@@ -1,0 +1,204 @@
+<template>
+    <div class="inbound-overview">
+        <div class="title">
+            <span>{{$i.warehouse.warehouseOverview}}</span>
+        </div>
+        <div class="body">
+            <div class="head">
+                <span>{{$i.warehouse.status}}</span>
+                <el-radio-group class="radioGroup" @change="changeStatus" v-model="inboundStatus" size="mini">
+                    <el-radio-button label="0">全部</el-radio-button>
+                    <el-radio-button label="WAIT_FOR_QC">待验货</el-radio-button>
+                    <el-radio-button label="APPLY_FOR_REWORK">申请返工</el-radio-button>
+                    <el-radio-button label="CONFIRMATION_OF_REWORK">确认返工</el-radio-button>
+                    <el-radio-button label="APPLY_FOR_RETURN">申请退货</el-radio-button>
+                    <el-radio-button label="CONFIRMATION_OF_RETURN">确认退货</el-radio-button>
+                    <el-radio-button label="CONFIRMED">已确认</el-radio-button>
+                </el-radio-group>
+                <select-search
+                        class="search"
+                        @inputEnter="searchInbound"
+                        v-model="searchId"
+                        :options="searchOptions"></select-search>
+            </div>
+            <div class="section">
+                <div class="btns">
+                    <el-button>{{$i.warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
+                </div>
+                <v-table
+                        :loading="loadingTable"
+                        :data="tableDataList"
+                        :buttons="[{label: '详情', type: 1}]"
+                        @change-checked="changeChecked"
+                        @action="btnClick">
+                </v-table>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import VTable from '@/components/common/table/index'
+    import selectSearch from '@/components/common/fnCompon/selectSearch'
+
+    export default {
+        name: "warehouseOverview",
+        components:{
+            selectSearch,
+            VTable
+        },
+        data(){
+            return{
+                /**
+                 * 页面基本配置
+                 * */
+                loadingTable:false,
+                inboundStatus:'0',
+                tableDataList:[],
+                downloadBtnInfo:'All',
+                selectList:[],
+                warehouseConfig:{
+                    inboundNo: "",
+                    // operatorFilters: [
+                    //     {
+                    //         columnName: "",
+                    //         operator: "",
+                    //         property: "",
+                    //         resultMapId: "",
+                    //         value: {}
+                    //     }
+                    // ],
+                    orderNo: "",
+                    pn: 1,
+                    ps: 50,
+                    skuCode: "",
+                    skuInventoryStatusDictCode: null,
+                    // sorts: [
+                    //     {
+                    //         orderBy: "",
+                    //         orderType: "",
+                    //     }
+                    // ],
+                },
+
+                searchId:1,
+
+                searchOptions:[
+                    {
+                        label:'订单号',
+                        id:1
+                    },
+                    {
+                        label:'供应商货号',
+                        id:2
+                    },
+                    {
+                        label:'入库单号',
+                        id:3
+                    },
+                ]
+            }
+        },
+        methods:{
+            changeStatus(e){
+                if(e==='0'){
+                    this.warehouseConfig.skuInventoryStatusDictCode=null;
+                }else{
+                    this.warehouseConfig.skuInventoryStatusDictCode=e;
+                }
+                this.getInboundData();
+            },
+
+            //获取表格数据
+            getInboundData(){
+                this.loadingTable=true;
+                this.$ajax.post(this.$apis.get_warehouseOverviewData,this.warehouseConfig).then(res=>{
+                    this.tableDataList = this.$getDB(this.$db.warehouse.sellerWarehouseTable, res.datas,(e)=>{
+                        // e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
+                        // e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
+                        // e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
+                        // return e;
+                    });
+                    this.loadingTable=false;
+                }).catch(err=>{
+                    this.loadingTable=false;
+                });
+            },
+
+
+            searchInbound(e){
+                // this.warehouseConfig.inboundNo=e.key;
+                console.log(e)
+                if(!e.keyType){
+                    this.$message({
+                        message: '请至少选择一个类别',
+                        type: 'warning'
+                    });
+                    return;
+                }else if(e.keyType===1){    //订单号
+                    this.warehouseConfig.inboundNo='';
+                    this.warehouseConfig.orderNo=e.key;
+                    this.warehouseConfig.skuCode='';
+                }else if(e.keyType===2){    //供应商货号
+                    this.warehouseConfig.inboundNo='';
+                    this.warehouseConfig.orderNo='';
+                    this.warehouseConfig.skuCode=e.key;
+                }else if(e.keyType===3){    //入库单号
+                    this.warehouseConfig.inboundNo=e.key;
+                    this.warehouseConfig.orderNo='';
+                    this.warehouseConfig.skuCode='';
+                }
+                this.getInboundData();
+            },
+
+            btnClick(e){
+                this.$windowOpen({
+                    url:'/sellerWarehouse/inboundDetail',
+                    params:{
+                        id:e.id.value
+                    }
+                })
+            },
+
+            changeChecked(e){
+                this.selectList=e;
+            },
+        },
+        created(){
+            this.getInboundData();
+        },
+        watch:{
+            selectList(n){
+                if(n.length>0){
+                    this.downloadBtnInfo=n.length;
+                }else{
+                    this.downloadBtnInfo='All';
+                }
+            }
+        }
+    }
+</script>
+
+<style scoped>
+    .title{
+        font-weight: bold;
+        font-size: 18px;
+        height: 32px;
+        line-height: 32px;
+        color:#666666;
+    }
+
+    .radioGroup{
+        margin-left: 10px;
+    }
+    .head{
+        padding: 10px 0;
+    }
+    .head .search{
+        float: right;
+
+    }
+    .section{
+        margin-top: 10px;
+    }
+</style>

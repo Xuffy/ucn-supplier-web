@@ -1,0 +1,73 @@
+{
+    "sequenceNumber": "Sequence No",
+
+    "important": "Important",
+    "attachment": "Attachment",
+    "responsibility": "Responsibility",
+    "archive": "Archive",
+    "orderNo": "Order No",
+    "orderDate": "Order Date",
+    "status": "Order Status",
+    "customerName": "Customer Short Name",
+    "customerOrderNo": "Customer Order No",
+    "supplierName": "Supplier Short Name",
+    "supplierOrderNo": "Supplier Order No",
+    "incoterm": "Incoterm",
+    "incotermArea": "Incoterm Area",
+    "lcNo": "LC No.",
+    "payment": "Payment",
+    "currency": "Currency",
+    "deliveryDt": "Delivery Date",
+
+    "countryofShipmentOrigin": "Country of Shipment Origin",
+
+    "destCountry": "Destination Country",
+    "customerAgreementNo": "Customer Agreement ID",
+    "customerAgreementDt": "Customer Agreement Date",
+
+    "comments": "Comments",
+
+    "paymentRemark": "Payment Remark",
+    "totalSkuPrice": "Total SKU Price",
+    "paidAmount": "Paid Amount",
+    "unpaidAmount": "Unpaid Amount",
+    "inboundQty": "Inbound Quantity",
+    "deliveredQty": "Delivered Quantity",
+
+    "modifyTime": "Modify Time",
+    "createTime": "Create Time",
+
+    "quotationNo": "Quotation Inquiry No.",
+    "totalQty": "Total Quantity",
+    "totalOuterCartonQty": "Total Outer Carton Quantity",
+    "totalNetWeight": "Total Outer Carton Net Wet",
+    "totalVolume": "Total Outer Carton Volume",
+    "skuQty": "SKU Quantity",
+
+
+    "customerSKUCode": "Customer SKU Code",
+    "SKUBarCode": "SKU Bar Code",
+    "SKUcode": "SKU code",
+    "supplierName": "supplier name",
+    "SKUNameCN": "SKU Name CN",
+    "SKUEnglishname": "SKU English name",
+    "SKUdescriptionincustomerlanguage": "SKU description in customer language",
+    "SKUEnglishDescription": "SKU English description",
+    "martialCN": "martial（CN）",
+    "martialEN": "martial（EN）",
+    "UnitPrice": "Unit Price",
+    "totalQuantity": "Total Quantity",
+    "totalPrice": "Total Price",
+    "orderDate": "Order Date",
+    "deliveryDate": "Delivery Date",
+    "departureDate": "Departure Date",
+    "deliveredQuantity": "Delivered Quantity",
+    "productStatus": "Product Status",
+    "incoterm": "Incoterm",
+    "incotermarea": "incoterm area"
+
+
+
+
+
+}

@@ -1,0 +1,59 @@
+{
+  "title":"产品总览",
+  "costPrice":"成本价",
+  "quotedPrice":"基础报价",
+
+
+
+  "advanced":"展开高级收缩",
+  "hideTheAdvanced":"收起高级搜索",
+  "search":"搜索",
+  "clear":"清除条件",
+  "addNewProduct":"添加新产品",
+  "setUp":"设为上架",
+  "setDown":"设为下架",
+  "downloadSelected":"下载选中的产品",
+  "delete":"删除",
+  "edit":"编辑",
+  "basicInformation":"基础信息",
+  "customerInfo":"海关信息",
+  "priceInfo":"价格信息",
+  "packingInfo":"包装信息",
+  "logisticInfo":"物流信息",
+  "otherInfo":"其他信息",
+  "attachment":"附件",
+  "tradeHistory":"交易历史",
+  "finish":"完成",
+
+  "cifPrice":"CIF单价",
+  "cifCurrency":"CIF 币种",
+  "cifArea":"CIF 区域",
+  "dduPrice":"DDU 单价",
+  "dduCurrency":"DDU 币种",
+  "dduArea":"DDU 区域",
+
+  "productVisible":"产品可见性",
+  "allSee":"全网可见",
+  "partSee":"部分客户可见",
+  "customerName":"客户名称",
+  "customerType":"客户类型",
+  "customerCode":"客户编号",
+  "customerCountry":"客户国别",
+  "customerCity":"所在城市",
+  "action":"操作",
+  "add":"添加",
+
+
+
+
+
+  "fobCurrency":"FOB币种",
+  "fobPrice":"FOB单价",
+  "fobPort":"FOB港口",
+  "exwPrice":"EXW单价",
+  "exwCurrency":"EXW币种",
+  "otherIncoterm":"其他价格条款",
+  "otherIncotermPrice":"其他价格条款单价",
+  "otherIncotermArea":"其他价格条款区域",
+  "otherIncotermCurrency":"其他价格条款币种"
+}

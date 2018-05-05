@@ -1,0 +1,34 @@
+{
+    "compareOverview": "Compare Overview",
+    "supplierBookmark": "Supplier Bookmark",
+    "supplierSourcing": " Supplier Sourcing",
+
+    "supplierName": "Supplier Name",
+    "businessScope": "Main Business Scope",
+    "categoryId": "Category",
+    "supplierType": "Supplier Type",
+    "SKUnameEN": "SKU Name(EN)",
+    "SKUcode": "SKU Code",
+    "description": "description",
+
+
+    "supplierNO": "Supplier NO",
+    "suppliername": "supplier name",
+    "suppliertype": "Supplier type",
+
+
+
+
+    "provideincoterm": "Provide incoterm",
+
+    "description": "description",
+    "id": "id",
+
+
+    "country": "Country",
+    "provideIncoterm": "Provide Incoterm",
+    "exportLicense": "Export License",
+    "mainBusinessScope": "Main Business Scope",
+    "category": "Category"
+
+}

@@ -1,0 +1,23 @@
+export default {
+    skuId:{
+        _hide:true
+    },
+    id:{
+        _hide:true
+    },
+    orderNo:{},
+    skuBarCode:{},
+    skuCode:{},
+    inboundNo:{},
+    skuNameEn:{},
+    skuNameCustomer:{},
+    skuNameCn:{},
+    skuMaterialCn:{},
+    skuMaterialEn:{},
+    factorySkuCode:{},
+    customerSkuCode:{},
+    skuDescEn:{},
+    skuDescCn:{},
+    skuBrand:{},
+    innerCartonVolume:{},
+}

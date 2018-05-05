@@ -1,0 +1,14 @@
+{
+    "inquiryNo": "Inquiry No.",
+    "quotationNo": "Quotation No.",
+    "status": "Status",
+    "supplierName": "Supplier name",
+    "skuCode": "sku code",
+    "skuNameEN": "SKU name EN",
+    "price": "Price",
+    "currency": "Currency",
+    "incoterm": "Incoterm",
+    "departurePort": "departure port",
+    "destinationPort": "destination port",
+    "remark": "Inquiry remark"
+}

@@ -1,0 +1,308 @@
+<template>
+  <div class="message">
+    <div class="head">
+      <el-button @click="manageMessage">{{$i.common.messageManagement}}</el-button>
+      <el-button type="primary" @click="postRead">{{$i.common.markAsRead}}</el-button>
+      <!-- <h1 style="color:red">这个页面表格要加一列title</h1> -->
+    </div>
+    <div class="spe-div">
+      <div class="View">
+        <el-radio-group size=""  v-model="viewByStatus" @change="getDataInfo()">
+          <el-radio-button label="1">{{$i.message.platformMessage}}</el-radio-button>
+          <el-radio-button label="2">{{$i.message.companyMessage}}</el-radio-button>
+          <el-radio-button label="3">{{$i.message.messageSetting}}</el-radio-button>
+        </el-radio-group>
+      </div>
+      <div class="search">
+        <select-search  class="search" :options="options" @inputEnter="inputEnter" v-model="message" :searchLoad="searchLoad"/>
+      </div>
+    </div>
+    <div class="main">
+      <div v-show="isHide">
+        <v-table
+          :data="tabData"
+          @change-checked="changeChecked"
+          :height="450"
+        />
+      </div>
+
+      <div v-show="isShow" class="box">
+        <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick" >
+          <!--<el-tab-pane >-->
+          <el-table
+            ref="tableData"
+            :data="tableData"
+            tooltip-effect="dark"
+            style="width: 100%"
+            @selection-change="handleSelectionChange">
+            <el-table-column
+              label="Message Type"
+              align="center">
+              <template slot-scope="scope">{{ scope.row.message }}</template>
+            </el-table-column>
+            <el-table-column
+              label="Notification Method"
+              align="center">
+              <template slot-scope="scope">
+                <!--<div @click="handleEdit(scope.$index, scope.row)" style="display: inline-block;">-->
+                  <el-checkbox @change="handleCheckedCitiesChange(scope.$index, scope.row)" v-model="scope.row.subscribeEmail">Email</el-checkbox>
+                <!--</div>-->
+                <el-checkbox v-model="checked1" disabled>Platform</el-checkbox>
+              </template>
+            </el-table-column>
+          </el-table>
+          <br>
+          <!--</el-tab-pane>-->
+        </el-tabs>
+      </div>
+    </div>
+
+    <el-dialog
+        title="提示"
+        :visible.sync="centerDialogVisible"
+        width="30%"
+        center>
+          <span>系统通过邮件来发送消息</span>
+          <span slot="footer" class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+
+  </div>
+</template>
+
+<script>
+  import { selectSearch, VTable } from '@/components/index';
+
+  export default {
+    name: "message",
+    components:{
+      VTable,
+      selectSearch
+    },
+    data(){
+      return{
+        searchLoad: false,
+        viewByStatus:'',
+        isShow:false,
+        isHide:true,
+        centerDialogVisible: false,
+        options: [{
+          id: '1',
+          label: 'Tittle'
+        }, {
+          id: '2',
+          label: 'Content'
+        }],
+        activeName: 'System Message',           //激活的tab页的name
+        multipleSelection:[],
+        currentPage:1,
+        tableData:[],
+        params: {
+          mark: 0,
+          content: '',
+          ps:10,
+          pn:1
+        },
+        checked:'',
+        checked1:true,
+        message:'',
+        tabData:[],
+        checkedData:[],
+        checkValues: [],
+        updatesetting:{
+          id:'',
+          subscribeEmail:0,
+          subscribePlatform:1,
+          messageType:''
+        }
+      }
+    },
+    methods:{
+      handleClick(tab, event) {
+        console.log(tab, event);
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
+      changeChecked(item) { //tab 勾选
+        this.checkedData = item;
+      },
+      handleCheckedCitiesChange(index, row){
+        let url = this.$apis.post_messagesetting_updatesetting
+        this.updatesetting.id = row.id
+        this.updatesetting.messageType = row.messageType
+        // 0：不订阅，1：订阅
+        if (row.subscribeEmail){
+          this.updatesetting.subscribeEmail = 1
+          this.$ajax.post(url, this.updatesetting)
+          .then(res => {
+            this.$message('系统通过邮件来发送消息');
+            this.getMessageQuery()
+          })
+        }else{
+          this.updatesetting.subscribeEmail = 0
+          this.$ajax.post(url, this.updatesetting)
+          .then(res => {
+            this.$message('系统关闭邮件来发送消息');
+            this.getMessageQuery()
+          })
+        }
+      },
+      //管理信息
+      manageMessage(){
+        if (this.viewByStatus + '' === '1'){
+          this.$router.push({
+            path: '/message/messageManagement',
+            query: {
+              type: 1,
+            }
+          })
+        }else{
+          this.$router.push({
+            path: '/message/messageManagement',
+            query: {
+              type: 2,
+            }
+          })
+        }
+      },
+      inputEnter(val) {
+        if(!val.keyType) return this.$message('请选中搜索类型');
+        if(!val.key) return this.$message('搜索内容不能为空');
+        this.params.mark = val.keyType;
+        this.params.content = val.key;
+        this.searchLoad = true;
+      },
+      getDataInfo() {
+        let url, column;
+        this.tabLoad = true;
+        column = this.$db.message.table;
+        if(this.viewByStatus + '' === '1') {
+          url = this.$apis.post_systemmessage_query;
+        } else {
+          url = this.$apis.post_companymessage_query;
+        };
+        this.$ajax.post(url, this.params)
+          .then(res => {
+            this.tabData = this.$getDB(column, res.datas);
+            this.tabLoad = false;
+            this.searchLoad = false;
+          })
+          .catch(() => {
+            this.searchLoad = false;
+            this.tabLoad = false;
+          })
+      },
+      postRead(){
+        let url;
+        if(this.viewByStatus + '' === '1'){
+          url = this.$apis.post_sys_updateread;
+        } else {
+          url = this.$apis.post_company_updateread;
+        };
+        let arr = [];
+        _.map(this.checkedData, item => {
+          if(!_.isUndefined(item)) arr.push(_.findWhere(item, {'key': 'subscribeId'}).value);
+        });
+        this.$ajax.post(url, arr)
+          .then(res => {
+            this.$message('系统将消息置为已读');
+          })
+          .catch(() => {
+
+          })
+      },
+      getMessageQuery(){
+        let url = this.$apis.get_messagesetting_query
+        this.$ajax.get(url)
+          .then(res => {
+            res = _.map(res,val=>{
+              switch (val.messageType)
+              {
+                case 1:
+                  // val.messageType = 'System message'
+                  val.message = 'System message'
+                  break;
+                case 2:
+                  val.message = 'company message'
+                  break;
+                case 3:
+                  val.message = 'Pending task'
+                  break;
+                case 4:
+                  val.message = 'Future task'
+                  break;
+                case 5:
+                  val.message = 'Push'
+                  break;
+                case 6:
+                  val.message = 'FYI'
+                  break;
+              }
+              if (val.subscribeEmail == 1){
+                val.subscribeEmail = true
+              }else{
+                val.subscribeEmail = false;
+              }
+                return val;
+            });
+
+
+            this.tableData = res
+          })
+          .catch(() => {
+
+          })
+      },
+    },
+    watch: {
+      viewByStatus() {
+        if(this.viewByStatus == 3){
+          this.isShow = true;
+          this.isHide = false;
+        }else{
+          this.isShow = false;
+          this.isHide = true;
+        }
+        // this.getDataInfo()
+      }
+    },
+    created(){
+      this.getDataInfo()
+      this.getMessageQuery()
+      //  this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
+    }
+  }
+</script>
+
+<style>
+  .head{
+    padding: 10px 0;
+  }
+  .box{
+    padding-top: 20px;
+  }
+  /*.speTable >>> .el-table__header-wrapper table thead tr th{*/
+  /*font-weight: bold;*/
+  /*}*/
+  .spe-div{
+    padding-top: 20px;
+    overflow: hidden;
+  }
+  .spe-div .View{
+    float: left;
+  }
+  .spe-div .search{
+    float: right;
+    margin-left: 10px;
+    margin-right: 40px;
+  }
+</style>

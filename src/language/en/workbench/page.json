@@ -1,0 +1,10 @@
+{
+  "quickLink": "Quick Link",
+  "dataDashboard": "Data Dashboard",
+  "purchaseOrder": "Purchase order",
+  "orderPlaced": "Order placed",
+  "pendingTask": "Pending Task",
+  "futureTask": "Future Task",
+  "fyi": "FYI",
+  "push": "Push"
+}

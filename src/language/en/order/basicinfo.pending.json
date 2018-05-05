@@ -1,0 +1,40 @@
+{
+    "orderNo": "Order No",
+    "orderDate": "Order Date",
+    "customerOrderNo": "Customer OrderNo",
+    "customerName": "Customer Name",
+    "customerNo": "Customer No",
+    "supplierOrderNo": "Supplier OrderNo",
+    "supplierName": "Supplier Name",
+    "supplierNo": "Supplier No",
+    "quotationNo": "Quotation No",
+    "orderStatus": "Order Status",
+    "deliveryDate": "Delivery Date",
+    "incoterm": "Incoterm",
+    "incortermAea": "Incorterm Aea",
+    "payment": "Payment",
+    "lcNo": "LcNo",
+    "paymentDays": "Payment Days",
+    "paymentStatus": "Payment Status",
+    "departureCountry": "Departure Country",
+    "departurePort": "Departure Port",
+    "destinationCountry": "Destination Country",
+    "destinationPort": "Destination Port",
+    "transportationWay": "Transportation Way",
+    "customerAgreementNumber": "Customer Agreement Number",
+    "customerAgreementDate": "Customer Agreement Date",
+    "remark": "Remark",
+    "attachment": "Attachment",
+
+
+    "responsibility": "responsibility",
+    "NeedLabelDesignInfoDate": "NeedLabelDesignInfoDate",
+    "LableDesignDate": "LableDesignDate",
+    "DesignNeedConfirmDate": "DesignNeedConfirmDate",
+    "ReceiveSampleDate": "ReceiveSampleDate",
+    "SampleNeedConfirmDate": "SampleNeedConfirmDate",
+    "OtherDate": "OtherDate"
+
+
+
+}
