@@ -1,7 +1,7 @@
 'use strict';
 export default {
     //order
-    get_orderlist: ['/order/page', 'BASE_HCJ', 'UPURCHASE_URL'],
+    get_orderlist: ['/order/overview/page', 'BASE_HCJ', 'UPURCHASE_URL'],
     get_draft_orderlist: ['/order/draft/page', 'BASE_HCJ', 'UPURCHASE_URL'],
     get_recycle_orderlist: ['/order/recycle/page', 'BASE_HCJ', 'UPURCHASE_URL'],
     post_recover_order: ['/order/recover', 'BASE_HCJ', 'UPURCHASE_URL'],
