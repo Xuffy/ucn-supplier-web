@@ -574,13 +574,13 @@
             },
             send() {
                
-//                let parentNode = this.$filterModify(this.dataFilter(this.newProductTabData))
+                let parentNode = this.$filterModify(this.dataFilter(this.newProductTabData))
                 //                return console.log(parentNode)
                 //参数一堆堆 我靠
                 let param = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
-                    skuList:this.skuList,
+//                    skuList:this.skuList,
                     responsibilityList: this.$refs.responsibility.tableData,
                     draftCustomer: false,
                     importantCustomer: this.markAsImportant,
@@ -591,6 +591,7 @@
                 _.extend(param, basic)
                 var caculate = this.$refs.caculate.caculateForm
                 _.extend(param, caculate)
+                param.skuList=parentNode
                 this.$ajax.post(this.$apis.post_updataOrder, param)
                     .then(res => {
                         this.$router.push('/order/overview')
