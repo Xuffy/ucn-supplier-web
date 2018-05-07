@@ -1,305 +1,204 @@
 <template>
-  <div class="orderOverview">
-    <h3 class="hd">Order Overview</h3>
-    <div class="status">
-      <div class="btn-wrap">
-        <span>Status&nbsp</span>
-        <el-radio-group v-model="params.skuInventoryStatusDictCode" size="mini" @change="getdata()">
-          <!--<el-radio-button label=" ">{{($i.common.all)}}</el-radio-button>-->
-          <el-radio-button label="WAIT_FOR_QC"> {{ $i.common.waitingQC }}</el-radio-button>
-          <el-radio-button label="APPLY_FOR_REWORK">{{($i.common.applyRework)}}</el-radio-button>
-          <el-radio-button label="CONFIRMATION_OF_REWORK">{{($i.common.confirmedRework)}}</el-radio-button>
-          <el-radio-button label="APPLY_FOR_RETURN">{{($i.common.applyReturn)}}</el-radio-button>
-          <el-radio-button label="CONFIRMATION_OF_RETURN">{{($i.common.confirmedReturn)}}</el-radio-button>
-          <el-radio-button label="CONFIRMED">{{($i.common.confirmed)}}</el-radio-button>
-        </el-radio-group>
-      </div>
-      <div class="select-wrap">
-        <selectSearch
-          :options=options
-          @selectChange="selectChange"
-          @inputEnter="inputEnter"
-          v-model="warehouseSearch"
-        ></selectSearch>
-      </div>
+    <div class="inbound-overview">
+        <div class="title">
+            <span>{{$i.warehouse.warehouseOverview}}</span>
+        </div>
+        <div class="body">
+            <div class="head">
+                <span>{{$i.warehouse.status}}</span>
+                <el-radio-group class="radioGroup" @change="changeStatus" v-model="inboundStatus" size="mini">
+                    <el-radio-button label="0">全部</el-radio-button>
+                    <el-radio-button label="WAIT_FOR_QC">待验货</el-radio-button>
+                    <el-radio-button label="APPLY_FOR_REWORK">申请返工</el-radio-button>
+                    <el-radio-button label="CONFIRMATION_OF_REWORK">确认返工</el-radio-button>
+                    <el-radio-button label="APPLY_FOR_RETURN">申请退货</el-radio-button>
+                    <el-radio-button label="CONFIRMATION_OF_RETURN">确认退货</el-radio-button>
+                    <el-radio-button label="CONFIRMED">已确认</el-radio-button>
+                </el-radio-group>
+                <select-search
+                        class="search"
+                        @inputEnter="searchInbound"
+                        v-model="searchId"
+                        :options="searchOptions"></select-search>
+            </div>
+            <div class="section">
+                <div class="btns">
+                    <el-button>{{$i.warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
+                </div>
+                <v-table
+                        :loading="loadingTable"
+                        :data="tableDataList"
+                        :buttons="[{label: '详情', type: 1}]"
+                        @change-checked="changeChecked"
+                        @action="btnClick">
+                </v-table>
+            </div>
+        </div>
     </div>
-    <div class="fn">
-      <div class="btn-wrap">
-        <el-button @click='download'>{{($i.common.download)}}({{selectedDate.length}})</el-button>
-      </div>
-    </div>
-    <!--form-->
-    <v-table
-      ref='vtable'
-      :data="tabData"
-      :buttons="[{label: 'detail', type: 1}]"
-      @action="onAction"
-      :loading='loading'
-      @change-checked='checked'
-      :height="450"
-      style='marginTop:10px'/>
-      <v-pagination
-        :page-data.sync="params"
-        @change="handleSizeChange"
-        @size-change="pageSizeChange"
-      />
-
-  </div>
 </template>
+
 <script>
-  /**
-   * @param selectChange 下拉框 值发生变更触发
-   * @param keyWord search框 值
-   * @param options 下拉框 原始数据
-   * @param value 下拉框 选中值
-   */
+    import VTable from '@/components/common/table/index'
+    import selectSearch from '@/components/common/fnCompon/selectSearch'
 
-  import { VTable,VPagination,dropDown,selectSearch } from '@/components/index';
-  export default {
-    name: 'orderOverview',
-    components: {
-      dropDown,
-      VTable,
-      selectSearch,
-      VPagination
-    },
-    data() {
-      return {
-        value: '',
-        keyWord: '',
-        tabData: [],
-        loading: false,
-        warehouseSearch:'',
-        rowspan: 1,
-        pazeSize: [10, 20, 30, 40, 50, 100],
-        options: [{
-          id: '1',
-          label: 'Order No'
-        }, {
-          id: '2',
-          label: 'Sku Code',
-        },{
-          id:'3',
-          label: 'Inbound No'
-        }],
-        keyType: '',
-        pageTotal: 0,
-        params: {
-          companyId: 0,
-          inboundNo: "",
-          orderNo: "",
-          outboundNo: "",
-          // "ownerIds": [
-          //   0
-          // ],
-          pn: 1,
-          ps: 10,
-          tc:0,
-          qcOrderNo: "",
-          skuCode: "",
-          skuInventoryStatusDictCode: "WAIT_FOR_QC", //WAIT_FOR_QC
-          sorts: [
-            {
-              nativeSql: true,
-              orderBy: "inboundDate", //入库时间
-              orderType: "ASC", //升序
-              resultMapId: ""
+    export default {
+        name: "warehouseOverview",
+        components:{
+            selectSearch,
+            VTable
+        },
+        data(){
+            return{
+                /**
+                 * 页面基本配置
+                 * */
+                loadingTable:false,
+                inboundStatus:'0',
+                tableDataList:[],
+                downloadBtnInfo:'All',
+                selectList:[],
+                warehouseConfig:{
+                    inboundNo: "",
+                    // operatorFilters: [
+                    //     {
+                    //         columnName: "",
+                    //         operator: "",
+                    //         property: "",
+                    //         resultMapId: "",
+                    //         value: {}
+                    //     }
+                    // ],
+                    orderNo: "",
+                    pn: 1,
+                    ps: 50,
+                    skuCode: "",
+                    skuInventoryStatusDictCode: null,
+                    // sorts: [
+                    //     {
+                    //         orderBy: "",
+                    //         orderType: "",
+                    //     }
+                    // ],
+                },
+
+                searchId:1,
+
+                searchOptions:[
+                    {
+                        label:'订单号',
+                        id:1
+                    },
+                    {
+                        label:'供应商货号',
+                        id:2
+                    },
+                    {
+                        label:'入库单号',
+                        id:3
+                    },
+                ]
             }
-          ],
-          tenantId: ''
         },
-        selectedDate: [],
-        selectedNumber: []
-      }
-    },
-    methods: {
-      onAction(item, type) {
-      //点击后跳转到此SKU的产品详情页
-        this.$windowOpen({
-          url: 'product/sourcingDetail',
-          params: {
-             id:item.skuId
-          }
-        });
-      },
-      handleSizeChange(val) {
-        this.params.pn = val;
-      },
-      pageSizeChange(val) {
-        this.params.ps = val;
-      },
-      selectChange(val) {
-        this.keyType = val;
-      },
-      checked(item) {
-        this.selectedDate = item
-        var obj=[]
-        this.selectedDate.forEach(item => {
-          obj.push(item.id.value);
-        });
-        this.selectedNumber=obj
-      },
-      inputEnter(val) {
-        if (!val.keyType) return this.$message('请选中搜索类型');
-        if (!val.key) return this.$message('搜索内容不能为空');
-        if (val.keyType == '1') {
-          this.params.orderNo = val.key
-          console.log(this.params.orderNo)
-        } else if (val.keyType == '2'){
-          this.params.skuCode = val.key
-        }else{
-          this.params.inboundNo = val.key
+        methods:{
+            changeStatus(e){
+                if(e==='0'){
+                    this.warehouseConfig.skuInventoryStatusDictCode=null;
+                }else{
+                    this.warehouseConfig.skuInventoryStatusDictCode=e;
+                }
+                this.getInboundData();
+            },
+
+            //获取表格数据
+            getInboundData(){
+                this.loadingTable=true;
+                this.$ajax.post(this.$apis.get_warehouseOverviewData,this.warehouseConfig).then(res=>{
+                    this.tableDataList = this.$getDB(this.$db.warehouse.sellerWarehouseTable, res.datas,(e)=>{
+                        // e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
+                        // e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
+                        // e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
+                        // return e;
+                    });
+                    this.loadingTable=false;
+                }).catch(err=>{
+                    this.loadingTable=false;
+                });
+            },
+
+
+            searchInbound(e){
+                // this.warehouseConfig.inboundNo=e.key;
+                console.log(e)
+                if(!e.keyType){
+                    this.$message({
+                        message: '请至少选择一个类别',
+                        type: 'warning'
+                    });
+                    return;
+                }else if(e.keyType===1){    //订单号
+                    this.warehouseConfig.inboundNo='';
+                    this.warehouseConfig.orderNo=e.key;
+                    this.warehouseConfig.skuCode='';
+                }else if(e.keyType===2){    //供应商货号
+                    this.warehouseConfig.inboundNo='';
+                    this.warehouseConfig.orderNo='';
+                    this.warehouseConfig.skuCode=e.key;
+                }else if(e.keyType===3){    //入库单号
+                    this.warehouseConfig.inboundNo=e.key;
+                    this.warehouseConfig.orderNo='';
+                    this.warehouseConfig.skuCode='';
+                }
+                this.getInboundData();
+            },
+
+            btnClick(e){
+                this.$windowOpen({
+                    url:'/sellerWarehouse/inboundDetail',
+                    params:{
+                        id:e.id.value
+                    }
+                })
+            },
+
+            changeChecked(e){
+                this.selectList=e;
+            },
+        },
+        created(){
+            this.getInboundData();
+        },
+        watch:{
+            selectList(n){
+                if(n.length>0){
+                    this.downloadBtnInfo=n.length;
+                }else{
+                    this.downloadBtnInfo='All';
+                }
+            }
         }
-        this.getdata()
-      },
-      download() {
-        this.$ajax.post(this.$apis.download_order, {ids:this.selectedNumber})
-          .then((res) => {
-            console.log(res)
-          })
-          .catch((res) => {
-            console.log(res)
-          });
-      },
-      //get_orderlist数据
-      getdata() {
-        this.loading = true
-        this.$ajax.post(this.$apis.post_warehouse_page, this.params)
-          .then((res) => {
-            res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
-            this.tabData = this.$getDB(this.$db.warehouse.warehouseTable, res.datas, item => {
-              _.mapObject(item, val => {
-                val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
-                return val
-              })
-            })
-            this.loading = false
-          })
-          .catch((res) => {
-            this.loading = false
-          });
-      }
-    },
-    computed: {
+    }
+</script>
 
-    },
-    created() {
-      this.getdata()
-    },
-    mounted() {
-      this.loading = false
-    },
-    updated() {
+<style scoped>
+    .title{
+        font-weight: bold;
+        font-size: 18px;
+        height: 32px;
+        line-height: 32px;
+        color:#666666;
+    }
 
-    },
-    watch: {
-      status(){
-         console.log(1)
-      },
-      params: {
-        handler(val, oldVal) {
-          this.getdata();
-        },
-        deep: true
-      }
+    .radioGroup{
+        margin-left: 10px;
+    }
+    .head{
+        padding: 10px 0;
+    }
+    .head .search{
+        float: right;
 
     }
-  }
-
-</script>
-<style scoped>
-  >>>.el-input-group__append {
-    padding: 0 !important;
-  }
-
-</style>
-<style lang="less" scoped>
-  .orderOverview {
-  .hd {
-    height: 50px;
-    line-height: 50px;
-    color: #666;
-    border-bottom: 1px solid #ccc;
-    font-size: 18px;
-    color: #666666;
-  }
-  .status {
-    display: flex;
-    height: 60px;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 15px;
-    box-sizing: border-box;
-  .btn-wrap {
-    display: flex;
-    align-items: center;
-  span {
-    font-size: 14px;
-  }
-  button {
-    padding: 2px 5px;
-    cursor: pointer;
-    border: 1px solid #108ee9;
-    background-color: #fff;
-    margin-left: 10px;
-    border-radius: 5px;
-    transition: all .5s ease;
-  &:hover,
-  &.active {
-     background-color: #108ee9;
-     color: #fff;
-   }
-  }
-  }
-  .select-wrap {
-    display: flex;
-    align-items: center;
-  .select {
-    width: 110px;
-    margin-right: 5px;
-  input {}
-  }
-  }
-
-  }
-  .fn {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 15px;
-    box-sizing: border-box;
-  .viewBy {
-    display: flex;
-    align-items: center;
-  span {
-    font-size: 14px;
-    color: #666;
-  }
-
-  .set {
-    cursor: pointer;
-    padding-left: 40px;
-  /*                    color: #999;*/
-  i {
-    font-size: 25px;
-  }
-  .speDropdown {
-    position: absolute;
-    right: 40px;
-    background-color: #ffffff;
-    z-index: 2000;
-    display: none
-  }
-  .speDropdownshow {
-    position: absolute;
-    right: 40px;
-    background-color: #ffffff;
-    z-index: 2000;
-
-  }
-  }
-  }
-  }
-
-  }
-
+    .section{
+        margin-top: 10px;
+    }
 </style>

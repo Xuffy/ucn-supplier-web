@@ -17,10 +17,12 @@
                         <v-table 
                             :data.sync="newTabData" 
                             :selection="false" 
+                            :height="450"
                             :buttons="basicInfoBtn"
                             :loading="tableLoad"
                             :rowspan="2"
                             @action="basicInfoAction"
+                            :hideFilterValue="statusModify"
                         />
                     </div>
                 </div>
@@ -30,7 +32,7 @@
                             <el-button @click="addProduct" :disabled="!statusModify">{{ $i.common.addProduct }}</el-button>
                             <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i.common.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
                         </div>
-                        <select-search :options="options" v-model="id" />
+                        <select-search :options="options" v-model="id" v-show="!statusModify" />
                     </div>
                     <v-table 
                         :data.sync="newProductTabData"
@@ -40,6 +42,7 @@
                         @change-checked="changeChecked"
                         :rowspan="2"
                         :selection="statusModify"
+                        :hideFilterValue="statusModify"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
                         <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.accept }}</el-button>
@@ -81,39 +84,41 @@
                 @save="save"
                 ref="HM"
             >
-            <div slot="transportationWay" slot-scope="{item}">
-                <el-select v-model="item" placeholder="请选择">
-                    <el-option
-                        v-for="item in selectAll.transportationWay"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                    >
-                    </el-option>
-                </el-select>
-            </div>
-            <div slot="supplierName" slot-scope="{item}">
+            <template v-for="item in $db.inquiry.basicInfo" :slot="item._slot" slot-scope="{data}">
                 <el-select
-                    style="width:100%;"
-                    v-model="item"
-                    multiple
-                    filterable
-                    remote
-                    reserve-keyword
-                    value-key="id"
-                    size="mini"
-                    placeholder="请输入关键词"
-                    :remote-method="remoteMethod"
-                    :loading="loading">
+                        v-model="fromArg[item.key]" 
+                        value-key="id"
+                        :size="item.size || 'mini'"
+                        :placeholder="item.placeholder" 
+                        v-if="item.key === 'destinationCountry' || item.key === 'departureCountry'"
+                        style="width:100%;"
+                    >
                     <el-option
-                        v-for="item in selectAll.supplierName"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item"
-                        :id="item.id"
+                        v-for="items in selectAll[item.key]"
+                        :key="items.id"
+                        :label="items.name"
+                        :value="items.code"
+                        :id="items.id"
                     />
                 </el-select>
-            </div>
+                <el-select
+                        v-model="fromArg[item.key]" 
+                        value-key="id"
+                        :size="item.size || 'mini'"
+                        :placeholder="item.placeholder" 
+                        v-if="item.type === 'select' && item.key !== 'destinationCountry' && item.key != 'departureCountry'"
+                        style="width:100%;"
+                    >
+                    <el-option
+                        v-for="items in selectAll[item.key]"
+                        :key="items.id"
+                        :label="items.name"
+                        :value="items.code"
+                        :id="items.id"
+                    />
+                </el-select>
+                <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
+            </template>
         </v-history-modify>
     </div>
 </template>
@@ -132,10 +137,12 @@
     import { messageBoard, selectSearch, VTable, compareList, VHistoryModify } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
+    import { mapActions } from 'vuex'
     export default {
         name:'inquiryDetail',
         data() {
             return {
+                fromArg:{},
                 disabledLine: [],
                 trig: 0,
                 disabledTabData: [],
@@ -213,6 +220,13 @@
                 this.compareConfig = this.$localStore.get('$in_quiryCompare');
             };
             this.getDictionaries();
+            this.setRecycleBin({
+                name: 'negotiationRecycleBin',
+                params: {
+                    type: 'inquiry'
+                },
+                show: true
+            });
         },
         watch: {
             ChildrenCheckList(val, oldVal) {
@@ -229,6 +243,10 @@
             }
         },
         methods: {
+            ...mapActions([
+                'setDraft',
+                'setRecycleBin'
+            ]),
             deleteInquiry() {
                 this.$confirm('确认删除?', '提示', {
                     confirmButtonText: '确定',
@@ -334,11 +352,31 @@
                 })
                 .then(res => {
                     //Basic Info
-                    this.newTabData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
-                    this.tabData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
+                    let basicInfoData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
+                    _.map(basicInfoData, item => {
+                        if(!item._remark) _.mapObject(item, (val, k) => {
+                            switch(val.state) {
+                                case 'time':
+                                    item[k].value = this.$dateFormat(val.value, 'yyyy-mm-dd');
+                            }
+                        });
+                    });
+                    this.newTabData = basicInfoData;
+                    this.tabData = basicInfoData;
                     //Product Info
-                    this.newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
-                    this.productTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
+                    let newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
+
+                    _.map(newProductTabData, item => {
+                        if(!item._remark) _.mapObject(item, (val, k) => {
+                            switch(val.state) {
+                                case 'time':
+                                    item[k].value = this.$dateFormat(val.value, 'yyyy-mm-dd');
+                            }
+                        });
+                    });
+
+                    this.newProductTabData = newProductTabData;
+                    this.productTabData = newProductTabData;
                     this.tableLoad = false;
                 })
                 .catch(err => {
@@ -402,14 +440,12 @@
                         if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[0], {'key': 'id'}).value && !val._remark && !data[0]._remark) {
                             val = data[0];
                             val._modify = true;
-                            val.displayStyle.value = 1;
                             _.mapObject(val, (item, k) => {
                                 if(item.length) this.$set(item, '_style', 'color:#27b7b6')
                             })
                         } else if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[1], {'key': 'id'}).value && val._remark && data[1]._remark) {
                             val = data[1];
                             val._modify = true;
-                            val.displayStyle.value = 1;
                             _.mapObject(val, (item, k) => {
                                 if(item.length) this.$set(item, '_style', 'color:#27b7b6')
                             });
@@ -463,6 +499,7 @@
                             this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
                         }
                     }
+                    this.fromArg = arr[0];
                 });
            },
            basicInfoAction(data, type) { // basic info 按钮操作 
@@ -488,6 +525,14 @@
                         case 'modify':
                             this.oSwitch = true;
                             this.fnBasicInfoHistoty(data, 'productInfo', { type:'modify', data: data.skuId.value });
+                            break;
+                        case 'detail':
+                            this.$router.push({
+                                path: '/product/sourcingDetail',
+                                query: {
+                                    id: data.skuId.value
+                                }
+                            });
                             break;
                 }
            },
@@ -533,6 +578,7 @@
                 parentNode.draft = 0;
                 this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SAVE, this.$filterModify(parentNode))
                 .then(res => {
+                    this.newTabData[0].status.value = res.status;
                     this.tabData = this.newTabData;
                     this.productTabData = this.newProductTabData;
                     this.productModify();

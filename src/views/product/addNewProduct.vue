@@ -57,7 +57,8 @@
                             </el-input-number>
                         </div>
                         <div v-if="v.showType==='dropdown'">
-                            <drop-down :defaultProps="defaultProps" class="speInputNumber" v-model="productForm[v.key]" :list="dropData" ref="dropDown"></drop-down>
+                            <drop-down class="speSelect" v-model="productForm[v.key]" :list="categoryList" :defaultProps="defaultProps"
+                                       ref="dropDown" :expandOnClickNode="false"></drop-down>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -143,9 +144,6 @@
                                     :min="0"
                                     label="描述文字">
                             </el-input-number>
-                        </div>
-                        <div v-if="v.showType==='dropdown'">
-                            <drop-down class="speInputNumber" v-model="productForm[v.key]" :list="dropData" ref="dropDown"></drop-down>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -391,9 +389,6 @@
                                     label="描述文字">
                             </el-input-number>
                         </div>
-                        <div v-if="v.showType==='dropdown'">
-                            <drop-down class="speInputNumber" v-model="productForm[v.key]" :list="dropData" ref="dropDown"></drop-down>
-                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -442,9 +437,6 @@
                                     :min="0"
                                     label="描述文字">
                             </el-input-number>
-                        </div>
-                        <div v-if="v.showType==='dropdown'">
-                            <drop-down class="speInputNumber" v-model="productForm[v.key]" :list="dropData" ref="dropDown"></drop-down>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -526,9 +518,6 @@
                                 </el-input-number>
                             </div>
                         </div>
-                        <div v-if="v.showType==='dropdown'">
-                            <drop-down class="speInputNumber" v-model="productForm[v.key]" :list="dropData" ref="dropDown"></drop-down>
-                        </div>
                         <div v-if="v.showType==='date'">
                             <el-date-picker
                                     size="mini"
@@ -552,7 +541,6 @@
         <div class="footBtn">
             <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i.productCn.finish}}</el-button>
         </div>
-
 
         <el-dialog width="70%" title="收货地址" :visible.sync="addCustomerDialogVisible">
 
@@ -600,15 +588,12 @@
             </div>
         </el-dialog>
 
-
-
-
     </div>
 </template>
 
 <script>
     import upLoad from '@/components/common/upload/upload'
-    import imgHandler from '../product/bookmark/imgHandler'
+    import imgHandler from '../product/imgHandler'
     import {dropDownSingle} from '@/components/index'
 
     export default {
@@ -630,6 +615,21 @@
                         date: '2016-05-02',
                         name: '王小虎',
                         address: '上海市普陀区金沙江路 1518 弄'
+                    },
+                ],
+
+                categoryList:[
+                    {
+                        id:123,
+                        name:"系统分类",
+                        children:[],
+                        _disableClick:true,
+                    },
+                    {
+                        id:5125,
+                        name:"自己的分类",
+                        children:[],
+                        _disableClick:true,
                     },
                 ],
 
@@ -1215,46 +1215,6 @@
                 },
 
                 //dropDown Data
-                dropData:[
-                    {
-                        id: 1,
-                        label: '一级 1',
-                        children: [{
-                            id: 4,
-                            label: '二级 1-1',
-                            children: [
-                                {
-                                id: 9,
-                                label: '三级 1-1-1'
-                                }, {
-                                id: 10,
-                                label: '三级 1-1-2'
-                                }
-                            ]
-                        }]
-                    },
-                    {
-                        id: 2,
-                        label: '一级 2',
-                        children: [{
-                            id: 5,
-                            label: '二级 2-1'
-                        }, {
-                            id: 6,
-                            label: '二级 2-2'
-                        }]
-                    },
-                    {
-                        id: 3,
-                        label: '一级 3',
-                        children: [{
-                            id: 7,
-                            label: '二级 3-1'
-                        }, {
-                            id: 8,
-                            label: '二级 3-2'
-                        }]
-                    }],
                 defaultProps:{
                     label:'name',
                     children:'children'
@@ -1300,11 +1260,17 @@
                 document.getElementById('pic').click();
             },
 
+            //获取类别数据
             getCategoryId(){
-                this.$ajax.get(this.$apis.get_supply_category,{}).then(res=>{
-                    this.dropData=res;
+                this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
+                    this.categoryList[0].children=res;
                 }).catch(err=>{
-                    console.log(err)
+
+                });
+                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(res=>{
+                    this.categoryList[1].children=res;
+                }).catch(err=>{
+
                 });
             },
 

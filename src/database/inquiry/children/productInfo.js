@@ -4,7 +4,11 @@ export default {
     label: ' ',
     type: 'text',
     _disabled: true,
-    _title: 'remark'
+    _title: 'remark',
+    state: 'time'
+  },
+  tenantId: {
+    _hide: true   
   },
   skuRecycle: {
     _hide: true

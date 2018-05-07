@@ -1,3 +1,20 @@
 {
-  "warehouseOverview":"Warehouse Overview"
+  "inboundOverview":"入库总览",
+  "all":"全部",
+  "inboundType":"入库类型",
+  "purchaseInbound":"采购入库",
+  "checkInbound":"验货入库",
+  "customerReturnInbound":"客户退货入库",
+  "preDeliveryInbound":"预发货退货入库",
+  "download":"下载",
+  "basicInfo":"基本信息",
+  "close":"关闭",
+  "productInfo":"产品信息",
+  "summary":"总计",
+  "addProduct":"增加产品",
+  "removeProduct":"移除产品",
+  "search":"搜索",
+  "clear":"清空",
+  "submit":"提交",
+  "cancel":"取消"
 }
