@@ -64,7 +64,8 @@ export default {
     },
     inboundOutCartonTotalQty:{
         key:'inboundOutCartonTotalQty',     //需要填写
-        showType:'number'
+        showType:'number',
+        needInput:true
 
     },
     inboundSkuTotalVolume:{
@@ -88,18 +89,18 @@ export default {
     },
     skuOuterCartonVolume:{
         key:'skuOuterCartonVolume',         //可修改，必填
-        belong:'skuList',
-        showType:'input'
+        // belong:'skuList',
+        showType:'number'
     },
     skuOuterCartonRoughWeight:{
         key:'skuOuterCartonRoughWeight',        //可修改，必填
-        belong:'skuList',
-        showType:'input'
+        // belong:'skuList',
+        showType:'number'
     },
     skuOuterCartonNetWeight:{
         key:'skuOuterCartonNetWeight',        //可修改，必填
-        belong:'skuList',
-        showType:'input'
+        // belong:'skuList',
+        showType:'number'
     },
     unqualifiedType:{   //不合格类型====>>>默认为0，页面上只展示0即可
         key:'unqualifiedType',
