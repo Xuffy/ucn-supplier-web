@@ -13,14 +13,14 @@
                                     size="mini"
                                     :disabled="v.disabled"
                                     v-model="outboundData[v.key]"
-                                    placeholder="please input"></el-input>
+                                    :placeholder="v.sysCreate?'系统生成':'请输入'"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
-                            <el-select class="speInput" size="mini" v-model="outboundData[v.key]" placeholder="please choose">
+                            <el-select class="speInput" size="mini" v-model="outboundData[v.key]" placeholder="请选择">
                                 <el-option
-                                        v-for="item in v.options"
-                                        :key="item.value"
-                                        :label="item.label"
+                                        v-for="item in outboundTypeOption"
+                                        :key="item.id"
+                                        :label="item.name"
                                         :value="item.value">
                                 </el-option>
                             </el-select>
@@ -55,6 +55,7 @@
                             <el-date-picker
                                     class="speInput"
                                     size="mini"
+                                    :editable="false"
                                     v-model="outboundData[v.key]"
                                     align="right"
                                     type="date"
@@ -73,7 +74,7 @@
             {{$i.warehouse.productInfo}}
         </div>
         <div class="btns">
-            <el-button @click="addProduct">{{$i.warehouse.addProduct}}</el-button>
+            <el-button type="primary" @click="addProduct">{{$i.warehouse.addProduct}}</el-button>
             <el-button @click="removeProduct" :disabled="disableRemoveProduct" type="danger">{{$i.warehouse.removeProduct}}</el-button>
         </div>
 
@@ -118,14 +119,9 @@
             </el-table-column>
         </el-table>
 
-        <!--<v-table-->
-                <!--v-loading="loadingProductTable"-->
-                <!--:data="productData"-->
-                <!--@change-checked="changeProductChecked"></v-table>-->
-
         <div class="total">
             <div class="title">
-                {{$i.warehouse.total}}
+                {{$i.warehouse.summary}}
             </div>
             <el-form :modal="outboundSummary" label-width="200px" :label-position="labelPosition">
                 <el-row>
@@ -163,7 +159,7 @@
         </div>
 
         <el-dialog
-                title="Add Product From Order"
+                title="从订单添加产品"
                 :visible.sync="addOrderDialogVisible"
                 width="70%">
 
@@ -171,27 +167,35 @@
                 <el-row>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="orderNo" :label="$i.warehouse.orderNo">
-                            <el-input size="mini" class="speInput" v-model="orderProduct.orderNo"></el-input>
+
+                            <el-select clearable size="mini" class="speInput" v-model="orderProduct.orderNo" placeholder="请选择">
+                                <el-option
+                                        v-for="item in orderNoOption"
+                                        :key="item.id"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuCode" :label="$i.warehouse.skuCode">
-                            <el-input size="mini" class="speInput" v-model="orderProduct.skuCode"></el-input>
+                            <el-input placeholder="请输入" size="mini" class="speInput" v-model="orderProduct.skuCode"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="skuNameCn" :label="$i.warehouse.nameCn">
-                            <el-input size="mini" class="speInput" v-model="orderProduct.skuNameCn"></el-input>
+                        <el-form-item prop="skuNameCn" :label="$i.warehouse.skuNameCn">
+                            <el-input placeholder="请输入" size="mini" class="speInput" v-model="orderProduct.skuNameCn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="skuBarCode" :label="$i.warehouse.barCode">
-                            <el-input size="mini" class="speInput" v-model="orderProduct.skuBarCode"></el-input>
+                        <el-form-item prop="skuBarCode" :label="$i.warehouse.skuBarCode">
+                            <el-input placeholder="请输入" size="mini" class="speInput" v-model="orderProduct.skuBarCode"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="inboundNo" :label="$i.warehouse.inboundNo">
-                            <el-input size="mini" class="speInput" v-model="orderProduct.inboundNo"></el-input>
+                            <el-input placeholder="请输入" size="mini" class="speInput" v-model="orderProduct.inboundNo"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -263,6 +267,7 @@
                 productTableData:[],
                 selectProductList:[],
                 loadingProductTable:false,
+                outboundTypeOption:[],
                 /**
                  * 外部展示数据
                  * */
@@ -298,6 +303,7 @@
                 /**
                  * 弹出框数据
                  * */
+                orderNoOption:[],
                 selectList:[],
                 loadingTable:false,
                 tableDataList:[],           //弹出框表格数据
@@ -344,6 +350,17 @@
                 //请求弹出框数据
                 this.$ajax.post(this.$apis.get_inboundSku,this.orderProduct).then(res=>{
                     this.copyData=res.datas;
+
+                    this.orderNoOption=[];
+                    _.uniq(_.pluck(res.datas, 'orderNo')).forEach((v,k)=>{
+                        this.orderNoOption.push({
+                            id:k+1,
+                            value:v,
+                            label:v
+                        });
+                    });
+
+
                     this.tableDataList = this.$getDB(this.$db.warehouse.outboundOrderTable, res.datas);
                     this.disabledSearch=false;
                     this.disabledCancelSearch=false;
@@ -515,9 +532,9 @@
             },
             postData(){
 
-                this.productData=this.$copyArr(this.copyData);
+                // this.productData=this.$copyArr(this.copyData);
 
-                console.log(this.productData)
+                console.log(this.selectList)
                 // let arr=this.$copyArr(this.selectList);
                 // arr.forEach(v=>{
                 //     if(v._checked && !v._disabled){
@@ -527,13 +544,13 @@
                 //     }
                 // });
                 // this.loadingProductTable=true;
-                // this.$ajax.post(this.$apis.get_orderSku,this.productIds).then(res=>{
-                //     this.productData=res;
-                //     console.log(this.productData)
-                //     this.loadingProductTable=false;
-                // }).catch(err=>{
-                //     this.loadingProductTable=false;
-                // });
+                this.$ajax.post(this.$apis.get_orderSku,this.productIds).then(res=>{
+                    this.productData=res;
+                    console.log(this.productData)
+                    this.loadingProductTable=false;
+                }).catch(err=>{
+                    this.loadingProductTable=false;
+                });
                 //
                 // console.log(this.productIds)
                 // this.addOrderDialogVisible=false;
@@ -554,9 +571,22 @@
                 // })
             },
 
+
+            /**
+             * 获取字典
+             * */
+            getUnit(){
+                this.$ajax.post(this.$apis.get_partUnit,['OBD_STATUS'],{_cache:true}).then(res=>{
+                    this.outboundTypeOption=res[0].codes;
+                });
+                // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{
+                //     console.log(res)
+                // });
+            },
+
         },
         created(){
-
+            this.getUnit();
         },
         watch:{
             selectProductList(n){
@@ -622,6 +652,7 @@
         left: 0;
         bottom: 0;
         width: 100%;
+        z-index: 1000;
     }
     .dialog-footer{
         text-align: center;

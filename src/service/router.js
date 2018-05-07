@@ -549,7 +549,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'create Inbound'
+            name: '创建入库单'
           },
           component: () => import('../views/warehouse/inbound/createInbound'),
         },
@@ -572,7 +572,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Outbound Overview'
+            name: '出库总览'
           },
           component: () => import('../views/warehouse/outbound/outboundOverview'),
         },
@@ -583,18 +583,19 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'create Outbound'
+            name: '创建出库单'
           },
           component: () => import('../views/warehouse/outbound/createOutbound'),
         },
         {
           path: 'outboundDetail',
           name: 'outbound Detail',
+          hidden:true,
           meta: {
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'outbound Detail',
+            name: '出库单详情',
           },
           component: () => import('../views/warehouse/outbound/outboundDetail'),
         },

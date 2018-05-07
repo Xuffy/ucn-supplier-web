@@ -17,9 +17,9 @@
                         <div v-else-if="v.showType==='select'">
                             <el-select :disabled="true" class="speInput" size="mini" v-model="inboundData[v.key]">
                                 <el-option
-                                        v-for="item in v.options"
-                                        :key="item.value"
-                                        :label="item.label"
+                                        v-for="item in inboundTypeOption"
+                                        :key="item.id"
+                                        :label="item.name"
                                         :value="item.value">
                                 </el-option>
                             </el-select>
@@ -98,7 +98,7 @@
                     <el-form-item prop="v" :label="$i.warehouse.cartonOfProducts">
                         <el-input
                                 size="mini"
-                                v-model="summaryData.cartonOfProducts"
+                                v-model="inboundData.skuTotalCartonQty"
                                 :disabled="true">
                         </el-input>
                     </el-form-item>
@@ -107,7 +107,7 @@
                     <el-form-item prop="v" :label="$i.warehouse.grossWeightOfProducts">
                         <el-input
                                 size="mini"
-                                v-model="summaryData.grossWeightOfProducts"
+                                v-model="inboundData.skuTotalGrossWeight"
                                 :disabled="true">
                         </el-input>
                     </el-form-item>
@@ -116,7 +116,7 @@
                     <el-form-item prop="v" :label="$i.warehouse.volumeOfProducts">
                         <el-input
                                 size="mini"
-                                v-model="summaryData.volumeOfProducts"
+                                v-model="inboundData.skuTotalVolume"
                                 :disabled="true">
                         </el-input>
                     </el-form-item>
@@ -125,7 +125,7 @@
                     <el-form-item prop="v" :label="$i.warehouse.netWeightOfProducts">
                         <el-input
                                 size="mini"
-                                v-model="summaryData.netWeightOfProducts"
+                                v-model="inboundData.skuTotalNetWeight"
                                 :disabled="true">
                         </el-input>
                     </el-form-item>
@@ -134,7 +134,7 @@
                     <el-form-item prop="v" :label="$i.warehouse.quantityOfProducts">
                         <el-input
                                 size="mini"
-                                v-model="summaryData.quantityOfProducts"
+                                v-model="inboundData.skuTotalQty"
                                 :disabled="true">
                         </el-input>
                     </el-form-item>
@@ -193,6 +193,7 @@
                 },
                 addOrderDialogVisible:false,
                 loadingTable:false,
+                inboundTypeOption:[],
                 inboundData:{
                     inboundNo:'',
                     inboundDate:'',
@@ -205,6 +206,11 @@
                     carrier:'',
                     carrierPhone:'',
                     timeZone:'',
+                    skuTotalCartonQty: null,
+                    skuTotalGrossWeight: null,
+                    skuTotalNetWeight: null,
+                    skuTotalQty: null,
+                    skuTotalVolume: null
                 },
                 summaryData:{
                     cartonOfProducts:0,
@@ -276,10 +282,22 @@
             //关闭窗口
             closeWindow(){
                 window.close();
-            }
+            },
+            /**
+             * 获取字典
+             * */
+            getUnit(){
+                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE'],{_cache:true}).then(res=>{
+                    this.inboundTypeOption=res[0].codes;
+                });
+                // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{
+                //     console.log(res)
+                // });
+            },
         },
         created(){
             this.getData();
+            this.getUnit();
         },
     }
 </script>
