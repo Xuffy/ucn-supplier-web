@@ -41,17 +41,18 @@ export default {
     },
     skuUnit:{
         key:'skuUnit',          //字典
-        showType:'select',
-        options:[
-            {
-                label:'kg',
-                value:1
-            },
-            {
-                label:'g',
-                value:2
-            }
-        ],
+        belong:'skuList',
+        // showType:'select',
+        // options:[
+        //     {
+        //         label:'kg',
+        //         value:1
+        //     },
+        //     {
+        //         label:'g',
+        //         value:2
+        //     }
+        // ],
     },
     totalQty:{
         key:'totalQty'

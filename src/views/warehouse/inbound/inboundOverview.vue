@@ -1,17 +1,14 @@
 <template>
     <div class="inbound-overview">
-        <!--<div class="title">-->
-            <!--<span>{{$i.warehouse.inboundOverview}}</span>-->
-        <!--</div>-->
+        <div class="title">
+            <span>{{$i.warehouse.inboundOverview}}</span>
+        </div>
         <div class="body">
             <div class="head">
                 <span>{{$i.warehouse.inboundType}}</span>
-                <el-radio-group class="radioGroup" @change="changeStatus" v-model="inboundStatus" size="mini">
-                    <el-radio-button label="0">全部</el-radio-button>
-                    <el-radio-button label="1">采购入库</el-radio-button>
-                    <el-radio-button label="2">验货入库</el-radio-button>
-                    <el-radio-button label="3">客户退货入库</el-radio-button>
-                    <el-radio-button label="4">预发货退货入库</el-radio-button>
+                <el-radio-group class="radios" @change="changeStatus" v-model="inboundConfig.inboundTypeDictCode" size="mini">
+                    <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
+                    <el-radio-button v-for="v in inboundType" :key="v.id" :label="v.value">{{v.label}}</el-radio-button>
                 </el-radio-group>
                 <select-search
                         class="search"
@@ -21,7 +18,7 @@
             </div>
             <div class="section">
                 <div class="btns">
-                    <el-button>{{$i.warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
+                    <el-button>{{$i.warehouse.download}}({{selectList.length===0?'All':selectList.length}})</el-button>
                     <el-button @click="createInbound">新建</el-button>
                 </div>
                 <v-table
@@ -53,8 +50,8 @@
                  * */
                 loadingTable:false,
                 inboundStatus:'0',
+                inboundType:[],         //入库类型
                 tableDataList:[],
-                downloadBtnInfo:'All',
                 selectList:[],
                 inboundConfig:{
                     inboundNo: "",
@@ -66,7 +63,7 @@
                     //         orderType: "",
                     //     }
                     // ],
-                    inboundTypeDictCode: null
+                    inboundTypeDictCode: ''
                 },
 
                 searchId:1,
@@ -76,25 +73,11 @@
                         label:'入库单号',
                         id:1
                     },
-                    // {
-                    //     label:'供应商货号',
-                    //     id:2
-                    // },
-                    // {
-                    //     label:'订单号',
-                    //     id:3
-                    // },
                 ]
             }
         },
         methods:{
-            changeStatus(e){
-                let num=Number(e);
-                if(num===0){
-                    this.inboundConfig.inboundTypeDictCode=null;
-                }else{
-                    this.inboundConfig.inboundTypeDictCode=num;
-                }
+            changeStatus(){
                 this.getInboundData();
             },
 
@@ -117,7 +100,7 @@
             //新建入库单
             createInbound(){
                 this.$windowOpen({
-                    url:'/sellerWarehouse/createInbound'
+                    url:'/warehouse/createInbound'
                 });
             },
 
@@ -135,7 +118,7 @@
 
             btnClick(e){
                 this.$windowOpen({
-                    url:'/sellerWarehouse/inboundDetail',
+                    url:'/warehouse/inboundDetail',
                     params:{
                         id:e.id.value
                     }
@@ -148,14 +131,24 @@
         },
         created(){
             this.getInboundData();
+            this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE']).then(res=>{
+                this.inboundType=res[0].codes;
+                this.inboundType.forEach(v=>{
+                    if(v.value==='1'){
+                        v.label=this.$i.warehouse.purchaseInbound;
+                    }else if(v.value==='2'){
+                        v.label=this.$i.warehouse.checkInbound;
+                    }else if(v.value==='3'){
+                        v.label=this.$i.warehouse.customerReturnInbound;
+                    }else if(v.value==='4'){
+                        v.label=this.$i.warehouse.preDeliveryInbound;
+                    }
+                })
+            });
         },
         watch:{
             selectList(n){
-                if(n.length>0){
-                    this.downloadBtnInfo=n.length;
-                }else{
-                    this.downloadBtnInfo='All';
-                }
+
             }
         }
     }
@@ -168,9 +161,9 @@
         height: 32px;
         line-height: 32px;
         color:#666666;
+        margin-bottom: 5px;
     }
-
-    .radioGroup{
+    .radios{
         margin-left: 10px;
     }
 

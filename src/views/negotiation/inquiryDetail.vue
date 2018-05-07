@@ -88,10 +88,40 @@
             @save="save"
             ref="HM"
         >
-            <template v-for="items in $db.inquiry.basicInfo" :slot="items._slot" slot-scope="{data}">
-                <el-select placeholder="请选择" v-model="fromArg[items.key]">
-                    <el-option v-for="item in selectAll[data.key]" :key="item.value" :label="item.label" :value="item.value" />
+            <template v-for="item in $db.inquiry.basicInfo" :slot="item._slot" slot-scope="{data}">
+                <el-select
+                        v-model="fromArg[item.key]" 
+                        value-key="id"
+                        :size="item.size || 'mini'"
+                        :placeholder="item.placeholder" 
+                        v-if="item.key === 'destinationCountry' || item.key === 'departureCountry'"
+                        style="width:100%;"
+                    >
+                    <el-option
+                        v-for="items in selectAll[item.key]"
+                        :key="items.id"
+                        :label="items.name"
+                        :value="items.code"
+                        :id="items.id"
+                    />
                 </el-select>
+                <el-select
+                        v-model="fromArg[item.key]" 
+                        value-key="id"
+                        :size="item.size || 'mini'"
+                        :placeholder="item.placeholder" 
+                        v-if="item.type === 'select' && item.key !== 'destinationCountry' && item.key != 'departureCountry'"
+                        style="width:100%;"
+                    >
+                    <el-option
+                        v-for="items in selectAll[item.key]"
+                        :key="items.id"
+                        :label="items.name"
+                        :value="items.code"
+                        :id="items.id"
+                    />
+                </el-select>
+                <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
             </template>
         </v-history-modify>
     </div>
@@ -115,6 +145,7 @@
         name:'inquiryDetail',
         data() {
             return {
+                fromArg:{},
                 loading: false,
                 disabledLine: [],
                 trig: 0,
@@ -178,15 +209,6 @@
                 }
             }
         },
-        computed: {
-            fromArg() {
-                let json = {};
-                _.mapObject(this.$db.inquiry.basicInfo, (val, k) => {
-                    json[k] = val.key;
-                });
-                return json; 
-            }
-        },
         components: {
             'message-board':messageBoard,
             'select-search':selectSearch,
@@ -202,6 +224,7 @@
                 this.compareConfig = this.$localStore.get('$in_quiryCompare');
             };
             this.getDictionaries();
+            this.remoteMethod('');
         },
         watch: {
             ChildrenCheckList(val, oldVal) {
@@ -237,6 +260,12 @@
                         message: '已取消删除'
                     });
                 });
+            },
+            remoteMethod(keyWord) {
+                this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`)
+                .then(res => {
+                    this.selectAll.supplierName = res;
+                })
             },
             getDictionaries() {
                 this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
@@ -448,6 +477,7 @@
                             this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
                         }
                     }
+                    this.fromArg = arr[0];
                 });
            },
            basicInfoAction(data, type) { // basic info 按钮操作 

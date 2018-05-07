@@ -9,8 +9,6 @@
  *
  * */
 
-
-
 export default {
     //overview页面字段
     categoryId: {
