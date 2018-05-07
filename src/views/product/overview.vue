@@ -390,7 +390,7 @@
 
             addNewProduct(){
                 this.$windowOpen({
-                    url:'/sellerProduct/addNewProduct'
+                    url:'/product/addNewProduct'
                 });
             },
         },

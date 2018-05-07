@@ -112,11 +112,21 @@
                         </div>
                     </div>
                     <div v-else-if="v.showType==='input'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="scope.row[v.key]"
-                                clearable>
-                        </el-input>
+                        <!--<div v-if="v.needInput">-->
+                            <!--<el-input-->
+                                    <!--placeholder="请输入内容"-->
+                                    <!--v-model="scope.row[v.key]"-->
+                                    <!--@focus="handleBlur"-->
+                                    <!--clearable>-->
+                            <!--</el-input>-->
+                        <!--</div>-->
+                        <!--<div v-else>-->
+                            <el-input
+                                    placeholder="请输入内容"
+                                    v-model="scope.row[v.key]"
+                                    clearable>
+                            </el-input>
+                        <!--</div>-->
                     </div>
                     <div v-else-if="v.showType==='select'">
                         <el-select v-model="scope.row.skuList[0][v.key]" placeholder="请选择">
@@ -132,7 +142,7 @@
                         <el-input-number
                                 :disabled="v.computed"
                                 v-model="scope.row[v.key]"
-                                @blur="handleBlur(v.key)"
+                                @blur="handleBlur(v.key,scope.$index)"
                                 :controls="false"
                                 label="请输入"></el-input-number>
                     </div>
@@ -570,8 +580,48 @@
             /**
              * 页面表格事件
              * */
-            handleBlur(){
-                console.log(12345)
+            handleBlur(e,index){
+                console.log(e,'???')
+                if(e==='inboundOutCartonTotalQty'){
+                    //处理入库产品总箱数输入框
+                    console.log(this.productData[index][e],'入库产品总箱数')
+                    console.log(this.productData[index]['skuOuterCartonQty'],'外箱产品数')
+                    if(!this.productData[index][e] || !this.productData[index]['skuOuterCartonQty']){
+                        this.productData[index].inboundSkuTotalQty='';
+                    }else{
+                        this.productData[index].inboundSkuTotalQty=this.productData[index][e]*this.productData[index]['skuOuterCartonQty'];
+                    }
+
+                    //处理入库产品总净重
+                    if(!this.productData[index][e] || !this.productData[index]['skuOuterCartonNetWeight']){
+                        this.productData[index].inboundSkuTotalNetWeight='';
+                    }else{
+                        this.productData[index].inboundSkuTotalNetWeight=this.productData[index][e]*this.productData[index]['skuOuterCartonNetWeight'];
+                    }
+
+                    //处理入库产品总毛重
+                    if(!this.productData[index][e] || !this.productData[index]['skuOuterCartonRoughWeight']){
+                        this.productData[index].inboundSkuTotalGrossWeight='';
+                    }else{
+                        this.productData[index].inboundSkuTotalGrossWeight=this.productData[index][e]*this.productData[index]['skuOuterCartonRoughWeight'];
+                    }
+                }else if(e==='skuOuterCartonVolume'){
+                    //处理外箱体积
+                }else if(e==='skuOuterCartonRoughWeight'){
+                    //处理外箱毛重
+                    if(!this.productData[index]['inboundOutCartonTotalQty'] || !this.productData[index]['skuOuterCartonRoughWeight']){
+                        this.productData[index].inboundSkuTotalGrossWeight='';
+                    }else{
+                        this.productData[index].inboundSkuTotalGrossWeight=this.productData[index]['inboundOutCartonTotalQty']*this.productData[index]['skuOuterCartonRoughWeight'];
+                    }
+                }else if(e==='skuOuterCartonNetWeight'){
+                    //处理外箱净重
+                    if(!this.productData[index]['inboundOutCartonTotalQty'] || !this.productData[index]['skuOuterCartonNetWeight']){
+                        this.productData[index].inboundSkuTotalNetWeight='';
+                    }else{
+                        this.productData[index].inboundSkuTotalNetWeight=this.productData[index]['inboundOutCartonTotalQty']*this.productData[index]['skuOuterCartonNetWeight'];
+                    }
+                }
             },
             handleClick(e){
                 // this.$windowOpen({
