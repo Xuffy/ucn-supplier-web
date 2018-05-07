@@ -1,8 +1,8 @@
 <template>
     <div class="payment-table">
         <div class="payment-btn">
-            <el-button :disabled="orderStatus==='5'||stopEdit" @click="handleClick" type="primary">{{btnInfo}}</el-button>
-             <el-button :disabled="orderStatus==='5'||stopEdit" type="primary" @click='dunning'>提醒供应商退款</el-button>
+            <el-button :disabled="orderStatus==='5'||stopEdit" @click="handleClick" type="primary">申请退款</el-button>
+             <el-button :disabled="orderStatus==='5'||stopEdit" type="primary" @click='dunning'>提醒采购商付款</el-button>
         </div>
         <el-table
                 class="speTable"
@@ -48,7 +48,7 @@
                             {{scope.row[v.prop]}}   
                         </div>
                     </div>
-                    <div v-else-if="v.type==='Date'&& v.belong==='customer'">
+                    <div v-else-if="v.type==='Date'&& v.belong==='supplier'">
                             <div v-if="(scope.row.isEdit || scope.row.isNew)">
                                 <el-date-picker
                                         class="chooseDate"
@@ -68,7 +68,7 @@
                           </div>   
                        
                     </div>
-                    <div v-else-if="v.type==='Input'&&v.belong==='customer'">
+                    <div v-else-if="v.type==='Input'&&v.belong==='supplier'">
                         <div v-if="scope.row.isEdit || scope.row.isNew">
                             <el-input
                                     placeholder="请输入内容"
@@ -80,7 +80,7 @@
                             {{scope.row[v.prop]}}
                         </div>
                     </div>
-                    <div v-else-if="v.type==='Number'&&v.belong==='customer'">
+                    <div v-else-if="v.type==='Number'&&v.belong==='supplier'">
                         <div v-if="scope.row.isEdit || scope.row.isNew">
                             <el-input-number
                                     class="speInputNumber"
@@ -108,7 +108,7 @@
                             <el-button type="text" :disabled="orderStatus==='5'" @click="cancelSaveNewLine(scope.row)">取消</el-button>
                         </div>
                         <div v-else>
-                            <div v-if="scope.row[columns[11].prop]===10||scope.row[columns[11].prop]===30">
+                            <div v-if="scope.row[columns[11].prop]===20||scope.row[columns[11].prop]===30">
                                 <!--处在编辑状态-->
                                 <div v-if="scope.row.isEdit">
                                     <el-button type="text" :disabled="orderStatus==='5'" @click="saveLine(scope.row)">保存</el-button>
@@ -118,7 +118,7 @@
                                     <el-button type="text" :disabled="orderStatus==='5'" @click="confirmLine(scope.row)">确认</el-button>
                                 </div>
                             </div>
-                             <div v-else-if="scope.row[columns[11].prop]===20">
+                             <div v-else-if="scope.row[columns[11].prop]===10">
                                 <!--处在编辑状态-->
                                 <div v-if="scope.row.isEdit">
                                     <el-button type="text" :disabled="orderStatus==='5'" @click="saveLine(scope.row)">保存</el-button>
@@ -140,10 +140,6 @@
 </div>
 </template>
 <script>
-    /*
-                                                                                                                                                                                                                        10:待采购商确认,20:待供应商确认,30:待服务商确认，40:已确认,-1:作废
-                                                                                                                                                                                                                         orderType :10 采购订单
-                                                                                                                                                                                                                        */
     export default {
         name: 'payment-table',
         props: {
@@ -153,7 +149,7 @@
             },
             orderNo: {
                 type: String,
-                default: '999'
+                default: ' '
             },
             currencyCode: {
                 type: String,
@@ -193,41 +189,41 @@
                     ]
                 },
                 columns: [{
-                        label: 'Payment No.',
+                        label: '付款编号',
                         prop: 'no',
                         type: 'Text',
                         width: 180
                     },
                     {
-                        label: 'Payment Item',
+                        label: '款项名称',
                         prop: 'name',
                         type: 'Input',
                         width: 150,
-                        belong: "customer",
+                        belong: "supplier",
                     },
                     {
-                        label: 'Est. Pay Date',
+                        label: '预计收款日期',
                         prop: 'planPayDt',
                         type: 'Date',
                         belong: "customer",
                         width: 150
                     },
                     {
-                        label: 'Est. Amount',
+                        label: '预计收款金额',
                         prop: 'planPayAmount',
                         type: 'Number',
                         belong: "customer",
                         width: 130
                     },
                     {
-                        label: 'Act. Pay Date',
+                        label: '实际收款日期',
                         prop: 'actualPayDt',
                         type: 'Date',
                         belong: "customer",
                         width: 150
                     },
                     {
-                        label: 'Act. Amount',
+                        label: '实际收款金额',
                         prop: 'actualPayAmount',
                         type: 'Number',
                         belong: "customer",
@@ -235,14 +231,14 @@
 
                     },
                     {
-                        label: 'Est. Refund Date',
+                        label: '预计退款日期',
                         prop: 'planRefundDt',
                         type: 'Date',
                         belong: "supplier",
                         width: 150
                     },
                     {
-                        label: 'Est. Refund Amount',
+                        label: '预计退款金额',
                         prop: 'planRefundAmount',
                         type: 'Number',
                         belong: "supplier",
@@ -250,7 +246,7 @@
 
                     },
                     {
-                        label: 'Act. Refund Date',
+                        label: '实际退款日期',
                         prop: 'actualRefundDt',
                         type: 'Date',
                         belong: "supplier",
@@ -258,7 +254,7 @@
 
                     },
                     {
-                        label: 'Act. Refund Amount',
+                        label: '实际退款金额',
                         prop: 'actualRefundAmount',
                         type: 'Number',
                         belong: "supplier",
@@ -266,14 +262,14 @@
 
                     },
                     {
-                        label: 'currency',
+                        label: '币种',
                         prop: 'currency',
                         type: 'Text',
                         width: 150,
                         belong: "customer", //............
                     },
                     {
-                        label: 'Avilable',
+                        label: '有效性',
                         prop: 'status',
                         type: 'Text'
                     },
@@ -282,7 +278,7 @@
                 //用于备份data
                 copyData: [],
                 orderType: 10,
-                type: '10', //10 付款  20退款
+                type: '20', //10 付款  20退款
                 stopEdit: false
             }
         },
@@ -351,15 +347,15 @@
                     res => {
                         this.paymentData.push({
                             no: res,
-                            name: '',
-                            planPayDt: '', //预计付款时间
-                            planPayAmount: '', //预计付款金额
-                            actualPayDt: '', //实际付款时间
-                            actualPayAmount: '', //实际付款金额
+                            name: '1324',
+                            planRefundDt: '', //预计退款时间
+                            planRefundAmount: '', //预计退款金额
+                            actualRefundDt: '', //实际退款时间
+                            actualRefundAmount: '', //实际退款金额
                             type: this.type, //10 付款  20退款
                             payToId: this.payToId, //order的数据
                             currencyCode: this.currencyCode,
-                            currency: this.currencyCode, //order的数据
+                            currency: '12', //order的数据
                             //                            status: 1, //10:待采购商确认,20:待供应商确认,30:待服务商确认，40:已确认,-1:作废
                             isNew: true, //新增的数据全部处于新增状态
                         });
@@ -392,6 +388,7 @@
 
             //恢复一行数据
             recoverLine(e) {
+               console.log(e.version)
                 this.$ajax.post(this.$apis.paymentRecover + '/' + e.id + '?version=' + e.version).then((res) => {
                     _.map(this.paymentData, (key, value) => {
                         if (key.id == res.id) {
@@ -404,21 +401,23 @@
             },
 
             //保存修改一行数据(调用接口之后也要同步更新copyData)
-            saveLine(e) {
+            saveLine(e) {           
+                console.log(e)
                 let targetKey = this.columns[0].prop;
                 let params = {
                     id: e.id,
                     name: e.name,
-                    planPayDt: e.planPayDt,
-                    planPayAmount: e.planPayAmount,
-                    actualPayDt: e.actualPayDt,
-                    actualPayAmount: e.actualPayAmount,
+                    planRefundDt: e.planRefundDt,
+                    planRefundAmount: e.planRefundAmount,
+                    actualRefundDt: e.actualRefundDt,
+                    actualRefundAmount: e.actualRefundAmount,
                     version: e.version
                 }
                 this.$ajax.post(this.$apis.paymentUpdata, params).then((res) => {
                     _.map(this.paymentData, (key, value) => {
                         if (key.id == res.id) {
                             this.paymentData.splice(value, 1, res)
+                            console.log(this.paymentData)
                         }
                     })
                 }).catch((res) => {
@@ -450,7 +449,9 @@
                     let params = (Object.assign({}, e))
                     delete params.isNew
                     params.orderNo = this.orderNo,
-                        params.orderType = 10,
+                    params.orderType = 10,
+//                    console.log(params);     
+                        
                         this.$ajax.post(this.$apis.paymentSave, params).then(res => {
                             _.map(this.paymentData, (key, value) => {
                                 if (key.no == res.no) {
