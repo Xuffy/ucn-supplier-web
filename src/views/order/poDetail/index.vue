@@ -85,6 +85,8 @@
             >
             
            </v-history-modify>
+           
+           
   </div>
 </template>
 
@@ -144,7 +146,178 @@
                 },
                 disabledLine: [],
                 trig: 0,
-                tableTatal: []
+                tableTatal: [],
+                skuList: [{
+                    "companyId": 12315465465454661655,
+                    "entryDt": "2018-04-28T02:56:16.789Z",
+                    "entryId": 0,
+                    "entryName": "string",
+                    "fieldsRemark": "string",
+                    "id": 0,
+                    "orderId": 0,
+                    "orderNo": "string",
+                    "ownerId": 0,
+                    "skuAdditionalFour": "string",
+                    "skuAdditionalOne": "string",
+                    "skuAdditionalThree": "string",
+                    "skuAdditionalTwo": "string",
+                    "skuAdjustPackage": true,
+                    "skuApplicableAge": 0,
+                    "skuAvailableQty": 0,
+                    "skuBarCode": "string",
+                    "skuBrand": "string",
+                    "skuBrandRelated": "string",
+                    "skuBrandRemark": "string",
+                    "skuCategoryFour": "string",
+                    "skuCategoryId": 0,
+                    "skuCategoryOne": "string",
+                    "skuCategoryThree": "string",
+                    "skuCategoryTwo": "string",
+                    "skuCertificat": "string",
+                    "skuCifCurrency": "string",
+                    "skuCifPort": "string",
+                    "skuCifPrice": 0,
+                    "skuCode": "1234",
+                    "skuColourCn": "string",
+                    "skuColourEn": "string",
+                    "skuComments": "string",
+                    "skuCommodityInspectionCn": "string",
+                    "skuCommodityInspectionEn": "string",
+                    "skuCustomerCreate": true,
+                    "skuCustomerSkuCode": "string",
+                    "skuCustomsCode": "string",
+                    "skuCustomsNameCn": "string",
+                    "skuCustomsNameEn": "string",
+                    "skuDduCurrency": "string",
+                    "skuDduPort": "string",
+                    "skuDduPrice": 0,
+                    "skuDeclareElement": "string",
+                    "skuDeliveredQty": 0,
+                    "skuDeliveryDates": 0,
+                    "skuDepartureDt": 0,
+                    "skuDescCn": "string",
+                    "skuDescCustomer": "string",
+                    "skuDescEn": "string",
+                    "skuDesign": "string",
+                    "skuDisplayBoxQty": 0,
+                    "skuExpireDates": 0,
+                    "skuExpireUnit": "string",
+                    "skuExwCurrency": "string",
+                    "skuExwPrice": 0,
+                    "skuFobCurrency": "CNY",
+                    "skuFobPort": "string",
+                    "skuFobPrice": 0,
+                    "skuFormation": "string",
+                    "skuGp20SkuQty": 0,
+                    "skuGp40SkuQty": 0,
+                    "skuHeight": 0,
+                    "skuHq40SkuQty": 0,
+                    "skuId": 0,
+                    "skuInboundQty": 0,
+                    "skuInnerCartonDesc": "string",
+                    "skuInnerCartonHeight": 0,
+                    "skuInnerCartonLength": 0,
+                    "skuInnerCartonMethodCn": "string",
+                    "skuInnerCartonMethodEn": "string",
+                    "skuInnerCartonOuterNum": 0,
+                    "skuInnerCartonPic": "string",
+                    "skuInnerCartonQty": 0,
+                    "skuInnerCartonRoughWeight": 0,
+                    "skuInnerCartonUnit": "string",
+                    "skuInnerCartonVolume": 0,
+                    "skuInnerCartonWeightNet": 0,
+                    "skuInnerCartonWidth": 0,
+                    "skuInnerPackBarCode": "string",
+                    "skuInnerPackCode": "string",
+                    "skuInnerPackLabel": "string",
+                    "skuInspectQuarantineCategory": "string",
+                    "skuInventory": 0,
+                    "skuInventoryCostMethod": "string",
+                    "skuLabel": "string",
+                    "skuLabelDesc": "string",
+                    "skuLabelPic": "string",
+                    "skuLength": 0,
+                    "skuLengthWidthHeight": "string",
+                    "skuMainSaleArea": "string",
+                    "skuMainSaleCountry": 0,
+                    "skuMaterialCn": "string",
+                    "skuMaterialEn": "string",
+                    "skuMethodPkgCn": "string",
+                    "skuMethodPkgEn": "string",
+                    "skuMinInventory": 0,
+                    "skuMinOrderQty": 0,
+                    "skuModifyStatus": 0,
+                    "skuNameCn": "string",
+                    "skuNameCustomer": "string",
+                    "skuNameEn": "string",
+                    "skuNetWeight": 0,
+                    "skuNoneSellCountry": 0,
+                    "skuOem": true,
+                    "skuOrigin": "string",
+                    "skuOtherPackInfoCn": "string",
+                    "skuOtherPackInfoEn": "string",
+                    "skuOuterCartonBarCode": "string",
+                    "skuOuterCartonCode": "string",
+                    "skuOuterCartonDesc": "string",
+                    "skuOuterCartonHeight": 0,
+                    "skuOuterCartonLength": 0,
+                    "skuOuterCartonMethodCn": "string",
+                    "skuOuterCartonMethodEn": "string",
+                    "skuOuterCartonNetWeight": 0,
+                    "skuOuterCartonPic": "string",
+                    "skuOuterCartonQty": 1,
+                    "skuOuterCartonRoughWeight": 0,
+                    "skuOuterCartonUnit": "string",
+                    "skuOuterCartonVolume": 0,
+                    "skuOuterCartonWidth": 0,
+                    "skuPic": "string",
+                    "skuPkgMethodPic": "string",
+                    "skuPrice": 0,
+                    "skuProductionDates": 0,
+                    "skuQty": 1,
+                    "skuQtyPerTray": 0,
+                    "skuQualifiedQty": 0,
+                    "skuQualityStander": "string",
+                    "skuQuotationNo": "string",
+                    "skuRateValueAddedTax": 0,
+                    "skuReadilyAvailable": true,
+                    "skuRecycle": true,
+                    "skuRemarkOne": "string",
+                    "skuRemarkThree": "string",
+                    "skuRemarkTwo": "string",
+                    "skuSafeInventory": 0,
+                    "skuSaleStatus": 0,
+                    "skuSample": true,
+                    "skuSamplePrice": 0,
+                    "skuSampleQty": 0,
+                    "skuShippingMarks": "string",
+                    "skuSpecialTransportRequire": "string",
+                    "skuStatus": 0,
+                    "skuSupplierCode": "string",
+                    "skuSupplierId": 0,
+                    "skuSupplierName": "1",
+                    "skuSysCode": "string",
+                    "skuTaxRefundRate": 0,
+                    "skuTradeMarkCn": "string",
+                    "skuTradeMarkEn": "string",
+                    "skuTryDimension": 0,
+                    "skuUnit": "string",
+                    "skuUnitLength": 0,
+                    "skuUnitVolume": 0,
+                    "skuUnitWeight": 0,
+                    "skuUntestedQty": 0,
+                    "skuUseDisplayBox": true,
+                    "skuVolume": 0,
+                    "skuWarehourceDefault": "string",
+                    "skuWidth": 0,
+                    "skuYearListed": "2018-04-28T02:56:16.789Z",
+                    "tenantId": 0,
+                    "timeZone": "string",
+                    "updateDt": "2018-04-28T02:56:16.789Z",
+                    "updateId": 0,
+                    "updateName": "string",
+                    "version": 0
+                }],
             }
         },
         methods: {
@@ -197,7 +370,7 @@
                         //.传递给[payment]组件的数据
                         this.orderNo = res.orderNo
                         this.currencyCode = res.currency
-                        this.payToId = res.companyId
+                        this.payToId = res.supplierCode
 
                         this.markAsImportant = res.importantSupplier //importantCustomer端不一样
                         //..........basicinfo
@@ -219,7 +392,6 @@
                             item => {
                                 return item;
                             });
-                        this.tableTatalCal();
                         this.tableLoad = false;
                     })
                     .catch((res) => {
@@ -401,23 +573,25 @@
                 });
             },
             send() {
-                let parentNode = this.$filterModify(this.dataFilter(this.newProductTabData))
+               
+//                let parentNode = this.$filterModify(this.dataFilter(this.newProductTabData))
                 //                return console.log(parentNode)
                 //参数一堆堆 我靠
-                let params = {
+                let param = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
-                    skuList: parentNode,
+                    skuList:this.skuList,
                     responsibilityList: this.$refs.responsibility.tableData,
                     draftCustomer: false,
-                    importantCustomer: false,
-                    importantSupplier: this.markAsImportant,
+                    importantCustomer: this.markAsImportant,
+                    importantSupplier: false,
                 }
+                console.log(param, '===')
                 var basic = this.$refs.basicInfo.formItem
-                _.extendOwn(params, basic)
+                _.extend(param, basic)
                 var caculate = this.$refs.caculate.caculateForm
-                _.extendOwn(params, caculate)
-                this.$ajax.post(this.$apis.post_updataOrder, params)
+                _.extend(param, caculate)
+                this.$ajax.post(this.$apis.post_updataOrder, param)
                     .then(res => {
                         this.$router.push('/order/overview')
                     })

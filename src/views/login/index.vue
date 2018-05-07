@@ -16,7 +16,7 @@
       }
     },
     created() {
-      let redirectUrl = '/#/?type=1&redirect=' + Base64.encode(`${window.location.origin}/static/authorize/index.html`);
+      let redirectUrl = '/#/?type=2&redirect=' + Base64.encode(`${window.location.origin}/static/authorize/index.html`);
       this.$message.closeAll();
       this.loginUrl = `${config.ENV.LOGIN_URL}${redirectUrl}`;
       this.$localStore.clearAll();
