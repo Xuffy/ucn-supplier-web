@@ -1,16 +1,16 @@
 <template>
     <div class="orderOverview">
-        <h3 class="hd">Order Overview</h3>
+        <h3 class="hd">订单总览</h3>
         <div class="status">
             <div class="btn-wrap">
                 <span>Status&nbsp</span>
                       <el-radio-group v-model="params.status" size="mini" @change='changeStatus'>
-                            <el-radio-button label=" ">{{($i.common.all)}}</el-radio-button>
-                            <el-radio-button label="1"> {{ $i.common.TBCByCustomer }}</el-radio-button>
-                            <el-radio-button label="2">{{($i.common.TBCBySupplier)}}</el-radio-button>
-                            <el-radio-button label="3">{{($i.common.process)}}</el-radio-button>
-                            <el-radio-button label="4">{{($i.common.finish)}}</el-radio-button>
-                            <el-radio-button label="5">{{($i.common.cancel)}}</el-radio-button>
+                            <el-radio-button label=" ">全部</el-radio-button>
+                            <el-radio-button label="1"> 待供应商确认</el-radio-button>
+                            <el-radio-button label="2">待采购商确认</el-radio-button>
+                            <el-radio-button label="3">进行中</el-radio-button>
+                            <el-radio-button label="4">已完成</el-radio-button>
+                            <el-radio-button label="5">已关闭</el-radio-button>
                     </el-radio-group>
             </div>
             <div class="select-wrap">
@@ -23,16 +23,16 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedDate.length}})</el-button>
-                <el-button @click='creat_order' :disabled='!(selectedDate.length==1)' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.common.createOrder)}}</el-button>
-                 <el-button :disabled='prodisabled' @click='finish'>finish</el-button>
-                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>
+                <el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">下载({{selectedDate.length}})</el-button>
+<!--                <el-button @click='creat_order' :disabled='!(selectedDate.length==1)' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.common.createOrder)}}</el-button>-->
+<!--                 <el-button :disabled='prodisabled' @click='finish'>finish</el-button>-->
+                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">删除</el-button>
             </div>
             <div class="viewBy">
-                <span>View by&nbsp</span>
+                <span>浏览方式&nbsp</span>
                    <el-radio-group v-model="params.view" size="mini" @change='changeView'>
-                            <el-radio-button label=1>{{($i.common.order)}}</el-radio-button>
-                            <el-radio-button label=2>{{($i.common.SKU)}}</el-radio-button>
+                            <el-radio-button label=1>订单</el-radio-button>
+                            <el-radio-button label=2>产品</el-radio-button>
                     </el-radio-group>
             </div>
         </div>
