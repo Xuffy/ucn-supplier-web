@@ -586,7 +586,6 @@
                     importantCustomer: this.markAsImportant,
                     importantSupplier: false,
                 }
-                console.log(param, '===')
                 var basic = this.$refs.basicInfo.formItem
                 _.extend(param, basic)
                 var caculate = this.$refs.caculate.caculateForm

@@ -62,7 +62,7 @@ export default {
     
     
     //字典表数据
-    post_codePart:['/code/part','UMETA_URL','BASE_BUYER'],
-     post_country:['/country/all','UMETA_URL','BASE_BUYER'],
-     post_logisticsport:['/logisticsport/query','UMETA_URL','BASE_BUYER']
+    post_codePart:['/code/part','UMETA_URL'],
+     post_country:['/country/all','UMETA_URL'],
+     post_logisticsport:['/logisticsport/query','UMETA_URL']
 }
