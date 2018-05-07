@@ -23,9 +23,10 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click="cancelInquiry" :disabled="!checkedData.length||params.status+''==='99'||params.status+''==='1'||params.status===null">{{ $i.common.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData && params.status !== null && params.status+'' !== '22' && params.status+'' !== '21' ? false : true">{{ $i.common.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button>{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
+                <el-button @click="ajaxInqueryAction('accept')" :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='99'||params.status+''==='1'||params.status === null">{{ $i.common.accept }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="cancelInquiry" :disabled="!checkedData.length||params.status+''==='99'||params.status+''==='1'||params.status === null">{{ $i.common.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='21'||params.status === null">{{ $i.common.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button :disabled="!tabData.length">{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
@@ -38,6 +39,7 @@
         <v-table 
             :data="tabData" 
             :buttons="[{label: 'detail', type: 'detail'}]" 
+            :height="450"
             @action="action" 
             @change-checked="changeChecked"
             :loading="tabLoad" 
@@ -45,8 +47,8 @@
         />
         <v-pagination
             :page-data.sync="params"
-            @page-change="handleSizeChange"
-            @page-size-change="pageSizeChange"
+            @size-change="handleSizeChange"
+            @change="pageSizeChange"
         />
     </div>
 </template>
@@ -56,6 +58,7 @@
      * @param options 下拉框 原始数据 
     */
     import { selectSearch, VTable, VPagination } from '@/components/index';
+    import { mapActions } from 'vuex'
     export default {
         name:'',
         data() {
@@ -103,6 +106,13 @@
         },
         created() {
             this.viewByStatus = 0;
+            this.setRecycleBin({
+                name: 'negotiationRecycleBin',
+                params: {
+                    type: 'inquiry'
+                },
+                show: true
+            });
         },
         watch: {
             viewByStatus() {
@@ -117,6 +127,9 @@
             
         },
         methods: {
+            ...mapActions([
+                'setRecycleBin'
+            ]),
             inputEnter(val) {
                 if(!val.keyType) return this.$message('请选中搜索类型');
                 if(!val.key) return this.$message('搜索内容不能为空');
@@ -184,7 +197,7 @@
             },
             detail(item) {
                 this.$router.push({
-                    path: '/sellerNegotiation/inquiryDetail',
+                    path: '/negotiation/inquiryDetail',
                     query: {
                         id: _.findWhere(item, {'key': 'id'}).value
                     }
@@ -208,8 +221,8 @@
                     }
                 });
             },
-            pageSizeChange(No) {
-                console.log(No)
+            pageSizeChange(no) {
+                this.params.pn = no;
             },
             handleSizeChange(val) {
                 this.params.ps = val;

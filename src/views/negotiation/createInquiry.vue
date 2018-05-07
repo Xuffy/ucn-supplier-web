@@ -36,11 +36,11 @@
                                     style="width:100%;"
                                 >
                                 <el-option
-                                    v-for="item in selectAll[item.key]"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.code"
-                                    :id="item.id"
+                                    v-for="items in selectAll[item.key]"
+                                    :key="items.id"
+                                    :label="items.name"
+                                    :value="items.code"
+                                    :id="items.id"
                                 />
                             </el-select>
 
@@ -53,11 +53,11 @@
                                     style="width:100%;"
                                 >
                                 <el-option
-                                    v-for="item in selectAll[item.key]"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.code"
-                                    :id="item.id"
+                                    v-for="items in selectAll[item.key]"
+                                    :key="items.id"
+                                    :label="items.name"
+                                    :value="items.code"
+                                    :id="items.id"
                                 />
                             </el-select>
                             <el-select
@@ -74,11 +74,11 @@
                                 :remote-method="remoteMethod"
                                 :loading="loading">
                                 <el-option
-                                    v-for="item in selectAll[item.key]"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item"
-                                    :id="item.id"
+                                    v-for="items in selectAll[item.key]"
+                                    :key="items.id"
+                                    :label="items.name"
+                                    :value="items"
+                                    :id="items.id"
                                 />
                             </el-select>
                             <el-input

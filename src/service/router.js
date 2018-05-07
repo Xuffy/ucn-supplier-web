@@ -16,39 +16,36 @@ export const routerMap = [
       hidden: true, // 在侧边栏中不显示该菜单
     },
     {
-      path: '/sellerNegotiation',
-      name: 'sellerNegotiation',
+      path: '/negotiation',
+      name: 'negotiation',
       noDropdown: true,
       component: Layout,
-      redirect: '/sellerNegotiation/inquiry',
+      redirect: '/negotiation/inquiry',
       meta: {
-        name: 'sellerNegotiation',
+        name: 'negotiation',
       },
       children: [
         {
           path: 'inquiry',
-          name: 'sellerInquiry',
+          name: 'inquiry',
           meta: {
-            name: 'seller Negotiation inquiry',
+            name: 'negotiation inquiry',
           },
           component: () => import('../views/sellerNegotiation/inquiryOverview')
         },
         {
           path: 'inquiryDetail',
-          name: 'sellerInquiryDetail',
+          name: 'inquiryDetail',
           hidden: true,
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: 'Inquiry Detail',
             messageBoard: 'code'
           },
           component: () => import('../views/sellerNegotiation/inquiryDetail')
         },
         {
-          path: 'recycleBin',
-          name: 'sellerRecycleBin',
+          path: 'recycleBin/:type',
+          name: 'negotiationRecycleBin',
           component: () => import('../views/sellerNegotiation/recycleBin')
         }
       ]
@@ -265,77 +262,6 @@ export const routerMap = [
             name: 'Compare Overview'
           },
           component: () => import ('../views/supplier/Compare/Overview.vue')
-        }
-      ]
-    },
-    {
-      path: '/negotiation',
-      component: Layout,
-      redirect: '/negotiation/inquiry',
-      name: 'negotiation',
-      meta: {name: 'Negotiation'},
-      children: [
-        {
-          path: 'inquiry',
-          name: 'negotiationInquiry',
-          meta: {
-            name: 'Inquiry Overview'
-          },
-          component: () => import('../views/negotiation/inquiryOverview')
-        },
-        {
-          path: 'inquiryDetail',
-          name: 'negotiationInquiryDetail',
-          hidden: true,
-          meta: {
-            name: 'Inquiry Detail',
-            messageBoard: 'code'
-          },
-          component: () => import('../views/negotiation/inquiryDetail')
-        },
-        {
-          path: 'createInquiry',
-          name: 'negotiationCreateInquiry',
-          hidden: true,
-          meta: {
-            name: 'Create Inquiry'
-          },
-          component: () => import('../views/negotiation/createInquiry')
-        },
-        {
-          path: 'compare',
-          name: 'negotiationCompare',
-          meta: {
-            name: 'Compare Overview'
-          },
-          component: () => import('../views/negotiation/compareOverview')
-        },
-        {
-          path: 'compareDetail/:type',
-          name: 'negotiationCompareDetail',
-          hidden: true,
-          meta: {
-            name: 'Compare Detail'
-          },
-          component: () => import('../views/negotiation/compare')
-        },
-        {
-          path: 'draft/:type',
-          name: 'negotiationDraft',
-          hidden: true,
-          meta: {
-            name: 'draft'
-          },
-          component: () => import('../views/negotiation/draft')
-        },
-        {
-          path: 'recycleBin/:type',
-          name: 'negotiationRecycleBin',
-          hidden: true,
-          meta: {
-            name: 'recycleBin'
-          },
-          component: () => import('../views/negotiation/recycleBin')
         }
       ]
     },

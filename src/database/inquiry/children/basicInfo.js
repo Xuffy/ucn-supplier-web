@@ -23,6 +23,7 @@ export default {
     },
     remarkDate: {
         key: 'updateDt',
+        state: 'time',
         label: '22',
         type: 'String',
         _disabled: true,
@@ -36,7 +37,7 @@ export default {
         placeholder: 'Please select',
         width: '150px',
         type: 'String',
-        state: 0,
+        state: 'time',
         _disabled: true,
         _inquiryHide: true
     },
@@ -46,7 +47,7 @@ export default {
         rules: [],
         width: '150px',
         type: 'String',
-        state: 0,
+        state: 'time',
         _disabled: true,
         _inquiryHide: true
     },
@@ -75,7 +76,7 @@ export default {
         rules: [],
         width: '150px',
         type: 'String',
-        state: 0,
+        state: 'time',
         _inquiryHide: true,
         _disabled: true
     },
@@ -164,7 +165,6 @@ export default {
     supplierName: { // 供应商名称 ok
         placeholder: 'Please select',
         rules: [],
-        _slot: 'supplierName',
         width: '150px',
         type: 'manySelect',
         state: 0
