@@ -5,13 +5,26 @@ export default {
     type: 'text',
     _disabled: true,
     _title: 'remark',
-    state: 'time'
+    transForm: 'time'
+  },
+  skuSysCode: {
+    key: 'skuSysCode',
+    _hide: true
+  },
+  skuMethodPkgEn: {
+    _hide: true
+  },
+  skuWarehourceDefault: {
+    _hide: true
+  },
+  skuWarehourceDefault: {
+    _hide: true
+  },
+  skuMethodPkgEn: {
+    _hide: true
   },
   tenantId: {
     _hide: true   
-  },
-  skuRecycle: {
-    _hide: true
   },
   skuId: {
     _hide: true
@@ -32,357 +45,520 @@ export default {
   skuCustomerCreate: {
     _hide: true
   },
-  pic: {
-    key: 'skuPic',
-    type: 'attachment'
-  },
-  skuSysCode: {
-    type: 'text',
+  operater: {
+    key: 'updateName',
     _disabled: true
   },
-  status: {
-    key: 'skuStatus',
-    type: 'text'
+  pic: {
+    key: 'skuPic',
+    type: 'attachment',
+    _disabled: true
   },
-  code: {
+  skuSaleStatus: {
+    key: 'skuStatus',
+    _disabled: true
+  },
+  deleteOrNotRecycle: {
+    key: 'skuRecycle',
+    _disabled: true
+  },
+  skuCode: {
     key: 'skuCode',
-    type: 'text',
     _disabled: true
   },
   nameCn: {
     key: 'skuNameCn',
-    type: 'text',
     _disabled: true
   },
-  descCn: {
+  skuDescriptionCn: {
     key: 'skuDescCn',
-    type: 'text',
     _disabled: true
   },
-  nameEn: {
+  skuNameEn: {
     key: 'skuNameEn',
-    type: 'text',
     _disabled: true
   },
-  descEn: {
+  skuDescriptionEn: {
     key: 'skuDescEn',
-    type: 'text',
     _disabled: true
   },
-  nameCustomer: {
+  skuNameInCustomerLanguage: {
     key: 'skuNameCustomer',
-    type: 'text',
     _disabled: true
   },
-  descCustomer: {
-    key: 'skuDescCustomer'
+  skuDescriptionInCustomerLanguage: {
+    key: 'skuDescCustomer',
+    _disabled: true
   },
   customerSkuCode: {
-    key: 'skuCustomerSkuCode'
+    key: 'skuCustomerSkuCode',
+    _disabled: true
   },
   supplierName: {
-    key: 'skuSupplierName'
+    key: 'skuSupplierName',
+    _disabled: true
   },
-  supplierCode: {
-    key: 'skuSupplierCode'
+  supplierNo: {
+    key: 'skuSupplierCode',
+    _disabled: true
   },
   unit: {
-    key: 'skuUnit'
+    key: 'skuUnit',
+    type: 'Select',
+    transForm: 'SKU_UNIT'
   },
-  formation: {
-    key: 'skuFormation'
+  productFormation: {
+    key: 'skuFormation',
+    type: 'String'
   },
-  materialEn: {
-    key: 'skuMaterialEn'
+  martialEn: {
+    key: 'skuMaterialEn',
+    type: 'String'
   },
-  materialCn: {
-    key: 'skuMaterialCn'
+  martialCn: {
+    key: 'skuMaterialCn',
+    type: 'String'
   },
   colourEn: {
-    key: 'skuColourEn'
+    key: 'skuColourEn',
+    type: 'String'
   },
   colourCn: {
-    key: 'skuColourCn'
+    key: 'skuColourCn',
+    type: 'String'
   },
-  minOrderQty: {
-    key: 'skuMinOrderQty'
+  minimumOrderQuantity: {
+    key: 'skuMinOrderQty',
+    type: 'Number'
   },
-  deliveryDates: {
-    key: 'skuDeliveryDates'
+  deliveryDays: {
+    key: 'skuDeliveryDates',
+    type: 'Number'
   },
-  design: {
-    key: 'skuDesign'
+  productDesign: {
+    key: 'skuDesign',
+    type: 'String'
   },
-  categoryId: {
-    key: 'skuCategoryId'
+  category: {
+    key: 'skuCategoryId',
+    type: 'Select',
+    state: 'category'
   },
   barcode: {
-    key: "skuBarcode"
+    key: "skuBarcode",
+    type: 'String'
   },
   readilyAvailable: {
-    key: 'skuReadilyAvailable'
+    key: 'skuReadilyAvailable',
+    type: 'Select'
   },
-  availableQty: {
-    key: 'skuAvailableQty'
+  skuAvailable: {
+    key: 'skuAvailableQty',
+    type: 'Number'
   },
-  noneSellCountry: {
-    key: 'skuNoneSellCountry'
+  restrictedSellingCountry: {
+    key: 'skuNoneSellCountry',
+    _disabled: true,
+    transForm: 'COUNTRY'
   },
   applicableAge: {
-    key: 'skuApplicableAge'
+    key: 'skuApplicableAge',
+    type: 'Number',
+    max: 200,
+    min: 0
   },
-  expireDates: {
-    key: 'skuExpireDates'
+  expirationDate: {
+    key: 'skuExpireDates',
+    type: 'Number'
   },
-  expireUnit: {
-    key: 'skuExpireUnit'
+  expirationDateUnit: {
+    key: 'skuExpireUnit',
+    type: 'Select',
+    state: 'Date',
+    time: 'yyyy-mm-dd'
   },
-  comments: {
-    key: 'skuComments'
+  explain: {
+    key: 'skuComments',
+    type: 'String',
+    max: 300
   },
   fobCurrency: {
-    key: 'skuFobCurrency'
+    key: 'skuFobCurrency',
+    type: 'Select',
+    transForm: 'CY_UNIT'
   },
   fobPrice: {
-    key: 'skuFobPrice'
+    key: 'skuFobPrice',
+    type: 'Number'
+  },
+  referenceFobPriceUsd: {
+    key: 'skuRefFobPrice',
+    _disabled: true
   },
   fobPort: {
-    key: 'skuFobPort'
+    key: 'skuFobPort',
+    type: 'String'
   },
   exwPrice: {
-    key: 'skuExwPrice'
+    key: 'skuExwPrice',
+    type: 'Number'
   },
   exwCurrency: {
-    key: 'skuExwCurrency'
+    key: 'skuExwCurrency',
+    type: 'Select',
+    transForm: 'CY_UNIT'
   },
-  otherIncoterm: {
-    key: 'skuOtherIncoterm'
+  cifPrice: {
+    key: 'skuCifPrice',
+    type: 'Number'
   },
-  otherIncotermPrice: {
-    key: 'skuOtherIncotermPrice'
-  },
-  otherIncotermArea: {
-    key: 'skuOtherIncotermArea'
+  referenceCifPriceUsd: {
+    key: 'skuRefCifPrice',
+    _disabled: true
   },
   otherIncotermCurrency: {
-    key: 'skuOtherIncotermCurrency'
+    key: 'skuOtherIncotermCurrency',
+    type: 'Select',
+    transForm: 'CY_UNIT'
   },
-  rateValueAddedTax: {
-    key: 'skuRateValueAddedTax'
+  cifArea: {
+    key: 'skuCifArea',
+    type: 'String'
+  },
+  dduOrice: {
+    key: 'skuDduPrice',
+    type: 'Number'
+  },
+  referenceDdupriceUsd: {
+    key: 'skuRefDduPrice',
+    _disabled: true
+  },
+  dduCurrency: {
+    key: 'skuDduCurrency',
+    type: 'Select',
+    transForm: 'CY_UNIT'
+  },
+  dduArea: {
+    key: 'skuDduArea',
+    type: 'String'
+  },
+  rateOfValueAddedTax: {
+    key: 'skuRateValueAddedTax',
+    type: 'Number',
+    state: 'rate',
+    max: 100,
+    min: 0
   },
   taxRefundRate: {
-    key: 'skuTaxRefundRate'
+    key: 'skuTaxRefundRate',
+    type: 'Number',
+    state: 'rate',
+    max: 100,
+    min: 0
   },
-  customsCode: {
-    key: 'skuCustomsCode'
+  hsCode: {
+    key: 'skuCustomsCode',
+    type: 'String'
   },
-  customsNameCn: {
-    key: 'skuCustomsNameCn'
+  customsDeclarationNameCn: {
+    key: 'skuCustomsNameCn',
+    type: 'String',
+    max: 100
   },
-  customsNameEn: {
-    key: 'skuCustomsNameEn'
+  customsDeclarationNameEn: {
+    key: 'skuCustomsNameEn',
+    type: 'String',
+    max: 100
   },
-  tradeMarkCn: {
-    key: 'skuTradeMarkCn'
+  chineseTradeMark: {
+    key: 'skuTradeMarkCn',
+    type: 'String'
   },
-  tradeMarkEn: {
-    key: 'skuTradeMarkEn'
+  englishTradeMark: {
+    key: 'skuTradeMarkEn',
+    type: 'String'
   },
-  commodityInspectionCn: {
-    key: 'skuCommodityInspectionCn'
+  commodityInspectionChineseName: {
+    key: 'skuCommodityInspectionCn',
+    type: 'String'
   },
-  commodityInspectionEn: {
-    key: 'skuCommodityInspectionEn'
+  commodityInspectionEnglishName: {
+    key: 'skuCommodityInspectionEn',
+    type: 'String'
   },
-  declareElement: {
-    key: 'skuDeclareElement'
+  declareElements: {
+    key: 'skuDeclareElement',
+    type: 'String'
   },
   origin: {
-    key: 'skuOrigin'
+    key: 'skuOrigin',
+    type: 'String'
   },
-  inspectQuarantineCategory: {
-    key: 'skuInspectQuarantineCategory'
+  inspectionAndQuarantineCategory: {
+    key: 'skuInspectQuarantineCategory',
+    type: 'String'
   },
   brand: {
-    key: 'skuBrand'
+    key: 'skuBrand',
+    type: 'String'
   },
   brandRemark: {
-    key: 'skuBrandRemark'
+    key: 'skuBrandRemark',
+    type: 'String'
   },
-  brandRelated: {
-    key: 'skuBrandRelated'
+  relatedBrand: {
+    key: 'skuBrandRelated',
+    type: 'String'
   },
   certificat: {
-    key: 'skuCertificat'
+    key: 'skuCertificat',
+    type: 'String',
+    max: 45
   },
-
-
-  unitWeight: {
-    key: 'skuUnitWeight'
+  unitOfWeight: {
+    key: 'skuUnitWeigh',
+    type: 'Select',
+    transForm: 'WT_UNIT'
   },
-  unitLength: {
-    key: 'skuUnitLength'
+  unitOfLength: {
+    key: 'skuUnitLength',
+    type: 'Select',
+    transForm: 'LH_UNIT'
   },
-  unitVolume: {
-    key: 'skuUnitVolume'
+  unitOfVolume: {
+    key: 'skuUnitVolume',
+    type: 'Select',
+    transForm: 'VE_UNIT'
   },
-  length: {
-    key: 'skuLength'
+  skuLength: {
+    key: 'skuLength',
+    type: 'Number'
   },
-  width: {
-    key: 'skuWidth'
+  skuBreadth: {
+    key: 'skuWidth',
+    type: 'Number'
   },
-  height: {
-    key: 'skuHeight'
+  skuHeight: {
+    key: 'skuHeight',
+    type: 'Number'
   },
-  netWeight: {
-    key: 'skuNetWeight'
+  skuNetWeight: {
+    key: 'skuNetWeight',
+    type: 'Number'
   },
-  volume: {
-    key: 'skuVolume'
+  skuVolume: {
+    key: 'skuVolume',
+    type: 'Number'
   },
-  methodPkgCn: {
-    key: 'skuMethodPkgCn'
+  packingMethodCn: {
+    key: 'skuMethodPkgCn',
+    type: 'String',
+    max: 45
   },
-  methodPkgEn: {
-    key: 'skuMethodPkgEn'
+  packingMethodEn: {
+    key: 'skuMethodPkgE',
+    type: 'String',
+    max: 45
   },
-  innerCartonUnit: {
-    key: 'skuInnerCartonUnit'
+  unitOfInnerCarton: {
+    key: 'skuInnerCartonUnit',
+    type: 'String',
+    max: 45
   },
-  innerCartonQty: {
-    key: 'skuInnerCartonQty'
+  skuQuantityOfInnerCarton: {
+    key: 'skuInnerCartonQty',
+    type: 'Number'
   },
-  innerCartonLength: {
-    key: 'skuInnerCartonLength'
+  lengthOfInnerCarton: {
+    key: 'skuInnerCartonLength',
+    type: 'Number'
   },
-  innerCartonWidth: {
-    key: 'skuInnerCartonWidth'
+  breadthOfInnerCarton: {
+    key: 'skuInnerCartonWidth',
+    type: 'Number'
   },
-  innerCartonHeight: {
-    key: 'skuInnerCartonHeight'
+  heightOfInnerCarton: {
+    key: 'skuInnerCartonHeight',
+    type: 'Number'
   },
-  innerCartonWeightNet: {
-    key: 'skuInnerCartonWeightNet'
+  netWeightOfInnerCarton: {
+    key: 'skuInnerCartonWeightNet',
+    type: 'Number'
   },
-  innerCartonRoughWeight: {
-    key: 'skuInnerCartonRoughWeight'
+  grossWeightofInnerCarton: {
+    key: 'skuInnerCartonRoughWeight',
+    type: 'Number'
   },
-  innerCartonVolume: {
-    key: 'skuInnerCartonVolume'
+  volumeOfInnerCarton: {
+    key: 'skuInnerCartonVolume',
+    type: 'Number'
   },
-  innerCartonDesc: {
-    key: 'skuInnerCartonDesc'
+  descriptionOfInnerCarton: {
+    key: 'skuInnerCartonDesc',
+    type: 'String',
+    max: 100
   },
-  innerCartonMethodCn: {
-    key: 'skuInnerCartonMethodCn'
+  packingMethodOfInnerCartonCn: {
+    key: 'skuInnerCartonMethodCn',
+    type: 'String',
+    max: 30
   },
-  innerCartonMethodEn: {
-    key: 'skuInnerCartonMethodEn'
+  packingMethodOfInnerCartonEn: {
+    key: 'skuInnerCartonMethodEn',
+    type: 'String',
+    max: 45
   },
-  outerCartonUnit: {
-    key: 'skuOuterCartonUnit'
+  unitOfOuterCarton: {
+    key: 'skuOuterCartonUnit',
+    type: 'String',
+    max: 20
   },
-  outerCartonDesc: {
-    key: 'skuOuterCartonDesc'
+  descriptionOfOuterCarton: {
+    key: 'skuOuterCartonDesc',
+    type: 'String',
+    max: 100
   },
-  innerCartonOuterNum: {
-    key: 'skuInnerCartonOuterNum'
+  innerCartonOfOuterCarton: {
+    key: 'skuInnerCartonOuterNum',
+    type: 'Number'
   },
-  outerCartonQty: {
-    key: 'skuOuterCartonQty'
+  skuQuantityOfOuterCarton: {
+    key: 'skuOuterCartonQty',
+    type: 'Number'
   },
-  outerCartonLength: {
-    key: 'skuOuterCartonLength'
+  lengthOfOuterCarton: {
+    key: 'skuOuterCartonLength',
+    type: 'Number'
   },
-  outerCartonWidth: {
-    key: 'skuOuterCartonWidth'
+  breadthOfOuterCarton: {
+    key: 'skuOuterCartonWidth',
+    type: 'Number'
   },
-  outerCartonHeight: {
-    key: 'skuOuterCartonHeight'
+  heightOfOuterCarton: {
+    key: 'skuOuterCartonHeight',
+    type: 'Number'
   },
-  outerCartonNetWeight: {
-    key: 'skuOuterCartonNetWeight'
+  netWeightOfOuterCarton: {
+    key: 'skuOuterCartonNetWeight',
+    type: 'Number'
   },
-  outerCartonRoughWeight: {
-    key: 'skuOuterCartonRoughWeight'
+  grossWeightOfOuterCarton: {
+    key: 'skuOuterCartonRoughWeight',
+    type: 'Number'
   },
-  outerCartonVolume: {
-    key: 'skuOuterCartonVolume'
+  volumeOfOuterCarton: {
+    key: 'skuOuterCartonVolume',
+    type: 'Number'
   },
-  outerCartonMethodCn: {
-    key: 'skuOuterCartonMethodCn'
+  packingMethodOfOuterCartonCn: {
+    key: 'skuOuterCartonMethodCn',
+    max: 45
   },
-  outerCartonMethodEn: {
-    key: 'skuOuterCartonMethodEn'
+  packingMethodOfOuterCartonEn: {
+    key: 'skuOuterCartonMethodEn',
+    max: 45
   },
-  oem: {
-    key: 'skuOem'
+  OEM: {
+    key: 'skuOem',
+    type: 'Select',
+    transForm: 'OEM_IS'
   },
-  gp20SkuQty: {
-    key: 'skuGp20SkuQty'
+  gp20SkuQuantity: {
+    key: 'skuGp20SkuQty',
+    type: 'Number'
   },
-  gp40SkuQty: {
-    key: 'skuGp40SkuQty'
+  gp40SkuQuantity: {
+    key: 'skuGp40SkuQty',
+    type: 'Number'
   },
-  hq40SkuQty: {
-    key: 'skuHq40SkuQty'
+  hq40SkuQuantity: {
+    key: 'skuHq40SkuQty',
+    type: 'Number'
   },
-  tryDimension: {
-    key: 'skuTryDimension'
+  trayDimension: {
+    key: 'skuTryDimension',
+    type: 'Number'
   },
-  skuQtyPerTray: {
-    key: 'skuSkuQtyPerTray'
+  skuQuantityPerTray: {
+    key: 'skuSkuQtyPerTray',
+    type: 'Number'
   },
-  specialTransportRequire: {
-    key: 'skuSpecialTransportRequire'
+  specialTransportRequirements: {
+    key: 'skuSpecialTransportRequire',
+    type: 'String',
+    max: 100
   },
-  inventoryCostMethod: {
-    key: 'skuInventoryCostMethod'
+  inventoryCostCalculationMethod: {
+    key: 'skuInventoryCostMethod',
+    type: 'String',
+    max: 100
   },
-  warehourceDefault: {
-    key: 'skuWarehourceDefault'
+  defaultWarehouse: {
+    key: 'skuWarehourceDefaul',
+    type: 'String',
+    max: 100
   },
-  inventory: {        //自有库存?????不知道对不对
-    key: 'skuInventory'
+  supplierInventoryQuantity: {
+    key: 'skuInventory',
+    type: 'Number',
+    min: 0
   },
-  safeInventory: {
-    key: 'skuSafeInventory'
+  supplierSafeInventoryQuantity: {
+    key: 'skuSafeInventory',
+    type: 'Number'
   },
-  minInventory: {
-    key: 'skuMinInventory'
+  supplierMinimumInventory: {
+    key: 'skuMinInventory',
+    type: 'Number'
   },
-  mainSaleCountry: {
-    key: 'skuMainSaleCountry'
+  mainsaleCountry: {
+    key: 'skuMainSaleCountry',
+    type: 'Select',
+    transForm: 'COUNTRY'
   },
-  mainSaleArea: {
-    key: 'skuMainSaleArea'
+  mainsalearea: {
+    key: 'skuMainSaleArea',
+    type: 'String'
   },
-  productionDates: {
-    key: 'skuProductionDates'
+  prductiondays: {
+    key: 'skuProductionDates',
+    type: 'Number'
   },
   qualityStander: {
-    key: 'skuQualityStander'
+    key: 'skuQualityStander',
+    type: 'String'
   },
-  yearListed: {
-    key: 'skuYearListed'
+  yearOfListed: {
+    key: 'skuYearListed',
+    type: 'Select',
+    state: 'Date',
+    time: 'yyyy-mm-dd'
   },
-  useDisplayBox: {
-    key: 'skuUseDisplayBox'
+  useDisplayBoxOrNot: {
+    key: 'skuUseDisplayBox',
+    type: 'Select',
+    transForm: 'UDB_IS'
   },
-  displayBoxQty: {
-    key: 'skuDisplayBoxQty'
+  skuQuantityInDisplayBox: {
+    key: 'skuDisplayBoxQty',
+    type: 'Number'
   },
-  lengthWidthHeight: {
-    key: 'skuLengthWidthHeight'
+  lengthBreadthAndHeightOfDisplayBox: {
+    key: 'skuLengthWidthHeight',
+    type: 'Number'
   },
-  otherPackInfoCn: {
-    key: 'skuOtherPackInfoCn'
+  otherPackingInformationCn: {
+    key: 'skuOtherPackInfoCn',
+    type: 'String'
   },
-  otherPackInfoEn: {
-    key: 'skuOtherPackInfoEn'
+  otherPackingInformationEn: {
+    key: 'skuOtherPackInfoEn',
+    type: 'String',
+    max: 100
   },
-  adjustPackage: {
-    key: 'skuAdjustPackage'
+  adjustSkuAndPackageOrNot: {
+    key: 'skuAdjustPackage',
+    type: 'Select',
+    transForm: 'SKU_PG_IS'
   }
 }
