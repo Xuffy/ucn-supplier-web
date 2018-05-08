@@ -34,27 +34,5 @@ export default {
     },
     TaxpayerQualification:{
          key:'TaxpayerQualification'
-    },
-    
-    Provideincoterm: {
-        key: 'incoterm'
-    },
-    
-    Exportlicense: {
-        key: 'exportLicense'
-    },
-    businessscope: {
-        key: 'businessScope'
-    },
-    category: {
-        key: 'category'
-    },
-    
-    
-    Customershortname: {
-        key: 'shortName'
-    },
-    description: {
-        key: 'description'
-    },
+    }
 }
