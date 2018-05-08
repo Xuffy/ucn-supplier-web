@@ -16,6 +16,14 @@ import outboundOverviewTable from './outboundOverviewTable';
 import createQcProductTable from './createQcProductTable';
 import payment from './payment';
 import qcDetailProductInfo from './qcDetailProductInfo';
+
+
+/**
+ * 全新import
+ * */
+import qcOverview from './qcOverview';
+
+
 export default {
     inbound,
     outbound,
@@ -35,4 +43,11 @@ export default {
     createQcProductTable,
     payment,
     qcDetailProductInfo,
+
+
+
+    /**
+     * 全新DB
+     * */
+    qcOverview
 }

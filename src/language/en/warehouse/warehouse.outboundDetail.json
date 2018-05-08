@@ -1,0 +1,6 @@
+{
+  "outboundOutCartonTotalQty":"出库产品总箱数",
+  "outboundSkuTotalVolume":"出库产品总体积",
+  "outboundSkuTotalNetWeight":"出库产品总净重",
+  "outboundSkuTotalGrossWeight":"出库产品总毛重"
+}

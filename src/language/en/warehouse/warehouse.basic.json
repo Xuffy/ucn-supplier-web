@@ -23,5 +23,12 @@
   "sellingOutOfTheTreasury":"销售出库",
   "collectionOfMaterialsFromTheWarehouse":"组装领料出库",
   "stockTransfer":"转库",
-  "returnToSupplier":"退回供应商"
+  "returnToSupplier":"退回供应商",
+
+
+
+
+
+  "qcOverview":"货单预览",
+  "status":"状态"
 }

@@ -40,12 +40,12 @@ const json = {
     require(`./${lang}/payment/payment`),
     require(`./${lang}/payment/payment.table`)
   ),
-    product: _.extend({},
-        require(`./${lang}/product/product.basic`),
-        require(`./${lang}/product/product.overview`),
-        require(`./${lang}/product/product.overviewTable`),
-        require(`./${lang}/product/productDetail`),
-    ),
+  product: _.extend({},
+    require(`./${lang}/product/product.basic`),
+    require(`./${lang}/product/product.overview`),
+    require(`./${lang}/product/product.overviewTable`),
+    require(`./${lang}/product/product.detail`),
+  ),
     setting: _.extend({},
     require(`./${lang}/setting/department`),
     require(`./${lang}/setting/personalInfo`),
@@ -63,6 +63,13 @@ const json = {
     require(`./${lang}/warehouse/warehouse.inboundOverviewTable`),
     require(`./${lang}/warehouse/warehouse.inboundDetail`),
     require(`./${lang}/warehouse/warehouse.outboundOverview`),
+    require(`./${lang}/warehouse/warehouse.outboundDetail`),
+
+
+    /**
+     * 新language
+     * */
+    require(`./${lang}/warehouse/warehouse.qcOverview`),
   ),
   workbench: _.extend({},
     require(`./${lang}/workbench/page`),

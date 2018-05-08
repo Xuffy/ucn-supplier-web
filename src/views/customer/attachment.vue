@@ -1,4 +1,4 @@
-template>
+<template>
   <div class="attachment">
     <div class="attchment">
        <div class="attchment_item" @click='download'>
