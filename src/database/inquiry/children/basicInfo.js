@@ -1,4 +1,13 @@
 export default {
+    _firstColumn: {
+        key: 'updateDt',
+        label: ' ',
+        type: 'text',
+        _disabled: true,
+        _title: 'remark',
+        _inquiryHide: true,
+        transForm: 'time'
+    },
     id: {
         _hide: true
     },
@@ -18,25 +27,16 @@ export default {
         _hide: true
     },
     operater: { //修改人 系统带入
-        placeholder: 'Please select',
+        key: 'updateName',
+        placeholder: 'Please Select',
         width: '150px',
         type: 'String',
         _disabled: true,
         _inquiryHide: true,
-    },
-    time: { //时间 系统带入
-        key: 'updateDt',
-        placeholder: 'Please select time',
-        rules: [],
-        width: '150px',
-        type: 'String',
-        _disabled: true,
-        _inquiryHide: true,
-        transForm: 'time'
     },
     inquiryNo: { //询价单号 系统带入
         key: 'inquiryNo',
-        placeholder: 'Please select',
+        placeholder: 'Please Select',
         rules: [],
         width: '150px',
         type: 'String',
@@ -45,7 +45,7 @@ export default {
         _inquiryHide: true
     },
     quotationNo: { //询价子单号 系统带入
-        placeholder: 'Please select',
+        placeholder: 'Please Select',
         rules: [],
         width: '150px',
         type: 'String',
@@ -55,7 +55,6 @@ export default {
     },
     createTime: { // 创建时间
         key: 'entryDt',
-        placeholder: 'Please select',
         rules: [],
         width: '150px',
         type: 'String',
@@ -65,7 +64,6 @@ export default {
     },
     inquiryStatus: { //询价单状态
         key: 'status',
-        placeholder: 'Please select',
         rules: [],
         width: '150px',
         type: 'String',
@@ -76,54 +74,54 @@ export default {
     },
     transportationWay: { //下拉选择 运输方式
         key: 'transport',
-        placeholder: 'Please select',
         rules: [],
         width: '150px',
-        type: 'select',
+        type: 'Select',
         state: 0,
         _slot: 'transportationWay',
         transForm: 'MD_TN'
     },
     payment: { //付款方式 下拉选择
         key: 'paymentMethod',
-        placeholder: 'Please select',
         rules: [],
         width: '150px',
-        type: 'select',
+        type: 'Select',
         state: 0,
         _slot: 'paymentMethod',
         transForm: 'PMT'
     },
     destinationCountry: { //目的国 下拉选择
-        placeholder: 'Please select',
+        placeholder: 'Please Select',
         rules: [],
         width: '150px',
-        type: 'select',
+        type: 'Select',
         state: 0,
-        _slot: 'destinationCountry'
+        _slot: 'destinationCountry',
+        transForm: 'COUNTRY'
     },
     departureCountry: { //发运国 下拉选择所有选项 ok
-        placeholder: 'Please select',
+        placeholder: 'Please Select',
         rules: [],
         width: '150px',
-        type: 'select',
+        type: 'Select',
         state: 0,
-        _slot: 'departureCountry'
+        _slot: 'departureCountry',
+        transForm: 'COUNTRY'
     },
     incoterm: { //价格条款 选择 ok
-        placeholder: 'Please select',
+        placeholder: 'Please Select',
         rules: [],
         width: '150px',
-        type: 'select',
+        type: 'Select',
         state: 0,
         _slot: 'incoterm',
         transForm: 'ITM'
     },
     currency: { //币种 选择 ok
-        placeholder: 'Please select',
+        placeholder: 'Please Select',
         rules: [],
         width: '150px',
-        type: 'select',
+        type: 'Select',
         state: 0,
         _slot: 'currency',
         transForm: 'CY_UNIT'
@@ -133,7 +131,7 @@ export default {
         _inquiryHide: true
     },
     discountRate: { //折扣率 限制输入百分比 ok
-        placeholder: 'Please select',
+        placeholder: 'Please Select',
         rules: [],
         width: '150px',
         type: 'Number',
@@ -142,26 +140,28 @@ export default {
         max:100
     },
     departurePort: { //发运港口  ok
-        placeholder: 'Please select',
+        placeholder: 'Please Select',
         rules: [],
         width: '150px',
-        type: 'String'
+        type: 'String',
+        transForm: 'SPORT'
     },
     destinationPort: { //目的港口 ok
-        placeholder: 'Please select',
+        placeholder: 'Please Select',
         rules: [],
         width: '150px',
-        type: 'String'
+        type: 'String',
+        transForm: 'SPORT'
     },
     supplierName: { // 供应商名称 ok
-        placeholder: 'Please select',
+        placeholder: 'Please Select',
         rules: [],
         width: '150px',
         type: 'manySelect',
         _disabled: true
     },
     supplierType: { //供应商类型 ok
-        placeholder: 'Please select',
+        placeholder: 'Please Select',
         rules: [],
         width: '150px',
         type: 'String',
@@ -170,10 +170,10 @@ export default {
         _inquiryHide: true
     },
     exportLicense: { //出口资质 ok
-        placeholder: 'Please select',
+        placeholder: 'Please Select',
         rules: [],
         width: '150px',
-        type: 'select',
+        type: 'Select',
         state: 0,
         _disabled: true,
         transForm: 'EL_IS'
@@ -191,7 +191,7 @@ export default {
         _hide: true
     },
     relatedOrderNO: { //关联订单号
-        placeholder: 'Please select',
+        placeholder: 'Please Select',
         rules: [],
         width: '150px',
         type: 'String',
@@ -201,7 +201,7 @@ export default {
     },
     inquiryRemark: { //询价备注
         key: 'remark',
-        placeholder: 'Please select',
+        placeholder: 'Please Select',
         rules: [],
         width: '150px',
         type: 'String',
@@ -213,7 +213,7 @@ export default {
         lg: 24
     },
     attachment: { //上传附件
-        placeholder: 'Please select',
+        placeholder: 'Please Select',
         rules: [],
         width: '150px',
         type: 'attachment',

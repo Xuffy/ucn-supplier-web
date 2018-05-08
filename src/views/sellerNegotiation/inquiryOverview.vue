@@ -124,7 +124,6 @@
                 },
                 deep: true
             }
-            
         },
         methods: {
             ...mapActions([

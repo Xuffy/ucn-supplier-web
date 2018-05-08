@@ -6,8 +6,8 @@
                 <span>Status&nbsp</span>
                       <el-radio-group v-model="params.status" size="mini" @change='changeStatus'>
                             <el-radio-button label="">全部</el-radio-button>
-                            <el-radio-button label="1"> 待供应商确认</el-radio-button>
-                            <el-radio-button label="2">待采购商确认</el-radio-button>
+                            <el-radio-button label="2"> 待供应商确认</el-radio-button>
+                            <el-radio-button label="1">待采购商确认</el-radio-button>
                             <el-radio-button label="3">进行中</el-radio-button>
                             <el-radio-button label="4">已完成</el-radio-button>
                             <el-radio-button label="5">已关闭</el-radio-button>

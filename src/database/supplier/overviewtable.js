@@ -1,50 +1,67 @@
 export default {
     //.......................表格
-    supplierNO: {
+    customerNO: {
         key: 'code'
     },
-    suppliername: {
+    customerName: {
         key: 'name'
     },
-    suppliertype: {
+    customerShortName: {
+        key: 'shortName'
+    },
+    customerType: {
         key: 'type'
     },
     country: {
         key: 'country'
     },
-    companyId: {
-        _hide: true,
-        key: 'companyId'
+    city: {
+        key: 'city'
     },
-    //    category: {
-    //        key: "category"
-    //    },
     mainbusinessscope: {
         key: 'mainBuiness'
     },
-    provideincoterm: {
+    payment: {
+        key: 'payment'
+    },
+    currency:{
+        key:'currency'
+    },
+    shipAgent: {
+        key: "shipAgent"
+    },
+    incoterm: {
         key: 'incoterm'
     },
-    exportlicense: {
-        key: 'exportLicense'
-    },
-    description: {
-        key: 'description'
-    },
+    //    companyId: {
+    //        _hide: true,
+    //        key: 'companyId'
+    //    },
+    //    category: {
+    //        key: "category"
+    //    },
 
-    id: {
-        _hide: true,
-        key: 'id',
-
-    },
-    logo: {
-        _hide: true,
-    },
-    payment: {
-        _hide: true,
-    },
-
-    recycle: {
-        _hide: true,
-    }
+    //    provideincoterm: {
+    //        key: 'incoterm'
+    //    },
+    //    exportlicense: {
+    //        key: 'exportLicense'
+    //    },
+    //    description: {
+    //        key: 'description'
+    //    },
+    //
+        id: {
+            _hide: true,
+            key: 'id',
+    
+        },
+    //    logo: {
+    //        _hide: true,
+    //    },
+    //
+    //
+    //    recycle: {
+    //        _hide: true,
+    //    }
 }

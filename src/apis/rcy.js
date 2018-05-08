@@ -41,13 +41,13 @@ export default {
     post_recoverBookmarks: ['/purchase/supplier/batchRecoverBookmark', 'USUPPLY_URL', 'USUPPLY_URL'],
 
     //customer
-    post_getCustomerList: ['/supply/overview', 'USUPPLY_URL', 'USUPPLY_URL'],
-    post_deleteCustomerRemark: ['/supply/deleteRemark/{id}', 'USUPPLY_URL', 'USUPPLY_URL'],
-    post_customerDetail: ['/supply/{id}', 'USUPPLY_URL', 'USUPPLY_URL'],
-    post_getCustomerListRemark: ['/supply/listRemarks/{id}', 'USUPPLY_URL', 'USUPPLY_URL'],
-    post_addCustomerListRemark: ['/supply/remark', 'USUPPLY_URL', 'USUPPLY_URL'],
-    post_delete_CustomerRemark: ['/supply/deleteRemark/{id}', 'USUPPLY_URL', 'USUPPLY_URL'],
-    post_customerUpdataRmark: ['/supply/remark/{id}', 'USUPPLY_URL', 'USUPPLY_URL'],
+    post_getCustomerList: ['/supply/overview', 'BASE_CS', 'USUPPLY_URL'],
+    post_deleteCustomerRemark: ['/supply/deleteRemark/{id}', 'BASE_CS', 'USUPPLY_URL'],
+    post_customerDetail: ['/supply/{id}', 'BASE_CS', 'USUPPLY_URL'],
+    post_getCustomerListRemark: ['/supply/listRemarks/{id}', 'BASE_CS', 'USUPPLY_URL'],
+    post_addCustomerListRemark: ['/supply/remark', 'BASE_CS', 'USUPPLY_URL'],
+    post_delete_CustomerRemark: ['/supply/deleteRemark/{id}', 'BASE_CS', 'USUPPLY_URL'],
+    post_customerUpdataRmark: ['/supply/remark/{id}', 'BASE_CS', 'USUPPLY_URL'],
 
 
     //payment
@@ -58,11 +58,12 @@ export default {
     paymentAbandon: ['/payment/abandon', 'BASE_HCJ', 'USUPPLY_URL'],
     paymentAccept: ['/payment/accept/{id}', 'BASE_HCJ', 'USUPPLY_URL'],
     paymentDunning: ['/payment/dunning/{orderNo}/{orderType}', 'BASE_HCJ', 'USUPPLY_URL'],
-    post_order_paymentlist: ['/payment/list/{orderNo}/{orderType}', 'BASE_HCJ', 'BASE_BUYER'],
+    post_order_paymentlist: ['/payment/list/{orderNo}/{orderType}', 'BASE_HCJ', 'USUPPLY_URL'],
     
     
     //字典表数据
     post_codePart:['/code/part','UMETA_URL'],
      post_country:['/country/all','UMETA_URL'],
-     post_logisticsport:['/logisticsport/query','UMETA_URL']
+     post_logisticsport:['/logisticsport/query','UMETA_URL'],
+     get_currency:['/currency/all','UMETA_URL']
 }
