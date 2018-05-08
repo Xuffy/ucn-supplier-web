@@ -17,16 +17,18 @@
                         :options="searchOptions"></select-search>
             </div>
             <div class="section">
-                <div class="btns">
-                    <el-button>{{$i.warehouse.download}}({{selectList.length===0?'All':selectList.length}})</el-button>
-                    <el-button @click="createInbound">新建</el-button>
-                </div>
                 <v-table
                         :loading="loadingTable"
                         :data="tableDataList"
                         :buttons="[{label: '详情', type: 1}]"
                         @change-checked="changeChecked"
                         @action="btnClick">
+                    <template slot="header">
+                        <div class="btns">
+                            <el-button>{{$i.warehouse.download}}({{selectList.length===0?'All':selectList.length}})</el-button>
+                            <el-button @click="createInbound">新建</el-button>
+                        </div>
+                    </template>
                 </v-table>
             </div>
         </div>

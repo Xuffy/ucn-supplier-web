@@ -1,17 +1,14 @@
 <template>
     <div class="inbound-overview">
-        <!--<div class="title">-->
-            <!--<span>{{$i.warehouse.inboundOverview}}</span>-->
-        <!--</div>-->
+        <div class="title">
+            <span>{{$i.warehouse.outboundOverview}}</span>
+        </div>
         <div class="body">
             <div class="head">
                 <span>{{$i.warehouse.outBoundType}}</span>
-                <el-radio-group class="radioGroup" @change="changeStatus" v-model="inboundStatus" size="mini">
-                    <el-radio-button label="0">全部</el-radio-button>
-                    <el-radio-button label="1">销售出库</el-radio-button>
-                    <el-radio-button label="2">组装领料出库</el-radio-button>
-                    <el-radio-button label="3">转库</el-radio-button>
-                    <el-radio-button label="4">退回供应商</el-radio-button>
+                <el-radio-group class="radios" @change="changeStatus" v-model="outboundConfig.outboundTypeDictCode" size="mini">
+                    <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
+                    <el-radio-button v-for="v in outboundType" :key="v.id" :label="v.value">{{v.label}}</el-radio-button>
                 </el-radio-group>
                 <select-search
                         class="search"
@@ -20,16 +17,18 @@
                         :options="searchOptions"></select-search>
             </div>
             <div class="section">
-                <div class="btns">
-                    <el-button>{{$i.warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
-                    <el-button @click="createOutbound">新建</el-button>
-                </div>
                 <v-table
                         :loading="loadingTable"
                         :data="tableDataList"
                         :buttons="[{label: '详情', type: 1}]"
                         @change-checked="changeChecked"
                         @action="btnClick">
+                    <template slot="header">
+                        <div class="btns">
+                            <el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>
+                            <el-button @click="createOutbound">新建</el-button>
+                        </div>
+                    </template>
                 </v-table>
             </div>
         </div>
@@ -56,6 +55,7 @@
                 tableDataList:[],
                 downloadBtnInfo:'All',
                 selectList:[],
+                outboundType:[],
                 outboundConfig:{
                     outboundNo: "",
                     pn: 1,
@@ -66,36 +66,20 @@
                     //         orderType: "",
                     //     }
                     // ],
-                    // outboundTypeDictCode: null
+                    outboundTypeDictCode: ''
                 },
-
                 searchId:1,
-
                 searchOptions:[
                     {
                         label:'出库编号',
                         id:1
                     },
-                    // {
-                    //     label:'供应商货号',
-                    //     id:2
-                    // },
-                    // {
-                    //     label:'订单号',
-                    //     id:3
-                    // },
                 ]
             }
         },
         methods:{
-            changeStatus(e){
-                let num=Number(e);
-                if(num===0){
-                    this.inboundConfig.inboundTypeDictCode=null;
-                }else{
-                    this.inboundConfig.inboundTypeDictCode=num;
-                }
-                this.getInboundData();
+            changeStatus(){
+                this.getOutboundData();
             },
 
             //获取表格数据
@@ -117,7 +101,7 @@
             //新建入库单
             createOutbound(){
                 this.$windowOpen({
-                    url:'/sellerWarehouse/createOutbound'
+                    url:'/warehouse/createOutbound'
                 });
             },
 
@@ -129,13 +113,13 @@
                     });
                     return;
                 }
-                this.inboundConfig.inboundNo=e.key;
-                this.getInboundData();
+                this.outboundConfig.outboundNo=e.key;
+                this.getOutboundData();
             },
 
             btnClick(e){
                 this.$windowOpen({
-                    url:'/sellerWarehouse/outboundDetail',
+                    url:'/warehouse/outboundDetail',
                     params:{
                         id:e.id.value
                     }
@@ -145,9 +129,34 @@
             changeChecked(e){
                 this.selectList=e;
             },
+
+
+            /**
+             * 获取字典
+             * */
+            getUnit(){
+                this.$ajax.post(this.$apis.get_partUnit,['OBD_STATUS']).then(res=>{
+                    this.outboundType=res[0].codes;
+                    this.outboundType.forEach(v=>{
+                        if(v.value==='1'){
+                            v.label=this.$i.warehouse.sellingOutOfTheTreasury;
+                        }else if(v.value==='2'){
+                            v.label=this.$i.warehouse.collectionOfMaterialsFromTheWarehouse;
+                        }else if(v.value==='3'){
+                            v.label=this.$i.warehouse.stockTransfer;
+                        }else if(v.value==='4'){
+                            v.label=this.$i.warehouse.returnToSupplier;
+                        }
+                    })
+                });
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res,'???')
+                // });
+            },
         },
         created(){
             this.getOutboundData();
+            this.getUnit();
         },
         watch:{
             selectList(n){
@@ -168,6 +177,10 @@
         height: 32px;
         line-height: 32px;
         color:#666666;
+        margin-bottom: 5px;
+    }
+    .radios{
+        margin-left: 10px;
     }
 
     .radioGroup{

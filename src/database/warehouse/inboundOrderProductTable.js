@@ -57,28 +57,27 @@ export default {
     totalQty:{
         key:'totalQty'
     },
-    inboundSkuTotalQty:{
+    inboundSkuTotalQty:{        //入库产品总数量
         key:'inboundSkuTotalQty',       //需要计算
         computed:true,
         showType:'number'
     },
-    inboundOutCartonTotalQty:{
+    inboundOutCartonTotalQty:{      //入库产品总箱数
         key:'inboundOutCartonTotalQty',     //需要填写
         showType:'number',
         needInput:true
-
     },
-    inboundSkuTotalVolume:{
+    inboundSkuTotalVolume:{     //入库产品总体积
         key:'inboundSkuTotalVolume',    //需要计算
         showType:'number',
         computed:true,
     },
-    inboundSkuTotalNetWeight:{
+    inboundSkuTotalNetWeight:{      //入库产品总净重
         key:'inboundSkuTotalNetWeight',    //需要计算
         showType:'number',
         computed:true,
     },
-    inboundSkuTotalGrossWeight:{
+    inboundSkuTotalGrossWeight:{        //入库产品总毛重
         key:'inboundSkuTotalGrossWeight',    //需要计算
         showType:'number',
         computed:true,
