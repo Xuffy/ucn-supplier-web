@@ -74,7 +74,10 @@ export default {
         key:'outerCartonNetWeight',
         showType:'number',
     },
-    //入库日期
+    inboundDate:{
+        key:'inboundDate',
+
+    },
     //仓储天数
     inventorySkuPrice:{        //需要传的参数
         key:'inventorySkuPrice',
@@ -105,8 +108,12 @@ export default {
     orderNo:{
         key:'orderNo',
     },
-    //仓库编号
-    //仓库名称
+    warehouseNo:{
+        key:'warehouseNo'
+    },
+    warehouseName:{
+        key:'warehouseName'
+    },
     skuLabel:{
         key:'skuLabel',
     },

@@ -103,6 +103,9 @@
                                 v-model="scope.row[v.key]"
                                 :controls="false"></el-input-number>
                     </div>
+                    <div v-else-if="v.key==='inboundDate' || v.key==='warehouseName' || v.key==='warehouseNo'">
+                        {{scope.row.inboundVo[v.key]}}
+                    </div>
                     <div v-else>
                         {{scope.row[v.key]}}
                     </div>
@@ -398,16 +401,18 @@
             submit(){
                 // console.log(this.outboundData,'????')
                 // console.log(this.productData,'productData')
-                let id=1;
+                // let id=1;
                 this.productData.forEach(v=>{
                     this.outboundData.outboundSkuCreateParams.push({
-                        inboundSkuId: id++,
+                        inboundSkuId: v.skuId,
                         inventoryServiceFee: v.inventoryServiceFee?v.inventoryServiceFee:0,
                         inventorySkuPrice: v.inventorySkuPrice?v.inventorySkuPrice:0,
                         outboundOutCartonTotalQty: v.outboundOutCartonTotalQty?v.outboundOutCartonTotalQty:0
                     });
                 })
+                console.log(this.productData,'????')
                 console.log(this.outboundData)
+
 
 
 
@@ -531,17 +536,18 @@
                 this.selectList=e;
             },
             postData(){
+
+
                 let id=[];
                 this.selectList.forEach(v=>{
                     id.push(v.skuId.value);
                 });
                 id=_.uniq(id);
                 this.loadingProductTable=true;
-                this.$ajax.post(this.$apis.get_orderSku,id).then(res=>{
-                    console.log(res)
-                    this.productData=res;
-                    // this.productData=res;
-                    // console.log(this.productData)
+                this.$ajax.post(this.$apis.get_outboundProductData,{
+                    ids:id
+                }).then(res=>{
+                    this.productData=res.datas;
                     this.loadingProductTable=false;
                 }).catch(err=>{
                     this.loadingProductTable=false;

@@ -3,6 +3,7 @@ export default {
     get_buyer_sys_category: ['/purchase/sys/category', 'BASE_BUY','UPURCHASE_URL'],
     get_buyer_my_category:['/purchase/category/tree','BASE_BUY','UPURCHASE_URL'],
     get_supply_category:['/sys/category','BASE_SELL','USUPPLY_URL'],
+    get_supply_my_category:['/category/tree','BASE_SELL','USUPPLY_URL'],
 
 
     get_productCategory:['/purchase/sys/category','BASE_BUY','UPURCHASE_URL'],
@@ -39,13 +40,9 @@ export default {
     set_sellerProductPutAway:['/sku/putaway','BASE_SELL','USUPPLY_URL'],
     set_sellerProductPutDown:['/sku/soldout','BASE_SELL','USUPPLY_URL'],
     delete_sellerProduct:['/sku/deleteAll','BASE_SELL','USUPPLY_URL'],
-
-
-
-
-    //product supplier
-    get_sellerCustomer:['/supplier/sku/setting/listCustomers','BASE_CS','USUPPLY_URL'],
-
+    get_sellerCustomer:['/supplier/sku/setting/listCustomers','BASE_SELL','USUPPLY_URL'],
+    get_sellerCustomerOne:['/supplier/sku/setting/listCustomers/{id}','BASE_SELL','USUPPLY_URL'],
+    update_buyerProductDetail:['/sku/{id}','BASE_SELL','USUPPLY_URL'],
 
 
     //product buyer
@@ -69,6 +66,9 @@ export default {
     delete_buyerProductRemark:['/purchase/sku/deleteSkuRemark/{id}','BASE_BUY','UPURCHASE_URL'],
     recover_buyerProductBookmark:['/purchase/sku/recoverBookmark','BASE_BUY','UPURCHASE_URL'],
 
+
+
+
     /**
      * seller warehouse
      * */
@@ -85,6 +85,7 @@ export default {
 
     get_outboundData:['/outbound/page','BASE_SELL','USUPPLY_URL'],
     add_outbound:['/outbound/add','BASE_SELL','USUPPLY_URL'],
+    get_outboundProductData:['/inbound/sku/queryForOutbound','BASE_SELL','USUPPLY_URL'],
 
 
     /**

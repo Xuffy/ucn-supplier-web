@@ -344,7 +344,7 @@
                 this.$windowOpen({
                     url:"/product/addNewProduct",
                     params:{
-                        id:this.productForm.id,
+                        id:this.$route.query.id,
                         isEdit:true
                     }
                 });

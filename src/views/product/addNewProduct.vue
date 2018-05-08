@@ -29,7 +29,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isCountry">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" filterable placeholder="please choose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" multiple filterable placeholder="please choose">
                                     <el-option
                                             v-for="item in countryOption"
                                             :key="item.id"
@@ -132,7 +132,6 @@
                     <el-form-item :label="$i.product.productVisible">
                         <el-radio v-model="productForm.visibility" :label="true">{{$i.product.allSee}}</el-radio>
                         <el-radio v-model="productForm.visibility" :label="false">{{$i.product.partSee}}</el-radio>
-
                         <div v-if="!productForm.visibility">
                             <el-button
                                     @click="addCustomer"
@@ -682,14 +681,13 @@
         </div>
 
         <el-dialog width="70%" title="收货地址" :visible.sync="addCustomerDialogVisible">
-
-
             <el-form ref="customerQuery" :model="customerQuery" label-width="120px">
                 <el-row class="speZone">
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
 
                         <el-form-item prop="name" :label="$i.product.customerName">
                             <el-input
+                                    placeholder="请输入"
                                     size="mini"
                                     v-model="customerQuery.name"></el-input>
                         </el-form-item>
@@ -698,6 +696,7 @@
 
                         <el-form-item prop="name" :label="$i.product.customerType">
                             <el-input
+                                    placeholder="请输入"
                                     size="mini"
                                     v-model="customerQuery.type"></el-input>
                         </el-form-item>
@@ -705,25 +704,49 @@
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
 
                         <el-form-item prop="name" :label="$i.product.customerCountry">
-                            <el-input
-                                    size="mini"
-                                    v-model="customerQuery.country"></el-input>
+
+                            <el-select size="mini" v-model="customerQuery.country" filterable placeholder="请选择">
+                                <el-option
+                                        v-for="item in countryOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-
                         <el-form-item prop="name" :label="$i.product.customerCity">
                             <el-input
+                                    placeholder="请输入"
                                     size="mini"
                                     v-model="customerQuery.city"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
+            <div style="text-align: center">
+                <el-button :disabled="loadingTable" @click="searchCustomer" type="primary">{{$i.warehouse.search}}</el-button>
+                <el-button :disabled="loadingTable" @click="clearCustomerSearch">{{$i.warehouse.clear}}</el-button>
+            </div>
+
+            <v-table
+                    :loading="loadingTable"
+                    :data="tableDataList"
+                    :buttons="[{label: '详情', type: 1}]"
+                    @change-checked="changeChecked"
+                    @action="btnClick">
+                <!--<template slot="header">-->
+                    <!--<div class="btns">-->
+                        <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
+                    <!--</div>-->
+                <!--</template>-->
+            </v-table>
+
 
             <div slot="footer" class="dialog-footer">
-                <el-button @click="addCustomerDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addCustomerDialogVisible = false">确 定</el-button>
+                <el-button :disabled="loadingTable" type="primary" @click="postData">确 定</el-button>
+                <el-button :disabled="loadingTable" @click="addCustomerDialogVisible = false">取 消</el-button>
             </div>
         </el-dialog>
 
@@ -733,13 +756,14 @@
 <script>
     import upLoad from '@/components/common/upload/upload'
     import imgHandler from '../product/imgHandler'
-    import {dropDownSingle} from '@/components/index'
+    import {dropDownSingle,VTable} from '@/components/index'
 
     export default {
         name: "addNewProduct",
         components:{
             imgHandler,
             upLoad,
+            VTable,
             dropDown:dropDownSingle
         },
         data(){
@@ -818,11 +842,12 @@
                     width:'',
                     height:''
                 },
-
+                countryList:[],
                 customerQuery:{
-                    city: "",
-                    country: "",
                     name: "",
+                    type: null,
+                    country: '',
+                    city: "",
                     pn: 1,
                     ps: 50,
                     // sorts: [
@@ -833,9 +858,16 @@
                     //         "resultMapId": "string"
                     //     }
                     // ],
-                    type: null
+                    // operatorFilters: [
+                    //     {
+                    //         "columnName": "string",
+                    //         "operator": "string",
+                    //         "property": "string",
+                    //         "resultMapId": "string",
+                    //         "value": {}
+                    //     }
+                    // ],
                 },
-
                 productForm:{
                     id: '',                         //新增传空
                     ids:[],                         //选择的可见
@@ -977,7 +1009,6 @@
                         },
                     ]
                 },
-
                 rules:{
                     nameEn:[
                         {max:45,message: '最大长度为45',}
@@ -1138,13 +1169,11 @@
                     ],
 
                 },
-
                 //dropDown Data
                 defaultProps:{
                     label:'name',
                     children:'children'
                 },
-
                 options: [
                     {
                     value: '选项1',
@@ -1163,6 +1192,13 @@
                     label: '北京烤鸭'
                 }],
 
+
+                /**
+                 * 弹出框data
+                 * */
+                loadingTable:false,
+                tableDataList:[],
+                selectList:[],
             }
         },
         methods:{
@@ -1187,12 +1223,12 @@
 
             //获取类别数据
             getCategoryId(){
-                this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
+                this.$ajax.get(this.$apis.get_supply_category,{}).then(res=>{
                     this.categoryList[0].children=res;
                 }).catch(err=>{
 
                 });
-                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(res=>{
+                this.$ajax.get(this.$apis.get_supply_my_category,{}).then(res=>{
                     this.categoryList[1].children=res;
                 }).catch(err=>{
 
@@ -1202,8 +1238,12 @@
             //添加客户
             addCustomer(){
                 this.addCustomerDialogVisible=true;
+                this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_sellerCustomer,this.customerQuery).then(res=>{
-                    console.log(res)
+                    this.loadingTable=false;
+                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas);
+                }).catch(err=>{
+                    this.loadingTable=false;
                 });
             },
 
@@ -1212,24 +1252,34 @@
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 this.$set(this.productForm,'lengthWidthHeight',size);
                 this.disabledSubmit=true;
-
                 if(this.$route.query.id && this.$route.query.isEdit){
                     //代表是编辑
-                    this.$ajax.post(this.$apis.get_productDetail,this.productForm).then(res=>{
-                        this.$message({
-                            message: '修改成功',
-                            type: 'success'
-                        });
-                        this.disabledSubmit=false;
-                        this.$router.push('/sellerProduct/overview');
-                    }).catch(err=>{
-                        this.disabledSubmit=false;
+                    let param=Object.assign({},this.productForm);
+                    _.mapObject(param,(e,k)=>{
+                        if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
+                            param[k]=parseInt(param[k]);
+                        }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
+                            let item='';
+                            param[k].forEach((v,index)=>{
+                                if(index===param[k].length-1){
+                                    item+=v;
+                                }else{
+                                    item+=(v+',');
+                                }
+                            })
+                            param[k]=item;
+                        }
                     });
-                }else{
-                    console.log(this.productForm,'???')
-                    // this.$ajax.post(this.$apis.add_newSKU,this.productForm).then(res=>{
+                    if(!param.readilyAvailable){
+                        param.availableQty=0;
+                    }
+                    if(!param.visibility){
+                        param.ids=[];
+                    }
+                    console.log()
+                    // this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
                     //     this.$message({
-                    //         message: '新增成功',
+                    //         message: '修改成功',
                     //         type: 'success'
                     //     });
                     //     this.disabledSubmit=false;
@@ -1237,19 +1287,102 @@
                     // }).catch(err=>{
                     //     this.disabledSubmit=false;
                     // });
+                }else{
+                    let param=Object.assign({},this.productForm);
+                    _.mapObject(param,(e,k)=>{
+                        if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
+                            param[k]=parseInt(param[k]);
+                        }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
+                            let item='';
+                            param[k].forEach((v,index)=>{
+                                if(index===param[k].length-1){
+                                    item+=v;
+                                }else{
+                                    item+=(v+',');
+                                }
+                            })
+                            param[k]=item;
+                        }
+                    });
+                    if(!param.readilyAvailable){
+                        param.availableQty=0;
+                    }
+                    if(!param.visibility){
+                        param.ids=[];
+                    }
+                    this.$ajax.post(this.$apis.add_newSKU,param).then(res=>{
+                        this.$message({
+                            message: '新增成功',
+                            type: 'success'
+                        });
+                        this.disabledSubmit=false;
+                        this.$router.push('/product/overview');
+                    }).catch(err=>{
+                        this.disabledSubmit=false;
+                    });
                 }
             },
 
             //获取产品详情
             getGoodsData(){
+                this.loadingData=true;
                 this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
                     this.productForm=res;
-                    console.log(this.productForm)
+                    _.mapObject(this.productForm,(e,k)=>{
+                        if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
+                            this.productForm[k]=String(this.productForm[k]);
+                        }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
+                            this.productForm[k]=this.productForm[k].split(',');
+                        }
+                    });
+                    this.loadingData=false;
                 }).catch(err=>{
-
+                    this.loadingData=false;
                 });
             },
 
+            /**
+             * 弹出框事件
+             * */
+            changeChecked(e){
+                this.selectList=e;
+            },
+            btnClick(e){
+                console.log(e)
+            },
+            searchCustomer(){
+                // console.log(this.customerQuery)
+                // let country='';
+                // this.countryList.forEach((v,k)=>{
+                //     if(k===this.countryList.length-1){
+                //         country+=v;
+                //     }else{
+                //         country+=(v+',');
+                //     }
+                // });
+                //
+                // this.customerQuery.country=country;
+                this.loadingTable=true;
+                this.$ajax.post(this.$apis.get_sellerCustomer,this.customerQuery).then(res=>{
+                    this.loadingTable=false;
+                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas);
+                }).catch(err=>{
+                    this.loadingTable=false;
+                });
+            },
+            clearCustomerSearch(){
+                this.customerQuery.name='';
+                this.customerQuery.type=null;
+                this.customerQuery.country='';
+                this.customerQuery.city='';
+                // this.countryList=[];
+            },
+            postData(){
+                console.log(this.selectList)
+                this.$ajax.post(this.$apis.get_sellerCustomerOne,{
+                    id:''
+                });
+            },
 
             /**
              * 获取字典
@@ -1271,7 +1404,6 @@
 
                 this.loadingData=true;
                 this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS'],{_cache:true}).then(res=>{
-                    console.log(res,'单位')
                     res.forEach(v=>{
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
@@ -1307,7 +1439,7 @@
 
 
                 this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                    console.log(res)
+
                 });
             },
         },
@@ -1406,6 +1538,9 @@
         left: 0;
         bottom: 0;
         width: 100%;
+        text-align: left;
+    }
+    .dialog-footer{
         text-align: center;
     }
 </style>

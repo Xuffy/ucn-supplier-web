@@ -610,23 +610,25 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'qc Overview',
+            name: '货单预览',
           },
           component: () => import('../views/warehouse/qc/qcOverview'),
         },
         {
-          path: 'sellerQCOrderDetail',
-          name: 'sellerQCOrderDetail',
+          path: 'qcOrderDetail',
+          name: 'qc Order Detail',
+          hidden:true,
           meta: {
-            name: 'sellerQCOrderDetail'
+            name: 'qcOrderDetail'
           },
           component: () => import('../views/warehouse/qc/QCOrderDetail')
         },
         {
-          path: 'sellerEditOrderOverview',
-          name: 'sellerEditOrderOverview',
+          path: 'qcDetail',
+          name: 'qc Detail',
+          hidden:true,
           meta: {
-            name: 'sellerEditOrderOverview'
+            name: 'qcDetail'
           },
           component: () => import('../views/warehouse/qc/editQcOrderOverview')
         }

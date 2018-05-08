@@ -11,6 +11,7 @@ import compareTable from './compare.indexTable';
  * */
 import overview from './overview';
 import overviewTable from './overviewTable';
+import addProductCustomer from './addProductCustomer';
 
 
 
@@ -28,4 +29,5 @@ export default {
     overviewTable,
     detailTab,
     detailTop,
+    addProductCustomer,
 }

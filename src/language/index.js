@@ -45,6 +45,7 @@ const json = {
     require(`./${lang}/product/product.overview`),
     require(`./${lang}/product/product.overviewTable`),
     require(`./${lang}/product/product.detail`),
+    require(`./${lang}/product/product.customer`),
   ),
     setting: _.extend({},
     require(`./${lang}/setting/department`),
@@ -70,6 +71,7 @@ const json = {
      * 新language
      * */
     require(`./${lang}/warehouse/warehouse.qcOverview`),
+    require(`./${lang}/warehouse/warehouse.overview`),
   ),
   workbench: _.extend({},
     require(`./${lang}/workbench/page`),
