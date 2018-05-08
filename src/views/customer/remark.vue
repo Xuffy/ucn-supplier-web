@@ -34,8 +34,10 @@
 </el-table-column>
 </el-table>
 <br>
+<!--
 <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
 </el-pagination>
+-->
 
 <el-dialog title="新增备注" :visible.sync="addRemarkFormVisible" center width="500px">
     <el-form :model="parms">
@@ -49,21 +51,6 @@
         <el-button @click="addRemarkFormVisible = false">取 消</el-button>
     </div>
 </el-dialog>
-
-<!--<el-dialog title="备注查看" :visible.sync="checkRemarkFormVisible" center width="500px">-->
-<!--<el-form :model="form">-->
-
-<!--<el-form-item label="备注:" :label-width="formLabelWidth">-->
-<!--{{form.name}}-->
-<!--Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, consectetur debitis deleniti ea, eligendi est magnam numquam perferendis quidem suscipit, veniam voluptatem voluptatibus! Assumenda, corporis impedit in iste minus neque.-->
-<!--</el-form-item>-->
-
-<!--</el-form>-->
-<!--<div slot="footer" class="dialog-footer">-->
-<!--<el-button @click="checkRemarkFormVisible = false">关 闭</el-button>-->
-<!--</div>-->
-<!--</el-dialog>-->
-
 <el-dialog title="修改备注" :visible.sync="editRemarkFormVisible" center width="500px">
     <el-form :model="parms">
         <el-form-item label="备注:" :label-width="formLabelWidth">
