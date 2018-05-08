@@ -128,7 +128,8 @@
         },
         methods: {
             ...mapActions([
-                'setRecycleBin'
+                'setRecycleBin',
+                'setDic'
             ]),
             inputEnter(val) {
                 if(!val.keyType) return this.$message('请选中搜索类型');

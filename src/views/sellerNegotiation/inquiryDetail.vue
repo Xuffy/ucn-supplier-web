@@ -246,7 +246,8 @@
         methods: {
             ...mapActions([
                 'setDraft',
-                'setRecycleBin'
+                'setRecycleBin',
+                'setDic'
             ]),
             deleteInquiry() {
                 this.$confirm('确认删除?', '提示', {
@@ -352,33 +353,24 @@
                     id: this.$route.query.id
                 })
                 .then(res => {
-                    //Basic Info
-                    let basicInfoData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
-                    _.map(basicInfoData, item => {
-                        if(!item._remark) _.mapObject(item, (val, k) => {
-                            switch(val.state) {
-                                case 'time':
-                                    item[k].value = this.$dateFormat(val.value, 'yyyy-mm-dd');
-                            }
+                    let basicInfoData, newProductTabData;
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
+                    .then(data => {
+                        this.setDic(data);
+                        //Basic Info
+                        basicInfoData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]), (item) => {
+                            this.$filterDic(item);
                         });
-                    });
-                    this.newTabData = basicInfoData;
-                    this.tabData = basicInfoData;
-                    //Product Info
-                    let newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
-
-                    _.map(newProductTabData, item => {
-                        if(!item._remark) _.mapObject(item, (val, k) => {
-                            switch(val.state) {
-                                case 'time':
-                                    item[k].value = this.$dateFormat(val.value, 'yyyy-mm-dd');
-                            }
+                        this.newTabData = basicInfoData;
+                        this.tabData = basicInfoData;
+                        //Product Info
+                        newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'), (item) => {
+                            this.$filterDic(item);
                         });
+                        this.newProductTabData = newProductTabData;
+                        this.productTabData = newProductTabData;
+                        this.tableLoad = false;
                     });
-
-                    this.newProductTabData = newProductTabData;
-                    this.productTabData = newProductTabData;
-                    this.tableLoad = false;
                 })
                 .catch(err => {
                     this.tableLoad = false;

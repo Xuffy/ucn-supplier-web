@@ -12,15 +12,11 @@ const json = {
     require(`./${lang}/common/message`)
   ),
   inquiry: _.extend({},
-    require(`./${lang}/inquiry/productInfo.pending`),
-    require(`./${lang}/inquiry/compare.pending`),
+    require(`./${lang}/inquiry/basicInfo.pending`),
     require(`./${lang}/inquiry/index`),
     require(`./${lang}/inquiry/viewByInqury.pending`),
     require(`./${lang}/inquiry/viewBySKU.pending`),
     require(`./${lang}/inquiry/productInfo.pending`)
-<<<<<<< HEAD
-  )
-=======
   ),
   logistic: _.extend({},
     require(`./${lang}/logistic/plan/basicInfo.pending`),
@@ -48,8 +44,6 @@ const json = {
         require(`./${lang}/product/product.basic`),
         require(`./${lang}/product/product.overview`),
         require(`./${lang}/product/product.overviewTable`),
-
-
         require(`./${lang}/product/productDetail`),
     ),
     setting: _.extend({},
@@ -74,7 +68,6 @@ const json = {
     require(`./${lang}/workbench/page`),
     require(`./${lang}/workbench/task`)
   ),
->>>>>>> 1e86c85cb808d65048888517369b9a25e4ca4c5a
 }
 
 console.log(`%c这是优化后的国际化配置，请仔细看，修改并不麻烦。\n只需要把之前下划线 ‘$i.’ 去掉就行了`, "color:#409EFF", json,'\n\n');
