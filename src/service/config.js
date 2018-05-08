@@ -6,6 +6,7 @@ export default {
       BASE_CS: '//192.168.51.33:11003',
       BASE_CSTEST2:'//192.168.51.33:11002',
       BASE_CSTEST1:'//192.168.51.33:11001',
+      // BASE_CS: '//192.168.51.33:11002',
       // BASE_CS: 'http://192.168.51.248:11002',
       // BASE_CS1: 'http://192.168.51.33:11007',
       // BASE_CS1: 'http://192.168.51.248:11001',
@@ -15,8 +16,10 @@ export default {
       // BASE_CS: '//192.168.51.248:11002',
       //BASE_CS1: '//192.168.51.33:11007',
       BASE_API: '',
-      BASE_CS_cgs: '//192.168.51.33:11007',
-      BASE_HCJ: '//192.168.51.248:11001',
+
+      BASE_CS_cgs: '//192.168.51.33:11002',
+      BASE_HCJ: '//192.168.51.248:11002',
+
       BASE_JY: '//192.168.51.199:18002',
       BASE_DHC: '//dev.upurchase-facade.ucnholding.com',
       BASE_LYF: '//dev.uuser-facade.ucnholding.com',

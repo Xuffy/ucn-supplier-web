@@ -260,9 +260,8 @@
                         type: 'info',
                         message: '不修改和以前同'
                     });  
-                    this.$ajax.post(this.$apis.POST_UPDATE_CATEGORY, {
-                        id: data.id,
-                        name: value
+                    this.$ajax.post(`${this.$apis.POST_PURCHASE_UPDATE_CATEGORY}/?name=${value}`, {
+                        id: data.id
                     })
                     .then(res => {
                         data.name = value;

@@ -1,7 +1,7 @@
 <template>
-    <div class="category-setting">
+    <div class="category-common">
         <span style="display:none;" v-text="upDataPage"></span>
-        <div class="hd">{{ $i.common.categorySettingTitle }}</div>
+        <div class="hd">{{ $i.common.categorycommonTitle }}</div>
         <div class="category-wrap">
             <div class="maping-relation">
                 <h5>{{ $i.common.mappingRelation }}</h5>
@@ -74,7 +74,7 @@
 </template>
 <script>
     export default {
-        name: 'CategorySetting',
+        name: 'Categorycommon',
         data() {
             return {
                 upDataPage:0,
@@ -105,19 +105,19 @@
         },
         methods: {
             getMgeneralCategoryData() {
-                this.$ajax.get(this.$apis.GET_PURCHASE_SYS_CATEGORY)
+                this.$ajax.get(this.$apis.GET_SYS_CATEGORY)
                 .then(res => {
                     this.mgeneralCategoryData = res;
                 });
             },
             getMyCategoryData() {
-                this.$ajax.get(this.$apis.GET_PURCHASE_CATEGORY)
+                this.$ajax.get(this.$apis.GET_CATEGORY)
                 .then(res => {
                     this.myCategoryData = res;
                 })
             },
             getMappingCategory() {
-                this.$ajax.get(this.$apis.GET_PURCHASE_MAPPING_CATEGORY)
+                this.$ajax.get(this.$apis.GET_MAPPING_CATEGORY)
                 .then(res => {
                     this.mappingRelationData = res;
                     this.mappingRelationDataSplit(this.mappingRelationData);
@@ -143,7 +143,7 @@
                     parentId: data.id || 0,
                     name: name
                 };
-                this.$ajax.post(this.$apis.GET_PURCHASE_CATEGORY, params)
+                this.$ajax.post(this.$apis.GET_CATEGORY, params)
                 .then(res => {
                     this.addData(res, data, name, type);
                     this.myCategory = '';
@@ -189,14 +189,14 @@
                 const id = children[index].id;
                 if(data.children && data.children.length) return  this.$message({
                     type: 'info',
-                    message: this.$i.myCategorySettingDelete
+                    message: this.$i.myCategorycommonDelete
                 }); 
-                this.$confirm(this.$i.myCategorySettingDeleteTitle, this.$i.myCategorySettingTitle, {
+                this.$confirm(this.$i.myCategorycommonDeleteTitle, this.$i.myCategorycommonTitle, {
                     confirmButtonText: this.$i.common.ok,
                     cancelButtonText: this.$i.common.cancel,
                     type: 'warning'
                 }).then(() => {
-                    this.$ajax.get(`${this.$apis.POST_PURCHASE_CATEGORY_DELETE}/{id}`, {
+                    this.$ajax.get(`${this.$apis.POST_CATEGORY_DELETE}/{id}`, {
                         id: id
                     })
                     .then(res => {
@@ -216,26 +216,26 @@
                 });
             },
             add(data, type) {
-                this.$prompt('添加分类', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消'
+                this.$prompt(this.$i.common.addClassification, this.$i.common.prompt, {
+                    confirmButtonText: this.$i.common.confirm,
+                    cancelButtonText: this.$i.common.cancel
                 }).then(({ value }) => {
                     if(!value) return this.$message({
-                        message: '分类名不能为空',
+                        message: this.$i.common.theClassificationNameCanNotBeEmpty,
                         type: 'warning'
                     });
                     if(type === 'parents') return this.addNewCategory(data, value, type);
                     if(data.children && data.children.length) {
                         this.addNewCategory(data, value, type);
                     } else {
-                        this.$ajax.get(this.$apis.GET_PURCHASE_ADD_APPING_CATEGORY, {
+                        this.$ajax.get(this.$apis.GET_ADD_APPING_CATEGORY, {
                             id: data.id
                         })
                         .then(res => {
                             if(!res) return this.addNewCategory(data, value, type);
-                            this.$confirm('添加子集会导致父级节点对应关系被清空，请问确定添加吗？', '提示', {
-                                confirmButtonText: '确定',
-                                cancelButtonText: '取消',
+                            this.$confirm(this.$i.common.addEmptying, this.$i.common.prompt, {
+                                confirmButtonText: this.$i.common.confirm,
+                                cancelButtonText: this.$i.common.cancel,
                                 type: 'warning'
                             }).then(() => {
                                 this.addNewCategory(data, value, type)
@@ -247,22 +247,21 @@
                 });
             },
             edit(data) {
-                this.$prompt('请编辑', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$prompt(this.$i.common.pleaseEdit, this.$i.common.prompt, {
+                    confirmButtonText: this.$i.common.confirm,
+                    cancelButtonText: this.$i.common.cancel,
                     inputValue: data.name
                 }).then(({ value }) => {
                     if(!value) return this.$message({
-                        message: '不能为空',
+                        message: this.$i.common.canTBeEmptys,
                         type: 'warning'
                     });
                     if(data.name === value) return this.$message({
                         type: 'info',
-                        message: '不修改和以前同'
+                        message: this.$i.common.canTBeEmptys
                     });  
-                    this.$ajax.post(this.$apis.POST_PURCHASE_UPDATE_CATEGORY, {
-                        id: data.id,
-                        name: value
+                    this.$ajax.post(`${this.$apis.POST_UPDATE_CATEGORY}/?name=${value}`, {
+                        id: data.id
                     })
                     .then(res => {
                         data.name = value;
@@ -275,24 +274,24 @@
             },
             genCheckBox(id, list) {
                 list.forEach(items => {
-                    if(id) {
-                        if(id === items.id + '') this.$refs.tree1.setChecked(items.id, true, true);
-                    } else {
-                        this.$refs.tree1.setChecked(items.id, false, true);
-                    }
+                    if(id === items.id + '') this.$refs.tree1.setChecked(items.id, true, true);
                     if(items[this.defaultProps.children] && items[this.defaultProps.children].length) this.genCheckBox(id, items[this.defaultProps.children]);
                 });
             },
+            setCheckBox(list) {
+                list.forEach(items => {
+                    this.$refs.tree1.setChecked(items.id, false, true);
+                    if(items[this.defaultProps.children] && items[this.defaultProps.children].length) this.setCheckBox(items[this.defaultProps.children]);
+                });
+            },
             myCategoryChange(val) {
-                if(val.children && val.children.length) return; // this.$message({
-                    //     type: 'info',
-                    //     message: '父节点不能添加映射关系'
-                    // });
+                if(val.children && val.children.length) return this.myCategory = '';
                 this.myCategory = val.id;
-                this.$ajax.get(this.$apis.GET_PURCHASE_CHANGE_MAPPING_CATEGORY, {
+                this.$ajax.get(this.$apis.GET_CHANGE_MAPPING_CATEGORY, {
                     id: val.id
                 })
                 .then(res => {
+                    this.setCheckBox(this.mgeneralCategoryData)
                     if(res) {
                         const genCheckBox = res.split(',');
                         genCheckBox.forEach(item => {
@@ -314,9 +313,9 @@
                 };
                 if(!params.categoryId) return this.$message({
                     type: 'info',
-                    message: '请先选择分类'
+                    message: this.$i.common.pleaseSelectTheLeafNode
                 });
-                this.$ajax.post(this.$apis.POST_PURCHASE_SAVE_MAPPING_CATEGORY, params)
+                this.$ajax.post(this.$apis.POST_SAVE_MAPPING_CATEGORY, params)
                 .then(res => {
                     this.mappingRelationData = res;
                     this.mappingRelationDataSplit(this.mappingRelationData);
@@ -376,7 +375,7 @@
 </style>
 
 <style lang="less" scoped>
-    .category-setting {
+    .category-common {
         .hd {
             font-weight: bold;
             font-size:16px;

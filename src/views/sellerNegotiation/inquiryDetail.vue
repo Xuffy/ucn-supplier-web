@@ -46,11 +46,11 @@
                         :hideFilterValue="statusModify"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
-                        <el-button @click="modifyAction" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.modify }}</el-button>
-                        <el-button v-authorize="'INQUIRY:DETAIL:DOWNLOAD'">{{ $i.common.download }}</el-button>
-                        <el-button v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '22' && tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
-                        <el-button v-authorize="'INQUIRY:DETAIL:DELETE'" type="danger" @click="deleteInquiry" :disabled="tabData[0].status.value + '' !== '99' && tabData[0].status.value + '' !== '1'" v-if="tabData[0]">{{ $i.common.delete }}</el-button>
+                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
+                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.dataBase + ''!=='99'||tabData[0].status.dataBase+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button>
+                        <el-button @click="modifyAction" :disabled="tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
+                        <el-button type="info" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.dataBase+''!== '22'&&tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
+                        <el-button>{{ $i.common.download }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
                         <el-button @click="modify">{{ $i.common.send }}</el-button>
@@ -67,10 +67,6 @@
                 width="70%"
                 lock-scroll
             >
-            <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button label="product">{{ $i.common.fromNewSearch }}</el-radio-button>
-                <el-radio-button label="bookmark">{{ $i.common.FromMyBookmark }}</el-radio-button>
-            </el-radio-group>
             <v-product 
                 :hideBtns="true"
                 :hideBtn="true"
@@ -121,6 +117,7 @@
                 <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
             </template>
         </v-history-modify>
+        <v-message-board module="inquiry" code="inquiryDetail" :id="$route.query.id+''"></v-message-board>
     </div>
 </template>
 <script>
@@ -135,7 +132,7 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard, selectSearch, VTable, compareList, VHistoryModify } from '@/components/index';
+    import { VMessageBoard, selectSearch, VTable, compareList, VHistoryModify } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
     import { mapActions } from 'vuex'
@@ -207,7 +204,7 @@
             }
         },
         components: {
-            'message-board':messageBoard,
+            'v-message-board':VMessageBoard,
             'select-search':selectSearch,
             'v-table': VTable,
             'v-product': product,
@@ -262,12 +259,7 @@
                     .then(res => {
                         this.$router.push('/negotiation/inquiry')
                     });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
+                })
             },
             getDictionaries() {
                 this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
@@ -376,16 +368,6 @@
                     this.tableLoad = false;
                 });
             },
-            submit(str) { //留言板发布
-                let json = {};
-                json.time = getData(new Date(), 6);
-                json.name = '罗涛';
-                json.content = str;
-                this.list.push(json);
-            },
-            boardSwitch() { //留言板开关
-                this.switchStatus = !this.switchStatus;
-            },
             getList(ids) {
                 this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SKUS, ids)
                 .then(res => {
@@ -433,12 +415,14 @@
                         if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[0], {'key': 'id'}).value && !val._remark && !data[0]._remark) {
                             val = data[0];
                             val._modify = true;
+                            val.displayStyle.value = 1;
                             _.mapObject(val, (item, k) => {
                                 if(item.length) this.$set(item, '_style', 'color:#27b7b6')
                             })
                         } else if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[1], {'key': 'id'}).value && val._remark && data[1]._remark) {
                             val = data[1];
                             val._modify = true;
+                            val.displayStyle.value = 1;
                             _.mapObject(val, (item, k) => {
                                 if(item.length) this.$set(item, '_style', 'color:#27b7b6')
                             });
@@ -571,7 +555,7 @@
                 parentNode.draft = 0;
                 this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SAVE, this.$filterModify(parentNode))
                 .then(res => {
-                    this.newTabData[0].status.value = res.status;
+                    this.newTabData[0].status.dataBase = res.status;
                     this.tabData = this.newTabData;
                     this.productTabData = this.newProductTabData;
                     this.productModify();
@@ -584,7 +568,7 @@
                     jsons = {};
                     if(item._remark) { //拼装remark 数据
                         for(let k in item) {
-                            jsons[k] = item[k].value;
+                            jsons[k] = item[k].dataBase?item[k].dataBase:item[k].value;
                         }
                         json.fieldRemark = jsons;
                     } else {
@@ -593,7 +577,7 @@
                             if(json[k] === 'fieldRemark') {
                                 json[k] = jsons;
                             } else {
-                                json[k] = item[k].value;
+                                json[k] = item[k].dataBase?item[k].dataBase:item[k].value;
                             }
                         };
                         arr.push(json);

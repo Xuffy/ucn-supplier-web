@@ -1,11 +1,15 @@
 export default {
-    SupplierCode: {
+    CustomerCode: {
         key: 'code'
     },
-    Suppliercompanyname: {
+    Customercompanyname: {
         key: 'name'
     },
-    Suppliertype: {
+
+    CustomerShortName: {
+        key: 'CustomerShortName'
+    },
+    Customertype: {
         key: 'type'
     },
     country: {
@@ -14,32 +18,21 @@ export default {
     city: {
         key: 'city'
     },
-    Provideincoterm: {
-        key: 'incoterm'
+    
+    customerSource:{
+        key:'customerSource'
     },
-    Exportlicense: {
-        key: 'exportLicense'
-    },
-    businessscope: {
-        key: 'businessScope'
-    },
-    category: {
-        key: 'category'
+    
+    paymentterm: {
+        key: 'payment'
     },
     currency: {
         key: 'currency'
     },
-    paymentterm: {
-        key: 'payment'
+    filingDate:{
+        key:'filingDate'
     },
-    Suppliershortname: {
-        key: 'shortName'
-    },
-    description: {
-        key: 'description'
-    },
-    
-    
-    
-    
+    TaxpayerQualification:{
+         key:'TaxpayerQualification'
+    }
 }
