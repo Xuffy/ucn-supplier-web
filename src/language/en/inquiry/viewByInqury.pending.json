@@ -4,7 +4,6 @@
     "status": "Status",
     "supplierName": "supplierName",
     "quantity": "quantity",
-    "inquiryValue": "inquiry Value",
     "currency": "Currency",
     "incoterm": "Incoterm",
     "departurePort": "departurePort",

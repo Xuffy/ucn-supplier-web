@@ -6,12 +6,13 @@ const lang = localStore.get('language') || config.LANGUAGE;
 const json = {
   common: _.extend({},
     require(`./${lang}/common/quickLinks`),
+    require(`./${lang}/common/basePlaceholder`),
     require(`./${lang}/common/baseText`),
+    require(`./${lang}/common/setting`),
     require(`./${lang}/common/message`)
   ),
   inquiry: _.extend({},
     require(`./${lang}/inquiry/basicInfo.pending`),
-    require(`./${lang}/inquiry/compare.pending`),
     require(`./${lang}/inquiry/index`),
     require(`./${lang}/inquiry/viewByInqury.pending`),
     require(`./${lang}/inquiry/viewBySKU.pending`),

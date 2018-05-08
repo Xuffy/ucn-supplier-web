@@ -23,6 +23,8 @@ export const routerMap = [
       redirect: '/negotiation/inquiry',
       meta: {
         name: 'negotiation',
+        draft: true,
+
       },
       children: [
         {
@@ -30,6 +32,7 @@ export const routerMap = [
           name: 'inquiry',
           meta: {
             name: 'negotiation inquiry',
+            recycleBin: 'INQUIRY:OVERVIEW:RECYCLE_BIN'
           },
           component: () => import('../views/sellerNegotiation/inquiryOverview')
         },
@@ -39,7 +42,8 @@ export const routerMap = [
           hidden: true,
           meta: {
             name: 'Inquiry Detail',
-            messageBoard: 'code'
+            recycleBin: 'INQUIRY:DETAIL:RECYCLE_BIN',
+            messageBoard: 'INQUIRY:DETAIL:MESSAGE_BOARD'
           },
           component: () => import('../views/sellerNegotiation/inquiryDetail')
         },

@@ -24,6 +24,9 @@ const state = {
     hideMenu: false,
     paddingRight: 0
   },
+  dic: {
+
+  },
   /*messageBoard: {
     show: true,
     code: null
@@ -36,6 +39,9 @@ const actions = {
   },
   setRecycleBin({ commit }, newData) {
     commit(type.SETRECYCLEBIN, newData);
+  },
+  setDic({ commit }, newData) {
+    commit(type.DIC, newData);
   }
 };
 
@@ -45,6 +51,9 @@ const mutations = {
   },
   [type.SETRECYCLEBIN](state, newData) {
     state.quickLink.recycleBin = newData;
+  },
+  [type.DIC](state, newData) {
+    state.dic = newData;
   }
 };
 
