@@ -15,7 +15,6 @@ import overviewTable from './overviewTable';
 
 
 export default {
-    detailTop,
     buyerDetailTop,
     detailPriceTable,
     compareTable,
@@ -28,4 +27,5 @@ export default {
     overview,
     overviewTable,
     detailTab,
+    detailTop,
 }

@@ -2,7 +2,7 @@
     <div class="Details" v-loading="loadingTable">
         <div class="head">
             <div class="title">
-                {{productForm.nameCn}}   (采购商显示英文，供应商显示中文)
+                {{productForm.nameCn}}
             </div>
             <div class="detail">
                 <el-row>
@@ -341,7 +341,13 @@
 
             //编辑产品
             editProduct(){
-                this.windowOpen('/sellerProduct/addNewProduct',{id:this.productForm.id,isEdit:true});
+                this.$windowOpen({
+                    url:"/product/addNewProduct",
+                    params:{
+                        id:this.productForm.id,
+                        isEdit:true
+                    }
+                });
             },
 
             //设置商品上/下架状态

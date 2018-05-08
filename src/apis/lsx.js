@@ -106,6 +106,15 @@ export default {
     get_qcProductInfo:['/qc/detail/page','BASE_BUY','UPURCHASE_URL'],
 
 
+    /**
+     * service warehouse
+     * */
+    get_serviceQcOrder:['/qc/page','BASE_SERVICE','USERVICE_URL'],
+    get_serviceOrderDetail:['/qc/getById','BASE_SERVICE','USERVICE_URL'],
+    get_serviceQcOrderProduct:['/qc/detail/page','BASE_SERVICE','USERVICE_URL'],
+    get_serviceQcSurveyor:['/user/list','UUSER_URL','UUSER_URL'],
+    save_serviceQcOrder:['/qc/result/save','BASE_SERVICE','USERVICE_URL'],
+
 
     /**
      * 字典获取

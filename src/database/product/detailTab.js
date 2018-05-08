@@ -150,16 +150,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
-        options:[
-            {
-                label:"否",
-                value:false,
-            },
-            {
-                label:"是",
-                value:true
-            }
-        ],
+        isReadily:true,
     },
     availableQty:{
         key:'availableQty',
@@ -445,40 +436,14 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
-        options:[
-            {
-                label:'km',
-                value:0
-            },
-            {
-                label:'mile',
-                value:1
-            },
-            {
-                label:'m',
-                value:2
-            },
-        ]
+        isLength:'true'
     },
     unitVolume:{
         key:'unitVolume',
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
-        options:[
-            {
-                label:'m3',
-                value:0
-            },
-            {
-                label:'liter',
-                value:1
-            },
-            {
-                label:'ft3',
-                value:2
-            },
-        ]
+        isVolume:true,
     },
     length:{
         key:'length',
@@ -667,16 +632,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
-        options:[
-            {
-                label:'yes',
-                value:true
-            },
-            {
-                label:'no',
-                value:false
-            }
-        ]
+        isOem:true,
     },
 
     /**
@@ -788,16 +744,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'otherInfo',
-        options:[
-            {
-                label:'Yes',
-                value:true,
-            },
-            {
-                label:'No',
-                value:false,
-            },
-        ]
+        isUDB:true,
     },
     displayBoxQty:{
         key:'displayBoxQty',
@@ -828,16 +775,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'otherInfo',
-        options:[
-            {
-                label:'Yes',
-                value:true,
-            },
-            {
-                label:'No',
-                value:false,
-            },
-        ]
+        isSkuPkg:true,
     },
 
 
