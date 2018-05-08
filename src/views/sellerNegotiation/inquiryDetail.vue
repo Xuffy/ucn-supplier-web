@@ -27,6 +27,7 @@
                     </div>
                 </div>
                 <div class="basic-info">
+                    <h5>{{ $i.common.productInfo }}</h5>
                     <div class="status">
                         <div class="btn-wrap">
                             <el-button @click="addProduct" :disabled="!statusModify">{{ $i.common.addProduct }}</el-button>
@@ -45,11 +46,11 @@
                         :hideFilterValue="statusModify"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.accept }}</el-button>
+                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
                         <el-button @click="modifyAction" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.modify }}</el-button>
-                        <el-button>{{ $i.common.download }}</el-button>
-                        <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '22' && tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
-                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.value + '' !== '99' && tabData[0].status.value + '' !== '1'" v-if="tabData[0]">{{ $i.common.delete }}</el-button>
+                        <el-button v-authorize="'INQUIRY:DETAIL:DOWNLOAD'">{{ $i.common.download }}</el-button>
+                        <el-button v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '22' && tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
+                        <el-button v-authorize="'INQUIRY:DETAIL:DELETE'" type="danger" @click="deleteInquiry" :disabled="tabData[0].status.value + '' !== '99' && tabData[0].status.value + '' !== '1'" v-if="tabData[0]">{{ $i.common.delete }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
                         <el-button @click="modify">{{ $i.common.send }}</el-button>
