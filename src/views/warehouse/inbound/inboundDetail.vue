@@ -12,15 +12,14 @@
                                     class="speInput"
                                     size="mini"
                                     :disabled="true"
-                                    v-model="inboundData[v.key]"
-                                    placeholder="please input"></el-input>
+                                    v-model="inboundData[v.key]"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
-                            <el-select :disabled="true" class="speInput" size="mini" v-model="inboundData[v.key]" placeholder="please choose">
+                            <el-select :disabled="true" class="speInput" size="mini" v-model="inboundData[v.key]">
                                 <el-option
-                                        v-for="item in v.options"
-                                        :key="item.value"
-                                        :label="item.label"
+                                        v-for="item in inboundTypeOption"
+                                        :key="item.id"
+                                        :label="item.name"
                                         :value="item.value">
                                 </el-option>
                             </el-select>
@@ -31,7 +30,6 @@
                                     class="speInput"
                                     type="textarea"
                                     autosize
-                                    placeholder="please input"
                                     v-model="inboundData[v.key]">
                             </el-input>
                         </div>
@@ -42,8 +40,7 @@
                                     size="mini"
                                     v-model="inboundData[v.key]"
                                     :controls="false"
-                                    :min="0"
-                                    label="please input"></el-input-number>
+                                    :min="0"></el-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -53,6 +50,13 @@
                                     v-model="inboundData[v.key]"
                                     ref="dropDown"></drop-down>
                         </div>
+                        <div v-else-if="v.showType==='timezone'">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    :disabled="true"
+                                    v-model="inboundData[v.key]"></el-input>
+                        </div>
                         <div v-else-if="v.showType==='date'">
                             <el-date-picker
                                     :disabled="true"
@@ -61,7 +65,6 @@
                                     v-model="inboundData[v.key]"
                                     align="right"
                                     type="date"
-                                    placeholder="选择日期"
                                     :picker-options="pickerOptions1">
                             </el-date-picker>
                         </div>
@@ -70,17 +73,74 @@
             </el-row>
         </el-form>
 
-        <div class="title">
-            {{$i.warehouse.productInfo}}
-        </div>
-
         <v-table
                 v-loading="loadProductTable"
                 class="speTable"
                 :data="productTable"
-                :buttons="[{label:'Detail',type:1}]"
+                :buttons="[{label:'详情',type:1}]"
                 @action="btnClick"
-                @change-checked="changeChecked"></v-table>
+                @change-checked="changeChecked">
+            <template slot="header">
+                <div class="title" style="display: inline">
+                    {{$i.warehouse.productInfo}}
+                </div>
+            </template>
+        </v-table>
+
+        <div class="title" style="margin-top: 50px">
+            {{$i.warehouse.summary}}
+        </div>
+
+
+        <el-form class="speForm" label-width="200px" :label-position="labelPosition">
+            <el-row>
+                <el-col class="speCol" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item prop="v" :label="$i.warehouse.cartonOfProducts">
+                        <el-input
+                                size="mini"
+                                v-model="inboundData.skuTotalCartonQty"
+                                :disabled="true">
+                        </el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col class="speCol" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item prop="v" :label="$i.warehouse.grossWeightOfProducts">
+                        <el-input
+                                size="mini"
+                                v-model="inboundData.skuTotalGrossWeight"
+                                :disabled="true">
+                        </el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col class="speCol" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item prop="v" :label="$i.warehouse.volumeOfProducts">
+                        <el-input
+                                size="mini"
+                                v-model="inboundData.skuTotalVolume"
+                                :disabled="true">
+                        </el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col class="speCol" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item prop="v" :label="$i.warehouse.netWeightOfProducts">
+                        <el-input
+                                size="mini"
+                                v-model="inboundData.skuTotalNetWeight"
+                                :disabled="true">
+                        </el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col class="speCol" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item prop="v" :label="$i.warehouse.quantityOfProducts">
+                        <el-input
+                                size="mini"
+                                v-model="inboundData.skuTotalQty"
+                                :disabled="true">
+                        </el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
 
         <div class="footBtn">
             <el-button @click="closeWindow" type="primary">{{$i.warehouse.close}}</el-button>
@@ -91,15 +151,17 @@
 
 <script>
 
-    import VTable from '@/components/common/table/index'
+    import {VTimeZone,VTable} from '@/components/index'
 
     export default {
         name: "inboundDetail",
         components:{
-            VTable
+            VTable,
+            VTimeZone
         },
         data(){
             return{
+                value:'',
                 /**
                  * 页面基础配置
                  * */
@@ -131,7 +193,7 @@
                 },
                 addOrderDialogVisible:false,
                 loadingTable:false,
-
+                inboundTypeOption:[],
                 inboundData:{
                     inboundNo:'',
                     inboundDate:'',
@@ -144,7 +206,18 @@
                     carrier:'',
                     carrierPhone:'',
                     timeZone:'',
-
+                    skuTotalCartonQty: null,
+                    skuTotalGrossWeight: null,
+                    skuTotalNetWeight: null,
+                    skuTotalQty: null,
+                    skuTotalVolume: null
+                },
+                summaryData:{
+                    cartonOfProducts:0,
+                    grossWeightOfProducts:0,
+                    volumeOfProducts:0,
+                    netWeightOfProducts:0,
+                    quantityOfProducts:0,
                 },
 
                 /**
@@ -152,7 +225,6 @@
                  * */
                 loadProductTable:false,
                 productTable:[],
-
             }
         },
         methods:{
@@ -160,7 +232,7 @@
                 this.loadingTable=true;
                 this.$ajax.get(`${this.$apis.get_inboundDetail}?id=${this.$route.query.id}`).then(res=>{
                     this.inboundData=res;
-
+                    console.log(this.inboundData,'???')
                     this.$ajax.post(this.$apis.get_inboundSku,{
                         inboundId: this.$route.query.id,
                         pn: 1,
@@ -172,12 +244,19 @@
                         //     }
                         // ],
                     }).then(res=>{
-                        console.log(res)
-
                         this.productTable = this.$getDB(this.$db.warehouse.inboundDetailProductTable, res.datas,(e)=>{
 
                         });
-
+                        /**
+                         * 计算统计数据
+                         * */
+                        res.datas.forEach(v=>{
+                            this.summaryData.cartonOfProducts+=v.inboundOutCartonTotalQty;
+                            this.summaryData.grossWeightOfProducts+=v.inboundSkuTotalGrossWeight;
+                            this.summaryData.volumeOfProducts+=v.inboundSkuTotalVolume;
+                            this.summaryData.netWeightOfProducts+=v.inboundSkuTotalNetWeight;
+                            this.summaryData.quantityOfProducts+=v.inboundSkuTotalQty;
+                        });
                         this.loadingTable=false;
                     }).catch(err=>{
                         this.loadingTable=false;
@@ -203,15 +282,28 @@
             //关闭窗口
             closeWindow(){
                 window.close();
-            }
+            },
+            /**
+             * 获取字典
+             * */
+            getUnit(){
+                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE'],{_cache:true}).then(res=>{
+                    this.inboundTypeOption=res[0].codes;
+                });
+                // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{
+                //     console.log(res)
+                // });
+            },
         },
         created(){
             this.getData();
+            this.getUnit();
         },
     }
 </script>
 
 <style scoped>
+
     .title{
         font-weight: bold;
         font-size: 16px;
@@ -233,6 +325,10 @@
 
     .speInput{
         width: 80%;
+        max-width: 1000px !important;
+    }
+    .speInput >>> .el-select{
+        display: block;
     }
 
 

@@ -70,7 +70,7 @@
                 loading: false,
                 pageTotal: 1,
                 rowspan: 1,
-                selectSearch:'1',
+                selectSearch: '1',
                 options: [{
                     id: '1',
                     label: 'Order No'
@@ -95,7 +95,7 @@
                 //                this.$windowOpen('', {
                 //                    orderId: item.id.value
                 //                });
-
+                console.log('in')
                 this.$windowOpen({
                     url: '/order/detail',
                     params: {

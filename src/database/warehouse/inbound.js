@@ -3,7 +3,8 @@ export default {
         key:'inboundNo',
         belong:'basicInfo',
         showType:'input',
-        disabled:true
+        disabled:true,
+        sysCreate:true,
     },
     inboundDate:{
         key:'inboundDate',
@@ -24,16 +25,6 @@ export default {
         key:'inboundTypeDictCode',
         belong:'basicInfo',
         showType:'select',
-        options:[
-            {
-                label:'采购入库',
-                value:'1'
-            },
-            {
-                label:'验货入库',
-                value:'2'
-            },
-        ]
     },
     warehouseManager:{
         key:'warehouseManager',
@@ -58,7 +49,7 @@ export default {
     timeZone:{
         key:'timeZone',
         belong:'basicInfo',
-        showType:'input',
+        showType:'timezone',
     },
     remark:{
         key:'remark',

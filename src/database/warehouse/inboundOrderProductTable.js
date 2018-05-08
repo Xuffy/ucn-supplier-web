@@ -41,42 +41,43 @@ export default {
     },
     skuUnit:{
         key:'skuUnit',          //字典
-        showType:'select',
-        options:[
-            {
-                label:'kg',
-                value:1
-            },
-            {
-                label:'g',
-                value:2
-            }
-        ],
+        belong:'skuList',
+        // showType:'select',
+        // options:[
+        //     {
+        //         label:'kg',
+        //         value:1
+        //     },
+        //     {
+        //         label:'g',
+        //         value:2
+        //     }
+        // ],
     },
     totalQty:{
         key:'totalQty'
     },
-    inboundSkuTotalQty:{
+    inboundSkuTotalQty:{        //入库产品总数量
         key:'inboundSkuTotalQty',       //需要计算
         computed:true,
         showType:'number'
     },
-    inboundOutCartonTotalQty:{
+    inboundOutCartonTotalQty:{      //入库产品总箱数
         key:'inboundOutCartonTotalQty',     //需要填写
-        showType:'number'
-
+        showType:'number',
+        needInput:true
     },
-    inboundSkuTotalVolume:{
+    inboundSkuTotalVolume:{     //入库产品总体积
         key:'inboundSkuTotalVolume',    //需要计算
         showType:'number',
         computed:true,
     },
-    inboundSkuTotalNetWeight:{
+    inboundSkuTotalNetWeight:{      //入库产品总净重
         key:'inboundSkuTotalNetWeight',    //需要计算
         showType:'number',
         computed:true,
     },
-    inboundSkuTotalGrossWeight:{
+    inboundSkuTotalGrossWeight:{        //入库产品总毛重
         key:'inboundSkuTotalGrossWeight',    //需要计算
         showType:'number',
         computed:true,
@@ -87,18 +88,18 @@ export default {
     },
     skuOuterCartonVolume:{
         key:'skuOuterCartonVolume',         //可修改，必填
-        belong:'skuList',
-        showType:'input'
+        // belong:'skuList',
+        showType:'number'
     },
     skuOuterCartonRoughWeight:{
         key:'skuOuterCartonRoughWeight',        //可修改，必填
-        belong:'skuList',
-        showType:'input'
+        // belong:'skuList',
+        showType:'number'
     },
     skuOuterCartonNetWeight:{
         key:'skuOuterCartonNetWeight',        //可修改，必填
-        belong:'skuList',
-        showType:'input'
+        // belong:'skuList',
+        showType:'number'
     },
     unqualifiedType:{   //不合格类型====>>>默认为0，页面上只展示0即可
         key:'unqualifiedType',

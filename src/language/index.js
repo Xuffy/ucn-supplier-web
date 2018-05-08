@@ -18,7 +18,63 @@ const json = {
     require(`./${lang}/inquiry/viewByInqury.pending`),
     require(`./${lang}/inquiry/viewBySKU.pending`),
     require(`./${lang}/inquiry/productInfo.pending`)
+<<<<<<< HEAD
   )
+=======
+  ),
+  logistic: _.extend({},
+    require(`./${lang}/logistic/plan/basicInfo.pending`),
+    require(`./${lang}/logistic/plan/overviewBtn.pending`),
+    require(`./${lang}/logistic/plan/plan.base`)
+  ),
+  logs: _.extend({},
+    require(`./${lang}/logs/logs.basic`),
+    require(`./${lang}/logs/logs.basic`)
+  ),
+  message: _.extend({},
+    require(`./${lang}/message/message.table`),
+    require(`./${lang}/message/tabs`)
+  ),
+  order: _.extend({},
+    require(`./${lang}/order/basicinfo.pending`),
+    require(`./${lang}/order/overview`),
+    require(`./${lang}/order/productinfo.pending`)
+  ),
+    payment: _.extend({},
+    require(`./${lang}/payment/payment`),
+    require(`./${lang}/payment/payment.table`)
+  ),
+    product: _.extend({},
+        require(`./${lang}/product/product.basic`),
+        require(`./${lang}/product/product.overview`),
+        require(`./${lang}/product/product.overviewTable`),
+
+
+        require(`./${lang}/product/productDetail`),
+    ),
+    setting: _.extend({},
+    require(`./${lang}/setting/department`),
+    require(`./${lang}/setting/personalInfo`),
+    require(`./${lang}/setting/setting.basic`)
+  ),
+  supplier: _.extend({},
+    require(`./${lang}/supplier/detail.pending`),
+    require(`./${lang}/supplier/overview`)
+  ),
+  track: _.extend({},
+    require(`./${lang}/track/trackBysku`)
+  ),
+  warehouse: _.extend(
+    require(`./${lang}/warehouse/warehouse.basic`),
+    require(`./${lang}/warehouse/warehouse.inboundOverviewTable`),
+    require(`./${lang}/warehouse/warehouse.inboundDetail`),
+    require(`./${lang}/warehouse/warehouse.outboundOverview`),
+  ),
+  workbench: _.extend({},
+    require(`./${lang}/workbench/page`),
+    require(`./${lang}/workbench/task`)
+  ),
+>>>>>>> 1e86c85cb808d65048888517369b9a25e4ca4c5a
 }
 
 console.log(`%c这是优化后的国际化配置，请仔细看，修改并不麻烦。\n只需要把之前下划线 ‘$i.’ 去掉就行了`, "color:#409EFF", json,'\n\n');
