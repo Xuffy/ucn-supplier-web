@@ -41,13 +41,13 @@ export default {
     post_recoverBookmarks: ['/purchase/supplier/batchRecoverBookmark', 'USUPPLY_URL', 'USUPPLY_URL'],
 
     //customer
-    post_getCustomerList: ['/supply/overview', 'BASE_CS', 'USUPPLY_URL'],
-    post_deleteCustomerRemark: ['/supply/deleteRemark/{id}', 'BASE_CS', 'USUPPLY_URL'],
-    post_customerDetail: ['/supply/{id}', 'BASE_CS', 'USUPPLY_URL'],
-    post_getCustomerListRemark: ['/supply/listRemarks/{id}', 'BASE_CS', 'USUPPLY_URL'],
-    post_addCustomerListRemark: ['/supply/remark', 'BASE_CS', 'USUPPLY_URL'],
-    post_delete_CustomerRemark: ['/supply/deleteRemark/{id}', 'BASE_CS', 'USUPPLY_URL'],
-    post_customerUpdataRmark: ['/supply/remark/{id}', 'BASE_CS', 'USUPPLY_URL'],
+    post_getCustomerList: ['/supply/overview', 'USUPPLY_URL', 'USUPPLY_URL'],
+    post_deleteCustomerRemark: ['/supply/deleteRemark/{id}', 'USUPPLY_URL', 'USUPPLY_URL'],
+    post_customerDetail: ['/supply/{id}', 'USUPPLY_URL', 'USUPPLY_URL'],
+    post_getCustomerListRemark: ['/supply/listRemarks/{id}', 'USUPPLY_URL', 'USUPPLY_URL'],
+    post_addCustomerListRemark: ['/supply/remark', 'USUPPLY_URL', 'USUPPLY_URL'],
+    post_delete_CustomerRemark: ['/supply/deleteRemark/{id}', 'USUPPLY_URL', 'USUPPLY_URL'],
+    post_customerUpdataRmark: ['/supply/remark/{id}', 'USUPPLY_URL', 'USUPPLY_URL'],
 
 
     //payment

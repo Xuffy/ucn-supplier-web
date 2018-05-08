@@ -53,6 +53,27 @@
                                   </el-select>
                             </el-form-item> 
                              <el-form-item 
+                                  v-if='item.type=="status"'
+                                 :label="item.label"
+                                 :prop="item.key">
+                                 <el-select
+                                           v-model='formItem[item.key]'           
+                                             reserve-keyword  
+                                              filterable  
+                                              remote 
+                                              value-key="id"
+                                             :remote-method="remoteMethod" :disabled="item.ismodify||disabled||item.isDefaultEdit||formItem[item.key]!='3'" 
+                                              @change='selectchangeName'
+                                             >
+                                             <el-option
+                                                v-for="item in selectAll[item.key]"
+                                                :key="item.code"
+                                                :label='item.name'
+                                                :value="item.code"                                            
+                                            />
+                                  </el-select>
+                            </el-form-item>    
+                             <el-form-item 
                                   v-if='item.type=="supplierName"'
                                  :label="item.label"
                                  :prop="item.key">
@@ -74,7 +95,7 @@
                                   </el-select>
                             </el-form-item>     
                           <el-form-item 
-                                  v-if='item.type=="supplierNo"'
+                                  v-if='item.type=="supplierCode"'
                                  :label="item.label"
                                  :prop="item.key">
                                  <el-select
@@ -138,7 +159,7 @@
                     customerNo: '', //必填 系统生成 
                     supplierOrderNo: '',
                     supplierName: '', //必填 不可编辑 系统生成 弹出框
-                    supplierNo: '', //必填 不可编辑 系统生成 弹出框
+                    supplierCode: '', //必填 不可编辑 系统生成 弹出框
                     quotationNo: '', // 不可编辑
                     status: '', //必填 orderStatus下拉框值 部分可编辑.........  可手动finished
                     deliveryDt: '', //必填 
@@ -190,7 +211,7 @@
                         message: '',
                         trigger: 'blur'
                     }, ],
-                    supplierNo: [{
+                    supplierCode: [{
                         required: true,
                         message: '',
                         trigger: 'blur'
@@ -258,9 +279,13 @@
                 })[0].name
             },
             selectchangeName(data) {
-                this.formItem.supplierNo = _.where(this.selectAll.supplierName, {
+                this.formItem.supplierCode = _.where(this.selectAll.supplierName, {
                     code: data
                 })[0].code
+                this.formItem.supplierName = _.where(this.selectAll.supplierName, {
+                    code: data
+                })[0].name
+                console.log(this.formItem)
             },
             //获取字典表
             getDictionaries() {
@@ -331,11 +356,11 @@
     }
 
     .el-select {
-        max-width: 200px
+        max-width: 190px
     }
 
     .el-input {
-        max-width: 200px;
+        max-width: 190px;
     }
 
 </style>

@@ -70,7 +70,12 @@
                     @action="detail" 
                     @change-checked='checked'
                     style='marginTop:10px'/>
-                    
+              <v-pagination
+            :page-data.sync="params"
+             @change="handleSizeChange"
+            @size-change="pageSizeChange"
+        />     
+                         
             <div v-show='!isButton'  style='display:flex; justify-content: center'>
                 <el-button @click='emitData'>{{$i.common.ok}}</el-button>     
                 <el-button type="primary">{{$i.common.cancel}}</el-button>
@@ -81,7 +86,8 @@
 
 <script>
     import {
-        dropDownSingle
+        dropDownSingle,
+        VPagination
     } from '@/components/index'
     import {
         VTable
@@ -90,7 +96,8 @@
         name: "SupplierSourcing",
         components: {
             dropDown: dropDownSingle,
-            VTable
+            VTable,
+            VPagination
         },
         props: {
             isButton: {
@@ -121,6 +128,7 @@
                     "payment": '',
                     "pn": 1,
                     "ps": 10,
+                    tc:0
                     //                    "sorts": [{
                     //                        "nativeSql": true,
                     //                        "orderBy": "string",
@@ -184,6 +192,7 @@
                 this.loading = true
                 this.$ajax.post(this.$apis.post_getCustomerList, this.parms)
                     .then(res => {
+                    res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
                         this.pageTotal = res.datas.tc
                         this.endpn = res.datas.end
                         this.loading = false
@@ -209,6 +218,14 @@
                 }).catch(err => {
                     console.log(err)
                 });
+            },
+                handleSizeChange(val) {
+                this.params.pn = val;
+                this.getdata()
+            },
+            pageSizeChange(val) {
+                this.params.ps = val;
+                this.getdata()
             },
         },
         created() {
