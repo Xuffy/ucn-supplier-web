@@ -91,7 +91,7 @@ export default {
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
-        type: 'select',
+        type: 'currency',
     },
     incortermAea: {
         key: 'incortermAea',

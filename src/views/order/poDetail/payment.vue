@@ -279,7 +279,8 @@
                 copyData: [],
                 orderType: 10,
                 type: '20', //10 付款  20退款
-                stopEdit: false
+                stopEdit: false,
+                currency:''
             }
         },
         methods: {
@@ -342,12 +343,19 @@
 
             //处理顶部按钮点击
             handleClick() {
+                 if( this.currencyCode=='CNY'){
+                     this.currency=33
+                    }else if(this.currencyCode='USD'){
+                        this.currency=154
+                    }else if(this.currencyCode='EUR'){
+                        this.currency=49
+                   }
                 this.stopEdit = true;
                 this.$ajax.post(this.$apis.paymentGetNo, {}).then(
                     res => {
                         this.paymentData.push({
                             no: res,
-                            name: '1324',
+                            name: '',
                             planRefundDt: '', //预计退款时间
                             planRefundAmount: '', //预计退款金额
                             actualRefundDt: '', //实际退款时间
@@ -355,7 +363,7 @@
                             type: this.type, //10 付款  20退款
                             payToId: this.payToId, //order的数据
                             currencyCode: this.currencyCode,
-                            currency: '12', //order的数据
+                            currency: this.currency, //order的数据
                             //                            status: 1, //10:待采购商确认,20:待供应商确认,30:待服务商确认，40:已确认,-1:作废
                             isNew: true, //新增的数据全部处于新增状态
                         });
