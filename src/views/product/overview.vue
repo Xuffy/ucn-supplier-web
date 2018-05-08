@@ -69,6 +69,7 @@
                 <el-button :disabled="disabledDeleteGoods" @click="setUp">{{$i.product.setUp}}</el-button>
                 <el-button :disabled="disabledDeleteGoods" @click="setDown">{{$i.product.setDown}}</el-button>
                 <el-button>{{$i.product.downloadSelected}}({{selectList.length?selectList.length:'All'}})</el-button>
+                <el-button @click="upload">{{$i.product.uploadProduct}}</el-button>
                 <el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger">{{$i.product.delete}}</el-button>
             </div>
 
@@ -329,6 +330,11 @@
                 });
             },
 
+            //上传产品
+            upload(){
+
+            },
+
             //删除商品
             deleteGood(){
                 this.$confirm('确定删除选中商品?', '提示', {
@@ -369,7 +375,7 @@
                         message: '当前选择中没有已下架的产品',
                         type: 'warning'
                     });
-                    this.partDialogVisible=false;
+                    // this.partDialogVisible=false;
                 }else{
                     // this.$ajax.post(this.$apis.set_sellerProductPutDown,id).then(res=>{
                     //     this.getData();
