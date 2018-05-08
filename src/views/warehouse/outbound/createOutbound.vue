@@ -94,7 +94,7 @@
             <el-table-column
                     v-for="v in $db.warehouse.outboundProduct"
                     :key="v.key"
-                    :label="v.key"
+                    :label="$i.warehouse[v.key]"
                     align="center"
                     width="180">
                 <template slot-scope="scope">
@@ -531,10 +531,25 @@
                 this.selectList=e;
             },
             postData(){
+                let id=[];
+                this.selectList.forEach(v=>{
+                    id.push(v.skuId.value);
+                });
+                id=_.uniq(id);
+                this.loadingProductTable=true;
+                this.$ajax.post(this.$apis.get_orderSku,id).then(res=>{
+                    console.log(res)
+                    this.productData=res;
+                    // this.productData=res;
+                    // console.log(this.productData)
+                    this.loadingProductTable=false;
+                }).catch(err=>{
+                    this.loadingProductTable=false;
+                });
 
-                // this.productData=this.$copyArr(this.copyData);
 
-                console.log(this.selectList)
+
+
                 // let arr=this.$copyArr(this.selectList);
                 // arr.forEach(v=>{
                 //     if(v._checked && !v._disabled){
@@ -543,17 +558,11 @@
                 //         this.productIds.push(v.skuId.value);
                 //     }
                 // });
-                // this.loadingProductTable=true;
-                this.$ajax.post(this.$apis.get_orderSku,this.productIds).then(res=>{
-                    this.productData=res;
-                    console.log(this.productData)
-                    this.loadingProductTable=false;
-                }).catch(err=>{
-                    this.loadingProductTable=false;
-                });
+
+
                 //
                 // console.log(this.productIds)
-                // this.addOrderDialogVisible=false;
+                this.addOrderDialogVisible=false;
             },
 
             /**

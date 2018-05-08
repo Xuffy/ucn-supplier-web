@@ -35,7 +35,7 @@ export default {
     /**
      * seller product
      * */
-    add_newSKU: ['/sku', 'BASE_CS','USUPPLY_URL'],
+    add_newSKU: ['/sku', 'BASE_SELL','USUPPLY_URL'],
     set_sellerProductPutAway:['/sku/putaway','BASE_SELL','USUPPLY_URL'],
     set_sellerProductPutDown:['/sku/soldout','BASE_SELL','USUPPLY_URL'],
     delete_sellerProduct:['/sku/deleteAll','BASE_SELL','USUPPLY_URL'],
@@ -73,14 +73,14 @@ export default {
      * seller warehouse
      * */
     get_inboundData:['/inbound/page','BASE_SELL','USUPPLY_URL'],
-    get_productInfo:['/order/skuListPage','BASE_BUY','UPURCHASE_URL'],
+    get_productInfo:['/order/skuListPage','BASE_SELL','USUPPLY_URL'],
     get_inboundDetail:['/inbound/getById','BASE_SELL','USUPPLY_URL'],
     add_inbound:['/inbound/add','BASE_SELL','USUPPLY_URL'],
     // get_productInfo:['/order/skuListPage','BASE_BUYER'],
     get_warehouseOrderData:['/order/skus','BASE_SELLER','UPURCHASE_URL'],
     get_qcOrderData:['/qc/page','USUPPLY_URL','USUPPLY_URL'],
     get_warehouseOverviewData:['/warehouse/overview/page','BASE_SELL','USUPPLY_URL'],
-    get_orderSku:['/order/getAllOrderInfo','BASE_BUY','UPURCHASE_URL'],
+    get_orderSku:['/order/getAllOrderInfo','BASE_SELL','USUPPLY_URL'],
     get_inboundSku:['/inbound/sku/page','BASE_SELL','USUPPLY_URL'],
 
     get_outboundData:['/outbound/page','BASE_SELL','USUPPLY_URL'],

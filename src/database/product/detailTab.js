@@ -9,16 +9,8 @@ export default {
         type: 'Boolean',
         showType:'select',
         belongTab:'basicInfo',
-        options:[
-            {
-                label:'下架',
-                value:0
-            },
-            {
-                label:'上架',
-                value:1
-            }
-        ]
+        isSaleStatus:true,
+
     },
     code:{
         key:'code',
@@ -90,16 +82,8 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
-        options:[
-            {
-                label:'kg',
-                value:1
-            },
-            {
-                label:'g',
-                value:2
-            }
-        ]
+        isWeight:true,
+
     },
     formation:{
         key:'formation',
@@ -168,12 +152,12 @@ export default {
         belongTab:'basicInfo',
         options:[
             {
-                label:'有货',
-                value:true
+                label:"否",
+                value:false,
             },
             {
-                label:'无货',
-                value:false
+                label:"是",
+                value:true
             }
         ],
     },
@@ -182,22 +166,14 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        isAvailableQty:true
     },
     noneSellCountry:{
         key:'noneSellCountry',
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
-        options:[
-            {
-                label:'中国',
-                value:0
-            },
-            {
-                label:'美国',
-                value:1
-            }
-        ]
+        isCountry:true
     },
     applicableAge:{
         key:'applicableAge',
@@ -216,21 +192,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
-        options:[
-            {
-                label:'Year',
-                value:1
-            },
-            {
-                label:'Month',
-                value:2
-            },
-            {
-                label:'Day',
-                value:3
-            },
-
-        ]
+        isDateUnit:true,
     },
     comments:{
         key:'comments',
@@ -476,20 +438,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
-        options:[
-            {
-                label:'t',
-                value:0
-            },
-            {
-                label:'kg',
-                value:1
-            },
-            {
-                label:'lb',
-                value:2
-            },
-        ]
+        isWeight:true,
     },
     unitLength:{
         key:'unitLength',
@@ -808,20 +757,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'otherInfo',
-        options:[
-            {
-                label:'中国',
-                value:0
-            },
-            {
-                label:'美国',
-                value:1
-            },
-            {
-                label:'日本',
-                value:2
-            },
-        ]
+        isCountry:true,
     },
     mainSaleArea:{
         key:'mainSaleArea',
@@ -854,11 +790,11 @@ export default {
         belongTab:'otherInfo',
         options:[
             {
-                label:'yes',
+                label:'Yes',
                 value:true,
             },
             {
-                label:'no',
+                label:'No',
                 value:false,
             },
         ]
@@ -894,11 +830,11 @@ export default {
         belongTab:'otherInfo',
         options:[
             {
-                label:'yes',
+                label:'Yes',
                 value:true,
             },
             {
-                label:'no',
+                label:'No',
                 value:false,
             },
         ]

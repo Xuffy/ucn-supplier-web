@@ -18,20 +18,62 @@
                 <el-col style="height: 51px;" v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
-                            <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
-                                <el-option
-                                        v-for="item in skuStatusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                            <div v-if="v.isWeight">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in weightOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isCountry">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" filterable placeholder="please choose">
+                                    <el-option
+                                            v-for="item in countryOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isDateUnit">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in dateOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isSaleStatus">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in saleStatusOption"
+                                            :key="item.id"
+                                            :label="item.label"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else>
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in v.options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
                         </div>
                         <div v-if="v.showType==='input'">
                             <el-input
                                     :disabled="v.disabledInput"
                                     size="mini"
-                                    placeholder="系统生成"
+                                    placeholder="请填写"
                                     clearable
                                     v-model="productForm[v.key]">
                             </el-input>
@@ -47,14 +89,27 @@
                             </el-input>
                         </div>
                         <div v-if="v.showType==='number'">
-                            <el-input-number
-                                    class="speInputNumber"
-                                    size="mini"
-                                    :controls="false"
-                                    v-model="productForm[v.key]"
-                                    :min="0"
-                                    label="描述文字">
-                            </el-input-number>
+                            <div v-if="v.isAvailableQty">
+                                <el-input-number
+                                        class="speInputNumber"
+                                        size="mini"
+                                        :controls="false"
+                                        v-model="productForm[v.key]"
+                                        :min="0"
+                                        :disabled="!productForm.readilyAvailable"
+                                        label="描述文字">
+                                </el-input-number>
+                            </div>
+                            <div v-else>
+                                <el-input-number
+                                        class="speInputNumber"
+                                        size="mini"
+                                        :controls="false"
+                                        v-model="productForm[v.key]"
+                                        :min="0"
+                                        label="描述文字">
+                                </el-input-number>
+                            </div>
                         </div>
                         <div v-if="v.showType==='dropdown'">
                             <drop-down class="speSelect" v-model="productForm[v.key]" :list="categoryList" :defaultProps="defaultProps"
@@ -177,10 +232,10 @@
                         <el-form-item class="tableList">
                             <el-select v-model="scope.row.fobCurrency" placeholder="请选择">
                                 <el-option
-                                        v-for="item in fobUnit"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                        v-for="item in currencyOption"
+                                        :key="item.id"
+                                        :label="item.code"
+                                        :value="item.code">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -239,10 +294,10 @@
                         <el-form-item class="tableList">
                             <el-select v-model="scope.row.exwCurrency" placeholder="请选择">
                                 <el-option
-                                        v-for="item in fobUnit"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                        v-for="item in currencyOption"
+                                        :key="item.id"
+                                        :label="item.code"
+                                        :value="item.code">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -272,10 +327,10 @@
                         <el-form-item class="tableList">
                             <el-select v-model="scope.row.cifCurrency" placeholder="请选择">
                                 <el-option
-                                        v-for="item in fobUnit"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                        v-for="item in currencyOption"
+                                        :key="item.id"
+                                        :label="item.code"
+                                        :value="item.code">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -319,10 +374,10 @@
                         <el-form-item class="tableList">
                             <el-select v-model="scope.row.dduCurrency" placeholder="请选择">
                                 <el-option
-                                        v-for="item in fobUnit"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                        v-for="item in currencyOption"
+                                        :key="item.id"
+                                        :label="item.code"
+                                        :value="item.code">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -351,14 +406,26 @@
                 <el-col style="height: 51px;" v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
-                            <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
-                                <el-option
-                                        v-for="item in skuStatusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                            <div v-if="v.isWeight">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in weightOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else>
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in skuStatusOption"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
                         </div>
                         <div v-if="v.showType==='input'">
                             <el-input
@@ -450,14 +517,26 @@
                 <el-col style="height: 51px;" v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
-                            <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
-                                <el-option
-                                        v-for="item in skuStatusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                            <div v-if="v.isCountry">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" filterable multiple placeholder="please choose">
+                                    <el-option
+                                            v-for="item in countryOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else>
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in v.options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
                         </div>
                         <div v-if="v.showType==='input'">
                             <el-input
@@ -605,6 +684,17 @@
         },
         data(){
             return{
+                /**
+                 * 字典数据
+                 * */
+                currencyOption:[],      //币种字典
+                countryOption:[],       //国家字典
+                weightOption:[],        //重量单位
+                saleStatusOption:[],    //销售状态字典
+                dateOption:[],          //日期单位
+
+
+
                 labelPosition:'left',
                 disabledSubmit:false,               //防止用户多次提及表单
                 imgGroup:[],
@@ -655,7 +745,7 @@
                     ids:[],                         //选择的可见
                     pic: "thisIsAPicture",
                     visibility:true,                //全网可见为true,否则false
-                    status: 1,                      //0下架 1上架
+                    status: '1',                      //0下架 1上架
                     nameEn: "",
                     barcode: "",                    //产品条码
                     nameCn: "",
@@ -667,7 +757,7 @@
                     supplierCode: "",
                     supplierName: "",
                     code: "",                       //新增时系统生成，传空
-                    unit: "2",
+                    unit: "",
                     formation: "",
                     materialEn: "",
                     materialCn: "",
@@ -676,23 +766,23 @@
                     minOrderQty: 1,
                     deliveryDates: 1,               //交期(做完需要多少天)
                     design: "",
-                    noneSellCountry: 1,             //禁售国家，暂时传1
+                    noneSellCountry: '',             //禁售国家
                     applicableAge: 1,
                     expireDates: 1,
-                    expireUnit: 1,                  //保质期单位，暂时传1
+                    expireUnit: '',                  //保质期单位，暂时传1
                     comments: "",
-                    readilyAvailable: 1,
+                    readilyAvailable: false,
                     availableQty: 1,
-                    mainSaleCountry: 1,
+                    mainSaleCountry: '',
                     mainSaleArea: "",
                     productionDates: 1,             //开发时间
                     qualityStander: "",
-                    yearListed: "2018-02-23",
-                    useDisplayBox: 1,
+                    yearListed: "",
+                    useDisplayBox: true,
                     displayBoxQty: 0,
                     otherPackInfoCn: "",
                     otherPackInfoEn: "",
-                    adjustPackage: 2,
+                    adjustPackage: true,
                     lengthWidthHeight: "",
                     recycle: false,                     //只有在recycleBin里才是false
                     categoryId: '',                      //类型id
@@ -723,7 +813,7 @@
                     inventory: 0,
                     safeInventory: 0,
                     minInventory: 0,
-                    unitWeight: 1,                      //重量单位,暂时传1
+                    unitWeight: '7',                      //重量单位,暂时传1
                     unitLength: 1,                      //长度单位,暂时传1
                     unitVolume: 1,                      //提及单位，暂时传1
                     length: 0,
@@ -763,30 +853,30 @@
                     price: [
                         {
                             cifArea: "",
-                            cifCurrency: 0,
-                            cifPrice: 0,
+                            cifCurrency: 'USD',
+                            cifPrice: null,
                             dduArea: "",
-                            dduCurrency: 0,
-                            dduPrice: 0,
-                            fobCurrency: 1,
-                            fobPrice: 1,                    //价格起始是多少
+                            dduCurrency: 'USD',
+                            dduPrice: null,
+                            fobCurrency: 'USD',
+                            fobPrice: null,                    //价格起始是多少
                             fobPort: "",
-                            exwPrice: 1,                    //价格起始是多少
-                            exwCurrency: 1,
+                            exwPrice: null,                    //价格起始是多少
+                            exwCurrency: 'USD',
                             status: 1                       //1成本价，2基础报价
                         },
                         {
                             cifArea: "",
-                            cifCurrency: 0,
-                            cifPrice: 0,
+                            cifCurrency: 'USD',
+                            cifPrice: null,
                             dduArea: "",
-                            dduCurrency: 0,
-                            dduPrice: 0,
-                            fobCurrency: 1,
-                            fobPrice: 1,
+                            dduCurrency: 'USD',
+                            dduPrice: null,
+                            fobCurrency: 'USD',
+                            fobPrice: null,
                             fobPort: "",
-                            exwPrice: 1,
-                            exwCurrency: 1,
+                            exwPrice: null,
+                            exwCurrency: 'USD',
                             status: 2
                         },
                     ]
@@ -964,17 +1054,6 @@
                         value: 0
                     }
                 ],
-                //是否现货
-                isReadilyAvailable:[
-                    {
-                        label:'是',
-                        value:1
-                    },
-                    {
-                        label:'否',
-                        value:0
-                    }
-                ],
                 //国家列表
                 countryList:[
                     {
@@ -1007,21 +1086,6 @@
                     {
                         label:'年',
                         value:4
-                    },
-                ],
-                //fob单位
-                fobUnit:[
-                    {
-                        label:'USD',
-                        value:1
-                    },
-                    {
-                        label:'CNY',
-                        value:2
-                    },
-                    {
-                        label:'EUR',
-                        value:3
                     },
                 ],
                 //otherIncoterm单位
@@ -1301,16 +1365,17 @@
                         this.disabledSubmit=false;
                     });
                 }else{
-                    this.$ajax.post(this.$apis.add_newSKU,this.productForm).then(res=>{
-                        this.$message({
-                            message: '新增成功',
-                            type: 'success'
-                        });
-                        this.disabledSubmit=false;
-                        this.$router.push('/sellerProduct/overview');
-                    }).catch(err=>{
-                        this.disabledSubmit=false;
-                    });
+                    console.log(this.productForm,'???')
+                    // this.$ajax.post(this.$apis.add_newSKU,this.productForm).then(res=>{
+                    //     this.$message({
+                    //         message: '新增成功',
+                    //         type: 'success'
+                    //     });
+                    //     this.disabledSubmit=false;
+                    //     this.$router.push('/sellerProduct/overview');
+                    // }).catch(err=>{
+                    //     this.disabledSubmit=false;
+                    // });
                 }
             },
 
@@ -1323,18 +1388,56 @@
                     console.log(err,'12345')
                 });
             },
+
+
+            /**
+             * 获取字典
+             * */
+            getUnit(){
+                //币种单位
+                this.$ajax.get(this.$apis.get_currencyUnit,{},{_cache:true}).then(res=>{
+                    this.currencyOption=res;
+                }).catch(err=>{
+
+                });
+
+                //国家
+                this.$ajax.get(this.$apis.get_country,{},{_cache:true}).then(res=>{
+                    this.countryOption=res;
+                }).catch(err=>{
+
+                });
+
+                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT'],{_cache:true}).then(res=>{
+                    console.log(res)
+                    res.forEach(v=>{
+                        if(v.code==='ED_UNIT'){
+                            this.dateOption=v.codes;
+                        }else if(v.code==='WT_UNIT'){
+                            this.weightOption=v.codes;
+                        }else if(v.code==='VE_UNIT'){
+                            this.volumeOption=v.codes;
+                        }else if(v.code==='LH_UNIT'){
+                            this.lengthOption=v.codes;
+                        }else if(v.code==='SKU_SALE_STATUS'){
+                            this.saleStatusOption=v.codes;
+                            this.saleStatusOption.forEach(v=>{
+                                if(v.code==='1'){
+                                    v.label='上架';
+                                }else if(v.code==='0'){
+                                    v.label='下架';
+                                }
+                            })
+                        }
+                    })
+                }).catch(err=>{
+
+                })
+            },
         },
         created(){
             this.getCategoryId();
-            this.$ajax.get(this.$apis.getCategory,{}).then(res=>{
-                this.dropData=res;
-                let id=this.$route.query.id;
-                if(id){
-                    this.getGoodsData();
-                }
-            }).catch(err=>{
-                console.log(err)
-            });
+            this.getUnit();
         },
     }
 </script>
