@@ -9,16 +9,8 @@ export default {
         type: 'Boolean',
         showType:'select',
         belongTab:'basicInfo',
-        options:[
-            {
-                label:'下架',
-                value:0
-            },
-            {
-                label:'上架',
-                value:1
-            }
-        ]
+        isSaleStatus:true,
+
     },
     code:{
         key:'code',
@@ -90,16 +82,8 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
-        options:[
-            {
-                label:'kg',
-                value:1
-            },
-            {
-                label:'g',
-                value:2
-            }
-        ]
+        isWeight:true,
+
     },
     formation:{
         key:'formation',
@@ -166,38 +150,21 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
-        options:[
-            {
-                label:'有货',
-                value:true
-            },
-            {
-                label:'无货',
-                value:false
-            }
-        ],
+        isReadily:true,
     },
     availableQty:{
         key:'availableQty',
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        isAvailableQty:true
     },
     noneSellCountry:{
         key:'noneSellCountry',
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
-        options:[
-            {
-                label:'中国',
-                value:0
-            },
-            {
-                label:'美国',
-                value:1
-            }
-        ]
+        isCountry:true
     },
     applicableAge:{
         key:'applicableAge',
@@ -216,21 +183,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
-        options:[
-            {
-                label:'Year',
-                value:1
-            },
-            {
-                label:'Month',
-                value:2
-            },
-            {
-                label:'Day',
-                value:3
-            },
-
-        ]
+        isDateUnit:true,
     },
     comments:{
         key:'comments',
@@ -476,60 +429,21 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
-        options:[
-            {
-                label:'t',
-                value:0
-            },
-            {
-                label:'kg',
-                value:1
-            },
-            {
-                label:'lb',
-                value:2
-            },
-        ]
+        isWeight:true,
     },
     unitLength:{
         key:'unitLength',
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
-        options:[
-            {
-                label:'km',
-                value:0
-            },
-            {
-                label:'mile',
-                value:1
-            },
-            {
-                label:'m',
-                value:2
-            },
-        ]
+        isLength:'true'
     },
     unitVolume:{
         key:'unitVolume',
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
-        options:[
-            {
-                label:'m3',
-                value:0
-            },
-            {
-                label:'liter',
-                value:1
-            },
-            {
-                label:'ft3',
-                value:2
-            },
-        ]
+        isVolume:true,
     },
     length:{
         key:'length',
@@ -718,16 +632,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
-        options:[
-            {
-                label:'yes',
-                value:true
-            },
-            {
-                label:'no',
-                value:false
-            }
-        ]
+        isOem:true,
     },
 
     /**
@@ -808,20 +713,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'otherInfo',
-        options:[
-            {
-                label:'中国',
-                value:0
-            },
-            {
-                label:'美国',
-                value:1
-            },
-            {
-                label:'日本',
-                value:2
-            },
-        ]
+        isCountry:true,
     },
     mainSaleArea:{
         key:'mainSaleArea',
@@ -852,16 +744,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'otherInfo',
-        options:[
-            {
-                label:'yes',
-                value:true,
-            },
-            {
-                label:'no',
-                value:false,
-            },
-        ]
+        isUDB:true,
     },
     displayBoxQty:{
         key:'displayBoxQty',
@@ -892,16 +775,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'otherInfo',
-        options:[
-            {
-                label:'yes',
-                value:true,
-            },
-            {
-                label:'no',
-                value:false,
-            },
-        ]
+        isSkuPkg:true,
     },
 
 

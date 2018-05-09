@@ -26,7 +26,7 @@
                  {{$i.common.productInfo}}
              </div>
              <div class="pro_button">
-                  <el-button  @click="dialogAddproduct = true" :disabled='statusModify' v-authorize="'ORDER:DETAIL:PRODUCT_INFO_ADD'">{{$i.common.addproduct}}</el-button>
+                  <el-button  @click="addProduct" :disabled='statusModify' v-authorize="'ORDER:DETAIL:PRODUCT_INFO_ADD'">{{$i.common.addproduct}}</el-button>
                   <el-button type='danger' @click='removeProduct' :disabled='statusModify' v-authorize="'ORDER:DETAIL:PRODUCT_INFO_DELETE'">{{$i.common.remove}}</el-button>
 
              </div>
@@ -573,14 +573,14 @@
                 });
             },
             send() {
-               
+
                 let parentNode = this.$filterModify(this.dataFilter(this.newProductTabData))
                 //                return console.log(parentNode)
                 //参数一堆堆 我靠
                 let param = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
-//                    skuList:this.skuList,
+                    //                    skuList:this.skuList,
                     responsibilityList: this.$refs.responsibility.tableData,
                     draftCustomer: false,
                     importantCustomer: this.markAsImportant,
@@ -590,7 +590,7 @@
                 _.extend(param, basic)
                 var caculate = this.$refs.caculate.caculateForm
                 _.extend(param, caculate)
-                param.skuList=parentNode
+                param.skuList = parentNode
                 this.$ajax.post(this.$apis.post_updataOrder, param)
                     .then(res => {
                         this.$router.push('/order/overview')

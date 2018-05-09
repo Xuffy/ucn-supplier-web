@@ -1,5 +1,5 @@
 <template>
-    <div class="add-product">
+    <div class="add-product" v-loading="loadingData">
         <div class="title">{{$i.product.basicInformation}}</div>
         <div class="addPic">
             <div class="name">
@@ -18,20 +18,73 @@
                 <el-col style="height: 51px;" v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
-                            <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
-                                <el-option
-                                        v-for="item in skuStatusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                            <div v-if="v.isWeight">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in weightOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isCountry">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" multiple filterable placeholder="please choose">
+                                    <el-option
+                                            v-for="item in countryOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isReadily">
+
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in readilyOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isDateUnit">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in dateOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isSaleStatus">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in saleStatusOption"
+                                            :key="item.id"
+                                            :label="item.label"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else>
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in v.options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
                         </div>
                         <div v-if="v.showType==='input'">
                             <el-input
                                     :disabled="v.disabledInput"
                                     size="mini"
-                                    placeholder="系统生成"
+                                    placeholder="请填写"
                                     clearable
                                     v-model="productForm[v.key]">
                             </el-input>
@@ -42,19 +95,32 @@
                                     size="mini"
                                     type="textarea"
                                     autosize
-                                    placeholder="请输入内容"
+                                    placeholder="请填写"
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
                         <div v-if="v.showType==='number'">
-                            <el-input-number
-                                    class="speInputNumber"
-                                    size="mini"
-                                    :controls="false"
-                                    v-model="productForm[v.key]"
-                                    :min="0"
-                                    label="描述文字">
-                            </el-input-number>
+                            <div v-if="v.isAvailableQty">
+                                <el-input-number
+                                        class="speInputNumber"
+                                        size="mini"
+                                        :controls="false"
+                                        v-model="productForm[v.key]"
+                                        :min="0"
+                                        :disabled="!parseInt(productForm.readilyAvailable)"
+                                        label="描述文字">
+                                </el-input-number>
+                            </div>
+                            <div v-else>
+                                <el-input-number
+                                        class="speInputNumber"
+                                        size="mini"
+                                        :controls="false"
+                                        v-model="productForm[v.key]"
+                                        :min="0"
+                                        label="描述文字">
+                                </el-input-number>
+                            </div>
                         </div>
                         <div v-if="v.showType==='dropdown'">
                             <drop-down class="speSelect" v-model="productForm[v.key]" :list="categoryList" :defaultProps="defaultProps"
@@ -64,9 +130,8 @@
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                     <el-form-item :label="$i.product.productVisible">
-                        <el-radio v-model="productForm.visibility" label="全网可见">{{$i.product.allSee}}</el-radio>
-                        <el-radio v-model="productForm.visibility" label="部分客户可见">{{$i.product.partSee}}</el-radio>
-
+                        <el-radio v-model="productForm.visibility" :label="true">{{$i.product.allSee}}</el-radio>
+                        <el-radio v-model="productForm.visibility" :label="false">{{$i.product.partSee}}</el-radio>
                         <div v-if="!productForm.visibility">
                             <el-button
                                     @click="addCustomer"
@@ -120,7 +185,7 @@
                             <el-input
                                     :disabled="v.disabledInput"
                                     size="mini"
-                                    placeholder="系统生成"
+                                    placeholder="请填写"
                                     clearable
                                     v-model="productForm[v.key]">
                             </el-input>
@@ -131,7 +196,7 @@
                                     size="mini"
                                     type="textarea"
                                     autosize
-                                    placeholder="请输入内容"
+                                    placeholder="请填写"
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
@@ -177,10 +242,10 @@
                         <el-form-item class="tableList">
                             <el-select v-model="scope.row.fobCurrency" placeholder="请选择">
                                 <el-option
-                                        v-for="item in fobUnit"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                        v-for="item in currencyOption"
+                                        :key="item.id"
+                                        :label="item.code"
+                                        :value="item.code">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -211,7 +276,7 @@
                             <el-input
                                     v-model="scope.row.fobPort"
                                     clearable
-                                    placeholder="请输入内容"></el-input>
+                                    placeholder="请填写"></el-input>
                         </el-form-item>
                     </template>
                 </el-table-column>
@@ -239,10 +304,10 @@
                         <el-form-item class="tableList">
                             <el-select v-model="scope.row.exwCurrency" placeholder="请选择">
                                 <el-option
-                                        v-for="item in fobUnit"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                        v-for="item in currencyOption"
+                                        :key="item.id"
+                                        :label="item.code"
+                                        :value="item.code">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -272,10 +337,10 @@
                         <el-form-item class="tableList">
                             <el-select v-model="scope.row.cifCurrency" placeholder="请选择">
                                 <el-option
-                                        v-for="item in fobUnit"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                        v-for="item in currencyOption"
+                                        :key="item.id"
+                                        :label="item.code"
+                                        :value="item.code">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -291,7 +356,7 @@
                             <el-input
                                     v-model="scope.row.cifArea"
                                     clearable
-                                    placeholder="请输入内容"></el-input>
+                                    placeholder="请填写"></el-input>
                         </el-form-item>
                     </template>
                 </el-table-column>
@@ -319,10 +384,10 @@
                         <el-form-item class="tableList">
                             <el-select v-model="scope.row.dduCurrency" placeholder="请选择">
                                 <el-option
-                                        v-for="item in fobUnit"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                        v-for="item in currencyOption"
+                                        :key="item.id"
+                                        :label="item.code"
+                                        :value="item.code">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -338,7 +403,7 @@
                             <el-input
                                     v-model="scope.row.dduArea"
                                     clearable
-                                    placeholder="请输入内容"></el-input>
+                                    placeholder="请填写"></el-input>
                         </el-form-item>
                     </template>
                 </el-table-column>
@@ -351,14 +416,56 @@
                 <el-col style="height: 51px;" v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
-                            <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
-                                <el-option
-                                        v-for="item in skuStatusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                            <div v-if="v.isWeight">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in weightOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isLength">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in lengthOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isVolume">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in volumeOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isOem">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in oemOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else>
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in skuStatusOption"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
                         </div>
                         <div v-if="v.showType==='input'">
                             <el-input
@@ -375,7 +482,7 @@
                                     size="mini"
                                     type="textarea"
                                     autosize
-                                    placeholder="请输入内容"
+                                    placeholder="请填写"
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
@@ -424,7 +531,7 @@
                                     size="mini"
                                     type="textarea"
                                     autosize
-                                    placeholder="请输入内容"
+                                    placeholder="请填写"
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
@@ -450,14 +557,46 @@
                 <el-col style="height: 51px;" v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
-                            <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
-                                <el-option
-                                        v-for="item in skuStatusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                            <div v-if="v.isCountry">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" filterable multiple placeholder="please choose">
+                                    <el-option
+                                            v-for="item in countryOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isUDB">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in udbOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isSkuPkg">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in skuPkgOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else>
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in v.options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
                         </div>
                         <div v-if="v.showType==='input'">
                             <el-input
@@ -474,7 +613,7 @@
                                     size="mini"
                                     type="textarea"
                                     autosize
-                                    placeholder="请输入内容"
+                                    placeholder="请填写"
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
@@ -523,10 +662,9 @@
                                     size="mini"
                                     v-model="productForm[v.key]"
                                     align="right"
-                                    type="date"
+                                    type="month"
                                     placeholder="选择日期"
-                                    :editable="false"
-                                    :picker-options="pickerOptions1">
+                                    :editable="false">
                             </el-date-picker>
                         </div>
                     </el-form-item>
@@ -543,14 +681,13 @@
         </div>
 
         <el-dialog width="70%" title="收货地址" :visible.sync="addCustomerDialogVisible">
-
-
             <el-form ref="customerQuery" :model="customerQuery" label-width="120px">
                 <el-row class="speZone">
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
 
                         <el-form-item prop="name" :label="$i.product.customerName">
                             <el-input
+                                    placeholder="请输入"
                                     size="mini"
                                     v-model="customerQuery.name"></el-input>
                         </el-form-item>
@@ -559,6 +696,7 @@
 
                         <el-form-item prop="name" :label="$i.product.customerType">
                             <el-input
+                                    placeholder="请输入"
                                     size="mini"
                                     v-model="customerQuery.type"></el-input>
                         </el-form-item>
@@ -566,25 +704,49 @@
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
 
                         <el-form-item prop="name" :label="$i.product.customerCountry">
-                            <el-input
-                                    size="mini"
-                                    v-model="customerQuery.country"></el-input>
+
+                            <el-select size="mini" v-model="customerQuery.country" filterable placeholder="请选择">
+                                <el-option
+                                        v-for="item in countryOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-
                         <el-form-item prop="name" :label="$i.product.customerCity">
                             <el-input
+                                    placeholder="请输入"
                                     size="mini"
                                     v-model="customerQuery.city"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
+            <div style="text-align: center">
+                <el-button :disabled="loadingTable" @click="searchCustomer" type="primary">{{$i.warehouse.search}}</el-button>
+                <el-button :disabled="loadingTable" @click="clearCustomerSearch">{{$i.warehouse.clear}}</el-button>
+            </div>
+
+            <v-table
+                    :loading="loadingTable"
+                    :data="tableDataList"
+                    :buttons="[{label: '详情', type: 1}]"
+                    @change-checked="changeChecked"
+                    @action="btnClick">
+                <!--<template slot="header">-->
+                    <!--<div class="btns">-->
+                        <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
+                    <!--</div>-->
+                <!--</template>-->
+            </v-table>
+
 
             <div slot="footer" class="dialog-footer">
-                <el-button @click="addCustomerDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addCustomerDialogVisible = false">确 定</el-button>
+                <el-button :disabled="loadingTable" type="primary" @click="postData">确 定</el-button>
+                <el-button :disabled="loadingTable" @click="addCustomerDialogVisible = false">取 消</el-button>
             </div>
         </el-dialog>
 
@@ -594,17 +756,36 @@
 <script>
     import upLoad from '@/components/common/upload/upload'
     import imgHandler from '../product/imgHandler'
-    import {dropDownSingle} from '@/components/index'
+    import {dropDownSingle,VTable} from '@/components/index'
 
     export default {
         name: "addNewProduct",
         components:{
             imgHandler,
             upLoad,
+            VTable,
             dropDown:dropDownSingle
         },
         data(){
             return{
+                skuStatusOption:[],
+                /**
+                 * 字典数据
+                 * */
+                currencyOption:[],      //币种字典
+                countryOption:[],       //国家字典
+                weightOption:[],        //重量单位
+                saleStatusOption:[],    //销售状态字典
+                dateOption:[],          //日期单位
+                lengthOption:[],        //长度单位
+                volumeOption:[],        //体积单位
+                oemOption:[],           //可否贴牌
+                udbOption:[],           //是否展示包装盒
+                skuPkgOption:[],        //产品包装可否调整
+                readilyOption:[],       //是否现货
+
+
+                loadingData:true,
                 labelPosition:'left',
                 disabledSubmit:false,               //防止用户多次提及表单
                 imgGroup:[],
@@ -617,7 +798,31 @@
                         address: '上海市普陀区金沙江路 1518 弄'
                     },
                 ],
-
+                pickerOptions1: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    },
+                    shortcuts: [{
+                        text: '今天',
+                        onClick(picker) {
+                            picker.$emit('pick', new Date());
+                        }
+                    }, {
+                        text: '昨天',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24);
+                            picker.$emit('pick', date);
+                        }
+                    }, {
+                        text: '一周前',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', date);
+                        }
+                    }]
+                },
                 categoryList:[
                     {
                         id:123,
@@ -632,11 +837,17 @@
                         _disableClick:true,
                     },
                 ],
-
+                boxSize:{
+                    length:'',
+                    width:'',
+                    height:''
+                },
+                countryList:[],
                 customerQuery:{
-                    city: "",
-                    country: "",
                     name: "",
+                    type: null,
+                    country: '',
+                    city: "",
                     pn: 1,
                     ps: 50,
                     // sorts: [
@@ -647,15 +858,22 @@
                     //         "resultMapId": "string"
                     //     }
                     // ],
-                    type: null
+                    // operatorFilters: [
+                    //     {
+                    //         "columnName": "string",
+                    //         "operator": "string",
+                    //         "property": "string",
+                    //         "resultMapId": "string",
+                    //         "value": {}
+                    //     }
+                    // ],
                 },
-
                 productForm:{
                     id: '',                         //新增传空
                     ids:[],                         //选择的可见
                     pic: "thisIsAPicture",
                     visibility:true,                //全网可见为true,否则false
-                    status: 1,                      //0下架 1上架
+                    status: '1',                      //0下架 1上架
                     nameEn: "",
                     barcode: "",                    //产品条码
                     nameCn: "",
@@ -666,8 +884,8 @@
                     customerSkuCode: "",
                     supplierCode: "",
                     supplierName: "",
-                    code: "",                       //新增时系统生成，传空
-                    unit: "2",
+                    code: "",                       //新增时请填写，传空
+                    unit: "7",
                     formation: "",
                     materialEn: "",
                     materialCn: "",
@@ -676,23 +894,23 @@
                     minOrderQty: 1,
                     deliveryDates: 1,               //交期(做完需要多少天)
                     design: "",
-                    noneSellCountry: 1,             //禁售国家，暂时传1
+                    noneSellCountry: '',             //禁售国家
                     applicableAge: 1,
                     expireDates: 1,
-                    expireUnit: 1,                  //保质期单位，暂时传1
+                    expireUnit: '3',                  //保质期单位
                     comments: "",
-                    readilyAvailable: 1,
+                    readilyAvailable: '0',
                     availableQty: 1,
-                    mainSaleCountry: 1,
+                    mainSaleCountry: '',
                     mainSaleArea: "",
                     productionDates: 1,             //开发时间
                     qualityStander: "",
-                    yearListed: "2018-02-23",
-                    useDisplayBox: 1,
+                    yearListed: "",
+                    useDisplayBox: '1',
                     displayBoxQty: 0,
                     otherPackInfoCn: "",
                     otherPackInfoEn: "",
-                    adjustPackage: 2,
+                    adjustPackage: '1',
                     lengthWidthHeight: "",
                     recycle: false,                     //只有在recycleBin里才是false
                     categoryId: '',                      //类型id
@@ -723,9 +941,9 @@
                     inventory: 0,
                     safeInventory: 0,
                     minInventory: 0,
-                    unitWeight: 1,                      //重量单位,暂时传1
-                    unitLength: 1,                      //长度单位,暂时传1
-                    unitVolume: 1,                      //提及单位，暂时传1
+                    unitWeight: '7',                      //重量单位
+                    unitLength: '3',                      //长度单位,暂时传1
+                    unitVolume: '3',                      //提及单位，暂时传1
                     length: 0,
                     width: 0,
                     height: 0,
@@ -756,42 +974,41 @@
                     outerCartonVolume: 0,
                     outerCartonMethodCn: "",
                     outerCartonMethodEn: "",
-                    oem: 1,
+                    oem: '1',
                     logisticId: 1,
                     version: 1,
                     pkgId: 1,
                     price: [
                         {
                             cifArea: "",
-                            cifCurrency: 0,
-                            cifPrice: 0,
+                            cifCurrency: 'USD',
+                            cifPrice: null,
                             dduArea: "",
-                            dduCurrency: 0,
-                            dduPrice: 0,
-                            fobCurrency: 1,
-                            fobPrice: 1,                    //价格起始是多少
+                            dduCurrency: 'USD',
+                            dduPrice: null,
+                            fobCurrency: 'USD',
+                            fobPrice: null,                    //价格起始是多少
                             fobPort: "",
-                            exwPrice: 1,                    //价格起始是多少
-                            exwCurrency: 1,
+                            exwPrice: null,                    //价格起始是多少
+                            exwCurrency: 'USD',
                             status: 1                       //1成本价，2基础报价
                         },
                         {
                             cifArea: "",
-                            cifCurrency: 0,
-                            cifPrice: 0,
+                            cifCurrency: 'USD',
+                            cifPrice: null,
                             dduArea: "",
-                            dduCurrency: 0,
-                            dduPrice: 0,
-                            fobCurrency: 1,
-                            fobPrice: 1,
+                            dduCurrency: 'USD',
+                            dduPrice: null,
+                            fobCurrency: 'USD',
+                            fobPrice: null,
                             fobPort: "",
-                            exwPrice: 1,
-                            exwCurrency: 1,
+                            exwPrice: null,
+                            exwCurrency: 'USD',
                             status: 2
                         },
                     ]
                 },
-
                 rules:{
                     nameEn:[
                         {max:45,message: '最大长度为45',}
@@ -952,274 +1169,11 @@
                     ],
 
                 },
-
-                //上下架状态
-                skuStatusOption:[
-                    {
-                        label: '上架',
-                        value: 1
-                    },
-                    {
-                        label: '下架',
-                        value: 0
-                    }
-                ],
-                //是否现货
-                isReadilyAvailable:[
-                    {
-                        label:'是',
-                        value:1
-                    },
-                    {
-                        label:'否',
-                        value:0
-                    }
-                ],
-                //国家列表
-                countryList:[
-                    {
-                        label:'中国',
-                        value:1
-                    },
-                    {
-                        label:'美国',
-                        value:2
-                    },
-                    {
-                        label:'日本',
-                        value:3
-                    }
-                ],
-                //保质期单位
-                expireUnitList:[
-                    {
-                        label:'小时',
-                        value:1
-                    },
-                    {
-                        label:'日',
-                        value:2
-                    },
-                    {
-                        label:'月',
-                        value:3
-                    },
-                    {
-                        label:'年',
-                        value:4
-                    },
-                ],
-                //fob单位
-                fobUnit:[
-                    {
-                        label:'USD',
-                        value:1
-                    },
-                    {
-                        label:'CNY',
-                        value:2
-                    },
-                    {
-                        label:'EUR',
-                        value:3
-                    },
-                ],
-                //otherIncoterm单位
-                otherIncotermUnit:[
-                    {
-                        label:'CIF',
-                        value:1
-                    },
-                    {
-                        label:'DDU',
-                        value:2
-                    },
-                ],
-                //weight单位
-                weightUnit:[
-                    {
-                        label:'t',
-                        value:1
-                    },
-                    {
-                        label:'kg',
-                        value:2
-                    },
-                    {
-                        label:'lb',
-                        value:3
-                    },
-                    {
-                        label:'sh.ton',
-                        value:4
-                    },
-                    {
-                        label:'long ton',
-                        value:5
-                    },
-                    {
-                        label:'oz',
-                        value:6
-                    },
-                    {
-                        label:'g',
-                        value:7
-                    },
-                ],
-                //length单位
-                lengthUnit:[
-                    {
-                        label:'km',
-                        value:1
-                    },
-                    {
-                        label:'mile',
-                        value:2
-                    },
-                    {
-                        label:'m',
-                        value:3
-                    },
-                    {
-                        label:'ft',
-                        value:4
-                    },
-                    {
-                        label:'yd',
-                        value:5
-                    },
-                    {
-                        label:'cm',
-                        value:6
-                    },
-                    {
-                        label:'in',
-                        value:7
-                    },
-                    {
-                        label:'mm',
-                        value:8
-                    },
-                ],
-                //volume单位
-                volumeUnit:[
-                    {
-                        label:'m3',
-                        value:1
-                    },
-                    {
-                        label:'liter',
-                        value:2
-                    },
-                    {
-                        label:'ft3',
-                        value:3
-                    },
-                    {
-                        label:'mcf',
-                        value:4
-                    },
-                    {
-                        label:'in3',
-                        value:5
-                    },
-                    {
-                        label:'cm3',
-                        value:6
-                    },
-                    {
-                        label:'bbl',
-                        value:7
-                    },
-                    {
-                        label:'gal',
-                        value:8
-                    },
-                    {
-                        label:'qt',
-                        value:9
-                    },
-                    {
-                        label:'pt',
-                        value:10
-                    },
-                    {
-                        label:'gi',
-                        value:11
-                    },
-                ],
-                //可否贴牌
-                isOem:[
-                    {
-                        label:'是',
-                        value:1
-                    },
-                    {
-                        label:'否',
-                        value:0
-                    }
-                ],
-                //日期组件配置
-                pickerOptions1: {
-                    // disabledDate(time) {
-                    //     return time.getTime() > Date.now();
-                    // },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
-                //是否展示box
-                isUseDisplayBox:[
-                    {
-                        label:'是',
-                        value:1
-                    },
-                    {
-                        label:'否',
-                        value:0
-                    }
-                ],
-                //产品或包装可否调整
-                isAdjustSku:[
-                    {
-                        label:'是',
-                        value:1
-                    },
-                    {
-                        label:'否',
-                        value:0
-                    },
-                ],
-                //展示盒的长宽高
-                boxSize:{
-                    length:0,
-                    width:0,
-                    height:0
-                },
-
                 //dropDown Data
                 defaultProps:{
                     label:'name',
                     children:'children'
                 },
-
                 options: [
                     {
                     value: '选项1',
@@ -1238,6 +1192,13 @@
                     label: '北京烤鸭'
                 }],
 
+
+                /**
+                 * 弹出框data
+                 * */
+                loadingTable:false,
+                tableDataList:[],
+                selectList:[],
             }
         },
         methods:{
@@ -1262,12 +1223,12 @@
 
             //获取类别数据
             getCategoryId(){
-                this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
+                this.$ajax.get(this.$apis.get_supply_category,{}).then(res=>{
                     this.categoryList[0].children=res;
                 }).catch(err=>{
 
                 });
-                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(res=>{
+                this.$ajax.get(this.$apis.get_supply_my_category,{}).then(res=>{
                     this.categoryList[1].children=res;
                 }).catch(err=>{
 
@@ -1277,8 +1238,12 @@
             //添加客户
             addCustomer(){
                 this.addCustomerDialogVisible=true;
+                this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_sellerCustomer,this.customerQuery).then(res=>{
-                    console.log(res)
+                    this.loadingTable=false;
+                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas);
+                }).catch(err=>{
+                    this.loadingTable=false;
                 });
             },
 
@@ -1287,27 +1252,71 @@
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 this.$set(this.productForm,'lengthWidthHeight',size);
                 this.disabledSubmit=true;
-
                 if(this.$route.query.id && this.$route.query.isEdit){
                     //代表是编辑
-                    this.$ajax.post(this.$apis.get_productDetail,this.productForm).then(res=>{
-                        this.$message({
-                            message: '修改成功',
-                            type: 'success'
-                        });
-                        this.disabledSubmit=false;
-                        this.$router.push('/sellerProduct/overview');
-                    }).catch(err=>{
-                        this.disabledSubmit=false;
+                    let param=Object.assign({},this.productForm);
+                    _.mapObject(param,(e,k)=>{
+                        if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
+                            param[k]=parseInt(param[k]);
+                        }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
+                            let item='';
+                            param[k].forEach((v,index)=>{
+                                if(index===param[k].length-1){
+                                    item+=v;
+                                }else{
+                                    item+=(v+',');
+                                }
+                            })
+                            param[k]=item;
+                        }
                     });
+                    if(!param.readilyAvailable){
+                        param.availableQty=0;
+                    }
+                    if(!param.visibility){
+                        param.ids=[];
+                    }
+                    console.log()
+                    // this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
+                    //     this.$message({
+                    //         message: '修改成功',
+                    //         type: 'success'
+                    //     });
+                    //     this.disabledSubmit=false;
+                    //     this.$router.push('/sellerProduct/overview');
+                    // }).catch(err=>{
+                    //     this.disabledSubmit=false;
+                    // });
                 }else{
-                    this.$ajax.post(this.$apis.add_newSKU,this.productForm).then(res=>{
+                    let param=Object.assign({},this.productForm);
+                    _.mapObject(param,(e,k)=>{
+                        if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
+                            param[k]=parseInt(param[k]);
+                        }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
+                            let item='';
+                            param[k].forEach((v,index)=>{
+                                if(index===param[k].length-1){
+                                    item+=v;
+                                }else{
+                                    item+=(v+',');
+                                }
+                            })
+                            param[k]=item;
+                        }
+                    });
+                    if(!param.readilyAvailable){
+                        param.availableQty=0;
+                    }
+                    if(!param.visibility){
+                        param.ids=[];
+                    }
+                    this.$ajax.post(this.$apis.add_newSKU,param).then(res=>{
                         this.$message({
                             message: '新增成功',
                             type: 'success'
                         });
                         this.disabledSubmit=false;
-                        this.$router.push('/sellerProduct/overview');
+                        this.$router.push('/product/overview');
                     }).catch(err=>{
                         this.disabledSubmit=false;
                     });
@@ -1316,25 +1325,130 @@
 
             //获取产品详情
             getGoodsData(){
+                this.loadingData=true;
                 this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
-                    console.log(res)
                     this.productForm=res;
+                    _.mapObject(this.productForm,(e,k)=>{
+                        if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
+                            this.productForm[k]=String(this.productForm[k]);
+                        }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
+                            this.productForm[k]=this.productForm[k].split(',');
+                        }
+                    });
+                    this.loadingData=false;
                 }).catch(err=>{
-                    console.log(err,'12345')
+                    this.loadingData=false;
+                });
+            },
+
+            /**
+             * 弹出框事件
+             * */
+            changeChecked(e){
+                this.selectList=e;
+            },
+            btnClick(e){
+                console.log(e)
+            },
+            searchCustomer(){
+                // console.log(this.customerQuery)
+                // let country='';
+                // this.countryList.forEach((v,k)=>{
+                //     if(k===this.countryList.length-1){
+                //         country+=v;
+                //     }else{
+                //         country+=(v+',');
+                //     }
+                // });
+                //
+                // this.customerQuery.country=country;
+                this.loadingTable=true;
+                this.$ajax.post(this.$apis.get_sellerCustomer,this.customerQuery).then(res=>{
+                    this.loadingTable=false;
+                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas);
+                }).catch(err=>{
+                    this.loadingTable=false;
+                });
+            },
+            clearCustomerSearch(){
+                this.customerQuery.name='';
+                this.customerQuery.type=null;
+                this.customerQuery.country='';
+                this.customerQuery.city='';
+                // this.countryList=[];
+            },
+            postData(){
+                console.log(this.selectList)
+                this.$ajax.post(this.$apis.get_sellerCustomerOne,{
+                    id:''
+                });
+            },
+
+            /**
+             * 获取字典
+             * */
+            getUnit(){
+                //币种单位
+                this.$ajax.get(this.$apis.get_currencyUnit,{},{_cache:true}).then(res=>{
+                    this.currencyOption=res;
+                }).catch(err=>{
+
+                });
+
+                //国家
+                this.$ajax.get(this.$apis.get_country,{},{_cache:true}).then(res=>{
+                    this.countryOption=res;
+                }).catch(err=>{
+
+                });
+
+                this.loadingData=true;
+                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS'],{_cache:true}).then(res=>{
+                    res.forEach(v=>{
+                        if(v.code==='ED_UNIT'){
+                            this.dateOption=v.codes;
+                        }else if(v.code==='WT_UNIT'){
+                            this.weightOption=v.codes;
+                        }else if(v.code==='VE_UNIT'){
+                            this.volumeOption=v.codes;
+                        }else if(v.code==='LH_UNIT'){
+                            this.lengthOption=v.codes;
+                        }else if(v.code==='SKU_SALE_STATUS'){
+                            this.saleStatusOption=v.codes;
+                            this.saleStatusOption.forEach(v=>{
+                                if(v.code==='1'){
+                                    v.label='上架';
+                                }else if(v.code==='0'){
+                                    v.label='下架';
+                                }
+                            })
+                        }else if(v.code==='OEM_IS'){
+                            this.oemOption=v.codes;
+                        }else if(v.code==='UDB_IS'){
+                            this.udbOption=v.codes;
+                        }else if(v.code==='SKU_PG_IS'){
+                            this.skuPkgOption=v.codes;
+                        }else if(v.code==='RA_IS'){
+                            this.readilyOption=v.codes;
+                        }
+                    })
+                    this.loadingData=false;
+                }).catch(err=>{
+                    this.loadingData=false;
+                })
+
+
+                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+
                 });
             },
         },
         created(){
             this.getCategoryId();
-            this.$ajax.get(this.$apis.getCategory,{}).then(res=>{
-                this.dropData=res;
-                let id=this.$route.query.id;
-                if(id){
-                    this.getGoodsData();
-                }
-            }).catch(err=>{
-                console.log(err)
-            });
+            this.getUnit();
+            if(this.$route.query.isEdit){
+                this.getGoodsData();
+            }
         },
     }
 </script>
@@ -1424,6 +1538,9 @@
         left: 0;
         bottom: 0;
         width: 100%;
+        text-align: left;
+    }
+    .dialog-footer{
         text-align: center;
     }
 </style>

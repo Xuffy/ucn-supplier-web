@@ -1,87 +1,87 @@
 {
-    "SupplierCode": "Supplier Code",
-    "Suppliercompanyname": "Supplier Company Name",
-    "Suppliertype": "Supplier Type",
-    "country": "Country",
-    "city": "City",
-    "Provideincoterm": "Provide Incoterm",
-    "Exportlicense": "Export License",
-    "businessscope": "Business Scope",
-    "category": "Category",
-    "currency": "Currency",
-    "paymentterm": "Payment Term",
-    "Suppliershortname": "Supplier Short Name",
-    "description": "Description",
+    "CustomerCode": "客户编号",
+    "Customercompanyname": "客户名称",
+    "Customertype": "客户类别",
+
+    "CustomerShortName": "客户简称",
+
+    "country": "客户国别",
+    "city": "所在城市",
+
+    "customerSource": "客户来源",
+
+    "paymentterm": "付款方式",
+    "currency": " 币种",
+    "filingDate": "建档日期",
+    "TaxpayerQualification": "纳税人资格",
 
 
 
-    "address": "Address",
-    "accountInfo": "Account Info",
-    "contactInfo": "Contact Info",
-    "tradeHistory": "Trade History",
-    "inquireHistory": "Inquire History",
-    "remark": "Remark",
-    "attchment": "Attchment",
-
-    "factoryName": "Factory Name",
-    "factoryAddress": "Factory Address",
-    "exportPort": "Export Port",
-    "contactPerson1": "Contact Person1",
-    "concatPhone1": "Concat Phone No",
-    "contactPerson2": "Contact Person2",
-    "contactPhone2": "Contact Phone No",
 
 
-    "beneficiaryName": "Beneficiary Name",
-    "beneficiaryAccount": "Beneficiary Account",
-    "beneficiaryAddress": "Beneficiary Address",
-    "beneficiaryBankName": "Beneficiary Bank Name",
-    "beneficiaryBankSwift": "Beneficiary Bank Swift",
-    "accountType": "Account Type",
-    "currency": "Currency",
+    "address": "地址信息",
+    "companyAddress": "公司办公地址",
+    
+    "companyRegisteredAddress": "公司注册地址",  
+    
+    "receiveAddress": "收货地址",
+    "notify": "通知",
 
-
-    "name": "Name",
-    "department": "Department",
-    "gender": "Gender",
-    "position": "Position",
-    "mobileNumber": "Mobile Number",
-    "telNumber": "Tel Number",
-    "faxNumber": "Fax Number",
-    "emailAddress": "Email Address",
-    "skype": "Skype",
+    
+    
+    "concats": "联系信息",
+    "concatsName": "姓名",
+    "department": "部门",
+    "gender": "性别",
+    "position": "职务",
+    "telNumber": "座机号码",
+    "mobileNumber": "手机号码",
+    "faxNumber": "传真号码",
+    "emailAddress": "电子邮件",
+    "skype": "SKYPE",
     "QQ": "QQ",
 
-
-    "OrderNo": "Order No",
-    "orderStatus": "Order Status",
-    "orderDate": "Order Date",
-    "currency": "Currency",
-    "purchasingPerson": "Purchasing Person",
-    "SKUCode": "SKU Code",
-    "orderPrice": "Order Price",
-    "orderQuantity": "Order Quantity",
-    "amount": "Amount",
-    "totalNetWeight": "Total Net Weight",
-    "totalGrossWeight": " Total Gross Weight",
-    "totalVolume": "Total Volume",
+    
+    
+    
+    "document": "单证要求",
+    "documentRequired": "所需要的单证",
+    "factoryInspectionReport": "验厂报告",
+    "invoice": "发票",
+    "packingList": "箱单",
+    "examiningReport": "检测报告",
 
 
-    "InquiryNumber": "Inquiry number",
-    "inquiryDate": "Inquiry Date",
-    "payment": "Payment",
-    "departurePort": "Departure Port",
-    "destinationPort": "Destination Port",
-    "quantity": "Quantity",
 
+    "inquiry": "询价历史",
+    "inquiryNo":"询价单号",
+    "inquiryDate": "询价日期",
+    "Incoterm": "价格条款",
+    "skuQuantityOfInquiry": "询价数量",
+    "quantityOfCarton": "产品箱数",
+    "totalNetWeight": "产品总净重",
+    "totalRoughWeight":"产品总毛重",
+    "totalVolum":"产品总体积",
 
+    
+    
+    "tradeHistory": "订单历史",
+    "OrderNumber":"订单号",
+    "OrderDate":"订单日期",
+    "OrderStatus":"订单状态",
+    "ActDeliveryDate":"交货日期",
+    "quantityOfSKU":"订单数量",
+    "totalCartonOfSku":" 产品总箱数",
+    "totalSkuNetWeight":"产品总净重",
+    "totalSkuRoughWeight":"产品总毛重",
+    "totalSkuVolume":" 产品总体积",
+    "loadingDate":"装船日期",
+    "dateOfBL":"放单日期",
+    
     "remark": "Remark",
     "date": "Date",
-    "operater": "Operater",
+    "operater": "Operater"
 
-    "compareTime": "Compare Time",
-    "compareName": "Compare Name",
-    "compareItem": "Compare Item"
 
 
 }

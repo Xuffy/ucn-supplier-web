@@ -2,7 +2,7 @@
     "operater": "operater",
     "time": "Time",
     "InquiryNo": "Inquiry No.",
-    "QuotationNo": "Quotation No.",
+    "quotationNo": "Quotation No.",
     "createTime": "Create time",
     "inquiryStatus": "inquiry status",
     "transportationWay": "transportation way",
@@ -11,6 +11,7 @@
     "departureCountry": "Departure Country",
     "incoterm": "Incoterm",
     "currency": "Currency",
+    "exchangeRate": "exchange rate",
     "discountRate": "discount rate",
     "departurePort": "departure port",
     "destinationPort": "destination port",
@@ -19,6 +20,5 @@
     "exportLicense": "export license",
     "attachment": "Attachment",
     "inquiryRemark": "Inquiry remark",
-    "relatedOrderNO": "related order NO.",
-    "remarkDate": " "
+    "relatedOrderNO": "related order NO."
 }

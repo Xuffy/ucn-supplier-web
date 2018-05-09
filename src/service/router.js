@@ -23,6 +23,8 @@ export const routerMap = [
       redirect: '/negotiation/inquiry',
       meta: {
         name: 'negotiation',
+        draft: true,
+
       },
       children: [
         {
@@ -30,6 +32,7 @@ export const routerMap = [
           name: 'inquiry',
           meta: {
             name: 'negotiation inquiry',
+            recycleBin: 'INQUIRY:OVERVIEW:RECYCLE_BIN'
           },
           component: () => import('../views/sellerNegotiation/inquiryOverview')
         },
@@ -39,7 +42,8 @@ export const routerMap = [
           hidden: true,
           meta: {
             name: 'Inquiry Detail',
-            messageBoard: 'code'
+            recycleBin: 'INQUIRY:DETAIL:RECYCLE_BIN',
+            messageBoard: 'INQUIRY:DETAIL:MESSAGE_BOARD'
           },
           component: () => import('../views/sellerNegotiation/inquiryDetail')
         },
@@ -148,7 +152,7 @@ export const routerMap = [
             log: true,
             name: 'Compare Detail'
           },
-          component: () => import ('../views/supplier/Compare/Compare.vue')
+          component: () => import ('../views/supplier/compare/compare.vue')
         },
         {
           path: 'compare',
@@ -159,7 +163,7 @@ export const routerMap = [
             log: true,
             name: 'Compare Overview'
           },
-          component: () => import ('../views/supplier/Compare/Overview.vue')
+          component: () => import ('../views/supplier/compare/overview.vue')
         }
       ]
     },
@@ -549,7 +553,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'create Inbound'
+            name: '创建入库单'
           },
           component: () => import('../views/warehouse/inbound/createInbound'),
         },
@@ -572,7 +576,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Outbound Overview'
+            name: '出库总览'
           },
           component: () => import('../views/warehouse/outbound/outboundOverview'),
         },
@@ -583,18 +587,19 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'create Outbound'
+            name: '创建出库单'
           },
           component: () => import('../views/warehouse/outbound/createOutbound'),
         },
         {
           path: 'outboundDetail',
           name: 'outbound Detail',
+          hidden:true,
           meta: {
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'outbound Detail',
+            name: '出库单详情',
           },
           component: () => import('../views/warehouse/outbound/outboundDetail'),
         },
@@ -605,23 +610,25 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'qc Overview',
+            name: '货单预览',
           },
           component: () => import('../views/warehouse/qc/qcOverview'),
         },
         {
-          path: 'sellerQCOrderDetail',
-          name: 'sellerQCOrderDetail',
+          path: 'qcOrderDetail',
+          name: 'qc Order Detail',
+          hidden:true,
           meta: {
-            name: 'sellerQCOrderDetail'
+            name: 'qcOrderDetail'
           },
           component: () => import('../views/warehouse/qc/QCOrderDetail')
         },
         {
-          path: 'sellerEditOrderOverview',
-          name: 'sellerEditOrderOverview',
+          path: 'qcDetail',
+          name: 'qc Detail',
+          hidden:true,
           meta: {
-            name: 'sellerEditOrderOverview'
+            name: 'qcDetail'
           },
           component: () => import('../views/warehouse/qc/editQcOrderOverview')
         }

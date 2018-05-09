@@ -62,6 +62,7 @@
                                     align="right"
                                     type="date"
                                     placeholder="选择日期"
+                                    :editable="false"
                                     :picker-options="pickerOptions1">
                             </el-date-picker>
                         </div>
@@ -84,11 +85,13 @@
                 :data="productData"
                 border
                 show-summary
+                :summary-method="getSummaries"
                 @selection-change="changeProductChecked"
                 style="width: 100%">
             <el-table-column
                     type="selection"
                     align="center"
+                    fixed="left"
                     class="table-checkbox"
                     width="55">
             </el-table-column>
@@ -96,6 +99,7 @@
                     v-for="v in $db.warehouse.inboundOrderProductTable"
                     :key="v.key"
                     :label="$i.warehouse[v.key]"
+                    :prop="v.key"
                     align="center"
                     width="180">
                 <template slot-scope="scope">
@@ -157,6 +161,7 @@
             <el-table-column
                     fixed="right"
                     label="操作"
+                    align="center"
                     width="100">
                 <template slot-scope="scope">
                     <el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
@@ -168,31 +173,31 @@
             <div class="title">
                 {{$i.warehouse.summary}}
             </div>
-            <el-form :modal="inboundSummary" label-width="200px" :label-position="labelPosition">
+            <el-form :modal="inboundData" label-width="200px" :label-position="labelPosition">
                 <el-row>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="asd" :label="$i.warehouse.cartonOfProducts">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
+                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundData.skuTotalCartonQty"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="asd" :label="$i.warehouse.grossWeightOfProducts">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
+                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundData.skuTotalGrossWeight"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="asd" :label="$i.warehouse.volumeOfProducts">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
+                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundData.skuTotalVolume"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="asd" :label="$i.warehouse.netWeightOfProducts">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
+                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundData.skuTotalNetWeight"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="asd" :label="$i.warehouse.quantityOfProducts">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
+                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundData.skuTotalQty"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -212,10 +217,10 @@
                 <el-row>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="orderNo" :label="$i.warehouse.orderNo">
-                            <el-select size="mini" class="speInput" v-model="orderProduct.orderNo" placeholder="请选择">
+                            <el-select clearable size="mini" class="speInput" v-model="orderProduct.orderNo" placeholder="请选择">
                                 <el-option
-                                        v-for="item in options"
-                                        :key="item.value"
+                                        v-for="item in orderNoOption"
+                                        :key="item.id"
                                         :label="item.label"
                                         :value="item.value">
                                 </el-option>
@@ -224,17 +229,17 @@
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuCode" :label="$i.warehouse.skuCode">
-                            <el-input size="mini" class="speInput" v-model="orderProduct.skuCode"></el-input>
+                            <el-input placeholder="请输入" size="mini" class="speInput" v-model="orderProduct.skuCode"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuNameCn" :label="$i.warehouse.skuNameCn">
-                            <el-input size="mini" class="speInput" v-model="orderProduct.skuNameCn"></el-input>
+                            <el-input placeholder="请输入" size="mini" class="speInput" v-model="orderProduct.skuNameCn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuBarCode" :label="$i.warehouse.skuBarCode">
-                            <el-input size="mini" class="speInput" v-model="orderProduct.skuBarCode"></el-input>
+                            <el-input placeholder="请输入" size="mini" class="speInput" v-model="orderProduct.skuBarCode"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -251,10 +256,9 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button :disabled="disabledSearch" type="primary" @click="postData">确 定</el-button>
-                <el-button :disabled="disabledCancelSearch" @click="addOrderDialogVisible = false">取 消</el-button>
+                <el-button :disabled="disabledCancelSearch" @click="closeDialog">取 消</el-button>
             </div>
         </el-dialog>
-
     </div>
 </template>
 
@@ -270,13 +274,12 @@
         },
         data(){
             return{
-                options:[],
-
                 /**
                  * 页面基础配置
                  * */
                 labelPosition:'right',
                 disabledSubmit:false,
+                orderNoOption:[],
                 pickerOptions1: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
@@ -334,14 +337,6 @@
                     skuTotalVolume: 0,
                 },
                 selectOuterProductList:[],
-                //inbound总计
-                inboundSummary:{
-                    totalCartonQty:0,
-                    totalGrossWeight:0,
-                    totalVolume:0,
-                    totalNetWeight:0,
-                    totalSkuQty:0,
-                },
                 /**
                  * 弹出框数据
                  * */
@@ -376,6 +371,14 @@
                 this.disabledCancelSearch=true;
                 //请求弹出框数据
                 this.$ajax.post(this.$apis.get_productInfo,this.orderProduct).then(res=>{
+                    this.orderNoOption=[];
+                    _.uniq(_.pluck(res.datas, 'orderNo')).forEach((v,k)=>{
+                        this.orderNoOption.push({
+                            id:k+1,
+                            value:v,
+                            label:v
+                        });
+                    });
                     this.tableDataList = this.$getDB(this.$db.warehouse.inboundOrderTable, res.datas);
                     /**
                      * 每次打开弹窗时进行置灰判断
@@ -388,8 +391,8 @@
                                 if(v.skuId.value===m.skuList[0].skuId){
                                     this.$set(v,'_disabled',true);
                                     this.$set(v,'_checked',true);
+                                    this.selectList.push(v);
                                 }
-                                this.selectList.push(m);
                             });
                         }
                     });
@@ -487,9 +490,7 @@
                         supplierOrderNo: v.supplierOrderNo,
                     });
                 })
-                console.log(this.inboundData)
                 this.disabledSubmit=true;
-
                 this.$ajax.post(this.$apis.add_inbound,this.inboundData).then(res=>{
                     this.disabledSubmit=false;
                     this.$message({
@@ -509,8 +510,46 @@
             changeProductChecked(e){
                 this.selectOuterProductList=e;
             },
+            //表格统计
+            getSummaries(param) {
+                const { columns, data } = param;
+                const sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = '总价';
+                    }else{
+                        if(index===13 || index===14 || index===15 || index===16 || index===17){
+                            const values = data.map(item => Number(item[column.property]));
+                            if (!values.every(value => isNaN(value))) {
+                                sums[index] = values.reduce((prev, curr) => {
+                                    const value = Number(curr);
+                                    if (!isNaN(value)) {
+                                        return prev + curr;
+                                    } else {
+                                        return prev;
+                                    }
+                                }, 0);
+                                // sums[index] += ' 元';
+                            } else {
+                                sums[index] = 0;
+                            }
+                            if(index===13){
+                                this.inboundData.skuTotalCartonQty=sums[index];
+                            }else if(index===14){
+                                this.inboundData.skuTotalVolume=sums[index];
+                            }else if(index===15){
+                                this.inboundData.skuTotalNetWeight=sums[index];
+                            }else if(index===16){
+                                this.inboundData.skuTotalGrossWeight=sums[index];
+                            }else if(index===17){
+                                this.inboundData.skuTotalQty=sums[index];
+                            }
+                        }
+                    }
+                });
 
-
+                return sums;
+            },
 
             /**
              * 弹出框事件
@@ -552,6 +591,7 @@
                 this.selectList=e;
             },
             postData(){
+                this.productIds=[];
                 let arr=this.$copyArr(this.selectList);
                 if(arr.length===0){
                     return this.$message({
@@ -566,26 +606,68 @@
                         this.productIds.push(v.skuId.value);
                     }
                 });
-                this.loadingProductTable=true;
-                this.$ajax.post(this.$apis.get_orderSku,this.productIds).then(res=>{
-                    this.productData=res;
-                    this.loadingProductTable=false;
-                }).catch(err=>{
-                    this.loadingProductTable=false;
-                });
+                if(this.productIds.length!==0){
+                    //表示有新增产品
+                    this.loadingProductTable=true;
+                    this.$ajax.post(this.$apis.get_orderSku,this.productIds).then(res=>{
+                        res.forEach(v=>{
+                            this.productData.push(v);
+                        });
+                        console.log(this.productData,'this.productData')
+                        /**
+                         * 计算底部summary
+                         * */
+                        // inboundOutCartonTotalQty
 
+                        let skuTotalCartonQty=0,
+                            skuTotalGrossWeight=0,
+                            skuTotalNetWeight=0,
+                            skuTotalQty=0,
+                            skuTotalVolume=0;
+
+                        this.productData.forEach(v=>{
+                            if(v.inboundOutCartonTotalQty){
+                                skuTotalCartonQty+=v.inboundOutCartonTotalQty;
+                            }
+                            if(v.inboundSkuTotalGrossWeight){
+                                skuTotalGrossWeight+=v.inboundSkuTotalGrossWeight;
+                            }
+                            if(v.inboundSkuTotalNetWeight){
+                                skuTotalNetWeight+=v.inboundSkuTotalNetWeight;
+                            }
+                            if(v.inboundSkuTotalQty){
+                                skuTotalQty+=v.inboundSkuTotalQty;
+                            }
+                            if(v.inboundSkuTotalVolume){
+                                skuTotalVolume+=v.inboundSkuTotalVolume;
+                            }
+                        });
+                        this.$set(this.inboundData,'skuTotalCartonQty',skuTotalCartonQty);
+                        this.$set(this.inboundData,'skuTotalGrossWeight',skuTotalGrossWeight);
+                        this.$set(this.inboundData,'skuTotalNetWeight',skuTotalNetWeight);
+                        this.$set(this.inboundData,'skuTotalQty',skuTotalQty);
+                        this.$set(this.inboundData,'skuTotalVolume',skuTotalVolume);
+                        this.loadingProductTable=false;
+                    }).catch(err=>{
+                        this.loadingProductTable=false;
+                    });
+                }
+                this.clearSearchData();
                 this.addOrderDialogVisible=false;
+            },
+            closeDialog(){
+                this.addOrderDialogVisible = false;
+                this.clearSearchData();
             },
 
             /**
              * 页面表格事件
              * */
             handleBlur(e,index){
-                console.log(e,'???')
                 if(e==='inboundOutCartonTotalQty'){
+
+
                     //处理入库产品总箱数输入框
-                    console.log(this.productData[index][e],'入库产品总箱数')
-                    console.log(this.productData[index]['skuOuterCartonQty'],'外箱产品数')
                     if(!this.productData[index][e] || !this.productData[index]['skuOuterCartonQty']){
                         this.productData[index].inboundSkuTotalQty='';
                     }else{
@@ -605,8 +687,20 @@
                     }else{
                         this.productData[index].inboundSkuTotalGrossWeight=this.productData[index][e]*this.productData[index]['skuOuterCartonRoughWeight'];
                     }
+
+                    //处理入库产品总体积
+                    if(!this.productData[index][e] || !this.productData[index]['skuOuterCartonVolume']){
+                        this.productData[index].inboundSkuTotalVolume='';
+                    }else{
+                        this.productData[index].inboundSkuTotalVolume=this.productData[index][e]*this.productData[index]['skuOuterCartonVolume'];
+                    }
                 }else if(e==='skuOuterCartonVolume'){
                     //处理外箱体积
+                    if(!this.productData[index]['inboundOutCartonTotalQty'] || !this.productData[index]['skuOuterCartonVolume']){
+                        this.productData[index].inboundSkuTotalVolume='';
+                    }else{
+                        this.productData[index].inboundSkuTotalVolume=this.productData[index]['inboundOutCartonTotalQty']*this.productData[index]['skuOuterCartonVolume'];
+                    }
                 }else if(e==='skuOuterCartonRoughWeight'){
                     //处理外箱毛重
                     if(!this.productData[index]['inboundOutCartonTotalQty'] || !this.productData[index]['skuOuterCartonRoughWeight']){
@@ -632,12 +726,11 @@
                 // })
             },
 
-
             /**
              * 获取字典
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE']).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE'],{_cache:true}).then(res=>{
                     this.inboundTypeOption=res[0].codes;
                 });
                 // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{
@@ -708,6 +801,7 @@
         left: 0;
         bottom: 0;
         width: 100%;
+        z-index:1000;
     }
     .dialog-footer{
         text-align: center;

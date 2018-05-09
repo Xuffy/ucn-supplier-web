@@ -22,15 +22,17 @@
                         :options="searchOptions"></select-search>
             </div>
             <div class="section">
-                <div class="btns">
-                    <el-button>{{$i.warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
-                </div>
                 <v-table
                         :loading="loadingTable"
                         :data="tableDataList"
                         :buttons="[{label: '详情', type: 1}]"
                         @change-checked="changeChecked"
                         @action="btnClick">
+                    <template slot="header">
+                        <div class="btns">
+                            <el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'全部'}})</el-button>
+                        </div>
+                    </template>
                 </v-table>
             </div>
         </div>
@@ -114,6 +116,7 @@
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_warehouseOverviewData,this.warehouseConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.warehouse.sellerWarehouseTable, res.datas,(e)=>{
+                        e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
                         // e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
                         // e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
                         // e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
@@ -152,12 +155,13 @@
             },
 
             btnClick(e){
-                this.$windowOpen({
-                    url:'/sellerWarehouse/inboundDetail',
-                    params:{
-                        id:e.id.value
-                    }
-                })
+                console.log(e)
+                // this.$windowOpen({
+                //     url:'/warehouse/inboundDetail',
+                //     params:{
+                //         id:e.id.value
+                //     }
+                // })
             },
 
             changeChecked(e){

@@ -58,11 +58,12 @@ export default {
     paymentAbandon: ['/payment/abandon', 'BASE_HCJ', 'USUPPLY_URL'],
     paymentAccept: ['/payment/accept/{id}', 'BASE_HCJ', 'USUPPLY_URL'],
     paymentDunning: ['/payment/dunning/{orderNo}/{orderType}', 'BASE_HCJ', 'USUPPLY_URL'],
-    post_order_paymentlist: ['/payment/list/{orderNo}/{orderType}', 'BASE_HCJ', 'BASE_BUYER'],
+    post_order_paymentlist: ['/payment/list/{orderNo}/{orderType}', 'BASE_HCJ', 'USUPPLY_URL'],
     
     
     //字典表数据
     post_codePart:['/code/part','UMETA_URL'],
      post_country:['/country/all','UMETA_URL'],
-     post_logisticsport:['/logisticsport/query','UMETA_URL']
+     post_logisticsport:['/logisticsport/query','UMETA_URL'],
+     get_currency:['/currency/all','UMETA_URL']
 }

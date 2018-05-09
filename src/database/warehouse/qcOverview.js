@@ -1,0 +1,24 @@
+export default {
+    id:{
+        _hide:true
+    },
+    qcOrderNo:{},
+    qcStatusDictCode:{},
+    qcMethodDictCode:{},
+    surveyor:{},
+    factoryAddress:{},
+    factoryContactPhone:{},
+    remark:{},
+    qualifiedSkuCartonTotalQty:{},
+    qualifiedSkuQty:{},
+    qualifiedSkuVolume:{},
+    qualifiedSkuNetWeight:{},
+    qualifiedSkuGrossWeight:{},
+    unqualifiedSkuQty:{},
+    unqualifiedSkuCartonTotalQty:{},
+    unqualifiedSkuNetWeight:{},
+    unqualifiedSkuVolume:{},
+    unqualifiedSkuGrossWeight:{},
+    skuRowNum:{},
+    checkOuterCartonQty:{},
+}

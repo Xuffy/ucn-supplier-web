@@ -1,7 +1,9 @@
 {
   "inboundOverview":"入库总览",
+  "outboundOverview":"出库总览",
   "all":"全部",
   "inboundType":"入库类型",
+  "outBoundType":"出库类型",
   "purchaseInbound":"采购入库",
   "checkInbound":"验货入库",
   "customerReturnInbound":"客户退货入库",
@@ -16,5 +18,17 @@
   "search":"搜索",
   "clear":"清空",
   "submit":"提交",
-  "cancel":"取消"
+  "cancel":"取消",
+
+  "sellingOutOfTheTreasury":"销售出库",
+  "collectionOfMaterialsFromTheWarehouse":"组装领料出库",
+  "stockTransfer":"转库",
+  "returnToSupplier":"退回供应商",
+
+
+
+
+  "warehouseOverview":"仓库总览",
+  "qcOverview":"货单预览",
+  "status":"状态"
 }

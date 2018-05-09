@@ -1,4 +1,7 @@
 export default {
+    id:{
+        _hide:true
+    },
     pic: {
         key: 'pic',     //接口还没反
     },

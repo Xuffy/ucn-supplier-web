@@ -2,7 +2,7 @@ export default {
     orderNo: {
         key: 'orderNo',
         ismodify: false,
-//        isDefaultEdit: true,
+        //        isDefaultEdit: true,
         rules: [],
         type: 'text',
     },
@@ -46,17 +46,17 @@ export default {
     supplierName: {
         key: 'supplierName',
         ismodify: false,
-//        isDefaultEdit: true,
+        //        isDefaultEdit: true,
         rules: [],
         type: 'supplierName',
     },
     //弹窗修改
     supplierNo: {
-        key: 'supplierNo',
+        key: 'supplierCode',
         ismodify: false,
-//        isDefaultEdit: true,
+        //        isDefaultEdit: true,
         rules: [],
-        type: 'supplierNo',
+        type: 'supplierCode',
     },
     quotationNo: {
         key: 'quotationNo',
@@ -70,7 +70,7 @@ export default {
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
-        type: 'select',
+        type: 'status',
     },
     deliveryDate: {
         key: 'deliveryDt',
@@ -91,7 +91,7 @@ export default {
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
-        type: 'select',
+        type: 'currency',
     },
     incortermAea: {
         key: 'incortermAea',
@@ -160,7 +160,7 @@ export default {
         key: 'transport',
         ismodify: false,
         isDefaultEdit: true,
-        isDefaultValue:true,
+        isDefaultValue: true,
         rules: [],
         type: 'select',
     },

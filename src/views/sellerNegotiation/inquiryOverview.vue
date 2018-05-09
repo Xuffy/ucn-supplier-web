@@ -23,10 +23,10 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click="ajaxInqueryAction('accept')" :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='99'||params.status+''==='1'||params.status === null">{{ $i.common.accept }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="cancelInquiry" :disabled="!checkedData.length||params.status+''==='99'||params.status+''==='1'||params.status === null">{{ $i.common.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='21'||params.status === null">{{ $i.common.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button :disabled="!tabData.length">{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
+                <el-button @click="ajaxInqueryAction('accept')" v-authorize="'INQUIRY:OVERVIEW:ACCEPT'" :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='99'||params.status+''==='1'||params.status === null">{{ $i.common.accept }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="cancelInquiry" :disabled="!checkedData.length||params.status+''==='99'||params.status+''==='1'||params.status === null" v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'">{{ $i.common.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='21'||params.status === null" v-authorize="'INQUIRY:OVERVIEW:DELETE'">{{ $i.common.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button :disabled="!tabData.length" v-authorize="'INQUIRY:OVERVIEW:DOWNLOAD'">{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
@@ -124,11 +124,11 @@
                 },
                 deep: true
             }
-            
         },
         methods: {
             ...mapActions([
-                'setRecycleBin'
+                'setRecycleBin',
+                'setDic'
             ]),
             inputEnter(val) {
                 if(!val.keyType) return this.$message('请选中搜索类型');
@@ -150,10 +150,16 @@
                 this.$ajax.post(url, this.params)
                 .then(res => {
                     this.params.tc = res.tc;
-                    this.tabData = this.$getDB(column, res.datas);
-                    this.tabLoad = false;
-                    this.searchLoad = false; 
-                    this.checkedData = [];
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], '_cache')
+                    .then(data => {
+                        this.setDic(data);
+                        this.tabData = this.$getDB(column, res.datas, (item) => {
+                            this.$filterDic(item);
+                        });
+                        this.tabLoad = false;
+                        this.searchLoad = false; 
+                        this.checkedData = [];
+                    });
                 })
                 .catch(() => {
                     this.searchLoad = false; 

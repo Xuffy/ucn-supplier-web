@@ -24,7 +24,7 @@ export default {
 
     },
     status: { //系统带入，共四个状态：TOC-C;TOB-S;finish;cancel 
-        
+        transForm: 'INQUIRY_STATUS'
     },
     supplierName: { //系统带入：当前询价单所选的供应商（如果有多个供应商用逗号隔开）
 
@@ -32,14 +32,12 @@ export default {
     quantity: { //系统计算：当前询价单所有产品的数量
         key: 'skuQty'
     },
-    inquiryValue: { //系统计算：当前询价单所有产品的总价
-        key: 'inquiryAmount'
-    },
     currency: { //系统带入，当前inquiry所选的币种
-        key: 'currency'
+        key: 'currency',
+        transForm: 'CY_UNIT'
     },
     incoterm: { //系统带入，当前inquiry所选的付款条款
-
+        transForm: 'ITM'
     },
     departurePort: { //系统带入，当前inquiry所选的发运港口
 

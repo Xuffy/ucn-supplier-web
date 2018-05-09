@@ -3,7 +3,8 @@ export default {
         key:'outboundNo',
         belong:'basicInfo',
         showType:'input',
-        disabled:true
+        disabled:true,
+        sysCreate:true,
     },
     shipmentInvoiceNo:{
         key:'shipmentInvoiceNo',
@@ -14,16 +15,6 @@ export default {
         key:'outboundTypeDictCode',
         belong:'basicInfo',
         showType:'select',
-        options:[
-            {
-                label:'销售出库',
-                value:1
-            },
-            {
-                label:'转库',
-                value:2
-            },
-        ],
     },
     outboundDate:{
         key:'outboundDate',
@@ -38,7 +29,8 @@ export default {
     outboundSkuTotalQty:{
         key:'outboundSkuTotalQty',
         belong:'basicInfo',
-        showType:'number',
+        showType:'input',
+        disabled:true
     },
     timeZone:{
         key:'timeZone',
