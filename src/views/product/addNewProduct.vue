@@ -15,7 +15,7 @@
         <el-form :model="productForm" :rules="rules" ref="productForm1" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <!--设置高度51px以免inputNumber错位-->
-                <el-col style="height: 51px;" v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                <el-col style="height: 51px;" v-if="v.belongTab==='basicInfo' && !v.isHide" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
                             <div v-if="v.isWeight">
@@ -882,8 +882,8 @@
                     descCustomer: "",
                     nameCustomer: "",
                     customerSkuCode: "",
-                    supplierCode: "",
-                    supplierName: "",
+                    // supplierCode: "",
+                    // supplierName: "",
                     code: "",                       //新增时请填写，传空
                     unit: "7",
                     formation: "",
