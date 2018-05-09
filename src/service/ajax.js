@@ -120,7 +120,7 @@ const $ajax = (config) => {
         case 'DELETE':
           return axios.delete(_options.url);
         case 'PUT':
-          return axios.put(_options.url, options.data, config);
+          return axios.put(_options.url, options.data, _options);
         default:
           return axios(_options);
       }

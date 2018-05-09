@@ -1,6 +1,6 @@
 export default {
   //payment
-  post_ledgerPage:['/ledger/page','BASE_BJ_p','USUPPLY_URL'],
+  post_ledgerPage:['/ledger/page','USUPPLY_URL','USUPPLY_URL'],
   post_payment_list:['/payment/list/{orderNo}/{orderType}','USUPPLY_URL','USUPPLY_URL'],
   post_payment_accept:['/payment/accept/{id}','USUPPLY_URL','USUPPLY_URL'],
   post_payment_dunning:['/payment/dunning/{orderNo}/{orderType}','USUPPLY_URL','USUPPLY_URL'],
