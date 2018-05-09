@@ -103,6 +103,9 @@ export const routerMap = [
       redirect: '/order/overview',
       meta: {name: 'Order'},
       noDropdown: true,
+      meta: {
+        name: '订单'
+      },
       children: [
         {
           path: 'overview',

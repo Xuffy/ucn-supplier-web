@@ -60,7 +60,7 @@
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
      */
-
+    import { mapActions } from 'vuex'
     import {
         dropDown,
         selectSearch,
@@ -90,10 +90,10 @@
                 rowspan: 1,
                 options: [{
                     id: '1',
-                    label: 'Order No'
+                    label: '订单编号'
                 }, {
                     id: '2',
-                    label: 'Sku Code'
+                    label: '产品编号'
                 }],
                 keyType: '',
                 params: {
@@ -110,6 +110,9 @@
             }
         },
         methods: {
+             ...mapActions([
+                'setRecycleBin','setDraft'
+            ]),
             onAction(item, type) {
                 this.$windowOpen({
                     url: '/order/detail',
@@ -213,6 +216,7 @@
             },
             //get_orderlist数据
             getdata(overview) {
+                console.log('in')
                 this.loading = true
                 this.$ajax.post(this.$apis.get_orderlist, this.params)
                     .then((res) => {
@@ -252,6 +256,14 @@
         },
         created() {
             this.getdata(this.$db.order.overview)
+            this.setRecycleBin({
+                name: 'orderRecycleBin',
+                show: true
+            });
+            this.setDraft({
+                name: 'orderDraft',
+                show: true
+            });
         },
         mounted() {
             this.loading = false
