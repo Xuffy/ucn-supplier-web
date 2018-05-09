@@ -41,7 +41,7 @@ export default {
     set_sellerProductPutDown:['/sku/soldout','BASE_SELL','USUPPLY_URL'],
     delete_sellerProduct:['/sku/deleteAll','BASE_SELL','USUPPLY_URL'],
     get_sellerCustomer:['/supplier/sku/setting/listCustomers','BASE_SELL','USUPPLY_URL'],
-    get_sellerCustomerOne:['/supplier/sku/setting/listCustomers/{id}','BASE_SELL','USUPPLY_URL'],
+    get_sellerCustomerGroup:['/supplier/sku/setting/getCustomerByIds','BASE_SELL','USUPPLY_URL'],
     update_buyerProductDetail:['/sku/{id}','BASE_SELL','USUPPLY_URL'],
 
 
@@ -104,6 +104,9 @@ export default {
     POST_REWORK_HANDLE: ['/qc/rework/handle', 'USUPPLY_URL', 'USUPPLY_URL'],
     get_qcDetail:['/qc/getById','BASE_BUY','UPURCHASE_URL'],
     get_qcProductInfo:['/qc/detail/page','BASE_BUY','UPURCHASE_URL'],
+    get_buyerWarehouseOverview:['/warehouse/overview/page','BASE_BUY','UPURCHASE_URL'],
+    set_qcResultConfirm:['/qc/result/confirm','BASE_BUY','UPURCHASE_URL'],
+
 
 
     /**

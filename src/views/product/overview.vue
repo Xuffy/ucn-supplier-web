@@ -149,7 +149,7 @@
                     outerCartonMethodEnLike: "",
                     pn: 1,
                     ps: 50,
-                    readilyAvailable: true,
+                    readilyAvailable: null,
                     recycle: false,             //recycleBin里传true,其他地方传false
                     //初始搜索的时候不传，当有筛选条件之后再传
                     // sorts: [
