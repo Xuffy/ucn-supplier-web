@@ -35,21 +35,19 @@ const json = {
     require(`./${lang}/order/overview`),
     require(`./${lang}/order/productinfo.pending`)
   ),
-  payment: _.extend({},
+    payment: _.extend({},
     require(`./${lang}/payment/payment`),
     require(`./${lang}/payment/payment.table`)
   ),
-  product: _.extend({},
-    require(`./${lang}/product/product.basic`),
-    require(`./${lang}/product/productDetail`),
-    require(`./${lang}/product/productOverview`)
-  ),
-  productCn: _.extend({},
-    require(`./${lang}/productCn/product.basic`),
-    require(`./${lang}/productCn/productDetail`),
-    require(`./${lang}/productCn/productOverview`)
-  ),
-  setting: _.extend({},
+    product: _.extend({},
+        require(`./${lang}/product/product.basic`),
+        require(`./${lang}/product/product.overview`),
+        require(`./${lang}/product/product.overviewTable`),
+
+
+        require(`./${lang}/product/productDetail`),
+    ),
+    setting: _.extend({},
     require(`./${lang}/setting/department`),
     require(`./${lang}/setting/personalInfo`),
     require(`./${lang}/setting/setting.basic`)
@@ -62,19 +60,9 @@ const json = {
     require(`./${lang}/track/trackBysku`)
   ),
   warehouse: _.extend(
-    require(`./${lang}/warehouse/qcWarehouse`),
-    require(`./${lang}/warehouse/warehouse.table`),
     require(`./${lang}/warehouse/warehouse.basic`),
-    require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
-    require(`./${lang}/warehouse/payment.pending`),
-    require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
-    require(`./${lang}/warehouse/qcDetailProductInfo.pending`),
-    require(`./${lang}/warehouse/summary.pending`),
-    require(`./${lang}/warehouse/createQc.basic`),
-  ),
-  warehouseCn: _.extend({},
-    require(`./${lang}/warehouseCn/warehouse.basic`),
-    require(`./${lang}/warehouseCn/warehouse.index`)
+    require(`./${lang}/warehouse/warehouse.inboundOverviewTable`),
+    require(`./${lang}/warehouse/warehouse.inboundDetail`),
   ),
   workbench: _.extend({},
     require(`./${lang}/workbench/page`),

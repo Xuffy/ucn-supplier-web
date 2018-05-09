@@ -27,7 +27,7 @@
                <el-date-picker
                   v-model="scope.row.customer"
                   type="datetime"
-                  :disabled='(copyData[scope.$index].customer!="")||scope.$index==1||scope.$index==3||disabled'                              >    
+                 :disabled=true                              >    
                 </el-date-picker>
         </template>
 </el-table-column>
@@ -37,7 +37,7 @@
                   v-model="scope.row.supplier"
                   type="datetime"
                   placeholder=""             
-                   :disabled=true  
+                  :disabled='(copyData[scope.$index].customer!="")||scope.$index==0||scope.$index==2||scope.$index==4||disabled' 
                   >
                 </el-date-picker>
                

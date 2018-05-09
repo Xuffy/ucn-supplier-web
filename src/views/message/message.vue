@@ -23,6 +23,7 @@
           :data="tabData"
           @change-checked="changeChecked"
           :height="450"
+          hide-filter-value
         />
       </div>
 
@@ -57,17 +58,17 @@
       </div>
     </div>
 
-    <el-dialog
-        title="提示"
-        :visible.sync="centerDialogVisible"
-        width="30%"
-        center>
-          <span>系统通过邮件来发送消息</span>
-          <span slot="footer" class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
+    <!--<el-dialog-->
+        <!--title="提示"-->
+        <!--:visible.sync="centerDialogVisible"-->
+        <!--width="30%"-->
+        <!--center>-->
+          <!--<span>系统通过邮件来发送消息</span>-->
+          <!--<span slot="footer" class="dialog-footer">-->
+        <!--<el-button @click="centerDialogVisible = false">取 消</el-button>-->
+        <!--<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>-->
+      <!--</span>-->
+    <!--</el-dialog>-->
 
   </div>
 </template>
@@ -84,10 +85,9 @@
     data(){
       return{
         searchLoad: false,
-        viewByStatus:'',
+        viewByStatus:'1',
         isShow:false,
         isHide:true,
-        centerDialogVisible: false,
         options: [{
           id: '1',
           label: 'Tittle'
@@ -97,7 +97,6 @@
         }],
         activeName: 'System Message',           //激活的tab页的name
         multipleSelection:[],
-        currentPage:1,
         tableData:[],
         params: {
           mark: 0,
@@ -105,12 +104,11 @@
           ps:10,
           pn:1
         },
-        checked:'',
         checked1:true,
         message:'',
         tabData:[],
         checkedData:[],
-        checkValues: [],
+        centerDialogVisible:false,
         updatesetting:{
           id:'',
           subscribeEmail:0,
@@ -144,14 +142,20 @@
           this.updatesetting.subscribeEmail = 1
           this.$ajax.post(url, this.updatesetting)
           .then(res => {
-            this.$message('系统通过邮件来发送消息');
+            this.$message({
+              message: '配置成功',
+              type: 'success',
+            });
             this.getMessageQuery()
           })
         }else{
           this.updatesetting.subscribeEmail = 0
           this.$ajax.post(url, this.updatesetting)
           .then(res => {
-            this.$message('系统关闭邮件来发送消息');
+            this.$message({
+              message: '配置成功',
+              type: 'success',
+            });
             this.getMessageQuery()
           })
         }
@@ -192,7 +196,12 @@
         };
         this.$ajax.post(url, this.params)
           .then(res => {
-            this.tabData = this.$getDB(column, res.datas);
+              this.tabData = this.$getDB(column, res.datas,item=>{
+                _.mapObject(item, val => {
+                  val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'))
+                  return val
+                })
+              });
             this.tabLoad = false;
             this.searchLoad = false;
           })
@@ -214,7 +223,7 @@
         });
         this.$ajax.post(url, arr)
           .then(res => {
-            this.$message('系统将消息置为已读');
+             this.$message('系统将消息置为已读');
           })
           .catch(() => {
 
@@ -222,17 +231,16 @@
       },
       getMessageQuery(){
         let url = this.$apis.get_messagesetting_query
-        this.$ajax.get(url)
+        this.$ajax.get(`${url}?type=${2}`)
           .then(res => {
             res = _.map(res,val=>{
               switch (val.messageType)
               {
                 case 1:
-                  // val.messageType = 'System message'
-                  val.message = 'System message'
+                  val.message = 'Platform message'
                   break;
                 case 2:
-                  val.message = 'company message'
+                  val.message = 'Company message'
                   break;
                 case 3:
                   val.message = 'Pending task'
@@ -254,8 +262,6 @@
               }
                 return val;
             });
-
-
             this.tableData = res
           })
           .catch(() => {
@@ -278,7 +284,6 @@
     created(){
       this.getDataInfo()
       this.getMessageQuery()
-      //  this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
     }
   }
 </script>
@@ -296,6 +301,7 @@
   .spe-div{
     padding-top: 20px;
     overflow: hidden;
+    padding-bottom: 20px;
   }
   .spe-div .View{
     float: left;

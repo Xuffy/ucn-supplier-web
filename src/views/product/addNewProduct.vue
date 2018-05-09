@@ -1,6 +1,6 @@
 <template>
     <div class="add-product">
-        <div class="title">{{$i.productCn.basicInformation}}</div>
+        <div class="title">{{$i.product.basicInformation}}</div>
         <div class="addPic">
             <div class="name">
                 Pic:
@@ -57,33 +57,34 @@
                             </el-input-number>
                         </div>
                         <div v-if="v.showType==='dropdown'">
-                            <drop-down :defaultProps="defaultProps" class="speInputNumber" v-model="productForm[v.key]" :list="dropData" ref="dropDown"></drop-down>
+                            <drop-down class="speSelect" v-model="productForm[v.key]" :list="categoryList" :defaultProps="defaultProps"
+                                       ref="dropDown" :expandOnClickNode="false"></drop-down>
                         </div>
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item :label="$i.productCn.productVisible">
-                        <el-radio v-model="productForm.visibility" label="全网可见">{{$i.productCn.allSee}}</el-radio>
-                        <el-radio v-model="productForm.visibility" label="部分客户可见">{{$i.productCn.partSee}}</el-radio>
+                    <el-form-item :label="$i.product.productVisible">
+                        <el-radio v-model="productForm.visibility" label="全网可见">{{$i.product.allSee}}</el-radio>
+                        <el-radio v-model="productForm.visibility" label="部分客户可见">{{$i.product.partSee}}</el-radio>
 
                         <div v-if="!productForm.visibility">
                             <el-button
                                     @click="addCustomer"
                                     size="mini"
-                                    type="primary">{{$i.productCn.add}}</el-button>
+                                    type="primary">{{$i.product.add}}</el-button>
                             <el-table
                                     :data="tableData"
                                     style="width: 511px"
                                     border>
                                 <el-table-column
                                         prop="date"
-                                        :label="$i.productCn.customerName"
+                                        :label="$i.product.customerName"
                                         align="center"
                                         width="180">
                                 </el-table-column>
                                 <el-table-column
                                         prop="name"
-                                        :label="$i.productCn.customerCode"
+                                        :label="$i.product.customerCode"
                                         align="center"
                                         width="180">
                                 </el-table-column>
@@ -91,7 +92,7 @@
                                         prop="address"
                                         width="150"
                                         align="center"
-                                        :label="$i.productCn.action">
+                                        :label="$i.product.action">
                                 </el-table-column>
                             </el-table>
                         </div>
@@ -100,7 +101,7 @@
             </el-row>
         </el-form>
 
-        <div class="title">{{$i.productCn.customerInfo}}</div>
+        <div class="title">{{$i.product.customerInfo}}</div>
         <el-form :model="productForm" ref="productForm2" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <el-col style="height: 51px;" v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -144,15 +145,12 @@
                                     label="描述文字">
                             </el-input-number>
                         </div>
-                        <div v-if="v.showType==='dropdown'">
-                            <drop-down class="speInputNumber" v-model="productForm[v.key]" :list="dropData" ref="dropDown"></drop-down>
-                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
 
-        <div class="title">{{$i.productCn.priceInfo}}</div>
+        <div class="title">{{$i.product.priceInfo}}</div>
         <el-form :model="productForm" ref="productForm3" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-table
                     :data="productForm.price"
@@ -163,17 +161,17 @@
                         width="180">
                     <template slot-scope="scope">
                         <div v-if="scope.$index===0">
-                            {{$i.productCn.costPrice}}
+                            {{$i.product.costPrice}}
                         </div>
                         <div v-if="scope.$index===1">
-                            {{$i.productCn.quotedPrice}}
+                            {{$i.product.quotedPrice}}
                         </div>
                     </template>
                 </el-table-column>
                 <el-table-column
                         prop="fobCurrency"
                         align="center"
-                        :label="$i.productCn.fobCurrency"
+                        :label="$i.product.fobCurrency"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -191,7 +189,7 @@
                 <el-table-column
                         prop="fobPrice"
                         align="center"
-                        :label="$i.productCn.fobPrice"
+                        :label="$i.product.fobPrice"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -206,7 +204,7 @@
                 <el-table-column
                         prop="fobPort"
                         align="center"
-                        :label="$i.productCn.fobPort"
+                        :label="$i.product.fobPort"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -220,7 +218,7 @@
                 <el-table-column
                         prop="exwPrice"
                         align="center"
-                        :label="$i.productCn.exwPrice"
+                        :label="$i.product.exwPrice"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -235,7 +233,7 @@
                 <el-table-column
                         prop="exwCurrency"
                         align="center"
-                        :label="$i.productCn.exwCurrency"
+                        :label="$i.product.exwCurrency"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -253,7 +251,7 @@
                 <el-table-column
                         prop="otherIncoterm"
                         align="center"
-                        :label="$i.productCn.cifPrice"
+                        :label="$i.product.cifPrice"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -268,7 +266,7 @@
                 <el-table-column
                         prop="otherIncotermPrice"
                         align="center"
-                        :label="$i.productCn.cifCurrency"
+                        :label="$i.product.cifCurrency"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -286,7 +284,7 @@
                 <el-table-column
                         prop="otherIncotermArea"
                         align="center"
-                        :label="$i.productCn.cifArea"
+                        :label="$i.product.cifArea"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -300,7 +298,7 @@
                 <el-table-column
                         prop="otherIncotermCurrency"
                         align="center"
-                        :label="$i.productCn.dduPrice"
+                        :label="$i.product.dduPrice"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -315,7 +313,7 @@
                 <el-table-column
                         prop="otherIncotermCurrency"
                         align="center"
-                        :label="$i.productCn.dduCurrency"
+                        :label="$i.product.dduCurrency"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -333,7 +331,7 @@
                 <el-table-column
                         prop="otherIncotermCurrency"
                         align="center"
-                        :label="$i.productCn.dduArea"
+                        :label="$i.product.dduArea"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -347,7 +345,7 @@
             </el-table>
         </el-form>
 
-        <div class="title">{{$i.productCn.packingInfo}}</div>
+        <div class="title">{{$i.product.packingInfo}}</div>
         <el-form :model="productForm" ref="productForm4" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <el-col style="height: 51px;" v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -391,15 +389,12 @@
                                     label="描述文字">
                             </el-input-number>
                         </div>
-                        <div v-if="v.showType==='dropdown'">
-                            <drop-down class="speInputNumber" v-model="productForm[v.key]" :list="dropData" ref="dropDown"></drop-down>
-                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
 
-        <div class="title">{{$i.productCn.logisticInfo}}</div>
+        <div class="title">{{$i.product.logisticInfo}}</div>
         <el-form :model="productForm" ref="productForm5" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <el-col style="height: 51px;" v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -443,15 +438,12 @@
                                     label="描述文字">
                             </el-input-number>
                         </div>
-                        <div v-if="v.showType==='dropdown'">
-                            <drop-down class="speInputNumber" v-model="productForm[v.key]" :list="dropData" ref="dropDown"></drop-down>
-                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
 
-        <div class="title">{{$i.productCn.otherInfo}}</div>
+        <div class="title">{{$i.product.otherInfo}}</div>
         <el-form :model="productForm" ref="productForm6" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
 
@@ -526,9 +518,6 @@
                                 </el-input-number>
                             </div>
                         </div>
-                        <div v-if="v.showType==='dropdown'">
-                            <drop-down class="speInputNumber" v-model="productForm[v.key]" :list="dropData" ref="dropDown"></drop-down>
-                        </div>
                         <div v-if="v.showType==='date'">
                             <el-date-picker
                                     size="mini"
@@ -545,14 +534,13 @@
             </el-row>
         </el-form>
 
-        <div class="title">{{$i.productCn.attachment}}</div>
+        <div class="title">{{$i.product.attachment}}</div>
 
         <input style="display: none" id="pic" name="file" type="file" accept="image/*" @change="uploadPic">
 
         <div class="footBtn">
-            <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i.productCn.finish}}</el-button>
+            <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i.product.finish}}</el-button>
         </div>
-
 
         <el-dialog width="70%" title="收货地址" :visible.sync="addCustomerDialogVisible">
 
@@ -561,7 +549,7 @@
                 <el-row class="speZone">
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
 
-                        <el-form-item prop="name" :label="$i.productCn.customerName">
+                        <el-form-item prop="name" :label="$i.product.customerName">
                             <el-input
                                     size="mini"
                                     v-model="customerQuery.name"></el-input>
@@ -569,7 +557,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
 
-                        <el-form-item prop="name" :label="$i.productCn.customerType">
+                        <el-form-item prop="name" :label="$i.product.customerType">
                             <el-input
                                     size="mini"
                                     v-model="customerQuery.type"></el-input>
@@ -577,7 +565,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
 
-                        <el-form-item prop="name" :label="$i.productCn.customerCountry">
+                        <el-form-item prop="name" :label="$i.product.customerCountry">
                             <el-input
                                     size="mini"
                                     v-model="customerQuery.country"></el-input>
@@ -585,7 +573,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
 
-                        <el-form-item prop="name" :label="$i.productCn.customerCity">
+                        <el-form-item prop="name" :label="$i.product.customerCity">
                             <el-input
                                     size="mini"
                                     v-model="customerQuery.city"></el-input>
@@ -600,15 +588,12 @@
             </div>
         </el-dialog>
 
-
-
-
     </div>
 </template>
 
 <script>
     import upLoad from '@/components/common/upload/upload'
-    import imgHandler from '../product/bookmark/imgHandler'
+    import imgHandler from '../product/imgHandler'
     import {dropDownSingle} from '@/components/index'
 
     export default {
@@ -630,6 +615,21 @@
                         date: '2016-05-02',
                         name: '王小虎',
                         address: '上海市普陀区金沙江路 1518 弄'
+                    },
+                ],
+
+                categoryList:[
+                    {
+                        id:123,
+                        name:"系统分类",
+                        children:[],
+                        _disableClick:true,
+                    },
+                    {
+                        id:5125,
+                        name:"自己的分类",
+                        children:[],
+                        _disableClick:true,
                     },
                 ],
 
@@ -1215,46 +1215,6 @@
                 },
 
                 //dropDown Data
-                dropData:[
-                    {
-                        id: 1,
-                        label: '一级 1',
-                        children: [{
-                            id: 4,
-                            label: '二级 1-1',
-                            children: [
-                                {
-                                id: 9,
-                                label: '三级 1-1-1'
-                                }, {
-                                id: 10,
-                                label: '三级 1-1-2'
-                                }
-                            ]
-                        }]
-                    },
-                    {
-                        id: 2,
-                        label: '一级 2',
-                        children: [{
-                            id: 5,
-                            label: '二级 2-1'
-                        }, {
-                            id: 6,
-                            label: '二级 2-2'
-                        }]
-                    },
-                    {
-                        id: 3,
-                        label: '一级 3',
-                        children: [{
-                            id: 7,
-                            label: '二级 3-1'
-                        }, {
-                            id: 8,
-                            label: '二级 3-2'
-                        }]
-                    }],
                 defaultProps:{
                     label:'name',
                     children:'children'
@@ -1300,11 +1260,17 @@
                 document.getElementById('pic').click();
             },
 
+            //获取类别数据
             getCategoryId(){
-                this.$ajax.get(this.$apis.get_supply_category,{}).then(res=>{
-                    this.dropData=res;
+                this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
+                    this.categoryList[0].children=res;
                 }).catch(err=>{
-                    console.log(err)
+
+                });
+                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(res=>{
+                    this.categoryList[1].children=res;
+                }).catch(err=>{
+
                 });
             },
 
