@@ -1236,9 +1236,17 @@
             addCustomer(){
                 this.addCustomerDialogVisible=true;
                 this.loadingTable=true;
+
                 this.$ajax.post(this.$apis.get_sellerCustomer,this.customerQuery).then(res=>{
                     this.loadingTable=false;
-                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas);
+                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
+                        this.tableData.forEach(v=>{
+                            if(v.id===e.id.value){
+                                this.$set(e,'_disabled',true);
+                                this.$set(e,'_checked',true);
+                            }
+                        })
+                    });
                 }).catch(err=>{
                     this.loadingTable=false;
                 });
@@ -1284,7 +1292,8 @@
                     // }).catch(err=>{
                     //     this.disabledSubmit=false;
                     // });
-                }else{
+                }
+                else{
                     let param=Object.assign({},this.productForm);
                     _.mapObject(param,(e,k)=>{
                         if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
@@ -1304,9 +1313,15 @@
                     if(!param.readilyAvailable){
                         param.availableQty=0;
                     }
-                    if(!param.visibility){
+                    if(param.visibility){
                         param.ids=[];
+                    }else{
+                        param.ids=[];
+                        this.tableData.forEach(v=>{
+                            param.ids.push(v.id);
+                        });
                     }
+
                     this.$ajax.post(this.$apis.add_newSKU,param).then(res=>{
                         this.$message({
                             message: '新增成功',
@@ -1348,21 +1363,18 @@
                 console.log(e)
             },
             searchCustomer(){
-                // console.log(this.customerQuery)
-                // let country='';
-                // this.countryList.forEach((v,k)=>{
-                //     if(k===this.countryList.length-1){
-                //         country+=v;
-                //     }else{
-                //         country+=(v+',');
-                //     }
-                // });
-                //
-                // this.customerQuery.country=country;
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_sellerCustomer,this.customerQuery).then(res=>{
                     this.loadingTable=false;
-                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas);
+                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
+                        this.tableData.forEach(v=>{
+                            if(v.id===e.id.value){
+                                this.$set(e,'_disabled',true);
+                                this.$set(e,'_checked',true);
+                            }
+                        })
+                    });
+
                 }).catch(err=>{
                     this.loadingTable=false;
                 });
@@ -1376,19 +1388,27 @@
             },
             postData(){
                 let id=[];
-                this.selectList.forEach(v=>{
-                    id.push(v.id.value);
+                this.tableDataList.forEach(v=>{
+                    if(v._checked && !v._disabled){
+                        id.push(v.id.value);
+                    }
                 });
-                this.disableClickPost=true;
-                this.$ajax.post(this.$apis.get_sellerCustomerGroup,id).then(res=>{
-                    console.log(res)
-                    this.tableData=res;
+                if(id.length){
+                    this.disableClickPost=true;
+                    this.$ajax.post(this.$apis.get_sellerCustomerGroup,id).then(res=>{
+                        res.forEach(v=>{
+                            this.tableData.push(v);
+                        })
+                        this.addCustomerDialogVisible=false;
+                        this.disableClickPost=false;
+                    }).catch(err=>{
+                        this.addCustomerDialogVisible=false;
+                        this.disableClickPost=false;
+                    });
+                }else{
                     this.addCustomerDialogVisible=false;
-                    this.disableClickPost=false;
-                }).catch(err=>{
-                    this.addCustomerDialogVisible=false;
-                    this.disableClickPost=false;
-                });
+                }
+
             },
 
             /**
