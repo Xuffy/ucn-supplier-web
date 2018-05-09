@@ -14,7 +14,7 @@
             </el-col>
             <el-col :span="12">
                 <el-form-item  label="Password">
-                    <el-input style="max-width:140px;" type="password"></el-input>
+                    <el-input style="max-width:140px;" type="password" auto-complete="off"></el-input>
                     <span  @click="dialogVisibleO = true">Replace</span>
                     <!-- <el-button style=" " @click="dialogVisible = true">Replace</el-button> -->
                 </el-form-item>
@@ -25,19 +25,19 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item :label="$i.setting.birthday">
+                <el-form-item :label="$i.setting.birthday"  v-if="isVisible">
                     <div style="display:flex;max-width:200px;">
                         <el-date-picker type="date" placeholder="选择日期" value-format="timestamp" v-model="form.birthday"  style="max-width:300px;"></el-date-picker>
                     </div>
                 </el-form-item>
             </el-col>
-            <el-col :span="12">
-                <el-form-item prop="department" :label="$i.setting.department" >
+            <el-col :span="12" >
+              <el-form-item prop="department" :label="$i.setting.department" v-if="isVisible">
                   <el-input style="max-width:200px"v-model="form.deptName"  disabled="disabled"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item prop="language" :label="$i.setting.language">
+                <el-form-item prop="language" :label="$i.setting.language"  v-if="isVisible">
                     <el-select v-model="form.lang" placeholder="请选择" style="width: 200px">
                         <el-option
                                 v-for="item in language"
@@ -49,13 +49,13 @@
                     </el-select>
                 </el-form-item>
             </el-col>
-            <el-col :span="12">
-                <el-form-item prop="role" :label="$i.setting.role">
+            <el-col :span="12" >
+                <el-form-item prop="role" :label="$i.setting.role" v-if="isVisible">
                   <el-input style="max-width:200px" v-model="form.roleName" disabled="disabled"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item prop="gender" :label="$i.setting.gender">
+                <el-form-item prop="gender" :label="$i.setting.gender"  v-if="isVisible">
                     <el-select v-model="form.gender" placeholder="please input" style="width: 200px">
                         <el-option
                                 v-for="item in genderOptions"
@@ -105,7 +105,6 @@ export default {
             callback(new Error('请输入密码'));
             } else {
             if (this.modifyPass.comfirmNewPassword.length !== '') {
-                console.log(this.modifyPass.comfirmNewPassword)
                 this.$refs.modifyPass.validateField('comfirmNewPassword');
             }
             callback();
@@ -130,7 +129,7 @@ export default {
               birthday:'',
               lang:'',
               deptName:'',
-              roleName:'hh',
+              roleName:'',
               deptId:'',
               roleId:''
             },
@@ -170,10 +169,18 @@ export default {
             },
             dialogVisibleO:false,
             formLabelWidth: '140px',
-            language:[]
+            language:[],
+            isVisible:false
         };
     },
     methods: {
+        getUserPrivilege(){
+          this.$ajax.get(this.$apis.get_user_privilege)
+            .then(res => {
+              //用户类型：0 管理员，1 普通用户
+              res.userType === this.isVisible
+            })
+        },
         postLanguage(){
             this.$ajax.post(this.$apis.POST_CODE_PART,['LANGUAGE'])
             .then(res => {
@@ -212,14 +219,9 @@ export default {
                 });
                 return false;
             }
-            console.log(this.modifyPass)
             this.$ajax.put(this.$apis.put_user_profile_password,this.modifyPass)
             .then(res => {
-              console.log(res)
-                // this.$message({
-                //     type: 'success',
-                //     message: '修改成功!'
-                // });
+              this.$message({type: 'success', message: '修改成功!'});
             });
         },
         handleClose(){
@@ -227,9 +229,10 @@ export default {
         }
     },
     created(){
-       this.getUserProfile()
-       this.postLanguage()
-      console.log
+       this.getUserPrivilege();
+       this.getUserProfile();
+       this.postLanguage();
+
     }
 }
 </script>
@@ -244,4 +247,7 @@ export default {
     span {
         cursor:pointer;
     }
+  .dialog-footer{
+    padding-top: 30px;
+  }
 </style>

@@ -1,5 +1,8 @@
 {
     "title": "Title",
     "content": "Content",
-    "sendTime": "Send time"
-}
+    "sendTime": "Send time",
+    "read": "read",
+    "sender": "sender"
+  }
+  

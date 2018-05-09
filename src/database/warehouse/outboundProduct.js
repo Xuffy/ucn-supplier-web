@@ -34,14 +34,15 @@ export default {
             }
         ]
     },
-    outboundSkuTotalQty:{
+    outboundSkuTotalQty:{   //出库产品总数量
         key:'outboundSkuTotalQty',
         showType:'number',
         computed:true
     },
     outboundOutCartonTotalQty:{
         key:'outboundOutCartonTotalQty',        //需要传的参数
-        showType:'number'
+        showType:'number',
+        isNeed:true
     },
     outboundSkuTotalVolume:{
         key:'outboundSkuTotalVolume',
@@ -58,27 +59,24 @@ export default {
         showType:'number',
         computed:true
     },
-    outerCartonSkuQty:{
+    outerCartonSkuQty:{         //外箱产品数
         key:'outerCartonSkuQty',
-        showType:'number',
     },
     outerCartonVolume:{
         key:'outerCartonVolume',
-        showType:'number',
     },
     outerCartonGrossWeight:{
         key:'outerCartonGrossWeight',
-        showType:'number',
     },
     outerCartonNetWeight:{
         key:'outerCartonNetWeight',
-        showType:'number',
     },
     inboundDate:{
         key:'inboundDate',
-
     },
-    //仓储天数
+    inventoryDays:{
+        key:'inventoryDays'
+    },
     inventorySkuPrice:{        //需要传的参数
         key:'inventorySkuPrice',
         showType:'number',

@@ -4,5 +4,6 @@
   "outboundSkuTotalNetWeight":"出库产品总净重",
   "outboundSkuTotalGrossWeight":"出库产品总毛重",
   "inventorySkuPrice":"仓储单价",
-  "inventoryServiceFee":"仓储费用"
+  "inventoryServiceFee":"仓储费用",
+  "inventoryDays":"仓储天数"
 }

@@ -29,7 +29,8 @@ export default {
     outboundSkuTotalQty:{
         key:'outboundSkuTotalQty',
         belong:'basicInfo',
-        showType:'number',
+        showType:'input',
+        disabled:true
     },
     timeZone:{
         key:'timeZone',
