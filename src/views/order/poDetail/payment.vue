@@ -291,6 +291,8 @@
             }) {
                 if (row[this.columns[11].prop] === -1) {
                     return 'warning-row';
+                }else  if (row[this.columns[11].prop] === 20) {
+                    return 'light-row';
                 }
                 return '';
             },
@@ -541,6 +543,9 @@
 <style>
     .el-table .warning-row {
         background: rgba(237, 237, 237, 0.5);
+    }
+    .el-table .light-row {
+        background: #f0f9eb;
     }
 
 </style>

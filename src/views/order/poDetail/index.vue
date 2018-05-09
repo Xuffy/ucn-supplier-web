@@ -44,7 +44,11 @@
 <!--         caculate-->
          <v-caculate :disabled=true ref='caculate' ></v-caculate>
 <!--         底部固定按钮区域-->
-         <div class="footer">
+        <div class="footer" v-if="orderStatus!='3'">
+             <el-button  @click='acceptOrder' v-authorize="'ORDER:DETAIL:CONFIRM'">接受</el-button>
+             <el-button @click='cancelOrder' v-authorize="'ORDER:DETAIL:CANCEL'">拒绝</el-button>
+        </div>
+         <div class="footer" v-else>
              <div class="footer_button" v-if='statusModify'>
                  <el-button  @click='modify' v-authorize="'ORDER:DETAIL:MODIFY'">{{$i.common.modify}}</el-button>
                  <el-button @click='confirm' v-authorize="'ORDER:DETAIL:CONFIRM'">{{$i.common.confirm}}</el-button>
@@ -91,6 +95,7 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
     import responsibility from '../creatOrder/responsibility.vue'
     import basicinfo from '../creatOrder/basicInfo.vue'
     import VProduct from '@/views/product/addProduct';
@@ -321,6 +326,9 @@
             }
         },
         methods: {
+               ...mapActions([
+                'setRecycleBin','setDraft'
+            ]),
             confirm() {
                 this.$ajax.post(this.$apis.post_confirm, {
                     ids: [this.orderId]
@@ -346,6 +354,17 @@
             },
             onAction(item, type) {
                 //                console.log(item, type)
+            },
+            //.......接受订单
+            acceptOrder(){  
+                return console.log('in')
+                this.$ajax.post(this.$apis.post_accept, {
+                    ids: [this.orderId]
+                }).then(res => {
+                    console.log(res)
+                }).catch(res => {
+                    console.log(res)
+                })
             },
             //........取消订单
             cancelOrder() {
@@ -420,7 +439,7 @@
                         break;
                     case 'detail':
                         this.$windowOpen({
-                            url: '/product/sourcingDetail',
+                            url: '/product/overview',
                             params: {
                                 id: data.skuId.value
                             }
@@ -673,6 +692,14 @@
         created() {
             this.get_data()
             this.submitData.id = this.$route.query.id;
+            this.setRecycleBin({
+                name: 'orderRecycleBin',
+                show: true
+            });
+            this.setDraft({
+                name: 'orderDraft',
+                show: true
+            });
         },
         watch: {
             newProductTabData: {

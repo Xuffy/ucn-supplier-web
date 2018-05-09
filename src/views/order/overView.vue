@@ -26,7 +26,7 @@
                 <el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">下载({{selectedDate.length}})</el-button>
 <!--                <el-button @click='creat_order' :disabled='!(selectedDate.length==1)' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.common.createOrder)}}</el-button>-->
 <!--                 <el-button :disabled='prodisabled' @click='finish'>finish</el-button>-->
-                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">删除</el-button>
+<!--                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">删除</el-button>-->
             </div>
             <div class="viewBy">
                 <span>浏览方式&nbsp</span>
@@ -101,7 +101,7 @@
                     skuCode: '',
                     status: '',
                     view: 1, //view by的按钮组
-                    ps: 10,
+                    ps: 50,
                     pn: 1,
                     tc: 0
                 },
@@ -232,11 +232,19 @@
             },
             handleSizeChange(val) {
                 this.params.pn = val;
-                this.getdata()
+                 if (this.params.view == 1) {
+                            this.getdata(this.$db.order.overview)
+                        } else {
+                            this.getdata(this.$db.order.overviewBysku)
+                        }
             },
             pageSizeChange(val) {
                 this.params.ps = val;
-                this.getdata()
+                if (this.params.view == 1) {
+                            this.getdata(this.$db.order.overview)
+                        } else {
+                            this.getdata(this.$db.order.overviewBysku)
+                        }
             },
         },
         computed: {

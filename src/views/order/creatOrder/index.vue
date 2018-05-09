@@ -89,6 +89,7 @@
 
 
 <script>
+    import { mapActions } from 'vuex'
     /* this.$ref.basicInfo*/
     import VResponsibility from './responsibility.vue'
     import VBasicinfo from './basicInfo.vue'
@@ -312,6 +313,9 @@
             }
         },
         methods: {
+               ...mapActions([
+                'setRecycleBin','setDraft'
+            ]),
             addProduct() {
                 let arr = [];
                 _.map(this.tabData, item => {
@@ -642,6 +646,14 @@
             }
         },
         created() {
+            this.setRecycleBin({
+                name: 'orderRecycleBin',
+                show: true
+            });
+            this.setDraft({
+                name: 'orderDraft',
+                show: true
+            });
             //判断从哪个地方带来的数据
             let fromData = this.$route.query.type
             switch (fromData) {
