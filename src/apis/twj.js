@@ -1,8 +1,9 @@
 export default {
   //payment
-  post_ledgerPage:['/ledger/page','BASE_BJ_p','UPURCHASE_URL'],
-  post_payment_list:['/payment/list/{orderNo}/{orderType}','UPURCHASE_URL','UPURCHASE_URL'],
-  post_payment_accept:['/payment/accept/{id}','UPURCHASE_URL','UPURCHASE_URL'],
+  post_ledgerPage:['/ledger/page','USUPPLY_URL','USUPPLY_URL'],
+  post_payment_list:['/payment/list/{orderNo}/{orderType}','USUPPLY_URL','USUPPLY_URL'],
+  post_payment_accept:['/payment/accept/{id}','USUPPLY_URL','USUPPLY_URL'],
+  post_payment_dunning:['/payment/dunning/{orderNo}/{orderType}','USUPPLY_URL','USUPPLY_URL'],
   //message
   post_companymessage_query:['/companymessage/query','UMESSAGE_URL','UMESSAGE_URL'],
   post_systemmessage_query:['/systemmessage/query','UMESSAGE_URL','UMESSAGE_URL'],
@@ -21,8 +22,8 @@ export default {
   put_user_profile:['/user/profile','UUSER_URL','UUSER_URL'],
   put_user_profile_password:['/user/profile/password','UUSER_URL','UUSER_URL'],
   //qc order
-  post_qc_page:['/qc/page','UPURCHASE_URL','UPURCHASE_URL'],
-  post_qc_detail_page: ['/qc/detail/page','UPURCHASE_URL','UPURCHASE_URL'],
+  post_qc_page:['/qc/page','USUPPLY_URL','USUPPLY_URL'],
+  post_qc_detail_page: ['/qc/detail/page','USUPPLY_URL','USUPPLY_URL'],
 
   //元数据
   POST_CODE_PART: ['/code/part', 'UMETA_URL','UMETA_URL'],
@@ -30,12 +31,12 @@ export default {
   get_currency_all: ['/currency/all', 'UMETA_URL','UMETA_URL'],
 
   //warehouse
-  post_warehouse_page: ['/warehouse/overview/page','BASE_HSM_W','UPURCHASE_URL'],
+  post_warehouse_page: ['/warehouse/overview/page','BASE_HSM_W','USUPPLY_URL'],
   // post_warehouse_page: ['/warehouse/overview/page','UWAREHOUSE_URL']
-  get_qc_getById: ['/qc/getById','USERVICE_URL','USERVICE_URL'],
-  post_qc_result_save: ['/qc/result/save','USERVICE_URL','USERVICE_URL'],
+  get_qc_getById: ['/qc/getById','USUPPLY_URL','USUPPLY_URL'],
+  post_qc_result_save: ['/qc/result/save','USUPPLY_URL','USUPPLY_URL'],
 
   //user
-  get_user_list: ['/user/list','UPURCHASE_URL','UUSER_URL'] //获取当前登录用户所在企业下所有用户信息
-
+  get_user_list: ['/user/list','UUSER_URL','UUSER_URL'],//获取当前登录用户所在企业下所有用户信息
+  get_user_privilege: ['/user/privilege','UUSER_URL','UUSER_URL']
 }

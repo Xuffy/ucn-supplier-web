@@ -6,6 +6,8 @@
         <div class="body">
           <v-table
             :data="tabData"
+            hide-filter-value
+            :height="450"
           />
         </div>
 
@@ -31,7 +33,7 @@
             </el-input>
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="postAddMessage()">发 布</el-button>
-                <el-button @click="dialogVisible = false">取消</el-button>
+                <el-button @click="cencl()">取消</el-button>
             </span>
         </el-dialog>
     </div>
@@ -94,6 +96,10 @@
                 //     .catch(_ => {});
                 done();
             },
+          cencl(){
+            this.dialogVisible = false
+            this.params = {}
+          },
           getMessageList(){
             let url, column;
             this.tabLoad = true;
@@ -105,7 +111,12 @@
             };
             this.$ajax.post(url,this.pData)
               .then(res => {
-                this.tabData = this.$getDB(column, res.datas);
+                this.tabData = this.$getDB(column, res.datas,item=>{
+                  _.mapObject(item, val => {
+                    val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'))
+                    return val
+                  })
+                });
                 this.tabLoad = false;
               })
               .catch(() => {
@@ -121,7 +132,11 @@
             };
             this.$ajax.post(url, this.params)
             .then(res => {
-              this.$message('发送成功');
+              this.$message({
+                message: '添加成功',
+                type: 'success',
+              });
+              this.params = {}
               this.getMessageList()
             })
             .catch(() => {
