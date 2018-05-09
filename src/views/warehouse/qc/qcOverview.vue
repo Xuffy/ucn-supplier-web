@@ -8,7 +8,7 @@
                 <span>{{$i.warehouse.status}}</span>
                 <el-radio-group class="radioGroup" @change="changeStatus" v-model="qcOrderConfig.qcStatusDictCode" size="mini">
                     <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
-                    <el-radio-button v-for="v in qcStatusOption" :key="v.id" :label="v.code">{{v.label}}</el-radio-button>
+                    <el-radio-button v-for="v in qcStatusOption" :key="v.id" :label="v.code">{{v.code}}</el-radio-button>
                 </el-radio-group>
                 <select-search
                         class="search"
