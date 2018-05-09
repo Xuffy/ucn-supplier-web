@@ -92,7 +92,7 @@
 
 <script>
     import responsibility from '../creatOrder/responsibility.vue'
-    import basicinfo from '../creatOrder/basicinfo.vue'
+    import basicinfo from '../creatOrder/basicInfo.vue'
     import VProduct from '@/views/product/addProduct';
     import attchment from '../creatOrder/attachment'
     import VCaculate from '../creatOrder/caculate'

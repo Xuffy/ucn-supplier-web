@@ -91,7 +91,7 @@
 <script>
     /* this.$ref.basicInfo*/
     import VResponsibility from './responsibility.vue'
-    import VBasicinfo from './basicinfo.vue'
+    import VBasicinfo from './basicInfo.vue'
     import VAttchment from './attachment'
     import VCaculate from './caculate'
     import VDialogEdit from './dialogEdit'
