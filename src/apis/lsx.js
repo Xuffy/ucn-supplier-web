@@ -87,7 +87,6 @@ export default {
     add_outbound:['/outbound/add','BASE_SELL','USUPPLY_URL'],
     get_outboundProductData:['/inbound/sku/queryForOutbound','BASE_SELL','USUPPLY_URL'],
 
-
     /**
      * buyer Warehouse
      * */
