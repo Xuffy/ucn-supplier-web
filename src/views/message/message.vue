@@ -200,7 +200,12 @@
                 _.mapObject(item, val => {
                   val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'))
                   return val
-                })
+                });
+                if(item.isRead.value){
+                  item.isRead.value = '已读'
+                }else{
+                  item.isRead.value = '未读'
+                }
               });
             this.tabLoad = false;
             this.searchLoad = false;
