@@ -1,7 +1,7 @@
 <template>
     <div class="SupplierSourcing">
             <div class="title">
-             {{$i.supplier.supplierSourcing}}
+             客户总览
         </div>
 <!--        搜索条件-->
             <div style='marginTop:20px;'>
@@ -127,7 +127,7 @@
                     "name": "",
                     "payment": '',
                     "pn": 1,
-                    "ps": 10,
+                    "ps": 50,
                      tc: 0
                     //                    "sorts": [{
                     //                        "nativeSql": true,
