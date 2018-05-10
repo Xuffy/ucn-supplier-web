@@ -43,6 +43,9 @@ export default {
     get_sellerCustomer:['/supplier/sku/setting/listCustomers','BASE_SELL','USUPPLY_URL'],
     get_sellerCustomerGroup:['/supplier/sku/setting/getCustomerByIds','BASE_SELL','USUPPLY_URL'],
     update_buyerProductDetail:['/sku/{id}','BASE_SELL','USUPPLY_URL'],
+    get_sellerProductList:['/sku/listSkuByParams','BASE_SELL','USUPPLY_URL'],
+
+
 
 
     //product buyer

@@ -106,12 +106,18 @@
             },
 
             btnClick(e){
-                this.$windowOpen({
-                    url:'/sellerWarehouse/inboundDetail',
-                    params:{
-                        id:e.id.value
-                    }
-                })
+                console.log(e)
+                if(e.serviceProviderIsLoginUser.value){
+                    //跳9.2.3
+                }else{
+                    //跳9.2.1
+                    this.$windowOpen({
+                        url:'/warehouse/qcOrder',
+                        params:{
+                            id:e.id.value
+                        }
+                    })
+                }
             },
 
             changeChecked(e){
