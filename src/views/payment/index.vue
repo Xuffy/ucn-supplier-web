@@ -150,12 +150,6 @@
               this.params.conditions.orderEntryEndDt = this.date[1]
               this.getList()
             },
-            // params: {
-            //   handler(val, oldVal) {
-            //     this.getList();
-            //   },
-            //   deep: true
-            // }
         },
         methods:{
             onFilterValue(val) {
@@ -209,8 +203,6 @@
                     // }
                     return item;
                   });
-
-                  console.log(this.tableDataList)
                 })
                 .catch((res) => {
                   this.tabLoad = false;
@@ -219,19 +211,17 @@
 
             },
             action(item, type) {
-                console.log(item)
                 switch(type) {
-                    case 'detail':
+                    case '1':
+                      this.urgingPayment(item);
+                      break;
+                    case '2':
                         this.detail(item);
-                        break;
-                    case 'urging payment':
-                        this.urgingPayment(item);
                         break;
                 }
             },
             detail(item) {
                 //点击进入对应po detail 10、lo detail 30、QC order detail 20页面
-                console.log(item)
                 if(item.orderType.value == 10){
                     this.$router.push({
                         path: '/',
@@ -256,20 +246,21 @@
                 }
             },
             urgingPayment(item) {
-                console.log(item)
-                const count = 0
-                // ① 催款，此操作会给对应付款人发一条提示付款的信息，在对方的workbench显示；
-                // ② 当待付款金额不为0时，催款按钮可操作；
-                // ③ 当待付金额为0时，催款按钮为禁用，不可操作；
-                // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
-                // if(item.waitPayment.value != 0){
-                //
-                //
-                // }
+              // ① 催款，此操作会给对应付款人发一条提示付款的信息，在对方的workbench显示；
+              // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
+              const parmes = {
+                orderNo:item.orderNo.value,
+                orderType:item.orderType.value
+              }
+              this.$ajax.post(this.$apis.post_payment_dunning,parmes)
+              .then(res => {
+                this.$message('已催促采购商对应的付款人付款');
+              })
             },
             setButtons(item){
                 if(_.findWhere(item, {'key': 'waitPayment'}).value + '' === '0') return [{label: 'urging payment', type: '1',disabled:true},{label: 'detail', type: '2'}]
                 return [{label: 'urging payment', type: '1',disabled:false},{label: 'detail', type: '2'}];
+
             },
             handleSizeChange(val) {
                 this.params.ps = val;
@@ -277,7 +268,7 @@
 
         },
         created(){
-           this.viewByStatus = '';
+           this.viewByStatus = '1';
            this.getList();
         },
     }

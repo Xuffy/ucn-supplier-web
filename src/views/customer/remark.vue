@@ -10,22 +10,22 @@
                 style="width: 100%">
             <el-table-column
                     prop="remark"
-                    :label="$i.product.remark"
+                    label="备注"
                     align="center">
             </el-table-column>
             <el-table-column
                     prop="updateName"
-                    :label="$i.product.operator"
+                    label="操作人"
                     align="center">
             </el-table-column>
             <el-table-column
                     prop="updateDt"
-                    :label="$i.product.time"
+                    label="操作时间"
                     align="center">
             </el-table-column>
             <el-table-column
                     fixed="right"
-                    :label="$i.product.action"
+                    label="操作"
                     align="center">
                 <template slot-scope="scope">
                     <el-button @click="editRemark(scope.$index, scope.row)" type="text" size="small">{{$i.product.modify}}</el-button>

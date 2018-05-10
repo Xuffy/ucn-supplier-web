@@ -1,4 +1,7 @@
 export default {
+    id:{
+        _hide:true
+    },
     code:{},
     name:{},
     shortName:{},

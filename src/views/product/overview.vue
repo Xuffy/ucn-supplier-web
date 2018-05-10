@@ -66,11 +66,11 @@
         <div class="footer">
             <div class="btns">
                 <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
-                <el-button :disabled="disabledDeleteGoods" @click="setUp">{{$i.product.setUp}}</el-button>
-                <el-button :disabled="disabledDeleteGoods" @click="setDown">{{$i.product.setDown}}</el-button>
+                <el-button :disabled="disabledDeleteGoods" :loading="disableClickSetUp" @click="setUp">{{$i.product.setUp}}</el-button>
+                <el-button :disabled="disabledDeleteGoods" :loading="disableClickSetDown" @click="setDown">{{$i.product.setDown}}</el-button>
                 <el-button>{{$i.product.downloadSelected}}({{selectList.length?selectList.length:'All'}})</el-button>
                 <el-button @click="upload">{{$i.product.uploadProduct}}</el-button>
-                <el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger">{{$i.product.delete}}</el-button>
+                <!--<el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger">{{$i.product.delete}}</el-button>-->
             </div>
 
             <v-table
@@ -120,6 +120,8 @@
                 btnInfo:this.$i.product.advanced,     //按钮默认文字显示
                 disabledSearch:false,                 //是否禁止搜索，默认false
                 disabledDeleteGoods:true,             //默认没有选中商品的时候是不能点击删除的
+                disableClickSetUp:false,
+                disableClickSetDown:false,
                 //表格字段绑定
                 productForm: {
                     categoryId: '',
@@ -149,7 +151,7 @@
                     outerCartonMethodEnLike: "",
                     pn: 1,
                     ps: 50,
-                    readilyAvailable: true,
+                    readilyAvailable: null,
                     recycle: false,             //recycleBin里传true,其他地方传false
                     //初始搜索的时候不传，当有筛选条件之后再传
                     // sorts: [
@@ -298,34 +300,54 @@
 
             //设为上架
             setUp(){
-                let id=[];
-                this.selectList.forEach(v=>{
-                    id.push(v.id.value);
-                });
-                this.$ajax.post(this.$apis.set_sellerProductPutAway,id).then(res=>{
-                    this.getData();
-                    this.$message({
-                        message: '上架成功',
-                        type: 'success'
+                // this.$confirm('确认上架选中产品?', '提示', {
+                //     confirmButtonText: '确定',
+                //     cancelButtonText: '取消',
+                //     type: 'warning'
+                // }).then(() => {
+                    let id=[];
+                    this.selectList.forEach(v=>{
+                        id.push(v.id.value);
                     });
-                }).catch(err=>{
-
-                });
+                    this.disableClickSetUp=true;
+                    this.$ajax.post(this.$apis.set_sellerProductPutAway,id).then(res=>{
+                        this.getData();
+                        this.$message({
+                            message: '上架成功',
+                            type: 'success'
+                        });
+                        this.disableClickSetUp=false;
+                    }).catch(err=>{
+                        this.disableClickSetUp=false;
+                    });
+                // }).catch(() => {
+                //
+                // });
             },
 
             //设为下架
             setDown(){
-                let id=[];
-                this.selectList.forEach(v=>{
-                    id.push(v.id.value);
-                });
-                this.$ajax.post(this.$apis.set_sellerProductPutDown,id).then(res=>{
-                    this.getData();
-                    this.$message({
-                        message: '下架成功',
-                        type: 'success'
+                this.$confirm('确定下架选中产品?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let id=[];
+                    this.selectList.forEach(v=>{
+                        id.push(v.id.value);
                     });
-                }).catch(err=>{
+                    this.disableClickSetDown=true;
+                    this.$ajax.post(this.$apis.set_sellerProductPutDown,id).then(res=>{
+                        this.getData();
+                        this.$message({
+                            message: '下架成功',
+                            type: 'success'
+                        });
+                        this.disableClickSetDown=false;
+                    }).catch(err=>{
+                        this.disableClickSetDown=false;
+                    });
+                }).catch(() => {
 
                 });
             },
@@ -351,6 +373,7 @@
                     if(hasUp){
                         this.partDialogVisible=true;
                     }else{
+                        //直接把选中的产品删除
                         this.$message({
                             message: '删除成功，被删除的产品可在回收站中找回',
                             type: 'success'
@@ -377,6 +400,7 @@
                     });
                     // this.partDialogVisible=false;
                 }else{
+                    console.log(id,'???')
                     // this.$ajax.post(this.$apis.set_sellerProductPutDown,id).then(res=>{
                     //     this.getData();
                     // }).catch(err=>{

@@ -8,8 +8,8 @@ export default {
 
     get_productCategory:['/purchase/sys/category','BASE_BUY','UPURCHASE_URL'],
     get_productDetail: ['/sku/{id}', 'BASE_SELL','USUPPLY_URL'],
-    delete_product: ['/sku/{id}/delete', 'BASE_CS','USUPPLY_URL'],
-    change_productStatus: ['/sku/{id}/status', 'BASE_CS','USUPPLY_URL'],
+    delete_product: ['/sku/{id}/delete', 'BASE_SELL','USUPPLY_URL'],
+    change_productStatus: ['/sku/{id}/status', 'BASE_SELL','USUPPLY_URL'],
     get_productList: ['/sku/listSkuByParams', 'BASE_SELL','USUPPLY_URL'],
     get_supplierWhole: ['/supplierWhole', 'BASE_CS','USUPPLY_URL'],
     add_address: ['/supplier/address', 'BASE_CS','USUPPLY_URL'],
@@ -41,8 +41,11 @@ export default {
     set_sellerProductPutDown:['/sku/soldout','BASE_SELL','USUPPLY_URL'],
     delete_sellerProduct:['/sku/deleteAll','BASE_SELL','USUPPLY_URL'],
     get_sellerCustomer:['/supplier/sku/setting/listCustomers','BASE_SELL','USUPPLY_URL'],
-    get_sellerCustomerOne:['/supplier/sku/setting/listCustomers/{id}','BASE_SELL','USUPPLY_URL'],
+    get_sellerCustomerGroup:['/supplier/sku/setting/getCustomerByIds','BASE_SELL','USUPPLY_URL'],
     update_buyerProductDetail:['/sku/{id}','BASE_SELL','USUPPLY_URL'],
+    get_sellerProductList:['/sku/listSkuByParams','BASE_SELL','USUPPLY_URL'],
+
+
 
 
     //product buyer
@@ -87,7 +90,6 @@ export default {
     add_outbound:['/outbound/add','BASE_SELL','USUPPLY_URL'],
     get_outboundProductData:['/inbound/sku/queryForOutbound','BASE_SELL','USUPPLY_URL'],
 
-
     /**
      * buyer Warehouse
      * */
@@ -105,6 +107,9 @@ export default {
     POST_REWORK_HANDLE: ['/qc/rework/handle', 'USUPPLY_URL', 'USUPPLY_URL'],
     get_qcDetail:['/qc/getById','BASE_BUY','UPURCHASE_URL'],
     get_qcProductInfo:['/qc/detail/page','BASE_BUY','UPURCHASE_URL'],
+    get_buyerWarehouseOverview:['/warehouse/overview/page','BASE_BUY','UPURCHASE_URL'],
+    set_qcResultConfirm:['/qc/result/confirm','BASE_BUY','UPURCHASE_URL'],
+
 
 
     /**

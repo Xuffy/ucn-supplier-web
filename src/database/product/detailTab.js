@@ -70,12 +70,14 @@ export default {
         type: 'String',
         showType:'input',
         belongTab:'basicInfo',
+        isHide:true
     },
     supplierNo:{
         key:'supplierCode',
         type: 'String',
         showType:'input',
         belongTab:'basicInfo',
+        isHide:true
     },
     unit:{
         key:'unit',
