@@ -8,10 +8,10 @@
                 <div class="basic-info">
                     <div class="basesic-hd">
                         <h5>{{ $i.common.basicInfo }}</h5>
-                        <el-checkbox-group v-model="ChildrenCheckList">
+                        <!-- <el-checkbox-group v-model="ChildrenCheckList">
                             <el-checkbox :label="0">{{ $i.common.hideTheSame }}</el-checkbox>
                             <el-checkbox :label="1">{{ $i.common.highlightTheDifferent }}</el-checkbox>
-                        </el-checkbox-group>
+                        </el-checkbox-group> -->
                     </div>
                     <div class="tab-msg-wrap">
                         <v-table 
@@ -577,7 +577,7 @@
                             if(json[k] === 'fieldRemark') {
                                 json[k] = jsons;
                             } else {
-                                json[k] = item[k].dataBase?item[k].dataBase:item[k].value;
+                                json[k] = item[k].dataBase||item[k].dataBase===0?item[k].dataBase:item[k].value;
                             }
                         };
                         arr.push(json);
