@@ -463,7 +463,7 @@
                 else{
                     let url='';
                     if(this.type==='product'){
-                        url=this.$apis.get_buyerProductList;
+                        url=this.$apis.get_sellerProductList;
                     }else if(this.type==='bookmark'){
                         url=this.$apis.get_buyerBookmarkList;
                     }

@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import Router from 'vue-router';
 import config from 'service/config';
-import Layout from 'components/Layout/index.vue';
+import Layout from 'components/layout/index.vue';
 import {Notification, Message} from 'element-ui';
 import {localStore, sessionStore} from 'service/store';
 
@@ -103,9 +103,6 @@ export const routerMap = [
       redirect: '/order/overview',
       meta: {name: 'Order'},
       noDropdown: true,
-      meta: {
-        name: '订单'
-      },
       children: [
         {
           path: 'overview',
@@ -519,22 +516,22 @@ export const routerMap = [
           component: () => import('../views/warehouse/qc/qcOverview'),
         },
         {
-          path: 'qcOrderDetail',
-          name: 'qc Order Detail',
+          path: 'qcOrder',
+          name: 'qc Order',
           hidden:true,
           meta: {
-            name: 'qcOrderDetail'
+            name: 'qc Order'
           },
-          component: () => import('../views/warehouse/qc/QCOrderDetail')
+          component: () => import('../views/warehouse/qc/qcOrder')
         },
         {
-          path: 'qcDetail',
-          name: 'qc Detail',
+          path: 'qcOrderService',
+          name: 'qc Order Service',
           hidden:true,
           meta: {
-            name: 'qcDetail'
+            name: 'qc Order Service'
           },
-          component: () => import('../views/warehouse/qc/editQcOrderOverview')
+          component: () => import('../views/warehouse/qc/qcOrderService')
         }
       ]
     },

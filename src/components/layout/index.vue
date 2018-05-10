@@ -20,8 +20,8 @@
 </template>
 
 <script>
-  import VHeader from './Header'
-  import VMenu from './Menu'
+  import VHeader from './header'
+  import VMenu from './menu'
   import NavBar from './navBar'
   import {VAddQuickLink, VMessageBoard} from '@/components/index'
 

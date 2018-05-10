@@ -8,8 +8,8 @@ export default {
 
     get_productCategory:['/purchase/sys/category','BASE_BUY','UPURCHASE_URL'],
     get_productDetail: ['/sku/{id}', 'BASE_SELL','USUPPLY_URL'],
-    delete_product: ['/sku/{id}/delete', 'BASE_CS','USUPPLY_URL'],
-    change_productStatus: ['/sku/{id}/status', 'BASE_CS','USUPPLY_URL'],
+    delete_product: ['/sku/{id}/delete', 'BASE_SELL','USUPPLY_URL'],
+    change_productStatus: ['/sku/{id}/status', 'BASE_SELL','USUPPLY_URL'],
     get_productList: ['/sku/listSkuByParams', 'BASE_SELL','USUPPLY_URL'],
     get_supplierWhole: ['/supplierWhole', 'BASE_CS','USUPPLY_URL'],
     add_address: ['/supplier/address', 'BASE_CS','USUPPLY_URL'],
@@ -43,6 +43,9 @@ export default {
     get_sellerCustomer:['/supplier/sku/setting/listCustomers','BASE_SELL','USUPPLY_URL'],
     get_sellerCustomerGroup:['/supplier/sku/setting/getCustomerByIds','BASE_SELL','USUPPLY_URL'],
     update_buyerProductDetail:['/sku/{id}','BASE_SELL','USUPPLY_URL'],
+    get_sellerProductList:['/sku/listSkuByParams','BASE_SELL','USUPPLY_URL'],
+
+
 
 
     //product buyer

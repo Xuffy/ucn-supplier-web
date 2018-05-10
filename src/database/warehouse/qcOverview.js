@@ -2,6 +2,9 @@ export default {
     id:{
         _hide:true
     },
+    serviceProviderIsLoginUser:{
+        _hide:true
+    },
     qcOrderNo:{},
     qcStatusDictCode:{},
     qcMethodDictCode:{},
