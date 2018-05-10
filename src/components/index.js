@@ -14,7 +14,7 @@ import FilterValue from './common/table/filterValue';
 import Upload from './common/upload/upload';
 import UploadDialog from './common/UploadDialog/index';
 import Download from './common/UploadDialog/download';
-import Layout from './Layout/index';
+import Layout from './layout/index';
 import messageBoard from './common/messageBoard/index';
 import VMessageBoard from './common/messageBoard/index';
 import selectSearch from './common/fnCompon/selectSearch';
