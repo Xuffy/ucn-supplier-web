@@ -188,7 +188,8 @@
                         }
                     ]
                 },
-                columns: [{
+                columns: [
+                    {
                         label: '付款编号',
                         prop: 'no',
                         type: 'Text',

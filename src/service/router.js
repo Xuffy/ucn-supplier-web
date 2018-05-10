@@ -541,8 +541,10 @@ export const routerMap = [
       component: Layout,
       meta: {name: 'customer'},
       redirect: '/customer/overview',
-      noDropdown: true,
       hidden: false,
+      meta: {
+        name: '客户'
+      },
       children: [
         {
           path: 'overview',
@@ -551,16 +553,18 @@ export const routerMap = [
             draft: false,
             recycleBin: false,
             log: false,
+            name:'客户总览'
           },
           component: () => import('../views/customer/overview.vue')
         },
         {
           path: 'detail',
           name: 'customerDetail',
+          hidden:true,
           meta: {
             draft: false,
             recycleBin: false,
-            log: false,
+            log: false,           
           },
           component: () => import('../views/customer/customerDetail.vue')
         }

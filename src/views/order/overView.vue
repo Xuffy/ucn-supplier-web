@@ -3,7 +3,7 @@
         <h3 class="hd">订单总览</h3>
         <div class="status">
             <div class="btn-wrap">
-                <span>Status&nbsp</span>
+                <span>状态&nbsp</span>
                       <el-radio-group v-model="params.status" size="mini" @change='changeStatus'>
                             <el-radio-button label="">全部</el-radio-button>
                             <el-radio-button label="2"> 待供应商确认</el-radio-button>
