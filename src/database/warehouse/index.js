@@ -9,7 +9,6 @@ import inboundDetailProductTable from './inboundDetailProductTable';
 import outbound from './outbound';
 import outboundOrderTable from './outboundOrderTable';
 import outboundProduct from './outboundProduct';
-import qcDetailBasicInfo from './qcDetailBasicInfo';
 import summary from './summary';
 import createQcProductDialog from './createQcProductDialog';
 import outboundOverviewTable from './outboundOverviewTable';
@@ -22,6 +21,7 @@ import qcDetailProductInfo from './qcDetailProductInfo';
  * 全新import
  * */
 import qcOverview from './qcOverview';
+import qcOrder from './qcOrder';
 
 
 export default {
@@ -36,7 +36,6 @@ export default {
     inboundDetailProductTable,
     outboundOrderTable,
     outboundProduct,
-    qcDetailBasicInfo,
     summary,
     createQcProductDialog,
     outboundOverviewTable,
@@ -49,5 +48,6 @@ export default {
     /**
      * 全新DB
      * */
-    qcOverview
+    qcOverview,
+    qcOrder,
 }

@@ -72,6 +72,7 @@ const json = {
      * */
     require(`./${lang}/warehouse/warehouse.qcOverview`),
     require(`./${lang}/warehouse/warehouse.overview`),
+    require(`./${lang}/warehouse/warehouse.qcDetail`),
   ),
   workbench: _.extend({},
     require(`./${lang}/workbench/page`),
