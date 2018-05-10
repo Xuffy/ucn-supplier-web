@@ -18,7 +18,7 @@ var plugins = [],
 // }
 
 plugins.push(new webpack.ProvidePlugin(providePlugin));
-process.env.NODE_ENV !== 'local' && plugins.push(new BundleAnalyzerPlugin());
+// process.env.NODE_ENV !== 'local' && plugins.push(new BundleAnalyzerPlugin());
 /*plugins.push(new webpack.optimize.UglifyJsPlugin({
   compress: {
     warnings: false,
