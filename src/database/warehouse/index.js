@@ -28,7 +28,6 @@ export default {
     inbound,
     outbound,
     inboundTable,
-    qcOrderTable,
     inboundOrderTable,
     warehouseTable,
     inboundOrderProductTable,
@@ -50,4 +49,5 @@ export default {
      * */
     qcOverview,
     qcOrder,
+    qcOrderTable,
 }

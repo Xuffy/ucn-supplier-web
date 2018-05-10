@@ -88,6 +88,9 @@ export default {
     get_outboundProductData:['/inbound/sku/queryForOutbound','BASE_SELL','USUPPLY_URL'],
     get_qcOrderDetail: ['/qc/getById', 'USUPPLY_URL', 'USUPPLY_URL'],
     get_qcOrderProductData:['/qc/detail/page', 'USUPPLY_URL', 'USUPPLY_URL'],
+    accept_qcResult: ['/qc/result/accept', 'BASE_SELL', 'USUPPLY_URL'],
+
+
 
 
     /**
@@ -100,7 +103,6 @@ export default {
     add_buyerQcOrder:['/qc/add','BASE_BUY','UPURCHASE_URL'],
     GET_QC_DETAIL_GETBYID: ['/qc/detail/getById', 'USUPPLY_URL', 'USUPPLY_URL'],
     GET_QC_GETBYQCORDERNO: ['/qc/getByQcOrderNo', 'USUPPLY_URL', 'USUPPLY_URL'],
-    POST_QC_RESULT_ACCEPT: ['/qc/result/accept', 'USUPPLY_URL', 'USUPPLY_URL'],
     POST_RETURN_HANDLE: ['/qc/return/handle', 'USUPPLY_URL', 'USUPPLY_URL'],
     POST_REWORK_HANDLE: ['/qc/rework/handle', 'USUPPLY_URL', 'USUPPLY_URL'],
     get_qcDetail:['/qc/getById','BASE_BUY','UPURCHASE_URL'],

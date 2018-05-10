@@ -1,62 +1,72 @@
 export default {
-    id:{
-        _hide:true
-    },
-  qcOrderNo: {
-    key: 'qcOrderNo'
-  },
-  qcStatus: {
-    key: 'qcStatusDictCode'
-  },
-  qcMethod:{
-    key: 'qcMethodDictCode'
-  },
-  surveyor: {
-    key: 'surveyor'
-  },
-  factoryAddress: {
-    key: 'factoryAddress'
-  },
-  factoryContactPhone: {
-    key: 'factoryContactPhone'
-  },
-  remark: {
-    key: 'remark'
-  },
-  qualifiedProductsTotalCTNS: {
-    key: 'qualifiedSkuCartonTotalQty'
-  },
-  qualifiedProductsTotalQTYS: {
-    key: 'qualifiedSkuQty'
-  },
-  qualifiedProductsTotalCBM: {
-    key: 'qualifiedSkuVolume'
-  },
-  qualifiedProductTotalNW: {
-    key: 'qualifiedSkuNetWeight'
-  },
-  qualifiedProductTotalGW: {
-    key: 'qualifiedSkuGrossWeight'
-  },
-  unqualifiedProductsQTY: {
-    key: 'unqualifiedSkuQty'
-  },
-  unqualifiedProductTotalCTNS: {
-    key: 'unqualifiedSkuCartonTotalQty'
-  },
-  unqualifiedProductTotalNW: {
-    key: 'unqualifiedSkuNetWeight'
-  },
-  unqualifiedProductsTotalCBM: {
-    key: 'unqualifiedSkuVolume'
-  },
-  unqualifiedProductTotalGW: {
-    key: 'unqualifiedSkuGrossWeight'
-  },
-  quantityOfSKU: {
-    key: ''
-  },
-  checkOuterCartons: {
-    key: ''
-  },
+    skuQcResultDictCode:{},
+    skuInventoryStatusDictCode:{},
+    skuCode:{},
+    customerSkuCode:{},
+    factorySkuCode:{},
+    skuNameCn:{},
+    skuBrand:{},
+    skuDesign:{},
+    packingMethodCn:{},
+    innerCartonPackingMethodCn:{},
+    deliveryDate:{},
+    skuUnitDictCode:{},
+    lengthUnitDictCode:{},
+    volumeUnitDictCode:{},
+    weightUnitDictCode:{},
+    inboundNo:{},
+    orderSkuQty:{},
+    expectQcQty:{},
+    samplingRate:{},
+    unqualifiedProcessingMode:{},
+    outerCartonTotalQty:{},
+    skuLength:{},
+    skuWidth:{},
+    skuHeight:{},
+    skuNetWeight:{},
+    outerCartonSkuQty:{},
+    actOuterCartonSkuQty:{},
+    outerCartonInnerBoxQty:{},
+    actOuterCartonInnerBoxQty:{},
+    innerCartonSkuQty:{},
+    actInnerCartonSkuQty:{},
+    innerCartonLength:{},
+    innerCartonWidth:{},
+    innerCartonHeight:{},
+    innerCartonNetWeight:{},
+    innerCartonGrossWeight:{},
+    innerCartonVolume:{},
+    outerCartonLength:{},
+    outerCartonWidth:{},
+    outerCartonHeight:{},
+    outerCartonNetWeight:{},
+    outerCartonVolume:{},
+    outerCartonGrossWeight:{},
+    actSkuCartonTotalQty:{},
+    qualifiedSkuCartonTotalQty:{},
+    unqualifiedSkuCartonTotalQty:{},
+    qualifiedSkuQty:{},
+    unqualifiedSkuQty:{},
+    qualifiedSkuNetWeight:{},
+    unqualifiedSkuNetWeight:{},
+    qualifiedSkuVolume:{},
+    unqualifiedSkuVolume:{},
+    qualifiedSkuGrossWeight:{},
+    unqualifiedSkuGrossWeight:{},
+    unqualifiedType:{},
+    skuBarCode:{},
+    skuBarCodeResultDictCode:{},
+    skuLabel:{},
+    skuLabelResultDictCode:{},
+    innerPackingBarCode:{},
+    innerPackingBarCodeResultDictCode:{},
+    outerCartonBarCode:{},
+    outerCartonBarCodeResultDictCode:{},
+    shippingMark:{},
+    shippingMarkResultDictCode:{},
+    qcPic:{},
+    checkOuterCartonQty:{},
+    remark:{},
+
+
 }
