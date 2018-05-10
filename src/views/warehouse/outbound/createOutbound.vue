@@ -5,7 +5,7 @@
         </div>
         <el-form :modal="outboundData" ref="basicInfo" class="speForm" label-width="200px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.warehouse.outbound" v-if="v.belong==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:8" :md="v.fullLine?24:8" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col class="speCol" v-for="v in $db.warehouse.outbound" v-if="v.belong==='basicInfo' && v.showType!=='timeZone'" :key="v.key" :xs="24" :sm="v.fullLine?24:8" :md="v.fullLine?24:8" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.showType==='input'">
                             <el-input
@@ -262,7 +262,7 @@
                     outboundTypeDictCode: "",
                     remark: "",
                     shipmentInvoiceNo: "",
-                    timeZone: "",
+                    // timeZone: "",
                 },
                 //inbound总计
                 outboundSummary:{
@@ -373,13 +373,17 @@
                     });
                 });
                 console.log(this.outboundData)
-                // this.disabledSubmit=true;
-                // this.$ajax.post(this.$apis.add_outbound,this.outboundData).then(res=>{
-                //     console.log(res)
-                //     this.disabledSubmit=false;
-                // }).catch(err=>{
-                //     this.disabledSubmit=false;
-                // });
+                this.disabledSubmit=true;
+                this.$ajax.post(this.$apis.add_outbound,this.outboundData).then(res=>{
+                    this.disabledSubmit=false;
+                    this.$message({
+                        message: '提交成功!',
+                        type: 'success'
+                    });
+                    this.$router.push('/warehouse/outbound');
+                }).catch(err=>{
+                    this.disabledSubmit=false;
+                });
             },
 
             cancel(){
