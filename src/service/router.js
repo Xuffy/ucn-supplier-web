@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import Router from 'vue-router';
 import config from 'service/config';
-import Layout from 'components/Layout/index.vue';
+import Layout from 'components/layout/index.vue';
 import {Notification, Message} from 'element-ui';
 import {localStore, sessionStore} from 'service/store';
 
