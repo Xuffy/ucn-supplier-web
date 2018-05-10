@@ -77,9 +77,11 @@
                                 :isInquiry="true"
                            ></v-product>
                         </el-tab-pane>
+<!--
                         <el-tab-pane :label="$i.common.fromMyBookmark" name="FromMyBookmark">
                            <v-product :hideBtns="true"></v-product>
                         </el-tab-pane>
+-->
                       </el-tabs>
            </el-dialog>
            
@@ -357,11 +359,11 @@
             },
             //.......接受订单
             acceptOrder(){  
-                return console.log('in')
+//                return console.log('in')
                 this.$ajax.post(this.$apis.post_accept, {
                     ids: [this.orderId]
                 }).then(res => {
-                    console.log(res)
+                    this.orderStatus=res
                 }).catch(res => {
                     console.log(res)
                 })
@@ -391,7 +393,7 @@
                         this.currencyCode = res.currency
                         this.payToId = res.supplierCode
 
-                        this.markAsImportant = res.importantSupplier //importantCustomer端不一样
+                        this.markAsImportant = res.importantCustomer //importantCustomer端不一样
                         //..........basicinfo
                         this.$refs.basicInfo.formItem = res;
                         //..........caculate
