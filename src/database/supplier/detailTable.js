@@ -8,16 +8,23 @@ export default {
         key:'receiveAddress',
          belong: "address"
     },
-    //???????
+    //???????  后台没返
     companyRegisteredAddress: {
         key: "companyRegisteredAddress",
         belong: "address"
     },
-    //??????
+     //?????? 后台没返
     notify: {
         key: "notify",
         belong: "address"
     },  
+    city:{
+        key:"city"
+    },
+    country:{
+        key:'country'
+    },
+   
     id: {
         _hide: true,
         key: "id",
