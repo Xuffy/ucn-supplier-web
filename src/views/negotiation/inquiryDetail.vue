@@ -8,24 +8,26 @@
                 <div class="basic-info">
                     <div class="basesic-hd">
                         <h5>{{ $i.common.basicInfo }}</h5>
-                        <el-checkbox-group v-model="ChildrenCheckList">
+                        <!-- <el-checkbox-group v-model="ChildrenCheckList">
                             <el-checkbox :label="0">{{ $i.common.hideTheSame }}</el-checkbox>
                             <el-checkbox :label="1">{{ $i.common.highlightTheDifferent }}</el-checkbox>
-                        </el-checkbox-group>
+                        </el-checkbox-group> -->
                     </div>
                     <div class="tab-msg-wrap">
                         <v-table 
                             :data.sync="newTabData" 
                             :selection="false" 
+                            :height="450"
                             :buttons="basicInfoBtn"
                             :loading="tableLoad"
                             :rowspan="2"
                             @action="basicInfoAction"
-                            :hideFilterColumn="statusModify"
+                            :hideFilterValue="statusModify"
                         />
                     </div>
                 </div>
                 <div class="basic-info">
+                    <h5>{{ $i.common.productInfo }}</h5>
                     <div class="status">
                         <div class="btn-wrap">
                             <el-button @click="addProduct" :disabled="!statusModify">{{ $i.common.addProduct }}</el-button>
@@ -37,23 +39,18 @@
                         :data.sync="newProductTabData"
                         :buttons="productInfoBtn"
                         :loading="tableLoad"
-                        :height="450"
                         @action="producInfoAction"
                         @change-checked="changeChecked"
                         :rowspan="2"
                         :selection="statusModify"
-                        :hideFilterColumn="statusModify"
+                        :hideFilterValue="statusModify"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i.common.accept }}</el-button>
-                        <!-- <el-button @click="windowOpen('/order/creatOrder')">{{ $i.common.createOrder }}</el-button> -->
-                        <el-button @click="addToCompare">{{ $i.common.addToCompare }}</el-button>
-                        <el-button @click="modifyAction" :disabled="tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i.common.modify }}</el-button>
-                        <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id}})">{{ $i.common.copy }}</el-button>
-                        <el-button @click="toCreateInquire">{{ $i.common.createInquiry }}</el-button>
+                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
+                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.dataBase + ''!=='99'||tabData[0].status.dataBase+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button>
+                        <el-button @click="modifyAction" :disabled="tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
+                        <el-button type="info" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.dataBase+''!== '22'&&tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
                         <el-button>{{ $i.common.download }}</el-button>
-                        <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '22' && tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
-                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.value + '' !== '99' && tabData[0].status.value + '' !== '1'" v-if="tabData[0]">{{ $i.common.delete }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
                         <el-button @click="modify">{{ $i.common.send }}</el-button>
@@ -70,10 +67,6 @@
                 width="70%"
                 lock-scroll
             >
-            <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button label="product">{{ $i.common.fromNewSearch }}</el-radio-button>
-                <el-radio-button label="bookmark">{{ $i.common.FromMyBookmark }}</el-radio-button>
-            </el-radio-group>
             <v-product 
                 :hideBtns="true"
                 :hideBtn="true"
@@ -85,9 +78,9 @@
             ></v-product>
         </el-dialog>
         <v-history-modify
-            @save="save"
-            ref="HM"
-        >
+                @save="save"
+                ref="HM"
+            >
             <template v-for="item in $db.inquiry.basicInfo" :slot="item._slot" slot-scope="{data}">
                 <el-select
                         v-model="fromArg[item.key]" 
@@ -124,6 +117,7 @@
                 <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
             </template>
         </v-history-modify>
+        <v-message-board module="inquiry" code="inquiryDetail" :id="$route.query.id+''"></v-message-board>
     </div>
 </template>
 <script>
@@ -138,15 +132,15 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard, selectSearch, VTable, compareList, VHistoryModify } from '@/components/index';
+    import { VMessageBoard, selectSearch, VTable, compareList, VHistoryModify } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
+    import { mapActions } from 'vuex'
     export default {
         name:'inquiryDetail',
         data() {
             return {
                 fromArg:{},
-                loading: false,
                 disabledLine: [],
                 trig: 0,
                 disabledTabData: [],
@@ -210,7 +204,7 @@
             }
         },
         components: {
-            'message-board':messageBoard,
+            'v-message-board':VMessageBoard,
             'select-search':selectSearch,
             'v-table': VTable,
             'v-product': product,
@@ -224,7 +218,13 @@
                 this.compareConfig = this.$localStore.get('$in_quiryCompare');
             };
             this.getDictionaries();
-            this.remoteMethod('');
+            this.setRecycleBin({
+                name: 'negotiationRecycleBin',
+                params: {
+                    type: 'inquiry'
+                },
+                show: true
+            });
         },
         watch: {
             ChildrenCheckList(val, oldVal) {
@@ -241,30 +241,24 @@
             }
         },
         methods: {
+            ...mapActions([
+                'setDraft',
+                'setRecycleBin',
+                'setDic'
+            ]),
             deleteInquiry() {
                 this.$confirm('确认删除?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+                    this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
                         action: 'delete',
                         ids: [this.$route.query.id]
                     })
                     .then(res => {
                         this.$router.push('/negotiation/inquiry')
                     });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
-            },
-            remoteMethod(keyWord) {
-                this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`)
-                .then(res => {
-                    this.selectAll.supplierName = res;
                 })
             },
             getDictionaries() {
@@ -306,7 +300,7 @@
                     arr.push(item.id);
                 });
                 this.$router.push({
-                    name: 'negotiationCompareDetail',
+                    name: 'inquiryCompareDetail',
                     params: {
                         type: 'new'
                     },
@@ -326,6 +320,10 @@
                 this.$localStore.set('$in_quiryCompare', this.compareConfig);
             },
             addToCompare() { //添加对比
+                if(!this.tabData[0]) return this.$message({
+                    message: '请加载完毕再操作',
+                    type: 'warning'
+                });
                 this.compareLists = true;
                 let config = {
                     name: this.tabData[0].inquiryNo.value,
@@ -339,47 +337,45 @@
                     });
                 }
                 this.compareConfig.push(config);
-                this.$localStore.set('$in_quiryCompare', this.compareConfig);
+                this.$message('添加对比成功！');
             },
-            getInquiryDetail() { //获取 Inquiry detail 数据
-                if(!this.$route.query.id) return this.$message('地址错误');
+           getInquiryDetail() { //获取 Inquiry detail 数据
+                if(!this.$route.query.id) return this.$message(this.$i.common.addressError);
                 this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
                     id: this.$route.query.id
                 })
                 .then(res => {
+                    let basicInfoData, newProductTabData;
                     //Basic Info
-                    this.newTabData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
-                    this.tabData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
+                    basicInfoData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]), (item) => {
+                        this.$filterDic(item);
+                        _.map(item, (val, k) => {
+                            val.defaultData = _.isUndefined(val.dataBase)?val.value:val.dataBase;
+                        });
+                    });
+                    this.newTabData = basicInfoData;
+                    this.tabData = basicInfoData;
+                    //SKU_UNIT 
                     //Product Info
-                    this.newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
-                    this.productTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
+                    newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'), (item) => {
+                        this.$filterDic(item);
+                        _.map(item, (val, k) => {
+                            val.defaultData = _.isUndefined(val.dataBase)?val.value:val.dataBase;
+                        });
+                    });
+                    this.newProductTabData = newProductTabData;
+                    this.productTabData = newProductTabData;
                     this.tableLoad = false;
                 })
                 .catch(err => {
                     this.tableLoad = false;
                 });
             },
-            submit(str) { //留言板发布
-                let json = {};
-                json.time = getData(new Date(), 6);
-                json.name = '罗涛';
-                json.content = str;
-                this.list.push(json);
-            },
-            boardSwitch() { //留言板开关
-                this.switchStatus = !this.switchStatus;
-            },
             getList(ids) {
                 this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, ids)
                 .then(res => {
-                    _.map(res, item => {
-                        item.displayStyle = 0;
-                    });
-                    let arr = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId'));
-                    _.map(arr, item => {
-                        _.mapObject(item, (val, k) => {
-                            val._style = 'color:#27b7b6';
-                        });
+                    let arr = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId'), (item) => {
+                        this.$filterDic(item);
                     });
                     this.newProductTabData = arr.concat(this.newProductTabData);
                     this.newSearchDialogVisible = false;
@@ -411,40 +407,45 @@
                 this.statusModify = true;
             },
             save(data) { //modify 编辑完成反填数据
+                let json = this.$filterName(data[0]), styleJson = {};
                 if(this.id_type === 'basicInfo') { //反填 basicInfo
                     this.newTabData = _.map(this.newTabData, val => {
-                        if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[0], {'key': 'id'}).value && !val._remark && !data[0]._remark) {
-                            val = data[0];
+                        if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(json, {'key': 'id'}).value && !val._remark && !json._remark) {
+                            val = json;
                             val._modify = true;
-                            val.displayStyle = 1;
-                            _.mapObject(val, (item, k) => {
-                                if(item.length) this.$set(item, '_style', 'color:#27b7b6')
-                            })
+                            _.map(val, (item, k) => {
+                                if(item.dataBase||item.dataBase===0?item.dataBase!==item.defaultData:item.value!==item.defaultData) {
+                                    this.$set(item, '_style', 'color:#27b7b6')
+                                };
+                            });
                         } else if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[1], {'key': 'id'}).value && val._remark && data[1]._remark) {
                             val = data[1];
                             val._modify = true;
-                            val.displayStyle = 1;
-                            _.mapObject(val, (item, k) => {
-                                if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                            _.map(val, (item, k) => {
+                                if(item.dataBase||item.dataBase===0?item.dataBase!==item.defaultData:item.value!==item.defaultData) {
+                                    this.$set(item, '_style', 'color:#27b7b6')
+                                };
                             });
                         }
                         return val;
                     });
                 } else if(this.id_type === 'producInfo') { // 反填 productTabData
                     this.newProductTabData = _.map(this.newProductTabData, val => {
-                        if(_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(data[0], {'key': 'skuId'}).value + '' && !val._remark && !data[0]._remark) {
-                            val = data[0];
+                        if(_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(json, {'key': 'skuId'}).value + '' && !val._remark && !json._remark) {
+                            val = json;
                             val._modify = true;
-                            val.displayStyle = 1;
-                            _.mapObject(val, (item, k) => {
-                                if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                            _.map(val, (item, k) => {
+                                if(item.dataBase||item.dataBase===0?item.dataBase!==item.defaultData:item.value!==item.defaultData) {
+                                    this.$set(item, '_style', 'color:#27b7b6')
+                                };
                             });
                         } else if(_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(data[1], {'key': 'skuId'}).value + '' && val._remark && data[1]._remark) {
                             val = data[1];
                             val._modify = true;
-                            val.displayStyle = 1;
-                            _.mapObject(val, (item, k) => {
-                                if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                            _.map(val, (item, k) => {
+                                if(item.dataBase||item.dataBase===0?item.dataBase!==item.defaultData:item.value!==item.defaultData) {
+                                    this.$set(item, '_style', 'color:#27b7b6')
+                                };
                             });
                         }
                         return val;
@@ -453,7 +454,7 @@
             },
             fnBasicInfoHistoty(item, type, config) { //查看历史记录
                 let column;
-                this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
+                this.$ajax.get(this.$apis.BUYER_GET_INQUIRY_HISTORY, {
                     id: item.id.value
                 })
                 .then(res => {
@@ -504,6 +505,14 @@
                             this.oSwitch = true;
                             this.fnBasicInfoHistoty(data, 'productInfo', { type:'modify', data: data.skuId.value });
                             break;
+                        case 'detail':
+                            this.$router.push({
+                                path: '/product/sourcingDetail',
+                                query: {
+                                    id: data.skuId.value
+                                }
+                            });
+                            break;
                 }
            },
            changeChecked(item) { //获取选中的单 集合
@@ -515,7 +524,7 @@
             ajaxInqueryAction(type) { //接受单
                 const argId = [];
                 argId.push(this.$route.query.id);
-                this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+                this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
                     action: type,
                     ids:argId
                 })
@@ -546,8 +555,9 @@
                 });
                 parentNode.details = this.dataFilter(arr);
                 parentNode.draft = 0;
-                this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(parentNode))
+                this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SAVE, this.$filterModify(parentNode))
                 .then(res => {
+                    this.newTabData[0].status.dataBase = res.status;
                     this.tabData = this.newTabData;
                     this.productTabData = this.newProductTabData;
                     this.productModify();
@@ -560,7 +570,7 @@
                     jsons = {};
                     if(item._remark) { //拼装remark 数据
                         for(let k in item) {
-                            jsons[k] = item[k].value;
+                            jsons[k] = item[k].dataBase?item[k].dataBase:item[k].value;
                         }
                         json.fieldRemark = jsons;
                     } else {
@@ -569,7 +579,7 @@
                             if(json[k] === 'fieldRemark') {
                                 json[k] = jsons;
                             } else {
-                                json[k] = item[k].value;
+                                json[k] = item[k].dataBase||item[k].dataBase===0?item[k].dataBase:item[k].value;
                             }
                         };
                         arr.push(json);

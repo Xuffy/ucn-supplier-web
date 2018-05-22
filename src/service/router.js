@@ -34,7 +34,7 @@ export const routerMap = [
             name: 'negotiation inquiry',
             recycleBin: 'INQUIRY:OVERVIEW:RECYCLE_BIN'
           },
-          component: () => import('../views/sellerNegotiation/inquiryOverview')
+          component: () => import('../views/negotiation/inquiryOverview')
         },
         {
           path: 'inquiryDetail',
@@ -45,12 +45,12 @@ export const routerMap = [
             recycleBin: 'INQUIRY:DETAIL:RECYCLE_BIN',
             messageBoard: 'INQUIRY:DETAIL:MESSAGE_BOARD'
           },
-          component: () => import('../views/sellerNegotiation/inquiryDetail')
+          component: () => import('../views/negotiation/inquiryDetail')
         },
         {
           path: 'recycleBin/:type',
           name: 'negotiationRecycleBin',
-          component: () => import('../views/sellerNegotiation/recycleBin')
+          component: () => import('../views/negotiation/recycleBin')
         }
       ]
     },
