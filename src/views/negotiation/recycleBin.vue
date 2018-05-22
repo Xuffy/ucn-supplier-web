@@ -11,7 +11,7 @@
         <v-table 
             :data="tabData" 
             :loading="tabLoad"
-            :buttons="[{label: 'Detail', type: 'detail'}]" 
+            :buttons="buttonsFn" 
             @action="action"
             @change-checked="changeChecked"
             :height="350"
@@ -65,8 +65,11 @@
             'v-table': VTable
         },
         methods: {
+            buttonsFn() {
+                if(this.$route.params.type === 'inquiry') return [{label: 'Detail', type: 'detail'}];
+            },
             getInquiryList() { // 获取inquirylist
-                this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.bodyData)
+                this.$ajax.post(this.$apis.BUYER_POST_INQIIRY_LIST, this.bodyData)
                 .then(res => {
                     this.pageTotal = res.tc;
                     this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas);
@@ -78,24 +81,32 @@
                     this.tabLoad = false;
                 });
             },
-            getCompare() { // 获取compare
-                this.$ajax.post(this.$apis.POST_INQIIRY_COMPARE_LIST, this.bodyData)
-                .then(res => {
-                    let data = res.datas;
-                    this.tabLoad = false;
-                    data.forEach(item => {
-                        item.updateDt ? item.updateDt = this.$dateFormat(data.updateDt, 'yyyy-mm-dd') : '';
-                    });
-                    this.pageTotal = res.tc;
-                    this.tabData = this.$getDB(this.$db.inquiry.compare, data);
-                });
-            },
             searchEnter(item) { // 搜索框
                 this.bodyData.key = item.key;
                 this.bodyData.keyType = item.keyType;
             },
             action(item, type) { //操作表单 action
-                
+                switch(this.$route.params.type) {
+                    case 'compare':
+                        this.$router.push({
+                            name: 'negotiationCompareDetail',
+                            query: {
+                                id: item.id.value
+                            },
+                            params: {
+                                type: 'only'
+                            }
+                        })
+                        break;
+                    case 'inquiry':
+                        this.$router.push({
+                            path: '/negotiation/inquiryDetail',
+                            query: {
+                                id: item.id.value
+                            }
+                        })
+                        break;
+                }
             },
             changeChecked(item) { //选中的list
                 let arr = [];
@@ -115,7 +126,7 @@
                 }
             },
             actionInquiry(type) {
-                this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+                this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
                     ids:this.checkedArg,
                     action: type
                 })
@@ -131,7 +142,7 @@
                 });
             },
             actionCompare() {
-                this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_RESTORE, this.checkedArg)
+                this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_COMPARE_RESTORE, this.checkedArg)
                 .then(res => {
                     this.checkedArg = [];
                     this.getCompare();
@@ -149,7 +160,7 @@
             },
             ajaxInqueryAction(type) {
                 const argId = this.getChildrenId();
-                this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+                this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
                     action: type,
                     ids:argId
                 })

@@ -6,7 +6,7 @@
                 <span>{{ $i.common.Status }}</span>
                 <el-radio-group v-model="params.status" size="mini">
                     <el-radio-button :label="null">{{$i.common.all}}</el-radio-button>
-                    <el-radio-button
+                    <el-radio-button 
                         v-for="item in $db.inquiry.overoiewState"
                         :label="item.id"
                         :key="item.id"
@@ -15,19 +15,18 @@
                     </el-radio-button>
                 </el-radio-group>
             </div>
-            <select-search
-                :options="options"
+            <select-search 
+                :options="options" 
                 @inputChange="inputEnter"
                 :searchLoad="searchLoad"
             />
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click="toCompare" :disabled="checkedData.length >= 2 ? false : true">{{ $i.common.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})">{{ $i.common.createNewInquiry }}</el-button>
-                <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData && params.status+'' !== '99' && params.status+'' !== '1' ? false : true">{{ $i.common.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData && params.status !== null && params.status+'' !== '22' && params.status+'' !== '21' ? false : true">{{ $i.common.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button :disabled="tabData.length <= 0?true:false">{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
+                <el-button @click="ajaxInqueryAction('accept')" v-authorize="'INQUIRY:OVERVIEW:ACCEPT'" :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='99'||params.status+''==='1'||params.status === null">{{ $i.common.accept }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="cancelInquiry" :disabled="!checkedData.length||params.status+''==='99'||params.status+''==='1'||params.status === null" v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'">{{ $i.common.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='21'||params.status === null" v-authorize="'INQUIRY:OVERVIEW:DELETE'">{{ $i.common.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button :disabled="!tabData.length" v-authorize="'INQUIRY:OVERVIEW:DOWNLOAD'">{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
@@ -37,26 +36,26 @@
                 </el-radio-group>
             </div>
         </div>
-        <v-table
-            :data="tabData"
-            :buttons="[{label: 'detail', type: 'detail'}]"
+        <v-table 
+            :data="tabData" 
+            :buttons="[{label: 'detail', type: 'detail'}]" 
             :height="450"
-            @action="action"
+            @action="action" 
             @change-checked="changeChecked"
-            :loading="tabLoad"
+            :loading="tabLoad" 
             ref="tab"
         />
         <v-pagination
             :page-data.sync="params"
-            @change="handleSizeChange"
-            @size-change="pageSizeChange"
+            @size-change="handleSizeChange"
+            @change="pageSizeChange"
         />
     </div>
 </template>
 <script>
     /**
      * @param selectChange 下拉框 值发生变更触发
-     * @param options 下拉框 原始数据
+     * @param options 下拉框 原始数据 
     */
     import { selectSearch, VTable, VPagination } from '@/components/index';
     import { mapActions } from 'vuex'
@@ -83,21 +82,20 @@
                     id: 'PAYMENT_METHOD',
                     label: '支付方式'
                 }],
+
                 tabData: [],
                 viewByStatus: '',
                 params: {
-                    status: 22,
+                    status: 21,
                     keyType: '',
                     key: '',
                     ps: 10,
                     pn: 1,
                     tc: 0,
-                    draft: 0,
-                    recycleCustomer: false
-                    //recycleSupplier
+                    recycleSupplier: false,
+                    draft: false
                 },
                 tabLoad:false,
-                pageTotal: 0,
                 _id: ''
             }
         },
@@ -108,13 +106,6 @@
         },
         created() {
             this.viewByStatus = 0;
-            this.setDraft({
-                name: 'negotiationDraft',
-                params: {
-                    type: 'inquiry'
-                },
-                show: true
-            });
             this.setRecycleBin({
                 name: 'negotiationRecycleBin',
                 params: {
@@ -133,12 +124,11 @@
                 },
                 deep: true
             }
-
         },
         methods: {
             ...mapActions([
-                'setDraft',
-                'setRecycleBin'
+                'setRecycleBin',
+                'setDic'
             ]),
             inputEnter(val) {
                 if(!val.keyType) return this.$message('请选中搜索类型');
@@ -151,23 +141,28 @@
                 let url, column;
                 this.tabLoad = true;
                 if(this.viewByStatus + '' === '0') {
-                    url = this.$apis.POST_INQIIRY_LIST;
+                    url = this.$apis.BUYER_POST_INQIIRY_LIST;
                     column = this.$db.inquiry.viewByInqury;
                 } else {
-                    url = this.$apis.POST_INQIIRY_LIST_SKU;
+                    url = this.$apis.BUYER_POST_INQIIRY_LIST_SKU;
                     column = this.$db.inquiry.viewBySKU;
                 };
                 this.$ajax.post(url, this.params)
                 .then(res => {
-                    res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
-                    this.checkedData = [];
-                    this.tabData = this.$getDB(column, res.datas);
-                    this.tabLoad = false;
-                    this.searchLoad = false;
-                    this.checkedData = [];
+                    this.params.tc = res.tc;
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], '_cache')
+                    .then(data => {
+                        this.setDic(data);
+                        this.tabData = this.$getDB(column, res.datas, (item) => {
+                            this.$filterDic(item);
+                        });
+                        this.tabLoad = false;
+                        this.searchLoad = false; 
+                        this.checkedData = [];
+                    });
                 })
                 .catch(() => {
-                    this.searchLoad = false;
+                    this.searchLoad = false; 
                     this.tabLoad = false;
                 })
             },
@@ -185,12 +180,12 @@
                     this.$message({
                         type: 'info',
                         message: '已取消删除'
-                    });
+                    });          
                 });
             },
             ajaxInqueryAction(type) {
                 const argId = this.getChildrenId();
-                this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+                this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
                     action: type,
                     ids:argId
                 })
@@ -207,11 +202,10 @@
                 }
             },
             detail(item) {
-                let id = _.findWhere(item, {'key': 'inquiryId'})?_.findWhere(item, {'key': 'inquiryId'}).value:_.findWhere(item, {'key': 'id'}).value;
                 this.$router.push({
                     path: '/negotiation/inquiryDetail',
                     query: {
-                        id: id
+                        id: _.findWhere(item, {'key': 'id'}).value
                     }
                 });
             },
@@ -227,20 +221,16 @@
                 let argId = this.getChildrenId('str');
                 this.$windowOpen({
                     url: '/negotiation/compareDetail/{type}',
-                    params: {
+                    params: {   
                         type: 'new',
                         ids: argId.join(',')
                     }
                 });
             },
-            pageChange(No) {
-                console.log(No)
+            pageSizeChange(no) {
+                this.params.pn = no;
             },
             handleSizeChange(val) {
-                console.log(val)
-                this.params.pn = val;
-            },
-            pageSizeChange(val) {
                 this.params.ps = val;
             },
             changeChecked(item) { //tab 勾选

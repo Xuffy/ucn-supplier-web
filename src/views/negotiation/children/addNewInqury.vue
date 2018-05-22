@@ -5,6 +5,7 @@
             :visible.sync="dialogVisible"
             width="80%"
             >
+                <h3 class="hd"> {{ $i.inquiry.inquiryTitle }}</h3>
                 <div class="status">
                     <div class="state">
                         <span>{{ $i.common.state }}</span>

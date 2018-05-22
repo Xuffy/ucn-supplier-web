@@ -14,18 +14,13 @@
             :buttons="[{label: 'Detail', type: 'detail'}]" 
             @action="action"
             @change-checked="changeChecked"
-            :height="450"
+            :height="350"
             :page-total="pageTotal"
-        />
-        <v-pagination
-            :page-data.sync="bodyData"
-            @change="handleSizeChange"
-            @size-change="pageSizeChange"
         />
     </div>
 </template>
 <script>
-    import { VTable, selectSearch, VPagination } from '@/components/index';
+    import { VTable, selectSearch } from '@/components/index';
     export default {
         name:'',
         data() {
@@ -53,7 +48,6 @@
                     // },
                     ps: 10,
                     pn: 1,
-                    tc: 0,
                     draft: 1,
                     recycleCustomer: 0
                     //recycleSupplier
@@ -71,20 +65,13 @@
         },
         components: {
             'select-search':selectSearch,
-            'v-table': VTable,
-            'v-pagination': VPagination
+            'v-table': VTable
         },
         methods: {
-            handleSizeChange(val) {
-                this.bodyData.pn = val;
-            },
-            pageSizeChange(val) {
-                this.bodyData.ps = val;
-            },
             getInquiryList() { //获取inquirylist
                 this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.bodyData)
                 .then(res => {
-                    this.bodyData.tc = res.tc;
+                    this.pageTotal = res.tc;
                     this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas);
                     this.tabLoad = false;
                     this.searchLoad = false; 
@@ -99,12 +86,7 @@
                 this.bodyData.keyType = item.keyType;
             },
             action(item, type) { //操作表单 action
-                this.$router.push({
-                    name: 'negotiationCreateInquiry',
-                    query: {
-                        id: item.id.value
-                    }
-                });
+                
             },
             changeChecked(item) { //选中的list
                 let arr = [];
