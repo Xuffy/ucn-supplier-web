@@ -127,7 +127,7 @@
                         <!--<div v-else>-->
                             <el-input
                                     placeholder="请输入内容"
-                                    v-model="scope.row[v.key]"
+                                    v-model="scope.row.skuList[0][v.key]"
                                     clearable>
                             </el-input>
                         <!--</div>-->
@@ -613,7 +613,6 @@
                         res.forEach(v=>{
                             this.productData.push(v);
                         });
-                        console.log(this.productData,'this.productData')
                         /**
                          * 计算底部summary
                          * */
@@ -647,7 +646,6 @@
                         this.$set(this.inboundData,'skuTotalNetWeight',skuTotalNetWeight);
                         this.$set(this.inboundData,'skuTotalQty',skuTotalQty);
                         this.$set(this.inboundData,'skuTotalVolume',skuTotalVolume);
-                        console.log('step2')
                         this.loadingProductTable=false;
                     }).catch(err=>{
                         this.loadingProductTable=false;
@@ -655,7 +653,6 @@
                 }
                 this.clearSearchData();
                 this.addOrderDialogVisible=false;
-                console.log('step1')
             },
             closeDialog(){
                 this.addOrderDialogVisible = false;
