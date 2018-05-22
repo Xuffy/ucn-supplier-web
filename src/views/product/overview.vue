@@ -81,7 +81,7 @@
             <v-table
                     :loading="loadingTable"
                     :data="tableDataList"
-                    :buttons="[{label: 'Detail', type: 1}]"
+                    :buttons="[{label: '详情', type: 1}]"
                     @change-checked="changeChecked"
                     @action="btnClick"></v-table>
         </div>

@@ -87,9 +87,9 @@
             getInboundData(){
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_inboundData,this.inboundConfig).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.warehouse.inboundTable, res.datas,(e)=>{
-                        e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
+                    this.tableDataList = this.$getDB(this.$db.warehouse.inboundOverviewTable, res.datas,e=>{
                         e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
+                        e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
                         e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
                         return e;
                     });

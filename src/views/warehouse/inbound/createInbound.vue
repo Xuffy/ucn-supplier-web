@@ -647,6 +647,7 @@
                         this.$set(this.inboundData,'skuTotalNetWeight',skuTotalNetWeight);
                         this.$set(this.inboundData,'skuTotalQty',skuTotalQty);
                         this.$set(this.inboundData,'skuTotalVolume',skuTotalVolume);
+                        console.log('step2')
                         this.loadingProductTable=false;
                     }).catch(err=>{
                         this.loadingProductTable=false;
@@ -654,6 +655,7 @@
                 }
                 this.clearSearchData();
                 this.addOrderDialogVisible=false;
+                console.log('step1')
             },
             closeDialog(){
                 this.addOrderDialogVisible = false;
