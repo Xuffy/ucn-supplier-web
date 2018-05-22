@@ -71,6 +71,11 @@
                 <el-button>{{$i.product.downloadSelected}}({{selectList.length?selectList.length:'All'}})</el-button>
                 <el-button @click="upload">{{$i.product.uploadProduct}}</el-button>
                 <!--<el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger">{{$i.product.delete}}</el-button>-->
+
+
+
+
+
             </div>
 
             <v-table
