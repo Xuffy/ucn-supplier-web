@@ -87,6 +87,7 @@
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_outboundData,this.outboundConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.warehouse.outboundOverviewTable, res.datas,(e)=>{
+                        e.outboundTypeDictCode.value=this.$change(this.outboundType,'outboundTypeDictCode',e).label;
                         e.outboundDate.value=this.$dateFormat(e.outboundDate.value,'yyyy-mm-dd');
                         e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
                         e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
@@ -147,7 +148,10 @@
                         }else if(v.value==='4'){
                             v.label=this.$i.warehouse.returnToSupplier;
                         }
-                    })
+                    });
+
+                    this.getOutboundData();
+
                 });
                 // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
                 //     console.log(res,'???')
@@ -155,7 +159,6 @@
             },
         },
         created(){
-            this.getOutboundData();
             this.getUnit();
         },
         watch:{

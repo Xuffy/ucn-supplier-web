@@ -75,7 +75,8 @@ export default {
         key:'inboundDate',
     },
     inventoryDays:{
-        key:'inventoryDays'
+        key:'inventoryDays',
+        showType:'number',
     },
     inventorySkuPrice:{        //需要传的参数
         key:'inventorySkuPrice',

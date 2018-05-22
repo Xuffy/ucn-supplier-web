@@ -450,6 +450,7 @@ export const routerMap = [
         {
           path: 'createInbound',
           name: 'create Inbound',
+          hidden:true,
           meta: {
             draft: true,
             recycleBin: true,

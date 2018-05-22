@@ -680,7 +680,7 @@
         <input style="display: none" id="pic" name="file" type="file" accept="image/*" @change="uploadPic">
 
         <div class="footBtn">
-            <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i.product.finish}}</el-button>
+            <el-button @click="finish" :disabled="loadingData" :loading="disabledSubmit" type="primary">{{$i.product.finish}}</el-button>
         </div>
 
         <el-dialog width="70%" :title="$i.product.addCustomer" :visible.sync="addCustomerDialogVisible">

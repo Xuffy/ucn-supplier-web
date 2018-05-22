@@ -247,6 +247,19 @@ export default {
       })
     }
 
+    /**
+     * 转换表格中需要由字典表数据来转换的数据
+     * */
+    Vue.prototype.$change=(obj,code,e)=>{
+        let data=_.findWhere(obj,{code:e[code].value});
+        if(data){
+            return data;
+        }else{
+            return '';
+        }
+    };
+
+
     Vue.prototype.$depthClone = (data) => {
       return JSON.parse(_.clone(JSON.stringify(data)));
     }

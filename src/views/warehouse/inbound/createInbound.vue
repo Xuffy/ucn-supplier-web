@@ -664,8 +664,6 @@
              * */
             handleBlur(e,index){
                 if(e==='inboundOutCartonTotalQty'){
-
-
                     //处理入库产品总箱数输入框
                     if(!this.productData[index][e] || !this.productData[index]['skuOuterCartonQty']){
                         this.productData[index].inboundSkuTotalQty='';

@@ -42,8 +42,7 @@
                                     v-model="qcOrderData[v.key]"
                                     align="right"
                                     type="date"
-                                    placeholder="服务商填写"
-                                    :picker-options="pickerOptions1">
+                                    placeholder="服务商填写">
                             </el-date-picker>
                         </div>
                     </el-form-item>
@@ -61,7 +60,7 @@
         </div>
         <el-tabs type="border-card">
             <el-tab-pane :label="$i.warehouse.qcResult">
-                <el-button type="primary" @click="accept">{{$i.warehouse.accept}}</el-button>
+                <el-button :disabled="selectFirst.length===0" type="primary" @click="accept">{{$i.warehouse.accept}}</el-button>
 
                 <el-table
                         :data="productTable"
@@ -81,7 +80,6 @@
                         <template slot-scope="scope">{{ scope.row[v.key] }}</template>
                     </el-table-column>
                 </el-table>
-
 
             </el-tab-pane>
             <el-tab-pane :label="$i.warehouse.applyRework">
@@ -154,31 +152,6 @@
                 options:[],
                 dialogFormVisible:false,
                 labelPosition:'right',
-                pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
                 qcOrderData:{},
                 summaryData:{
                     cartonOfProducts:0,
