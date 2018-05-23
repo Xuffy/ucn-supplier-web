@@ -30,5 +30,14 @@
 
   "warehouseOverview":"仓库总览",
   "qcOverview":"货单预览",
-  "status":"状态"
+  "status":"状态",
+  "payment":"付款信息",
+  "qcResult":"验货结果",
+  "applyRework":"返工申请",
+  "applyReturn":"退货申请",
+  "accept":"接受",
+  "acceptRework":"接受返工",
+  "acceptReturn":"接受退货"
+
+
 }

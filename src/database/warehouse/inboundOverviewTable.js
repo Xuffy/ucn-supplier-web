@@ -1,0 +1,18 @@
+export default {
+    inboundNo:{},
+    inboundDate:{},
+    warehouseNo:{},
+    warehouseName:{},
+    inboundTypeDictCode:{},
+    skuTotalQty:{},
+    skuTotalVolume:{},
+    skuTotalNetWeight:{},
+    skuTotalGrossWeight:{},
+    purchaser:{},
+    carrier:{},
+    carrierPhone:{},
+    remark:{},
+    updateName:{},
+    entryDt:{},
+    updateDt:{},
+}

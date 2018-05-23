@@ -5,7 +5,7 @@
             <div class="btn-wrap">
                 <el-button @click='download' v-authorize="'ORDER:DRAFT_OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedDate.length}})</el-button>
                  <el-button @click='send' v-authorize="'ORDER:DRAFT_OVERVIEW:SEND'">{{($i.common.send)}}</el-button>
-                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder' v-authorize="'ORDER:DRAFT_OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>
+<!--                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder' v-authorize="'ORDER:DRAFT_OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>-->
             </div>
              <div class="select-wrap">
                <selectSearch 
@@ -46,7 +46,7 @@
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
      */
-
+    import { mapActions } from 'vuex'
     import {
         dropDown,
         selectSearch
@@ -84,7 +84,7 @@
                     orderNo: '',
                     skuCode: '',
                     view: 1, //view by的按钮组
-                    ps: 10,
+                    ps: 50,
                     pn: 1
                 },
                 selectedDate: [],
@@ -92,6 +92,9 @@
             }
         },
         methods: {
+             ...mapActions([
+                'setRecycleBin','setDraft'
+            ]),
             onAction(item, type) {
                 this.$windowOpen({
                     url: '/order/detail',
@@ -206,6 +209,14 @@
         },
         created() {
             this.getdata(this.$db.order.overview)
+            this.setRecycleBin({
+                name: 'orderRecycleBin',
+                show: true
+            });
+            this.setDraft({
+                name: 'orderDraft',
+                show: true
+            });
         },
         mounted() {
             this.loading = false

@@ -463,7 +463,7 @@
                 else{
                     let url='';
                     if(this.type==='product'){
-                        url=this.$apis.get_buyerProductList;
+                        url=this.$apis.get_sellerProductList;
                     }else if(this.type==='bookmark'){
                         url=this.$apis.get_buyerBookmarkList;
                     }
@@ -474,7 +474,7 @@
                         pn:e?e:1,
                         ps:10
                     }).then(res=>{
-                        this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
+                        this.tableDataList = this.$getDB(this.$db.product.addProductTable, res.datas,(e)=>{
                             if(e.status.value===1){
                                 e.status.value='上架';
                             }else if(e.status.value===0){
@@ -609,7 +609,7 @@
                     this.$ajax.post(this.$apis.get_buyerBookmarkList,{
                         recycle:true
                     }).then(res=>{
-                        this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
+                        this.tableDataList = this.$getDB(this.$db.product.addProductTable, res.datas,(e)=>{
                             if(e.status.value===1){
                                 e.status.value='上架';
                             }else if(e.status.value===0){

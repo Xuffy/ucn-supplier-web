@@ -40,7 +40,7 @@ export default {
         transForm: 'ITM'
     },
     departurePort: { //系统带入，当前inquiry所选的发运港口
-
+        transForm: 'PORT'
     },
     destinationPort: { //系统带入，当前inquiry所选目的港口
 

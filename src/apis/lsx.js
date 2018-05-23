@@ -6,10 +6,11 @@ export default {
     get_supply_my_category:['/category/tree','BASE_SELL','USUPPLY_URL'],
 
 
+
     get_productCategory:['/purchase/sys/category','BASE_BUY','UPURCHASE_URL'],
     get_productDetail: ['/sku/{id}', 'BASE_SELL','USUPPLY_URL'],
-    delete_product: ['/sku/{id}/delete', 'BASE_CS','USUPPLY_URL'],
-    change_productStatus: ['/sku/{id}/status', 'BASE_CS','USUPPLY_URL'],
+    delete_product: ['/sku/{id}/delete', 'BASE_SELL','USUPPLY_URL'],
+    change_productStatus: ['/sku/{id}/status', 'BASE_SELL','USUPPLY_URL'],
     get_productList: ['/sku/listSkuByParams', 'BASE_SELL','USUPPLY_URL'],
     get_supplierWhole: ['/supplierWhole', 'BASE_CS','USUPPLY_URL'],
     add_address: ['/supplier/address', 'BASE_CS','USUPPLY_URL'],
@@ -24,6 +25,7 @@ export default {
     update_supplier: ['/supplier/{id}', 'BASE_CS','USUPPLY_URL'],
 
 
+
     //department setting
     get_departmentOverview: ['/department/overview', 'BASE_LYF','UUSER_URL'],
     get_department: ['/department', 'BASE_LYF','UUSER_URL'],
@@ -31,6 +33,7 @@ export default {
     delete_department: ['/department/{deptId}', 'BASE_LYF','UUSER_URL'],
     add_departmentRole: ['/role', 'BASE_LYF','UUSER_URL'],
     delete_departmentRole: ['/role/{deptId}/{roleId}', 'BASE_LYF','UUSER_URL'],
+
 
 
     /**
@@ -41,9 +44,9 @@ export default {
     set_sellerProductPutDown:['/sku/soldout','BASE_SELL','USUPPLY_URL'],
     delete_sellerProduct:['/sku/deleteAll','BASE_SELL','USUPPLY_URL'],
     get_sellerCustomer:['/supplier/sku/setting/listCustomers','BASE_SELL','USUPPLY_URL'],
-    get_sellerCustomerOne:['/supplier/sku/setting/listCustomers/{id}','BASE_SELL','USUPPLY_URL'],
+    get_sellerCustomerGroup:['/supplier/sku/setting/getCustomerByIds','BASE_SELL','USUPPLY_URL'],
     update_buyerProductDetail:['/sku/{id}','BASE_SELL','USUPPLY_URL'],
-
+    get_sellerProductList:['/sku/listSkuByParams','BASE_SELL','USUPPLY_URL'],
 
     //product buyer
     get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_BUY','UPURCHASE_URL'],
@@ -67,8 +70,6 @@ export default {
     recover_buyerProductBookmark:['/purchase/sku/recoverBookmark','BASE_BUY','UPURCHASE_URL'],
 
 
-
-
     /**
      * seller warehouse
      * */
@@ -82,10 +83,17 @@ export default {
     get_warehouseOverviewData:['/warehouse/overview/page','BASE_SELL','USUPPLY_URL'],
     get_orderSku:['/order/getAllOrderInfo','BASE_SELL','USUPPLY_URL'],
     get_inboundSku:['/inbound/sku/page','BASE_SELL','USUPPLY_URL'],
-
     get_outboundData:['/outbound/page','BASE_SELL','USUPPLY_URL'],
     add_outbound:['/outbound/add','BASE_SELL','USUPPLY_URL'],
+    get_outBoundDetail:['/outbound/getById','BASE_SELL','USUPPLY_URL'],
     get_outboundProductData:['/inbound/sku/queryForOutbound','BASE_SELL','USUPPLY_URL'],
+    get_qcOrderDetail: ['/qc/getById', 'USUPPLY_URL', 'USUPPLY_URL'],
+    get_qcOrderProductData:['/qc/detail/page', 'USUPPLY_URL', 'USUPPLY_URL'],
+    accept_qcResult: ['/qc/result/accept', 'BASE_SELL', 'USUPPLY_URL'],
+    get_outboundDetailProductData:['/outbound/sku/page','BASE_SELL','USUPPLY_URL'],
+
+
+
 
     /**
      * buyer Warehouse
@@ -96,14 +104,14 @@ export default {
     get_currency:['/currency/all','UMETA_URL','UMETA_URL'],
     add_buyerQcOrder:['/qc/add','BASE_BUY','UPURCHASE_URL'],
     GET_QC_DETAIL_GETBYID: ['/qc/detail/getById', 'USUPPLY_URL', 'USUPPLY_URL'],
-    GET_QC_GETBYID: ['/qc/getById', 'USUPPLY_URL', 'USUPPLY_URL'],
     GET_QC_GETBYQCORDERNO: ['/qc/getByQcOrderNo', 'USUPPLY_URL', 'USUPPLY_URL'],
-    POST_QC_DETAIL_PAGE: ['/qc/detail/page', 'USUPPLY_URL', 'USUPPLY_URL'],
-    POST_QC_RESULT_ACCEPT: ['/qc/result/accept', 'USUPPLY_URL', 'USUPPLY_URL'],
     POST_RETURN_HANDLE: ['/qc/return/handle', 'USUPPLY_URL', 'USUPPLY_URL'],
     POST_REWORK_HANDLE: ['/qc/rework/handle', 'USUPPLY_URL', 'USUPPLY_URL'],
     get_qcDetail:['/qc/getById','BASE_BUY','UPURCHASE_URL'],
     get_qcProductInfo:['/qc/detail/page','BASE_BUY','UPURCHASE_URL'],
+    get_buyerWarehouseOverview:['/warehouse/overview/page','BASE_BUY','UPURCHASE_URL'],
+    set_qcResultConfirm:['/qc/result/confirm','BASE_BUY','UPURCHASE_URL'],
+
 
 
     /**
@@ -114,6 +122,7 @@ export default {
     get_serviceQcOrderProduct:['/qc/detail/page','BASE_SERVICE','USERVICE_URL'],
     get_serviceQcSurveyor:['/user/list','UUSER_URL','UUSER_URL'],
     save_serviceQcOrder:['/qc/result/save','BASE_SERVICE','USERVICE_URL'],
+
 
 
     /**

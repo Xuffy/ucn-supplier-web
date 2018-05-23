@@ -32,11 +32,11 @@ export default {
         showType:'input',
         disabled:true
     },
-    timeZone:{
-        key:'timeZone',
-        belong:'basicInfo',
-        showType:'timeZone',
-    },
+    // timeZone:{
+    //     key:'timeZone',
+    //     belong:'basicInfo',
+    //     showType:'timeZone',
+    // },
     attachment:{
         key:'attachment',
         belong:'basicInfo',

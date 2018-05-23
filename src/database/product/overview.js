@@ -37,6 +37,10 @@ export default {
         belongPage:'sellerProductOverview',
         options:[
             {
+                label:'全部',
+                value:null
+            },
+            {
                 label:'是',
                 value:true
             },

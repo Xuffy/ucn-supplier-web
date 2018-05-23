@@ -5,7 +5,7 @@
         </div>
         <el-form :modal="outboundData" ref="basicInfo" class="speForm" label-width="200px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.warehouse.outbound" v-if="v.belong==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:8" :md="v.fullLine?24:8" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col class="speCol" v-for="v in $db.warehouse.outbound" v-if="v.belong==='basicInfo' && v.showType!=='timeZone'" :key="v.key" :xs="24" :sm="v.fullLine?24:8" :md="v.fullLine?24:8" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.showType==='input'">
                             <el-input
@@ -262,7 +262,7 @@
                     outboundTypeDictCode: "",
                     remark: "",
                     shipmentInvoiceNo: "",
-                    timeZone: "",
+                    // timeZone: "",
                 },
                 //inbound总计
                 outboundSummary:{
@@ -364,6 +364,7 @@
 
             //提交表单
             submit(){
+                this.outboundData.outboundSkuCreateParams=[];
                 this.productData.forEach(v=>{
                     this.outboundData.outboundSkuCreateParams.push({
                         inboundSkuId: v.id,
@@ -373,13 +374,17 @@
                     });
                 });
                 console.log(this.outboundData)
-                // this.disabledSubmit=true;
-                // this.$ajax.post(this.$apis.add_outbound,this.outboundData).then(res=>{
-                //     console.log(res)
-                //     this.disabledSubmit=false;
-                // }).catch(err=>{
-                //     this.disabledSubmit=false;
-                // });
+                this.disabledSubmit=true;
+                this.$ajax.post(this.$apis.add_outbound,this.outboundData).then(res=>{
+                    this.disabledSubmit=false;
+                    this.$message({
+                        message: '提交成功!',
+                        type: 'success'
+                    });
+                    this.$router.push('/warehouse/outbound');
+                }).catch(err=>{
+                    this.disabledSubmit=false;
+                });
             },
 
             cancel(){
@@ -434,6 +439,10 @@
                         res.datas.forEach(v=>{
                             this.productData.push(v);
                         });
+                        console.log(this.productData)
+                        this.productData.forEach(v=>{
+                            v.inboundVo.inboundDate=this.$dateFormat(v.inboundVo.inboundDate,'yyyy-mm-dd')
+                        });
                         this.loadingProductTable=false;
                     }).catch(err=>{
                         this.loadingProductTable=false;
@@ -477,12 +486,13 @@
              * 页面表格事件
              * */
             handleClick(e){
-                // this.$windowOpen({
-                //     url:'',
-                //     params:{
-                //         id:e.skuList[0].skuId
-                //     }
-                // })
+                console.log(e)
+                this.$windowOpen({
+                    url:'/product/detail',
+                    params:{
+                        id:e.skuId
+                    }
+                })
             },
             handleBlur(e,value,index){
                 if(e.isNeed){

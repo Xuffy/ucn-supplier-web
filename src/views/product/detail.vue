@@ -45,7 +45,7 @@
                     <el-button @click="editProduct">{{$i.product.edit}}</el-button>
                     <el-button :loading="disabledSetupBtn" @click="setUpDown">{{btnInfo}}</el-button>
                     <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
-                    <el-button :loading="disabledDeleteBtn" type="danger" @click="deleteProduct">{{$i.product.delete}}</el-button>
+                    <!--<el-button :loading="disabledDeleteBtn" type="danger" @click="deleteProduct">{{$i.product.delete}}</el-button>-->
                 </div>
             </div>
         </div>
@@ -352,25 +352,27 @@
 
             //设置商品上/下架状态
             setUpDown(){
-                let info,status,successInfo;
+                let info,status,successInfo,url;
                 if(this.productForm.status===1){
                     info='确定下架该商品?';
                     successInfo='下架成功';
                     status=0;
+                    url=this.$apis.set_sellerProductPutDown;
                 }else if(this.productForm.status===0){
                     info='确定上架该商品?';
                     successInfo='上架成功';
                     status=1;
+                    url=this.$apis.set_sellerProductPutAway;
                 }
+
                 this.$confirm(info, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
                     this.disabledSetupBtn=true;
-                    this.$ajax.post(`${this.$apis.change_productStatus}?status=${status}`,{
-                        id:this.productForm.id,
-                    }).then(res=>{
+
+                    this.$ajax.post(url,[this.$route.query.id]).then(res=>{
                         this.disabledSetupBtn=false;
                         this.$message({
                             message: successInfo,
@@ -386,6 +388,15 @@
                     }).catch(err=>{
                         this.disabledSetupBtn=false;
                     });
+                    //
+                    //
+                    // this.$ajax.post(`${this.$apis.change_productStatus}?status=${status}`,{
+                    //     id:this.productForm.id,
+                    // }).then(res=>{
+                    //
+                    // }).catch(err=>{
+                    //
+                    // });
                 }).catch(() => {
 
                 });
@@ -393,7 +404,9 @@
 
             //添加新产品
             addNewProduct(){
-                this.windowOpen('/sellerProduct/addNewProduct');
+                this.$windowOpen({
+                    url:"/product/addNewProduct",
+                })
             },
 
             //删除产品

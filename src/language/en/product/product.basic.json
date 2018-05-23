@@ -54,5 +54,9 @@
   "otherIncotermArea":"其他价格条款区域",
   "otherIncotermCurrency":"其他价格条款币种",
 
-  "uploadProduct":"上传产品"
+  "uploadProduct":"上传产品",
+
+
+  "remove":"移除",
+  "detail":"详情"
 }

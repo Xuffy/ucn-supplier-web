@@ -1,7 +1,7 @@
 <template>
     <div class="SupplierSourcing">
             <div class="title">
-             {{$i.supplier.supplierSourcing}}
+             客户总览
         </div>
 <!--        搜索条件-->
             <div style='marginTop:20px;'>
@@ -54,7 +54,7 @@
                   <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectNumber.length}})</el-button>
                   <el-button  @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
 -->
-                  <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectNumber.length}})</el-button>
+<!--                  <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectNumber.length}})</el-button>-->
 <!--                  <el-button :disabled='!selectedData.length>0'>{{$i.common.delete}}({{selectNumber.length}})</el-button>-->
               </div>  
               <div>
@@ -127,7 +127,7 @@
                     "name": "",
                     "payment": '',
                     "pn": 1,
-                    "ps": 10,
+                    "ps": 50,
                      tc: 0
                     //                    "sorts": [{
                     //                        "nativeSql": true,

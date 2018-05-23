@@ -127,7 +127,7 @@
                         <!--<div v-else>-->
                             <el-input
                                     placeholder="请输入内容"
-                                    v-model="scope.row[v.key]"
+                                    v-model="scope.row.skuList[0][v.key]"
                                     clearable>
                             </el-input>
                         <!--</div>-->
@@ -613,7 +613,6 @@
                         res.forEach(v=>{
                             this.productData.push(v);
                         });
-                        console.log(this.productData,'this.productData')
                         /**
                          * 计算底部summary
                          * */
@@ -665,8 +664,6 @@
              * */
             handleBlur(e,index){
                 if(e==='inboundOutCartonTotalQty'){
-
-
                     //处理入库产品总箱数输入框
                     if(!this.productData[index][e] || !this.productData[index]['skuOuterCartonQty']){
                         this.productData[index].inboundSkuTotalQty='';

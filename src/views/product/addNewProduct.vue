@@ -139,25 +139,28 @@
                                     type="primary">{{$i.product.add}}</el-button>
                             <el-table
                                     :data="tableData"
-                                    style="width: 511px"
+                                    style="width: 541px"
                                     border>
                                 <el-table-column
-                                        prop="date"
+                                        prop="name"
                                         :label="$i.product.customerName"
                                         align="center"
                                         width="180">
                                 </el-table-column>
                                 <el-table-column
-                                        prop="name"
+                                        prop="code"
                                         :label="$i.product.customerCode"
                                         align="center"
                                         width="180">
                                 </el-table-column>
                                 <el-table-column
-                                        prop="address"
-                                        width="150"
+                                        label="操作"
                                         align="center"
-                                        :label="$i.product.action">
+                                        width="180">
+                                    <template slot-scope="scope">
+                                        <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.product.remove}}</el-button>
+                                        <el-button type="text" size="small">{{$i.product.detail}}</el-button>
+                                    </template>
                                 </el-table-column>
                             </el-table>
                         </div>
@@ -677,10 +680,10 @@
         <input style="display: none" id="pic" name="file" type="file" accept="image/*" @change="uploadPic">
 
         <div class="footBtn">
-            <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i.product.finish}}</el-button>
+            <el-button @click="finish" :disabled="loadingData" :loading="disabledSubmit" type="primary">{{$i.product.finish}}</el-button>
         </div>
 
-        <el-dialog width="70%" title="收货地址" :visible.sync="addCustomerDialogVisible">
+        <el-dialog width="70%" :title="$i.product.addCustomer" :visible.sync="addCustomerDialogVisible">
             <el-form ref="customerQuery" :model="customerQuery" label-width="120px">
                 <el-row class="speZone">
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
@@ -743,9 +746,8 @@
                 <!--</template>-->
             </v-table>
 
-
             <div slot="footer" class="dialog-footer">
-                <el-button :disabled="loadingTable" type="primary" @click="postData">确 定</el-button>
+                <el-button :disabled="loadingTable" :loading="disableClickPost" type="primary" @click="postData">确 定</el-button>
                 <el-button :disabled="loadingTable" @click="addCustomerDialogVisible = false">取 消</el-button>
             </div>
         </el-dialog>
@@ -790,14 +792,9 @@
                 disabledSubmit:false,               //防止用户多次提及表单
                 imgGroup:[],
                 addCustomerDialogVisible:false,     //弹出框可见
+                disableClickPost:false,
                 //配置可见性用户
-                tableData:[
-                    {
-                        date: '2016-05-02',
-                        name: '王小虎',
-                        address: '上海市普陀区金沙江路 1518 弄'
-                    },
-                ],
+                tableData:[],
                 pickerOptions1: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
@@ -1239,9 +1236,17 @@
             addCustomer(){
                 this.addCustomerDialogVisible=true;
                 this.loadingTable=true;
+
                 this.$ajax.post(this.$apis.get_sellerCustomer,this.customerQuery).then(res=>{
                     this.loadingTable=false;
-                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas);
+                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
+                        this.tableData.forEach(v=>{
+                            if(v.id===e.id.value){
+                                this.$set(e,'_disabled',true);
+                                this.$set(e,'_checked',true);
+                            }
+                        })
+                    });
                 }).catch(err=>{
                     this.loadingTable=false;
                 });
@@ -1287,7 +1292,8 @@
                     // }).catch(err=>{
                     //     this.disabledSubmit=false;
                     // });
-                }else{
+                }
+                else{
                     let param=Object.assign({},this.productForm);
                     _.mapObject(param,(e,k)=>{
                         if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
@@ -1307,9 +1313,15 @@
                     if(!param.readilyAvailable){
                         param.availableQty=0;
                     }
-                    if(!param.visibility){
+                    if(param.visibility){
                         param.ids=[];
+                    }else{
+                        param.ids=[];
+                        this.tableData.forEach(v=>{
+                            param.ids.push(v.id);
+                        });
                     }
+
                     this.$ajax.post(this.$apis.add_newSKU,param).then(res=>{
                         this.$message({
                             message: '新增成功',
@@ -1351,21 +1363,18 @@
                 console.log(e)
             },
             searchCustomer(){
-                // console.log(this.customerQuery)
-                // let country='';
-                // this.countryList.forEach((v,k)=>{
-                //     if(k===this.countryList.length-1){
-                //         country+=v;
-                //     }else{
-                //         country+=(v+',');
-                //     }
-                // });
-                //
-                // this.customerQuery.country=country;
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_sellerCustomer,this.customerQuery).then(res=>{
                     this.loadingTable=false;
-                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas);
+                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
+                        this.tableData.forEach(v=>{
+                            if(v.id===e.id.value){
+                                this.$set(e,'_disabled',true);
+                                this.$set(e,'_checked',true);
+                            }
+                        })
+                    });
+
                 }).catch(err=>{
                     this.loadingTable=false;
                 });
@@ -1378,10 +1387,28 @@
                 // this.countryList=[];
             },
             postData(){
-                console.log(this.selectList)
-                this.$ajax.post(this.$apis.get_sellerCustomerOne,{
-                    id:''
+                let id=[];
+                this.tableDataList.forEach(v=>{
+                    if(v._checked && !v._disabled){
+                        id.push(v.id.value);
+                    }
                 });
+                if(id.length){
+                    this.disableClickPost=true;
+                    this.$ajax.post(this.$apis.get_sellerCustomerGroup,id).then(res=>{
+                        res.forEach(v=>{
+                            this.tableData.push(v);
+                        })
+                        this.addCustomerDialogVisible=false;
+                        this.disableClickPost=false;
+                    }).catch(err=>{
+                        this.addCustomerDialogVisible=false;
+                        this.disableClickPost=false;
+                    });
+                }else{
+                    this.addCustomerDialogVisible=false;
+                }
+
             },
 
             /**
@@ -1539,6 +1566,7 @@
         bottom: 0;
         width: 100%;
         text-align: left;
+        z-index: 1000;
     }
     .dialog-footer{
         text-align: center;

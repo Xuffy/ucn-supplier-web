@@ -3,7 +3,7 @@
         <h3 class="hd">订单总览</h3>
         <div class="status">
             <div class="btn-wrap">
-                <span>Status&nbsp</span>
+                <span>状态&nbsp</span>
                       <el-radio-group v-model="params.status" size="mini" @change='changeStatus'>
                             <el-radio-button label="">全部</el-radio-button>
                             <el-radio-button label="2"> 待供应商确认</el-radio-button>
@@ -26,7 +26,7 @@
                 <el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">下载({{selectedDate.length}})</el-button>
 <!--                <el-button @click='creat_order' :disabled='!(selectedDate.length==1)' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.common.createOrder)}}</el-button>-->
 <!--                 <el-button :disabled='prodisabled' @click='finish'>finish</el-button>-->
-                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">删除</el-button>
+<!--                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">删除</el-button>-->
             </div>
             <div class="viewBy">
                 <span>浏览方式&nbsp</span>
@@ -60,7 +60,7 @@
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
      */
-
+    import { mapActions } from 'vuex'
     import {
         dropDown,
         selectSearch,
@@ -90,10 +90,10 @@
                 rowspan: 1,
                 options: [{
                     id: '1',
-                    label: 'Order No'
+                    label: '订单编号'
                 }, {
                     id: '2',
-                    label: 'Sku Code'
+                    label: '产品编号'
                 }],
                 keyType: '',
                 params: {
@@ -101,7 +101,7 @@
                     skuCode: '',
                     status: '',
                     view: 1, //view by的按钮组
-                    ps: 10,
+                    ps: 50,
                     pn: 1,
                     tc: 0
                 },
@@ -110,6 +110,9 @@
             }
         },
         methods: {
+             ...mapActions([
+                'setRecycleBin','setDraft'
+            ]),
             onAction(item, type) {
                 this.$windowOpen({
                     url: '/order/detail',
@@ -213,6 +216,7 @@
             },
             //get_orderlist数据
             getdata(overview) {
+                console.log('in')
                 this.loading = true
                 this.$ajax.post(this.$apis.get_orderlist, this.params)
                     .then((res) => {
@@ -232,11 +236,19 @@
             },
             handleSizeChange(val) {
                 this.params.pn = val;
-                this.getdata()
+                 if (this.params.view == 1) {
+                            this.getdata(this.$db.order.overview)
+                        } else {
+                            this.getdata(this.$db.order.overviewBysku)
+                        }
             },
             pageSizeChange(val) {
                 this.params.ps = val;
-                this.getdata()
+                if (this.params.view == 1) {
+                            this.getdata(this.$db.order.overview)
+                        } else {
+                            this.getdata(this.$db.order.overviewBysku)
+                        }
             },
         },
         computed: {
@@ -244,6 +256,14 @@
         },
         created() {
             this.getdata(this.$db.order.overview)
+            this.setRecycleBin({
+                name: 'orderRecycleBin',
+                show: true
+            });
+            this.setDraft({
+                name: 'orderDraft',
+                show: true
+            });
         },
         mounted() {
             this.loading = false

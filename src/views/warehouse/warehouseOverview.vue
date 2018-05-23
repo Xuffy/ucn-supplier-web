@@ -115,12 +115,9 @@
             getInboundData(){
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_warehouseOverviewData,this.warehouseConfig).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.warehouse.sellerWarehouseTable, res.datas,(e)=>{
+                    this.tableDataList = this.$getDB(this.$db.warehouse.warehouseOverview, res.datas,(e)=>{
                         e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
-                        // e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
-                        // e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
-                        // e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
-                        // return e;
+                        return e;
                     });
                     this.loadingTable=false;
                 }).catch(err=>{
@@ -155,13 +152,12 @@
             },
 
             btnClick(e){
-                console.log(e)
-                // this.$windowOpen({
-                //     url:'/warehouse/inboundDetail',
-                //     params:{
-                //         id:e.id.value
-                //     }
-                // })
+                this.$windowOpen({
+                    url:'/product/detail',
+                    params:{
+                        id:e.skuId.value
+                    }
+                })
             },
 
             changeChecked(e){

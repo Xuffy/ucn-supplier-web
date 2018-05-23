@@ -3,20 +3,20 @@
         <div class="title">
             {{$i.warehouse.basicInfo}}
         </div>
-        <el-form :modal="inboundData" ref="basicInfo" class="speForm" label-width="200px" :label-position="labelPosition">
+        <el-form :modal="outboundData" ref="basicInfo" class="speForm" label-width="200px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.warehouse.inbound" v-if="v.belong==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:8" :md="v.fullLine?24:8" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col class="speCol" v-for="v in $db.warehouse.outbound" v-if="v.belong==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:8" :md="v.fullLine?24:8" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.showType==='input'">
                             <el-input
                                     class="speInput"
                                     size="mini"
                                     :disabled="true"
-                                    v-model="inboundData[v.key]"
-                                    placeholder="please input"></el-input>
+                                    v-model="outboundData[v.key]"
+                                    placeholder="请填写"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
-                            <el-select :disabled="true" class="speInput" size="mini" v-model="inboundData[v.key]" placeholder="please choose">
+                            <el-select :disabled="true" class="speInput" size="mini" v-model="outboundData[v.key]" placeholder="请选择">
                                 <el-option
                                         v-for="item in v.options"
                                         :key="item.value"
@@ -31,8 +31,8 @@
                                     class="speInput"
                                     type="textarea"
                                     autosize
-                                    placeholder="please input"
-                                    v-model="inboundData[v.key]">
+                                    placeholder="请填写"
+                                    v-model="outboundData[v.key]">
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
@@ -40,17 +40,17 @@
                                     :disabled="true"
                                     class="speInput"
                                     size="mini"
-                                    v-model="inboundData[v.key]"
+                                    v-model="outboundData[v.key]"
                                     :controls="false"
                                     :min="0"
-                                    label="please input"></el-input-number>
+                                    label="请填写"></el-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
                                     class="speInput"
                                     :list="dropData"
                                     :defaultProps="defaultProps"
-                                    v-model="inboundData[v.key]"
+                                    v-model="outboundData[v.key]"
                                     ref="dropDown"></drop-down>
                         </div>
                         <div v-else-if="v.showType==='date'">
@@ -58,11 +58,10 @@
                                     :disabled="true"
                                     class="speInput"
                                     size="mini"
-                                    v-model="inboundData[v.key]"
+                                    v-model="outboundData[v.key]"
                                     align="right"
                                     type="date"
-                                    placeholder="选择日期"
-                                    :picker-options="pickerOptions1">
+                                    placeholder="选择日期">
                             </el-date-picker>
                         </div>
                     </el-form-item>
@@ -104,35 +103,10 @@
                  * 页面基础配置
                  * */
                 labelPosition:'right',
-                pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
                 addOrderDialogVisible:false,
                 loadingTable:false,
 
-                inboundData:{
+                outboundData:{
                     inboundNo:'',
                     inboundDate:'',
                     warehouseNo:'',
@@ -144,7 +118,6 @@
                     carrier:'',
                     carrierPhone:'',
                     timeZone:'',
-
                 },
 
                 /**
@@ -158,11 +131,12 @@
         methods:{
             getData(){
                 this.loadingTable=true;
-                this.$ajax.get(`${this.$apis.get_inboundDetail}?id=${this.$route.query.id}`).then(res=>{
-                    this.inboundData=res;
+                this.$ajax.get(`${this.$apis.get_outBoundDetail}?id=${this.$route.query.id}`).then(res=>{
+                    console.log(res)
+                    this.outboundData=res;
 
-                    this.$ajax.post(this.$apis.get_inboundSku,{
-                        inboundId: this.$route.query.id,
+                    this.$ajax.post(this.$apis.get_outboundDetailProductData,{
+                        outboundId: this.$route.query.id,
                         pn: 1,
                         ps: 50,
 
@@ -173,18 +147,11 @@
                         //     }
                         // ],
                     }).then(res=>{
-                        console.log(res)
-
-                        this.productTable = this.$getDB(this.$db.warehouse.inboundDetailProductTable, res.datas,(e)=>{
-
-                        });
-
+                        this.productTable = this.$getDB(this.$db.warehouse.outboundDetailProductData, res.datas);
                         this.loadingTable=false;
                     }).catch(err=>{
                         this.loadingTable=false;
                     });
-
-
                 }).catch(err=>{
                     this.loadingTable=false;
                 });
