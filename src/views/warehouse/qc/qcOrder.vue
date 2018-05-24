@@ -61,14 +61,16 @@
         <el-tabs type="border-card">
             <el-tab-pane :label="$i.warehouse.qcResult">
                 <el-button :disabled="selectFirst.length===0" type="primary" @click="accept">{{$i.warehouse.accept}}</el-button>
-
                 <el-table
+                        class="speTable"
                         :data="productTable"
                         style="width: 100%;margin-top: 10px"
                         border
                         @selection-change="handleFirstTable">
                     <el-table-column
+                            align="center"
                             type="selection"
+                            :selectable='checkboxInit'
                             width="55">
                     </el-table-column>
                     <el-table-column
@@ -80,7 +82,6 @@
                         <template slot-scope="scope">{{ scope.row[v.key] }}</template>
                     </el-table-column>
                 </el-table>
-
             </el-tab-pane>
             <el-tab-pane :label="$i.warehouse.applyRework">
                 <el-button type="primary">{{$i.warehouse.acceptRework}}</el-button>
@@ -101,7 +102,6 @@
 
 
         <el-dialog width="40%" title="将QC数据更新到产品库" :visible.sync="dialogFormVisible">
-
 
             <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAll">全选</el-checkbox>
 
@@ -183,7 +183,7 @@
                 selectSecond:[],
                 selectThird:[],
                 acceptConfig:{
-                    fields: [],
+                    fields: ['innerCartonLength','innerCartonWidth','innerCartonHeight','innerCartonNetWeight','innerCartonGrossWeight','innerCartonVolume','outerCartonLength','outerCartonWidth','outerCartonHeight','outerCartonNetWeight','outerCartonGrossWeight','outerCartonVolume'],
                     qcOrderDetailIds: [],
                 },
 
@@ -191,9 +191,9 @@
                 /**
                  * 弹出框data
                  * */
-                checkAll:false,
+                checkAll:true,
                 isIndeterminate: false,
-                totalCheckList:['innerCartonLength','innerCartonWidth','innerCartonHeight','innerCartonNetWeight','innerCartonGrossWeight','innerCartonVolume','outerCartonLength','outerCartonWidth','outerCartonHeight','outerCartonNetWeight','v','outerCartonGrossWeight','outerCartonVolume'],
+                totalCheckList:['innerCartonLength','innerCartonWidth','innerCartonHeight','innerCartonNetWeight','innerCartonGrossWeight','innerCartonVolume','outerCartonLength','outerCartonWidth','outerCartonHeight','outerCartonNetWeight','outerCartonGrossWeight','outerCartonVolume'],
             }
         },
         methods:{
@@ -209,12 +209,19 @@
             getTableData(){
                 this.$ajax.post(this.$apis.get_qcOrderProductData,this.tableConfig)
                     .then(res=>{
-                        console.log(res.datas)
                         this.productTable=res.datas;
                     })
                     .catch(err=>{
 
                     });
+            },
+
+            checkboxInit(row,index){
+                if(row.skuQcResultDictCode === 'WAIT_FOR_QC'){
+                    return 0;
+                }else{
+                    return 1;
+                }
             },
 
 
@@ -246,7 +253,6 @@
              * 弹出框事件
              * */
             handleCheckAll(val){
-                console.log(val,'val')
                 this.acceptConfig.fields=val?this.totalCheckList:[];
                 this.isIndeterminate=false;
             },
@@ -307,6 +313,9 @@
     }
     .dialog-footer{
         text-align: center;
+    }
+    .speTable >>> .el-checkbox{
+        margin-right: 0;
     }
 
 

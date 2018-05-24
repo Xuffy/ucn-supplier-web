@@ -33,5 +33,6 @@
   "inventorySkuQty":"库存数量",
   "inventorySkuVolume":"库存总体积",
   "inventorySkuGrossWeight":"库存总毛重",
-  "inventorySkuNetWeight":"库存总净重"
+  "inventorySkuNetWeight":"库存总净重",
+  "skuPic":"图片"
 }

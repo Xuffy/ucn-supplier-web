@@ -57,6 +57,7 @@
                 downloadBtnInfo:'All',
                 selectList:[],
                 qcStatusOption:[],
+                qcMethodsOption:[],
                 qcOrderConfig:{
                     pn: 1,
                     ps: 50,
@@ -87,7 +88,9 @@
             getQcData(){
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_qcOrderData,this.qcOrderConfig).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.warehouse.qcOverview, res.datas);
+                    this.tableDataList = this.$getDB(this.$db.warehouse.qcOverview, res.datas,e=>{
+                        e.qcMethodDictCode.value=this.$change(this.qcMethodsOption,'qcMethodDictCode',e).name;
+                    });
                     this.loadingTable=false;
                 }).catch(err=>{
                     this.loadingTable=false;
@@ -108,9 +111,25 @@
             },
 
             btnClick(e){
-                console.log(e)
                 if(e.serviceProviderIsLoginUser.value){
                     //跳9.2.3
+                    if(e.qcStatusDictCode.value==='COMPLETED_QC'){
+                        //跳qcOrderDetail
+                        this.$windowOpen({
+                            url:'/warehouse/qcOrderDetail',
+                            params:{
+                                id:e.id.value
+                            }
+                        })
+                    }else{
+                        //跳qcOrderService
+                        this.$windowOpen({
+                            url:'/warehouse/qcOrderService',
+                            params:{
+                                id:e.id.value
+                            }
+                        })
+                    }
                 }else{
                     //跳9.2.1
                     this.$windowOpen({
@@ -130,22 +149,22 @@
              * 字典获取
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS'],{_cache:true}).then(res=>{
-                    this.qcStatusOption=res[0].codes;
-                    this.qcStatusOption.forEach(v=>{
-                        if(v.code==='1'){
-                            v.label='已验货';
-                        }else if(v.code==='2'){
-                            v.label='待验货';
+                this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS','QC_MD'],{_cache:true}).then(res=>{
+                    res.forEach(v=>{
+                        if(v.code==='QC_STATUS'){
+                            this.qcStatusOption=v.codes;
+                        }else if(v.code==='QC_MD'){
+                            this.qcMethodsOption=v.codes;
                         }
-                    })
+                    });
+
+                    this.getQcData();
                 }).catch(err=>{
 
                 });
             },
         },
         created(){
-            this.getQcData();
             this.getUnit();
         },
         watch:{

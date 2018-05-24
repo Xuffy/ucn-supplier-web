@@ -5,9 +5,7 @@ export default {
     skuId:{
         _hide:true
     },
-    // pic: {
-    //     key: 'pic',     //接口还没反
-    // },
+    skuPic: {},
     skuInventoryStatusDictCode:{},
     skuQcStatusDictCode:{},
     warehouseNo:{},

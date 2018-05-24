@@ -1442,6 +1442,7 @@
                             this.lengthOption=v.codes;
                         }else if(v.code==='SKU_SALE_STATUS'){
                             this.saleStatusOption=v.codes;
+                            console.log(this.saleStatusOption)
                             this.saleStatusOption.forEach(v=>{
                                 if(v.code==='1'){
                                     v.label='上架';

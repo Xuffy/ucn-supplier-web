@@ -1,289 +1,586 @@
 <template>
-  <div class="QCOrderDetail">
-    <el-form ref="ruleform" :model="fromArg">
-      <el-row :gutter="10">
-        <el-col
-          v-for="(item, index) in $db.warehouse.qcDetailBasicInfo"
-          :key="index"
-          :xs="item.xs || 8"
-          :sm="item.sm || 8"
-          :md="item.md || 8"
-          :lg="item.lg || 8"
-          v-if="!item._inquiryHide && !item._hide"
-        >
-          <el-form-item
-            :label="item.label"
-            :prop="item.key"
-            :rules="item.rules"
-            :label-width="item.width || '200px'"
-          >
-            <el-input
-              v-model="basicInfo[item.key]"
-              :size="item.size || 'mini'"
-              v-if="item.type === 'String' && !item._hide"
+    <div class="qc-detail" v-loading="loadingData">
+        <div class="title">
+            <span>{{$i.warehouse.qcOrderDetail}}</span>
+        </div>
+        <div class="second-title">
+            {{$i.warehouse.basicInfo}}
+        </div>
+        <div>
+            <el-form label-width="190px">
+                <el-row class="speZone">
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.qcOrderNo">
+                            <el-input
+                                    v-model="qcDetail.qcOrderNo"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.qcTypeDictCode">
+                            <el-select size="mini" class="speInput" v-model="qcDetail.qcTypeDictCode" clearable placeholder="请选择">
+                                <el-option
+                                        v-for="item in qcTypeOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item prop="11" :label="$i.warehouse.qcDate">
+                            <el-date-picker
+                                    size="mini"
+                                    class="speInput"
+                                    v-model="qcDetail.qcDate"
+                                    align="right"
+                                    type="date"
+                                    placeholder="选择日期"
+                                    :picker-options="pickerOptions1">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item prop="11" :label="$i.warehouse.factoryAddress">
+                            <el-input
+                                    v-model="qcDetail.factoryAddress"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item prop="11" :label="$i.warehouse.factoryContactPhone">
+                            <el-input
+                                    v-model="qcDetail.factoryContactPhone"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item prop="11" :label="$i.warehouse.qcStatusDictCode">
+                            <el-input
+                                    v-model="qcDetail.qcStatusDictCode"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item prop="11" :label="$i.warehouse.qcMethodDictCode">
+                            <el-select size="mini" class="speInput" v-model="qcDetail.qcMethodDictCode" clearable placeholder="请选择">
+                                <el-option
+                                        v-for="item in qcMethodOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item prop="11" :label="$i.warehouse.surveyor">
+                            <el-select size="mini" class="speInput" v-model="qcDetail.surveyor" clearable placeholder="请选择">
+                                <el-option
+                                        v-for="item in surveyorOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item prop="11" :label="$i.warehouse.serviceFee">
+                            <el-input-number
+                                    :controls="false"
+                                    size="mini"
+                                    class="speInput"
+                                    v-model="qcDetail.serviceFee"
+                                    label="描述文字"></el-input-number>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item prop="11" :label="$i.warehouse.serviceName">
+                            <el-input
+                                    v-model="qcDetail.serviceName"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item prop="11" :label="$i.warehouse.exchangeCurrencyDictCode">
+                            <el-input
+                                    v-model="qcDetail.exchangeCurrencyDictCode"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item prop="11" :label="$i.warehouse.timeZone">
+                            <el-input
+                                    v-model="qcDetail.timeZone"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item prop="11" :label="$i.warehouse.remark">
+                            <el-input
+                                    v-model="qcDetail.remark"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item prop="11" :label="$i.warehouse.attachment">
+                            <el-input
+                                    v-model="qcDetail.attachment"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </div>
+        <div class="second-title">
+            {{$i.warehouse.payment}}
+        </div>
+        <div class="payment-table">
+            <el-button class="payment-btn" type="primary">{{$i.warehouse.pressMoney}}</el-button>
+            <el-table
+                    :data="tableData"
+                    border
+                    style="width: 100%">
+                <el-table-column
+                        label="No."
+                        align="center"
+                        width="60">
+                    <template slot-scope="scope">
+                        {{scope.$index+1}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="date"
+                        label="Payment Number"
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="name"
+                        label="Payment Item"
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="address"
+                        label="Est. Pay Date">
+                </el-table-column>
+                <el-table-column
+                        prop="address"
+                        label="Act. Pay Date">
+                </el-table-column>
+                <el-table-column
+                        prop="address"
+                        label="Est. Amount">
+                </el-table-column>
+                <el-table-column
+                        prop="address"
+                        label="Act. Amount">
+                </el-table-column>
+                <el-table-column
+                        prop="address"
+                        label="Currency">
+                </el-table-column>
+                <el-table-column
+                        prop="address"
+                        label="Available">
+                </el-table-column>
+                <el-table-column
+                        fixed="right"
+                        label="Action"
+                        width="100">
+                    <template slot-scope="scope">
+                        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                        <el-button type="text" size="small">编辑</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
 
-            />
-            <el-input-number v-model="basicInfo[item.key]" :min="0" :max="100" v-if="item.type === 'phone'" controls-position="right" size="mini" :controls="false" style="width:100%;"/>
-            <el-select
-              v-model="selectAll[item.key]"
-              value-key="id"
-              :size="item.size || 'mini'"
-              v-if="item.type === 'Select'"
-              style="width:100%;"
-            >
-              <el-option
-                v-for="item in selectAll[item.key]"
-                :key="item.id"
-                :id="item.id"
-              />
-            </el-select>
-            <el-input
-              type="textarea"
-              v-model="basicInfo[item.key]"
-              :rows="item.rows || 4"
-              :size="item.size || 'mini'"
-              :placeholder="item.placeholder"
-              v-if="item.type === 'textarea'"
-              resize="none"
-              :disabled="true"
-            />
-            <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
-    <h5 class="solid">付款信息</h5>
-    <v-table
-      :data="paymentData"
-    />
-    <h5 class="solid">产品信息</h5>
-      <v-table
-  :data="tableData"
-/>
-    <h5 class="solid">总结</h5>
-    <el-form ref="ruleform" :model="fromArg">
-      <el-row :gutter="10">
-        <el-col
-          v-for="(item, index) in $db.warehouse.summary"
-          :key="index"
-          :xs="item.xs || 8"
-          :sm="item.sm || 8"
-          :md="item.md || 8"
-          :lg="item.lg || 8"
-          v-if="!item._inquiryHide && !item._hide"
-        >
-          <el-form-item
-            :label="item.label"
-            :prop="item.key"
-            :rules="item.rules"
-            :label-width="item.width || '200px'"
-          >
-            <el-input
-              v-model="basicInfo[item.key]"
-              :size="item.size || 'mini'"
-              v-if="!item._hide"
-              disabled
-            />
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
-    <div class="footer">
-      <hr>
-      <span slot="footer">
-            <el-button type="primary" @click="postQcSave">确认</el-button>
-            <el-button>取消</el-button>
-        </span>
+        <div class="product-info">
+            <div class="second-title">
+                {{$i.warehouse.productInfo}}
+            </div>
+
+            <el-table
+                    class="product-table"
+                    v-loading="loadingProductInfoTable"
+                    :data="productInfoData"
+                    height="250"
+                    border
+                    style="width: 100%">
+                <el-table-column
+                        align="center"
+                        fixed="left"
+                        type="selection"
+                        width="55">
+                </el-table-column>
+                <el-table-column
+                        v-for="v in $db.warehouse.qcDetailProductInfo"
+                        v-if="!v._hide"
+                        :prop="v.key"
+                        align="center"
+                        :key="v.value"
+                        :label="$i.warehouse[v.key]"
+                        width="180">
+                    <template slot-scope="scope">
+                        <div v-if="v.showType==='select'">
+                            <div v-if="v.isQcResult">
+                                <el-select clearable v-model="scope.row[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in qcResultOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isBarCodeResult">
+                                <el-select clearable v-model="scope.row[v.key]" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in barCodeResult"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else>
+
+                            </div>
+                        </div>
+                        <div v-else-if="v.showType==='number'">
+                            <el-input-number
+                                    :controls="false"
+                                    v-model="scope.row[v.key]"
+                                    label="描述文字"></el-input-number>
+                        </div>
+                        <div v-else-if="v.showType==='input'">
+                            <el-input
+                                    placeholder="请输入内容"
+                                    v-model="scope.row[v.key]"
+                                    clearable>
+                            </el-input>
+                        </div>
+                        <div v-else>
+                            {{scope.row[v.key]}}
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+
+        <div class="footBtn">
+            <el-button :disabled="loadingData" :loading="disableClickSubmit" @click="submit" type="primary">{{$i.warehouse.submit}}</el-button>
+            <el-button :disabled="loadingData" @click="cancel">{{$i.warehouse.cancel}}</el-button>
+        </div>
     </div>
-  </div>
 </template>
 <script>
-  import { Upload, VTable } from '@/components/index';
-  export default {
-    name: 'QCOrderDetail',
-    data() {
-      return {
-        selectAll: {
-          QCType:[],
-          QCMethod:[],
-          surveyor:[],
-          QCStatus:[],
-          exchangeCurrency:[]
 
+    import {VTable } from '@/components/index';
+
+    export default {
+        name:'qc-detail',
+        components:{
+            VTable
         },
-        checkedList: [],
-        checkedData: [],
-        paymentData: [],
-        orderType: 20,
-        basicInfo: {},
-        tabData: [],
-        activeName2: '',
-        dialogClose: false,
-        id:1,
-        type:'',
-        tableData: [],
-        copyData: []
-      }
-    },
-    computed: {
-      fromArg() {
-        let json = {};
-        _.mapObject(this.$db.warehouse.qcDetailBasicInfo, (val, k) => {
-          json[k] = '';
-        });
-        return json;
-      }
-    },
-    components: {
-      'v-up-load': Upload,
-      'v-table': VTable
-    },
-    created() {
-      this.getDetail();
-    },
-    methods: {
-      handleClick(tab, event) {
-        this.checkedData = [];
-        this.getQcList(tab.name);
-      },
-      handleSelectionChange() {
+        data(){
+            return{
+                options:[],
+                qcDetail:{},
+                loadingData:false,
+                pickerOptions1: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    },
+                    shortcuts: [{
+                        text: '今天',
+                        onClick(picker) {
+                            picker.$emit('pick', new Date());
+                        }
+                    }, {
+                        text: '昨天',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24);
+                            picker.$emit('pick', date);
+                        }
+                    }, {
+                        text: '一周前',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', date);
+                        }
+                    }]
+                },
+                disableClickSubmit:false,
+                /**
+                 * 字典数据
+                 * */
+                qcTypeOption:[],
+                qcMethodOption:[],
+                surveyorOption:[],
+                qcResultOption:[],
+                barCodeResult:[],
 
-      },
-      producInfoAction() {
 
-      },
-      changeChecked(item) {
-        let arr = [];
-        _.map(item, items => {
-          _.pick(items, (val, k) => {
-            if(k === 'id') arr.push(val.value);
-          })
-        })
-        this.checkedData = arr;
-      },
-      //获取详细信息
-      getDetail() {
-        //this.$route.query.id
-        this.$ajax.get(`${this.$apis.get_qc_getById}?id=${this.id}`)
-          .then(res => {
-            this.basicInfo = res;
-            this.postPaymentList()
-            this.getQcDetailList()
-          })
-      },
-      changeChecked(item) {
-        let arr = [];
-        _.map(item, items => {
-          _.pick(items, (val, k) => {
-            if(k === 'id') arr.push(val.value);
-          })
-        })
-        this.checkedData = arr;
-      },
-      postQcSave(){
-        //提交修改
-        const params = {
-          qcDate:this.basicInfo.QCDate,
-          qcMethodDictCode:this.basicInfo.QCStatus,
-          surveyor:this.basicInfo.surveyor,
-          serviceFee:this.basicInfo.serviceFee,
+                /**
+                 * paymentTable data
+                 * */
+                tableData: [
+                    {
+                        date: '2016-05-02',
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1518 弄'
+                    }
+                ],
+
+
+                /**
+                 * product info data
+                 * */
+                loadingProductInfoTable:false,
+                productInfoConfig:{
+                    pn: 1,
+                    ps: 200,
+                    qcOrderId: this.$route.query.id,
+
+                    // sorts: [
+                    //     {
+                    //         orderBy: "",
+                    //         orderType: "",
+                    //     }
+                    // ],
+                },
+                productInfoData:[],
+                selectList:[],
+
+
+
+                /**
+                 * qcOrder Config
+                 * */
+                qcOrderConfig:{
+                    qcDate:'',
+                    qcMethodDictCode: "",
+                    qcOrderId: null,
+                    qcOrderNo: "",
+                    qcResultDetailParams: [],
+                    qcTypeDictCode: "",
+                    serviceFee: 0,
+                    surveyor: "",
+                },
+
+            }
+        },
+        methods:{
+            getQcOrderDetail(){
+                this.loadingData=true;
+                this.$ajax.get(`${this.$apis.get_sellerOrderDetail}?id=${this.$route.query.id}`)
+                    .then(res=>{
+                        this.qcDetail=res;
+                        this.loadingData=false;
+                    }).catch(err=>{
+                        this.loadingData=false;
+                    }
+                );
+            },
+            getProductInfo(){
+                this.loadingProductInfoTable=true;
+                this.$ajax.post(this.$apis.get_sellerQcOrderProduct,this.productInfoConfig).then(res=>{
+                    this.productInfoData = res.datas;
+                    this.productInfoData.forEach(v=>{
+                        v.skuQcResultDictCode='';
+                    })
+                    this.loadingProductInfoTable=false;
+                }).catch(err=>{
+                    this.loadingProductInfoTable=false;
+                });
+            },
+
+
+
+            /**
+             * product info表格事件
+             * */
+            btnClick(e){
+                console.log(e)
+            },
+            changeChecked(e){
+                this.selectList=e;
+            },
+
+            submit(){
+                this.qcOrderConfig.qcDate=this.qcDetail.qcDate;
+                this.qcOrderConfig.qcMethodDictCode=this.qcDetail.qcMethodDictCode;
+                this.qcOrderConfig.qcOrderId=this.$route.query.id;
+                this.qcOrderConfig.qcOrderNo=this.qcDetail.qcOrderNo;
+                this.qcOrderConfig.qcTypeDictCode=this.qcDetail.qcTypeDictCode;
+                this.qcOrderConfig.surveyor=this.qcDetail.surveyor;
+                this.qcOrderConfig.serviceFee=this.qcDetail.serviceFee;
+
+                // console.log(this.productInfoData,'productInfoData')
+                let allow=true;
+                this.productInfoData.forEach(v=>{
+                    if(v.actOuterCartonSkuQty || v.actOuterCartonInnerBoxQty || v.actInnerCartonSkuQty || v.innerCartonLength || v.innerCartonWidth || v.innerCartonHeight || v.innerCartonNetWeight || v.innerCartonGrossWeight || v.innerCartonVolume || v.outerCartonLength || v.outerCartonWidth || v.outerCartonHeight || v.outerCartonNetWeight || v.outerCartonGrossWeight || v.qualifiedSkuCartonTotalQty || v.unqualifiedSkuCartonTotalQty || v.unqualifiedType || v.skuBarCodeResultDictCode || v.skuLabelResultDictCode || v.innerPackingBarCodeResultDictCode || v.outerCartonBarCodeResultDictCode || v.shippingMarkResultDictCode || v.remarks){
+                        if(!v.skuQcResultDictCode){
+                            allow=false;
+                        }
+                    }
+                });
+                if(!allow){
+                    return this.$message({
+                        message: '产品填了数值之后必须选择验货结果',
+                        type: 'warning'
+                    });
+                }
+
+                this.qcOrderConfig.qcResultDetailParams=[];
+                this.productInfoData.forEach(v=>{
+                    let skuQcResultDictCode;
+                    if(v.skuQcResultDictCode){
+                        skuQcResultDictCode=v.skuQcResultDictCode;
+                    }else{
+                        skuQcResultDictCode='WAIT_FOR_QC';
+                    }
+
+                    this.qcOrderConfig.qcResultDetailParams.push({
+                        actInnerCartonSkuQty: v.actInnerCartonSkuQty,
+                        actOuterCartonInnerBoxQty: v.actOuterCartonInnerBoxQty,
+                        actOuterCartonSkuQty: v.actOuterCartonSkuQty,
+                        checkOuterCartonQty: v.checkOuterCartonQty,
+                        innerCartonGrossWeight: v.innerCartonGrossWeight,
+                        innerCartonHeight: v.innerCartonHeight,
+                        innerCartonLength: v.innerCartonLength,
+                        innerCartonNetWeight: v.innerCartonNetWeight,
+                        innerCartonVolume: v.innerCartonVolume,
+                        innerCartonWidth: v.innerCartonWidth,
+                        innerPackingBarCodeResultDictCode: v.innerPackingBarCodeResultDictCode,
+                        outerCartonBarCodeResultDictCode: v.outerCartonBarCodeResultDictCode,
+                        outerCartonGrossWeight: v.outerCartonGrossWeight,
+                        outerCartonHeight: v.outerCartonHeight,
+                        outerCartonLength: v.outerCartonHeight,
+                        outerCartonNetWeight: v.outerCartonNetWeight,
+                        outerCartonWidth: v.outerCartonWidth,
+                        qcOrderDetailId: v.id,
+                        qcPic: v.qcPic,
+                        qualifiedSkuCartonTotalQty: v.qualifiedSkuCartonTotalQty,
+                        remark: v.remark,
+                        shippingMarkResultDictCode: v.shippingMarkResultDictCode,
+                        skuBarCodeResultDictCode: v.skuBarCodeResultDictCode,
+                        skuLabelResultDictCode: v.skuLabelResultDictCode,
+                        skuQcResultDictCode: skuQcResultDictCode,
+                        unqualifiedSkuCartonTotalQty: v.unqualifiedSkuCartonTotalQty,
+                        unqualifiedType: v.unqualifiedType
+                    });
+                });
+                this.disableClickSubmit=true;
+                this.$ajax.post(this.$apis.save_sellerQcOrder,this.qcOrderConfig).then(res=>{
+                    this.disableClickSubmit=false;
+                    this.$message({
+                        message: '提交成功',
+                        type: 'success'
+                    });
+                    this.$router.push('/warehouse/qcOverview');
+                }).catch(err=>{
+                    this.disableClickSubmit=false;
+                });
+            },
+
+            cancel(){
+                window.close();
+            },
+
+
+            /**
+             * 获取字典
+             * */
+            getUnit(){
+                this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_QC_RS','PB_CODE'],{_cache:true}).then(res=>{
+                    res.forEach(v=>{
+                        if(v.code==='QC_TYPE'){
+                            this.qcTypeOption=v.codes;
+                        }else if(v.code==='QC_MD'){
+                            this.qcMethodOption=v.codes;
+                        }else if(v.code==='SKU_QC_RS'){
+                            v.codes=_.filter(v.codes, e=>{
+                                return e.code!=='WAIT_FOR_QC' && e.code!=='CONFIRMED';
+                            });
+                            this.qcResultOption=v.codes;
+                        }else if(v.code==='PB_CODE'){
+                            this.barCodeResult=v.codes;
+                        }
+                    })
+                });
+
+                //获取验货员
+                // this.$ajax.get(this.$apis.get_serviceQcSurveyor).then(res=>{
+                //     // console.log(res)
+                // }).catch(err=>{
+                //
+                // });
+
+
+                // this.$ajax.post(this.$apis.get_partUnit,[]).then(res=>{
+                //     console.log(res)
+                // });
+            },
+        },
+        created(){
+            this.getQcOrderDetail();
+            this.getProductInfo();
+            this.getUnit();
         }
-
-      },
-      getQcDetailList(name) {
-        let params = {
-          pn: 1,
-          ps: 200,
-          qcOrderId: this.basicInfo.id,
-          skuInventoryStatusDictCode: name || ''
-        };
-        this.$ajax.post(this.$apis.post_qc_detail_page, params)
-          .then(res => {
-            this.tabData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas);
-          });
-      },
-      postPaymentList(){
-        //获取付款信息
-        this.$ajax.post(this.$apis.post_payment_list,{
-          orderNo: this.basicInfo.qcOrderNo,
-          orderType: this.orderType
-        }).then(res=>{
-          this.paymentData = res.datas;
-        }).catch(err=>{
-          console.log(err)
-        });
-      },
-      postPaymentAccept(){
-        //确认付款
-        this.$ajax.post(this.$apis.post_payment_accept,{
-          id:1
-        }).then(res=>{
-          console.log(res)
-
-        }).catch(err=>{
-          console.log(err)
-        });
-      },
-      getUesrLList(){
-        //获取当前登录用户所在企业下所有用户信息
-        this.$ajax.post(this.$apis.get_user_list).then(res=>{
-          this.selectAll.surveyor = res
-        }).catch(err=>{
-          console.log(err)
-        });
-      },
-      getCodePart(){
-        //获取元数据 下拉框
-        this.$ajax.post(this.$apis.POST_CODE_PART,['QC_TYPE','QC_MD','QC_STATUS']).then(res=>{
-          this.selectAll.QCMethod = _.findWhere(res, {'code': 'QC_MD'}).codes
-          this.selectAll.QCStatus = _.findWhere(res, {'code': 'QC_STATUS'}).codes
-          this.selectAll.QCType = _.findWhere(res, {'code': 'QC_TYPE'}).codes
-        }).catch(err=>{
-          console.log(err)
-        });
-      },
-      getCurrency(){
-        //币种
-        this.$ajax.get(this.$apis.get_currency_all).then(res=>{
-          this.selectAll.exchangeCurrency = res
-        }).catch(err=>{
-          console.log(err)
-        });
-      }
-    },
-    created(){
-       // this.getUesrLList()
-       this.getCodePart()
-       this.getCurrency()
-       this.getDetail()
-      console.log(this.$db)
     }
-  }
 </script>
 <style scoped>
-  .QCOrderDetail .el-form {
-    padding: 10px;
-  }
-  .QCOrderDetail .el-form-item >>> .el-form-item__label {
-    display:flex;
-    justify-content:flex-end;
-    text-align: left;
-  }
-</style>
-<style scoped lang="less">
-  .QCOrderDetail h5 {
-    font-size:15px;
-    font-weight: bold;
-    color:#666;
-    padding:10px 0;
-    margin: 5px 0;
-  &.solid {
-     border-bottom:1px dotted #ccc;
-   }
-  }
-  .footer{
-    text-align: center;
-    padding-top: 20px;
-  }
-</style>
+    .title{
+        font-weight: bold;
+        font-size: 18px;
+        height: 32px;
+        line-height: 32px;
+        color:#666666;
+    }
+    .second-title{
+        font-size: 16px;
+        color: #999999;
+        padding: 10px 0;
+    }
+    .payment-btn{
+        margin: 5px 0 10px 0;
+    }
+    .product-info{
+        margin-top: 10px;
+    }
 
+    .speInput{
+        width: 100%;
+    }
+
+    .product-table >>> .el-checkbox{
+        margin: 0;
+    }
+
+    .footBtn{
+        border-top: 1px solid #e0e0e0;
+        height: 40px;
+        line-height: 40px;
+        background-color: #ffffff;
+        position: sticky;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        z-index:1000;
+    }
+</style>

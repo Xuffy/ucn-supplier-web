@@ -526,6 +526,15 @@ export const routerMap = [
           component: () => import('../views/warehouse/qc/qcOrder')
         },
         {
+          path: 'qcOrderDetail',
+          name: 'qc Order Detail',
+          hidden:true,
+          meta: {
+            name: 'qc Order Detail'
+          },
+          component: () => import('../views/warehouse/qc/QCOrderDetail')
+        },
+        {
           path: 'qcOrderService',
           name: 'qc Order Service',
           hidden:true,
