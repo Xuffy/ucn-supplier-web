@@ -38,5 +38,8 @@ export default {
 
   //user
   get_user_list: ['/user/list','UUSER_URL','UUSER_URL'],//获取当前登录用户所在企业下所有用户信息
-  get_user_privilege: ['/user/privilege','UUSER_URL','UUSER_URL']
+  get_user_privilege: ['/user/privilege','UUSER_URL','UUSER_URL'],
+
+  //company info
+  get_supplierWhile: ['/supplierWhole','BASE_CS_CI','USUPPLY_URL']
 }
