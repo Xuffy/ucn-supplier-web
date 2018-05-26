@@ -21,7 +21,7 @@
                             <div v-if="v.isWeight">
                                 <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
                                     <el-option
-                                            v-for="item in weightOption"
+                                            v-for="item in skuUnitOption"
                                             :key="item.id"
                                             :label="item.name"
                                             :value="item.code">
@@ -39,7 +39,6 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isReadily">
-
                                 <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
                                     <el-option
                                             v-for="item in readilyOption"
@@ -785,6 +784,7 @@
                 udbOption:[],           //是否展示包装盒
                 skuPkgOption:[],        //产品包装可否调整
                 readilyOption:[],       //是否现货
+                skuUnitOption:[],       //计量单位
 
 
                 loadingData:true,
@@ -882,7 +882,7 @@
                     // supplierCode: "",
                     // supplierName: "",
                     code: "",                       //新增时请填写，传空
-                    unit: "7",
+                    unit: "1",
                     formation: "",
                     materialEn: "",
                     materialCn: "",
@@ -973,7 +973,6 @@
                     outerCartonMethodEn: "",
                     oem: '1',
                     logisticId: 1,
-                    version: 1,
                     pkgId: 1,
                     price: [
                         {
@@ -1430,7 +1429,7 @@
                 });
 
                 this.loadingData=true;
-                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS'],{_cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT'],{_cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
@@ -1458,6 +1457,8 @@
                             this.skuPkgOption=v.codes;
                         }else if(v.code==='RA_IS'){
                             this.readilyOption=v.codes;
+                        }else if(v.code==='SKU_UNIT'){
+                            this.skuUnitOption=v.codes;
                         }
                     })
                     this.loadingData=false;
@@ -1467,7 +1468,7 @@
 
 
                 this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-
+                    console.log(res)
                 });
             },
         },
