@@ -46,11 +46,11 @@ export default {
         belong:'basicInfo',
         showType:'input',
     },
-    timeZone:{
-        key:'timeZone',
-        belong:'basicInfo',
-        showType:'timezone',
-    },
+    // timeZone:{
+    //     key:'timeZone',
+    //     belong:'basicInfo',
+    //     showType:'timezone',
+    // },
     remark:{
         key:'remark',
         belong:'basicInfo',

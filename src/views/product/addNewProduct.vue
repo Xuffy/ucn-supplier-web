@@ -1280,17 +1280,16 @@
                     if(!param.visibility){
                         param.ids=[];
                     }
-                    console.log()
-                    // this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
-                    //     this.$message({
-                    //         message: '修改成功',
-                    //         type: 'success'
-                    //     });
-                    //     this.disabledSubmit=false;
-                    //     this.$router.push('/sellerProduct/overview');
-                    // }).catch(err=>{
-                    //     this.disabledSubmit=false;
-                    // });
+                    this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
+                        this.$message({
+                            message: '修改成功',
+                            type: 'success'
+                        });
+                        this.disabledSubmit=false;
+                        this.$router.push('/product/overview');
+                    }).catch(err=>{
+                        this.disabledSubmit=false;
+                    });
                 }
                 else{
                     let param=Object.assign({},this.productForm);

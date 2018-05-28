@@ -31,20 +31,25 @@
                         </div>
                     </template>
                 </v-table>
+                <page
+                        @size-change="changeSize"
+                        @change="changePage"
+                        :page-data="pageData"></page>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import VTable from '@/components/common/table/index'
+    import {VPagination,VTable} from '@/components/index'
     import selectSearch from '@/components/common/fnCompon/selectSearch'
 
     export default {
         name: "qcOverview",
         components:{
             selectSearch,
-            VTable
+            VTable,
+            page:VPagination
         },
         data(){
             return{
@@ -56,6 +61,7 @@
                 tableDataList:[],
                 downloadBtnInfo:'All',
                 selectList:[],
+                pageData:{},
                 qcStatusOption:[],
                 qcMethodsOption:[],
                 qcOrderConfig:{
@@ -81,6 +87,7 @@
         },
         methods:{
             changeStatus(){
+                this.qcOrderConfig.pn=1;
                 this.getQcData();
             },
 
@@ -91,12 +98,12 @@
                     this.tableDataList = this.$getDB(this.$db.warehouse.qcOverview, res.datas,e=>{
                         e.qcMethodDictCode.value=this.$change(this.qcMethodsOption,'qcMethodDictCode',e).name;
                     });
+                    this.pageData=res;
                     this.loadingTable=false;
                 }).catch(err=>{
                     this.loadingTable=false;
                 });
             },
-
 
             searchInbound(e){
                 if(!e.keyType){
@@ -163,6 +170,18 @@
 
                 });
             },
+
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                this.qcOrderConfig.pn=e;
+                this.getQcData();
+            },
+            changeSize(e){
+                this.qcOrderConfig.ps=e;
+                this.getQcData();
+            }
         },
         created(){
             this.getUnit();

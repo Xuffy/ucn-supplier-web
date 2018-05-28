@@ -30,20 +30,25 @@
                         </div>
                     </template>
                 </v-table>
+                <page
+                        @size-change="changeSize"
+                        @change="changePage"
+                        :page-data="pageData"></page>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import VTable from '@/components/common/table/index'
+    import {VPagination,VTable} from '@/components/index'
     import selectSearch from '@/components/common/fnCompon/selectSearch'
 
     export default {
         name: "inboundOverview",
         components:{
             selectSearch,
-            VTable
+            VTable,
+            page:VPagination
         },
         data(){
             return{
@@ -55,10 +60,11 @@
                 inboundType:[],         //入库类型
                 tableDataList:[],
                 selectList:[],
+                pageData:{},
                 inboundConfig:{
                     inboundNo: "",
                     pn: 1,
-                    ps: 50,
+                    ps: 10,
                     // sorts: [
                     //     {
                     //         orderBy: "",
@@ -80,6 +86,7 @@
         },
         methods:{
             changeStatus(){
+                this.inboundConfig.pn=1;
                 this.getInboundData();
             },
 
@@ -96,6 +103,7 @@
                         e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
                         return e;
                     });
+                    this.pageData=res;
                     this.loadingTable=false;
                 }).catch(err=>{
                     this.loadingTable=false;
@@ -122,6 +130,7 @@
             },
 
             btnClick(e){
+                console.log(e)
                 this.$windowOpen({
                     url:'/warehouse/inboundDetail',
                     params:{
@@ -133,6 +142,18 @@
             changeChecked(e){
                 this.selectList=e;
             },
+
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                this.inboundConfig.pn=e;
+                this.getInboundData();
+            },
+            changeSize(e){
+                this.inboundConfig.ps=e;
+                this.getInboundData();
+            }
         },
         created(){
             this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE']).then(res=>{
