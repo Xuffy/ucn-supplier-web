@@ -10,7 +10,16 @@ export default {
         showType:'select',
         belongTab:'basicInfo',
         isSaleStatus:true,
-
+        options:[
+            {
+                code:0,
+                label:'下架'
+            },
+            {
+                code:1,
+                label:'上架'
+            }
+        ]
     },
     code:{
         key:'code',

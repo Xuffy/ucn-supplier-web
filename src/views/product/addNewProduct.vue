@@ -1,17 +1,24 @@
 <template>
     <div class="add-product" v-loading="loadingData">
         <div class="title">{{$i.product.basicInformation}}</div>
-        <div class="addPic">
-            <div class="name">
-                Pic:
-            </div>
-            <div class="btns">
-                <v-upload ref="upload"></v-upload>
-            </div>
-        </div>
+        <!--<div class="addPic">-->
+            <!--<div class="name">-->
+                <!--Pic:-->
+            <!--</div>-->
+            <!--<div class="btns">-->
+                <!--<v-upload :limit="20" :onlyImage="true" ref="upload"></v-upload>-->
+            <!--</div>-->
+        <!--</div>-->
         <el-form :model="productForm" :rules="rules" ref="productForm1" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <!--设置高度51px以免inputNumber错位-->
+
+                <el-col style="height: 51px;" class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                    <el-form-item label="Picture:">
+                        <v-upload :limit="20" :onlyImage="true" ref="upload"></v-upload>
+                    </el-form-item>
+                </el-col>
+
                 <el-col style="height: 51px;" v-if="v.belongTab==='basicInfo' && !v.isHide" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
@@ -58,8 +65,8 @@
                             <div v-else-if="v.isSaleStatus">
                                 <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
                                     <el-option
-                                            v-for="item in saleStatusOption"
-                                            :key="item.id"
+                                            v-for="item in v.options"
+                                            :key="item.code"
                                             :label="item.label"
                                             :value="item.code">
                                     </el-option>
@@ -672,8 +679,9 @@
         </el-form>
 
         <div class="title">{{$i.product.attachment}}</div>
-
-        <input style="display: none" id="pic" name="file" type="file" accept="image/*" @change="uploadPic">
+        <div style="margin-bottom: 20px">
+            <v-upload :limit="20" ref="uploadAttachment"></v-upload>
+        </div>
 
         <div class="footBtn">
             <el-button @click="finish" :disabled="loadingData" :loading="disabledSubmit" type="primary">{{$i.product.finish}}</el-button>
@@ -861,11 +869,12 @@
                     // ],
                 },
                 productForm:{
+                    attachments:[],
                     id: '',                         //新增传空
                     ids:[],                         //选择的可见
-                    pic: "thisIsAPicture",
+                    pictures:[],
                     visibility:true,                //全网可见为true,否则false
-                    status: '1',                      //0下架 1上架
+                    status: 1,                      //0下架 1上架
                     nameEn: "",
                     barcode: "",                    //产品条码
                     nameCn: "",
@@ -1165,23 +1174,7 @@
                     label:'name',
                     children:'children'
                 },
-                options: [
-                    {
-                    value: '选项1',
-                    label: '黄金糕'
-                }, {
-                    value: '选项2',
-                    label: '双皮奶'
-                }, {
-                    value: '选项3',
-                    label: '蚵仔煎'
-                }, {
-                    value: '选项4',
-                    label: '龙须面'
-                }, {
-                    value: '选项5',
-                    label: '北京烤鸭'
-                }],
+                options: [],
 
                 /**
                  * 弹出框data
@@ -1192,25 +1185,6 @@
             }
         },
         methods:{
-            //上传图片
-            uploadPic(e){
-                let me=this;
-                console.log(e,"????")
-                let file=e.target.files[0];
-                // let param = new FormData(); //创建form对象
-                // param.append('file',file,file.name);//通过append向form对象添加数据
-                let reader=new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload=function (e) {
-                    me.imgGroup.push(e.target.result);
-                }
-            },
-
-            //添加图片到暂存区
-            addPic(){
-                document.getElementById('pic').click();
-            },
-
             //获取类别数据
             getCategoryId(){
                 this.$ajax.get(this.$apis.get_supply_category,{}).then(res=>{
@@ -1229,7 +1203,6 @@
             addCustomer(){
                 this.addCustomerDialogVisible=true;
                 this.loadingTable=true;
-
                 this.$ajax.post(this.$apis.get_sellerCustomer,this.customerQuery).then(res=>{
                     this.loadingTable=false;
                     this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
@@ -1286,20 +1259,25 @@
                     });
                 }
                 else{
+                    //代表是新增
                     let param=Object.assign({},this.productForm);
                     _.mapObject(param,(e,k)=>{
                         if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
                             param[k]=parseInt(param[k]);
                         }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
                             let item='';
-                            param[k].forEach((v,index)=>{
-                                if(index===param[k].length-1){
-                                    item+=v;
-                                }else{
-                                    item+=(v+',');
-                                }
-                            })
-                            param[k]=item;
+                            if(param[k].length===0){
+                                param[k]='';
+                            }else{
+                                param[k].forEach((v,index)=>{
+                                    if(index===param[k].length-1){
+                                        item+=v;
+                                    }else{
+                                        item+=(v+',');
+                                    }
+                                });
+                                param[k]=item;
+                            }
                         }
                     });
                     if(!param.readilyAvailable){
@@ -1313,6 +1291,8 @@
                             param.ids.push(v.id);
                         });
                     }
+                    param.pictures=this.$refs.upload.getFiles();
+                    param.attachments=this.$refs.uploadAttachment.getFiles();
 
                     this.$ajax.post(this.$apis.add_newSKU,param).then(res=>{
                         this.$message({
@@ -1333,10 +1313,12 @@
                 this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
                     this.productForm=res;
                     _.mapObject(this.productForm,(e,k)=>{
-                        if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
+                        if(k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
                             this.productForm[k]=String(this.productForm[k]);
                         }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
-                            this.productForm[k]=this.productForm[k].split(',');
+                            if(this.productForm[k]){
+                                this.productForm[k]=this.productForm[k].split(',');
+                            }
                         }
                     });
                     this.loadingData=false;
@@ -1434,14 +1416,14 @@
                             this.lengthOption=v.codes;
                         }else if(v.code==='SKU_SALE_STATUS'){
                             this.saleStatusOption=v.codes;
-                            console.log(this.saleStatusOption)
-                            this.saleStatusOption.forEach(v=>{
-                                if(v.code==='1'){
-                                    v.label='上架';
-                                }else if(v.code==='0'){
-                                    v.label='下架';
-                                }
-                            })
+                            // console.log(this.saleStatusOption,'saleStatusOption')
+                            // this.saleStatusOption.forEach(v=>{
+                            //     if(v.code==='1'){
+                            //         v.label='上架';
+                            //     }else if(v.code==='0'){
+                            //         v.label='下架';
+                            //     }
+                            // })
                         }else if(v.code==='OEM_IS'){
                             this.oemOption=v.codes;
                         }else if(v.code==='UDB_IS'){

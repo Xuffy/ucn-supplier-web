@@ -8,8 +8,8 @@
                 <el-row>
                     <el-col :span="6">
                         <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
-                            <el-carousel-item v-for="item in 3" :key="item">
-                                <img src="../../assets/images/login-back.jpg" style="width: 100%" alt="">
+                            <el-carousel-item v-for="item in productForm.pictures" :key="item">
+                                <img :src="item" style="max-width: 100%;max-height: 100%" alt="">
                             </el-carousel-item>
                         </el-carousel>
                     </el-col>
@@ -152,7 +152,7 @@
                 //页面数据
                 productForm:{
                     id: '',                         //新增传空
-                    pic: "thisIsAPicture",
+                    pictures:[],
                     status: 0,                      //0下架 1上架
                     nameEn: "",
                     barcode: "",                    //产品条码
@@ -334,6 +334,7 @@
                     }
                     this.tableData = this.$getDB(this.$db.product.detailPriceTable, this.productForm.price);
                     this.loadingTable=false;
+                    console.log(this.productForm)
                 }).catch(err=>{
                     this.loadingTable=false;
                 });
