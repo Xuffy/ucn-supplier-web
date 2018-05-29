@@ -29,7 +29,7 @@
                             <el-input
                                     class="speInput"
                                     type="textarea"
-                                    autosize
+                                    :autosize="{ minRows: 2}"
                                     placeholder="please input"
                                     v-model="outboundData[v.key]">
                             </el-input>
@@ -50,6 +50,9 @@
                                     :defaultProps="defaultProps"
                                     v-model="outboundData[v.key]"
                                     ref="dropDown"></drop-down>
+                        </div>
+                        <div v-else-if="v.isAttachment">
+                            附件组件
                         </div>
                         <div v-else-if="v.showType==='date'">
                             <el-date-picker

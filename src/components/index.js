@@ -19,6 +19,7 @@ import messageBoard from './common/messageBoard/index';
 import VMessageBoard from './common/messageBoard/index';
 import selectSearch from './common/fnCompon/selectSearch';
 import VViewPicture from './common/viewPicture/index';
+import VUpload from './common/upload/test';
 // import product from '../views/product/addProduct';
 import compareList from '@/views/product/compareList';
 
@@ -32,6 +33,7 @@ import VHistory from '@/views/negotiation/children/history';
 import addNewInqury from '@/views/negotiation/children/addNewInqury';
 
 export {
+  VUpload,
   VTimeZone,
   VPagination,
   VHistoryModify,

@@ -12,6 +12,7 @@
     "pro": "node build/build.js pro"
   },
   "dependencies": {
+    "ali-oss": "^5.2.0",
     "axios": "^0.18.0",
     "dateformat": "^3.0.3",
     "element-ui": "^2.2.2",

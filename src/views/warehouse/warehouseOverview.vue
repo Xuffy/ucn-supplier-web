@@ -34,20 +34,25 @@
                         </div>
                     </template>
                 </v-table>
+                <page
+                        @size-change="changeSize"
+                        @change="changePage"
+                        :page-data="pageData"></page>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import VTable from '@/components/common/table/index'
+    import {VPagination,VTable} from '@/components/index'
     import selectSearch from '@/components/common/fnCompon/selectSearch'
 
     export default {
         name: "warehouseOverview",
         components:{
             selectSearch,
-            VTable
+            VTable,
+            page:VPagination
         },
         data(){
             return{
@@ -59,9 +64,10 @@
                 tableDataList:[],
                 downloadBtnInfo:'All',
                 selectList:[],
+                pageData:{},
                 warehouseConfig:{
                     inboundNo: "",
-                    // operatorFilters: [
+                    operatorFilters: [
                     //     {
                     //         columnName: "",
                     //         operator: "",
@@ -69,18 +75,18 @@
                     //         resultMapId: "",
                     //         value: {}
                     //     }
-                    // ],
+                    ],
                     orderNo: "",
                     pn: 1,
-                    ps: 50,
+                    ps: 10,
                     skuCode: "",
                     skuInventoryStatusDictCode: null,
-                    // sorts: [
+                    sorts: [
                     //     {
                     //         orderBy: "",
                     //         orderType: "",
                     //     }
-                    // ],
+                    ],
                 },
 
                 searchId:1,
@@ -103,22 +109,24 @@
         },
         methods:{
             changeStatus(e){
+                this.warehouseConfig.pn=1;
                 if(e==='0'){
                     this.warehouseConfig.skuInventoryStatusDictCode=null;
                 }else{
                     this.warehouseConfig.skuInventoryStatusDictCode=e;
                 }
-                this.getInboundData();
+                this.getWarehouseData();
             },
 
             //获取表格数据
-            getInboundData(){
+            getWarehouseData(){
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_warehouseOverviewData,this.warehouseConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.warehouse.warehouseOverview, res.datas,(e)=>{
                         e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
                         return e;
                     });
+                    this.pageData=res;
                     this.loadingTable=false;
                 }).catch(err=>{
                     this.loadingTable=false;
@@ -128,7 +136,6 @@
 
             searchInbound(e){
                 // this.warehouseConfig.inboundNo=e.key;
-                console.log(e)
                 if(!e.keyType){
                     this.$message({
                         message: '请至少选择一个类别',
@@ -148,7 +155,7 @@
                     this.warehouseConfig.orderNo='';
                     this.warehouseConfig.skuCode='';
                 }
-                this.getInboundData();
+                this.getWarehouseData();
             },
 
             btnClick(e){
@@ -163,9 +170,22 @@
             changeChecked(e){
                 this.selectList=e;
             },
+
+
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                this.warehouseConfig.pn=e;
+                this.getWarehouseData();
+            },
+            changeSize(e){
+                this.warehouseConfig.ps=e;
+                this.getWarehouseData();
+            }
         },
         created(){
-            this.getInboundData();
+            this.getWarehouseData();
         },
         watch:{
             selectList(n){

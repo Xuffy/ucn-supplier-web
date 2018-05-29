@@ -37,16 +37,17 @@ export default {
     //     belong:'basicInfo',
     //     showType:'timeZone',
     // },
-    attachment:{
-        key:'attachment',
-        belong:'basicInfo',
-        showType:'textarea',
-    },
     remark:{
         key:'remark',
         belong:'basicInfo',
         showType:'textarea',
         fullLine:true
     },
+    attachment:{
+        key:'attachment',
+        belong:'basicInfo',
+        isAttachment:true
+    },
+
 
 }

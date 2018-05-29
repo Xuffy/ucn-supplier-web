@@ -64,26 +64,27 @@
             <el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>
         </div>
         <div class="footer">
-            <div class="btns">
-                <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
-                <el-button :disabled="disabledDeleteGoods" :loading="disableClickSetUp" @click="setUp">{{$i.product.setUp}}</el-button>
-                <el-button :disabled="disabledDeleteGoods" :loading="disableClickSetDown" @click="setDown">{{$i.product.setDown}}</el-button>
-                <el-button>{{$i.product.downloadSelected}}({{selectList.length?selectList.length:'All'}})</el-button>
-                <el-button @click="upload">{{$i.product.uploadProduct}}</el-button>
-                <!--<el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger">{{$i.product.delete}}</el-button>-->
-
-
-
-
-
-            </div>
-
             <v-table
                     :loading="loadingTable"
                     :data="tableDataList"
                     :buttons="[{label: '详情', type: 1}]"
                     @change-checked="changeChecked"
-                    @action="btnClick"></v-table>
+                    @action="btnClick">
+                <template slot="header">
+                    <div class="btns">
+                        <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
+                        <el-button :disabled="disabledDeleteGoods" :loading="disableClickSetUp" @click="setUp">{{$i.product.setUp}}</el-button>
+                        <el-button :disabled="disabledDeleteGoods" :loading="disableClickSetDown" @click="setDown">{{$i.product.setDown}}</el-button>
+                        <!--<el-button>{{$i.product.downloadSelected}}({{selectList.length?selectList.length:'All'}})</el-button>-->
+                        <!--<el-button @click="upload">{{$i.product.uploadProduct}}</el-button>-->
+                        <!--<el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger">{{$i.product.delete}}</el-button>-->
+                    </div>
+                </template>
+            </v-table>
+            <page
+                    @size-change="changeSize"
+                    @change="changePage"
+                    :page-data="pageData"></page>
         </div>
 
         <el-dialog
@@ -102,16 +103,17 @@
 </template>
 
 <script>
-    import VTable from '@/components/common/table/index'
     import {dropDownSingle} from '@/components/index'
     import sectionNumber from '../product/sectionNumber'
+    import {VPagination,VTable} from '@/components/index'
 
     export default {
         name: "overview",
         components:{
             dropDown:dropDownSingle,
             sectionNumber,
-            VTable
+            VTable,
+            page:VPagination
         },
         props:{
 
@@ -155,7 +157,7 @@
                     // ],
                     outerCartonMethodEnLike: "",
                     pn: 1,
-                    ps: 50,
+                    ps: 10,
                     readilyAvailable: null,
                     recycle: false,             //recycleBin里传true,其他地方传false
                     //初始搜索的时候不传，当有筛选条件之后再传
@@ -198,7 +200,8 @@
 
                 //底部table数据
                 tableDataList:[],
-                dataColumn:[]
+                dataColumn:[],
+                pageData:{},
             }
         },
         methods:{
@@ -252,16 +255,7 @@
             //获取table数据
             getData() {
                 this.loadingTable=true;
-                this.$ajax.post(this.$apis.get_productList,{
-                    recycle:false,
-                }).then(res=>{
-                    // res.datas.forEach(v=>{
-                    //     if(v.status===0){
-                    //         v.status='下架';
-                    //     }else if(v.status===1){
-                    //         v.status='上架';
-                    //     }
-                    // });
+                this.$ajax.post(this.$apis.get_productList,this.productForm).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.overviewTable, res.datas,e=>{
                         if(e.status.value===0){
                             e.status.value='下架';
@@ -272,6 +266,7 @@
                         e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm-dd');
                         return e;
                     });
+                    this.pageData=res;
                     this.selectList=[];
                     this.loadingTable=false;
                 }).catch(err=>{
@@ -428,6 +423,19 @@
                     url:'/product/addNewProduct'
                 });
             },
+
+
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                this.productForm.pn=e;
+                this.getData();
+            },
+            changeSize(e){
+                this.productForm.ps=e;
+                this.getData();
+            }
         },
         created(){
             this.getData();

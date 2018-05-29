@@ -485,6 +485,7 @@ export const routerMap = [
         {
           path: 'createOutbound',
           name: 'create Outbound',
+          hidden:true,
           meta: {
             draft: true,
             recycleBin: true,

@@ -5,11 +5,8 @@
             <div class="name">
                 Pic:
             </div>
-            <div class="imgGroup">
-                <img-handler :data="imgGroup"></img-handler>
-            </div>
             <div class="btns">
-                <up-load></up-load>
+                <v-upload ref="upload"></v-upload>
             </div>
         </div>
         <el-form :model="productForm" :rules="rules" ref="productForm1" class="speForm" label-width="230px" :label-position="labelPosition">
@@ -21,7 +18,7 @@
                             <div v-if="v.isWeight">
                                 <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
                                     <el-option
-                                            v-for="item in weightOption"
+                                            v-for="item in skuUnitOption"
                                             :key="item.id"
                                             :label="item.name"
                                             :value="item.code">
@@ -39,7 +36,6 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isReadily">
-
                                 <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
                                     <el-option
                                             v-for="item in readilyOption"
@@ -756,15 +752,14 @@
 </template>
 
 <script>
-    import upLoad from '@/components/common/upload/upload'
     import imgHandler from '../product/imgHandler'
-    import {dropDownSingle,VTable} from '@/components/index'
+    import {dropDownSingle,VTable,VUpload} from '@/components/index'
 
     export default {
         name: "addNewProduct",
         components:{
             imgHandler,
-            upLoad,
+            VUpload,
             VTable,
             dropDown:dropDownSingle
         },
@@ -785,7 +780,7 @@
                 udbOption:[],           //是否展示包装盒
                 skuPkgOption:[],        //产品包装可否调整
                 readilyOption:[],       //是否现货
-
+                skuUnitOption:[],       //计量单位
 
                 loadingData:true,
                 labelPosition:'left',
@@ -882,7 +877,7 @@
                     // supplierCode: "",
                     // supplierName: "",
                     code: "",                       //新增时请填写，传空
-                    unit: "7",
+                    unit: "1",
                     formation: "",
                     materialEn: "",
                     materialCn: "",
@@ -973,7 +968,6 @@
                     outerCartonMethodEn: "",
                     oem: '1',
                     logisticId: 1,
-                    version: 1,
                     pkgId: 1,
                     price: [
                         {
@@ -1189,7 +1183,6 @@
                     label: '北京烤鸭'
                 }],
 
-
                 /**
                  * 弹出框data
                  * */
@@ -1281,17 +1274,16 @@
                     if(!param.visibility){
                         param.ids=[];
                     }
-                    console.log()
-                    // this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
-                    //     this.$message({
-                    //         message: '修改成功',
-                    //         type: 'success'
-                    //     });
-                    //     this.disabledSubmit=false;
-                    //     this.$router.push('/sellerProduct/overview');
-                    // }).catch(err=>{
-                    //     this.disabledSubmit=false;
-                    // });
+                    this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
+                        this.$message({
+                            message: '修改成功',
+                            type: 'success'
+                        });
+                        this.disabledSubmit=false;
+                        this.$router.push('/product/overview');
+                    }).catch(err=>{
+                        this.disabledSubmit=false;
+                    });
                 }
                 else{
                     let param=Object.assign({},this.productForm);
@@ -1430,7 +1422,7 @@
                 });
 
                 this.loadingData=true;
-                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS'],{_cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT'],{_cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
@@ -1458,16 +1450,13 @@
                             this.skuPkgOption=v.codes;
                         }else if(v.code==='RA_IS'){
                             this.readilyOption=v.codes;
+                        }else if(v.code==='SKU_UNIT'){
+                            this.skuUnitOption=v.codes;
                         }
-                    })
+                    });
                     this.loadingData=false;
                 }).catch(err=>{
                     this.loadingData=false;
-                })
-
-
-                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-
                 });
             },
         },
