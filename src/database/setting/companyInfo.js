@@ -11,61 +11,54 @@
 
 export default {
     //顶部简介字段
-    supplierCodeSetting: {
+    supplierCode: {
         key: 'code',
         type: 'input',
         belong:'summary'
     },
-    supplierCompanyNameSetting:{
+    supplierCompanyName:{
         key: 'name',
         type: 'input',
         belong:'summary'
     },
-    supplierTypeSetting:{
+    supplierType:{
         key: 'type',
         type: 'select',
         belong:'summary'
     },
-    countrySetting:{
+    country:{
         key: 'country',
         type: 'select',
         belong:'summary'
     },
-    citySetting:{
+    city:{
         key: 'city',
         type: 'select',
         belong:'summary'
     },
-    provideIncotermSetting:{
+    provideIncoterm:{
         key: 'incoterm',
         type: 'select',
         belong:'summary'
     },
-    exportLicenseSetting:{
+    exportLicense:{
         key: 'exportLicense',
         type: 'select',
         belong:'summary'
     },
-    currencySetting:{
+    currency:{
         key: 'currency',
         type: 'select',
         belong:'summary'
     },
-    paymentTermSetting:{
+    paymentTerm:{
         key: 'payment',
         type: 'select',
         belong:'summary'
     },
-    supplierShortNameSetting:{
+    supplierShortName:{
         key: 'shortName',
         type: 'input',
         belong:'summary'
     },
-    descriptionSetting:{
-        key: 'description',
-        type: 'textarea',
-        belong:'summary',
-        fullLine:true
-    },
-
 }

@@ -43,7 +43,7 @@ export default {
       //BASE_SELL: '//dev.usupply-facade.ucnholding.com',
       //USUPPLY_URL: '//dev.usupply-facade.ucnholding.com', // 供应商端
       BASE_WAREHOUSE: '//192.168.51.248:12005',
-      BASE_CS_CI: '192.168.51.33:11002',
+      BASE_CS_CI: '//192.168.51.33:11002',
 
       // 开发服务器 248
       BASE_DEV: '//192.168.51.248:11001',

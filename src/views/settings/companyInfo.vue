@@ -64,19 +64,39 @@
                             border
                             style="width: 100%">
                         <el-table-column
-                                prop="orderNo"
+                                prop="name"
                                 align="center"
-                                :label="$i.setting.orderNumber">
+                                :label="$i.setting.factoryName">
                         </el-table-column>
                         <el-table-column
-                          prop="country"
+                          prop="address"
                           align="center"
-                          :label="$i.setting.country">
+                          :label="$i.setting.factoryAddress">
                         </el-table-column>
                         <el-table-column
-                          prop="province"
+                          prop="exportPort"
                           align="center"
-                          :label="$i.setting.province">
+                          :label="$i.setting.exportPort">
+                        </el-table-column>
+                         <el-table-column
+                                prop="contactPerson1"
+                                align="center"
+                                :label="$i.setting.ContacctPerson1">
+                        </el-table-column>
+                        <el-table-column
+                          prop="concatPhone1"
+                          align="center"
+                          :label="$i.setting.contactPhoneNo1">
+                        </el-table-column>
+                        <el-table-column
+                          prop="contactPerson2"
+                          align="center"
+                          :label="$i.setting.contacctPerson2">
+                        </el-table-column>
+                         <el-table-column
+                          prop="contactPhone2"
+                          align="center"
+                          :label="$i.setting.contactPhoneNo2">
                         </el-table-column>
                         <el-table-column
                                 align="center"
@@ -88,11 +108,66 @@
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
+                <el-tab-pane :label="$i.setting.accountInfo">
+                    <div class="section-btn">
+                        <el-button @click="addAccount" type="primary">{{$i.button.add}}</el-button>
+                    </div>
+                    <el-table
+                            v-if="companyInfo.accounts.length"
+                            :data="companyInfo.accounts"
+                            border
+                            style="width: 100%">
+                        <el-table-column
+                                prop="beneficiaryName"
+                                align="center"
+                                :label="$i.setting.beneficiaryName">
+                        </el-table-column>
+                        <el-table-column
+                                prop="beneficiaryAccount"
+                                align="center"
+                                :label="$i.setting.beneficiaryAccount">
+                        </el-table-column>
+                        <el-table-column
+                                prop="beneficiaryAddress"
+                                align="center"
+                                :label="$i.setting.beneficiaryAddress">
+                        </el-table-column>
+                        <el-table-column
+                                prop="beneficiaryBankName"
+                                align="center"
+                                :label="$i.setting.beneficiaryBankName">
+                        </el-table-column>
+                        <el-table-column
+                                prop="beneficiaryBankSwift"
+                                align="center"
+                                :label="$i.setting.beneficiaryBankSWIFT">
+                        </el-table-column>
+                        <el-table-column
+                                prop="accountType"
+                                align="center"
+                                :label="$i.setting.accountType">
+                        </el-table-column>
+                        <el-table-column
+                                prop="currency"
+                                align="center"
+                                :label="$i.setting.currency">
+                        </el-table-column>
+                        <el-table-column
+                                align="center"
+                                :label="$i.setting.action">
+                            <template slot-scope="scope">
+                                <el-button @click="modifyAccount(scope.row)" type="text">{{$i.button.modify}}</el-button>
+                                <el-button @click="deleteAccount(scope.row)" type="text">{{$i.button.delete}}</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-tab-pane>
+
                 <el-tab-pane :label="$i.setting.contactInfo">
                     <div class="section-btn">
                         <el-button @click="addContact" type="primary">{{$i.button.add}}</el-button>
                     </div>
-                    <el-table
+                     <el-table
                             v-if="companyInfo.concats.length"
                             :data="companyInfo.concats"
                             border
@@ -133,14 +208,14 @@
                                 :label="$i.setting.emailAddress">
                         </el-table-column>
                         <el-table-column
-                          prop="skype"
-                          align="center"
-                          :label="$i.setting.skype">
+                                prop="skype"
+                                align="center"
+                                :label="$i.setting.skype">
                         </el-table-column>
                         <el-table-column
-                          prop="qq"
-                          align="center"
-                          :label="$i.setting.qq">
+                                prop="qq"
+                                align="center"
+                                :label="$i.setting.QQ">
                         </el-table-column>
                         <el-table-column
                                 align="center"
@@ -150,39 +225,12 @@
                                 <el-button @click="deleteContact(scope.row)" type="text">{{$i.button.delete}}</el-button>
                             </template>
                         </el-table-column>
-                    </el-table>
-                </el-tab-pane>
-
-                <el-tab-pane :label="$i.setting.documentRequired">
-                    <div class="section-btn">
-                        <el-button @click="addDocument(documentData)" type="primary">{{$i.button.modify}}</el-button>
-                    </div>
-                  <el-form label-width="200px" :model="documentData">
-                    <el-row>
-                      <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
-                        <el-form-item  :label="$i.setting.documentRequired">
-                          <el-input size="mini" v-model="documentData.document"  placeholder="请输入内容"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="$i.setting.factoryInspectionReport">
-                          <el-input size="mini" v-model="documentData.aduitDetails" placeholder="请输入内容"></el-input>
-                        </el-form-item>
-                        <el-form-item  :label="$i.setting.packingList">
-                          <el-input size="mini"  v-model="documentData.packingList" placeholder="请输入内容"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="$i.setting.invoice">
-                          <el-input size="mini" v-model="documentData.invoice" placeholder="请输入内容"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="$i.setting.examiningReport">
-                          <el-input size="mini" v-model="documentData.examiningReport" placeholder="请输入内容"></el-input>
-                        </el-form-item>
-                      </el-col>
-                    </el-row>
-                  </el-form>
+                    </el-table>                
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.setting.attachment">
                   <div class="section-btn">
-                    <el-button @click="upload" type="primary">{{$i.button.upload}}</el-button>
+                    <!-- <el-button @click="upload" type="primary">{{$i.button.upload}}</el-button> -->
                   </div>
                   <!-- <v-upload></v-upload> -->
                 </el-tab-pane>
@@ -190,65 +238,41 @@
         </div>
 
         <el-dialog width="70%" :title="$i.setting.address" :visible.sync="addressDialogVisible">
-            <el-form label-width="150px" :model="addressData">
+            <el-form label-width="200px" :model="addressData">
                 <el-row>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="orderNo" :label="$i.setting.orderNumber">
-                      <el-input size="mini" v-model="addressData.orderNo" placeholder="请输入内容"></el-input>
+                    <el-form-item prop="orderNo" :label="$i.setting.factoryName">
+                      <el-input size="mini" v-model="addressData.name" placeholder="请输入内容" required="required"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                  <el-form-item prop="country" :label="$i.setting.country">
-                    <el-select  v-model="addressData.country" placeholder="请选择"  style="width: 285px;">
-                      <el-option
-                        v-for="item in options.country"
-                        :key="item.code"
-                        :label="item.name"
-                        :value="item.code">
-                      </el-option>
-                    </el-select>
+                  <el-form-item prop="country" :label="$i.setting.factoryAddress">
+                     <el-input size="mini" v-model="addressData.address" placeholder="请输入内容" required="required"></el-input>
                   </el-form-item>
                 </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="province" :label="$i.setting.province">
-                      <el-input size="mini" v-model="addressData.province" placeholder="请输入内容"></el-input>
+                    <el-form-item prop="province" :label="$i.setting.exportPort">
+                      <el-input size="mini" v-model="addressData.exportPort" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="city" :label="$i.setting.city">
-                      <el-input size="mini" v-model="addressData.city" placeholder="请输入内容"></el-input>
+                    <el-form-item prop="city" :label="$i.setting.ContacctPerson1">
+                      <el-input size="mini" v-model="addressData.contactPerson1" placeholder="请输入内容" required="required"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="address" :label="$i.setting.companyAddress">
-                      <el-input size="mini" v-model="addressData.address" placeholder="请输入内容"></el-input>
+                    <el-form-item prop="address" :label="$i.setting.contactPhoneNo1">
+                      <el-input size="mini" v-model="addressData.concatPhone1" placeholder="请输入内容" required="required"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="receiveCountry" :label="$i.setting.receiveCountry">
-                        <el-select  v-model="addressData.receiveCountry" placeholder="请选择"  style="width: 285px;">
-                          <el-option
-                            v-for="item in options.country"
-                            :key="item.code"
-                            :label="item.name"
-                            :value="item.code">
-                          </el-option>
-                        </el-select>
+                    <el-form-item prop="receiveCountry" :label="$i.setting.contacctPerson2">
+                        <el-input size="mini" v-model="addressData.contactPerson2" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="receiveProvince" :label="$i.setting.receiveProvince">
-                      <el-input size="mini" v-model="addressData.receiveProvince" placeholder="请输入内容"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="receiveCity" :label="$i.setting.receiveCity">
-                      <el-input size="mini" v-model="addressData.receiveCity" placeholder="请输入内容"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="receiveAddress" :label="$i.setting.receiverAddress">
-                      <el-input size="mini" v-model="addressData.receiveAddress" placeholder="请输入内容"></el-input>
+                    <el-form-item prop="receiveProvince" :label="$i.setting.contactPhoneNo2">
+                      <el-input size="mini" v-model="addressData.contactPhone2" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -260,110 +284,104 @@
         </el-dialog>
 
         <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="accountDialogVisible">
-            <el-form label-width="150px" :model="contactData">
+            <el-form label-width="200px" :model="accountData">
                 <el-row>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="name" :label="$i.setting.name">
-                            <el-input size="mini" v-model="contactData.name" placeholder="请输入内容"></el-input>
+                        <el-form-item prop="name" :label="$i.setting.beneficiaryName">
+                            <el-input size="mini" v-model="accountData.beneficiaryName" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                      <el-form-item prop="deptId" :label="$i.setting.department">
-                        <el-select  v-model="contactData.deptId" placeholder="请选择"  style="width: 285px;">
-                          <el-option
-                            v-for="item in department"
-                            :key="item.code"
-                            :label="item.name"
-                            :value="item.code">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                      <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="gender" :label="$i.setting.gender">
-                          <el-select  v-model="contactData.gender" placeholder="请选择"  style="width: 285px;">
-                            <el-option
-                              v-for="item in options.country"
-                              :key="item.code"
-                              :label="item.name"
-                              :value="item.code">
-                            </el-option>
-                          </el-select>
-                        </el-form-item>
-                      </el-col>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="cellphone" :label="$i.setting.mobileNumber">
-                            <el-input size="mini" v-model="contactData.cellphone" placeholder="请输入内容"></el-input>
+                        <el-form-item prop="cellphone" :label="$i.setting.beneficiaryAccount">
+                            <el-input size="mini" v-model="accountData.beneficiaryAccount" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="telphone" :label="$i.setting.telNumber">
-                            <el-input size="mini" v-model="contactData.telphone" placeholder="请输入内容"></el-input>
+                        <el-form-item prop="telphone" :label="$i.setting.beneficiaryAddress">
+                            <el-input size="mini" v-model="accountData.beneficiaryAddress" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="fax" :label="$i.setting.faxNumber">
-                            <el-input size="mini" v-model="contactData.fax" placeholder="请输入内容"></el-input>
+                        <el-form-item prop="fax" :label="$i.setting.beneficiaryBankName">
+                            <el-input size="mini" v-model="accountData.beneficiaryBankName" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="email" :label="$i.setting.emailAddress">
-                            <el-input size="mini" v-model="contactData.email" placeholder="请输入内容"></el-input>
+                        <el-form-item prop="email" :label="$i.setting.beneficiaryBankSWIFT">
+                            <el-input size="mini" v-model="accountData.beneficiaryBankSwift" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="skype" :label="$i.setting.skype">
-                      <el-input size="mini" v-model="contactData.skype" placeholder="请输入内容"></el-input>
+                    <el-form-item prop="skype" :label="$i.setting.accountType">
+                      <el-input size="mini" v-model="accountData.accountType" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="qq" :label="$i.setting.qq">
-                      <el-input size="mini" v-model="contactData.qq" placeholder="请输入内容"></el-input>
+                    <el-form-item prop="qq" :label="$i.setting.currency">
+                      <el-input size="mini" v-model="accountData.currency" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="accountDialogVisible=false">取 消</el-button>
-                <el-button :loading="allowAddAccount" type="primary" @click="sureAddContact">确 定</el-button>
+                <el-button :loading="allowAddAccount" type="primary" @click="sureAddAccount">确 定</el-button>
             </div>
         </el-dialog>
 
-      <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="documentDialogVisible">
-        <el-form label-width="200px" :model="documentData">
+      <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="contactDialogVisible">
+        <el-form label-width="200px" :model="contactData">
           <el-row>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item  :label="$i.setting.documentRequired">
-                <el-input size="mini" v-model="documentData.document" placeholder="请输入内容"></el-input>
+              <el-form-item  :label="$i.setting.name">
+                <el-input size="mini" v-model="contactData.name" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item :label="$i.setting.factoryInspectionReport">
-                <el-input size="mini" v-model="documentData.aduitDetails" placeholder="请输入内容"></el-input>
+              <el-form-item :label="$i.setting.department">
+                <el-input size="mini" v-model="contactData.deptId" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.packingList">
-                  <el-input size="mini" v-model="documentData.packingList" placeholder="请输入内容"></el-input>
+                <el-form-item  :label="$i.setting.gender">
+                  <el-input size="mini" v-model="contactData.gender" placeholder="请输入内容"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.invoice">
-                  <el-input size="mini" v-model="documentData.invoice" placeholder="请输入内容"></el-input>
+                <el-form-item  :label="$i.setting.mobileNumber">
+                  <el-input size="mini" v-model="contactData.cellphone" placeholder="请输入内容"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.examiningReport">
-                  <el-input size="mini" v-model="documentData.examiningReport" placeholder="请输入内容"></el-input>
+                <el-form-item  :label="$i.setting.telNumber">
+                  <el-input size="mini" v-model="contactData.telphone" placeholder="请输入内容"></el-input>
+                </el-form-item>
+            </el-col>
+             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <el-form-item  :label="$i.setting.faxNumber">
+                  <el-input size="mini" v-model="contactData.fax" placeholder="请输入内容"></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <el-form-item  :label="$i.setting.emailAddress">
+                  <el-input size="mini" v-model="contactData.email" placeholder="请输入内容"></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <el-form-item  :label="$i.setting.skype">
+                    <el-input size="mini" v-model="contactData.skype" placeholder="请输入内容"></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <el-form-item  :label="$i.setting.QQ">
+                    <el-input size="mini" v-model="contactData.qq" placeholder="请输入内容"></el-input>
                 </el-form-item>
             </el-col>
           </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="documentDialogVisible=false">取 消</el-button>
-          <el-button :loading="allowAddAccount" type="primary" @click="modifyDocument">确 定</el-button>
+          <el-button @click="contactDialogVisible=false">取 消</el-button>
+          <el-button :loading="allowAddAccount" type="primary" @click="sureAddContact">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -382,23 +400,19 @@
                 addressDialogVisible:false,
                 accountDialogVisible:false,
                 contactDialogVisible:false,
-                documentDialogVisible:false,
-                customDialogVisible:false,
-                exchangerateDialogVisible:false,
                 //页面page绑定
                 companyInfo:{
-                    logo:'',
-                    code:'',            //供应商编号
-                    name:'',            //供应商名称
-                    type:'',            //供应商类别
-                    country:'',         //国家
-                    city:'',
-                    incoterm:'',
-                    exportLicense:'',   //出口资质
-                    currency:'',        //币种
-                    payment:'',         //付款方式
-                    shortName:'',       //简称
-                    description:'',            //供应商描述
+                    city: '',
+                    country:'',
+                    currency: '',
+                    description: "",
+                    exportLicense: "",
+                    id: '',
+                    incoterm: '',
+                    logo: "",
+                    name: "",
+                    payment: '',
+                    shortName: ""
                 },
                 cloneData:{},                   //用于克隆存储的对象
                 //验证规则
@@ -409,16 +423,18 @@
                 //弹出框data
                 addressData:{
                     address: "",
-                    city: "",
-                    country: "",
-                    customerId: 0,
+                    companyId: "",
+                    concatPhone1: "",
+                    contactPerson1: "",
+                    contactPerson2: "",
+                    contactPhone2: "",
+                    exportPort: "",
                     id: "",
-                    orderNo: "",
-                    province: "",
-                    receiveAddress: "",
-                    receiveCity: "",
-                    receiveCountry: "",
-                    receiveProvince: "",
+                    name: "",
+                    ownerId: "",
+                    status: "",
+                    supplierId: "",
+                    tenantId: "",
                     version: ""
                 },
                 contactData:{
@@ -439,26 +455,17 @@
                   version: ""
                 },
               accountData:{
-                    name:'',
-                    deptName:'',
-                    gender:'',
-                    cellphone:'',
-                    telphone:'',
-                    fax:'',
-                    email:'',
-                    skype:'',
-                    qq:''
+                    accountType: "",
+                    beneficiaryAccount: "",
+                    beneficiaryAddress: "",
+                    beneficiaryBankName: "",
+                    beneficiaryBankSwift: "",
+                    beneficiaryName: "",
+                    currency: "",
+                    id: "",
+                    supplierId: "",
+                    version: ""
                 },
-              documentData:{
-                  aduitDetails: "",
-                  customerId: "",
-                  document: "",
-                  examiningReport: "",
-                  id: "",
-                  invoice: "",
-                  packingList: "",
-                  version: ""
-              },
               customData:{
                 customerId: "",
                 exchangeRateUSD: "",
@@ -467,13 +474,6 @@
                 oceanFreightUSD40HC: "",
                 portWarehousePrice40HC: "",
                 version: ""
-              },
-              exchangerateData: {
-                id: "",
-                fromCurrency: "",
-                toCurrency: "",
-                price: "",
-                symbol: ""
               },
                 //btn loading状态
                 allowAddAddress:false,
@@ -494,10 +494,9 @@
             getWholeData(){
                 this.companyInfo.address=[];
                 this.companyInfo.concats=[];
+                this.companyInfo.accounts=[];
                 this.$ajax.get(this.$apis.get_supplierWhile).then(res=>{
                     this.companyInfo=res;
-                    this.documentData = res.documents[0];
-                    this.customList = res.custom
                 }).catch(err=>{
                     console.log(err)
                 });
@@ -545,28 +544,22 @@
                 this.cloneData=Object.assign({},this.companyInfo);
             },
             saveModifySummary(){
-               console.log(this.$refs.uploadFile.getFiles())
                 let params={
                     city: this.companyInfo.city,
-                    code: this.companyInfo.code,
-                    companyId: this.companyInfo.companyId,
                     country: this.companyInfo.country,
                     currency: this.companyInfo.currency,
-                    exportLicense: this.companyInfo.exportLicense,
+                    description:this.companyInfo.description,
+                    exportLicense: this.companyInfo.exportLicense, //1 true 
                     id:this.companyInfo.id,
                     incoterm: this.companyInfo.incoterm,
-                    logo: this.$refs.uploadFile.getFiles()[0],
+                    // logo: this.$refs.uploadFile.getFiles()[0],
+                    logo:'',
                     name: this.companyInfo.name,
-                    ownerId: this.companyInfo.ownerId,
                     payment: this.companyInfo.payment,
-                    recycle: this.companyInfo.recycle,
                     shortName: this.companyInfo.shortName,
-                    status: this.companyInfo.status,
-                    tenantId: this.companyInfo.tenantId,
-                    type: this.companyInfo.type
-                };
+                }; 
                 this.allowModifySummary=true;
-                this.$ajax.post(`${this.$apis.post_purchase_customer}/${this.companyInfo.id}`,params).then(res=>{
+                this.$ajax.post(`${this.$apis.post_supplierWhile}/${this.companyInfo.id}`,params).then(res=>{
                     this.$message({
                         message: '修改成功',
                         type: 'success'
@@ -591,10 +584,10 @@
             },
             sureAddAddress(){
                 this.allowAddAddress=true;
-                this.addressData.customerId=this.companyInfo.id;
+                this.addressData.supplierId=this.companyInfo.id;
                 if(this.isModifyAddress){
                     //表示是在修改地址
-                    this.$ajax.post(`${this.$apis.post_purchase_customer_address_id}/${this.addressData.id}`,this.addressData).then(res=>{
+                    this.$ajax.post(`${this.$apis.post_supplier_address_id}/${this.addressData.id}`,this.addressData).then(res=>{
                         this.allowAddAddress=false;
                         this.$message({
                             message: '修改成功',
@@ -607,7 +600,7 @@
                     });
                 }else{
                     //表示是在新增地址
-                    this.$ajax.post(this.$apis.post_purchase_customer_address,this.addressData).then(res=>{
+                    this.$ajax.post(this.$apis.post_supplier_address,this.addressData).then(res=>{
                         this.allowAddAddress=false;
                         this.$message({
                             message: '添加成功',
@@ -636,7 +629,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$ajax.post(this.$apis.post_purchase_customer_deleteAddress,{id:e.id}).then(res=>{
+                    this.$ajax.post(this.$apis.post_supplier_delAddress,{id:e.id}).then(res=>{
                         this.$message({
                             type: 'success',
                             message: '删除成功!'
@@ -651,18 +644,18 @@
             },
 
             /**
-             * contact操作
+             * Account操作
              * */
-            addContact(){
-                this.contactDialogVisible=true;
+            addAccount(){
+                this.accountDialogVisible=true;
             },
-            sureAddContact(){
+            sureAddAccount(){
                 this.allowAddContact=true;
-                this.contactData.customerId=this.companyInfo.id;
+                this.accountData.supplierId=this.companyInfo.id;
 
                 if(this.isModifyContact){
                     //表示是在修改account
-                    this.$ajax.post(`${this.$apis.post_purchase_customer_concat_id}/${this.contactData.id}`,this.contactData).then(res=>{
+                    this.$ajax.post(`${this.$apis.post_supplier_account_id}/${this.accountData.id}`,this.accountData).then(res=>{
                         this.allowAddContact=false;
                         this.$message({
                             message: '修改成功',
@@ -677,7 +670,7 @@
                 }
                 else{
                     //表示是在新增account
-                    this.$ajax.post(this.$apis.post_purchase_customer_concat,this.contactData).then(res=>{
+                    this.$ajax.post(this.$apis.post_supplier_account,this.accountData).then(res=>{
                         this.allowAddContact=false;
                         this.$message({
                             message: '添加成功',
@@ -695,18 +688,18 @@
                     });
                 }
             },
-            modifyContact(e){
+            modifyAccount(e){
                 this.isModifyContact=true;      //标识正在修改contact
-                this.contactData=Object.assign({}, e);
+                this.accountData=Object.assign({}, e);
                 this.accountDialogVisible=true;
             },
-            deleteContact(e){
-                this.$confirm('确定删除该联系人?', '提示', {
+            deleteAccount(e){
+                this.$confirm('确定删除该账户信息?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$ajax.post(this.$apis.post_purchase_customer_deleteConcat,{id:e.id}).then(res=>{
+                    this.$ajax.post(this.$apis.post_supplier_delAccount,{id:e.id}).then(res=>{
                         this.$message({
                             type: 'success',
                             message: '删除成功!'
@@ -719,94 +712,76 @@
 
                 });
             },
-          /**
-           * document操作
-           * */
-          addDocument(e){
-              this.documentData = Object.assign({}, e);
-              this.documentDialogVisible = true;
-          },
-          modifyDocument(){
-            this.documentDialogVisible = false;
-            this.documentData.customerId=this.companyInfo.id;
-            this.$ajax.post(`${this.$apis.post_purchase_customer_document_id}/${this.documentData.id}`,this.documentData).then(res=>{
-              this.$message({
-                message: '修改成功',
-                type: 'success'
-              });
-              this.getWholeData();
-              this.documentDialogVisible = false;
-            }).catch(err=>{
-              this.$message({
-                message: err,
-                type: 'success'
-              });
-              this.documentDialogVisible=false;
-            });
-          },
-          /**
-           * custom操作
-           * */
-          addCustom(){
-            this.customDialogVisible = true;
+              /**
+             * contact操作
+             * */
+            addContact(){
+                this.contactDialogVisible=true;
+            },
+            sureAddContact(){
+                this.allowAddContact=true;
+                this.contactData.supplierId=this.companyInfo.id;
 
-          },
-          modifyCustom(){
-            this.customDialogVisible = false;
-            this.customData.customerId=this.companyInfo.id;
-            this.$ajax.post(`${this.$apis.post_purchase_customer_custom_id}/${this.customData.id}`,this.customData).then(res=>{
-              this.$message({
-                message: '修改成功',
-                type: 'success'
-              });
-              this.getWholeData();
-              this.customDialogVisible = false;
-            }).catch(err=>{
-              this.$message({
-                message: err,
-                type: 'success'
-              });
-              this.customDialogVisible=false;
-            });
-          },
+                if(this.isModifyContact){
+                    //表示是在修改account
+                    this.$ajax.post(`${this.$apis.post_supplier_contact_id}/${this.contactData.id}`,this.contactData).then(res=>{
+                        this.allowAddContact=false;
+                        this.$message({
+                            message: '修改成功',
+                            type: 'success'
+                        });
+                        this.getWholeData();
+                        this.contactDialogVisible=false;
+                    }).catch(err=>{
+                        this.allowAddContact=false;
+                        this.contactDialogVisible=false;
+                    });
+                }
+                else{
+                    //表示是在新增account
+                    this.$ajax.post(this.$apis.post_supplier_contact,this.contactData).then(res=>{
+                        this.allowAddContact=false;
+                        this.$message({
+                            message: '添加成功',
+                            type: 'success'
+                        });
+                        this.getWholeData();
+                        this.contactDialogVisible=false;
+                    }).catch(err=>{
+                        this.allowAddContact=false;
+                        this.$message({
+                            message: err,
+                            type: 'success'
+                        });
+                        this.contactDialogVisible=false;
+                    });
+                }
+            },
+            modifyContact(e){
+                this.isModifyContact=true;      //标识正在修改contact
+                this.contactData=Object.assign({}, e);
+                this.contactDialogVisible=true;
+            },
+            deleteContact(e){
+                this.$confirm('确定删除该联系人?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$ajax.post(this.$apis.post_supplier_delContact,{id:e.id}).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                        this.getWholeData();
+                    }).catch(err=>{
+                        console.log(err)
+                    });
+                }).catch(() => {
 
-          /**
-           * Trade exchange rate操作
-           * */
-          getGridfavoritePartData(){
-            this.$ajax.get(this.$apis.get_customcurrencyexchangerate_query).then(res=>{
-                this.currencyList = res;
-            }).catch(err=>{
-              this.$message({
-                message: err,
-                type: 'success'
-              });
-            });
-          },
-          updateExchangerate(e){
-            this.exchangerateDialogVisible = true;
-            this.exchangerateData=Object.assign({}, e);
-          },
-          modifyExchangerate(){
-            this.$ajax.post(this.$apis.post_exchangerate_update,this.exchangerateData).then(res=>{
-              this.$message({
-                message: '修改成功',
-                type: 'success'
-              });
-              this.getGridfavoritePartData();
-              this.exchangerateDialogVisible = false;
-            }).catch(err=>{
-              this.exchangerateDialogVisible = false;
-              this.$message({
-                message: err,
-                type: 'success'
-              });
-            });
-          },
-          upload(){
-
-          }
-
+                });
+            },
+            
         },
         created(){
             // this.supplierWhole();
@@ -815,7 +790,6 @@
                this.getCountryAll();
                this.getCodePart();
                this.getDepartment();
-               this.getGridfavoritePartData();
 
             // console.log(this.$db,'db')
         },
