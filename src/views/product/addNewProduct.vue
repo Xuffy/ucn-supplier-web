@@ -5,11 +5,8 @@
             <div class="name">
                 Pic:
             </div>
-            <div class="imgGroup">
-                <img-handler :data="imgGroup"></img-handler>
-            </div>
             <div class="btns">
-                <up-load></up-load>
+                <v-upload ref="upload"></v-upload>
             </div>
         </div>
         <el-form :model="productForm" :rules="rules" ref="productForm1" class="speForm" label-width="230px" :label-position="labelPosition">
@@ -755,15 +752,14 @@
 </template>
 
 <script>
-    import upLoad from '@/components/common/upload/upload'
     import imgHandler from '../product/imgHandler'
-    import {dropDownSingle,VTable} from '@/components/index'
+    import {dropDownSingle,VTable,VUpload} from '@/components/index'
 
     export default {
         name: "addNewProduct",
         components:{
             imgHandler,
-            upLoad,
+            VUpload,
             VTable,
             dropDown:dropDownSingle
         },
@@ -785,7 +781,6 @@
                 skuPkgOption:[],        //产品包装可否调整
                 readilyOption:[],       //是否现货
                 skuUnitOption:[],       //计量单位
-
 
                 loadingData:true,
                 labelPosition:'left',
@@ -1188,7 +1183,6 @@
                     label: '北京烤鸭'
                 }],
 
-
                 /**
                  * 弹出框data
                  * */
@@ -1459,15 +1453,10 @@
                         }else if(v.code==='SKU_UNIT'){
                             this.skuUnitOption=v.codes;
                         }
-                    })
+                    });
                     this.loadingData=false;
                 }).catch(err=>{
                     this.loadingData=false;
-                })
-
-
-                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                    console.log(res)
                 });
             },
         },
