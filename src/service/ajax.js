@@ -6,6 +6,8 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css';
 import {Message} from 'element-ui';
 import _config from './config';
+import $i from '../language/index';
+import md5 from 'blueimp-md5';
 import {localStore, sessionStore} from 'service/store';
 
 /**
@@ -36,8 +38,8 @@ const validate_error = (code, msg) => {
 
   }
 
-  Message.warning(msg || '数据返回异常，请重试！');
-  throw new Error(`${msg || '数据返回异常，请重试！'}`);
+  Message.warning(msg || $i.hintMessage.dataException);
+  throw new Error(`${msg || $i.hintMessage.dataException}`);
 }
 
 
@@ -100,12 +102,10 @@ const $ajax = (config) => {
 
     if (config._cache) {
       if (!_.isEmpty(resCache) && _.isArray(resCache)) {
-        _.map(resCache, val => {
-          let p = data.params || data;
-          if (url === val.url && _.isEqual(p, val.params)) {
-            resData = val;
-          }
-        });
+        let res = _.findWhere(resCache, {id: md5(url + JSON.stringify(data))});
+        if (res) {
+          resData = res;
+        }
       }
     }
 
@@ -208,7 +208,7 @@ axios.interceptors.request.use(config => {
 
   if (!config.headers['U-Session-Token'] && !config._noAuth && _config.AUTH) {
     Message({
-      message: '登录失效，请重新登录',
+      message: $i.hintMessage.loginExpired,
       type: 'warning',
       customClass: 'set-top',
       duration: 2000,
@@ -224,7 +224,7 @@ axios.interceptors.request.use(config => {
   return config
 }, error => {
   NProgress.done();
-  Message.warning('请求异常，请重试！');
+  Message.warning($i.hintMessage.requestException);
   Promise.reject(error);
 });
 
@@ -256,11 +256,11 @@ axios.interceptors.response.use(
     if (config._cache) {
       let rcList = [];
       _.map(resCache, val => {
-        if (config.url !== val.url || !_.isEqual(config.params, val.params)) {
+        if (config.url !== val.url || !_.isEqual(config.data, val.params)) {
           rcList.push(val);
         }
       });
-      rcList.push({url: config.url, params: config.params || {}, data: response.data});
+      rcList.push({url: config.url, params: config.data, data: response.data, id: md5(config.url + config.data)});
       sessionStore.set('request_cache', rcList);
     }
 
@@ -274,7 +274,7 @@ axios.interceptors.response.use(
 
   },
   error => {
-    Message.warning(_.isObject(error) || !error ? '网络异常，请稍后重试！' : error);
+    Message.warning(_.isObject(error) || !error ? $i.hintMessage.networkException : error);
     NProgress.done();
     return Promise.reject(error)
   }
