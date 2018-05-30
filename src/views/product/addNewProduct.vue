@@ -15,7 +15,7 @@
 
                 <el-col style="height: 51px;" class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                     <el-form-item label="Picture:">
-                        <v-upload :limit="20" :onlyImage="true" ref="upload"></v-upload>
+                        <v-upload :limit="20" :list="productForm.pictures" :onlyImage="true" ref="upload"></v-upload>
                     </el-form-item>
                 </el-col>
 
@@ -680,7 +680,7 @@
 
         <div class="title">{{$i.product.attachment}}</div>
         <div style="margin-bottom: 20px">
-            <v-upload :limit="20" ref="uploadAttachment"></v-upload>
+            <v-upload :list="productForm.attachments" :limit="20" ref="uploadAttachment"></v-upload>
         </div>
 
         <div class="footBtn">
@@ -755,7 +755,6 @@
                 <el-button :disabled="loadingTable" @click="addCustomerDialogVisible = false">取 消</el-button>
             </div>
         </el-dialog>
-
     </div>
 </template>
 
@@ -1231,14 +1230,18 @@
                             param[k]=parseInt(param[k]);
                         }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
                             let item='';
-                            param[k].forEach((v,index)=>{
-                                if(index===param[k].length-1){
-                                    item+=v;
-                                }else{
-                                    item+=(v+',');
-                                }
-                            })
-                            param[k]=item;
+                            if(param[k].length===0){
+                                param[k]='';
+                            }else{
+                                param[k].forEach((v,index)=>{
+                                    if(index===param[k].length-1){
+                                        item+=v;
+                                    }else{
+                                        item+=(v+',');
+                                    }
+                                });
+                                param[k]=item;
+                            }
                         }
                     });
                     if(!param.readilyAvailable){
@@ -1247,6 +1250,9 @@
                     if(!param.visibility){
                         param.ids=[];
                     }
+
+                    param.pictures=this.$refs.upload.getFiles();
+                    param.attachments=this.$refs.uploadAttachment.getFiles();
                     this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
                         this.$message({
                             message: '修改成功',

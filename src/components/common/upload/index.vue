@@ -1,6 +1,6 @@
 <template>
   <div class='ucn-upload small'>
-    <p class="upload-btn">
+    <p class="upload-btn" v-if="!readonly">
       <i class="el-icon-plus"></i>
       <input class="upload-file" type="file" ref="upload"
              @change="uploadFile"
@@ -23,6 +23,8 @@
         </div>
 
         <div class="delete-box" v-show="item.progress === 1 || item.url">
+
+          <i class="el-icon-download" @click="downloadFile(item)"></i>
           <i class="el-icon-delete" @click="deleteFile(item)"></i>
         </div>
 
@@ -42,6 +44,16 @@
   export default {
     name: 'VUpload',
     props: {
+      list: {
+        type: [Array, String],
+        default() {
+          return [];
+        },
+      },
+      readonly: {
+        type: Boolean,
+        default: false,
+      },
       limit: {
         type: Number,
         default: 1,
@@ -66,6 +78,15 @@
       this.tenantId = (this.$localStore.get('user') || {}).tenantId;
     },
     mounted() {
+
+    },
+    watch: {
+      fileList() {
+        console.log(this.fileList)
+      },
+      list(val) {
+        this.setList(val);
+      }
     },
     methods: {
       uploadFile() {
@@ -114,19 +135,22 @@
           console.log(err);
         });
       },
-      deleteFile(params) {
+      deleteFile(item) {
         let list = {};
-        this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
+        item.fileKey && this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
           let client = this.signature(data);
-          client.delete(params.fileKey);
+          client.delete(item.fileKey || '');
         });
 
         _.map(this.fileList, val => {
-          if (val.id !== params.id) {
+          if (val.id !== item.id) {
             list[val.id] = val;
           }
         });
         this.fileList = list;
+      },
+      downloadFile(item) {
+        item.url && window.open(item.url);
       },
       signature(params) {
         return new OSS.Wrapper({
@@ -139,14 +163,21 @@
 
       },
       filterType(name) {
-        let ns = name.split('.')
+        let rs = name.split('?')[0].split('/')
+          , ns = rs.pop().split('.')
           , param = {};
+
+        if (name.indexOf('?') > -1) {
+          param.url = name;
+          param.id = rs[rs.length - 1];
+        }
 
         if (ns.length > 1) {
           param.showType = ns.pop().toLocaleUpperCase();
-          param.showName = ns.join('');
+          param.showName = ns.shift();
         } else {
           param.showName = ns[0];
+          param.showType = 'File';
         }
 
         if (_.indexOf(imageType, param.showType) !== -1) {
@@ -154,6 +185,24 @@
         }
 
         return param;
+      },
+      setList(list) {
+        if (_.isEmpty(list)) {
+          return false;
+        }
+
+        if (_.isString(list)) {
+          list = [list];
+        }
+
+        _.map(list, value => {
+          let param = this.filterType(value);
+
+          if (_.isEmpty(this.fileList[param.id])) {
+            this.$set(this.fileList, param.id, param);
+          }
+        });
+
       },
       getFiles() {
         let files = _.pluck(_.values(this.fileList), 'fileKey');
@@ -245,18 +294,25 @@
     opacity: 1;
   }
 
-  .delete-box .el-icon-delete {
+  .delete-box i {
     position: absolute;
     top: 50%;
-    left: 50%;
-    font-size: 30px;
+    font-size: 18px;
     color: #ffffff;
     cursor: pointer;
     transition: all .5s;
     transform: translate(-50%, -50%);
   }
 
-  .delete-box .el-icon-delete:hover {
+  .delete-box .el-icon-download {
+    left: 25%;
+  }
+
+  .delete-box .el-icon-delete {
+    left: 75%;
+  }
+
+  .delete-box i:hover {
     color: #409eff;
   }
 

@@ -25,7 +25,7 @@
 <script>
     /*自己ref拿 上传的url数组*/
     import {
-        Upload
+        VUpload
     } from '@/components/index';
     export default {
         name: "attchment",
@@ -43,7 +43,7 @@
             }
         },
         components: {
-            Upload
+            Upload:VUpload
         },
         data() {
             return {}
