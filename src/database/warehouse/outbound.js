@@ -32,21 +32,22 @@ export default {
         showType:'input',
         disabled:true
     },
-    timeZone:{
-        key:'timeZone',
-        belong:'basicInfo',
-        showType:'timeZone',
-    },
-    attachment:{
-        key:'attachment',
-        belong:'basicInfo',
-        showType:'textarea',
-    },
+    // timeZone:{
+    //     key:'timeZone',
+    //     belong:'basicInfo',
+    //     showType:'timeZone',
+    // },
     remark:{
         key:'remark',
         belong:'basicInfo',
         showType:'textarea',
         fullLine:true
     },
+    attachment:{
+        key:'attachment',
+        belong:'basicInfo',
+        isAttachment:true
+    },
+
 
 }

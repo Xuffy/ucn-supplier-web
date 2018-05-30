@@ -450,6 +450,7 @@ export const routerMap = [
         {
           path: 'createInbound',
           name: 'create Inbound',
+          hidden:true,
           meta: {
             draft: true,
             recycleBin: true,
@@ -484,6 +485,7 @@ export const routerMap = [
         {
           path: 'createOutbound',
           name: 'create Outbound',
+          hidden:true,
           meta: {
             draft: true,
             recycleBin: true,
@@ -523,6 +525,15 @@ export const routerMap = [
             name: 'qc Order'
           },
           component: () => import('../views/warehouse/qc/qcOrder')
+        },
+        {
+          path: 'qcOrderDetail',
+          name: 'qc Order Detail',
+          hidden:true,
+          meta: {
+            name: 'qc Order Detail'
+          },
+          component: () => import('../views/warehouse/qc/QCOrderDetail')
         },
         {
           path: 'qcOrderService',

@@ -6,10 +6,12 @@
         <div class="body">
             <div class="head">
                 <span>{{$i.warehouse.status}}</span>
+
                 <el-radio-group class="radioGroup" @change="changeStatus" v-model="qcOrderConfig.qcStatusDictCode" size="mini">
                     <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
-                    <el-radio-button v-for="v in qcStatusOption" :key="v.id" :label="v.code">{{v.code}}</el-radio-button>
+                    <el-radio-button v-for="v in qcStatusOption" :key="v.id" :label="v.code">{{v.name}}</el-radio-button>
                 </el-radio-group>
+
                 <select-search
                         class="search"
                         @inputEnter="searchInbound"
@@ -29,20 +31,25 @@
                         </div>
                     </template>
                 </v-table>
+                <page
+                        @size-change="changeSize"
+                        @change="changePage"
+                        :page-data="pageData"></page>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import VTable from '@/components/common/table/index'
+    import {VPagination,VTable} from '@/components/index'
     import selectSearch from '@/components/common/fnCompon/selectSearch'
 
     export default {
         name: "qcOverview",
         components:{
             selectSearch,
-            VTable
+            VTable,
+            page:VPagination
         },
         data(){
             return{
@@ -54,7 +61,9 @@
                 tableDataList:[],
                 downloadBtnInfo:'All',
                 selectList:[],
+                pageData:{},
                 qcStatusOption:[],
+                qcMethodsOption:[],
                 qcOrderConfig:{
                     pn: 1,
                     ps: 50,
@@ -78,6 +87,7 @@
         },
         methods:{
             changeStatus(){
+                this.qcOrderConfig.pn=1;
                 this.getQcData();
             },
 
@@ -85,13 +95,15 @@
             getQcData(){
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_qcOrderData,this.qcOrderConfig).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.warehouse.qcOverview, res.datas);
+                    this.tableDataList = this.$getDB(this.$db.warehouse.qcOverview, res.datas,e=>{
+                        e.qcMethodDictCode.value=this.$change(this.qcMethodsOption,'qcMethodDictCode',e).name;
+                    });
+                    this.pageData=res;
                     this.loadingTable=false;
                 }).catch(err=>{
                     this.loadingTable=false;
                 });
             },
-
 
             searchInbound(e){
                 if(!e.keyType){
@@ -106,9 +118,25 @@
             },
 
             btnClick(e){
-                console.log(e)
                 if(e.serviceProviderIsLoginUser.value){
                     //跳9.2.3
+                    if(e.qcStatusDictCode.value==='COMPLETED_QC'){
+                        //跳qcOrderDetail
+                        this.$windowOpen({
+                            url:'/warehouse/qcOrderDetail',
+                            params:{
+                                id:e.id.value
+                            }
+                        })
+                    }else{
+                        //跳qcOrderService
+                        this.$windowOpen({
+                            url:'/warehouse/qcOrderService',
+                            params:{
+                                id:e.id.value
+                            }
+                        })
+                    }
                 }else{
                     //跳9.2.1
                     this.$windowOpen({
@@ -128,22 +156,34 @@
              * 字典获取
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS'],{_cache:true}).then(res=>{
-                    this.qcStatusOption=res[0].codes;
-                    this.qcStatusOption.forEach(v=>{
-                        if(v.code==='1'){
-                            v.label='已验货';
-                        }else if(v.code==='2'){
-                            v.label='待验货';
+                this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS','QC_MD'],{_cache:true}).then(res=>{
+                    res.forEach(v=>{
+                        if(v.code==='QC_STATUS'){
+                            this.qcStatusOption=v.codes;
+                        }else if(v.code==='QC_MD'){
+                            this.qcMethodsOption=v.codes;
                         }
-                    })
+                    });
+
+                    this.getQcData();
                 }).catch(err=>{
 
                 });
             },
+
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                this.qcOrderConfig.pn=e;
+                this.getQcData();
+            },
+            changeSize(e){
+                this.qcOrderConfig.ps=e;
+                this.getQcData();
+            }
         },
         created(){
-            this.getQcData();
             this.getUnit();
         },
         watch:{

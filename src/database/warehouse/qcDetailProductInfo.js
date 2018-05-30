@@ -2,39 +2,48 @@ export default{
     id: {
         _hide: true
     },
-    SKUQCResult: {
+    skuId:{
+        _hide:true
+    },
+    skuQcResultDictCode: {
         key: 'skuQcResultDictCode',
+        type: 'String',
+        showType:'select',
+        isQcResult:true
+    },
+    skuInventoryStatusDictCode:{
+        key: 'skuInventoryStatusDictCode',
         type: 'String'
     },
-    SKUCode: {
+    skuCode: {
         key: 'skuCode',
         type: 'String'
     },
-    custermerSKUCode: {    
+    customerSkuCode: {
         key: 'customerSkuCode',
         type: 'String'
     },
-    factorySKUCode: {
+    factorySkuCode: {
         key: 'factorySkuCode',
         type: 'String'
     },
-    SKUNameCN: {
+    skuNameCn: {
         key: 'skuNameCn',
         type: 'String'
     },
-    brand: {
+    skuBrand: {
         key: 'skuBrand',
         type: 'String'
     },
-    productDesign: {
+    skuDesign: {
         key: 'skuDesign',
         type: 'String'
     },
-    packingMethodCN: {
+    packingMethodCn: {
         key: 'packingMethodCn',
         type: 'String'
     },
-    packingMethodOfInnerCartonCN: {
+    innerCartonPackingMethodCn: {
         key: 'innerCartonPackingMethodCn',
         type: 'String'
     },
@@ -42,19 +51,19 @@ export default{
         key: 'deliveryDate',
         type: 'String'
     },
-    unit: {
+    skuUnitDictCode: {
         key: 'skuUnitDictCode',
         type: 'String'
     },
-    unitLength: {
+    lengthUnitDictCode: {
         key: 'lengthUnitDictCode',
         type: 'String'
     },
-    unitVolume: {
+    volumeUnitDictCode: {
         key: 'volumeUnitDictCode',
         type: 'String'
     },
-    unitWeight: {
+    weightUnitDictCode: {
         key: 'weightUnitDictCode',
         type: 'String'
     },
@@ -62,11 +71,11 @@ export default{
         key: 'inboundNo',
         type: 'String'
     },
-    orderSkuQuantity: {
+    orderSkuQty: {
         key: 'orderSkuQty',
         type: 'Number'
     },
-    expectQCQTY: {
+    expectQcQty: {
         key: 'expectQcQty',
         type: 'Number'
     },
@@ -78,204 +87,228 @@ export default{
         key: 'unqualifiedProcessingMode',
         type: 'String'
     },
-    totalOuterCartonQuantity: {
+    outerCartonTotalQty: {
         key: 'outerCartonTotalQty',
         type: 'Number'
     },
-    SKULength: {
+    skuLength: {
         key: 'skuLength',
         type: 'Number'
     },
-    SKUWidth: {
+    skuWidth: {
         key: 'skuWidth',
         type: 'Number'
     },
-    SKUHeigh: {
+    skuHeight: {
         key: 'skuHeight',
         type: 'Number'
     },
-    SKUNetWeight:{
+    skuNetWeight:{
         key: 'skuNetWeight',
         type: 'Number'
     },
-    SKUQuantityOfOuterCarton:{
+    outerCartonSkuQty:{
         key: 'outerCartonSkuQty',
         type: 'Number'
     },
-    actQuantityOuterCarton:{
+    actOuterCartonSkuQty:{
         key: 'actOuterCartonSkuQty',
-        type: 'Number'
+        type: 'Number',
+        showType:'number'
     },
-    quantityOfInnerBoxOuterCarton:{
+    outerCartonInnerBoxQty:{
         key: 'outerCartonInnerBoxQty',
         type: 'Number'
     },
-    actQuantityOfInnerBoxOuterCarton:{
+    actOuterCartonInnerBoxQty:{
         key: 'actOuterCartonInnerBoxQty',
-        type: 'Number'
+        type: 'Number',
+        showType:'number'
     },
-    SKUQuantityOfInnerCarton:{
+    innerCartonSkuQty:{
         key: 'innerCartonSkuQty',
         type: 'Number'
     },
-    actualQuantityInnerCarton:{
+    actInnerCartonSkuQty:{
         key: 'actInnerCartonSkuQty',
-        type: 'Number'
+        type: 'Number',
+        showType:'number'
     },
     innerCartonLength:{
         key: 'innerCartonLength',
-        type: 'Number'
+        type: 'Number',
+        showType:'number'
     },
     innerCartonWidth:{
         key: 'innerCartonWidth',
-        type: 'Number'
+        type: 'Number',
+        showType:'number'
     },
     innerCartonHeight:{
         key: 'innerCartonHeight',
-        type: 'Number'
+        type: 'Number',
+        showType:'number'
     },
     innerCartonNetWeight:{
         key: 'innerCartonNetWeight',
-        type: 'Number'
+        type: 'Number',
+        showType:'number'
     },
     innerCartonGrossWeight:{
         key: 'innerCartonGrossWeight',
-        type: 'Number'
+        type: 'Number',
+        showType:'number'
     },
     innerCartonVolume:{
         key: 'innerCartonVolume',
-        type: 'Number'
+        type: 'Number',
+        showType:'number'
     },
     outerCartonLength:{
         key: 'outerCartonLength',
-        type: 'Number'
+        type: 'Number',
+        showType:'number'
     },
     outerCartonWidth:{
         key: 'outerCartonWidth',
-        type: 'Number'
+        type: 'Number',
+        showType:'number'
     },
     outerCartonHeight:{
         key: 'outerCartonHeight',
-        type: 'Number'
+        type: 'Number',
+        showType:'number'
     },
-    netWeightOfOuterCarton:{
+    outerCartonNetWeight:{
         key: 'outerCartonNetWeight',
+        type: 'Number',
+        showType:'number'
+    },
+    outerCartonVolume:{
+        key: 'outerCartonVolume',       //计算？？？？
         type: 'Number'
     },
-    volumeOfOuterCarton:{
-        key: 'outerCartonVolume',
-        type: 'Number'
-    },
-    grossWeightofOuterCarton:{
+    outerCartonGrossWeight:{
         key: 'outerCartonGrossWeight',
-        type: 'Number'
+        type: 'Number',
+        showType:'number'
     },
-    actualProductTotalCTNS:{
+    actSkuCartonTotalQty:{              //计算？？？？
         key: 'actSkuCartonTotalQty',
         type: 'Number'
     },
-    qualifiedProductsTotalCTNS:{
+    qualifiedSkuCartonTotalQty:{
         key: 'qualifiedSkuCartonTotalQty',
-        type: 'Number'
+        type: 'Number',
+        showType:'number'
     },
-    unqualifiedProductTotalCTNS:{
+    unqualifiedSkuCartonTotalQty:{
         key: 'unqualifiedSkuCartonTotalQty',
-        type: 'Number'
+        type: 'Number',
+        showType:'number'
     },
-    actProductQuantity:{
+    actSkuQty:{              //计算？？？？
         key: 'actSkuQty',
         type: 'Number'
     },
-    qualifiedProductsTotalQTYS:{
+    qualifiedSkuQty:{              //计算？？？？
         key: 'qualifiedSkuQty',
         type: 'Number'
     },
-    unqualifiedProductsQTY:{
+    unqualifiedSkuQty:{              //计算？？？？
         key: 'unqualifiedSkuQty',
         type: 'Number'
     },
-    qualifiedProductTotalNW:{
+    qualifiedSkuNetWeight:{              //计算？？？？
         key: 'qualifiedSkuNetWeight',
         type: 'Number'
     },
-    unqualifiedProductTotalNW:{
+    unqualifiedSkuNetWeight:{              //计算？？？？
         key: 'unqualifiedSkuNetWeight',
         type: 'Number'
     },
-    qualifiedProductsTotalCBM:{
+    qualifiedSkuVolume:{              //计算？？？？
         key: 'qualifiedSkuVolume',
         type: 'Number'
     },
-    unqualifiedProductsTotalCBM:{
+    unqualifiedSkuVolume:{              //计算？？？？
         key: 'unqualifiedSkuVolume',
         type: 'Number'
     },
-    qualifiedProductTotalGW:{
+    qualifiedSkuGrossWeight:{              //计算？？？？
         key: 'qualifiedSkuGrossWeight',
         type: 'Number'
     },
-    unqualifiedProductTotalGW:{
+    unqualifiedSkuGrossWeight:{              //计算？？？？
         key: 'unqualifiedSkuGrossWeight',
         type: 'Number'
-    }, 
+    },
     unqualifiedType:{
         key: 'unqualifiedType',
-        type: 'String'
+        type: 'String',
+        showType:'input'
     },
-    SKUBarCode:{
+    skuBarCode:{
         key: 'skuBarCode',
         type: 'String'
     },
-    productBarCodeResults:{
+    skuBarCodeResultDictCode:{
         key: 'skuBarCodeResultDictCode',
-        type: 'String'
+        type: 'String',
+        showType:'select',
+        isBarCodeResult:true
     },
-    SKULabel:{
+    skuLabel:{
         key: 'skuLabel',
         type: 'String'
     },
-    productLabelResults:{
+    skuLabelResultDictCode:{
         key: 'skuLabelResultDictCode',
-        type: 'String'
+        type: 'String',
+        showType:'select',
+        isBarCodeResult:true
     },
     innerPackingBarCode:{
         key: 'innerPackingBarCode',
         type: 'String'
     },
-    innerPackingBarCodeResults:{
+    innerPackingBarCodeResultDictCode:{
         key: 'innerPackingBarCodeResultDictCode',
-        type: 'String'
+        type: 'String',
+        showType:'select',
+        isBarCodeResult:true
     },
     outerCartonBarCode:{
         key: 'outerCartonBarCode',
         type: 'String'
     },
-    outerCartonBarCodeResults:{
+    outerCartonBarCodeResultDictCode:{
         key: 'outerCartonBarCodeResultDictCode',
-        type: 'String'
+        type: 'String',
+        showType:'select',
+        isBarCodeResult:true
     },
-    shippingMarks:{
+    shippingMark:{
         key: 'shippingMark',
         type: 'String'
     },
-    outerCartonMarksResults:{
+    shippingMarkResultDictCode:{
         key: 'shippingMarkResultDictCode',
-        type: 'String'
+        type: 'String',
+        showType:'select',
+        isBarCodeResult:true
     },
-    QCPic:{
+    qcPic:{             //服务商上传
         key: 'qcPic',
         type: 'String'
     },
-    checkOuterCartons:{
+    checkOuterCartonQty:{
         key: 'checkOuterCartonQty',
         type: 'Number'
     },
-    remark:{
+    remarks:{
         key: 'remark',
         type: 'String',
+        showType:'input'
     },
-    SKUInventoryStatus:{
-        key: 'skuInventoryStatusDictCode',
-        type: 'String'
-    }
 }

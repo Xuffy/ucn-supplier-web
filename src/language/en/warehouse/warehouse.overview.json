@@ -26,5 +26,13 @@
   "roughWeightOfInnerCarton":"中包毛重",
   "volumeOfInnerCarton":"中包体积",
   "brand":"品牌",
-  "skuNameCN":"中文品名"
+  "skuNameCN":"中文品名",
+
+  "skuQcStatusDictCode":"产品库存状态",
+  "inventoryOutCartonQty":"库存箱数",
+  "inventorySkuQty":"库存数量",
+  "inventorySkuVolume":"库存总体积",
+  "inventorySkuGrossWeight":"库存总毛重",
+  "inventorySkuNetWeight":"库存总净重",
+  "skuPic":"图片"
 }

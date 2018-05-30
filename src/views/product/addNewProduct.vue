@@ -1,27 +1,31 @@
 <template>
     <div class="add-product" v-loading="loadingData">
         <div class="title">{{$i.product.basicInformation}}</div>
-        <div class="addPic">
-            <div class="name">
-                Pic:
-            </div>
-            <div class="imgGroup">
-                <img-handler :data="imgGroup"></img-handler>
-            </div>
-            <div class="btns">
-                <up-load></up-load>
-            </div>
-        </div>
+        <!--<div class="addPic">-->
+            <!--<div class="name">-->
+                <!--Pic:-->
+            <!--</div>-->
+            <!--<div class="btns">-->
+                <!--<v-upload :limit="20" :onlyImage="true" ref="upload"></v-upload>-->
+            <!--</div>-->
+        <!--</div>-->
         <el-form :model="productForm" :rules="rules" ref="productForm1" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <!--设置高度51px以免inputNumber错位-->
+
+                <el-col style="height: 51px;" class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                    <el-form-item label="Picture:">
+                        <v-upload :limit="20" :list="productForm.pictures" :onlyImage="true" ref="upload"></v-upload>
+                    </el-form-item>
+                </el-col>
+
                 <el-col style="height: 51px;" v-if="v.belongTab==='basicInfo' && !v.isHide" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
                             <div v-if="v.isWeight">
                                 <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
                                     <el-option
-                                            v-for="item in weightOption"
+                                            v-for="item in skuUnitOption"
                                             :key="item.id"
                                             :label="item.name"
                                             :value="item.code">
@@ -39,7 +43,6 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isReadily">
-
                                 <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
                                     <el-option
                                             v-for="item in readilyOption"
@@ -62,8 +65,8 @@
                             <div v-else-if="v.isSaleStatus">
                                 <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
                                     <el-option
-                                            v-for="item in saleStatusOption"
-                                            :key="item.id"
+                                            v-for="item in v.options"
+                                            :key="item.code"
                                             :label="item.label"
                                             :value="item.code">
                                     </el-option>
@@ -676,11 +679,12 @@
         </el-form>
 
         <div class="title">{{$i.product.attachment}}</div>
-
-        <input style="display: none" id="pic" name="file" type="file" accept="image/*" @change="uploadPic">
+        <div style="margin-bottom: 20px">
+            <v-upload :list="productForm.attachments" :limit="20" ref="uploadAttachment"></v-upload>
+        </div>
 
         <div class="footBtn">
-            <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i.product.finish}}</el-button>
+            <el-button @click="finish" :disabled="loadingData" :loading="disabledSubmit" type="primary">{{$i.product.finish}}</el-button>
         </div>
 
         <el-dialog width="70%" :title="$i.product.addCustomer" :visible.sync="addCustomerDialogVisible">
@@ -751,20 +755,18 @@
                 <el-button :disabled="loadingTable" @click="addCustomerDialogVisible = false">取 消</el-button>
             </div>
         </el-dialog>
-
     </div>
 </template>
 
 <script>
-    import upLoad from '@/components/common/upload/upload'
     import imgHandler from '../product/imgHandler'
-    import {dropDownSingle,VTable} from '@/components/index'
+    import {dropDownSingle,VTable,VUpload} from '@/components/index'
 
     export default {
         name: "addNewProduct",
         components:{
             imgHandler,
-            upLoad,
+            VUpload,
             VTable,
             dropDown:dropDownSingle
         },
@@ -785,7 +787,7 @@
                 udbOption:[],           //是否展示包装盒
                 skuPkgOption:[],        //产品包装可否调整
                 readilyOption:[],       //是否现货
-
+                skuUnitOption:[],       //计量单位
 
                 loadingData:true,
                 labelPosition:'left',
@@ -866,11 +868,12 @@
                     // ],
                 },
                 productForm:{
+                    attachments:[],
                     id: '',                         //新增传空
                     ids:[],                         //选择的可见
-                    pic: "thisIsAPicture",
+                    pictures:[],
                     visibility:true,                //全网可见为true,否则false
-                    status: '1',                      //0下架 1上架
+                    status: 1,                      //0下架 1上架
                     nameEn: "",
                     barcode: "",                    //产品条码
                     nameCn: "",
@@ -882,7 +885,7 @@
                     // supplierCode: "",
                     // supplierName: "",
                     code: "",                       //新增时请填写，传空
-                    unit: "7",
+                    unit: "1",
                     formation: "",
                     materialEn: "",
                     materialCn: "",
@@ -973,7 +976,6 @@
                     outerCartonMethodEn: "",
                     oem: '1',
                     logisticId: 1,
-                    version: 1,
                     pkgId: 1,
                     price: [
                         {
@@ -1171,24 +1173,7 @@
                     label:'name',
                     children:'children'
                 },
-                options: [
-                    {
-                    value: '选项1',
-                    label: '黄金糕'
-                }, {
-                    value: '选项2',
-                    label: '双皮奶'
-                }, {
-                    value: '选项3',
-                    label: '蚵仔煎'
-                }, {
-                    value: '选项4',
-                    label: '龙须面'
-                }, {
-                    value: '选项5',
-                    label: '北京烤鸭'
-                }],
-
+                options: [],
 
                 /**
                  * 弹出框data
@@ -1199,25 +1184,6 @@
             }
         },
         methods:{
-            //上传图片
-            uploadPic(e){
-                let me=this;
-                console.log(e,"????")
-                let file=e.target.files[0];
-                // let param = new FormData(); //创建form对象
-                // param.append('file',file,file.name);//通过append向form对象添加数据
-                let reader=new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload=function (e) {
-                    me.imgGroup.push(e.target.result);
-                }
-            },
-
-            //添加图片到暂存区
-            addPic(){
-                document.getElementById('pic').click();
-            },
-
             //获取类别数据
             getCategoryId(){
                 this.$ajax.get(this.$apis.get_supply_category,{}).then(res=>{
@@ -1236,7 +1202,6 @@
             addCustomer(){
                 this.addCustomerDialogVisible=true;
                 this.loadingTable=true;
-
                 this.$ajax.post(this.$apis.get_sellerCustomer,this.customerQuery).then(res=>{
                     this.loadingTable=false;
                     this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
@@ -1265,14 +1230,18 @@
                             param[k]=parseInt(param[k]);
                         }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
                             let item='';
-                            param[k].forEach((v,index)=>{
-                                if(index===param[k].length-1){
-                                    item+=v;
-                                }else{
-                                    item+=(v+',');
-                                }
-                            })
-                            param[k]=item;
+                            if(param[k].length===0){
+                                param[k]='';
+                            }else{
+                                param[k].forEach((v,index)=>{
+                                    if(index===param[k].length-1){
+                                        item+=v;
+                                    }else{
+                                        item+=(v+',');
+                                    }
+                                });
+                                param[k]=item;
+                            }
                         }
                     });
                     if(!param.readilyAvailable){
@@ -1281,33 +1250,40 @@
                     if(!param.visibility){
                         param.ids=[];
                     }
-                    console.log()
-                    // this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
-                    //     this.$message({
-                    //         message: '修改成功',
-                    //         type: 'success'
-                    //     });
-                    //     this.disabledSubmit=false;
-                    //     this.$router.push('/sellerProduct/overview');
-                    // }).catch(err=>{
-                    //     this.disabledSubmit=false;
-                    // });
+
+                    param.pictures=this.$refs.upload.getFiles();
+                    param.attachments=this.$refs.uploadAttachment.getFiles();
+                    this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
+                        this.$message({
+                            message: '修改成功',
+                            type: 'success'
+                        });
+                        this.disabledSubmit=false;
+                        this.$router.push('/product/overview');
+                    }).catch(err=>{
+                        this.disabledSubmit=false;
+                    });
                 }
                 else{
+                    //代表是新增
                     let param=Object.assign({},this.productForm);
                     _.mapObject(param,(e,k)=>{
                         if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
                             param[k]=parseInt(param[k]);
                         }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
                             let item='';
-                            param[k].forEach((v,index)=>{
-                                if(index===param[k].length-1){
-                                    item+=v;
-                                }else{
-                                    item+=(v+',');
-                                }
-                            })
-                            param[k]=item;
+                            if(param[k].length===0){
+                                param[k]='';
+                            }else{
+                                param[k].forEach((v,index)=>{
+                                    if(index===param[k].length-1){
+                                        item+=v;
+                                    }else{
+                                        item+=(v+',');
+                                    }
+                                });
+                                param[k]=item;
+                            }
                         }
                     });
                     if(!param.readilyAvailable){
@@ -1321,6 +1297,8 @@
                             param.ids.push(v.id);
                         });
                     }
+                    param.pictures=this.$refs.upload.getFiles();
+                    param.attachments=this.$refs.uploadAttachment.getFiles();
 
                     this.$ajax.post(this.$apis.add_newSKU,param).then(res=>{
                         this.$message({
@@ -1341,10 +1319,12 @@
                 this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
                     this.productForm=res;
                     _.mapObject(this.productForm,(e,k)=>{
-                        if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
+                        if(k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
                             this.productForm[k]=String(this.productForm[k]);
                         }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
-                            this.productForm[k]=this.productForm[k].split(',');
+                            if(this.productForm[k]){
+                                this.productForm[k]=this.productForm[k].split(',');
+                            }
                         }
                     });
                     this.loadingData=false;
@@ -1430,7 +1410,7 @@
                 });
 
                 this.loadingData=true;
-                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS'],{_cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT'],{_cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
@@ -1442,13 +1422,14 @@
                             this.lengthOption=v.codes;
                         }else if(v.code==='SKU_SALE_STATUS'){
                             this.saleStatusOption=v.codes;
-                            this.saleStatusOption.forEach(v=>{
-                                if(v.code==='1'){
-                                    v.label='上架';
-                                }else if(v.code==='0'){
-                                    v.label='下架';
-                                }
-                            })
+                            // console.log(this.saleStatusOption,'saleStatusOption')
+                            // this.saleStatusOption.forEach(v=>{
+                            //     if(v.code==='1'){
+                            //         v.label='上架';
+                            //     }else if(v.code==='0'){
+                            //         v.label='下架';
+                            //     }
+                            // })
                         }else if(v.code==='OEM_IS'){
                             this.oemOption=v.codes;
                         }else if(v.code==='UDB_IS'){
@@ -1457,16 +1438,13 @@
                             this.skuPkgOption=v.codes;
                         }else if(v.code==='RA_IS'){
                             this.readilyOption=v.codes;
+                        }else if(v.code==='SKU_UNIT'){
+                            this.skuUnitOption=v.codes;
                         }
-                    })
+                    });
                     this.loadingData=false;
                 }).catch(err=>{
                     this.loadingData=false;
-                })
-
-
-                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-
                 });
             },
         },

@@ -16,7 +16,7 @@
   </el-row>
 </template>
 <script>
-import { Upload } from '@/components/index'
+import { VUpload } from '@/components/index'
 
 export default {
   props: {
@@ -29,7 +29,7 @@ export default {
     }
   },
   components: {
-    Upload
+    Upload:VUpload
   },
   data () {
     return {

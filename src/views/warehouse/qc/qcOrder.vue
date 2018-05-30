@@ -16,14 +16,37 @@
                                     v-model="qcOrderData[v.key]"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
-                            <el-select placeholder="服务商选择" :disabled="true" class="speInput" size="mini" v-model="qcOrderData[v.key]">
-                                <el-option
-                                        v-for="item in options"
-                                        :key="item.id"
-                                        :label="item.name"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                            <div v-if="v.isQcType">
+                                <el-select placeholder="服务商选择" :disabled="true" class="speInput" size="mini" v-model="qcOrderData[v.key]">
+                                    <el-option
+                                            v-for="item in qcTypeOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isQcMethod">
+                                <el-select placeholder="服务商选择" :disabled="true" class="speInput" size="mini" v-model="qcOrderData[v.key]">
+                                    <el-option
+                                            v-for="item in qcMethodOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else>
+                                <el-select placeholder="服务商选择" :disabled="true" class="speInput" size="mini" v-model="qcOrderData[v.key]">
+                                    <el-option
+                                            v-for="item in options"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
+
                         </div>
                         <div v-else-if="v.showType==='textarea'">
                             <el-input
@@ -42,8 +65,7 @@
                                     v-model="qcOrderData[v.key]"
                                     align="right"
                                     type="date"
-                                    placeholder="服务商填写"
-                                    :picker-options="pickerOptions1">
+                                    placeholder="服务商填写">
                             </el-date-picker>
                         </div>
                     </el-form-item>
@@ -61,15 +83,18 @@
         </div>
         <el-tabs type="border-card">
             <el-tab-pane :label="$i.warehouse.qcResult">
-                <el-button type="primary" @click="accept">{{$i.warehouse.accept}}</el-button>
-
+                <el-button :disabled="selectFirst.length===0" type="primary" @click="accept">{{$i.warehouse.accept}}</el-button>
                 <el-table
+                        v-loading="loadingProductTable"
+                        class="speTable"
                         :data="productTable"
                         style="width: 100%;margin-top: 10px"
                         border
                         @selection-change="handleFirstTable">
                     <el-table-column
+                            align="center"
                             type="selection"
+                            :selectable='checkboxInit'
                             width="55">
                     </el-table-column>
                     <el-table-column
@@ -81,11 +106,31 @@
                         <template slot-scope="scope">{{ scope.row[v.key] }}</template>
                     </el-table-column>
                 </el-table>
-
-
             </el-tab-pane>
             <el-tab-pane :label="$i.warehouse.applyRework">
-                <el-button type="primary">{{$i.warehouse.acceptRework}}</el-button>
+                <el-button :disabled="selectSecond.length===0" @click="acceptRework" type="primary">{{$i.warehouse.acceptRework}}</el-button>
+                <el-table
+                        v-loading="loadingProductTable"
+                        class="speTable"
+                        :data="productTable1"
+                        style="width: 100%;margin-top: 10px"
+                        border
+                        @selection-change="handleSecondTable">
+                    <el-table-column
+                            align="center"
+                            type="selection"
+                            :selectable='checkboxInit'
+                            width="55">
+                    </el-table-column>
+                    <el-table-column
+                            v-for="v in $db.warehouse.qcOrderTable"
+                            :label="$i.warehouse[v.key]"
+                            :key="v.key"
+                            :prop="v.key"
+                            width="160">
+                        <template slot-scope="scope">{{ scope.row[v.key] }}</template>
+                    </el-table-column>
+                </el-table>
             </el-tab-pane>
             <el-tab-pane :label="$i.warehouse.applyReturn">
                 <el-button type="primary">{{$i.warehouse.acceptReturn}}</el-button>
@@ -103,10 +148,7 @@
 
 
         <el-dialog width="40%" title="将QC数据更新到产品库" :visible.sync="dialogFormVisible">
-
-
             <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAll">全选</el-checkbox>
-
             <el-checkbox-group v-model="acceptConfig.fields" @change="handleCheckedCitiesChange">
                 <el-row>
                     <el-col :span="6"><el-checkbox label="innerCartonLength">中包长</el-checkbox></el-col>
@@ -124,7 +166,7 @@
                 </el-row>
             </el-checkbox-group>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="saveAccept">保存</el-button>
+                <el-button :loading="disableClickSave" type="primary" @click="saveAccept">保存</el-button>
                 <el-button @click="dialogFormVisible = false">关闭</el-button>
             </div>
         </el-dialog>
@@ -152,34 +194,14 @@
                  * 页面基础配置
                  * */
                 options:[],
+                loadingTable:false,
                 dialogFormVisible:false,
+                disableClickSave:false,
+                loadingProductTable:false,
                 labelPosition:'right',
-                pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
                 qcOrderData:{},
+                qcTypeOption:[],
+                qcMethodOption:[],
                 summaryData:{
                     cartonOfProducts:0,
                     grossWeightOfProducts:0,
@@ -206,11 +228,13 @@
                     // ],
                 },
                 productTable:[],
+                productTable1:[],
+                productTable2:[],
                 selectFirst:[],
                 selectSecond:[],
                 selectThird:[],
                 acceptConfig:{
-                    fields: [],
+                    fields: ['innerCartonLength','innerCartonWidth','innerCartonHeight','innerCartonNetWeight','innerCartonGrossWeight','innerCartonVolume','outerCartonLength','outerCartonWidth','outerCartonHeight','outerCartonNetWeight','outerCartonGrossWeight','outerCartonVolume'],
                     qcOrderDetailIds: [],
                 },
 
@@ -218,14 +242,13 @@
                 /**
                  * 弹出框data
                  * */
-                checkAll:false,
+                checkAll:true,
                 isIndeterminate: false,
-                totalCheckList:['innerCartonLength','innerCartonWidth','innerCartonHeight','innerCartonNetWeight','innerCartonGrossWeight','innerCartonVolume','outerCartonLength','outerCartonWidth','outerCartonHeight','outerCartonNetWeight','v','outerCartonGrossWeight','outerCartonVolume'],
+                totalCheckList:['innerCartonLength','innerCartonWidth','innerCartonHeight','innerCartonNetWeight','innerCartonGrossWeight','innerCartonVolume','outerCartonLength','outerCartonWidth','outerCartonHeight','outerCartonNetWeight','outerCartonGrossWeight','outerCartonVolume'],
             }
         },
         methods:{
             getData(){
-                this.loadingTable=true;
                 this.$ajax.get(`${this.$apis.get_qcOrderDetail}?id=${this.$route.query.id}`).then(res=>{
                     this.qcOrderData=res;
                     this.loadingTable=false;
@@ -234,14 +257,35 @@
                 });
             },
             getTableData(){
+                this.loadingProductTable=true;
                 this.$ajax.post(this.$apis.get_qcOrderProductData,this.tableConfig)
                     .then(res=>{
-                        console.log(res.datas)
                         this.productTable=res.datas;
+                        this.tableConfig.skuInventoryStatusDictCode='APPLY_FOR_REWORK';
+                        this.$ajax.post(this.$apis.get_qcOrderProductData,this.tableConfig).then(res=>{
+                            this.productTable1=res.datas;
+                            this.tableConfig.skuInventoryStatusDictCode='APPLY_FOR_RETURN';
+                            this.$ajax.post(this.$apis.get_qcOrderProductData,this.tableConfig).then(res=>{
+                                this.productTable2=res.datas;
+                                this.loadingProductTable=false;
+                            }).catch(err=>{
+                                this.loadingProductTable=false;
+                            })
+                        }).catch(err=>{
+                            this.loadingProductTable=false;
+                        })
                     })
                     .catch(err=>{
-
+                        this.loadingProductTable=false;
                     });
+            },
+
+            checkboxInit(row,index){
+                if(row.skuQcResultDictCode === 'WAIT_FOR_QC'){
+                    return 0;
+                }else{
+                    return 1;
+                }
             },
 
 
@@ -252,11 +296,12 @@
                 this.selectFirst=e;
             },
             handleSecondTable(e){
-
+                this.selectSecond=e;
             },
             handleThirdTable(e){
 
             },
+            //接受验货结果
             accept(){
                 if(this.selectFirst.length===0){
                     this.$message({
@@ -266,14 +311,16 @@
                 }else{
                     this.dialogFormVisible=true;
                 }
-
+            },
+            //接受返工
+            acceptRework(){
+                console.log(this.selectSecond)
             },
 
             /**
              * 弹出框事件
              * */
             handleCheckAll(val){
-                console.log(val,'val')
                 this.acceptConfig.fields=val?this.totalCheckList:[];
                 this.isIndeterminate=false;
             },
@@ -286,13 +333,20 @@
                 this.selectFirst.forEach(v=>{
                     this.acceptConfig.qcOrderDetailIds.push(v.id);
                 });
+                this.disableClickSave=true;
                 this.$ajax.post(this.$apis.accept_qcResult,this.acceptConfig).then(res=>{
-                    console.log(res)
+                    this.disableClickSave=false;
+                    this.dialogFormVisible=false;
+                    this.$message({
+                        message: '保存成功',
+                        type: 'success'
+                    });
+                    this.getTableData();
                 }).catch(err=>{
-
+                    this.disableClickSave=false;
+                    this.dialogFormVisible=false;
                 });
             },
-
 
             /**
              * 获取字典
@@ -307,15 +361,33 @@
             // },
         },
         created(){
-            this.getData();
-            this.getTableData();
-            // this.getUnit();
+            this.loadingTable=true;
+            this.$ajax.post(this.$apis.get_partUnit,['QC_MD','QC_TYPE'],{_cache:true}).then(res=>{
+                res.forEach(v=>{
+                    if(v.code==='QC_MD'){
+                        this.qcMethodOption=v.codes;
+                    }else if(v.code==='QC_TYPE'){
+                        this.qcTypeOption=v.codes;
+                    }
+                });
+                this.getData();
+                this.getTableData();
+            });
+        },
+        watch:{
+            dialogFormVisible(n){
+                if(n){
+                    this.isIndeterminate=false;
+                    this.checkAll=true;
+                    this.acceptConfig.fields=['innerCartonLength','innerCartonWidth','innerCartonHeight','innerCartonNetWeight','innerCartonGrossWeight','innerCartonVolume','outerCartonLength','outerCartonWidth','outerCartonHeight','outerCartonNetWeight','outerCartonGrossWeight','outerCartonVolume'];
+
+                }
+            }
         },
     }
 </script>
 
 <style scoped>
-
     .title{
         font-weight: bold;
         font-size: 16px;
@@ -323,7 +395,6 @@
         line-height: 32px;
         color:#666666;
     }
-
 
     .speInput{
         width: 80%;
@@ -335,6 +406,7 @@
     .dialog-footer{
         text-align: center;
     }
-
-
+    .speTable >>> .el-checkbox{
+        margin-right: 0;
+    }
 </style>

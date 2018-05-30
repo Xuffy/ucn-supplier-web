@@ -221,6 +221,7 @@ export default {
             }
             this.$ajax.put(this.$apis.put_user_profile_password,this.modifyPass)
             .then(res => {
+              this.dialogVisibleO = false;
               this.$message({type: 'success', message: '修改成功!'});
             });
         },

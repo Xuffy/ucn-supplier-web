@@ -37,7 +37,14 @@
   "applyReturn":"退货申请",
   "accept":"接受",
   "acceptRework":"接受返工",
-  "acceptReturn":"接受退货"
+  "acceptReturn":"接受退货",
+
+
+  "create":"创建",
+  "remove":"移除",
+  "qcOrderDetail":"货单详情",
+  "detail":"详情",
+  "pressMoney":"催款"
 
 
 }

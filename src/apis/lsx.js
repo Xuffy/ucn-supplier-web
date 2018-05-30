@@ -85,11 +85,15 @@ export default {
     get_inboundSku:['/inbound/sku/page','BASE_SELL','USUPPLY_URL'],
     get_outboundData:['/outbound/page','BASE_SELL','USUPPLY_URL'],
     add_outbound:['/outbound/add','BASE_SELL','USUPPLY_URL'],
+    get_outBoundDetail:['/outbound/getById','BASE_SELL','USUPPLY_URL'],
     get_outboundProductData:['/inbound/sku/queryForOutbound','BASE_SELL','USUPPLY_URL'],
     get_qcOrderDetail: ['/qc/getById', 'USUPPLY_URL', 'USUPPLY_URL'],
     get_qcOrderProductData:['/qc/detail/page', 'USUPPLY_URL', 'USUPPLY_URL'],
     accept_qcResult: ['/qc/result/accept', 'BASE_SELL', 'USUPPLY_URL'],
-
+    get_outboundDetailProductData:['/outbound/sku/page','BASE_SELL','USUPPLY_URL'],
+    get_sellerOrderDetail:['/qc/getById','BASE_SELL','USUPPLY_URL'],
+    get_sellerQcOrderProduct:['/qc/detail/page','BASE_SELL','USUPPLY_URL'],
+    save_sellerQcOrder:['/qc/result/save','BASE_SELL','USUPPLY_URL'],
 
 
 

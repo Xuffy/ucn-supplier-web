@@ -29,7 +29,7 @@
                             <el-input
                                     class="speInput"
                                     type="textarea"
-                                    autosize
+                                    :autosize="{ minRows: 2}"
                                     placeholder="please input"
                                     v-model="outboundData[v.key]">
                             </el-input>
@@ -50,6 +50,9 @@
                                     :defaultProps="defaultProps"
                                     v-model="outboundData[v.key]"
                                     ref="dropDown"></drop-down>
+                        </div>
+                        <div v-else-if="v.isAttachment">
+                            附件组件
                         </div>
                         <div v-else-if="v.showType==='date'">
                             <el-date-picker
@@ -364,6 +367,7 @@
 
             //提交表单
             submit(){
+                this.outboundData.outboundSkuCreateParams=[];
                 this.productData.forEach(v=>{
                     this.outboundData.outboundSkuCreateParams.push({
                         inboundSkuId: v.id,
@@ -438,6 +442,10 @@
                         res.datas.forEach(v=>{
                             this.productData.push(v);
                         });
+                        console.log(this.productData)
+                        this.productData.forEach(v=>{
+                            v.inboundVo.inboundDate=this.$dateFormat(v.inboundVo.inboundDate,'yyyy-mm-dd')
+                        });
                         this.loadingProductTable=false;
                     }).catch(err=>{
                         this.loadingProductTable=false;
@@ -481,12 +489,13 @@
              * 页面表格事件
              * */
             handleClick(e){
-                // this.$windowOpen({
-                //     url:'',
-                //     params:{
-                //         id:e.skuList[0].skuId
-                //     }
-                // })
+                console.log(e)
+                this.$windowOpen({
+                    url:'/product/detail',
+                    params:{
+                        id:e.skuId
+                    }
+                })
             },
             handleBlur(e,value,index){
                 if(e.isNeed){

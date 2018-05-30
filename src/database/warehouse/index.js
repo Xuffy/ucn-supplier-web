@@ -3,7 +3,6 @@ import inboundTable from './inboundTable';
 import qcOrderTable from './qcOrderTable';
 import inboundOrderTable from './inboundOrderTable';
 import warehouseTable from './warehouseTable';
-import sellerWarehouseTable from './sellerWarehouseTable';
 import inboundOrderProductTable from './inboundOrderProductTable';
 import inboundDetailProductTable from './inboundDetailProductTable';
 import outbound from './outbound';
@@ -17,11 +16,15 @@ import payment from './payment';
 import qcDetailProductInfo from './qcDetailProductInfo';
 
 
+
 /**
  * 全新import
  * */
 import qcOverview from './qcOverview';
 import qcOrder from './qcOrder';
+import inboundOverviewTable from './inboundOverviewTable';
+import warehouseOverview from './warehouseOverview';
+import outboundDetailProductData from './outboundDetailProductData';
 
 
 export default {
@@ -31,7 +34,6 @@ export default {
     inboundOrderTable,
     warehouseTable,
     inboundOrderProductTable,
-    sellerWarehouseTable,
     inboundDetailProductTable,
     outboundOrderTable,
     outboundProduct,
@@ -50,4 +52,7 @@ export default {
     qcOverview,
     qcOrder,
     qcOrderTable,
+    inboundOverviewTable,
+    warehouseOverview,
+    outboundDetailProductData
 }
