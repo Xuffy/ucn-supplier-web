@@ -29,6 +29,7 @@ export default {
   POST_CODE_PART: ['/code/part', 'UMETA_URL','UMETA_URL'],
   GET_COUNTRY_ALL: ['/country/all', 'UMETA_URL','UMETA_URL'],
   get_currency_all: ['/currency/all', 'UMETA_URL','UMETA_URL'],
+  GET_DEPARTMENT:['/department','UUSER_URL','UUSER_URL'],
 
   //warehouse
   post_warehouse_page: ['/warehouse/overview/page','BASE_HSM_W','USUPPLY_URL'],
@@ -41,8 +42,8 @@ export default {
   get_user_privilege: ['/user/privilege','UUSER_URL','UUSER_URL'],
 
   //company info
-  get_supplierWhile: ['/supplierWhole','BASE_URL_CS','USUPPLY_URL'],
-  post_supplierWhile: ['/supplier','BASE_URL_CS','USUPPLY_URL'],
+  get_supplierWhile: ['/supplierWhole','USUPPLY_URL','USUPPLY_URL'],
+  post_supplierWhile: ['/supplier','USUPPLY_URL','USUPPLY_URL'],
   post_supplier_address: ['/supplier/address','USUPPLY_URL','USUPPLY_URL'],
   post_supplier_address_id: ['/supplier/address','USUPPLY_URL','USUPPLY_URL'],
   post_supplier_delAddress:['/supplier/delAddress/{id}','USUPPLY_URL','USUPPLY_URL'],
@@ -52,6 +53,6 @@ export default {
   post_supplier_contact:['/supplier/contact','USUPPLY_URL','USUPPLY_URL'],
   post_supplier_contact_id:['/supplier/contact','USUPPLY_URL','USUPPLY_URL'],
   post_supplier_delContact:['/supplier/delContact/{id}','USUPPLY_URL','USUPPLY_URL'],
-  post_oss_company_batchUpload: ['/supplier/purchase/oss/company/batchUpload','BASE_URL_CS','USUPPLY_URL'],
-  post_oss_company_upload: ['/supplier/purchase/oss/company/upload','BASE_URL_CS','USUPPLY_URL'],
+  post_oss_company_batchUpload: ['/supplier/purchase/oss/company/batchUpload','USUPPLY_URL','USUPPLY_URL'],
+  post_oss_company_upload: ['/supplier/purchase/oss/company/upload','USUPPLY_URL','USUPPLY_URL'],
 }

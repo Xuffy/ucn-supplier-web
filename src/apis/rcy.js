@@ -18,15 +18,15 @@ export default {
     post_updataOrder: ['/order/update', 'BASE_HCJ', 'USUPPLY_URL'],
     post_accept: ['/order/accept', 'BASE_HCJ', 'USUPPLY_URL'],
     post_confirm: ['/order/confirm  ', 'BASE_HCJ', 'USUPPLY_URL'],
-   
+
     //customer
-    post_getCustomerList: ['/supply/overview', 'BASE_CSTEST2', 'USUPPLY_URL'],
-    post_deleteCustomerRemark: ['/supply/deleteRemark/{id}', 'BASE_CSTEST2', 'USUPPLY_URL'],
-    post_customerDetail: ['/supply/{id}', 'BASE_CSTEST2', 'USUPPLY_URL'],
-    post_getCustomerListRemark: ['/supply/listRemarks/{id}', 'BASE_CSTEST2', 'USUPPLY_URL'],
-    post_addCustomerListRemark: ['/supply/remark', 'BASE_CSTEST2', 'USUPPLY_URL'],
-    post_delete_CustomerRemark: ['/supply/deleteRemark/{id}', 'BASE_CSTEST2', 'USUPPLY_URL'],
-    post_customerUpdataRmark: ['/supply/remark/{id}', 'BASE_CSTEST2', 'USUPPLY_URL'],
+    post_getCustomerList: ['/supply/overview', 'BASE_CS_CI', 'USUPPLY_URL'],
+    post_deleteCustomerRemark: ['/supply/deleteRemark/{id}', 'USUPPLY_URL', 'USUPPLY_URL'],
+    post_customerDetail: ['/supply/{id}', 'USUPPLY_URL', 'USUPPLY_URL'],
+    post_getCustomerListRemark: ['/supply/listRemarks/{id}', 'USUPPLY_URL', 'USUPPLY_URL'],
+    post_addCustomerListRemark: ['/supply/remark', 'USUPPLY_URL', 'USUPPLY_URL'],
+    post_delete_CustomerRemark: ['/supply/deleteRemark/{id}', 'USUPPLY_URL', 'USUPPLY_URL'],
+    post_customerUpdataRmark: ['/supply/remark/{id}', 'USUPPLY_URL', 'USUPPLY_URL'],
 
 
     //payment
@@ -38,11 +38,11 @@ export default {
     paymentAccept: ['/payment/accept/{id}', 'BASE_HCJ', 'USUPPLY_URL'],
     paymentDunning: ['/payment/dunning/{orderNo}/{orderType}', 'BASE_HCJ', 'USUPPLY_URL'],
     post_order_paymentlist: ['/payment/list/{orderNo}/{orderType}', 'BASE_HCJ', 'USUPPLY_URL'],
-    
-    
+
+
     //字典表数据
     post_codePart:['/code/part','UMETA_URL'],
-     post_country:['/country/all','UMETA_URL'],
+    post_country:['/country/all','UMETA_URL'],
      post_logisticsport:['/logisticsport/query','UMETA_URL'],
      get_currency:['/currency/all','UMETA_URL']
 }

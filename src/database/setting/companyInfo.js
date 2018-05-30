@@ -41,7 +41,7 @@ export default {
         type: 'select',
         belong:'summary'
     },
-    exportLicense:{
+    exportLicense: {
         key: 'exportLicense',
         type: 'select',
         belong:'summary'
