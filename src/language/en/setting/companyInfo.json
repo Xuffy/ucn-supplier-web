@@ -37,5 +37,7 @@
     "faxNumber": "fax number",
     "emailAddress": "email address",
     "skype": "skype",
-    "QQ": "QQ"
+    "QQ": "QQ",
+    "supplierId": "supplierId" ,
+    "id":"id"  
   }

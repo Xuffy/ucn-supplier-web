@@ -5,7 +5,13 @@
         </div>
         <div class="summary">
             <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
-                <!-- <v-upload ref="uploadFile"/> -->
+               <div style="overflow: hidden">
+                  <v-upload ref="uploadFile" onlyImage style="float: left" />
+                  <img :src="companyInfo.logo" class="logo"/>
+                </div>
+                <div class="section-btn" style="padding-top:10px">
+                  <el-button @click="uploadLogo" type="primary">{{$i.button.upload}}</el-button>
+                </div>
                 <el-row class="speZone">
                     <el-col :class="{speCol:v.key!=='description'}" v-if="v.belong==='summary'" v-for="v in $db.setting.companyInfo" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                         <el-form-item class="speWidth" :prop="v.key" :label="v.label">
@@ -24,7 +30,7 @@
                                             v-for="item in options[v.key]"
                                             :key="item.code"
                                             :label="item.name"
-                                            :value="item.code">
+                                            :value="item.typeCode === 'EL_IS' ? !!parseInt(item.code) : item.code">
                                     </el-option>
                                 </el-select>
                             </div>
@@ -58,181 +64,53 @@
                     <div class="section-btn">
                         <el-button @click="addAddress" type="primary">{{$i.button.add}}</el-button>
                     </div>
-                    <el-table
-                            v-if="companyInfo.address.length"
-                            :data="companyInfo.address"
-                            border
-                            style="width: 100%">
-                        <el-table-column
-                                prop="name"
-                                align="center"
-                                :label="$i.setting.factoryName">
-                        </el-table-column>
-                        <el-table-column
-                          prop="address"
-                          align="center"
-                          :label="$i.setting.factoryAddress">
-                        </el-table-column>
-                        <el-table-column
-                          prop="exportPort"
-                          align="center"
-                          :label="$i.setting.exportPort">
-                        </el-table-column>
-                         <el-table-column
-                                prop="contactPerson1"
-                                align="center"
-                                :label="$i.setting.ContacctPerson1">
-                        </el-table-column>
-                        <el-table-column
-                          prop="concatPhone1"
-                          align="center"
-                          :label="$i.setting.contactPhoneNo1">
-                        </el-table-column>
-                        <el-table-column
-                          prop="contactPerson2"
-                          align="center"
-                          :label="$i.setting.contacctPerson2">
-                        </el-table-column>
-                         <el-table-column
-                          prop="contactPhone2"
-                          align="center"
-                          :label="$i.setting.contactPhoneNo2">
-                        </el-table-column>
-                        <el-table-column
-                                align="center"
-                                :label="$i.setting.action">
-                            <template slot-scope="scope">
-                                <el-button @click="modifyAddreess(scope.row)" type="text">{{$i.button.modify}}</el-button>
-                                <el-button @click="deleteAddress(scope.row)" type="text">{{$i.button.delete}}</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                
+                   <div>
+                        <v-table
+                        :data="addressDatas"                         
+                        :height="500"
+                        :buttons="[{label: 'modify', type: 1},{label: 'delete', type: 2}]"
+                        @action="btnAddressClick"
+                        />
+                    </div>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.setting.accountInfo">
                     <div class="section-btn">
                         <el-button @click="addAccount" type="primary">{{$i.button.add}}</el-button>
                     </div>
-                    <el-table
-                            v-if="companyInfo.accounts.length"
-                            :data="companyInfo.accounts"
-                            border
-                            style="width: 100%">
-                        <el-table-column
-                                prop="beneficiaryName"
-                                align="center"
-                                :label="$i.setting.beneficiaryName">
-                        </el-table-column>
-                        <el-table-column
-                                prop="beneficiaryAccount"
-                                align="center"
-                                :label="$i.setting.beneficiaryAccount">
-                        </el-table-column>
-                        <el-table-column
-                                prop="beneficiaryAddress"
-                                align="center"
-                                :label="$i.setting.beneficiaryAddress">
-                        </el-table-column>
-                        <el-table-column
-                                prop="beneficiaryBankName"
-                                align="center"
-                                :label="$i.setting.beneficiaryBankName">
-                        </el-table-column>
-                        <el-table-column
-                                prop="beneficiaryBankSwift"
-                                align="center"
-                                :label="$i.setting.beneficiaryBankSWIFT">
-                        </el-table-column>
-                        <el-table-column
-                                prop="accountType"
-                                align="center"
-                                :label="$i.setting.accountType">
-                        </el-table-column>
-                        <el-table-column
-                                prop="currency"
-                                align="center"
-                                :label="$i.setting.currency">
-                        </el-table-column>
-                        <el-table-column
-                                align="center"
-                                :label="$i.setting.action">
-                            <template slot-scope="scope">
-                                <el-button @click="modifyAccount(scope.row)" type="text">{{$i.button.modify}}</el-button>
-                                <el-button @click="deleteAccount(scope.row)" type="text">{{$i.button.delete}}</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                    <div class="main">
+                        <div>
+                            <v-table
+                            :data="accountsData"                         
+                            :height="500"
+                            :buttons="[{label: 'modify', type: 1},{label: 'delete', type: 2}]"
+                            @action="btnClick"
+                            />
+                        </div>
+                    </div>
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.setting.contactInfo">
                     <div class="section-btn">
                         <el-button @click="addContact" type="primary">{{$i.button.add}}</el-button>
                     </div>
-                     <el-table
-                            v-if="companyInfo.concats.length"
-                            :data="companyInfo.concats"
-                            border
-                            style="width: 100%">
-                        <el-table-column
-                                prop="name"
-                                align="center"
-                                :label="$i.setting.name">
-                        </el-table-column>
-                        <el-table-column
-                                prop="deptName"
-                                align="center"
-                                :label="$i.setting.department">
-                        </el-table-column>
-                        <el-table-column
-                                prop="gender"
-                                align="center"
-                                :label="$i.setting.gender">
-                        </el-table-column>
-                        <el-table-column
-                                prop="cellphone"
-                                align="center"
-                                :label="$i.setting.mobileNumber">
-                        </el-table-column>
-                        <el-table-column
-                                prop="telphone"
-                                align="center"
-                                :label="$i.setting.telNumber">
-                        </el-table-column>
-                        <el-table-column
-                                prop="fax"
-                                align="center"
-                                :label="$i.setting.faxNumber">
-                        </el-table-column>
-                        <el-table-column
-                                prop="email"
-                                align="center"
-                                :label="$i.setting.emailAddress">
-                        </el-table-column>
-                        <el-table-column
-                                prop="skype"
-                                align="center"
-                                :label="$i.setting.skype">
-                        </el-table-column>
-                        <el-table-column
-                                prop="qq"
-                                align="center"
-                                :label="$i.setting.QQ">
-                        </el-table-column>
-                        <el-table-column
-                                align="center"
-                                :label="$i.setting.action">
-                            <template slot-scope="scope">
-                                <el-button @click="modifyContact(scope.row)" type="text">{{$i.button.modify}}</el-button>
-                                <el-button @click="deleteContact(scope.row)" type="text">{{$i.button.delete}}</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>                
+                    <div class="main">
+                        <div>
+                            <v-table
+                            :data="contactDatas"                         
+                            :height="500"
+                            :buttons="[{label: 'modify', type: 1},{label: 'delete', type: 2}]"
+                            @action="btnContactClick"
+                            />
+                        </div>
+                    </div>          
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.setting.attachment">
                   <div class="section-btn">
-                    <!-- <el-button @click="upload" type="primary">{{$i.button.upload}}</el-button> -->
+                    <el-button @click="upload" type="primary">{{$i.button.upload}}</el-button>
                   </div>
-                  <!-- <v-upload></v-upload> -->
+                  <v-upload ref="uploadAttachment" :limit="20" />
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -388,11 +266,12 @@
 </template>
 
 <script>
-    import { VTable} from '@/components/index'
+    import { VTable,VUpload} from '@/components/index'
     export default {
         name: "companyInfo",
         components:{
           VTable,
+          VUpload
         },
         data(){
             return{
@@ -412,14 +291,17 @@
                     logo: "",
                     name: "",
                     payment: '',
-                    shortName: ""
+                    shortName: "",
+                    version:'',
                 },
+                accountsData:[],
+                contactDatas:[],
+                addressDatas:[],
                 cloneData:{},                   //用于克隆存储的对象
                 //验证规则
                 companyInfoRules:{
 
                 },
-
                 //弹出框data
                 addressData:{
                     address: "",
@@ -435,7 +317,7 @@
                     status: "",
                     supplierId: "",
                     tenantId: "",
-                    version: ""
+                    version: "",
                 },
                 contactData:{
                   cellphone: "",
@@ -466,14 +348,10 @@
                     supplierId: "",
                     version: ""
                 },
-              customData:{
-                customerId: "",
-                exchangeRateUSD: "",
-                id:"",
-                insuranceExpensesUSD40HC: "",
-                oceanFreightUSD40HC: "",
-                portWarehousePrice40HC: "",
-                version: ""
+               logoParmas:{
+                id: "",
+                type: "PICTURE",
+                url: ""
               },
                 //btn loading状态
                 allowAddAddress:false,
@@ -492,10 +370,11 @@
         methods:{
             //获取整个页面数据
             getWholeData(){
-                this.companyInfo.address=[];
-                this.companyInfo.concats=[];
-                this.companyInfo.accounts=[];
                 this.$ajax.get(this.$apis.get_supplierWhile).then(res=>{
+                    // this.addressData contactData
+                     this.accountsData = this.$getDB(this.$db.setting.supplierAccount, res.accounts);
+                     this.contactDatas = this.$getDB(this.$db.setting.supplierContact, res.concats);
+                     this.addressDatas = this.$getDB(this.$db.setting.supplierAddress, res.address);
                     this.companyInfo=res;
                 }).catch(err=>{
                     console.log(err)
@@ -516,7 +395,6 @@
               this.options.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
               this.options.type = _.findWhere(res, {'code': 'CUSTOMER_TYPE'}).codes;
               this.options.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
-
             }).catch(err=>{
               console.log(err)
             });
@@ -552,11 +430,11 @@
                     exportLicense: this.companyInfo.exportLicense, //1 true 
                     id:this.companyInfo.id,
                     incoterm: this.companyInfo.incoterm,
-                    // logo: this.$refs.uploadFile.getFiles()[0],
                     logo:'',
                     name: this.companyInfo.name,
                     payment: this.companyInfo.payment,
                     shortName: this.companyInfo.shortName,
+                    version: this.companyInfo.version
                 }; 
                 this.allowModifySummary=true;
                 this.$ajax.post(`${this.$apis.post_supplierWhile}/${this.companyInfo.id}`,params).then(res=>{
@@ -564,9 +442,11 @@
                         message: '修改成功',
                         type: 'success'
                     });
+                    this.getWholeData()
                     this.allowModifySummary=false;
                     this.summaryDisabled=true;
                 }).catch(err=>{
+                    this.getWholeData()
                     this.allowModifySummary=false;
                     this.summaryDisabled=true;
                 });
@@ -575,12 +455,23 @@
                 this.companyInfo=Object.assign({},this.cloneData);
                 this.summaryDisabled=true;
             },
+            
 
             /**
              * address操作
              * */
             addAddress(){
                 this.addressDialogVisible=true;
+            },
+            btnAddressClick(item, type){
+                 switch(type) {
+                    case 1:
+                      this.modifyAddress(item);
+                      break;
+                    case 2:
+                        this.deleteAddress(item);
+                        break;
+                }
             },
             sureAddAddress(){
                 this.allowAddAddress=true;
@@ -618,9 +509,13 @@
                     });
                 }
             },
-            modifyAddreess(e){
+            modifyAddress(e){
+                var result = {}
+                for(const i in e){
+                    result[e[i].key]= e[i].value
+                }
                 this.isModifyAddress=true;      //标识正在修改地址
-                this.addressData=Object.assign({}, e);
+                this.addressData=Object.assign({}, result);
                 this.addressDialogVisible=true;
             },
             deleteAddress(e){
@@ -629,7 +524,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$ajax.post(this.$apis.post_supplier_delAddress,{id:e.id}).then(res=>{
+                    this.$ajax.post(this.$apis.post_supplier_delAddress,{id:e.id.value}).then(res=>{
                         this.$message({
                             type: 'success',
                             message: '删除成功!'
@@ -646,6 +541,16 @@
             /**
              * Account操作
              * */
+            btnClick(item, type){
+                 switch(type) {
+                    case 1:
+                      this.modifyAccount(item);
+                      break;
+                    case 2:
+                        this.deleteAccount(item);
+                        break;
+                }
+            },
             addAccount(){
                 this.accountDialogVisible=true;
             },
@@ -688,18 +593,23 @@
                     });
                 }
             },
-            modifyAccount(e){
+            modifyAccount(e){ 
+               var result = {}
+                for(const i in e){
+                    result[e[i].key]= e[i].value
+                }
                 this.isModifyContact=true;      //标识正在修改contact
-                this.accountData=Object.assign({}, e);
+                this.accountData=Object.assign({}, result);
                 this.accountDialogVisible=true;
             },
             deleteAccount(e){
+                console.log(e)
                 this.$confirm('确定删除该账户信息?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$ajax.post(this.$apis.post_supplier_delAccount,{id:e.id}).then(res=>{
+                    this.$ajax.post(this.$apis.post_supplier_delAccount,{id:e.id.value}).then(res=>{
                         this.$message({
                             type: 'success',
                             message: '删除成功!'
@@ -718,10 +628,19 @@
             addContact(){
                 this.contactDialogVisible=true;
             },
+            btnContactClick(item, type){
+                 switch(type) {
+                    case 1:
+                      this.modifyContact(item);
+                      break;
+                    case 2:
+                        this.deleteContact(item);
+                        break;
+                }
+            },
             sureAddContact(){
                 this.allowAddContact=true;
                 this.contactData.supplierId=this.companyInfo.id;
-
                 if(this.isModifyContact){
                     //表示是在修改account
                     this.$ajax.post(`${this.$apis.post_supplier_contact_id}/${this.contactData.id}`,this.contactData).then(res=>{
@@ -758,8 +677,12 @@
                 }
             },
             modifyContact(e){
+                var result = {}
+                for(const i in e){
+                    result[e[i].key]= e[i].value
+                }
                 this.isModifyContact=true;      //标识正在修改contact
-                this.contactData=Object.assign({}, e);
+                this.contactData=Object.assign({}, result);
                 this.contactDialogVisible=true;
             },
             deleteContact(e){
@@ -768,7 +691,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$ajax.post(this.$apis.post_supplier_delContact,{id:e.id}).then(res=>{
+                    this.$ajax.post(this.$apis.post_supplier_delContact,{id:e.id.value}).then(res=>{
                         this.$message({
                             type: 'success',
                             message: '删除成功!'
@@ -781,16 +704,66 @@
 
                 });
             },
-            
+             /**
+           * logo操作
+           * */
+          uploadLogo(){
+            this.logoParmas.id = this.companyInfo.id;
+            this.logoParmas.url = this.$refs.uploadFile.getFiles()[0];
+            console.log(this.$refs.uploadFile.getFiles()[0])
+            this.$ajax.post(this.$apis.post_oss_company_upload,this.logoParmas).then(res=>{
+              this.getWholeData();
+              this.$message({
+                message: '上传成功',
+                type: 'success'
+              })
+            })
+
+          },
+           /**
+           * Attachment操作
+           * */
+          upload(){
+            console.log(this.$refs.uploadAttachment.getFiles())
+              //ATTACHMENT,文件 PICTURE 图片
+            const uploadParams = {
+              id: this.companyInfo.id,
+              type: "ATTACHMENT",
+              url: this.$refs.uploadAttachment.getFiles()[0]
+            };
+            const batchUploadParams = {
+              id: this.companyInfo.id,
+              type: "ATTACHMENT",
+              urls: this.$refs.uploadAttachment.getFiles()
+            };
+            if (this.$refs.uploadAttachment.getFiles().length === 1){
+              this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
+                this.getWholeData();
+                this.$message({
+                  message: '上传成功',
+                  type: 'success'
+                });
+              })
+
+            }else{
+              this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
+                this.getWholeData();
+                this.$message({
+                  message: '上传成功',
+                  type: 'success'
+                });
+              })
+            }
+          },
         },
         created(){
             // this.supplierWhole();
-               this.getWholeData();
+              
                this.getCurrency();
                this.getCountryAll();
                this.getCodePart();
                this.getDepartment();
-
+               this.getWholeData();
             // console.log(this.$db,'db')
         },
         watch:{
@@ -846,7 +819,14 @@
     .section{
         margin-top: 20px;
     }
-
+    .logo{
+      width: 48px;
+      height: 48px;
+      float: left;
+      margin-left: 15px;
+      border: 1px solid #cccccc;
+      border-radius: 10%;
+    }
     /*表格样式调整*/
     /*.companyInfo >>> .el-table__header-wrapper>table{*/
     /*width: 100% !important;*/

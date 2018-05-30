@@ -2,7 +2,7 @@
   <div class='ucn-upload small'>
     <p class="upload-btn">
       <i class="el-icon-plus"></i>
-      <input v-if="limit === 1" class="upload-file" type="file" ref="upload"
+      <input class="upload-file" type="file" ref="upload"
              @change="uploadFile"
              v-bind="{multiple:limit !== 1}"
              :accept="onlyImage ? 'image/*' : ''"/>
