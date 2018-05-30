@@ -403,15 +403,15 @@
                      this.accountsData = this.$getDB(this.$db.setting.supplierAccount, res.accounts);
                      this.contactDatas = this.$getDB(this.$db.setting.supplierContact, res.concats);
                      this.addressDatas = this.$getDB(this.$db.setting.supplierAddress, res.address);
-                     !!parseInt(res.exportLicense) ? res.exportLicense = 'YES' : res.exportLicense = 'NO'
-                  this.companyInfo=res;
+                     res.exportLicense ? res.exportLicense = 'YES' : res.exportLicense = 'NO'
+                     this.companyInfo=res;
                 }).catch(err=>{
                     console.log(err)
                 });
             },
           //获取币种
           getCurrency(){
-              this.$ajax.get(this.$apis.get_currency_all).then(res=>{s
+              this.$ajax.get(this.$apis.get_currency_all).then(res=>{
                   this.options.currency = res
               }).catch(err=>{
                 console.log(err)
