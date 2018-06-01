@@ -42,8 +42,9 @@ export default {
       BASE_SELL: '//192.168.51.208:11002',
       //BASE_SELL: '//dev.usupply-facade.ucnholding.com',
       //USUPPLY_URL: '//dev.usupply-facade.ucnholding.com', // 供应商端
+      BASE_CS_CI: '//192.168.51.33:11002',
       BASE_WAREHOUSE: '//192.168.51.208:12005',
-
+      BASE_URL_CS: '//192.168.51.33:11002',
       // 开发服务器 248
       BASE_DEV: '//192.168.51.208:11001',
       BASE_DEV_DIC: '//192.168.51.208:11005',
@@ -80,6 +81,7 @@ export default {
       UOSS_URL: '//192.168.51.208:', // 对象存储服务
       UBIZLOG_URL: '//192.168.51.208:18100', // 业务日志
       UWORKBENCH_URL: '//dev.uworkbench.ucnholding.com:18100',
+      BASE_URL_CS: "//192.168.51.33:11002",
     },
     test: {
       BASE_URL: '//test.upurchase-facade.ucnscm.cn', // 采购端

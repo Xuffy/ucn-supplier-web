@@ -90,7 +90,7 @@
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="putUserPassword">{{$i.common.ok}}</el-button>
+            <el-button type="primary" @click="submitForm('modifyPass')">{{$i.common.ok}}</el-button>
             <el-button @click="dialogVisibleO = false">{{$i.common.cancel}}</el-button>
         </span>
     </el-dialog>
@@ -174,6 +174,16 @@ export default {
         };
     },
     methods: {
+        submitForm(formName) {
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              this.putUserPassword()
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
+        },
         getUserPrivilege(){
           this.$ajax.get(this.$apis.get_user_privilege)
             .then(res => {
