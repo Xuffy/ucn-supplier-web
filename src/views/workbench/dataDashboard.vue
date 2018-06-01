@@ -29,57 +29,27 @@
         <table>
           <tr>
             <!--<td class="title" v-text="$i.workbench.purchaseOrder"></td>-->
-            <td class="title" v-text="item.module"></td>
+            <td class="title" v-text="item.title"></td>
             <td class="value">
-              <div v-if="item.list[0]" v-text="item.list[0].value + ' ' + item.list[0].code"></div>&nbsp;
+              <div v-if="item.list[0]" v-text="item.list[0].value + ' ' + item.list[0].unit"></div>&nbsp;
             </td>
           </tr>
           <tr>
             <!--<td class="title" rowspan="2" v-text="$i.workbench.orderPlaced"></td>-->
-            <td class="title" rowspan="2" v-text="item.theme"></td>
+            <td class="title" rowspan="2" v-text="item.name"></td>
             <td class="value">
-              <div v-if="item.list[1]" v-text="item.list[1].value + ' ' + item.list[1].code"></div>&nbsp;
+              <div v-if="item.list[1]" v-text="item.list[1].value + ' ' + item.list[1].unit"></div>&nbsp;
             </td>
           </tr>
           <tr>
             <td class="value">
-              <div v-if="item.list[2]" v-text="item.list[2].code + ' ' + item.list[2].value"></div>&nbsp;
+              <div v-if="item.list[2]" v-text="item.list[2].value + ' ' + item.list[2].unit"></div>&nbsp;
             </td>
           </tr>
         </table>
       </el-col>
     </el-row>
 
-    <!--<el-dialog title="Data Dashboard" width="90%" :visible.sync="dialog.show">
-
-      <el-checkbox-group v-model="checkedDataList">
-        <el-row class="data-table" :gutter="20">
-          <el-col :span="6">
-            <table>
-              <tr>
-                <td rowspan="3" style="width: 20px">
-                  <el-checkbox lable="a1"></el-checkbox>
-                </td>
-                <td class="title" v-text="$i.workbench.purchaseOrder"></td>
-                <td class="value">26 Orders</td>
-              </tr>
-              <tr>
-                <td class="title" rowspan="2" v-text="$i.workbench.orderPlaced"></td>
-                <td class="value">281 SKU</td>
-              </tr>
-              <tr>
-                <td class="value">JSD 132.24.00</td>
-              </tr>
-            </table>
-          </el-col>
-        </el-row>
-      </el-checkbox-group>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialog.show = false">取 消</el-button>
-        <el-button type="primary" @click="dialog.show = false">确 定</el-button>
-      </div>
-    </el-dialog>-->
   </div>
 </template>
 
@@ -94,47 +64,6 @@
         dialog: {
           show: false,
         },
-        // radioTimeType: '',
-        /*checkedDataList: [],
-        pickerOptions2: {
-          shortcuts: [{
-            text: 'recent 7 days',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: 'recent 15 days',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: 'recent 30 days',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        },
-        dataList: [
-          'Create Inquiry1',
-          'Create Inquiry2',
-          'Create Inquiry3',
-          'Create Inquir5',
-          'Create Inquiry41',
-          'Create Inquiry15',
-          'Create Inquiry16',
-          'Create Inquiry17',
-          'Create Inquiry18',
-          'Create Inquiry19',
-        ]*/
       }
     },
     created() {
@@ -143,13 +72,47 @@
     methods: {
       getData() {
         this.loading = true;
-        this.$ajax.post(this.$apis.UDA_FINDDATAANALYSISLIST)
-          .then(data => {
-            this.dataList = data;
+        this.$ajax.post(this.$apis.UDA_FINDDATAANALYSISLIST, {
+          statPoints: ['CUST_PO_PLACED', 'CUST_PO_IN_PROCESSING', 'CUST_PO_CANCELED', 'CUST_LO_IN_PROCESSING']
+        })
+          .then(res => {
+            this.dataList = [];
+            this.getCode().then(data => {
+              _.map(res, resVal => {
+                let value = {}
+                  , ts = _.findWhere(data, {code: 'UDA_BIZ_CODE'})
+                  , ns = _.findWhere(data, {code: 'STAT_POINT'})
+                  , us = _.findWhere(data, {code: 'STAT_ITEM_UNIT'});
+
+                if (ts) {
+                  let v = _.findWhere(ts.codes, {code: resVal.bizCode});
+                  if (v) {
+                    value.title = v.name;
+                  }
+                }
+
+                if (ns) {
+                  let v = _.findWhere(ns.codes, {code: resVal.statPoint});
+                  if (v) {
+                    value.name = v.name;
+                  }
+                }
+
+                value.list = [];
+                _.map(resVal.items, itemVal => {
+                  let v = _.findWhere(us.codes, {code: itemVal.unit});
+                  value.list.push({unit: v ? v.value || '' : itemVal.unit || '', value: itemVal.value || ''})
+                });
+                this.dataList.push(value)
+              });
+            });
           })
           .finally(() => {
             this.loading = false;
           });
+      },
+      getCode() {
+        return this.$ajax.post(this.$apis.POST_CODE_PART, ['UDA_BIZ_CODE', 'STAT_POINT', 'STAT_ITEM_UNIT'], {_cache: true});
       }
     }
   }
@@ -183,7 +146,8 @@
     text-align: center;
     border-bottom: 1px solid #FFFFFF;
   }
-  .data-table .value > div{
+
+  .data-table .value > div {
     display: inline-block;
   }
 

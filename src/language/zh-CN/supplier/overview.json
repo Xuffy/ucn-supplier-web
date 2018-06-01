@@ -1,0 +1,34 @@
+{
+    "compareOverview": "比较总览",
+    "supplierBookmark": "供应商收藏夹",
+    "supplierSourcing": "搜索供应商",
+
+    "supplierName": "供应商名称",
+    "businessScope": "主营范围",
+    "categoryId": "分类",
+    "supplierType": "供应商类型",
+    "SKUnameEN": "英文品名",
+    "SKUcode": "供应商货号",
+    "description": "描述",
+
+
+    "supplierNO": "供应商编号",
+    "suppliername": "供应商名称",
+    "suppliertype": "供应商类型",
+    "compareRecycleBin":"归档",
+
+
+
+    "provideincoterm": "付款方式",
+
+    "description": "描述",
+    "id": "编号",
+
+
+    "country": "国家",
+    "provideIncoterm": "付款方式",
+    "exportLicense": "价格条款",
+    "mainBusinessScope": "主营范围",
+    "category": "分类"
+
+}

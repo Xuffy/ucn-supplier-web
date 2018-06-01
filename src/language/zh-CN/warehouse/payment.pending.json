@@ -1,0 +1,11 @@
+{
+    "no": "编号",
+    "paymentNumber": "付款编号",
+    "paymentItem": "款项名称",
+    "estPayDate": "预计付款日期",
+    "estAmount": "预计付款金额",
+    "actPayDate": "实际付款日期",
+    "actAmount": "实际付款金额",
+    "currency": "币种",
+    "avilable": "有效性"
+}

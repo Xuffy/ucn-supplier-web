@@ -8,7 +8,7 @@
     "price": "Price",
     "currency": "Currency",
     "incoterm": "Incoterm",
-    "departurePort": "departure port",
-    "destinationPort": "destination port",
+    "departurePort": "Departure port",
+    "destinationPort": "Destination port",
     "remark": "Inquiry remark"
 }

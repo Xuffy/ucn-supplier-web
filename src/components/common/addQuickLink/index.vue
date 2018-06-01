@@ -1,7 +1,7 @@
 <template>
   <div class="add-quick-link">
 
-    <el-dialog title="Add Quick Link" :visible.sync="$store.state.quickLink.show"
+    <el-dialog :title="$i.common.addNewLinks" :visible.sync="$store.state.quickLink.show"
                @close="dialogClose">
       <el-checkbox-group v-model="checkedList">
         <el-row>
@@ -14,8 +14,8 @@
       </el-checkbox-group>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="$store.state.quickLink.show = false">取 消</el-button>
-        <el-button type="primary" @click="updateQuickLink" :loading="loading">确 定</el-button>
+        <el-button @click="$store.state.quickLink.show = false">{{$i.button.cancel}}</el-button>
+        <el-button type="primary" @click="updateQuickLink" :loading="loading">{{$i.button.confirm}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -37,7 +37,7 @@
    *  <v-table></v-table>
    */
 
-  import {mapState} from 'vuex'
+  // import {mapState} from 'vuex'
 
   export default {
     name: 'VAddQuickLink',
@@ -90,7 +90,7 @@
           .then(() => {
             this.getQuickLink();
             this.$message({
-              message: '操作成功',
+              message: this.$i.hintMessage.operationSuccessful,
               type: 'success'
             });
             this.$store.state.quickLink.show = false;
@@ -98,7 +98,7 @@
           })
           .catch(() => {
             this.$message({
-              message: '操作失败',
+              message: this.$i.hintMessage.operationFailed,
               type: 'warning'
             });
             this.loading = false;

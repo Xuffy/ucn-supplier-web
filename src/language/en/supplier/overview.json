@@ -1,27 +1,34 @@
 {
-    "customerSourcing": "客户总览",
+    "compareOverview": "Compare Overview",
+    "supplierBookmark": "Supplier Bookmark",
+    "supplierSourcing": " Supplier Sourcing",
 
-    "customerName": "客户名称",
-    "businessScope": "业务范围",
-    "categoryId": "分类",
-    "customerType": "客户类型",
-    "payment": "付款方式",
-    "description": "description",
-    "city": "城市",
-    "country": "客户国别",
-    "customerNO": "客户编号",
-    "customerName": "客户名称",
-    "customerShortName": "客户简称",
-    "customerType": "客户类别",
-    "shipAgent": "船代公司",
-    "incoterm": "价格条款",
-    "mainBusinessScope": "业务范围",
+    "supplierName": "Supplier Name",
+    "businessScope": "Main Business Scope",
+    "categoryId": "Category",
+    "supplierType": "Supplier Type",
+    "SKUnameEN": "SKU Name (EN)",
+    "SKUcode": "SKU Code",
+    "description": "Description",
+
+
+    "supplierNO": "Supplier No.",
+    "suppliername": "supplier name",
+    "suppliertype": "Supplier type",
+    "compareRecycleBin":"Compare archive",
+
+
+
     "provideincoterm": "Provide incoterm",
-    "description": "description",
+
+    "description": "Description",
     "id": "id",
+
+
+    "country": "Country",
     "provideIncoterm": "Provide Incoterm",
     "exportLicense": "Export License",
-
+    "mainBusinessScope": "Main Business Scope",
     "category": "Category"
 
 }

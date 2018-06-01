@@ -1,0 +1,10 @@
+{
+  "quickLink": "快速链接",
+  "dataDashboard": "数据统计",
+  "purchaseOrder": "采购合同",
+  "orderPlaced": "新建订单",
+  "pendingTask": "当前待处理",
+  "futureTask": "未来任务",
+  "fyiTask": "与我相关",
+  "pushTask": "消息提醒"
+}

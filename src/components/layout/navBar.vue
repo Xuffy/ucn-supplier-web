@@ -26,8 +26,8 @@
           return item.meta ? item.meta.name : '';
         });
         const first = matched[0];
-        if (first && first.meta && (first.meta.name !== 'Home' || first.path !== '')) {
-          matched = [{meta: {name: 'Home'}, path: '/'}].concat(matched)
+        if (first && first.meta && (first.meta.name !== this.$i.common.home || first.path !== '')) {
+          matched = [{meta: {name: this.$i.common.home}, path: '/'}].concat(matched)
         }
         this.navBarList = matched;
       }

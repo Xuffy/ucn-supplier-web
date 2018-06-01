@@ -9,7 +9,7 @@
       <el-menu-item-group style="border-bottom: 1px solid rgba(255,255,255,.5);padding-bottom: 10px">
         <div slot="title">
           <i class="el-icon-menu" style="font-size: 16px"></i>
-          <span>Quick Link</span>
+          <span v-text="$i.common.quickLink"></span>
         </div>
 
         <el-menu-item v-for="(item,index) in $store.state.quickLink.list" :index="'1-' + index" :key="index">
@@ -22,30 +22,41 @@
         </el-menu-item>
         <el-menu-item @click="$store.state.quickLink.show = true" index="1-0">
           <i class="el-icon-more"></i>
-          <span>add new links</span>
+          <span v-text="$i.button.addNewLinks"></span>
         </el-menu-item>
       </el-menu-item-group>
 
       <el-menu-item-group>
         <el-menu-item index="2-0" v-show="$store.state.quickLink.draft.show"
                       @click="$router.push($store.state.quickLink.draft)">
-          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" content="Draft" placement="right">
+          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark"
+                      :content="$i.common.draft" placement="right">
             <i class="el-icon-edit-outline"></i>
           </el-tooltip>
-          <span>Draft</span>
+          <span v-text="$i.common.draft"></span>
         </el-menu-item>
         <el-menu-item index="2-1" v-show="$store.state.quickLink.recycleBin.show"
                       @click="$router.push($store.state.quickLink.recycleBin)">
-          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" content="Recycle Bin" placement="right">
+          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark"
+                      :content="$i.common.recycleBin" placement="right">
             <i class="el-icon-delete"></i>
           </el-tooltip>
-          <span>Recycle Bin</span>
+          <span v-text="$i.common.recycleBin"></span>
         </el-menu-item>
         <el-menu-item index="2-3" v-show="$store.state.quickLink.log">
-          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" content="Log" placement="right">
+          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark"
+                      :content="$i.common.log" placement="right">
             <i class="el-icon-tickets"></i>
           </el-tooltip>
-          <span>Log</span>
+          <span v-text="$i.common.log"></span>
+        </el-menu-item>
+        <el-menu-item index="2-4">
+          <router-link to="/logs/import">
+            <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" :content="'导入日志'" placement="right">
+              <i class="el-icon-tickets"></i>
+            </el-tooltip>
+            <span v-text="$i.logs.importTitle"></span>
+          </router-link>
         </el-menu-item>
       </el-menu-item-group>
     </el-menu>

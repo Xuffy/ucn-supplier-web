@@ -1,0 +1,27 @@
+{
+     "applyPayment":"申请付款",
+     "remindSuppliersToPay":"提醒供应商付款",
+     "invalid":"作废",
+     "confirmedBypurchaser":"待采购商确认",
+     "confirmedBySupplier":"待供应商确认",
+     "confirmedByService":"待服务商确认",
+     "confirmed":"已确认",
+     "save":"保存",
+     "cancel":"取消",
+     "confirm":"确认",
+     "modify":"修改",
+     "restore":"恢复",
+    
+     "paymentItem":"Payment Item",
+     "paymentNo":"Payment No",
+    "estPayDate":"Est. Pay Date",
+    "estAmount":"Est. Amount",
+    "actPayDate":"Act. Pay Date",
+    "actAmount":"Act. Amount",
+    "estRefundDate":"Est. Refund Date",
+    "estRefundAmount":"Est. Refund Amount",
+    "actRefundDate":"Act. Refund Date",
+    "actRefundAmount":"Act. Refund Amount",
+    "currency":"currency",
+    "avilable":"Avilable"
+}

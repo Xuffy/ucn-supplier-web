@@ -1,0 +1,21 @@
+{
+  "qcOrderNo":"QC Order No.",
+  "qcStatus":"QC status",
+  "qcMethod":"QC Method",
+  "surveyor":"Surveyor",
+  "factoryAddress":"Factory address",
+  "factoryContactPhone":" Factory Contact Phone",
+  "remark":"Remark",
+  "qualifiedProductsTotalCTNS":"Qualified products total CTNS",
+  "qualifiedProductsTotalQTYS":"Qualified products total QTYS",
+  "qualifiedProductsTotalCBM":"Qualified products total CBM",
+  "qualifiedProductTotalNW":"Qualified Product total NW",
+  "qualifiedProductTotalGW":"Qualified  Product total GW",
+  "unqualifiedProductsQTY":"Unqualified  products QTY",
+  "unqualifiedProductTotalCTNS":"Unqualified Product total CTNS",
+  "unqualifiedProductTotalNW":"Unqualified Product total NW",
+  "unqualifiedProductsTotalCBM":"Unqualified products total CBM",
+  "unqualifiedProductTotalGW":"Unqualified  Product total GW",
+  "quantityOfSKU":"Quantity of SKU",
+  "checkOuterCartons":"Check Outer Cartons"
+}

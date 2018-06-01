@@ -24,9 +24,7 @@ const state = {
     hideMenu: false,
     paddingRight: 0
   },
-  dic: {
-
-  },
+  dic: '',
   /*messageBoard: {
     show: true,
     code: null

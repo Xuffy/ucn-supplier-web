@@ -1,0 +1,16 @@
+{
+  "sureRework":"Sure Rework",
+  "sureReturn":"Sure Return",
+  "alreadyHandled":"Already Handled",
+  "confirmSuccess":"Confirm Success",
+  "reworkSuccess":"Rework Success!",
+  "returnSuccess":"Return Success!",
+  "createSuccess":"Create Success!",
+  "sureDelete":"Sure Delete?",
+  "changeSuccess":"Change Success!",
+  "submitSuccess":"Submit Success!",
+  "sureInvalid":"Sure Invalid?",
+  "invalidSuccess":"Invalid Success!",
+  "sureRestore":"Sure Restore?",
+  "restoreSuccess":"Restore Success!"
+}

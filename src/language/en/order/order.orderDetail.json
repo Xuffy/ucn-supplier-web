@@ -1,0 +1,8 @@
+{
+  "entryDt":"Order Date",
+  "customerName":"Customer Name",
+  "supplierName":"Supplier Name",
+  "supplierCode":"Supplier No",
+  "destPort":"Destination Port",
+  "transport":"Transportation Way"
+}

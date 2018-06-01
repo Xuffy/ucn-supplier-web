@@ -5,6 +5,13 @@
   "orderPlaced": "Order placed",
   "pendingTask": "Pending Task",
   "futureTask": "Future Task",
-  "fyi": "FYI",
-  "push": "Push"
+  "fyiTask": "FYI",
+  "pushTask": "Push",
+  "number": "Number",
+  "inquiry": "Inquiry",
+  "order": "Order",
+  "payment": "Payment",
+  "logistic": "Logistic",
+  "warehouse": "Warehouse",
+  "content": "Content"
 }

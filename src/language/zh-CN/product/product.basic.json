@@ -1,0 +1,79 @@
+{
+  "title":"Product Sourcing",
+  "costPrice":"成本价",
+  "quotedPrice":"基础报价",
+
+
+  "advanced":"Advanced",
+  "hideTheAdvanced":"Hide The Advanced",
+  "search":"Search",
+  "clear":"Clear",
+  "createInquiry":"Create Inquiry",
+  "createOrder":"Create Order",
+  "compare":"Compare",
+  "addToCompare":"Add To Compare",
+  "addToBookmark":"Add To Bookmark",
+  "download":"Download",
+  "delete":"Delete",
+  "addNewProduct":"添加新产品",
+  "setUp":"设为上架",
+  "setDown":"设为下架",
+  "downloadSelected":"下载选中的产品",
+  "edit":"编辑",
+  "basicInformation":"Basic Info",
+  "customerInfo":"Customer Info",
+  "priceInfo":"Price Info",
+  "packingInfo":"Packing Info",
+  "logisticInfo":"Logistic Info",
+  "otherInfo":"Other Info",
+  "attachment":"Attachment",
+  "tradeHistory":"Trade History",
+  "remark":"Remark",
+  "finish":"完成",
+  "finishEn":"Finish",
+  "remove":"Remove",
+  "upload":"Upload",
+  "recover":"Recover",
+
+
+
+  "compareOverview":"Compare Overview",
+  "compareDetail":"Compare Detail",
+
+
+
+  "fobCurrency":"FOB币种",
+  "fobPrice":"FOB单价",
+  "fobPort":"FOB港口",
+  "exwPrice":"EXW单价",
+  "exwCurrency":"EXW币种",
+  "otherIncoterm":"其他价格条款",
+  "otherIncotermPrice":"其他价格条款单价",
+  "otherIncotermArea":"其他价格条款区域",
+  "otherIncotermCurrency":"其他价格条款币种",
+
+
+  "add":"Add",
+  "operator":"Operator",
+  "time":"Time",
+  "action":"Action",
+  "modify":"Modify",
+  "editEn":"Edit",
+  "addNewProductEn":"Add New Product",
+  "manuallyAdd":"Manually Add",
+  "downloadTheProduct":"Download The Product",
+  "uploadProduct":"Upload Product",
+  "ok":"OK",
+  "cancel":"Cancel",
+  "accept":"Accept",
+  "addNew":"Add New",
+
+  "hideTheSame":"Hide The Same",
+  "highlightTheDifferent":"Highlight the Different",
+  "saveTheCompare":"Save The compare",
+
+  "deleteTheCompare":"Delete The Compare",
+
+  "skuNameEn":"SKU Name En",
+  "skuCode":"SKU Code"
+}

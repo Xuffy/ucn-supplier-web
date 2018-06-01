@@ -1,7 +1,6 @@
 export default {
-  id: {
-    key: 'id',
-    label: 'ID',
+  bizNo: {
+    key: 'bizNo',
   },
   time: {
     key: 'submittedTime',

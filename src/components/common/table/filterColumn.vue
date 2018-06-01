@@ -86,20 +86,30 @@
         return data.name.toLowerCase().indexOf(value.toLowerCase()) !== -1;
       },
       clickFilter() {
+        let selected = this.$refs.columnTree.getCheckedNodes()
+          , params = [];
         this.loading = true;
 
-        // todo 请求更新接口 update_gridfavorite
+        _.map(selected, value => {
+          let {bizCode, id} = value;
+          params.push({bizCode, gridFieldId: id});
+        });
 
-        setTimeout(() => {
+
+        this.$ajax.post(this.$apis.GRIDFAVORITE_UPDATE, params)
+          .then(res => {
+
+          });
+        /*setTimeout(() => {
           this.loading = false;
           this.$emit('filter-column', this.$refs.columnTree.getCheckedKeys());
           this.visible = false;
-        }, 1000);
+        }, 1000);*/
       },
       defaultChecked() {
         let list = [];
         _.map(this.data, val => {
-          if (val._checked) {
+          if (val.isChecked === '1') {
             list.push(val.property);
           }
         });

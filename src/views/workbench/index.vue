@@ -1,9 +1,7 @@
 <template>
   <div class="workbench">
-
-    <!--<v-time-zone :value.sync="timeZone"></v-time-zone>-->
     <div class="quickLink">
-      <h3 class="ucn-content-title inline" v-text="$i.workbench.quickLink"></h3>
+      <h3 class="ucn-content-title inline" @click="$refs.importFile.show()" v-text="$i.workbench.quickLink"></h3>
       <el-button size="mini" type="primary" icon="el-icon-plus"
                  style="display: inline-block;margin-left: 30px!important;"
                  @click="$store.state.quickLink.show = true"></el-button>
@@ -25,13 +23,14 @@
         <v-table-data :type="2"></v-table-data>
       </el-col>
       <el-col :span="12">
-        <v-table-data :type="4"></v-table-data>
+        <v-table-data :type="3"></v-table-data>
       </el-col>
       <el-col :span="12">
-        <v-table-data :type="3"></v-table-data>
+        <v-table-data :type="4"></v-table-data>
       </el-col>
     </el-row>
 
+    <v-import-template ref="importFile" code="PRODUCT_SUPPLIER" biz-code="PRODUCT_SUPPLIER"></v-import-template>
     <!--<v-message-board module="workbench" code="workbench" id="123"></v-message-board>-->
   </div>
 </template>
@@ -40,18 +39,20 @@
   import VDataDashboard from './dataDashboard'
   import VTableData from './tableData'
   import VBasicInfo from './basicInfo'
-  import {VHistoryModify, VMessageBoard, VTimeZone} from '@/components/index';
-  import testData from './test'
+  import {VHistoryModify, VMessageBoard, VTimeZone, VUpload, VImportTemplate, VImage} from '@/components/index';
 
   export default {
     name: 'workbench',
     components: {
+      VImportTemplate,
+      VUpload,
       VDataDashboard,
       VTableData,
       VBasicInfo,
       VHistoryModify,
       VMessageBoard,
       VTimeZone,
+      VImage,
     },
     data() {
       return {
@@ -69,24 +70,6 @@
     mounted() {
 
 
-      // this.$store.commit('setDraft', {path: '/login'});
-      /*this.$ajax.post(this.$apis.UTASK_PAGELIST).then(data => {
-        this.pengdingTask = data.pending_task;
-        this.futureTask = data.future_task;
-        this.fyiTask = data.fyi_task;
-        this.pushTask = data.push_task;
-      });*/
-
-      // this.$ajax.post(this.$apis.UTASK_TYPELIST,{}).then(data => {
-      //
-      // });
-      /*this.$notify({
-        title: 'Wellcome! Please set your basic info',
-        duration: 0,
-        offset: 60,
-        dangerouslyUseHTMLString: true,
-        message: h(VBasicInfo)
-      });*/
     },
     methods: {
       save(data) {
