@@ -16,45 +16,6 @@ export const routerMap = [
       hidden: true, // 在侧边栏中不显示该菜单
     },
     {
-      path: '/negotiation',
-      name: 'negotiation',
-      noDropdown: true,
-      component: Layout,
-      redirect: '/negotiation/inquiry',
-      meta: {
-        name: 'negotiation',
-        draft: true,
-
-      },
-      children: [
-        {
-          path: 'inquiry',
-          name: 'inquiry',
-          meta: {
-            name: 'negotiation inquiry',
-            recycleBin: 'INQUIRY:OVERVIEW:RECYCLE_BIN'
-          },
-          component: () => import('../views/negotiation/inquiryOverview')
-        },
-        {
-          path: 'inquiryDetail',
-          name: 'inquiryDetail',
-          hidden: true,
-          meta: {
-            name: 'Inquiry Detail',
-            recycleBin: 'INQUIRY:DETAIL:RECYCLE_BIN',
-            messageBoard: 'INQUIRY:DETAIL:MESSAGE_BOARD'
-          },
-          component: () => import('../views/negotiation/inquiryDetail')
-        },
-        {
-          path: 'recycleBin/:type',
-          name: 'negotiationRecycleBin',
-          component: () => import('../views/negotiation/recycleBin')
-        }
-      ]
-    },
-    {
       path: '/login',
       hidden: true,
       component: () => import('../views/login/index.vue')
@@ -78,6 +39,45 @@ export const routerMap = [
         }
       ]
     },
+  {
+    path: '/negotiation',
+    name: 'negotiation',
+    noDropdown: true,
+    component: Layout,
+    redirect: '/negotiation/inquiry',
+    meta: {
+      name: 'negotiation',
+      draft: true,
+
+    },
+    children: [
+      {
+        path: 'inquiry',
+        name: 'inquiry',
+        meta: {
+          name: 'negotiation inquiry',
+          recycleBin: 'INQUIRY:OVERVIEW:RECYCLE_BIN'
+        },
+        component: () => import('../views/negotiation/inquiryOverview')
+      },
+      {
+        path: 'inquiryDetail',
+        name: 'inquiryDetail',
+        hidden: true,
+        meta: {
+          name: 'Inquiry Detail',
+          recycleBin: 'INQUIRY:DETAIL:RECYCLE_BIN',
+          messageBoard: 'INQUIRY:DETAIL:MESSAGE_BOARD'
+        },
+        component: () => import('../views/negotiation/inquiryDetail')
+      },
+      {
+        path: 'recycleBin/:type',
+        name: 'negotiationRecycleBin',
+        component: () => import('../views/negotiation/recycleBin')
+      }
+    ]
+  },
     {
       path: '/payment',
       meta: {name: 'Payment'},
@@ -575,7 +575,7 @@ export const routerMap = [
           meta: {
             draft: false,
             recycleBin: false,
-            log: false,           
+            log: false,
           },
           component: () => import('../views/customer/customerDetail.vue')
         }
