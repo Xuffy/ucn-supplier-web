@@ -1,27 +1,12 @@
 {
-    "customerSourcing": "客户总览",
-
-    "customerName": "客户名称",
-    "businessScope": "业务范围",
-    "categoryId": "分类",
-    "customerType": "客户类型",
-    "payment": "付款方式",
-    "description": "description",
-    "city": "城市",
-    "country": "客户国别",
-    "customerNO": "客户编号",
-    "customerName": "客户名称",
-    "customerShortName": "客户简称",
-    "customerType": "客户类别",
-    "shipAgent": "船代公司",
-    "incoterm": "价格条款",
-    "mainBusinessScope": "业务范围",
+    "customerName": "customer name",
+    "customerType": "customer type",
+    "customerCountry": "customer country",
+    "city": "city",
+    "paymentItem": "payment item",
     "provideincoterm": "Provide incoterm",
-    "description": "description",
-    "id": "id",
-    "provideIncoterm": "Provide Incoterm",
-    "exportLicense": "Export License",
-
-    "category": "Category"
-
+    "incoterm": "Incoterm",
+    "customerShortName": "customer short name",
+    "currency": "currency",
+    "shipAgent ": "ship agent "
 }

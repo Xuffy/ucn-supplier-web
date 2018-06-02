@@ -1,87 +1,56 @@
 {
-    "CustomerCode": "客户编号",
-    "Customercompanyname": "客户名称",
-    "Customertype": "客户类别",
-
-    "CustomerShortName": "客户简称",
-
-    "country": "客户国别",
-    "city": "所在城市",
-
-    "customerSource": "客户来源",
-
-    "paymentterm": "付款方式",
-    "currency": " 币种",
-    "filingDate": "建档日期",
-    "TaxpayerQualification": "纳税人资格",
-
-
-
-
-
-    "address": "地址信息",
-    "companyAddress": "公司办公地址",
-    
-    "companyRegisteredAddress": "公司注册地址",  
-    
-    "receiveAddress": "收货地址",
-    "notify": "通知",
-
-    
-    
-    "concats": "联系信息",
-    "concatsName": "姓名",
-    "department": "部门",
-    "gender": "性别",
-    "position": "职务",
-    "telNumber": "座机号码",
-    "mobileNumber": "手机号码",
-    "faxNumber": "传真号码",
-    "emailAddress": "电子邮件",
-    "skype": "SKYPE",
-    "QQ": "QQ",
-
-    
-    
-    
-    "document": "单证要求",
-    "documentRequired": "所需要的单证",
-    "factoryInspectionReport": "验厂报告",
-    "invoice": "发票",
-    "packingList": "箱单",
-    "examiningReport": "检测报告",
-
-
-
-    "inquiry": "询价历史",
-    "inquiryNo":"询价单号",
-    "inquiryDate": "询价日期",
-    "Incoterm": "价格条款",
-    "skuQuantityOfInquiry": "询价数量",
-    "quantityOfCarton": "产品箱数",
-    "totalNetWeight": "产品总净重",
-    "totalRoughWeight":"产品总毛重",
-    "totalVolum":"产品总体积",
-
-    
-    
-    "tradeHistory": "订单历史",
-    "OrderNumber":"订单号",
-    "OrderDate":"订单日期",
-    "OrderStatus":"订单状态",
-    "ActDeliveryDate":"交货日期",
-    "quantityOfSKU":"订单数量",
-    "totalCartonOfSku":" 产品总箱数",
-    "totalSkuNetWeight":"产品总净重",
-    "totalSkuRoughWeight":"产品总毛重",
-    "totalSkuVolume":" 产品总体积",
-    "loadingDate":"装船日期",
-    "dateOfBL":"放单日期",
-    
-    "remark": "Remark",
-    "date": "Date",
-    "operater": "Operater"
-
-
-
+  "logo": "logo",
+  "customerNO": "customer NO",
+  "customerName": "customer name",
+  "customerShortName": "customer short name",
+  "customerType": "customer type",
+  "customerCountry": "customer country",
+  "city": "city",
+  "customer source": "customer source",
+  "paymentItem": "payment item",
+  "currency": "Currency",
+  "filingDate": "filing date",
+  "TaxpayerQualification": "Taxpayer qualification",
+  "companyRegisteredAddress": "company registered address",
+  "companyAddress": "company address",
+  "receiverAddress": "receiver address",
+  "notify": "notify",
+  "contactName": "contact name",
+  "department": "department",
+  "gender": "gender",
+  "position": "position",
+  "tel": "notify",
+  "mobileNo": "mobile No",
+  "faxNumber": "fax number",
+  "email": "email",
+  "skype": "SKYPE",
+  "qq": "QQ",
+  "remark": "remark",
+  "documentRequired": "document required",
+  "factoryInspectionReport": "factory inspection report",
+  "invoice": "invoice",
+  "packingList": "packing list",
+  "examiningReport": "examining report",
+  "inquiryNo": "inquiry No",
+  "inquiryDate": "inquiry date",
+  "incoterm": "Incoterm",
+  "skuQuantityOfInquiry": "sku quantity of inquiry",
+  "quantityOfCarton": "quantity of carton",
+  "totalNetWeight ": "total net weight ",
+  "totalRoughWeight ": "total rough weight ",
+  "totalVolum": "total volum",
+  "orderNumber": "Order Number",
+  "OrderDate": "Order Date",
+  "orderStatus": "Order Status",
+  "actDeliveryDate": "Act Delivery Date",
+  "quantityOfSKU": "quantity of SKU",
+  "totalCartonOfSku": "total carton of sku",
+  "totalSkuNetWeight": "total sku net weight",
+  "totalSkuRoughWeight": "total sku rough weight",
+  "totalSkuVolume": "total sku volume",
+  "loadingDate": "loading date",
+  "dateOfBL": "date of BL",
+  "date": "date",
+  "operater": "operater",
+  "action": "action"
 }
