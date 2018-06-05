@@ -115,7 +115,7 @@
                             {{scope.row.skuList[0][v.key]}}
                         </div>
                     </div>
-                    <div v-else-if="v.showType==='input'">
+                    <div v-else-if="v.showType==='input' && scope.row.skuList.length>0">
                         <!--<div v-if="v.needInput">-->
                             <!--<el-input-->
                                     <!--placeholder="请输入内容"-->
@@ -132,7 +132,7 @@
                             </el-input>
                         <!--</div>-->
                     </div>
-                    <div v-else-if="v.showType==='select'">
+                    <div v-else-if="v.showType==='select' && scope.row.skuList.length>0">
                         <el-select v-model="scope.row.skuList[0][v.key]" placeholder="请选择">
                             <el-option
                                     v-for="item in v.options"
