@@ -598,56 +598,60 @@
                         type: 'warning'
                     });
                 }
+                let orderNos=[];
                 arr.forEach(v=>{
                     if(v._checked && !v._disabled && v.skuId.value!==0){
                         v._checked=false;
                         v._disabled=false;
                         this.productIds.push(v.skuId.value);
+                        orderNos.push(v.orderNo.value);
                     }
                 });
+                console.log(this.productIds,'this.productIds')
+                console.log(orderNos,'orderNos')
                 if(this.productIds.length!==0){
                     //表示有新增产品
                     this.loadingProductTable=true;
-                    this.$ajax.post(this.$apis.get_orderSku,this.productIds).then(res=>{
+                    this.$ajax.post(this.$apis.get_orderSku,{
+                        skuIds:this.productIds,
+                        orderNos:orderNos
+                    }).then(res=>{
                         res.forEach(v=>{
                             this.productData.push(v);
                         });
 
-                        console.log('哇哈哈')
+                        /**
+                         * 计算底部summary
+                         * */
+                        // inboundOutCartonTotalQty
+                        let skuTotalCartonQty=0,
+                            skuTotalGrossWeight=0,
+                            skuTotalNetWeight=0,
+                            skuTotalQty=0,
+                            skuTotalVolume=0;
 
-                        // /**
-                        //  * 计算底部summary
-                        //  * */
-                        // // inboundOutCartonTotalQty
-                        //
-                        // let skuTotalCartonQty=0,
-                        //     skuTotalGrossWeight=0,
-                        //     skuTotalNetWeight=0,
-                        //     skuTotalQty=0,
-                        //     skuTotalVolume=0;
-                        //
-                        // this.productData.forEach(v=>{
-                        //     if(v.inboundOutCartonTotalQty){
-                        //         skuTotalCartonQty+=v.inboundOutCartonTotalQty;
-                        //     }
-                        //     if(v.inboundSkuTotalGrossWeight){
-                        //         skuTotalGrossWeight+=v.inboundSkuTotalGrossWeight;
-                        //     }
-                        //     if(v.inboundSkuTotalNetWeight){
-                        //         skuTotalNetWeight+=v.inboundSkuTotalNetWeight;
-                        //     }
-                        //     if(v.inboundSkuTotalQty){
-                        //         skuTotalQty+=v.inboundSkuTotalQty;
-                        //     }
-                        //     if(v.inboundSkuTotalVolume){
-                        //         skuTotalVolume+=v.inboundSkuTotalVolume;
-                        //     }
-                        // });
-                        // this.$set(this.inboundData,'skuTotalCartonQty',skuTotalCartonQty);
-                        // this.$set(this.inboundData,'skuTotalGrossWeight',skuTotalGrossWeight);
-                        // this.$set(this.inboundData,'skuTotalNetWeight',skuTotalNetWeight);
-                        // this.$set(this.inboundData,'skuTotalQty',skuTotalQty);
-                        // this.$set(this.inboundData,'skuTotalVolume',skuTotalVolume);
+                        this.productData.forEach(v=>{
+                            if(v.inboundOutCartonTotalQty){
+                                skuTotalCartonQty+=v.inboundOutCartonTotalQty;
+                            }
+                            if(v.inboundSkuTotalGrossWeight){
+                                skuTotalGrossWeight+=v.inboundSkuTotalGrossWeight;
+                            }
+                            if(v.inboundSkuTotalNetWeight){
+                                skuTotalNetWeight+=v.inboundSkuTotalNetWeight;
+                            }
+                            if(v.inboundSkuTotalQty){
+                                skuTotalQty+=v.inboundSkuTotalQty;
+                            }
+                            if(v.inboundSkuTotalVolume){
+                                skuTotalVolume+=v.inboundSkuTotalVolume;
+                            }
+                        });
+                        this.$set(this.inboundData,'skuTotalCartonQty',skuTotalCartonQty);
+                        this.$set(this.inboundData,'skuTotalGrossWeight',skuTotalGrossWeight);
+                        this.$set(this.inboundData,'skuTotalNetWeight',skuTotalNetWeight);
+                        this.$set(this.inboundData,'skuTotalQty',skuTotalQty);
+                        this.$set(this.inboundData,'skuTotalVolume',skuTotalVolume);
                         this.loadingProductTable=false;
                     }).catch(err=>{
                         this.loadingProductTable=false;
