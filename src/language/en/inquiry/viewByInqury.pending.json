@@ -6,7 +6,7 @@
     "quantity": "quantity",
     "currency": "Currency",
     "incoterm": "Incoterm",
-    "departurePort": "departurePort",
-    "destinationPort": "destination port",
+    "departurePort": "Departure Port",
+    "destinationPort": "Destination port",
     "inquiryRemark": "Inquiry remark"
 }

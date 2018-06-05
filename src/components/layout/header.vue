@@ -9,7 +9,7 @@
 
           <template v-for="(item,index) in routerList">
 
-            <el-menu-item v-if="item.children.length&&item.noDropdown&&!item.hidden&&checkAuth(item.auth)"
+            <el-menu-item v-if="item.children.length&&item.noDropdown&&!item.hidden"
                           :index="index + ''">
               <router-link class="link"
                            :to="item.path+'/'+item.children[0].path">
@@ -19,7 +19,7 @@
 
 
             <el-submenu
-              v-if="!item.noDropdown&&!item.hidden&&checkAuth(item.auth)" :index="index + ''">
+              v-if="!item.noDropdown&&!item.hidden" :index="index + ''">
               <template slot="title">
                 <span v-if="item.meta" v-text="item.meta.name"></span>
               </template>
@@ -27,7 +27,7 @@
               <template v-if="item.children.length&&!item.noDropdown&&!item.hidden"
                         v-for="(cItem,cIndex) in item.children">
                 <el-menu-item class="ucn-header-submenu"
-                              v-if="!cItem.hidden&&checkAuth(cItem.auth)" :index="index +'-'+cIndex">
+                              v-if="!cItem.hidden" :index="index +'-'+cIndex">
                   <router-link class="link" :to="item.path+'/'+cItem.path">
                     {{cItem.meta ? cItem.meta.name : ''}}
                   </router-link>
@@ -53,7 +53,7 @@
             v-model="message.show"
             trigger="click">
             <div v-loading="message.loading">
-              <h3 class="ucn-content-title">System Message（{{message.list.length}} New ）</h3>
+              <h3 class="ucn-content-title">{{$i.common.systemMessage}}（{{message.list.length}} {{$i.common.new}} ）</h3>
               <ul class="list" v-if="message.list.length">
                 <li class="unread" v-for="item in message.list">
                   <p v-text="item.content"></p>
@@ -61,15 +61,16 @@
                 </li>
               </ul>
               <div v-else style="color: #999999;height: 100px;width: 100%;text-align: center;line-height: 100px">
-                暂无最新消息
+                {{$i.hintMessage.noLatestNews}}
               </div>
               <el-row>
                 <el-col :span="12" style="text-align: left;padding: 5px 10px">
-                  <el-button type="text" size="mini" @click="readMessage" v-if="message.list.length">Mark as readed
+                  <el-button type="text" size="mini" @click="readMessage" v-if="message.list.length">
+                    {{$i.common.markAsReaded}}
                   </el-button>
                 </el-col>
                 <el-col :span="12" style="text-align: right;padding: 5px 10px">
-                  <el-button type="text" size="mini" @click="goMessage">More</el-button>
+                  <el-button type="text" size="mini" @click="goMessage">{{$i.common.more}}</el-button>
                 </el-col>
               </el-row>
             </div>
@@ -77,11 +78,18 @@
         </div>
 
         <div style="display: inline-block">
-          <a href="javascript:void(0)">
-            {{username || '管理员'}}&nbsp;&nbsp;|&nbsp;&nbsp;
-          </a>
+          <!--<a href="javascript:void(0)">
+          </a>-->
+          <el-dropdown trigger="click">
+            <a href="javascript:void(0)" class="el-dropdown-link" style="cursor: pointer">
+              {{userInfo.userType === 0 ? $i.common.admin : $i.common.user}}&nbsp;&nbsp;|&nbsp;&nbsp;
+            </a>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item><span @click="clearData">清理数据缓存</span></el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
           <a href="javascript:void(0)" @click="logout">
-            Sign out
+            {{$i.common.signOut}}
           </a>
         </div>
 
@@ -108,7 +116,7 @@
     data() {
       return {
         username: 'User Name',
-        userType: ['店长', '设计师', '管理员'],
+        userInfo: {},
         routerList: [],
         activeName: null,
         activeOpen: [],
@@ -129,13 +137,7 @@
       }
     },
     created() {
-      let user = this.$localStore.get('user');
-      if (!_.isEmpty(user)) {
-        this.username = user.nickName;
-        this.userType = this.userType[user.userType - 1];
-      } else {
-        this.userType = this.userType[0];
-      }
+      this.userInfo = this.$localStore.get('user');
 
       routerMap.forEach(value => {
         // 判断路由是否显示
@@ -150,9 +152,9 @@
     },
     methods: {
       logout() {
-        this.$confirm('是否确认退出登录', '系统提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$confirm(this.$i.hintMessage.logoutHints, this.$i.hintMessage.systemHints, {
+          confirmButtonText: this.$i.button.confirm,
+          cancelButtonText: this.$i.button.ccancel,
           type: 'warning'
         }).then(() => {
           this.$localStore.clearAll();
@@ -185,18 +187,9 @@
           }
         });
       },
-      checkAuth(param) {
-        let user = this.$localStore.get('user') || {userType: 1};
-
-        if (_.isEmpty(param)) {
-          return true;
-        }
-
-        return _.indexOf(param, user.userType) !== -1;
-      },
       getMessage() {
         this.message.loading = true;
-        this.$ajax.get(this.$apis.UNREADMESSAGE_QUERYUNREAD)
+        this.$ajax.get(this.$apis.UNREADMESSAGE_QUERYUNREAD, {}, {_cache: true})
           .then(data => {
             this.message.list = data || [];
           })
@@ -223,6 +216,11 @@
           .finally(() => {
             this.message.loading = false;
           });
+      },
+      clearData() {
+        // console.log(this.$sessionStore)
+        this.$sessionStore.remove('request_cache');
+        history.go(0);
       }
     },
   }
@@ -238,7 +236,7 @@
     position: fixed;
     width: 100%;
     z-index: 999;
-    min-width: 1600px;
+    min-width: 1366px;
     overflow: hidden;
   }
 
@@ -316,8 +314,9 @@
     background-color: initial;
   }
 
+  .el-submenu,
   .el-menu-item {
-    padding: 0 10px;
+    padding: 0 0 0 2.7vw;
     border: none !important;
   }
 

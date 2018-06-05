@@ -615,39 +615,39 @@
 
                         console.log('哇哈哈')
 
-                        /**
-                         * 计算底部summary
-                         * */
-                        // inboundOutCartonTotalQty
-
-                        let skuTotalCartonQty=0,
-                            skuTotalGrossWeight=0,
-                            skuTotalNetWeight=0,
-                            skuTotalQty=0,
-                            skuTotalVolume=0;
-
-                        this.productData.forEach(v=>{
-                            if(v.inboundOutCartonTotalQty){
-                                skuTotalCartonQty+=v.inboundOutCartonTotalQty;
-                            }
-                            if(v.inboundSkuTotalGrossWeight){
-                                skuTotalGrossWeight+=v.inboundSkuTotalGrossWeight;
-                            }
-                            if(v.inboundSkuTotalNetWeight){
-                                skuTotalNetWeight+=v.inboundSkuTotalNetWeight;
-                            }
-                            if(v.inboundSkuTotalQty){
-                                skuTotalQty+=v.inboundSkuTotalQty;
-                            }
-                            if(v.inboundSkuTotalVolume){
-                                skuTotalVolume+=v.inboundSkuTotalVolume;
-                            }
-                        });
-                        this.$set(this.inboundData,'skuTotalCartonQty',skuTotalCartonQty);
-                        this.$set(this.inboundData,'skuTotalGrossWeight',skuTotalGrossWeight);
-                        this.$set(this.inboundData,'skuTotalNetWeight',skuTotalNetWeight);
-                        this.$set(this.inboundData,'skuTotalQty',skuTotalQty);
-                        this.$set(this.inboundData,'skuTotalVolume',skuTotalVolume);
+                        // /**
+                        //  * 计算底部summary
+                        //  * */
+                        // // inboundOutCartonTotalQty
+                        //
+                        // let skuTotalCartonQty=0,
+                        //     skuTotalGrossWeight=0,
+                        //     skuTotalNetWeight=0,
+                        //     skuTotalQty=0,
+                        //     skuTotalVolume=0;
+                        //
+                        // this.productData.forEach(v=>{
+                        //     if(v.inboundOutCartonTotalQty){
+                        //         skuTotalCartonQty+=v.inboundOutCartonTotalQty;
+                        //     }
+                        //     if(v.inboundSkuTotalGrossWeight){
+                        //         skuTotalGrossWeight+=v.inboundSkuTotalGrossWeight;
+                        //     }
+                        //     if(v.inboundSkuTotalNetWeight){
+                        //         skuTotalNetWeight+=v.inboundSkuTotalNetWeight;
+                        //     }
+                        //     if(v.inboundSkuTotalQty){
+                        //         skuTotalQty+=v.inboundSkuTotalQty;
+                        //     }
+                        //     if(v.inboundSkuTotalVolume){
+                        //         skuTotalVolume+=v.inboundSkuTotalVolume;
+                        //     }
+                        // });
+                        // this.$set(this.inboundData,'skuTotalCartonQty',skuTotalCartonQty);
+                        // this.$set(this.inboundData,'skuTotalGrossWeight',skuTotalGrossWeight);
+                        // this.$set(this.inboundData,'skuTotalNetWeight',skuTotalNetWeight);
+                        // this.$set(this.inboundData,'skuTotalQty',skuTotalQty);
+                        // this.$set(this.inboundData,'skuTotalVolume',skuTotalVolume);
                         this.loadingProductTable=false;
                     }).catch(err=>{
                         this.loadingProductTable=false;

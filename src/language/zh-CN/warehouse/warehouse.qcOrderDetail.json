@@ -1,0 +1,15 @@
+{
+  "qcOrderNo":"QC Order No",
+  "qcTypeDictCode":"QC Type",
+  "qcDate":"QC Date",
+  "factoryAddress":"Factory Address",
+  "factoryContactPhone":"Factory Contact Phone",
+  "qcStatusDictCode":"QC Status",
+  "qcMethodDictCode":"QC Method",
+  "surveyor":"Surveyor",
+  "serviceFee":"Service Fee",
+  "serviceName":"Service Providers",
+  "exchangeCurrencyDictCode":"Exchange Currency",
+  "remark":"Remark",
+  "attachment":"Attachment"
+}

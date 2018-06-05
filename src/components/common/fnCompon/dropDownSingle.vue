@@ -72,7 +72,7 @@
 			},
 			checkInputBoxPl: {
 				type: String,
-				default: 'Please choose'
+				default: 'Please Choose'
 			},
 			list: {
 				type: Array,

@@ -61,9 +61,11 @@
 </template>
 
 <script>
-  /*
-                      具体后台返回数据，等结构出来再做更改
-                              */
+  /**
+   * <v-message-board module="业务模块名称/workbench" code="子业务模块/workbench" id="详情id"></v-message-board>
+   */
+
+
   import VUpload from '../upload/upload.vue'
 
   export default {

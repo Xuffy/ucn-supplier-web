@@ -1,0 +1,14 @@
+{
+  "paymentDunning": "已催促对应的付款人付款",
+  "keyType": "请选中搜索类型",
+  "keyValue": "搜索内容不能为空",
+  "configuration": "配置成功",
+  "read": "系统已将消息置为已读",
+  "addSuccess": "添加成功",
+  "error": "发送失败",
+  "title": "请输入标题",
+  "content": "请输入内容",
+  "release": "发布",
+  "passwordAuthentication": "新密码不能与原密码相同",
+  "modifySuccess": "编辑成功"
+}

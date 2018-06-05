@@ -1,0 +1,87 @@
+{
+    "SupplierCode": "供应商编号",
+    "Suppliercompanyname": "供应商名称",
+    "Suppliertype": "供应商类型",
+    "country": "国家",
+    "city": "城市",
+    "Provideincoterm": "价格条款",
+    "Exportlicense": "出口资质",
+    "businessscope": "业务范围",
+    "category": "分类",
+    "currency": "币种",
+    "paymentterm": "付款方式",
+    "Suppliershortname": "供应商简称",
+    "description": "描述",
+
+
+
+    "address": "地址信息",
+    "accountInfo": "账户信息",
+    "contactInfo": "联系人信息",
+    "tradeHistory": "交易历史",
+    "inquireHistory": "询价历史",
+    "remark": "备注",
+    "attchment": "附件",
+
+    "factoryName": "工厂名称",
+    "factoryAddress": "工厂地址",
+    "exportPort": "出口港口",
+    "contactPerson1": "联系人1",
+    "concatPhone1": "联系号码1",
+    "contactPerson2": "联系人2",
+    "contactPhone2": "联系号码2",
+
+
+    "beneficiaryName": "收款人",
+    "beneficiaryAccount": "收款账户",
+    "beneficiaryAddress": "收款地址",
+    "beneficiaryBankName": "收款银行",
+    "beneficiaryBankSwift": "收款银行代码",
+    "accountType": "账户类型",
+    "currency": "币种",
+
+
+    "name": "名字",
+    "department": "部门",
+    "gender": "性别",
+    "position": "职位",
+    "mobileNumber": "手机号码",
+    "telNumber": "座机号码",
+    "faxNumber": "传真号码",
+    "emailAddress": "电子邮件",
+    "skype": "Skype",
+    "QQ": "QQ",
+
+
+    "OrderNo": "订单号",
+    "orderStatus": "订单状态",
+    "orderDate": "订单日期",
+    "currency": "币种",
+    "purchasingPerson": "采购员",
+    "SKUCode": "供应商货号",
+    "orderPrice": "订单价格",
+    "orderQuantity": "合同数量",
+    "amount": "SKU数量",
+    "totalNetWeight": "总净重",
+    "totalGrossWeight": "总毛重",
+    "totalVolume": "总体积",
+
+
+    "InquiryNumber": "询价单号",
+    "inquiryDate": "询价日期",
+    "payment": "付款方式",
+    "departurePort": "发运港口",
+    "destinationPort": "目的港口",
+    "quantity": "SKU数量",
+
+
+    "remark": "备注",
+    "date": "日期",
+    "operater": "操作人",
+
+    "compareTime": "比较时间",
+    "compareName": "比较名称",
+    "compareItem": "比较项"
+
+
+}

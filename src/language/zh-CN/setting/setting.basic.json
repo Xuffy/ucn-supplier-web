@@ -1,0 +1,31 @@
+{
+  "supplierCodeSetting":"供应商编号",
+  "supplierCompanyNameSetting":"供应商名称",
+  "supplierTypeSetting":"供应商类型",
+  "countrySetting":"国家",
+  "citySetting":"城市",
+  "provideIncotermSetting":"价格条款",
+  "exportLicenseSetting":"出口资质",
+  "currencySetting":"币种",
+  "paymentTermSetting":"付款方式",
+  "supplierShortNameSetting":"供应商简称",
+  "descriptionSetting":"描述",
+
+  "userName":"用户名",
+  "email":"邮箱",
+  "deptName":"部门",
+  "roleName":"角色",
+  "tel":"电话",
+  "gender":"性别",
+  "birthday":"生日",
+  "lang":"语言",
+  "status":"状态",
+  "remark":"备注"
+
+
+
+
+
+
+
+}
