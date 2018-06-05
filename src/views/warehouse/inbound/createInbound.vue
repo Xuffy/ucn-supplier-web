@@ -102,19 +102,19 @@
                     :prop="v.key"
                     align="center"
                     width="180">
-                <!--<template slot-scope="scope">-->
-                    <!--<div v-if="v.belong==='skuList'">-->
-                        <!--<div v-if="v.showType==='input'">-->
-                            <!--<el-input-->
-                                    <!--placeholder="请输入内容"-->
-                                    <!--v-model="scope.row.skuList[0][v.key]"-->
-                                    <!--clearable>-->
-                            <!--</el-input>-->
-                        <!--</div>-->
-                        <!--<div v-else>-->
-                            <!--{{scope.row.skuList[0][v.key]}}-->
-                        <!--</div>-->
-                    <!--</div>-->
+                <template slot-scope="scope">
+                    <div v-if="v.belong==='skuList'">
+                        <div v-if="v.showType==='input'">
+                            <el-input
+                                    placeholder="请输入内容"
+                                    v-model="scope.row.skuList[0][v.key]"
+                                    clearable>
+                            </el-input>
+                        </div>
+                        <div v-else>
+                            {{scope.row.skuList[0][v.key]}}
+                        </div>
+                    </div>
                     <!--<div v-else-if="v.showType==='input'">-->
                         <!--&lt;!&ndash;<div v-if="v.needInput">&ndash;&gt;-->
                             <!--&lt;!&ndash;<el-input&ndash;&gt;-->
@@ -156,7 +156,7 @@
                     <!--<div v-else>-->
                         <!--{{scope.row[v.key]}}-->
                     <!--</div>-->
-                <!--</template>-->
+                </template>
             </el-table-column>
             <el-table-column
                     fixed="right"
