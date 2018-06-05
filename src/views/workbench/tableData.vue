@@ -101,6 +101,12 @@
       }
     },
     mounted() {
+      if (this.type === 2){
+        this.dataList[0] = null;
+        this.dataList[3] = null;
+        this.dataList[4] = null;
+        this.dataList = _.compact(this.dataList);
+      }
       this.getData();
     },
     watch: {},

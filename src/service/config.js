@@ -49,8 +49,8 @@ export default {
       BASE_DEV_DIC: '//192.168.51.208:11005',
 
 
-      // LOGIN_URL: '//dev.auth.ucnscm.cn',
-      LOGIN_URL: '//192.168.51.138:8070',
+      LOGIN_URL: '//dev.auth.ucnscm.cn',
+      // LOGIN_URL: '//192.168.51.138:8070',
       BASE_URL: '//192.168.51.208:11001', // 采购端
       USSO_URL: '//192.168.51.208:11006', // sso 服务
       UUSER_URL: '//192.168.51.208:11004', // 用户中心

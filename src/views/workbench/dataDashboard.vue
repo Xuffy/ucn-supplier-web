@@ -73,7 +73,7 @@
       getData() {
         this.loading = true;
         this.$ajax.post(this.$apis.UDA_FINDDATAANALYSISLIST, {
-          statPoints: ['CUST_PO_PLACED', 'CUST_PO_IN_PROCESSING', 'CUST_PO_CANCELED', 'CUST_LO_IN_PROCESSING']
+          statPoints: ['SUPPLIER_PO_IN_PROCESSING','SUPPLIER_IO_TBC_S', 'SUPPLIER_PAY_TO_RECEIVE', 'SUPPLIER_LO_TO_SHIP', 'SUPPLIER_QC_IN_PROCESSING','SUPPLIER_QC_DONE']
         })
           .then(res => {
             this.dataList = [];
