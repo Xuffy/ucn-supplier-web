@@ -609,9 +609,9 @@
                     //表示有新增产品
                     this.loadingProductTable=true;
                     this.$ajax.post(this.$apis.get_orderSku,this.productIds).then(res=>{
-                        res.forEach(v=>{
-                            this.productData.push(v);
-                        });
+                        // res.forEach(v=>{
+                        //     this.productData.push(v);
+                        // });
 
                         console.log('哇哈哈')
 
