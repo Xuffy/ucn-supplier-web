@@ -40,8 +40,8 @@ export default {
       BASE_BJ_p: 'http://dev.upurchase-facade.ucnholding.com:18300',
       BASE_BUY: '//192.168.51.208:11001',
       BASE_SELL: '//192.168.51.208:11002',
-      //BASE_SELL: '//dev.usupply-facade.ucnholding.com',
-      //USUPPLY_URL: '//dev.usupply-facade.ucnholding.com', // 供应商端
+      BASE_SELL12: '//192.168.51.173:12009',
+      //USUPPLY_URL: '//dev.usupply-facade.ucnholding.c、om', // 供应商端
       BASE_CS_CI: '//192.168.51.33:11002',
       BASE_WAREHOUSE: '//192.168.51.208:12005',
       BASE_URL_CS: '//192.168.51.33:11002',

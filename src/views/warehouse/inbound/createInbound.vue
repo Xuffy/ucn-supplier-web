@@ -396,7 +396,6 @@
                             });
                         }
                     });
-
                     this.disabledSearch=false;
                     this.disabledCancelSearch=false;
                     this.loadingTable=false;
@@ -613,6 +612,9 @@
                         res.forEach(v=>{
                             this.productData.push(v);
                         });
+
+                        console.log('哇哈哈')
+
                         /**
                          * 计算底部summary
                          * */
