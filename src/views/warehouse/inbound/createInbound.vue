@@ -106,6 +106,7 @@
                     <div v-if="v.belong==='skuList'">
                         <div v-if="v.showType==='input'">
                             <el-input
+                                    v-if="scope.row.skuList.length>0"
                                     placeholder="请输入内容"
                                     v-model="scope.row.skuList[0][v.key]"
                                     clearable>
@@ -115,47 +116,47 @@
                             {{scope.row.skuList[0][v.key]}}
                         </div>
                     </div>
-                    <!--<div v-else-if="v.showType==='input'">-->
-                        <!--&lt;!&ndash;<div v-if="v.needInput">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<el-input&ndash;&gt;-->
-                                    <!--&lt;!&ndash;placeholder="请输入内容"&ndash;&gt;-->
-                                    <!--&lt;!&ndash;v-model="scope.row[v.key]"&ndash;&gt;-->
-                                    <!--&lt;!&ndash;@focus="handleBlur"&ndash;&gt;-->
-                                    <!--&lt;!&ndash;clearable>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</el-input>&ndash;&gt;-->
-                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<div v-else>&ndash;&gt;-->
+                    <div v-else-if="v.showType==='input'">
+                        <!--<div v-if="v.needInput">-->
                             <!--<el-input-->
                                     <!--placeholder="请输入内容"-->
-                                    <!--v-model="scope.row.skuList[0][v.key]"-->
+                                    <!--v-model="scope.row[v.key]"-->
+                                    <!--@focus="handleBlur"-->
                                     <!--clearable>-->
                             <!--</el-input>-->
-                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                    <!--</div>-->
-                    <!--<div v-else-if="v.showType==='select'">-->
-                        <!--<el-select v-model="scope.row.skuList[0][v.key]" placeholder="请选择">-->
-                            <!--<el-option-->
-                                    <!--v-for="item in v.options"-->
-                                    <!--:key="item.value"-->
-                                    <!--:label="item.label"-->
-                                    <!--:value="item.value">-->
-                            <!--</el-option>-->
-                        <!--</el-select>-->
-                    <!--</div>-->
-                    <!--<div v-else-if="v.showType==='number'">-->
-                        <!--<el-input-number-->
-                                <!--:disabled="v.computed"-->
-                                <!--v-model="scope.row[v.key]"-->
-                                <!--@blur="handleBlur(v.key,scope.$index)"-->
-                                <!--:controls="false"-->
-                                <!--label="请输入"></el-input-number>-->
-                    <!--</div>-->
-                    <!--<div v-else-if="v.key==='unqualifiedType'">-->
-                        <!--0-->
-                    <!--</div>-->
-                    <!--<div v-else>-->
-                        <!--{{scope.row[v.key]}}-->
-                    <!--</div>-->
+                        <!--</div>-->
+                        <!--<div v-else>-->
+                            <el-input
+                                    placeholder="请输入内容"
+                                    v-model="scope.row.skuList[0][v.key]"
+                                    clearable>
+                            </el-input>
+                        <!--</div>-->
+                    </div>
+                    <div v-else-if="v.showType==='select'">
+                        <el-select v-model="scope.row.skuList[0][v.key]" placeholder="请选择">
+                            <el-option
+                                    v-for="item in v.options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </div>
+                    <div v-else-if="v.showType==='number'">
+                        <el-input-number
+                                :disabled="v.computed"
+                                v-model="scope.row[v.key]"
+                                @blur="handleBlur(v.key,scope.$index)"
+                                :controls="false"
+                                label="请输入"></el-input-number>
+                    </div>
+                    <div v-else-if="v.key==='unqualifiedType'">
+                        0
+                    </div>
+                    <div v-else>
+                        {{scope.row[v.key]}}
+                    </div>
                 </template>
             </el-table-column>
             <el-table-column
