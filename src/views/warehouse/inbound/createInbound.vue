@@ -103,10 +103,9 @@
                     align="center"
                     width="180">
                 <template slot-scope="scope">
-                    <div v-if="v.belong==='skuList'">
+                    <div v-if="v.belong==='skuList' && scope.row.skuList.length>0">
                         <div v-if="v.showType==='input'">
                             <el-input
-                                    v-if="scope.row.skuList.length>0"
                                     placeholder="请输入内容"
                                     v-model="scope.row.skuList[0][v.key]"
                                     clearable>
