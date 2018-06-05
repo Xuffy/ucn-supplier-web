@@ -95,13 +95,13 @@
                     class="table-checkbox"
                     width="55">
             </el-table-column>
-            <!--<el-table-column-->
-                    <!--v-for="v in $db.warehouse.inboundOrderProductTable"-->
-                    <!--:key="v.key"-->
-                    <!--:label="$i.warehouse[v.key]"-->
-                    <!--:prop="v.key"-->
-                    <!--align="center"-->
-                    <!--width="180">-->
+            <el-table-column
+                    v-for="v in $db.warehouse.inboundOrderProductTable"
+                    :key="v.key"
+                    :label="$i.warehouse[v.key]"
+                    :prop="v.key"
+                    align="center"
+                    width="180">
                 <!--<template slot-scope="scope">-->
                     <!--<div v-if="v.belong==='skuList'">-->
                         <!--<div v-if="v.showType==='input'">-->
@@ -157,7 +157,7 @@
                         <!--{{scope.row[v.key]}}-->
                     <!--</div>-->
                 <!--</template>-->
-            <!--</el-table-column>-->
+            </el-table-column>
             <el-table-column
                     fixed="right"
                     label="操作"
