@@ -17,20 +17,17 @@ export default {
   skuWarehourceDefault: {
     _hide: true
   },
-  skuWarehourceDefault: {
-    _hide: true
-  },
-  skuMethodPkgEn: {
-    _hide: true
-  },
   tenantId: {
-    _hide: true   
+    _hide: true
   },
   skuId: {
     _hide: true
   },
   _remark: {
-    _hide: true,
+    _hide: true
+  },
+  fieldDisplay: {
+    _hide: true
   },
   id: {
     key: 'id',
@@ -148,7 +145,7 @@ export default {
     state: 'category'
   },
   barcode: {
-    key: "skuBarcode",
+    key: 'skuBarcode',
     type: 'String'
   },
   readilyAvailable: {
@@ -578,4 +575,4 @@ export default {
     _slot: 'adjustSkuAndPackageOrNot',
     transForm: 'SKU_PG_IS'
   }
-}
+};
