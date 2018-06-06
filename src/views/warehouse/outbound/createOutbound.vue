@@ -190,7 +190,6 @@
                 <el-button :disabled="disabledCancelSearch" @click="addOrderDialogVisible = false">取 消</el-button>
             </div>
         </el-dialog>
-
     </div>
 </template>
 
@@ -442,7 +441,6 @@
                         res.datas.forEach(v=>{
                             this.productData.push(v);
                         });
-                        console.log(this.productData)
                         this.productData.forEach(v=>{
                             v.inboundVo.inboundDate=this.$dateFormat(v.inboundVo.inboundDate,'yyyy-mm-dd')
                         });

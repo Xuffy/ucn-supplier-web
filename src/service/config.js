@@ -37,6 +37,9 @@ export default {
       // BASE_BUY: '//192.168.51.33:11001',
       BASE_BUY: '//192.168.51.208:11001',
       BASE_SELL: '//192.168.51.208:11002',
+      BASE_SELL12: '//192.168.51.173:12009',
+      //USUPPLY_URL: '//dev.usupply-facade.ucnholding.c、om', // 供应商端
+      BASE_CS_CI: '//192.168.51.33:11002',
       //BASE_SELL: '//dev.usupply-facade.ucnholding.com',
       //USUPPLY_URL: '//dev.usupply-facade.ucnholding.com', // 供应商端
       // BASE_BUY: '//192.168.51.208:11001',
@@ -57,7 +60,7 @@ export default {
       UMETA_URL: '//192.168.51.208:11005', // 元数据
       UMESSAGE_URL: '//192.168.51.208:11007', // 消息服务
       ULOG_URL: '//192.168.51.208:11008', // 日志服务
-      UPURCHASE_URL: '//192.168.51.111:11001', // 采购端 dev
+      UPURCHASE_URL: '//192.168.51.208:11001', // 采购端 dev
       USUPPLY_URL: '//192.168.51.208:11002', // 供应商端 dev
       // UPURCHASE_URL: '//dev.upurchase-facade.ucnholding.com', // 采购端 开发人员电脑
       // USUPPLY_URL: '//dev.usupply-facade.ucnholding.com', // 供应商端 开发人员电脑
@@ -88,7 +91,7 @@ export default {
       WORKBENCH_URL: '//192.168.51.208:11010' //workbench
     },
     test: {
-      BASE_URL: '//test.upurchase-facade.ucnscm.cn', // 采购端
+      BASE_URL: '//test.usupply-facade.ucnscm.cn', // 采购端
       USSO_URL: '//test.usso-facade.ucnscm.cn', // sso 服务
       UUSER_URL: '//test.uuser-facade.ucnscm.cn', // 用户中心
       UMETA_URL: '//test.umeta-facade.ucnscm.cn', // 元数据

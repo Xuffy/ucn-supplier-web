@@ -103,7 +103,7 @@
                     align="center"
                     width="180">
                 <template slot-scope="scope">
-                    <div v-if="v.belong==='skuList'">
+                    <div v-if="v.belong==='skuList' && scope.row.skuList.length>0">
                         <div v-if="v.showType==='input'">
                             <el-input
                                     placeholder="请输入内容"
@@ -115,7 +115,7 @@
                             {{scope.row.skuList[0][v.key]}}
                         </div>
                     </div>
-                    <div v-else-if="v.showType==='input'">
+                    <div v-else-if="v.showType==='input' && scope.row.skuList.length>0">
                         <!--<div v-if="v.needInput">-->
                             <!--<el-input-->
                                     <!--placeholder="请输入内容"-->
@@ -132,7 +132,7 @@
                             </el-input>
                         <!--</div>-->
                     </div>
-                    <div v-else-if="v.showType==='select'">
+                    <div v-else-if="v.showType==='select' && scope.row.skuList.length>0">
                         <el-select v-model="scope.row.skuList[0][v.key]" placeholder="请选择">
                             <el-option
                                     v-for="item in v.options"
@@ -396,7 +396,6 @@
                             });
                         }
                     });
-
                     this.disabledSearch=false;
                     this.disabledCancelSearch=false;
                     this.loadingTable=false;
@@ -599,25 +598,32 @@
                         type: 'warning'
                     });
                 }
+                let orderNos=[];
                 arr.forEach(v=>{
                     if(v._checked && !v._disabled && v.skuId.value!==0){
                         v._checked=false;
                         v._disabled=false;
                         this.productIds.push(v.skuId.value);
+                        orderNos.push(v.orderNo.value);
                     }
                 });
+                console.log(this.productIds,'this.productIds')
+                console.log(orderNos,'orderNos')
                 if(this.productIds.length!==0){
                     //表示有新增产品
                     this.loadingProductTable=true;
-                    this.$ajax.post(this.$apis.get_orderSku,this.productIds).then(res=>{
+                    this.$ajax.post(this.$apis.get_orderSku,{
+                        skuIds:this.productIds,
+                        orderNos:orderNos
+                    }).then(res=>{
                         res.forEach(v=>{
                             this.productData.push(v);
                         });
+
                         /**
                          * 计算底部summary
                          * */
                         // inboundOutCartonTotalQty
-
                         let skuTotalCartonQty=0,
                             skuTotalGrossWeight=0,
                             skuTotalNetWeight=0,
