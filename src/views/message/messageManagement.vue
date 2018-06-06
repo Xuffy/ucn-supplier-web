@@ -1,7 +1,8 @@
 <template>
     <div>
         <div class="head">
-            <el-button @click="addNews">{{$i.common.add}}</el-button>
+            <el-button @click="addNews" type="primary">{{$i.common.add}}</el-button>
+            <el-button @click="$router.back(-1)" >{{$i.button.cancel}}</el-button>
         </div>
         <div class="body">
           <v-table
@@ -9,6 +10,10 @@
             hide-filter-value
             :height="450"
           />
+          <page
+          :page-data="pageData"
+          @change="handleSizeChange"
+          @size-change="pageSizeChange"></page>
         </div>
 
         <el-dialog
@@ -40,19 +45,22 @@
 </template>
 
 <script>
-    import { VTable } from '@/components/index';
+    import { VTable,VPagination } from '@/components/index';
     export default {
         name: "message-management",
         components:{
-          VTable
+          VTable,
+          page:VPagination
         },
         data(){
             return{
                 tabData:[],
                 tabLoad:true,
+                pageData:{},
                 params:{
                   title:'',
                   content:'',
+                  language:''
                 },
                 pData:{
                   ps:10,
@@ -67,20 +75,18 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
-
             //发布
             publish(e){
                 console.log(e)
             },
-
-            //分页操作
             handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+                this.params.pn = val;
+                this.getMessageList();
             },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
+            pageSizeChange(val) {
+                this.params.ps = val;
+                this.getMessageList();
             },
-
             //新增消息
             addNews(){
                 this.dialogVisible=true;
@@ -117,6 +123,7 @@
                     return val
                   })
                 });
+                this.pageData=res;
                 this.tabLoad = false;
               })
               .catch(() => {

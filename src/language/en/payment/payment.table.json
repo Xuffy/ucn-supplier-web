@@ -1,18 +1,18 @@
 {
-  "orderNo": "Order NO",
+  "orderNo": "Order No.",
   "orderType": "Order Type",
   "orderStatus": "Order Status",
-  "ordercreatedate": "Order Create Date",
+  "ordercreatedate": "Order Date",
   "paymentUpdateDate": "Payment update date",
-  "payable": "Payable",
-  "paid": "Paid",
-  "waitPayment": "Wait Payment",
-  "planDateOfPayment": "Plan Date of Payment",
-  "actualDateOfPayment":"Actual Date of Payment",
+  "payable": "Est. Amount",
+  "paid": "Act. Amount",
+  "waitPayment": "Wait. Amount",
+  "planDateOfPayment": "Est. Pay Date",
+  "actualDateOfPayment":"Act. Pay Date",
   "receivable":"Receivable",
   "received":"Received",
   "waitReceipt":"Wait Receipt",
   "planDateOfReceipt":"Plan Date of Receipt",
   "actualDateOfReceipt":"Actual Date of Receipt",
-  "currencyCode":"currency"
+  "currencyCode":"Currency"
 }

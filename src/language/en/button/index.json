@@ -1,9 +1,10 @@
 {
-    "confirm": "Confirm",
-    "cancel": "Cancel",
-    "addNewLinks": "add new links",
-    "add": "Add",
-    "modify": "Modify",
-    "upload": "Upload",
-    "delete": "Delete"
-  }
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "addNewLinks": "Add new links",
+  "add": "Add",
+  "modify": "Modify",
+  "upload": "Upload",
+  "delete": "Delete",
+  "submit": "submit"
+}

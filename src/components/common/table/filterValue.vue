@@ -157,7 +157,7 @@
         }
       },
       getConfig() {
-        this.$ajax.get(this.$apis.gridfieldsetting).then(data => {
+        this.$ajax.get(this.$apis.GRIDFIELDSETTING).then(data => {
           this.dataList = data;
         });
       },

@@ -8,5 +8,6 @@
     "incoterm": "Incoterm",
     "customerShortName": "customer short name",
     "currency": "currency",
-    "shipAgent ": "ship agent "
+    "shipAgent": "ship agent ",
+    "customerNo": "customer NO"
 }

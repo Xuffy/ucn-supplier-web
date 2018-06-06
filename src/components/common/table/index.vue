@@ -60,26 +60,34 @@
             <td v-if="rowspan < 2" :rowspan="rowspan">
               <div v-text="index + 1"></div>
             </td>
+
             <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && cItem.key"
                 :style="cItem._style">
+              <!-- 是否为图片显示 -->
               <div v-if="!cItem._image"
                    :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
                    v-text="cItem.value"></div>
 
-              <img v-else :src="getImage(cItem.value)" @click="$refs.viewPicture.show(cItem.value)"/>
+              <v-image class="img" v-else
+                       :src="getImage(cItem.value)"
+                       height="30px"
+                       width="30px"
+                       @click="$refs.tableViewPicture.show(cItem.value)"></v-image>
             </td>
+            <!--操作按钮显示-->
             <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
               <div style="white-space: nowrap;">
                 <span class="button"
                       v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
                       :class="{disabled:aItem.disabled || item._disabled}"
-                      @click="(!aItem.disabled && !item._disabled) && $emit('action',item,aItem.type)">
+                      @click="(!aItem.disabled && !item._disabled) && $emit('action',item,aItem.type, index)">
                   {{aItem.label || aItem}}</span>
               </div>
             </td>
           </tr>
           </tbody>
 
+          <!--合计行显示-->
           <tfoot ref="tableFoot" v-if="totalRow">
           <tr v-for="totalItem in totalRow">
             <td>
@@ -98,37 +106,16 @@
         </table>
 
         <div v-else class="empty">
-          暂无数据
+          {{$i.hintMessage.noData}}
         </div>
       </div>
     </div>
 
-    <!--分页-->
-    <!--<v-pagination :data="dataList"
-                  :page-sizes="pageSizes"
-                  :page-size="pageSize"
-                  :page-num="pageNum"
-                  :page-total="pageTotal"
-                  @size-change="size => {$emit('page-size-change', size)}"
-                  @current-change="page => {$emit('page-change', page)}"></v-pagination>-->
-
-
-    <!--<v-table ref="pendingTable"
-             :data.sync="dataList"
-             :buttons="[{label: 'detail', type: 1,disabled:true}, {label: 'history', type: 2}]"
-             :selection="filterSelection"
-             :rowspan="2"
-             :total-row="totalRow"
-             selection-radio
-             @action="onAction"
-             @filter-value="onFilterValue"
-             @change-checked="changeChecked">
-    </v-table>-->
     <div>
       <slot name="footer"></slot>
     </div>
 
-    <v-view-picture ref="viewPicture"></v-view-picture>
+    <v-view-picture ref="tableViewPicture"></v-view-picture>
   </div>
 </template>
 
@@ -158,10 +145,11 @@
 
   import VTableFilter from './filter'
   import VViewPicture from '../viewPicture/index'
+  import VImage from '../image/index'
 
   export default {
     name: 'VTable',
-    components: {VTableFilter, VViewPicture},
+    components: {VTableFilter, VViewPicture,VImage},
     props: {
       data: {
         type: Array,
@@ -207,10 +195,6 @@
       totalRow: {
         type: [Boolean, Array],
         default: false,
-      },
-      parId: {
-        type: String,
-        default: 'id'
       }
     },
     data() {
@@ -224,25 +208,25 @@
     },
     watch: {
       data(val) {
-        this.dataList = val;
-        this.filterColumn();
+        this.setDataList(val, true);
       },
       column() {
         this.filterColumn();
       },
       checkedAll(value) {
-        this.dataList = _.map(this.dataList, val => {
+        this.setDataList(_.map(this.dataList, val => {
           if (!val._disabled) {
             this.$set(val, '_checked', value);
           }
           return val;
-        });
+        }));
+        // this.dataList = ;
         this.changeCheck(this.dataList, value);
       },
     },
     mounted() {
-      this.dataList = this.data;
-      this.filterColumn();
+      this.setDataList(this.data, true);
+      // this.dataList = this.data;
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
 
       this.interval = setInterval(() => {
@@ -252,11 +236,7 @@
     methods: {
       onFilterColumn(checked) {
         // todo 需过滤column
-        // this.dataList = this.$refs.tableFilter.getFilterColumn(this.dataList, checked);
-        // this.filterColumn();
-        // console.log(this.$refs.tableFilter.getFilterColumn(this.dataList, checked))
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
-        // this.updateTable();
       },
       filterColumn() {
         this.dataColumn = _.values(this.dataList[0]);
@@ -299,14 +279,14 @@
             }
           });
 
-          this.$refs.tableTitle.style.transform = `translate3d(0,${st}px,0)`;
+          this.$refs.tableTitle.style.transform = `translate3d(0,${!ele.scrollTop ? 0 : st}px,0)`;
 
         });
       },
       getImage(value, split = ',') {
-        if (_.isEmpty(value)) return false;
+        if (_.isEmpty(value)) return '';
 
-        if (_.toString(value)) {
+        if (_.isString(value)) {
           value = value.split(split);
         }
 
@@ -314,10 +294,10 @@
       },
       changeCheck(item, value) {
         if (this.selectionRadio) {
-          this.dataList = _.map(this.dataList, val => {
+          this.setDataList(_.map(this.dataList, val => {
             val._checked = false;
             return val;
-          });
+          }));
           item._checked = true;
         }
         this.$emit('change-checked', this.getSelected());
@@ -325,6 +305,16 @@
       getSelected() {
         return this.selectionRadio ? _.findWhere(this.dataList, {_checked: true}) :
           _.where(this.dataList, {_checked: true});
+      },
+      setDataList(val, type) {
+        if (this.dataList.length !== val.length) {
+          this.$refs.tableBox.scrollTop = 0;
+        }
+        let to = setTimeout(() => {
+          clearTimeout(to);
+          this.dataList = val;
+          type && this.filterColumn();
+        }, 50);
       }
     },
     beforeDestroy() {
@@ -482,9 +472,7 @@
     padding: 10px;
   }
 
-  .ucn-table tbody td img {
-    max-height: 30px;
-    max-width: 30px;
+  .ucn-table tbody td .img {
     vertical-align: middle;
     cursor: pointer;
   }

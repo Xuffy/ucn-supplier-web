@@ -1,0 +1,68 @@
+{
+  "workbench": "Workbench",
+  "product": "Product",
+  "productSourcingOverview": "Sourcing Overview",
+  "productSourcingDetail": "Sourcing Detail",
+  "productBookmarkOverview": "Bookmark Overview",
+  "productBookmarkDetail": "Bookmark Detail",
+  "productBookmarkManuallyAdd": "Bookmark Manually Add",
+  "productBookmarkRecycleBin": "Bookmark archive",
+  "productCompareOverview": "Compare Overview",
+  "productCompareDetail": "Compare Detail",
+  "productCompareRecycleBin": "Compare Recycle",
+
+  "supplier": "Supplier",
+  "supplierOverview": "Supplier Overview",
+  "supplierBookmark": "Supplier Bookmark",
+  "supplierBookmarkDetail": "Bookmark Detail",
+  "supplierBookmarkRecycleBin": "Bookmark archive",
+  "supplierSourcingDetail": "Sourcing Detail",
+  "supplierCompareDetail": "Compare Detail",
+  "supplierCompareOverview": "Compare Overview",
+
+  "negotiation": "Negotiation",
+  "negotiationInquiryOverview": "Inquiry Overview",
+  "negotiationInquiryDetail": "Inquiry Detail",
+  "negotiationCreateInquiry": "Create Inquiry",
+  "negotiationCompareOverview": "Compare Overview",
+  "negotiationCompareDetail": "Compare Detail",
+  "negotiationDraft": "draft",
+  "negotiationRecycleBin": "archive",
+
+  "payment": "Payment",
+
+  "order": "Order",
+  "orderOverview": "Order Overview",
+  "orderCreate": "Create Order",
+  "orderDetail": "Order Detail",
+  "orderDraft": "Order Draft",
+  "orderRecycleBin": "Order archive",
+
+  "warehouse": "Warehouse",
+  "warehouseOverview": "Warehouse Overview",
+  "warehouseQcOverview": "QC Order Overview",
+  "warehouseQcOrderDetail": "QC Order Detail",
+  "warehouseCreateQcOrder": "Create QC Order",
+
+  "logistic": "Logistics",
+  "logisticPlanOverview": "Plan Overview",
+  "logisticLoadingList": "LoadingList",
+  "logisticLoadingDraft": "Logistics Draft",
+  "logisticLoadingArchive": "Logistics Archive",
+  "logisticPlaceLogisticPlan": "Place Logistics Plan",
+  "logisticPlaceDetail": "Place Detail",
+
+  "settings": "Settings",
+  "settingsDepartment": "Department and user setting",
+  "settingsCategory": "Category Setting",
+  "settingsPersonal": "Personal Setting",
+  "settingsCompany": "Company Info",
+
+  "track": "Track",
+
+  "logs": "Logs",
+  "message": "Message",
+  "messageManagement": "Management"
+
+
+}

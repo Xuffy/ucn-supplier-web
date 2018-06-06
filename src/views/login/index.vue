@@ -7,6 +7,7 @@
 <script>
   import config from 'service/config';
   import {Base64} from 'js-base64';
+  import Qs from 'qs';
 
   export default {
     name: 'login',
@@ -16,7 +17,12 @@
       }
     },
     created() {
-      let redirectUrl = '/#/?type=2&redirect=' + Base64.encode(`${window.location.origin}/static/authorize/index.html`);
+      let params = Qs.stringify({
+        type: 2,
+        language: config.LANGUAGE,
+        redirect: Base64.encode(`${window.location.origin}/static/authorize/index.html`)
+      });
+      let redirectUrl = `/#/?${params}`;
       this.$message.closeAll();
       this.loginUrl = `${config.ENV.LOGIN_URL}${redirectUrl}`;
       this.$localStore.clearAll();

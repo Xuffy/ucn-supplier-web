@@ -5,35 +5,53 @@
             <!-- {{$t('track.page.trackBySKU')}} -->
         </div>
         <div class="body">
-            <v-table :data="dataList"></v-table>            
-            <!-- <v-simple-table
-                    class="speTable"
-                    :data.sync="dataList"
-                    :column="dataColumn"
-                    @sort-change="getSort"
-                    @page-change="pageChange">
-            </v-simple-table> -->
+          <div class="search">
+            <select-search
+              v-model="searchId"
+              class="search"
+              :options=options
+              @inputEnter="inputEnter"
+              :searchLoad="searchLoad">
+            </select-search>
+          </div>
         </div>
+            <v-table 
+            :data="dataList" 
+            :height="500"
+            :loading='loading'></v-table>
+             <page
+              :page-data="pageData"
+              @change="handleSizeChange"
+              @size-change="pageSizeChange"></page>
     </div>
 </template>
 
 <script>
-    import VTable from '@/components/common/table/index'
+  import { VTable,selectSearch,VPagination } from '@/components/index'
 
     export default {
-        name: "track-bySKU",
+        name: "track-track",
         components:{
-            VSimpleTable
+          selectSearch,
+          VTable,
+          page:VPagination
         },
         data(){
             return{
                 dataList: [],
-                dataColumn: [
-                    // {
-                    //     label:'id',
-                    //     props:'id'
-                    // },
-                ],
+                searchLoad: false,
+                loading: false,
+                searchId:'1',
+                pageData:{},
+                params:{
+                    pn: 1,
+                    ps: 10,
+                    skuCode:'',
+                },
+              options: [{
+                id: '1',
+                label: 'skuCode'
+              }],
             }
         },
         methods:{
@@ -43,17 +61,33 @@
             getSort(val, key) {
                 console.log(val, key)
             },
+            handleSizeChange(val) {
+                this.params.pn = val;
+                this.getList();
+            },
+            pageSizeChange(val) {
+                this.params.ps = val;
+                this.getList();
+            },
+            inputEnter(val) {
+              if (!val.keyType) return this.$message('请选中搜索类型');
+              if (!val.key) return this.$message('搜索内容不能为空');
+              if (val.keyType == '1') {
+                this.params.skuCode= val.key
+              }
+              this.getList()
+            },
             getList() {
-                this.ajax.get('/getTrackList').then((data)=>{
-                    this.dataList = data;
-                    this.dataColumn = this.$getTableColumn(data, 'track.tableData',{width:200});
-                })
-                // this.ajax.get('/getList').then((data) => {
-                //     this.dataList = data;
-                //     this.dataColumn = this.$getTableColumn(data, 'workbench.tableData');
-                //     console.log(this.dataList,'yyy');
-                //     console.log(this.dataColumn,'xxx');
-                // });
+                this.loading = true;
+                this.$ajax.post(this.$apis.get_track_getTrackInfoByPage,this.params).then(res=>{
+                    this.loading = false;
+                    this.dataList = this.$getDB(this.$db.track.track, res.datas,item=>{
+                        return item;
+                    });
+                this.pageData=res;
+              }).catch(err=>{
+                this.loading = false;
+              });
             }
         },
         created(){

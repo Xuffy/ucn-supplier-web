@@ -1,0 +1,16 @@
+{
+  "orderOverview":"Order Overview",
+  "status":"Status",
+  "all":"All",
+  "order":"Order",
+  "sku":"SKU",
+  "viewBy":"View By",
+  "createOrder":"Create Order",
+  "finish":"Finish",
+  "basicInfo":"Basic Info",
+  "orderNo":"Order No",
+  "send":"Send",
+  "saveAsDraft":"Save As Draft",
+  "quickCreate":"Quick Create"
+
+}

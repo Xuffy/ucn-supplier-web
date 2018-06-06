@@ -1,10 +1,10 @@
 <template>
   <el-row>
-    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+    <!--<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
       <div class="upload-box">
         <span>{{ title }}</span>
-        <upload :accept="accept" @getres="getres" :action="action" :disabled="disabled"/>
-        <ul class="el-upload-list el-upload-list--text el-input">
+        <upload :accept="accept" @getres="getres" :action="action" :disabled="disabled" v-if="edit"/>
+        <ul class="el-upload-list el-upload-list&#45;&#45;text el-input">
           <li tabindex="0" class="el-upload-list__item is-success file-list" v-for="(a, i) of fileList">
             <a class="el-upload-list__item-name"><i class="el-icon-document"></i>{{ a.name }}asdasdasd33223f2f23g23g32g23g23g23g23g</a>
             <label class="el-upload-list__item-status-label"><i class="el-icon-upload-success el-icon-circle-check"></i></label>
@@ -12,11 +12,11 @@
           </li>
         </ul>
       </div>
-    </el-col>
+    </el-col>-->
   </el-row>
 </template>
 <script>
-import { VUpload } from '@/components/index'
+// import { Upload } from '@/components/index'
 
 export default {
   props: {
@@ -26,10 +26,14 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    edit: {
+      type: Boolean,
+      default: true
     }
   },
   components: {
-    Upload:VUpload
+    // Upload
   },
   data () {
     return {
