@@ -170,27 +170,18 @@
       },
       //管理信息
       manageMessage(){
-        if (this.viewByStatus + '' === '1'){
-          this.$router.push({
-            path: '/message/messageManagement',
-            query: {
-              type: 1,
-            }
-          })
-        }else{
-          this.$router.push({
-            path: '/message/messageManagement',
-            query: {
-              type: 2,
-            }
-          })
-        }
+        this.$windowOpen({
+          url: '/message/messageManagement',
+        });
       },
       inputEnter(val) {
-        if(!val.keyType) return this.$message('请选中搜索类型');
-        if(!val.key) return this.$message('搜索内容不能为空');
+       if (!val.keyType) return this.$message({
+          message: 'please choose a type',
+          type: 'warning'
+        });
         this.params.mark = val.keyType;
         this.params.content = val.key;
+        this.getDataInfo();
         this.searchLoad = true;
       },
       getDataInfo() {

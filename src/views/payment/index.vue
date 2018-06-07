@@ -156,9 +156,10 @@
                 console.log(val);
             },
             inputEnter(val) {
-              console.log(val)
-              if (!val.keyType) return this.$message('请选中搜索类型');
-              if (!val.key) return this.$message('搜索内容不能为空');
+              if (!val.keyType) return this.$message({
+                message: 'please choose a type',
+                type: 'warning'
+              });
               if (val.keyType == '1') {
                 this.params.conditions.orderNoLike = val.key
               }
@@ -223,39 +224,38 @@
             detail(item) {
                 //点击进入对应po detail 10、lo detail 30、QC order detail 20页面
                 if(item.orderType.value == 10){
-                    this.$router.push({
-                        path: '/',
-                        query: {
-                            // orderNo: _.findWhere(item, {'key': 'orderNo'}).value
-                        }
-                    });
-                }else if(item.orderType.value == 20){
-                    this.$router.push({
-                        path: '/',
-                        query: {
-                            // orderNo: item.orderNo
-                        }
-                    });
-                }else{
-                    this.$router.push({
-                        path: '/',
-                        query: {
-                            // orderNo: item.orderNo
-                        }
-                    });
-                }
+                  this.$windowOpen({
+                    url: '/product/sourcingDetail',
+                    params: {
+                      number:item.orderNo.value
+                    }
+                  });
+              }else if(item.orderType.value == 20){
+                  this.$windowOpen({
+                    url: '/',
+                    params: {
+                      number:item.orderNo.value
+                    }
+                  });
+              }else{
+                  this.$windowOpen({
+                    url: '/logisticPlanDetail',
+                    params: {
+                      number:item.orderNo.value
+                    }
+                  });
+              }
             },
             urgingPayment(item) {
               // ① 催款，此操作会给对应付款人发一条提示付款的信息，在对方的workbench显示；
               // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
-              const parmes = {
-                orderNo:item.orderNo.value,
-                orderType:item.orderType.value
-              }
-              this.$ajax.post(this.$apis.post_payment_dunning,parmes)
-              .then(res => {
-                this.$message('已催促采购商对应的付款人付款');
-              })
+              this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}`)
+                .then(res => {
+                  this.$message({
+                    type: 'success',
+                    message: '催促成功!'
+                  });
+                })
             },
             setButtons(item){
                 if(_.findWhere(item, {'key': 'waitPayment'}).value + '' === '0') return [{label: 'urging payment', type: '1',disabled:true},{label: 'detail', type: '2'}]

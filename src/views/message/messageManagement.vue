@@ -110,11 +110,7 @@
             let url, column;
             this.tabLoad = true;
             column = this.$db.message.table;
-            if(this.$route.query.type == 1) {;
-              url = this.$apis.post_sys_queryownlist;
-            } else {
-              url = this.$apis.post_company_queryownlist;
-            };
+            url = this.$apis.post_company_queryownlist;
             this.$ajax.post(url,this.pData)
               .then(res => {
                 this.tabData = this.$getDB(column, res.datas,item=>{

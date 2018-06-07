@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="body">
-            <el-tabs v-model="tabName" type="card" tab-click="handleClick">          
+            <el-tabs v-model="tabName" type="card" @tab-click="handleClick">          
                 <el-tab-pane :label="$i.supplier.address" name="address">
                     <v-table  :data="address"  style='marginTop:10px'/>
                 </el-tab-pane>
@@ -36,30 +36,53 @@
                 </el-tab-pane>
                 
                 <el-tab-pane :label="$i.supplier.document" name="document">
-                    <v-table  :data="document"   style='marginTop:10px'/>
+                    <el-form label-width="200px" :model="documents">
+                    <el-row>
+                      <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
+                        <el-form-item  :label="$i.setting.documentRequired">
+                          <el-input size="mini" v-model="documents.document"  placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$i.setting.factoryInspectionReport">
+                          <el-input size="mini" v-model="documents.aduitDetails" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item  :label="$i.setting.packingList">
+                          <el-input size="mini"  v-model="documents.packingList" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$i.setting.invoice">
+                          <el-input size="mini" v-model="documents.invoice" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$i.setting.examiningReport">
+                          <el-input size="mini" v-model="documents.examiningReport" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                  </el-form>
                 </el-tab-pane>
 
-                <el-tab-pane :label="$i.supplier.orderHistory" @click.native="getOrderHistory" >
+                <el-tab-pane :label="$i.supplier.orderHistory" name="order">
                     <!-- <v-table  :data="document"   style='marginTop:10px'/> -->
                 </el-tab-pane>
 
-                <el-tab-pane :label="$i.supplier.inquiryHistory"  @click="getInquiryHistory" name="inquiry">
+                <el-tab-pane :label="$i.supplier.inquiryHistory"  name="inquiry">
                     <v-table  :data="inquiryData"   style='marginTop:10px'/>
                 </el-tab-pane>
 
-                <el-tab-pane :label="$i.supplier.remark" name="remark">
-                <div class="section-btn">
-                  <el-button  @click="createRemark" type="primary">{{$i.button.add}}</el-button>
-                </div>
+                <el-tab-pane label="attachment" name="attchment">
+                    <div class="section-btn" style="margin-bottom:10px;">
+                      <el-button  @click="upload" type="primary">{{$i.button.upload}}</el-button>
+                    </div>
+                    <v-upload ref="uploadAttachment" :limit="20" />
+                </el-tab-pane>
+
+                 <el-tab-pane :label="$i.supplier.remark" name="remark">
+                    <div class="section-btn">
+                    <el-button  @click="createRemark" type="primary">{{$i.button.add}}</el-button>
+                    </div>
                   <v-table
                     :data="remarkData"
                     style='marginTop:10px'
                     :buttons="[{label: 'view', type: 1},{label: 'modify', type: 2},{label: 'delete', type: 3}]"
                     @action="remarkAction"/>
-              </el-tab-pane>
-                
-                <el-tab-pane label="attachment" name="attchment">
-                     <v-attachment></v-attachment>
                 </el-tab-pane>
 
             </el-tabs>
@@ -101,10 +124,9 @@
 
 <script>
     import VCompareList from '../product/compareList'
-    import VRemark from './remark'
     import VAttachment from './attachment'
     import {
-        VTable
+        VTable,VUpload
     } from '@/components/index';
 
     export default {
@@ -112,8 +134,8 @@
         components: {
             VTable,
             VCompareList,
-            VRemark,
-            VAttachment
+            VAttachment,
+            VUpload
         },
         data() {
             return {
@@ -145,6 +167,14 @@
                     pn: 1,
                     ps: 50,
                 },
+                documents:{
+                   aduitDetails:null,
+                   document:null,
+                   examiningReport:null,
+                   invoice:null,
+                   packingList:null
+
+                },
                 compareConfig: {
                     showCompareList: false, //是否显示比较列表
                 },
@@ -159,7 +189,17 @@
         },
         methods: {
             handleClick(tab, event) {
-                console.log(tab, event);
+                switch(Number(tab.index)){
+                    case 3:
+                    this.getOrderHistory();
+                    break;
+                    case 4:
+                    this.getInquiryHistory();
+                    break;
+                    case 5:
+                    this.getListRemark();
+                    break;
+                }
             },
             getListRemark(){
                 const remark ={
@@ -282,29 +322,25 @@
             get_data() {
                 this.loading = true
                 this.$ajax.post(this.$apis.post_customerDetail, {
-                        id: this.id
-                    })
-                    .then(res => {
-                this.code = res.code
-                this.basicDate = res;
-                console.log(this.basicDate)
-                this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
-                    
-                this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
-                    
-                this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);
-                    
-                this.documents = this.$getDB(this.$db.supplier.detailTable, res.documents);  
-                    
-                this.loading = false
-                    })
-                    .catch((res) => {
-                        this.loading = false
-                    });
+                    id: this.id
+                })
+                .then(res => {
+                    this.code = res.code
+                    this.basicDate = res;
+                    this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);                    
+                    this.address = this.$getDB(this.$db.supplier.detailTable, res.address);                   
+                    this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);
+                    if(res.documents[0]){
+                        this.documents = res.documents[0];
+                    }                    
+                    this.loading = false
+                })
+                .catch((res) => {
+                    this.loading = false
+                });
             },
             getOrderHistory(){
                 this.loading = true;
-                console.log(this.basicDate)
                 this.orderHistoryData.customerCode = this.basicDate.code;
                 this.$ajax.post(this.$apis.post_supply_supplier_orderHistory,this.orderHistoryData).then(res=>{
                    this.loading = false
@@ -326,11 +362,44 @@
                     console.log(res)
                 });
             },
+              /**
+           * Attachment操作
+           * */
+          upload(){
+            console.log(this.$refs.uploadAttachment.getFiles())
+              //ATTACHMENT,文件 PICTURE 图片
+            const uploadParams = {
+              id: this.id,
+              type: "ATTACHMENT",
+              url: this.$refs.uploadAttachment.getFiles()[0]
+            };
+            const batchUploadParams = {
+              id: this.id,
+              type: "ATTACHMENT",
+              urls: this.$refs.uploadAttachment.getFiles()
+            };
+            if (this.$refs.uploadAttachment.getFiles().length === 1){
+              this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
+                this.get_data();
+                this.$message({
+                  message: '上传成功',
+                  type: 'success'
+                });
+              })
+
+            }else{
+              this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
+                this.get_data();
+                this.$message({
+                  message: '上传成功',
+                  type: 'success'
+                });
+              })
+            }
+          },
         },       
         created() {
              this.get_data();
-             this.getListRemark();
-             this.getInquiryHistory();
         },
     }
 

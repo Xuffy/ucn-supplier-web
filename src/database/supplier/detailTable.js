@@ -106,19 +106,19 @@ export default {
     },
     //询价历史
     inquiryNo: {
-        key: 'updateDt',
+        key: 'inquiryNo',
         belong: "inquiry"
     },
     inquiryDate: {
-        key: 'updateDt',
+        key: 'entryDt',
         belong: "inquiry"
     },
     incoterm: {
-        key: 'updateDt',
+        key: 'incoterm',
         belong: "inquiry"
     },
     skuQuantityOfInquiry: {
-        key: 'updateDt',
+        key: 'skuQty',
         belong: "inquiry"
     },
     quantityOfCarton: {
@@ -126,16 +126,61 @@ export default {
         belong: "inquiry"
     },
     totalNetWeight: {
-        key: 'updateDt',
+        key: '',
         belong: "inquiry"
     },
     totalRoughWeight: {
-        key: 'updateDt',
+        key: '',
         belong: "inquiry"
     },
     totalVolum: {
-        key: 'updateDt',
+        key: '',
         belong: "inquiry"
+    },
+    //order
+    orderNumber: {
+        key: 'orderNo',
+        belong: "order"
+    },
+    orderDate: {
+        key: 'entryDt',
+        belong: "order"
+    },
+    orderStatus: {
+        key: 'status',
+        belong: "order"
+    },
+    actDeliveryDate: {
+        key: 'deliveryDt',
+        belong: "order"
+    },
+    quantityOfSKU: {
+        key: 'skuQty',
+        belong: "order"
+    },
+    totalCartonOfSku: {
+        key: 'totalOuterCartonQty',
+        belong: "order"
+    },
+    totalSkuNetWeight: {
+        key: 'totalNetWeight',
+        belong: "order"
+    },
+    totalSkuRoughWeight: {
+        key: 'totalGrossWeight',
+        belong: "order"
+    },
+    totalSkuVolume: {
+        key: 'totalVolume',
+        belong: "order"
+    },
+    loadingDate: {
+        key: '',
+        belong: "order"
+    },
+    dateOfBL: {
+        key: '',
+        belong: "order"
     },
      // remark
     date: {
