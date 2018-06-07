@@ -72,6 +72,13 @@
         </el-form>
 
         <div class="title">
+          {{$i.warehouse.attachment}}
+        </div>
+        <div style="margin-bottom: 20px">
+          <v-upload :list="inboundData.attachment" :limit="20" ref="uploadAttachment"></v-upload>
+        </div>
+
+        <div class="title">
             {{$i.warehouse.productInfo}}
         </div>
         <div class="btns">
@@ -264,13 +271,14 @@
 
 <script>
 
-    import {VTimeZone,VTable} from '@/components/index'
+    import {VTimeZone,VTable,VUpload} from '@/components/index'
 
     export default {
         name: "createInbound",
         components:{
             VTable,
-            VTimeZone
+            VTimeZone,
+            VUpload
         },
         data(){
             return{
@@ -327,7 +335,7 @@
                     carrier:'',
                     carrierPhone:'',
                     timeZone:'',
-                    attachment:'',
+                    attachments:[],
                     inboundSkuBeanCreateParams:[],      //新增的产品数组
                     //新增的产品总计
                     skuTotalCartonQty: 0,
@@ -488,7 +496,9 @@
                         supplierNo: v.supplierNo,
                         supplierOrderNo: v.supplierOrderNo,
                     });
-                })
+                });
+                this.inboundData.attachments = this.$refs.uploadAttachment.getFiles();
+
                 this.disabledSubmit=true;
                 this.$ajax.post(this.$apis.add_inbound,this.inboundData).then(res=>{
                     this.disabledSubmit=false;

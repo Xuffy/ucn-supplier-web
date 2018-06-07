@@ -43,11 +43,11 @@ export default {
         showType:'textarea',
         fullLine:true
     },
-    attachment:{
-        key:'attachment',
-        belong:'basicInfo',
-        isAttachment:true
-    },
+    // attachment:{
+    //     key:'attachment',
+    //     belong:'basicInfo',
+    //     isAttachment:true
+    // },
 
 
 }
