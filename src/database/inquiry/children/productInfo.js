@@ -103,7 +103,6 @@ export default {
   unit: {
     key: 'skuUnit',
     type: 'Select',
-    _slot: 'unit',
     transForm: 'SKU_UNIT'
   },
   productFormation: {
@@ -141,7 +140,6 @@ export default {
   category: {
     key: 'skuCategoryId',
     type: 'Select',
-    _slot: 'category',
     state: 'category'
   },
   barcode: {
@@ -151,7 +149,6 @@ export default {
   readilyAvailable: {
     key: 'skuReadilyAvailable',
     type: 'Select',
-    _slot: 'readilyAvailable'
   },
   skuAvailable: {
     key: 'skuAvailableQty',
@@ -176,8 +173,7 @@ export default {
     key: 'skuExpireUnit',
     type: 'Select',
     state: 'Date',
-    time: 'yyyy-mm-dd',
-    _slot: 'expirationDateUnit'
+    time: 'yyyy-mm-dd'
   },
   explain: {
     key: 'skuComments',
@@ -187,7 +183,6 @@ export default {
   fobCurrency: {
     key: 'skuFobCurrency',
     type: 'Select',
-    _slot: 'fobCurrency',
     transForm: 'CY_UNIT'
   },
   fobPrice: {
@@ -209,7 +204,6 @@ export default {
   exwCurrency: {
     key: 'skuExwCurrency',
     type: 'Select',
-    _slot: 'exwCurrency',
     transForm: 'CY_UNIT'
   },
   cifPrice: {
@@ -223,7 +217,6 @@ export default {
   otherIncotermCurrency: {
     key: 'skuOtherIncotermCurrency',
     type: 'Select',
-    _slot: 'otherIncotermCurrency',
     transForm: 'CY_UNIT'
   },
   cifArea: {
@@ -241,7 +234,6 @@ export default {
   dduCurrency: {
     key: 'skuDduCurrency',
     type: 'Select',
-    _slot: 'dduCurrency',
     transForm: 'CY_UNIT'
   },
   dduArea: {
@@ -324,19 +316,16 @@ export default {
   unitOfWeight: {
     key: 'skuUnitWeight',
     type: 'Select',
-    _slot: 'unitOfWeight',
     transForm: 'WT_UNIT'
   },
   unitOfLength: {
     key: 'skuUnitLength',
     type: 'Select',
-    _slot: 'unitOfLength',
     transForm: 'LH_UNIT'
   },
   unitOfVolume: {
     key: 'skuUnitVolume',
     type: 'Select',
-    _slot: 'unitOfVolume',
     transForm: 'VE_UNIT'
   },
   skuLength: {
@@ -470,7 +459,6 @@ export default {
   OEM: {
     key: 'skuOem',
     type: 'Select',
-    _slot: 'OEM',
     transForm: 'OEM_IS'
   },
   gp20SkuQuantity: {
@@ -524,7 +512,6 @@ export default {
   mainsaleCountry: {
     key: 'skuMainSaleCountry',
     type: 'Select',
-    _slot: 'mainsaleCountry',
     transForm: 'COUNTRY'
   },
   mainsalearea: {
@@ -543,13 +530,11 @@ export default {
     key: 'skuYearListed',
     type: 'Select',
     state: 'Date',
-    _slot: 'yearOfListed',
     time: 'yyyy-mm-dd'
   },
   useDisplayBoxOrNot: {
     key: 'skuUseDisplayBox',
     type: 'Select',
-    _slot: 'useDisplayBoxOrNot',
     transForm: 'UDB_IS'
   },
   skuQuantityInDisplayBox: {
@@ -572,7 +557,6 @@ export default {
   adjustSkuAndPackageOrNot: {
     key: 'skuAdjustPackage',
     type: 'Select',
-    _slot: 'adjustSkuAndPackageOrNot',
     transForm: 'SKU_PG_IS'
   }
 };
