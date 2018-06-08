@@ -27,6 +27,8 @@
   "confirm": "Confirm",
   "cancel": "Cancel",
   "copy": "Copy",
+  "receive": "Receive",
+  "refuse": "Refuse",
   "placeLogisticsPlan": "Place Logistics Plan",
   "download": "Download",
   "delete": "Delete",
@@ -204,5 +206,6 @@
   "USDEUR":"USD-EUR",
   "EURUSD":"EUR-USD",
   "transportationWayVal" : "海运",
-  "loadingTypeVal" : "集装箱"
+  "loadingTypeVal" : "集装箱",
+  "generateList": "生成装货清单"
 }

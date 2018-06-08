@@ -1,29 +1,26 @@
 export default {
-    CustomerCode: {
+    customerNO: {
         key: 'code'
     },
-    Customercompanyname: {
+    customerName: {
         key: 'name'
     },
-
-    CustomerShortName: {
-        key: 'CustomerShortName'
+    customerShortName: {
+        key: 'shortName'
     },
-    Customertype: {
+    customerType: {
         key: 'type'
     },
-    country: {
+    customerCountry: {
         key: 'country'
     },
     city: {
         key: 'city'
-    },
-    
+    }, 
     customerSource:{
         key:'customerSource'
-    },
-    
-    paymentterm: {
+    },  
+    paymentItem: {
         key: 'payment'
     },
     currency: {
@@ -32,7 +29,13 @@ export default {
     filingDate:{
         key:'filingDate'
     },
+    factoryInspectionReport:{
+        key:'currentInquiryDate'
+    },
+    recentTransactionDate:{
+        key:'recentDealDate'
+    },
     TaxpayerQualification:{
-         key:'TaxpayerQualification'
+         key:'taxpayer'
     }
 }

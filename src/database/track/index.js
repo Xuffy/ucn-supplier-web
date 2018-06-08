@@ -1,6 +1,6 @@
-import trackBysku from './trackBysku'
+import track from './trackBysku'
 
 
 export default {
-  trackBysku
+  track
 }

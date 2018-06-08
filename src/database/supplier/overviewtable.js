@@ -1,6 +1,6 @@
 export default {
     //.......................表格
-    customerNO: {
+    customerNo: {
         key: 'code'
     },
     customerName: {
@@ -12,20 +12,17 @@ export default {
     customerType: {
         key: 'type'
     },
-    country: {
+    customerCountry: {
         key: 'country'
     },
     city: {
         key: 'city'
     },
-    mainbusinessscope: {
-        key: 'mainBuiness'
-    },
-    payment: {
+    paymentItem: {
         key: 'payment'
     },
-    currency:{
-        key:'currency'
+    currency: {
+        key: 'currency'
     },
     shipAgent: {
         key: "shipAgent"
@@ -33,35 +30,13 @@ export default {
     incoterm: {
         key: 'incoterm'
     },
-    //    companyId: {
-    //        _hide: true,
-    //        key: 'companyId'
-    //    },
-    //    category: {
-    //        key: "category"
-    //    },
-
-    //    provideincoterm: {
-    //        key: 'incoterm'
-    //    },
-    //    exportlicense: {
-    //        key: 'exportLicense'
-    //    },
-    //    description: {
-    //        key: 'description'
-    //    },
-    //
-        id: {
-            _hide: true,
-            key: 'id',
-    
-        },
-    //    logo: {
-    //        _hide: true,
-    //    },
-    //
-    //
-    //    recycle: {
-    //        _hide: true,
-    //    }
+    id: {
+        _hide: true,
+        key: 'id',
+    },
+    companyId: {
+        _hide: true,
+        key: 'companyId',
+    }
+   
 }

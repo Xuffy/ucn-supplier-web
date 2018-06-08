@@ -25,6 +25,10 @@
           :height="450"
           hide-filter-value
         />
+        <page
+          :page-data="pageData"
+          @change="handleSizeChange"
+          @size-change="pageSizeChange"></page>
       </div>
 
       <div v-show="isShow" class="box">
@@ -74,13 +78,14 @@
 </template>
 
 <script>
-  import { selectSearch, VTable } from '@/components/index';
+  import { selectSearch, VTable,VPagination } from '@/components/index';
 
   export default {
     name: "message",
     components:{
       VTable,
-      selectSearch
+      selectSearch,
+      page:VPagination
     },
     data(){
       return{
@@ -88,6 +93,7 @@
         viewByStatus:'1',
         isShow:false,
         isHide:true,
+        pageData:{},
         options: [{
           id: '1',
           label: 'Tittle'
@@ -125,10 +131,12 @@
         this.multipleSelection = val;
       },
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+          this.params.pn = val;
+          this.getDataInfo();
       },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+      pageSizeChange(val) {
+          this.params.ps = val;
+          this.getDataInfo();
       },
       changeChecked(item) { //tab 勾选
         this.checkedData = item;
@@ -162,27 +170,18 @@
       },
       //管理信息
       manageMessage(){
-        if (this.viewByStatus + '' === '1'){
-          this.$router.push({
-            path: '/message/messageManagement',
-            query: {
-              type: 1,
-            }
-          })
-        }else{
-          this.$router.push({
-            path: '/message/messageManagement',
-            query: {
-              type: 2,
-            }
-          })
-        }
+        this.$windowOpen({
+          url: '/message/messageManagement',
+        });
       },
       inputEnter(val) {
-        if(!val.keyType) return this.$message('请选中搜索类型');
-        if(!val.key) return this.$message('搜索内容不能为空');
+       if (!val.keyType) return this.$message({
+          message: 'please choose a type',
+          type: 'warning'
+        });
         this.params.mark = val.keyType;
         this.params.content = val.key;
+        this.getDataInfo();
         this.searchLoad = true;
       },
       getDataInfo() {
@@ -200,13 +199,14 @@
                 _.mapObject(item, val => {
                   val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'))
                   return val
-                });
+                })
                 if(item.isRead.value){
                   item.isRead.value = '已读'
                 }else{
                   item.isRead.value = '未读'
                 }
               });
+            this.pageData=res;
             this.tabLoad = false;
             this.searchLoad = false;
           })
@@ -236,7 +236,7 @@
       },
       getMessageQuery(){
         let url = this.$apis.get_messagesetting_query
-        this.$ajax.get(`${url}?type=${2}`)
+        this.$ajax.get(`${url}?type=${1}`)
           .then(res => {
             res = _.map(res,val=>{
               switch (val.messageType)
