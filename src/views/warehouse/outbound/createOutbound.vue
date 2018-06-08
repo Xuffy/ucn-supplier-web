@@ -73,6 +73,14 @@
                 </el-col>
             </el-row>
         </el-form>
+
+      <div class="title">
+        {{$i.warehouse.attachment}}
+      </div>
+      <div style="margin-bottom: 20px">
+        <v-upload :list="outboundData.attachment" :limit="20" ref="uploadAttachment"></v-upload>
+      </div>
+
         <div class="title">
             {{$i.warehouse.productInfo}}
         </div>
@@ -196,13 +204,14 @@
 <script>
 
     import VTable from '@/components/common/table/index'
-    import {VTimeZone} from '@/components/index'
+    import {VTimeZone,VUpload} from '@/components/index'
 
     export default {
         name: "createInbound",
         components:{
             VTable,
-            VTimeZone
+            VTimeZone,
+            VUpload
         },
         data(){
             return{
@@ -249,7 +258,7 @@
                 productData:[],                 //添加到外部用于展示的产品详细信息
                 timeZone:'',                    //时区
                 outboundData:{
-                    attachment: "",
+                    attachments: [],
                     outboundOperator: "",
                     outboundDate:'',
                     outboundSkuCreateParams: [
@@ -375,6 +384,8 @@
                         outboundOutCartonTotalQty: v.outboundOutCartonTotalQty?v.outboundOutCartonTotalQty:0
                     });
                 });
+                this.outboundData.attachments = this.$refs.uploadAttachment.getFiles();
+
                 console.log(this.outboundData)
                 this.disabledSubmit=true;
                 this.$ajax.post(this.$apis.add_outbound,this.outboundData).then(res=>{
