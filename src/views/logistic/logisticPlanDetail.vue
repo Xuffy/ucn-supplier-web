@@ -81,7 +81,7 @@ export default {
   data() {
     return {
       modefiyProductIndex: 0,
-      logisticsStatus:null,
+      logisticsStatus:{},
       logisticsNo: '',
       remark: '',
       showProductDialog: false,
@@ -244,7 +244,10 @@ export default {
     getDetails () {
       this.$ajax.get(`${this.$apis.get_plan_details}${this.planId}`).then(res => {
         this.createdPlanData(res)
-        this.logisticsStatus = res.logisticsStatus;
+        this.logisticsStatus = {
+          recived : res.recived,
+          supplierRecived : res.supplierRecived
+        };
         this.matchRate(res.currencyExchangeRate);
         this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
           this.createdPaymentData(res)
@@ -456,7 +459,7 @@ export default {
     },
     switchEdit (arg) {     
       switch(arg){
-        case 'edit':
+        case 'receive':
             this.edit = !this.edit;
             this.pageName = 'planDetail';
           break; 

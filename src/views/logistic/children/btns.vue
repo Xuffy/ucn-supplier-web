@@ -1,18 +1,15 @@
 <template>
   <el-row class="btns" :style="{ width: '100%', paddingLeft: hideMune ? '65px' : '195px' }">
-    <div v-if="!edit">
-      <el-button size="mini" type="primary" :disabled="isLogistics" @click.stop="$emit('switchEdit','edit')">{{ $i.logistic.modify }}</el-button>
-      <el-button size="mini" type="primary" :disabled="isLogistics" @click.stop="$emit('switchEdit','confirm')">{{ $i.logistic.confirm }}</el-button>
-      <el-button size="mini" type="primary" :disabled="isLogistics" @click.stop="$emit('switchEdit','cancel')">{{ $i.logistic.cancel }}</el-button>
-      <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','copy')">{{ $i.logistic.copy }}</el-button>
-      <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','placeLogisticsPlan')">{{ $i.logistic.placeLogisticsPlan }}</el-button>
-      <el-button size="mini" type="primary">{{ $i.logistic.download }}</el-button>
-      <!-- <el-button size="mini" type="danger">{{ $i.logistic.delete }}</el-button> -->
+    <div v-if="!edit&&!logisticsStatus.supplierRecived">
+      <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','receive')">{{ $i.logistic.receive }}</el-button>
+      <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','refuse')">{{ $i.logistic.refuse }}</el-button>
     </div>
     <div v-else>
-      <el-button size="mini" type="primary" @click.stop="$emit('sendData', 'saveAsDraft')" v-if="(isCopy&&planId)||(!isCopy&&!planId)">{{ $i.logistic.saveAsDraft }}</el-button>
-      <el-button size="mini" type="primary" @click.stop="$emit('sendData', 'send')">{{ $i.logistic.send }}</el-button>
-      <el-button size="mini" type="danger" @click.stop="$emit('toExit')" v-if="!(isCopy&&planId)">{{ $i.logistic.exit }}</el-button>
+      <el-button size="mini" type="primary" :disabled="logisticsStatus.recived==1" @click.stop="$emit('switchEdit', 'edit')">{{ $i.logistic.modify }}</el-button>
+      <el-button size="mini" type="primary" :disabled="logisticsStatus.recived==1" @click.stop="$emit('sendData', 'confirm')">{{ $i.logistic.confirm }}</el-button>
+      <el-button size="mini" type="primary" :disabled="logisticsStatus.recived==1" @click.stop="$emit('toExit','generateList')">{{ $i.logistic.generateList }}</el-button>
+      <el-button size="mini" type="primary" :disabled="logisticsStatus.recived==1" @click.stop="$emit('toExit')">{{ $i.logistic.download }}</el-button>
+      <el-button size="mini" type="primary" :disabled="logisticsStatus.recived==1" @click.stop="$emit('toExit')">{{ $i.logistic.cancel }}</el-button>
     </div>
   </el-row>
 </template>
@@ -21,7 +18,7 @@ export default {
   props: {
     planId: [String, Number],
     isCopy: [String, Number],
-    logisticsStatus: [String, Number],
+    logisticsStatus: [Object],
     edit: {
       type: Boolean,
       default: false
@@ -36,17 +33,6 @@ export default {
   computed: {
     hideMune () {
       return this.$store.state.layout.hideMenu
-    },
-    isLogistics(){    
-      switch(Number(this.logisticsStatus)){
-        case 1:
-        case 4:
-          return true;
-        break;
-        default:
-          return false;
-        break;
-      }
     }
   }
 }
