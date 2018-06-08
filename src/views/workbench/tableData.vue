@@ -2,7 +2,7 @@
   <div class="tableData">
     <h3 class="ucn-content-title" v-text="typeLabel[type - 1]"></h3>
 
-    <div style="position: absolute;right: 0;top: -5px">
+    <!--<div style="position: absolute;right: 0;top: -5px">
       <el-select v-model="search.type" placeholder="请选择"
                  style="width: 100px;display: inline-block;vertical-align: middle">
         <el-option :label="$i.workbench.number" value="1"></el-option>
@@ -14,7 +14,7 @@
         <el-button slot="append" icon="el-icon-search"
                    @click="submitSearch"></el-button>
       </el-input>
-    </div>
+    </div>-->
     <br/>
 
     <el-tabs type="border-card" @tab-click="changeTab">
@@ -24,9 +24,8 @@
         <v-table ref="pendingTable"
                  :data="item.data"
                  :selection="false"
-                 :height="260"
-                 hide-filter-column
-                 hide-filter-value>
+                 hideFilterColumn
+                 :height="220">
         </v-table>
         <v-pagination :page-data="item.page" @size-change="pageSizeChange"
                       @change="pageChange"></v-pagination>
@@ -38,14 +37,12 @@
 </template>
 
 <script>
-  import {VSimpleTable, VTable, VTableFilter, VViewPicture, VPagination} from '@/components/index';
+  import {VTable,  VViewPicture, VPagination} from '@/components/index';
 
   export default {
     name: 'VTableData',
     components: {
-      VSimpleTable,
       VTable,
-      VTableFilter,
       VViewPicture,
       VPagination,
     },

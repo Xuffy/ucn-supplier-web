@@ -1,7 +1,7 @@
 <template>
   <div class="add-quick-link">
 
-    <el-dialog :title="$i.common.addNewLinks" :visible.sync="$store.state.quickLink.show"
+    <el-dialog :title="$i.common.addNewLinks" :visible.sync="quickLink.show"
                @close="dialogClose">
       <el-checkbox-group v-model="checkedList">
         <el-row>
@@ -14,7 +14,7 @@
       </el-checkbox-group>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="$store.state.quickLink.show = false">{{$i.button.cancel}}</el-button>
+        <el-button @click="quickLink.show = false">{{$i.button.cancel}}</el-button>
         <el-button type="primary" @click="updateQuickLink" :loading="loading">{{$i.button.confirm}}</el-button>
       </div>
     </el-dialog>
@@ -37,7 +37,7 @@
    *  <v-table></v-table>
    */
 
-  // import {mapState} from 'vuex'
+  import {mapActions, mapState} from 'vuex';
 
   export default {
     name: 'VAddQuickLink',
@@ -56,15 +56,18 @@
         checkedList: [],
       }
     },
-    computed: {},
+    computed: {
+      ...mapState({
+        quickLink: state => state.quickLink
+      }),
+    },
     watch: {},
     mounted() {
       this.getQuickLink();
     },
     methods: {
       getQuickLink() {
-        // this.$store.state.quickLink.list = this.$db.common.quickLink;
-        this.$ajax.post(this.$apis.ITEMFAVORITE_PART, ['QUICK_LINK'])
+        this.$ajax.post(this.$apis.ITEMFAVORITE_PART, {bizCode: 'QUICK_LINK'}, {contentType: 'F'})
           .then((data) => {
             let list = [];
             this.checkedList = _.map(data, val => {
@@ -72,14 +75,14 @@
               v.customer && list.push(this.$db.common.quickLink[val.itemCode]);
               return val.itemCode;
             });
-            this.$store.state.quickLink.list = list;
+            this.quickLink.list = list;
 
           });
       },
       updateQuickLink() {
         let data = [];
 
-        if (_.isEmpty(this.checkedList)) return this.$store.state.quickLink.show = false;
+        if (_.isEmpty(this.checkedList)) return this.quickLink.show = false;
 
         this.loading = true;
         _.map(this.checkedList, (val, index) => {
@@ -93,7 +96,7 @@
               message: this.$i.hintMessage.operationSuccessful,
               type: 'success'
             });
-            this.$store.state.quickLink.show = false;
+            this.quickLink.show = false;
             this.loading = false;
           })
           .catch(() => {
@@ -105,7 +108,7 @@
           });
       },
       dialogClose() {
-        this.checkedList = _.map(this.$store.state.quickLink.list, val => {
+        this.checkedList = _.map(this.quickLink.list, val => {
           return val.key;
         });
       }

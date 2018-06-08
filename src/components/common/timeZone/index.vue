@@ -36,7 +36,7 @@
     },
     methods: {
       getData() {
-        this.$ajax.get(this.$apis.TIMEZONE_ALL, {}, {_cache: true})
+        this.$ajax.get(this.$apis.TIMEZONE_ALL, {}, {cache: true})
           .then(data => {
             this.dataList = data;
           });

@@ -743,7 +743,7 @@
              * 获取字典
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE'],{_cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE'],{cache:true}).then(res=>{
                     this.inboundTypeOption=res[0].codes;
                 });
                 // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{

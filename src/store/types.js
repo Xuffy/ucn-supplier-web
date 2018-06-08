@@ -1,7 +1,8 @@
 const constant = {
-    SETDRAFT:'SETDRAFT',
-    SETRECYCLEBIN:'SETRECYCLEBIN',
-    DIC: 'DIC'
+  SETDRAFT: 'SETDRAFT',
+  SETRECYCLEBIN: 'SETRECYCLEBIN',
+  SETLOG: 'SETLOG',
+  DIC: 'DIC'
 };
 
 export default constant;

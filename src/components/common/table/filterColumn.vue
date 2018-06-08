@@ -6,18 +6,18 @@
       @hide="defaultChecked"
       placement="bottom-end"
       trigger="click">
-      <i slot="reference" class="el-icon-setting"></i>
+      <i slot="reference" class="iconfont icon-shezhi"></i>
       <div v-loading="loading">
-        <el-input v-model="filterText" placeholder="请输入内容" prefix-icon="el-icon-search"
+        <el-input v-model="filterText" :placeholder="$i.common.content" prefix-icon="el-icon-search"
                   size="mini" clearable style="margin-bottom: 10px"></el-input>
-        <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate">全选</el-checkbox>
+        <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate">{{$i.table.checkAll}}</el-checkbox>
         <div style="height: 200px;overflow: auto">
           <el-tree
             show-checkbox
             default-expand-all
             class="filter-tree"
             node-key="property"
-            :data="data"
+            :data="dataList"
             @check-change="changeCheck"
             :props="{children: 'children',label: 'name'}"
             :filter-node-method="filterNode"
@@ -27,10 +27,10 @@
         <br/>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-button size="mini" style="width: 100%" @click="clickFilter">确定</el-button>
+            <el-button size="mini" style="width: 100%" @click="submitFilter">{{$i.common.confirm}}</el-button>
           </el-col>
           <el-col :span="12">
-            <el-button size="mini" style="width: 100%" @click="visible =  false">取消</el-button>
+            <el-button size="mini" style="width: 100%" @click="visible =  false">{{$i.common.cancel}}</el-button>
           </el-col>
         </el-row>
       </div>
@@ -48,6 +48,10 @@
         default() {
           return [];
         },
+      },
+      code: {
+        type: String,
+        default: '',
       }
     },
     data() {
@@ -55,6 +59,7 @@
         loading: false,
         visible: false,
         checkedList: [],
+        dataList: [],
         checkAll: false,
         filterText: '',
         isIndeterminate: true,
@@ -62,60 +67,81 @@
     },
     watch: {
       data() {
-        this.defaultChecked();
+        // this.defaultChecked();
       },
       filterText(val) {
         this.$refs.columnTree.filter(val);
       },
       checkAll(val) {
-        val ? this.$refs.columnTree.setCheckedKeys(_.pluck(this.data, 'property'))
+        val ? this.$refs.columnTree.setCheckedKeys(_.pluck(this.dataList, 'property'))
           : this.$refs.columnTree.setCheckedKeys([]);
       },
       checkedList(value) {
         let checkedCount = value.length;
-        this.checkAll = checkedCount === this.data.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.data.length;
+        this.checkAll = checkedCount === this.dataList.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.dataList.length;
       }
     },
+    created() {
+      // this.getConfig();
+    },
     mounted() {
-      this.defaultChecked();
     },
     methods: {
       filterNode(value, data) {
         if (!value) return true;
         return data.name.toLowerCase().indexOf(value.toLowerCase()) !== -1;
       },
-      clickFilter() {
+      getFilterData(data, checkList) {
+        return _.map(data, val => {
+          return _.mapObject(val, v => {
+            if (_.isObject(v)){
+              v._hide = checkList.indexOf(v.key) === -1;
+            }
+            return v;
+          });
+        });
+      },
+      getConfig(isUpdate = false) {
+        return this.$ajax.post(this.$apis.GRIDFAVORITE_LIST, {bizCode: this.code},
+          {contentType: 'F', cache: true, updateCache: isUpdate})
+          .then(res => {
+            let list = _.pluck(_.where(res, {isChecked: '1'}), 'property');
+            this.dataList = res;
+            this.$refs.columnTree.setCheckedKeys(list);
+            return list;
+          });
+      },
+      submitFilter() {
         let selected = this.$refs.columnTree.getCheckedNodes()
           , params = [];
         this.loading = true;
 
         _.map(selected, value => {
-          let {bizCode, id} = value;
-          params.push({bizCode, gridFieldId: id});
+          let {bizCode, id, seqNum} = value;
+          params.push({bizCode, seqNum, gridFieldId: id});
         });
-
 
         this.$ajax.post(this.$apis.GRIDFAVORITE_UPDATE, params)
           .then(res => {
-
+            this.visible = false;
+            this.getConfig(true).then(data => {
+              this.$emit('change', data);
+            });
+          })
+          .finally(() => {
+            this.loading = false;
           });
-        /*setTimeout(() => {
-          this.loading = false;
-          this.$emit('filter-column', this.$refs.columnTree.getCheckedKeys());
-          this.visible = false;
-        }, 1000);*/
       },
       defaultChecked() {
         let list = [];
-        _.map(this.data, val => {
+        _.map(this.dataList, val => {
           if (val.isChecked === '1') {
             list.push(val.property);
           }
         });
-        this.$refs.columnTree.setCheckedKeys(list);
       },
-      changeCheck() {
+      changeCheck(val) {
         this.checkedList = this.$refs.columnTree.getCheckedKeys();
       }
     }
@@ -130,7 +156,7 @@
     display: inline-block;
   }
 
-  .filter-column .el-icon-setting {
+  .filter-column .icon-shezhi {
     font-size: 20px;
     color: #666666;
     cursor: pointer;

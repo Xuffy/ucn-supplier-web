@@ -1,13 +1,38 @@
 <template>
   <div class="workbench">
+    <ul class="welcome-box ucn-container-right" :class="{show:settingStateShow}">
+      <li class="title" v-text="$i.workbench.settingState"></li>
+      <li>
+        <el-checkbox :checked="settingState.departmentInfo" disabled>{{$i.workbench.settingDepartment}}</el-checkbox>
+        <br>
+        <router-link to="/settings/department">
+          <el-button type="text">Go set>></el-button>
+        </router-link>
+      </li>
+      <li>
+        <el-checkbox :checked="settingState.companyInfo" disabled>{{$i.workbench.settingCompany}}</el-checkbox>
+        <br>
+        <router-link to="/settings/companyInfo">
+          <el-button type="text">Go set>></el-button>
+        </router-link>
+      </li>
+      <li>
+        <el-checkbox :checked="settingState.categoryInfo" disabled>{{$i.workbench.settingCategory}}</el-checkbox>
+        <br>
+        <router-link to="/settings/category">
+          <el-button type="text">{{$i.workbench.goSet}}>></el-button>
+        </router-link>
+      </li>
+    </ul>
+
     <div class="quickLink">
       <h3 class="ucn-content-title inline" @click="$refs.importFile.show()" v-text="$i.workbench.quickLink"></h3>
       <el-button size="mini" type="primary" icon="el-icon-plus"
                  style="display: inline-block;margin-left: 30px!important;"
-                 @click="$store.state.quickLink.show = true"></el-button>
+                 @click="quickLink.show = true"></el-button>
       <br/>
-      <el-button size="mini" v-for="item in $store.state.quickLink.list" :key="item.id">
-        <router-link :to="item.link">
+      <el-button size="mini" v-for="item in quickLink.list" :key="item.id">
+        <router-link :to="item.link || '/'">
           {{item.label}}
         </router-link>
       </el-button>
@@ -30,7 +55,7 @@
       </el-col>
     </el-row>
 
-    <v-import-template ref="importFile" code="PRODUCT_SUPPLIER" biz-code="PRODUCT_SUPPLIER"></v-import-template>
+    <!--<v-import-template ref="importFile" code="PRODUCT_SUPPLIER" biz-code="PRODUCT_SUPPLIER"></v-import-template>-->
     <!--<v-message-board module="workbench" code="workbench" id="123"></v-message-board>-->
   </div>
 </template>
@@ -39,6 +64,8 @@
   import VDataDashboard from './dataDashboard'
   import VTableData from './tableData'
   import VBasicInfo from './basicInfo'
+  import config from 'service/config'
+  import {mapActions, mapState} from 'vuex';
   import {VHistoryModify, VMessageBoard, VTimeZone, VUpload, VImportTemplate, VImage} from '@/components/index';
 
   export default {
@@ -57,23 +84,38 @@
     data() {
       return {
         visible: false,
-        pengdingTask: [],
-        futureTask: [],
-        fyiTask: [],
-        pushTask: [],
-        timeZone: '1', // todo 测试
+        settingState: {},
+        settingStateShow: false,
+        settingStateLoading: false,
       }
     },
     created() {
-
+      this.getBasicInfo();
     },
     mounted() {
-
-
+      // this.setLog({name:'productSourcingOverview'});
+    },
+    computed: {
+      ...mapState({
+        quickLink: state => state.quickLink,
+        layout: state => state.layout
+      }),
     },
     methods: {
-      save(data) {
-        console.log(data)
+      // ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      getBasicInfo() {
+        this.settingStateLoading = true;
+        this.$ajax.post(this.$apis.USER_CUSTOMER_ISSETUSERINFO, {type: config.CLIENT_TYPE}, {cache: true})
+          .then(res => {
+            if (!res.categoryInfo || !res.companyInfo || !res.departmentInfo) {
+              this.settingStateShow = true;
+              this.layout.paddingRight = '250px'
+              this.settingState = res;
+            }
+          })
+          .finally(() => {
+            this.settingStateLoading = false;
+          });
       }
     }
   }
@@ -87,6 +129,45 @@
   .quickLink .el-button {
     margin-top: 10px;
   }
+
+  .welcome-box {
+    position: fixed;
+    top: 0;
+    right: 10px;
+    width: 230px;
+    height: 100%;
+    padding: 100px 10px 10px 10px;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    z-index: 10;;
+    transition: all .5s;
+    transform: translate(120%, 0);
+  }
+
+  .welcome-box.show {
+    transform: translate(0, 0);
+  }
+
+  .welcome-box li {
+    margin-top: 10px;
+  }
+
+  .welcome-box .title {
+    font-size: 16px;
+    line-height: 20px;
+    color: #666666;
+  }
+
+  .welcome-box /deep/ .el-checkbox__inner,
+  .welcome-box /deep/ .el-checkbox__label {
+    cursor: pointer !important;
+    color: #999999 !important;
+  }
+
+  .welcome-box /deep/ .el-button {
+    margin-left: 22px !important;
+  }
+
 </style>
 <style>
   /*.workbench-notify {

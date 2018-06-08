@@ -45,7 +45,7 @@
                             <el-input-number v-model="remarkJson[item.key]" :min="1" :max="100" controls-position="right" size="mini" :controls="false"></el-input-number> %
                         </span>
 
-                        <v-up-load v-if="item.type === 'attachment' && scope.row[item.key] &&scope.row[item.key].history"/>
+                        <!--<v-up-load v-if="item.type === 'attachment' && scope.row[item.key] &&scope.row[item.key].history"/>-->
                     </template>
                 </el-table-column>
             </el-table>
@@ -60,8 +60,8 @@
 </template>
 <script>
     import VTable from '@/components/common/table/index';
-    import VSimpleTable from '@/components/common/table/simple';
-    import Upload from '@/components/common/upload/upload';
+    // import VSimpleTable from '@/components/common/table/simple';
+    // import Upload from '@/components/common/upload/upload';
     export default {
         data() {
             return {
@@ -193,7 +193,7 @@
         },
         components: {
             VTable,
-            "v-up-load": Upload
+            // "v-up-load": Upload
         }
     }
 </script>

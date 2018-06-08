@@ -1,35 +1,22 @@
-const getData = (oData, type) => {
-    var type = type || '';
-
-    let oYear = oData.getFullYear(),
-        oMonth = oData.getMonth() + 1,
-        oDay = oData.getDate(),
-        oHour = oData.getHours(),
-        oMin = oData.getMinutes(),
-        oS = oData.getSeconds();
-
-    switch (type) {
-        case 1:
-            return oYear;
-        case 2:
-            return oMonth;
-        case 3:
-            return oDay;
-        case 4:
-            return oHour;
-        case 5:
-            return oMin;
-        case 5:
-            return oS;
-        case 6:
-            return `${oYear}-${oMonth}-${oDay} ${oHour}:${oMin}:${oS}`;
-        case 7:
-            return `${oYear}-${oMonth}-${oDay} ${oHour}:${oMin}`;
+/*
+const filterDic = (data, transForm, dataBase) => {
+  transForm ? transForm = transForm : transForm = 'transForm';
+  dataBase ? dataBase = dataBase : dataBase = 'dataBase';
+  _.mapObject(data, (val, k) => {
+    if (val[transForm] && !data._remark) {
+      switch (val[transForm]) {
+        case 'time':
+          val[dataBase] = val.value;
+          val.value = DateFormat(val.value, val.time)
+          break;
         default:
-            return `${oYear}-${oMonth}-${oDay}`;
+          val[dataBase] = val.value;
+      }
     }
+  });
+  return data;
 };
 
 export {
-    getData
-}
+  filterDic
+}*/

@@ -14,9 +14,9 @@
             </el-checkbox-group> -->
           </div>
           <div class="tab-msg-wrap">
-            <v-table 
-              :data.sync="newTabData" 
-              :selection="false" 
+            <v-table
+              :data.sync="newTabData"
+              :selection="false"
               :height="450"
               :buttons="basicInfoBtn"
               :loading="tableLoad"
@@ -35,7 +35,7 @@
             </div>
             <select-search :options="options" v-model="id" v-show="!statusModify" />
           </div>
-          <v-table 
+          <v-table
             :data.sync="newProductTabData"
             :buttons="productInfoBtn"
             :loading="tableLoad"
@@ -117,7 +117,7 @@
  * @param ProductCheckList Product Info 多选框选中值
  * @param keyWord search框 值
  * @param value 下拉框选中的值
- * @param options 下拉框原始数据 
+ * @param options 下拉框原始数据
  * @param list 留言板list
  * @param submit 留言 Events
  * @param switchStatus 留言板状态
@@ -252,7 +252,7 @@ export default {
       });
     },
     getDictionaries() {
-      this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache').then(res => {
+      this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], 'cache').then(res => {
         this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes;
         this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
         this.selectAll.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
@@ -260,7 +260,7 @@ export default {
         this.selectAll.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
       });
 
-      this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', '_cache').then(res => {
+      this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache:true}).then(res => {
         this.selectAll.destinationCountry = res;
         this.selectAll.departureCountry = res;
       });
@@ -342,7 +342,7 @@ export default {
         });
         this.newTabData = basicInfoData;
         this.tabData = basicInfoData;
-        // SKU_UNIT 
+        // SKU_UNIT
         // Product Info
         newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'), (item) => {
           this.$filterDic(item);
@@ -579,7 +579,7 @@ export default {
       });
       return arr;
     },
-    productCancel() { //  取消 product 编辑 
+    productCancel() { //  取消 product 编辑
       this.newProductTabData.forEach((item, index) => {
         if (!item._remove && item._disabled) {
           item._disabled = false;
@@ -588,7 +588,7 @@ export default {
         this.$set(this.newProductTabData, index, item);
       });
     },
-    productModify() { //  提交 product 编辑 
+    productModify() { //  提交 product 编辑
       this.newProductTabData.forEach((item, index) => {
         if(!item._remove && item._disabled) {
           item._remove = true;
@@ -753,6 +753,6 @@ export default {
        &.active {
         width:300px;
       }
-    } 
+    }
   }
 </style>

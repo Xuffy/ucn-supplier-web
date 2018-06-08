@@ -527,7 +527,7 @@
              * 获取字典
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['OBD_STATUS'],{_cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['OBD_STATUS'],{cache:true}).then(res=>{
                     this.outboundTypeOption=res[0].codes;
                 });
                 // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{

@@ -1396,21 +1396,21 @@
              * */
             getUnit(){
                 //币种单位
-                this.$ajax.get(this.$apis.get_currencyUnit,{},{_cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true}).then(res=>{
                     this.currencyOption=res;
                 }).catch(err=>{
 
                 });
 
                 //国家
-                this.$ajax.get(this.$apis.get_country,{},{_cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
                     this.countryOption=res;
                 }).catch(err=>{
 
                 });
 
                 this.loadingData=true;
-                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT'],{_cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT'],{cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;

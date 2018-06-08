@@ -26,9 +26,9 @@
                             type="daterange"
                             align="right"
                             unlink-panels
-                            range-separator="至"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
+                            :range-separator="$i.element.to"
+                            :start-placeholder="$i.element.startDate"
+                            :end-placeholder="$i.element.endDate"
                             :picker-options="pickerOptions2"
                             value-format="timestamp"
                             change="getbizlogs">
@@ -144,7 +144,6 @@
                         }
                     ]
                 }
-                console.log(params)
                 this.tabLoad = true;
                 this.$ajax.post(this.$apis.post_bizloQuery,params)
                 .then(res => {

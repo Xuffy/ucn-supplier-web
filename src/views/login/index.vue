@@ -18,7 +18,7 @@
     },
     created() {
       let params = Qs.stringify({
-        type: 2,
+        type: config.CLIENT_TYPE,
         language: config.LANGUAGE,
         redirect: Base64.encode(`${window.location.origin}/static/authorize/index.html`)
       });
