@@ -46,7 +46,7 @@
               :hideFilterColumn="statusModify"/>
           <div class="bom-btn-wrap" v-show="!statusModify">
             <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
-            <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.dataBase + ''!=='99'||tabData[0].status.dataBase+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button>
+            <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.dataBase + ''!=='99'||tabData[0].status.dataBase+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button> -->
             <el-button @click="modifyAction" :disabled="tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
             <el-button type="info" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.dataBase+''!== '22'&&tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
             <el-button>{{ $i.common.download }}</el-button>
