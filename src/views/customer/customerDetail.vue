@@ -22,25 +22,11 @@
                 </el-row>
                   </el-form>
                 <div class="btns" v-if="noEdit">
-<!--                   <el-button @click='deleted' type='danger'>{{$i.common.delete}}</el-button>-->
-<!--
-                    <el-button @click='createInquiry'>{{$i.common.createInquiry}}</el-button>
-                    <el-button @click='createOrder'>{{$i.common.createOrder}}</el-button>
-                    <el-button @click='addToCompare'>{{$i.common.addToCompare}}</el-button>
-                    <el-button @click='supplierProducts'>{{$i.common.supplierProducts}}</el-button>
-                    <el-button @click='addToBookmark'>{{$i.common.addToBookmark}}</el-button>
--->
                 </div>
-<!--
-                <div class="btns" v-else>
-                    <el-button @click="finishEdit" type="primary">{{$i.common.finish}}</el-button>
-                    <el-button @click="cancelEdit" type="info">{{$i.common.cancel}}</el-button>
-                </div>
--->
             </div>
         </div>
         <div class="body">
-            <el-tabs v-model="tabName" type="card" >          
+            <el-tabs v-model="tabName" type="card" @tab-click="handleClick">          
                 <el-tab-pane :label="$i.supplier.address" name="address">
                     <v-table  :data="address"  style='marginTop:10px'/>
                 </el-tab-pane>
@@ -50,39 +36,97 @@
                 </el-tab-pane>
                 
                 <el-tab-pane :label="$i.supplier.document" name="document">
-                    <v-table  :data="document"   style='marginTop:10px'/>
+                    <el-form label-width="200px" :model="documents">
+                    <el-row>
+                      <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
+                        <el-form-item  :label="$i.setting.documentRequired">
+                          <el-input size="mini" v-model="documents.document"  placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$i.setting.factoryInspectionReport">
+                          <el-input size="mini" v-model="documents.aduitDetails" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item  :label="$i.setting.packingList">
+                          <el-input size="mini"  v-model="documents.packingList" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$i.setting.invoice">
+                          <el-input size="mini" v-model="documents.invoice" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$i.setting.examiningReport">
+                          <el-input size="mini" v-model="documents.examiningReport" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                  </el-form>
                 </el-tab-pane>
-                
-                <el-tab-pane :label="$i.supplier.inquiry"  name="inquiry">
-<!--                  <v-table  :data="tabData"   style='marginTop:10px'/>-->
+
+                <el-tab-pane :label="$i.supplier.orderHistory" name="order">
+                    <!-- <v-table  :data="document"   style='marginTop:10px'/> -->
                 </el-tab-pane>
-                
-                <el-tab-pane :label="$i.supplier.tradeHistory"  name="tradeHistory">
-<!--                  <v-table  :data="tabData"   style='marginTop:10px'/> -->
+
+                <el-tab-pane :label="$i.supplier.inquiryHistory"  name="inquiry">
+                    <v-table  :data="inquiryData"   style='marginTop:10px'/>
                 </el-tab-pane>
-                
-                <el-tab-pane :label="$i.supplier.remark" name="remark">
-                    <v-remark  
-                     style='marginTop:10px'
-                     :id=id              
-                     />
-                </el-tab-pane>
-                
+
                 <el-tab-pane label="attachment" name="attchment">
-                     <v-attachment></v-attachment>
+                    <div class="section-btn" style="margin-bottom:10px;">
+                      <el-button  @click="upload" type="primary">{{$i.button.upload}}</el-button>
+                    </div>
+                    <v-upload ref="uploadAttachment" :limit="20" />
+                </el-tab-pane>
+
+                 <el-tab-pane :label="$i.supplier.remark" name="remark">
+                    <div class="section-btn">
+                    <el-button  @click="createRemark" type="primary">{{$i.button.add}}</el-button>
+                    </div>
+                  <v-table
+                    :data="remarkData"
+                    style='marginTop:10px'
+                    :buttons="[{label: 'view', type: 1},{label: 'modify', type: 2},{label: 'delete', type: 3}]"
+                    @action="remarkAction"/>
                 </el-tab-pane>
 
             </el-tabs>
         </div>
+        <el-dialog :title="$i.supplier.addRemark" :visible.sync="addRemarkFormVisible" center width="600px">
+            <el-form :model="addRemarkData">
+              <el-form-item :label="$i.supplier.remark" :label-width="formLabelWidth">
+                <el-input
+                  type="textarea"
+                  :rows="4"
+                  v-model="addRemarkData.remark">
+                </el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button :loading="disableCreateRemark" type="primary" @click="createRemarkSubmit">{{$i.button.submit}}</el-button>
+              <el-button @click="addRemarkFormVisible = false">{{$i.button.cancel}}</el-button>
+            </div>
+        </el-dialog>
+
+         <el-dialog :title="$i.supplier.remark" :visible.sync="lookRemarkFormVisible" center width="600px">
+            <el-form :model="addRemarkData">
+              <el-form-item :label="$i.supplier.remark" :label-width="formLabelWidth">
+                <el-input
+                  type="textarea"
+                  :rows="4"
+                  v-model="addRemarkData.remark">
+                </el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <!--<el-button :loading="disableCreateRemark" type="primary" >{{$i.button.submit}}</el-button>-->
+              <el-button @click="lookRemarkFormVisible = false">{{$i.button.cancel}}</el-button>
+            </div>
+          </el-dialog>
+
     </div>
 </template>
 
 <script>
     import VCompareList from '../product/compareList'
-    import VRemark from './remark'
     import VAttachment from './attachment'
     import {
-        VTable
+        VTable,VUpload
     } from '@/components/index';
 
     export default {
@@ -90,33 +134,169 @@
         components: {
             VTable,
             VCompareList,
-            VRemark,
-            VAttachment
+            VAttachment,
+            VUpload
         },
         data() {
             return {
                 noEdit: true,
-                id: Number(this.$route.query.id),
+                id:Number(this.$route.query.id),
                 tabName: 'address', //默认打开的tab
                 basicDate: [],
                 accounts: [],
                 concats: [],
                 address: [],
                 document:[],
-                inquiry:[],
                 tradeHistory:[],
                 remarkData: [],
+                inquiryData:[],
+                addRemarkData:{
+                  customerId: null,
+                  id: null,
+                  remark: "",
+                  supplierCustomerId: null,
+                  version: null
+                },
+                orderHistoryData:{
+                    customerCode: null,
+                    pn: 1,
+                    ps: 50,
+                },
+                inquiryHistoryData:{
+                    companyId: '',
+                    pn: 1,
+                    ps: 50,
+                },
+                documents:{
+                   aduitDetails:null,
+                   document:null,
+                   examiningReport:null,
+                   invoice:null,
+                   packingList:null
+
+                },
                 compareConfig: {
                     showCompareList: false, //是否显示比较列表
                 },
                 code: '',
-                loading: false
+                loading: false,
+                addRemarkFormVisible:false,
+                disableCreateRemark:false,
+                lookRemarkFormVisible:false,
+                isModifyAddress:false,
+                formLabelWidth:'80px',
             }
         },
         methods: {
-
-            deleted() {
-
+            handleClick(tab, event) {
+                switch(Number(tab.index)){
+                    case 3:
+                    this.getOrderHistory();
+                    break;
+                    case 4:
+                    this.getInquiryHistory();
+                    break;
+                    case 5:
+                    this.getListRemark();
+                    break;
+                }
+            },
+            getListRemark(){
+                const remark ={
+                  pn: 1,
+                  ps: 50,
+                }
+                this.$ajax.post(`${this.$apis.post_getCustomerListRemark}/${this.id}`,remark)
+                .then(res => {
+                    this.remarkData = this.$getDB(this.$db.supplier.detailTable, res.datas);
+                })
+                .catch((res) => {
+                    console.log(res)
+                });
+            },
+            modifyRemark(e){
+               var result = {}
+               result.remark = e.remark.value;
+               result.version = e.version.value;
+               result.id = e.id.value;
+               this.isModifyAddress=true;      //标识正在修改地
+               this.addRemarkData=Object.assign({}, result);
+               this.addRemarkFormVisible=true;
+            },
+            createRemark(){
+              this.addRemarkFormVisible=true;
+              this.addRemarkData = {}
+            },
+            lookRemark(e){
+              var result = {}
+              result.remark = e.remark.value;
+              this.addRemarkData=Object.assign({}, result);
+              this.lookRemarkFormVisible=true;
+            },
+            remarkAction(item,type){
+              switch(type) {
+                case 1:
+                  this.lookRemark(item);
+                  break;
+                case 2:
+                  this.modifyRemark(item);
+                  break;
+                case 3:
+                  this.deleteRemark(item);
+                  break;
+              }
+            },
+            createRemarkSubmit(){
+                this.disableCreateRemark = true;
+                this.addRemarkData.supplierCustomerId = Number(this.$route.query.id);
+                this.addRemarkData.customerId = Number(this.$route.query.customerId);
+                if (this.isModifyAddress){
+                this.$ajax.post(`${this.$apis.post_customerUpdataRmark}/${this.addRemarkData.id}`,this.addRemarkData)
+                    .then(res => {
+                    this.$message({
+                        message: '修改成功',
+                        type: 'success'
+                    });
+                    this.getListRemark();
+                    this.disableCreateRemark = false;
+                    this.addRemarkFormVisible = false;
+                    })
+                    .catch((res) => {
+                    this.disableCreateRemark = false;
+                    this.addRemarkFormVisible = false;
+                    });
+                }else{
+                this.$ajax.post(this.$apis.post_addCustomerListRemark,this.addRemarkData)
+                    .then(res => {
+                        this.$message({
+                        message: '添加成功',
+                        type: 'success'
+                        });
+                        this.getListRemark();
+                        this.disableCreateRemark = false;
+                        this.addRemarkFormVisible = false;
+                    })
+                    .catch((res) => {
+                        this.disableCreateRemark = false;
+                        this.addRemarkFormVisible = false;
+                    });
+                }
+                },
+                deleteRemark(e){
+                this.$confirm('确定删除该备注?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$ajax.post(this.$apis.post_deleteCustomerRemark,{id:e.id.value}).then(res=>{
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                    this.getListRemark();
+                    }).catch(err=>{
+                    });
+                })
             },
             addToBookmark() {
                 this.$ajax.post(this.$apis.post_supplier_addbookmark, [this.id])
@@ -142,29 +322,84 @@
             get_data() {
                 this.loading = true
                 this.$ajax.post(this.$apis.post_customerDetail, {
-                        id: this.id
-                    })
-                    .then(res => {
-                this.code = res.code
-                this.basicDate = res;
-                    
-                this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
-                    
-                this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
-                    
-                this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);
-                    
-                this.documents = this.$getDB(this.$db.supplier.detailTable, res.documents);  
-                    
-                this.loading = false
-                    })
-                    .catch((res) => {
-                        this.loading = false
-                    });
+                    id: this.id
+                })
+                .then(res => {
+                    this.code = res.code
+                    this.basicDate = res;
+                    this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);                    
+                    this.address = this.$getDB(this.$db.supplier.detailTable, res.address);                   
+                    this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);
+                    if(res.documents[0]){
+                        this.documents = res.documents[0];
+                    }                    
+                    this.loading = false
+                })
+                .catch((res) => {
+                    this.loading = false
+                });
             },
-        },
+            getOrderHistory(){
+                this.loading = true;
+                this.orderHistoryData.customerCode = this.basicDate.code;
+                this.$ajax.post(this.$apis.post_supply_supplier_orderHistory,this.orderHistoryData).then(res=>{
+                   this.loading = false
+                })
+                .catch((res) => {
+                    this.loading = false
+                    console.log(res)
+                });
+            },
+            getInquiryHistory(){
+                this.inquiryHistoryData.companyId = Number(this.$route.query.companyId);
+                this.loading = true;
+                this.$ajax.post(this.$apis.post_supply_supplier_getInquiryHistory,this.inquiryHistoryData).then(res=>{
+                   this.inquiryData = this.$getDB(this.$db.supplier.detailTable, res.datas);  
+                   this.loading = false
+                })
+                .catch((res) => {
+                    this.loading = false
+                    console.log(res)
+                });
+            },
+              /**
+           * Attachment操作
+           * */
+          upload(){
+            console.log(this.$refs.uploadAttachment.getFiles())
+              //ATTACHMENT,文件 PICTURE 图片
+            const uploadParams = {
+              id: this.id,
+              type: "ATTACHMENT",
+              url: this.$refs.uploadAttachment.getFiles()[0]
+            };
+            const batchUploadParams = {
+              id: this.id,
+              type: "ATTACHMENT",
+              urls: this.$refs.uploadAttachment.getFiles()
+            };
+            if (this.$refs.uploadAttachment.getFiles().length === 1){
+              this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
+                this.get_data();
+                this.$message({
+                  message: '上传成功',
+                  type: 'success'
+                });
+              })
+
+            }else{
+              this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
+                this.get_data();
+                this.$message({
+                  message: '上传成功',
+                  type: 'success'
+                });
+              })
+            }
+          },
+        },       
         created() {
-            this.get_data()
+             this.get_data();
         },
     }
 

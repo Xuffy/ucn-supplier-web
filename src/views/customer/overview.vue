@@ -7,40 +7,35 @@
             <div style='marginTop:20px;'>
                 <el-form ref="params" :model="params" label-width="200px" size="mini">
                     <el-row>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="8" 
-                           v-for='(item,index) in $db.supplier.overview'
-                           :key="index+'j'"
-                         
-                           >
-                            <el-form-item class="form-list" 
-                             v-if="item.showType==='text'"
-                            :label="item.label" 
-                            :prop="item.key"                    
-                            >
-                                <el-input v-model="params[item.key]" placeholder="Enter something..."></el-input>
-                            </el-form-item>
-                            <el-form-item class="form-list"  v-if="item.showType==='select'"
-                            :label="item.label" 
-                            :prop="item.key" >
-                                <el-select v-model="params[item.key]"></el-select>
-                               </el-form-item>
-                               <el-form-item class="form-list"  v-if="item.showType==='dropdown'"
-                                :label="item.label" 
-                                :prop="item.key">
-                                 <div class="speDropdown">
-                                     <drop-down
-                                      ref="dropDown" 
-                                          
-                                       v-model="params[item.key]" 
-                                     :defaultProps="defaultProps" 
-                                     :list="dropData"></drop-down>
-                                </div>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8"
+                           v-for='(v,index) in $db.supplier.overview'
+                           :key="index+'j'">
+                            <el-form-item class="speWidth" :prop="v.key"  :label="v.label">
+                              <div v-if="v.type==='input'">
+                                <el-input
+                                  size="mini"
+                                  placeholder="请输入内容"
+                                  v-model="params[v.key]">
+                                </el-input>
+                              </div>
+                              <div v-if="v.type==='select'">
+                                {{params[v.country]}}
+                                <el-select class="speWidth" v-model="params[v.key]" placeholder="请选择">
+                                  <el-option
+                                    size="mini"
+                                    v-for="item in options[v.key]"
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code">
+                                  </el-option>
+                                </el-select>
+                              </div>
                             </el-form-item>
                          </el-col>
-                        </el-row>
+                    </el-row>
                 </el-form>
             </div>
-         
+
             <div class="btn-group">
             <el-button @click="search" type="primary" class="search" >{{$i.common.search}}</el-button>
             <el-button @click="clear('params')">{{$i.common.clear}}</el-button>
@@ -48,56 +43,47 @@
 <!--      搜索结果  -->
             <div v-show='isButton'>
              <div class="btnline">
-<!--
-                  <el-button   @click='createInquiry'>{{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>
-                  <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.common.creatOrder}}</el-button>
-                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectNumber.length}})</el-button>
-                  <el-button  @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
--->
-<!--                  <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectNumber.length}})</el-button>-->
-<!--                  <el-button :disabled='!selectedData.length>0'>{{$i.common.delete}}({{selectNumber.length}})</el-button>-->
-              </div>  
+              </div>
               <div>
-                 
-              </div>          
+
+              </div>
         </div>
 <!--        表格-->
-             <v-table 
+          <div style="margin-top: 20px;">
+              <el-button @click="deleteCustomer" type="primary">{{$i.button.delete}}</el-button>
+          </div>
+             <v-table
                     :height=360
                     :loading='loading'
-                    :data="tabData" 
+                    :data="tabData"
                     :buttons="[{label: 'detail', type: 1}]"
-                    @action="detail" 
+                    @action="detail"
                     @change-checked='checked'
                     style='marginTop:10px'/>
-              <v-pagination
-            :page-data.sync="params"
-             @change="handleSizeChange"
-            @size-change="pageSizeChange"
-        />     
-                         
-            <div v-show='!isButton'  style='display:flex; justify-content: center'>
-                <el-button @click='emitData'>{{$i.common.ok}}</el-button>     
+              <page
+                :page-data="pageData"
+                @change="handleSizeChange"
+                @size-change="pageSizeChange"></page>
+
+
+      <div v-show='!isButton'  style='display:flex; justify-content: center'>
+                <el-button @click='emitData'>{{$i.common.ok}}</el-button>
                 <el-button type="primary">{{$i.common.cancel}}</el-button>
-            </div>        
-            
+            </div>
+
     </div>
 </template>
 
 <script>
-    import {
-        dropDownSingle,
-        VPagination
-    } from '@/components/index'
-    import {
-        VTable
-    } from '@/components/index';
+
+    import { mapActions} from 'vuex'
+    import {dropDownSingle,VPagination,VTable} from '@/components/index'
     export default {
         name: "SupplierSourcing",
         components: {
             dropDown: dropDownSingle,
             VTable,
-            VPagination
+            page:VPagination
         },
         props: {
             isButton: {
@@ -117,28 +103,24 @@
                 hideBody: true, //是否显示body
                 btnInfo: 'Show the Advance',
                 loading: false,
-                pageTotal: "",
-                endpn: "",
+                pageData: {},
+                endpn: '',
                 params: {
-                    "city": "",
-                    "companyId": '',
-                    "country": "",
-                    "incoterm": '',
-                    "name": "",
-                    "payment": '',
-                    "pn": 1,
-                    "ps": 50,
-                     tc: 0
-                    //                    "sorts": [{
-                    //                        "nativeSql": true,
-                    //                        "orderBy": "string",
-                    //                        "orderType": "string",
-                    //                        "resultMapId": "string"
-                    //                    }],
+                    city: '',
+                    companyId: null,
+                    country: '',
+                    incoterm: null,
+                    name: '',
+                    payment: null,
+                    pn: 1,
+                    ps: 50,
+                    // recycle: false,
+                    type: null
                 },
                 tabData: [],
                 selectedData: [],
                 selectNumber: [],
+                options:{},
                 //Category下拉组件数据
                 dropData: [],
                 defaultProps: {
@@ -148,7 +130,36 @@
             }
         },
         methods: {
-            //切换body的收缩展开状态
+               ...mapActions([
+                'setRecycleBin','setDraft'
+            ]),
+            handleSizeChange(val) {
+              this.params.pn = val;
+              this.getData();
+            },
+            pageSizeChange(val) {
+              this.params.ps = val;
+              this.getData();
+            },
+            //获取字典
+            getCodePart(){
+              this.$ajax.post(this.$apis.POST_CODE_PART,["PMT","CUSTOMER_TYPE","ITM"]).then(res=>{
+                this.options.payment = _.findWhere(res, {'code': 'PMT'}).codes;
+                this.options.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
+                this.options.type = _.findWhere(res, {'code': 'CUSTOMER_TYPE'}).codes;
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
+              //获取国家
+            getCountryAll(){
+              this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+                 this.options.country = res
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
+          //切换body的收缩展开状态
             switchDisplay() {
                 this.hideBody = !this.hideBody;
             },
@@ -156,7 +167,6 @@
             //清除填写的表格数据
             clear(name) {
                 this.$refs[name].resetFields();
-                this.params.mainBusiness = ''
             },
             //当作为主键时
             emitData() {
@@ -164,18 +174,31 @@
             },
             //搜查
             search() {
-                console.log(this.params)
-                this.get_data()
+                this.getData()
             },
             //...........进入detail
             detail(item) {
                 this.$windowOpen({
                     url: '/customer/detail',
                     params: {
-                        id: item.id.value
+                        id: item.id.value,
+                        companyId: item.companyId.value
                     }
 
                 });
+            },
+            deleteCustomer(){
+                 this.$ajax.post(this.$apis.post_supply_batchDelete, this.selectNumber)
+                    .then(res => {
+                        this.$message({
+                          message: '删除成功',
+                          type: 'success'
+                        });
+                        this.getData()
+                    })
+                    .catch((res) => {
+                        console.log(res)
+                    });
             },
             //.........checked
             checked(item) {
@@ -183,20 +206,17 @@
                 this.selectedData = item
                 let number = []
                 this.selectedData.forEach(item => {
-                    console.log()
                     number.push(item.id.value);
                 });
                 this.selectNumber = number
-               
+
             },
             //.....拿数据
-            get_data() {
+            getData() {
                 this.loading = true
                 this.$ajax.post(this.$apis.post_getCustomerList, this.params)
                     .then(res => {
-                        console.log(res)
-                        res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
-                        this.pageTotal = res.datas.tc
+                        this.pageData=res;
                         this.loading = false
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
                     })
@@ -211,7 +231,7 @@
                         console.log(res)
                     })
                     .catch((res) => {
-                        console.slog(res)
+                        console.log(res)
                     });
             },
             getCategoryId() {
@@ -223,16 +243,23 @@
             },
             handleSizeChange(val) {
                 this.params.pn = val;
-                this.get_data()
+                this.getData()
             },
             pageSizeChange(val) {
                 this.params.ps = val;
-                this.get_data()
+                this.getData()
             },
         },
         created() {
-            this.get_data()
-            this.getCategoryId()
+            this.getData();
+            this.getCodePart();
+            this.getCountryAll();
+            this.getCategoryId();
+            this.setRecycleBin({
+                name: 'customerRecycleBinDetail',
+                show: true
+            });
+
         },
         watch: {}
     }
@@ -243,7 +270,6 @@
     .SupplierSourcing {
         padding-right: 20px;
     }
-
     .title {
         font-weight: bold;
         font-size: 18px;
@@ -252,7 +278,6 @@
         color: #666666;
 
     }
-
     .title-btn {
         float: right;
         margin-right: 5px;
@@ -261,7 +286,6 @@
     .title-btn>>>span {
         color: #118ee9;
     }
-
     .body {
         /*        margin-top: 10px;*/
         overflow: hidden;
@@ -269,7 +293,6 @@
         display: block;
         transition: max-height .5s cubic-bezier(.445, .05, .55, .95);
     }
-
     .hide {
         max-height: 0;
 

@@ -3,7 +3,7 @@ export default {
   post_ledgerPage:['/ledger/page','USUPPLY_URL','USUPPLY_URL'],
   post_payment_list:['/payment/list/{orderNo}/{orderType}','USUPPLY_URL','USUPPLY_URL'],
   post_payment_accept:['/payment/accept/{id}','USUPPLY_URL','USUPPLY_URL'],
-  post_payment_dunning:['/payment/dunning/{orderNo}/{orderType}','USUPPLY_URL','USUPPLY_URL'],
+  post_payment_dunning:['/payment/dunning','USUPPLY_URL','USUPPLY_URL'],
   //message
   post_companymessage_query:['/companymessage/query','UMESSAGE_URL','UMESSAGE_URL'],
   post_systemmessage_query:['/systemmessage/query','UMESSAGE_URL','UMESSAGE_URL'],
@@ -55,4 +55,8 @@ export default {
   post_supplier_delContact:['/supplier/delContact/{id}','USUPPLY_URL','USUPPLY_URL'],
   post_oss_company_batchUpload: ['/supplier/purchase/oss/company/batchUpload','USUPPLY_URL','USUPPLY_URL'],
   post_oss_company_upload: ['/supplier/purchase/oss/company/upload','USUPPLY_URL','USUPPLY_URL'],
+
+  //track
+  get_track_getTrackInfoByPage: ['/track/getTrackInfoByPage','WORKBENCH_URL','WORKBENCH_URL'],
+
 }
