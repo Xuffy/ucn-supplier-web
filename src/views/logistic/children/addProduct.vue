@@ -45,7 +45,7 @@
           <span>{{ scope.row.skuCustomsCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.reportElements" width="120" align="center">
+      <el-table-column :label="$i.logistic.reportElement" width="120" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.skuDeclareElement }}</span>
         </template>
@@ -65,7 +65,7 @@
           <span>{{ scope.row.sku_customerSkuCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.factorySkuCode" width="160"align="center">
+      <el-table-column :label="$i.logistic.factorySkuCode" width="160" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.factorySkuCode }}</span>
         </template>
@@ -140,31 +140,41 @@
           <span>{{ scope.row.skuOuterCartonCode }}</span>
         </template>
       </el-table-column>
+      <el-table-column :label="$i.logistic.skuSupplierCompanyId" width="180" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.skuSupplierCompanyId }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$i.logistic.skuSupplierTenantId" width="180" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.skuSupplierTenantId }}</span>
+        </template>
+      </el-table-column>
       <el-table-column fixed="right" label="active" width="100">
         <template slot-scope="scope">
-          <el-button type="text" size="small">{{ $i.logistic.detail }}</el-button>
+          <el-button type="text" size="small" @click="productDetail(scope.row.id)">{{ $i.logistic.detail }}</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <div style="margin-top:20px;">
+      <v-pagination :page-data="pageParams" @spageParamsize-change="sizeChange" @change="pageChange"/>
+    </div>
   </el-row>
 </template>
 <script>
-import { selectSearch } from '@/components/index'
+import { selectSearch,VPagination } from '@/components/index'
 
 export default {
-  props: {
-    tableData: {
-      type: Array,
-      default () {
-        return []
-      }
-    }
-  },
   components: {
-    selectSearch
+    selectSearch,VPagination
   },
   data () {
     return {
+      tableData:[],
+      pageParams: {
+        pn: 1,
+        ps: 10
+      },
       selectArrData: [],
       options: [
         {
@@ -182,12 +192,33 @@ export default {
       ]
     }
   },
+  mounted(){
+    this.getOrderList();
+  },
   methods: {
+    sizeChange(e) {
+      this.pageParams.ps = e
+      this.getOrderList();
+    },
+    pageChange(e) {
+      this.pageParams.pn = e
+      this.getOrderList()
+    },
+    getOrderList () {
+      this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res => {
+        this.tableData = res.datas
+        this.pageParams = res;
+      })
+    },
     tableRowClassName({row, rowIndex}) {
       row.index = rowIndex
     },
     handleSelectionChange (arr) {
-      this.selectArrData = arr.map(a => a.id)
+      // arr.forEach(a => (a.id = ''))
+      this.selectArrData = arr
+    },
+    productDetail(id){
+      window.open(`${window.location.origin}#/product/sourcingDetail?id=${id}`);
     }
   }
 }
