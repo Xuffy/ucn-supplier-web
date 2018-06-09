@@ -11,6 +11,22 @@
   "orderNo":"Order No",
   "send":"Send",
   "saveAsDraft":"Save As Draft",
-  "quickCreate":"Quick Create"
-
+  "quickCreate":"Quick Create",
+  "shipped":"Shipped",
+  "exchangeRate":"Exchange Rate",
+  "responsibility":"Responsibility",
+  "productInfoBig":"Product Info",
+  "addProduct":"Add Product",
+  "remove":"Remove",
+  "remarks":"Remark",
+  "prompt":"Prompt",
+  "sure":"Sure",
+  "cancel":"Cancel",
+  "draftOverview":"Draft Overview",
+  "modify":"Modify",
+  "confirm":"Confirm",
+  "download":"Download",
+  "markAsImportant":"Mark As Important",
+  "accept":"接受",
+  "refuse":"拒绝"
 }

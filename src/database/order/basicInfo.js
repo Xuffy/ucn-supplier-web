@@ -2,7 +2,7 @@ export default {
     orderNo: {
         key: 'orderNo',
         ismodify: false,
-        //        isDefaultEdit: true,
+//        isDefaultEdit: true,
         rules: [],
         type: 'text',
     },
@@ -46,7 +46,7 @@ export default {
     supplierName: {
         key: 'supplierName',
         ismodify: false,
-        //        isDefaultEdit: true,
+//        isDefaultEdit: true,
         rules: [],
         type: 'supplierName',
     },
@@ -54,9 +54,9 @@ export default {
     supplierNo: {
         key: 'supplierCode',
         ismodify: false,
-        //        isDefaultEdit: true,
+//        isDefaultEdit: true,
         rules: [],
-        type: 'supplierCode',
+        type: 'supplierNo',
     },
     quotationNo: {
         key: 'quotationNo',
@@ -160,7 +160,7 @@ export default {
         key: 'transport',
         ismodify: false,
         isDefaultEdit: true,
-        isDefaultValue: true,
+        isDefaultValue:true,
         rules: [],
         type: 'select',
     },
@@ -185,4 +185,5 @@ export default {
         rules: [],
         type: 'textarea',
     },
+
 }

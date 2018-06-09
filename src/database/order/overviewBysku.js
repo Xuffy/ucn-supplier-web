@@ -1,89 +1,29 @@
 export default {
-    //.........................by sku
-    orderNo: {
-        key: "orderNo"
+    id:{
+        _hide:true,
     },
-
-    //Customer SKU Code
-    //    customerSKUCode: {
-    //        key: '',
-    //    },
-
-    SKUBarCode: {
-        key: 'skuBarcode',
-    },
-    SKUcode: {
-        key: 'skuCode',
-    },
-    supplierName: {
-        key: 'supplierName',
-    },
-    SKUNameCN: {
-        key: "skuNameCn"
-    },
-    SKUEnglishname: {
-        key: 'skuNameEn',
-    },
-    SKUdescriptionincustomerlanguage: {
-        key: '',
-    },
-    SKUEnglishDescription: {
-        key: "skuDescEn"
-    },
-    //martial（CN）
-    //    martialCN: {
-    //        key: '',
-    //    },
-    //martial（EN）
-    //    martialEN: {
-    //        key: '',
-    //    },
-
-    //    UnitPrice: {
-    //        key: '',
-    //    },
-
-    totalQuantity: {
-        key: 'totalQty',
-    },
-    totalPrice: {
-        key: 'totalSkuPrice',
-    },
-    //Order Date
-    //    orderDate: {
-    //        key: '',
-    //    },
-
-    deliveryDate: {
-        key: 'deliveryDt',
-    },
-    //Departure Date
-    //    departureDate: {
-    //        key: '',
-    //    },
-
-    deliveredQuantity: {
-        key: 'deliveredQty',
-    },
-    //Product Status
-    //    productStatus: {
-    //        key: '',
-    //    },
-
-    incoterm: {
-        key: 'incoterm',
-    },
-    incotermarea: {
-        key: 'incotermArea',
-    },
-
-    //    createTime: {
-    //        key: '',
-    //    },
-    //    modifyTime: {
-    //        key: '',
-    //    },
-    //    comments: {
-    //        key: '',
-    //    },
+    orderNo:{},
+    skuCustomerSkuCode:{},
+    skuBarCode:{},
+    skuCode:{},
+    supplierName:{},
+    //中文品名
+    skuNameEn:{},
+    skuNameCustomer:{},
+    skuDescEn:{},
+    //中文材质
+    //英文材质
+    //单价
+    totalQty:{},
+    totalSkuPrice:{},
+    entryDt:{},
+    deliveryDt:{},
+    //发运日期
+    //发运数量
+    //产品状态
+    incoterm:{},
+    currency:{},
+    incotermArea:{},
+    updateDt:{},
+    // remark:{},
 }
