@@ -207,5 +207,7 @@
   "EURUSD":"EUR-USD",
   "transportationWayVal" : "海运",
   "loadingTypeVal" : "集装箱",
-  "generateList": "生成装货清单"
+  "generateList": "生成装货清单",
+  "cancelModify": "取消修改",
+  "confirmModify": "更新信息"
 }

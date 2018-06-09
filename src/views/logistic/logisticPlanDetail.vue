@@ -26,7 +26,7 @@
     <div v-if="planId">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.feeInfoTitle }}</div>
-      <fee-info :edit="edit" :tableData.sync="feeList"></fee-info>
+      <fee-info :edit="edit" :tableData.sync="feeList" :selectArr="selectArr"></fee-info>
     </div>
 
     <div v-if="planId">
@@ -59,7 +59,7 @@
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
-    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
+    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
   </div>
 </template>
 <script>
@@ -121,7 +121,7 @@ export default {
       dictionaryPart: {
         avl: 'AVL',
         blType: 'BL_TYPE',
-        logisticsStatus: 'LS_STATUS',
+        logisticsStatus: 'LS_PLAN',
         transportationWay: 'MD_TN',
         payment: 'PMT'
       },
@@ -139,6 +139,7 @@ export default {
         }
       },
       pageName:'',
+      inintData:{}, //存放初始数据的 便于取消还原数据 
     }
   },
   components: {
@@ -156,9 +157,6 @@ export default {
   computed: {
     planId () {
       return this.$route.query.id
-    },
-    isCopy () {
-      return this.$route.query.copy
     },
     productbButtons(){
       let aArr = [
@@ -196,10 +194,6 @@ export default {
     })
     if (this.planId) {
       this.getDetails()
-      if(this.isCopy){
-        this.edit = true;
-        this.getNewLogisticsNo();
-      }
     } else {
       this.edit = true
       this.basicInfoArr.forEach((item)=>{
@@ -230,6 +224,7 @@ export default {
           }
         })
       })
+      this.inintData.ExchangeRateInfoArr = this.$depthClone(this.ExchangeRateInfoArr);
     },
     registerRoutes () {
       this.$store.commit('SETDRAFT', {
@@ -246,7 +241,8 @@ export default {
         this.createdPlanData(res)
         this.logisticsStatus = {
           recived : res.recived,
-          supplierRecived : res.supplierRecived
+          supplierRecived : res.supplierRecived,
+          status : res.logisticsStatus
         };
         this.matchRate(res.currencyExchangeRate);
         this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
@@ -268,29 +264,18 @@ export default {
         'blType'
       ]
       this.basicInfoArr.forEach(a => {
-        if(this.isCopy&&a.key=='logisticsNo'){
-          a.value = this.logisticsNo;
-        }else{
-          a.value = stringArray.includes(a.key) ? res[a.key] : res[a.key]
-        }
+        a.value = stringArray.includes(a.key) ? res[a.key] : res[a.key];
       })
+      this.inintData.basicInfoArr = this.$depthClone( this.basicInfoArr);
       this.transportInfoArr.forEach(a => {
         a.value = res[a.key]
       })
+      this.inintData.transportInfoArr = this.$depthClone( this.transportInfoArr);
       this.exchangeRateList = res.currencyExchangeRate || []
       this.remark = res.remark
-      if(!this.isCopy){
-        this.logisticsNo = res.logisticsNo
-      }
-      this.containerInfo = res.containerDetail || []
-      let feeListb = false;
-      _.mapObject(res.fee,(v,k)=>{
-        if(v!=null){
-          feeListb = true;
-          return;
-        }
-      })
-      this.feeList = feeListb ? [res.fee] : null;
+      this.containerInfo = res.containerDetail || [];
+      this.inintData.containerInfo = this.$depthClone(res.containerDetail) || [];
+      this.feeList = [res.fee];
       this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
     },
     createdPaymentData (res = this.oldPaymentObject) {
@@ -301,9 +286,6 @@ export default {
     getNewLogisticsNo () {
       this.$ajax.post(this.$apis.get_new_logistics_no).then(res => {
         this.basicInfoArr.find(a => a.key === 'logisticsNo').value = res
-        if(this.isCopy){
-          this.logisticsNo = res;
-        }
         this.getSupplier(res)
       })
     },
@@ -382,9 +364,6 @@ export default {
       const currencyCode = this.paymentList[i].currencyCode
       const payToId = this.paymentList[i].payToId
       const skuSupplierObj = this.selectArr.supplier.find(a => a.skuSupplierId === payToId)
-
-      console.log(this.selectArr.exchangeCurrency)
-      console.log(this.paymentList[i])
       const paymentData = {
         ...this.paymentList[i],
         currency: this.selectArr.exchangeCurrency.find(a => a.code === currencyCode).id,
@@ -460,24 +439,41 @@ export default {
     switchEdit (arg) {     
       switch(arg){
         case 'receive':
-            this.edit = !this.edit;
-            this.pageName = 'planDetail';
+            this.logisticsStatus.show = true;
+            this.receive();
+          break; 
+        case 'modify':
+            this.edit = true;
+          break; 
+        case 'cancelModify':
+            this.edit = false;
+            this.basicInfoArr = this.inintData.basicInfoArr;
+            this.ExchangeRateInfoArr = this.inintData.ExchangeRateInfoArr;
+            this.transportInfoArr = this.inintData.transportInfoArr;
+            this.containerInfo = this.inintData.containerInfo;
           break; 
         case 'confirm':
             this.conformPlan();
           break; 
+        case 'generateList':
+            this.generateList();
+          break; 
         case 'cancel':
             this.cancelPlan();
-          break; 
-        case 'copy':
-            this.copyPlan();
-          break; 
-        case 'placeLogisticsPlan':
-            this.$router.push('/logistic/placeLogisticPlan');
           break; 
         default:
           break; 
       }
+    },   
+    receive(){
+      this.$ajax.post(this.$apis.logistics_plan_receive,{id:this.planId}).then(res => {
+        this.getDetails();
+      })
+    },
+    generateList(){
+      this.$ajax.post(this.$apis.logistics_plan_postLoadingList,{id:this.planId}).then(res => {
+        this.getDetails();
+      })
     },
     conformPlan(){
       this.$ajax.post(this.$apis.logistics_plan_confirm,{id:this.planId}).then(res => {
@@ -503,11 +499,8 @@ export default {
         })
       })
     },
-    copyPlan(){
-      window.open(`${window.location.origin}#/logistic/placeLogisticPlan?id=${this.planId}&copy=copy`);
-    },
     toExit () {
-      if ((this.isCopy&&this.planId)||(!this.isCopy&&!this.planId)) {
+      if (this.planId) {
         return this.$router.go(-1)
       }
       this.edit = !this.edit
@@ -551,7 +544,7 @@ export default {
         this.oldPlanObject[key] = value
       })
       this.oldPlanObject.containerDetail = this.containerInfo
-      this.oldPlanObject.fee = this.feeList && this.feeList.length>0 ? this.feeList : null;
+      this.oldPlanObject.fee = this.feeList && this.feeList.length>0 ? this.feeList[0] : null; 
       this.oldPlanObject.product = this.modifyProductArray;
       this.oldPlanObject.currencyExchangeRate = _.map(this.$depthClone(this.ExchangeRateInfoArr),(item)=>{
         item['price'] = item['value'];
@@ -577,12 +570,7 @@ export default {
           }
         })
       });
-      let obj = null;
-      if(this.isCopy){
-        this.oldPlanObject.planNo = this.logisticsNo;
-        obj = this.restIdNull(this.oldPlanObject,['id','unId']);
-      }
-      this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
+      this.$ajax.post(url, this.oldPlanObject).then(res => {
         this.$message({
           message: '发送成功，正在跳转...',
           type: 'success',
@@ -593,23 +581,7 @@ export default {
         })
       })
     },
-    //递归重置 copy
-    //arg 传入的对象 
-    //restArr 要重置字段集合数组
-    restIdNull(arg,restArr){
-      restArr = restArr || [];    
-      let args =  _.omit(arg,...restArr);
-      return _.mapObject(args,(v,k)=>{
-        if(Array.isArray(v)){
-          return _.map(v,(val,key)=>{
-            return _.omit(val,...restArr);
-          })
-        }else{
-          return v;
-        }
-      })
-    },
-  },
+  }
 }
 </script>
 <style lang="less" scoped>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="btn-wraps" v-if="edit">
-      <el-button type="primary" size="mini" @click.stop="$emit('arrayAppend', 'tableData')">{{ $i.logistic.add }}</el-button>
+      <el-button type="primary" size="mini" @click.stop="$emit('arrayAppend', 'containerInfo')">{{ $i.logistic.add }}</el-button>
       <el-button type="danger" size="mini" @click.stop="$emit('deleteContainer')">{{ $i.logistic.delete }}</el-button>
     </div>
     <div class="tab-wrap">
@@ -28,12 +28,13 @@
         </el-table-column>
         <el-table-column :label="$i.logistic.containerType" width="140" align="center">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.containerType" placeholder="请选择" >
-              <el-option v-for="item in containerType" :key="item.id" :label="item.label" :value="item.value"/>
+            <el-select v-model="scope.row.containerType" placeholder="请选择" v-if="edit">
+              <el-option v-for="item in containerType" :key="item.id" :label="item.name" :value="item.code"/>
             </el-select>
+            <span v-else>{{ scope.row.containerType }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.vgm" prop="vgm" width="120"align="center">
+        <el-table-column :label="$i.logistic.vgm" prop="vgm" width="120" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.vgm }}</span>
           </template>

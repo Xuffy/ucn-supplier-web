@@ -12,7 +12,7 @@
           <div v-else>
             <el-input placeholder="请输入内容" v-model="a.value" :disabled="a.disabled" v-if="a.type === 'input'"/>
             <el-select v-model="a.value" placeholder="请输入内容" v-if="a.type === 'selector'" :clearable="true" :disabled="a.disabled">
-              <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code" v-if="selectArr[a.key]"/>
+              <el-option :label="item.name" :value="Number(item.code)" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code" v-if="selectArr[a.key]"/>
             </el-select>
             <el-date-picker v-if="a.type === 'date'" v-model="a.value" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
           </div>
