@@ -156,7 +156,7 @@
              * 字典获取
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS','QC_MD'],{_cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS','QC_MD'],{cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='QC_STATUS'){
                             this.qcStatusOption=v.codes;

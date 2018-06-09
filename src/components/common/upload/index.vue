@@ -7,7 +7,6 @@
              v-bind="{multiple:limit !== 1}"
              :accept="onlyImage ? 'image/*' : ''"/>
     </p>
-    <!--<el-button type="primary" @click="uploadFile">主要按钮</el-button>-->
     <ul class="upload-list">
       <li v-for="item in fileList" :title="item.showName">
         <template v-if="!item.isImage">
@@ -16,12 +15,8 @@
         </template>
 
         <v-image class="img-box" v-else-if="item.url" :src="item.url"></v-image>
-        <!--<div class="img-box"
-             :style="{'background-image': 'url('+ item.url +')'}">
-        </div>-->
         <div :class="{close:!item.progress || item.progress === 1}" class="progress"
              :style="{width: (item.progress * 100) + '%'}">
-          <!--<h6 v-text="parseInt(item.progress * 100) + '%'"></h6>-->
         </div>
 
         <div class="operation-box" :class="{readonly:readonly,image:readonly && item.isImage}"
@@ -32,7 +27,6 @@
           <i class="el-icon-view" @click="$refs.uploadViewPicture.show(item.url)"></i>
         </div>
 
-        <!--<el-progress :text-inside="true" :stroke-width="18" :percentage="item.progress*100"></el-progress>-->
       </li>
     </ul>
     <v-view-picture ref="uploadViewPicture"></v-view-picture>
@@ -44,8 +38,8 @@
   import co from 'co';
   import VViewPicture from '../viewPicture/index'
   import VImage from '../image/index'
+  import config from '../../../service/config';
 
-  const bucket = 'ucn-oss-dev';
   const imageType = ['JPG', 'PNG'];
 
   export default {
@@ -56,6 +50,10 @@
         default() {
           return [];
         },
+      },
+      ossPrivate: {
+        type: Boolean,
+        default: false,
       },
       readonly: {
         type: Boolean,
@@ -79,13 +77,14 @@
       return {
         tenantId: '',
         fileList: {},
+        bucket: ''
       }
     },
     created() {
       this.tenantId = (this.$localStore.get('user') || {}).tenantId;
     },
     mounted() {
-
+      this.bucket = this.ossPrivate ? config.ENV.OSS_BUCKET_PRIVATE : config.ENV.OSS_BUCKET_PUBLIC;
     },
     watch: {
       fileList() {
@@ -111,6 +110,7 @@
       },
       startUpload(client, files) {
         let _this = this
+          , params
           , uid = _this.$getUUID()
           , fileKey = `${this.tenantId}/${uid}/${files.name}`;
 
@@ -118,13 +118,15 @@
           return this.$message.warning(`只能上传${this.limit}个文件`);
         }
 
-        _this.$set(_this.fileList, uid, _.extend(this.filterType(files.name), {
+        params = _.extend(this.filterType(files.name), {
           fileKey,
           fileName: files.name,
           progress: 0,
           id: uid,
           temporary: true
-        }));
+        });
+
+        _this.$set(_this.fileList, uid, params);
 
         co(function* () {
           yield client.multipartUpload(fileKey, files, {
@@ -139,8 +141,8 @@
           }).then(result => {
             _this.$set(_this.fileList[uid], 'url', client.signatureUrl(result.name));
           });
-        }).catch(function (err) {
-          console.log(err);
+        }).catch(() => {
+          this.deleteFile(params);
         });
       },
       deleteFile(item) {
@@ -162,11 +164,11 @@
       },
       signature(params) {
         return new OSS.Wrapper({
-          region: 'oss-cn-hangzhou' || params.ossEndpoint,
+          region: params.region,
           accessKeyId: params.accessKeyId,
           accessKeySecret: params.accessKeySecret,
           stsToken: params.securityToken,
-          bucket: bucket
+          bucket: this.bucket
         });
 
       },
@@ -214,11 +216,13 @@
         });
 
       },
-      getFiles() {
-        let files = _.pluck(_.values(this.fileList), 'fileKey');
-        return _.map(files, val => {
-          return `${bucket}:${val}`;
+      getFiles(type) {
+        let files = _.pluck(_.values(this.fileList), 'fileKey')
+          , key = _.map(files, val => {
+          return `${this.bucket}:${val}`;
         });
+
+        return type ? {key, url: _.pluck(_.values(this.fileList), 'url')} : key;
       }
     },
   }

@@ -4,44 +4,44 @@
              <div class="basicinfo_form">
                   <el-form ref='ruleform' :model="formItem" label-width="230px" :rules="rules" >
                     <el-row>
-                     <el-col :xs="24" :sm="12" :md="12" :lg="8" 
+                     <el-col :xs="24" :sm="12" :md="12" :lg="8"
                            v-for="(item, index) in $db.order.basicInfo"
-                            :key="index"                         
+                            :key="index"
                            >
-                            <el-form-item 
+                            <el-form-item
                                   v-if='item.type=="text"'
-                                 :label="item.label" 
+                                 :label="item.label"
                                  :prop="item.key">
-                                <el-input                       
+                                <el-input
                                 v-model='formItem[item.key]'                                   :disabled=item.ismodify||disabled||item.isDefaultEdit ></el-input>
-                            </el-form-item>  
-                             <el-form-item 
+                            </el-form-item>
+                             <el-form-item
                                   v-if='item.type=="textdialog"'
-                                 :label="item.label" 
+                                 :label="item.label"
                                  :prop="item.key">
-                                <el-input                       
+                                <el-input
                                 v-model='formItem[item.key]'                                   :disabled=item.ismodify||disabled||item.isDefaultEdit ></el-input>
                                 <i class="el-icon-more-outline" style='fontSize:20px'  @click='dialogEdit'></i>
-                            </el-form-item>                         
+                            </el-form-item>
                              <el-form-item class="form-list"
                                    v-if='item.type=="datepicker"'
-                                    :label="item.label" 
+                                    :label="item.label"
                                    :prop="item.key">
                                    <div style='display:flex;max-width:200px;'>
                                    <el-date-picker
-                                      v-model='formItem[item.key]' 
+                                      v-model='formItem[item.key]'
                                       type="date"
                                      :disabled=item.ismodify||disabled||item.isDefaultEdit
                                     >
                                     </el-date-picker>
                                       </div>
-                            </el-form-item>                          
-                             <el-form-item 
+                            </el-form-item>
+                             <el-form-item
                                   v-if='item.type=="select"'
                                  :label="item.label"
-                                 :prop="item.key">                             
+                                 :prop="item.key">
                                   <el-select
-                                           v-model='formItem[item.key]'                      
+                                           v-model='formItem[item.key]'
                                         :disabled=item.ismodify||disabled||item.isDefaultEdit >
                                        <el-option
                                         v-for="item in selectAll[item.key]"
@@ -49,15 +49,15 @@
                                         :label="item.name"
                                         :value="item.code"
                                         :id="item.id"
-                                    />    
+                                    />
                                   </el-select>
-                            </el-form-item> 
-                             <el-form-item 
+                            </el-form-item>
+                             <el-form-item
                                   v-if='item.type=="currency"'
                                  :label="item.label"
-                                 :prop="item.key">                             
+                                 :prop="item.key">
                                   <el-select
-                                           v-model='formItem[item.key]'                      
+                                           v-model='formItem[item.key]'
                                         :disabled=item.ismodify||disabled||item.isDefaultEdit >
                                        <el-option
                                         v-for="item in selectAll[item.key]"
@@ -65,60 +65,60 @@
                                         :label="item.code"
                                         :value="item.code"
                                         :id="item.id"
-                                    />    
+                                    />
                                   </el-select>
-                            </el-form-item> 
-                             <el-form-item 
+                            </el-form-item>
+                             <el-form-item
                                   v-if='item.type=="status"'
                                  :label="item.label"
                                  :prop="item.key">
                                  <el-select
-                                           v-model='formItem[item.key]'           
-                                             reserve-keyword  
-                                              filterable  
-                                              remote 
+                                           v-model='formItem[item.key]'
+                                             reserve-keyword
+                                              filterable
+                                              remote
                                               value-key="id"
-                                             :remote-method="remoteMethod" :disabled="item.ismodify||disabled||item.isDefaultEdit||formItem[item.key]!='3'" 
+                                             :remote-method="remoteMethod" :disabled="item.ismodify||disabled||item.isDefaultEdit||formItem[item.key]!='3'"
                                               @change='selectchangeName'
                                              >
                                              <el-option
                                                 v-for="item in selectAll[item.key]"
                                                 :key="item.code"
                                                 :label='item.name'
-                                                :value="item.code"                                            
+                                                :value="item.code"
                                             />
                                   </el-select>
-                            </el-form-item>    
-                             <el-form-item 
+                            </el-form-item>
+                             <el-form-item
                                   v-if='item.type=="supplierName"'
                                  :label="item.label"
                                  :prop="item.key">
                                  <el-select
-                                           v-model='formItem[item.key]'           
-                                             reserve-keyword  
-                                              filterable  
-                                              remote 
+                                           v-model='formItem[item.key]'
+                                             reserve-keyword
+                                              filterable
+                                              remote
                                               value-key="id"
-                                             :remote-method="remoteMethod" :disabled=item.ismodify||disabled||item.isDefaultEdit 
+                                             :remote-method="remoteMethod" :disabled=item.ismodify||disabled||item.isDefaultEdit
                                               @change='selectchangeName'
                                              >
                                              <el-option
                                                 v-for="item in selectAll[item.key]"
                                                 :key="item.code"
                                                 :label='item.name'
-                                                :value="item.code"                                            
+                                                :value="item.code"
                                             />
                                   </el-select>
-                            </el-form-item>     
-                          <el-form-item 
+                            </el-form-item>
+                          <el-form-item
                                   v-if='item.type=="supplierCode"'
                                  :label="item.label"
                                  :prop="item.key">
                                  <el-select
-                                           v-model='formItem[item.key]'           
-                                             reserve-keyword  
-                                              filterable  
-                                              remote 
+                                           v-model='formItem[item.key]'
+                                             reserve-keyword
+                                              filterable
+                                              remote
                                               value-key="id"
                                                @change='selectchangeNo'
                                              :remote-method="remoteMethod" :disabled=item.ismodify||disabled||item.isDefaultEdit >
@@ -128,25 +128,25 @@
                                                 :value="item.code"
                                             />
                                   </el-select>
-                            </el-form-item>                 
+                            </el-form-item>
                          </el-col>
 
                          <el-col :xs="24" :sm="24" :md="24" :lg="24">
-                                <el-form-item class="form-list" 
+                                <el-form-item class="form-list"
                                    v-for="(item, index) in $db.order.basicInfo"
                                    :key="index"
                                    v-if='item.type==="textarea"'
-                                   :label="item.label" 
+                                   :label="item.label"
                                    :prop="item.key">
                                     <el-input type="textarea"
-                                      v-model='formItem[item.key]'                  :disabled=item.ismodify||disabled||item.isDefaultEdit                   
+                                      v-model='formItem[item.key]'                  :disabled=item.ismodify||disabled||item.isDefaultEdit
                                      ></el-input>
                                 </el-form-item>
                           </el-col>
                      </el-row>
                  </el-form>
              </div>
-         </div>  
+         </div>
 </template>
 <script>
     export default {
@@ -171,16 +171,16 @@
                     orderNo: '', //必填   系统生成 不可编辑
                     orderDate: '', //必填    系统生成   可编辑    ??????
                     customerOrderNo: '',
-                    customerName: '', //必填 系统生成  
-                    customerNo: '', //必填 系统生成 
+                    customerName: '', //必填 系统生成
+                    customerNo: '', //必填 系统生成
                     supplierOrderNo: '',
                     supplierName: '', //必填 不可编辑 系统生成 弹出框
                     supplierCode: '', //必填 不可编辑 系统生成 弹出框
                     quotationNo: '', // 不可编辑
                     status: '', //必填 orderStatus下拉框值 部分可编辑.........  可手动finished
-                    deliveryDt: '', //必填 
-                    incoterm: '', //必填 
-                    incortermAea: '', //必填 
+                    deliveryDt: '', //必填
+                    incoterm: '', //必填
+                    incortermAea: '', //必填
                     payment: '', //必填  select
                     lcNo: '',
                     paymentDays: '',
@@ -305,7 +305,7 @@
             },
             //获取字典表
             getDictionaries() {
-                this.$ajax.post(this.$apis.post_codePart, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN', 'ORDER_STATUS'], '_cache')
+                this.$ajax.post(this.$apis.post_codePart, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN', 'ORDER_STATUS'], {cache:true})
                     .then(res => {
                         this.selectAll.payment = _.findWhere(res, {
                             'code': 'PMT'
@@ -328,18 +328,18 @@
                         //                    });
                     });
 
-                this.$ajax.get(this.$apis.post_country, '', '_cache')
+                this.$ajax.get(this.$apis.post_country, '', {cache:true})
                     .then(res => {
                         this.selectAll.destinationCountry = res;
                         this.selectAll.departureCountry = res;
                     });
-                this.$ajax.get(this.$apis.post_logisticsport, '', '_cache')
+                this.$ajax.get(this.$apis.post_logisticsport, '', {cache:true})
                     .then(res => {
                         this.selectAll.destPort = res;
                         this.selectAll.departurePort = res;
                     });
-                
-                 this.$ajax.get(this.$apis.get_currency, '', '_cache')
+
+                 this.$ajax.get(this.$apis.get_currency, '', {cache:true})
                             .then(res => {
                                 this.selectAll.currency = res;
                             });

@@ -1,8 +1,8 @@
 <template>
-  <div class="menu ucn-menu" :class="{hideMenu:$store.state.layout.hideMenu}">
+  <div class="menu ucn-menu" :class="{hideMenu:layout.hideMenu}">
     <div class="fold-box" @click="changeHideMenu">
-      <i class="el-icon-arrow-left" v-show="!$store.state.layout.hideMenu"></i>
-      <i class="el-icon-arrow-right" v-show="$store.state.layout.hideMenu"></i>
+      <i class="el-icon-arrow-left" v-show="!layout.hideMenu"></i>
+      <i class="el-icon-arrow-right" v-show="layout.hideMenu"></i>
     </div>
 
     <el-menu class="menu-box">
@@ -11,40 +11,41 @@
           <i class="el-icon-menu" style="font-size: 16px"></i>
           <span v-text="$i.common.quickLink"></span>
         </div>
-
-        <el-menu-item v-for="(item,index) in $store.state.quickLink.list" :index="'1-' + index" :key="index">
-          <router-link :to="item.link">
-            <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" :content="item.label" placement="right">
+        <el-menu-item v-for="(item,index) in quickLink.list" :index="'1-' + index" :key="index">
+          <router-link :to="item.link || '/'">
+            <el-tooltip :disabled="!layout.hideMenu" effect="dark" :content="item.label"
+                        placement="right">
               <i class="iconfont" :class="[item.icon || 'icon-sousuo']"></i>
             </el-tooltip>
             <span v-text="item.label"></span>
           </router-link>
         </el-menu-item>
-        <el-menu-item @click="$store.state.quickLink.show = true" index="1-0">
+        <el-menu-item @click="quickLink.show = true" index="1-0">
           <i class="el-icon-more"></i>
           <span v-text="$i.button.addNewLinks"></span>
         </el-menu-item>
       </el-menu-item-group>
 
       <el-menu-item-group>
-        <el-menu-item index="2-0" v-show="$store.state.quickLink.draft.show"
-                      @click="$router.push($store.state.quickLink.draft)">
-          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark"
+        <el-menu-item index="2-0" v-show="quickLink.draft.show"
+                      @click="$router.push(quickLink.draft)">
+          <el-tooltip :disabled="!layout.hideMenu" effect="dark"
                       :content="$i.common.draft" placement="right">
             <i class="el-icon-edit-outline"></i>
           </el-tooltip>
           <span v-text="$i.common.draft"></span>
         </el-menu-item>
-        <el-menu-item index="2-1" v-show="$store.state.quickLink.recycleBin.show"
-                      @click="$router.push($store.state.quickLink.recycleBin)">
-          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark"
+        <el-menu-item index="2-1" v-show="quickLink.recycleBin.show"
+                      @click="$router.push(quickLink.recycleBin)">
+          <el-tooltip :disabled="!layout.hideMenu" effect="dark"
                       :content="$i.common.recycleBin" placement="right">
             <i class="el-icon-delete"></i>
           </el-tooltip>
           <span v-text="$i.common.recycleBin"></span>
         </el-menu-item>
-        <el-menu-item index="2-3" v-show="$store.state.quickLink.log">
-          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark"
+        <el-menu-item index="2-3" v-show="quickLink.log.show"
+                      @click="$router.push(quickLink.log)">
+          <el-tooltip :disabled="!layout.hideMenu" effect="dark"
                       :content="$i.common.log" placement="right">
             <i class="el-icon-tickets"></i>
           </el-tooltip>
@@ -52,8 +53,8 @@
         </el-menu-item>
         <el-menu-item index="2-4">
           <router-link to="/logs/import">
-            <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" :content="'导入日志'" placement="right">
-              <i class="el-icon-tickets"></i>
+            <el-tooltip :disabled="!layout.hideMenu" effect="dark" :content="$i.logs.importTitle" placement="right">
+              <i class="el-icon-time"></i>
             </el-tooltip>
             <span v-text="$i.logs.importTitle"></span>
           </router-link>
@@ -69,6 +70,7 @@
 </template>
 
 <script>
+  import {mapActions, mapState} from 'vuex';
   import {routerMap} from 'service/router'
 
   export default {
@@ -77,8 +79,14 @@
       return {
         routerList: [],
         activeName: null,
-        activeOpen: []
+        activeOpen: [],
       }
+    },
+    computed: {
+      ...mapState({
+        quickLink: state => state.quickLink,
+        layout: state => state.layout
+      }),
     },
     mounted() {
       routerMap.forEach(value => {
@@ -127,9 +135,9 @@
         return _.indexOf(param, user.userType) !== -1;
       },
       changeHideMenu() {
-        this.$store.state.layout.hideMenu = !this.$store.state.layout.hideMenu;
-        // this.$parent.$emit('full-box', !this.hideMenu);
-        // this.hideMenu = !this.hideMenu;
+        let userAction = this.$sessionStore.get('user_action') || {};
+        this.layout.hideMenu = userAction.hideMenu = !this.layout.hideMenu;
+        this.$sessionStore.set('user_action', userAction);
       }
     }
   }

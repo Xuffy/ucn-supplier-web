@@ -2,40 +2,18 @@
   <div class="dataDashboard">
 
     <h3 class="ucn-content-title inline" v-text="$i.workbench.dataDashboard"></h3>
-    <!--<div class="block" style="display: inline-block;margin-left: 80px">
-      <span class="demonstration">Time：</span>
-      <el-date-picker
-        v-model="value7"
-        type="daterange"
-        size="mini"
-        align="right"
-        unlink-panels
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        :picker-options="pickerOptions2">
-      </el-date-picker>
-    </div>
-
-    <el-button size="medium" type="text"
-               style="display: inline-block;margin-left: 30px!important;"
-               @click="dialog.show = true">more
-    </el-button>-->
-
     <br/><br/>
 
     <el-row class="data-table" :gutter="20" v-loading="loading">
       <el-col :span="6" v-for="(item,index) in dataList" :key="index">
         <table>
           <tr>
-            <!--<td class="title" v-text="$i.workbench.purchaseOrder"></td>-->
             <td class="title" v-text="item.title"></td>
             <td class="value">
               <div v-if="item.list[0]" v-text="item.list[0].value + ' ' + item.list[0].unit"></div>&nbsp;
             </td>
           </tr>
           <tr>
-            <!--<td class="title" rowspan="2" v-text="$i.workbench.orderPlaced"></td>-->
             <td class="title" rowspan="2" v-text="item.name"></td>
             <td class="value">
               <div v-if="item.list[1]" v-text="item.list[1].value + ' ' + item.list[1].unit"></div>&nbsp;
@@ -112,7 +90,7 @@
           });
       },
       getCode() {
-        return this.$ajax.post(this.$apis.POST_CODE_PART, ['UDA_BIZ_CODE', 'STAT_POINT', 'STAT_ITEM_UNIT'], {_cache: true});
+        return this.$ajax.post(this.$apis.POST_CODE_PART, ['UDA_BIZ_CODE', 'STAT_POINT', 'STAT_ITEM_UNIT'], {cache: true});
       }
     }
   }

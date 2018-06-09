@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <v-table-filter :hideFilterValue="true" class="filter"/>
+    <!--<v-table-filter :hideFilterValue="true" class="filter"/>-->
     <el-table :data="modifyArray" style="width: 100%" class="table">
       <el-table-column :label="$i.logistic.negotiate" width="120" align="center">
         <template slot-scope="scope">
@@ -163,7 +163,7 @@
   </el-row>
 </template>
 <script>
-import VTableFilter from '@/components/common/table/filter'
+// import VTableFilter from '@/components/common/table/filter'
 
 export default {
   props: {
@@ -183,7 +183,7 @@ export default {
     }
   },
   components: {
-    VTableFilter
+    // VTableFilter
   },
   data () {
     return {

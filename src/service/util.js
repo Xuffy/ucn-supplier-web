@@ -212,70 +212,39 @@ export default {
         return data;
       }
       return JSON.parse(_.clone(JSON.stringify(data)));
-    }
+    };
 
 
     Vue.prototype.$filterDic = (data, transForm, dataBase) => {
-      transForm ? transForm = transForm : transForm = 'transForm';
-      dataBase ? dataBase = dataBase : dataBase = 'dataBase';
+      transForm = transForm || 'transForm';
+      dataBase = dataBase || 'dataBase';
       _.mapObject(data, (val, k) => {
+        val.dataType = typeof val.value;
         if (_.isBoolean(val.value)) {
           val.value ? val.value = 1 : val.value = 0;
         }
         val[dataBase] = val.value;
-        if (val[transForm] && !data._remark) {
+        if (val[transForm] && !data._remark && ['entryDt', 'updateDt', 'fieldDisplay'].indexOf(k) < 0) {
           switch (val[transForm]) {
             case 'time':
-              val.value = DateFormat(val.value, val.time ? val.time : 'yyyy-dd-mm')
+              val.value = DateFormat(val.value, val.time ? val.time : 'yyyy-dd-mm');
               break;
             default:
-              if (!store.state.dic.length) return;
-              let label = val.name ? val.name : 'name';
-              val.dic = _.findWhere(store.state.dic, {'code': val[transForm]});
-              if (!val.dic || !val.dic) return;
-              if (_.isString(val[dataBase])) {
-                val.value = '';
-                _.map(val[dataBase].split(','), (res, index) => {
-                  val.value += _.findWhere(val.dic.codes, {'code': res + ''}) ? _.findWhere(val.dic.codes, {'code': res + ''})[label] : '';
-                  if ((index + 1) < val[dataBase].split(',').length) val.value += ',';
-                });
-
-              } else {
-                val.value = _.findWhere(val.dic.codes, {'code': val[dataBase] + ''}) ? _.findWhere(val.dic.codes, {'code': val[dataBase] + ''})[label] : '';
+              if(!store.state.dic.length) return;
+              let dic = _.findWhere(store.state.dic, {'code': val[transForm]});
+              if(!dic || !dic.codes) return;
+              val._option = dic.codes;
+              let code = _.findWhere(val._option, {'code': val[dataBase] + ''});
+              if (code) {
+                val._value = code.name || code[val.name];
+                val.value = code.code;
+                val[dataBase] = val.value;
               }
           }
         }
       });
       return data;
     };
-
-    Vue.prototype.$filterName = (data, transForm, dataBase) => {
-      transForm ? transForm = transForm : transForm = 'transForm';
-      dataBase ? dataBase = dataBase : dataBase = 'dataBase';
-      _.mapObject(data, (val, k) => {
-        if (val[transForm] && !data._remark) {
-          switch (val[transForm]) {
-            case 'time':
-              val.value = val[dataBase];
-              val.value = DateFormat(val[dataBase], val.time ? val.time : 'yyyy-dd-mm')
-              break;
-            default:
-              if (!store.state.dic.length) return;
-              let label = val.name ? val.name : 'name';
-              if (_.isBoolean(val.value)) {
-                val.dataBase ? val.dataBase = 1 : val.dataBase = 0;
-              }
-              val.value = val[dataBase];
-              val.dic = _.findWhere(store.state.dic, {'code': val[transForm]});
-              if (!val.dic || !val.dic) return;
-              val.value = _.findWhere(val.dic.codes, {'code': val[dataBase] + ''}) ? _.findWhere(val.dic.codes, {'code': val[dataBase] + ''})[label] : '';
-
-          }
-        }
-      });
-      return data;
-    };
-
 
     /**
      * $window.open

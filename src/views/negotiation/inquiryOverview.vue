@@ -6,7 +6,7 @@
                 <span>{{ $i.common.Status }}</span>
                 <el-radio-group v-model="params.status" size="mini">
                     <el-radio-button :label="null">{{$i.common.all}}</el-radio-button>
-                    <el-radio-button 
+                    <el-radio-button
                         v-for="item in $db.inquiry.overoiewState"
                         :label="item.id"
                         :key="item.id"
@@ -15,8 +15,8 @@
                     </el-radio-button>
                 </el-radio-group>
             </div>
-            <select-search 
-                :options="options" 
+            <select-search
+                :options="options"
                 @inputChange="inputEnter"
                 :searchLoad="searchLoad"
             />
@@ -36,13 +36,13 @@
                 </el-radio-group>
             </div>
         </div>
-        <v-table 
-            :data="tabData" 
-            :buttons="[{label: 'detail', type: 'detail'}]" 
+        <v-table
+            :data="tabData"
+            :buttons="[{label: 'detail', type: 'detail'}]"
             :height="450"
-            @action="action" 
+            @action="action"
             @change-checked="changeChecked"
-            :loading="tabLoad" 
+            :loading="tabLoad"
             ref="tab"
         />
         <v-pagination
@@ -55,7 +55,7 @@
 <script>
     /**
      * @param selectChange 下拉框 值发生变更触发
-     * @param options 下拉框 原始数据 
+     * @param options 下拉框 原始数据
     */
     import { selectSearch, VTable, VPagination } from '@/components/index';
     import { mapActions } from 'vuex'
@@ -150,19 +150,19 @@
                 this.$ajax.post(url, this.params)
                 .then(res => {
                     this.params.tc = res.tc;
-                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], '_cache')
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], {cache:true})
                     .then(data => {
                         this.setDic(data);
                         this.tabData = this.$getDB(column, res.datas, (item) => {
                             this.$filterDic(item);
                         });
                         this.tabLoad = false;
-                        this.searchLoad = false; 
+                        this.searchLoad = false;
                         this.checkedData = [];
                     });
                 })
                 .catch(() => {
-                    this.searchLoad = false; 
+                    this.searchLoad = false;
                     this.tabLoad = false;
                 })
             },
@@ -180,7 +180,7 @@
                     this.$message({
                         type: 'info',
                         message: '已取消删除'
-                    });          
+                    });
                 });
             },
             ajaxInqueryAction(type) {
@@ -221,7 +221,7 @@
                 let argId = this.getChildrenId('str');
                 this.$windowOpen({
                     url: '/negotiation/compareDetail/{type}',
-                    params: {   
+                    params: {
                         type: 'new',
                         ids: argId.join(',')
                     }

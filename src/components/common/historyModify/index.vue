@@ -18,45 +18,51 @@
                          :prop="item.key"
                          :label="item.label">
 
-          <template slot-scope="scope" v-if="scope.row[item.key] && !scope.row[item.key]._hide">
-            <div v-if="!scope.row[item.key]._edit || scope.row[item.key]._title">
-              {{scope.row[item.key].value}}
-              <p v-if="scope.row[item.key]._title" v-text="scope.row[item.key]._title"></p>
+          <template slot-scope="{ row }" v-if="row[item.key] && !row[item.key]._hide">
+            <div v-if="!row[item.key]._edit || row[item.key]._title">
+              {{row[item.key].value}}
+              <p v-if="row[item.key]._title" v-text="row[item.key]._title"></p>
             </div>
 
             <div v-else>
-              <span v-if="scope.row[item.key]._disabled || !isModify || scope.row[item.key].type === 'manySelect'" v-text="scope.row[item.key].value"></span>
-              <div v-else-if="scope.row[item.key]._slot && !scope.row._remark">
-                <slot :name="item._slot" :data="scope.row[item.key]"></slot>
+              <span v-if="(row[item.key]._disabled && !row._remark) || !isModify"
+                    v-text="row[item.key].value"></span>
+
+              <div v-else-if="row[item.key]._slot && !row._remark">
+                <slot :name="item._slot" :data="row[item.key]"></slot>
               </div>
-              
+
               <div v-else>
-                <el-input v-if="scope.row[item.key].type === 'String' || scope.row._remark" clearable
-                          v-model="scope.row[item.key].value" size="mini"></el-input>
-                
-                <span v-else-if="scope.row[item.key].type === 'Number' && scope.row[item.key].state === 'rate' && !scope.row._remark" style="position:relative;">
-                  <el-input-number
-                      v-model="scope.row[item.key].value"
-                      :min="scope.row[item.key].min || 0"
-                      :max="scope.row[item.key].max || 99999999"
-                      controls-position="right" 
-                      size="mini"
-                      :controls="false" 
-                      style="width:100%;"
-                  />
-                  <i style="position:absolute;top:0;right:5px;transform:translate(-50%, 0)">%</i>
-                </span>
+                <!--文本输入-->
+                <el-input v-if="row[item.key].type === 'String' || row._remark" clearable
+                          v-model="row[item.key].value" size="mini"></el-input>
+
+                <!--数字输入-->
                 <el-input-number
-                      v-else
-                      v-model="scope.row[item.key].value"
-                      :min="scope.row[item.key].min || 0"
-                      :max="scope.row[item.key].max || 99999999"
-                      controls-position="right" 
-                      size="mini"
-                      :controls="false" 
-                      style="width:100%;"
-                  />
-                <!--<span v-if="scope.row[item.key].unit"></span>-->
+                  v-else-if="row[item.key].type === 'Number'"
+                  v-model="row[item.key].value"
+                  :min="row[item.key].min || 0"
+                  :max="row[item.key].max || 99999999"
+                  controls-position="right"
+                  size="mini"
+                  :controls="false"
+                  style="width:100%;"></el-input-number>
+
+                <!--下拉选项-->
+                <el-select
+                  v-else-if="row[item.key].type === 'Select' && row[item.key]._option"
+                  clearable
+                  v-model="row[item.key].value"
+                  @change="val => {changeSelect(val,row[item.key])}"
+                  :placeholder="$i.order.pleaseChoose">
+                  <el-option
+                    v-for="(optionItem,index) in row[item.key]._option"
+                    :key="index"
+                    :label="optionItem[row[item.key]._optionLabel || 'name']"
+                    :value="optionItem[row[item.key]._optionValue || 'code']">
+                  </el-option>
+                </el-select>
+
               </div>
             </div>
           </template>
@@ -64,8 +70,8 @@
       </el-table>
 
       <div slot="footer">
-        <el-button @click="showDialog = false">取 消</el-button>
-        <el-button type="primary" @click="submit">确 定</el-button>
+        <el-button @click="showDialog = false">{{$i.common.cancel}}</el-button>
+        <el-button type="primary" @click="submit">{{$i.common.confirm}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -97,15 +103,12 @@
     },
     watch: {
       data(val) {
-        // this.dataList = this.getEditData(val);
       },
       visible(val) {
         this.showDialog = val;
       }
     },
     mounted() {
-      // this.dataList = this.getEditData(this.data);
-      // console.log(this.dataList)
     },
     methods: {
       submit() {
@@ -127,16 +130,21 @@
             return val;
           });
         });
-        // this.dataList = ed.concat(history);
         this.dataList = this.$depthClone(ed.concat(history));
-        
+
         this.defaultData = this.$depthClone(ed.concat(history));
         this.dataColumn = this.dataList[0];
         this.showDialog = true;
         this.isModify = isModify;
 
       },
-      getFilterData(data,k = 'id') {
+      changeSelect(val, item) {
+        let param = {}, obj;
+        param[item._optionValue || 'code'] = val;
+        obj = _.findWhere(item._option, param);
+        item._value = obj ? obj[item._optionLabel || 'name'] : '';
+      },
+      getFilterData(data, k = 'id') {
         let list = [];
         _.map(data, value => {
           list.push(value);

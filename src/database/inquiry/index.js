@@ -6,10 +6,10 @@ import productInfo from './children/productInfo';
 import compare from './children/compare';
 
 export default {
-    overoiewState,
-    viewByInqury,
-    viewBySKU,
-    basicInfo,
-    productInfo,
-    compare
-}
+  overoiewState,
+  viewByInqury,
+  viewBySKU,
+  basicInfo,
+  productInfo,
+  compare
+};

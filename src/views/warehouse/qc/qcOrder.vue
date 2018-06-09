@@ -352,7 +352,7 @@
              * 获取字典
              * */
             // getUnit(){
-            //     this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE'],{_cache:true}).then(res=>{
+            //     this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE'],{cache:true}).then(res=>{
             //         this.inboundTypeOption=res[0].codes;
             //     });
             //     // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{
@@ -362,7 +362,7 @@
         },
         created(){
             this.loadingTable=true;
-            this.$ajax.post(this.$apis.get_partUnit,['QC_MD','QC_TYPE'],{_cache:true}).then(res=>{
+            this.$ajax.post(this.$apis.get_partUnit,['QC_MD','QC_TYPE'],{cache:true}).then(res=>{
                 res.forEach(v=>{
                     if(v.code==='QC_MD'){
                         this.qcMethodOption=v.codes;

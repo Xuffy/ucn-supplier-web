@@ -189,7 +189,7 @@
       },
       getMessage() {
         this.message.loading = true;
-        this.$ajax.get(this.$apis.UNREADMESSAGE_QUERYUNREAD, {}, {_cache: true})
+        this.$ajax.get(this.$apis.UNREADMESSAGE_QUERYUNREAD)
           .then(data => {
             this.message.list = data || [];
           })

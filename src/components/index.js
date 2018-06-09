@@ -4,18 +4,13 @@ import VImage from './common/image/index';
 import VTimeZone from './common/timeZone/index';
 import VImportTemplate from './common/importTemplate/index';
 import VTable from './common/table/index';
-import VTableFilter from './common/table/filter';
+// import VTableFilter from './common/table/filter';
 import VPagination from './common/table/pagination';
-import VSimpleTable from './common/table/simple';
-import VComplexTable from './common/table/complex';
 import VHistoryModify from './common/historyModify';
 import dropDown from './common/fnCompon/dropDown';
-import Expand from './common/table/expand';
-import FilterColumn from './common/table/filterColumn';
-import FilterValue from './common/table/filterValue';
+import VFilterColumn from './common/table/filterColumn';
+import VFilterValue from './common/table/filterValue';
 import VUpload from './common/upload/index';
-import UploadDialog from './common/uploadDialog/index';
-import Download from './common/uploadDialog/download';
 import messageBoard from './common/messageBoard/index';
 import VMessageBoard from './common/messageBoard/index';
 import selectSearch from './common/fnCompon/selectSearch';
@@ -39,16 +34,10 @@ export {
   VHistoryModify,
   VAddQuickLink,
   VTable,
-  VTableFilter,
-  VSimpleTable,
-  VComplexTable,
   VMessageBoard,
   dropDown,
-  Expand,
-  FilterColumn,
-  FilterValue,
-  UploadDialog,
-  Download,
+  VFilterColumn,
+  VFilterValue,
   messageBoard,
   selectSearch,
   // product,                      //product页面组件

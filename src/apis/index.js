@@ -17,11 +17,11 @@ let list = _.mapObject(apis, val => {
     b = config.ENV.MOCK;
   } else if (config.ENV_FLAG !== 'local') {
     u = config.ENV[val[2] || val[1]]
-    b = (u || config.ENV['BASE_URL']) + v;
+    b = (u || config.ENV.BASE_URL) + v;
   } else if (_.indexOf(_.keys(config.ENV), val[1]) > -1) {
     b = config.ENV[val[1]] + v;
   } else {
-    b = config.ENV.BASE_API + v;
+    b = config.ENV.BASE_URL + v;
   }
   return b + val[0];
 });

@@ -9,7 +9,7 @@ export default {
   },
   createOrder: {
     icon: 'icon-dingdanC',
-    link: '/order/creat',
+    link: '/order/create',
     customer: true,
     supplier: false,
     server: false,

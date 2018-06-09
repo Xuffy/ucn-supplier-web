@@ -1,12 +1,12 @@
 <template>
-  <div class='uploadDialog'>  
+  <div class='uploadDialog'>
      <div class='address'>
-         Address&nbsp :&nbsp 
-         <upload></upload>
-     </div>   
+         Address&nbsp :&nbsp
+         <!--<upload></upload>-->
+     </div>
       <div class='download'>
-         Template : 
-         <span class="filename">{{filename}}</span>    
+         Template :
+         <span class="filename">{{filename}}</span>
          <el-button type="primary" icon="el-icon-download" > download</el-button>
 
      </div>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-    import upload from '@/components/common/upload/upload.vue'
+    // import upload from '@/components/common/upload/upload.vue'
     export default {
         name: 'uploadDialog',
         props:{
@@ -35,7 +35,7 @@
             },
         },
         components: {
-            upload,
+            // upload,
         },
         data() {
             return {}

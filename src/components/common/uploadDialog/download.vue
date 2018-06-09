@@ -1,8 +1,8 @@
 <template>
-  <div class='uploadDialog'>  
+  <div class='uploadDialog'>
       <div class='download'>
-         Template : 
-         <span class="filename">我是文件格式的名字哈</span>    
+         Template :
+         <span class="filename">我是文件格式的名字哈</span>
          <el-button type="primary" icon="el-icon-download" > download</el-button>
 
      </div>
@@ -10,7 +10,6 @@
 </template>
 
 <script>
-    import upload from '@/components/common/upload/upload.vue'
     export default {
         name: 'download',
         data() {

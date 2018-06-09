@@ -5,7 +5,6 @@ import ajax from 'service/ajax'
 import config from 'service/config';
 import * as filters from 'service/filters'
 import * as directive from 'service/directive'
-import fetch from 'service/fetch';
 import apis from '@/apis/index';
 import util from 'service/util';
 import '../theme/index.css';
@@ -26,7 +25,6 @@ const lang = localStore.get('language') || config.LANGUAGE;
 
 locale.use(require(`element-ui/lib/locale/lang/${lang}`).default);
 
-Vue.use(fetch);
 Vue.use(util);
 Vue.use(ElementUI, {size: 'mini'});
 

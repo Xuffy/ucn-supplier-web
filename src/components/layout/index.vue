@@ -2,10 +2,10 @@
   <div class="app-wrapper">
     <v-header></v-header>
     <v-menu></v-menu>
-    <div class="main-container" :class="{fullBox:$store.state.layout.hideMenu}">
+    <div class="main-container" :class="{fullBox:layout.hideMenu}">
       <nav-bar></nav-bar>
 
-      <section class="app-main" :style="{paddingRight:$store.state.layout.paddingRight || '15px'}">
+      <section class="app-main" :style="{paddingRight:layout.paddingRight || '15px'}">
         <div class="content">
           <transition name="el-fade-in-linear">
             <router-view :key="key"></router-view>
@@ -23,6 +23,7 @@
   import VHeader from './header'
   import VMenu from './menu'
   import NavBar from './navBar'
+  import {mapActions, mapState} from 'vuex';
   import {VAddQuickLink, VMessageBoard} from '@/components/index'
 
   export default {
@@ -42,6 +43,9 @@
     mounted() {
     },
     computed: {
+      ...mapState({
+        layout: state => state.layout
+      }),
       key() {
         return this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date();
       },
