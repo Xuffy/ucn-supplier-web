@@ -5,5 +5,7 @@
   "pleaseCreate":"Please Create",
   "deleteSuccess":"Delete Success",
   "sureDelete":"Sure Delete?",
-  "handleSuccess":"Handle Success!"
+  "handleSuccess":"Handle Success!",
+  "shippedSuccess":"Shipped Success!",
+  "saveSuccess":"Save Success!"
 }

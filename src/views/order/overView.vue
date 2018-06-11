@@ -96,13 +96,16 @@
                 selectSearch: 1,
                 pageTotal: 1,
                 rowspan: 1,
-                options: [{
-                    id: 1,
-                    label: 'Order No'
-                }, {
-                    id: 2,
-                    label: 'Sku Code'
-                }],
+                options: [
+                    {
+                        id: 1,
+                        label: 'Order No'
+                    },
+                    {
+                        id: 2,
+                        label: 'Sku Code'
+                    }
+                ],
                 keyType: '',
                 params: {
                     orderNo: '',
@@ -209,7 +212,9 @@
                 this.$ajax.post(url, this.params)
                     .then((res) => {
                         this.loading = false;
-                        this.tabData = this.$getDB(query, res.datas);
+                        this.tabData = this.$getDB(query, res.datas,e=>{
+                            console.log(e)
+                        });
                         this.pageData = res;
                     })
                     .catch((res) => {

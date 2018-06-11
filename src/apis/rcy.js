@@ -6,9 +6,11 @@ export default {
     OVERVIEW_ORDERPAGE: ['/order/overview/orderPage', 'USUPPLY_URL'],
     OVERVIEW_SKUPAGE: ['/order/overview/skuPage', 'USUPPLY_URL'],
     PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME: ['/purchase/supplier/listSupplierByName?name={name}', 'UPURCHASE_URL'],
-    ORDER_DETAIL: ['/order/detail', 'UPURCHASE_URL'],
-    ORDER_ACCEPT:['/order/accept','UPURCHASE_URL'],
-    ORDER_CANCEL:['/order/cancle','UPURCHASE_URL'],
+    ORDER_DETAIL: ['/order/detail', 'USUPPLY_URL'],
+    ORDER_ACCEPT:['/order/accept','USUPPLY_URL'],
+    ORDER_CANCEL:['/order/cancle','USUPPLY_URL'],
+    ORDER_CONFIRM:['/order/confirm','USUPPLY_URL'],
+    ORDER_UPDATE:['/order/update','USUPPLY_URL'],
 
 
     //customer

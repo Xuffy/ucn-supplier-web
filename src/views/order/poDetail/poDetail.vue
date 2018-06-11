@@ -316,11 +316,11 @@
                     <el-button @click="cancelModify" type="danger">{{$i.order.cancel}}</el-button>
                 </div>
                 <div v-else>
-                    <el-button :disabled="loadingPage || disableModify" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
-                    <el-button :disabled="loadingPage || disableConfirm" @click="confirmOrder" type="primary">{{$i.order.confirm}}</el-button>
-                    <el-button :disabled="loadingPage" @click="createOrder" type="primary">{{$i.order.createOrder}}</el-button>
-                    <el-button :disabled="loadingPage" type="danger">{{$i.order.cancel}}</el-button>
-                    <el-checkbox :disabled="loadingPage" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
+                    <el-button :disabled="loadingPage || disableModify || hasCancelOrder" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
+                    <el-button :disabled="loadingPage || disableConfirm || hasCancelOrder" @click="confirmOrder" type="primary">{{$i.order.confirm}}</el-button>
+                    <el-button :disabled="loadingPage || hasCancelOrder" @click="createOrder" type="info">{{$i.order.cancelOrder}}</el-button>
+                    <el-button :disabled="loadingPage || hasCancelOrder" type="danger">{{$i.order.cancel}}</el-button>
+                    <el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
                 </div>
             </div>
             <div v-else>
@@ -839,6 +839,7 @@
                  * 页面基础配置
                  * */
                 hasHandleOrder:false,       //该订单是否接单,默认为false
+                hasCancelOrder:false,
                 isModify:false,     //是否在modify状态
                 disabledLcNo:true,
                 allowQuery:0,
@@ -1182,12 +1183,12 @@
                     this.markImportant=this.orderForm.importantCustomer;
 
                     //判断底部按钮能不能点
-                    if(res.status!=='2' && res.status!=='3' && res.status!=='4'){
+                    if(res.status!=='1' && res.status!=='3' && res.status!=='4'){
                         this.disableModify=true;
                     }else{
                         this.disableModify=false;
                     }
-                    if(res.status!=='2'){
+                    if(res.status!=='1'){
                         this.disableConfirm=true;
                     }else{
                         this.disableConfirm=false;
@@ -1196,6 +1197,10 @@
                         this.hasHandleOrder=false;
                     }else{
                         this.hasHandleOrder=true;
+                    }
+                    //代表订单被取消了
+                    if(this.orderForm.status==='5'){
+                        this.hasCancelOrder=true;
                     }
                 }).finally(err=>{
                     this.loadingPage=false;
@@ -1465,7 +1470,7 @@
                 this.$ajax.post(this.$apis.ORDER_ACCEPT,{
                     ids:[this.orderForm.id],
                 }).then(res=>{
-                    console.log(res)
+                    this.getDetail();
                 }).finally(err=>{
                     this.disableClickAccept=false;
                 });
