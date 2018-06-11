@@ -14,11 +14,35 @@
   "return":"申请退货",
 
 
+  "skuNameCustomer":"SKU Name in Customer's language",
+  "skuMaterialCn":"Material (CN)",
+  "skuMaterialEn":"Material (EN)",
+  "skuDescCn":"SKU Description (CN)",
 
-  "serviceFill":"服务金额",
+  "qcOrderNo":"QC Order No",
+  "qcType":"QC Type",
+  "qcDate":"QC Date",
+  "factoryAddress":"Factory Address",
+  "factoryContactPhone":"Factory Contact Phone",
+  "qcStatus":"QC Status",
+  "qcMethod":"QC Method",
+  "surveyor":"Surveyor",
+  "serviceFee":"Service Fee",
+  "serviceProviders":"Service Providers",
+  "exchangeCurrency":"Exchange Currency",
+  "remark":"Remark",
+  "attachment":"Attachment",
 
-  "skuNameCustomer":"客户语言品名",
-  "skuMaterialCn":"中文材质",
-  "skuMaterialEn":"英文材质",
-  "skuDescCn":"产品中文描述"
+
+  "cartonOfQualifiedProducts":"Carton of Qualified Products",
+  "quantityOfQualifiedProducts":"Quantity of Qualified Products",
+  "volumeOfQualifiedProducts":"Volume of Qualified Products",
+  "netWeightOfQualifiedProducts":"Net Weight of Qualified Products",
+  "grossWeightOfQualifiedProducts":"Gross Weight of Qualified Products",
+  "quantityOfSubQualityProducts":"Quantity of Sub-quality Products",
+  "cartonOfSubQualityProducts":"Carton of Sub-quality Products",
+  "netWeightOfSubQualityProducts":"Net Weight of Sub-quality Products",
+  "volumeOfSubQualityProducts":"Volume of Sub-quality Products",
+  "grossWeightOfSubQualityProducts":"Gross Weight of Sub-quality Products",
+  "skuQuantity":"SKU Quantity"
 }

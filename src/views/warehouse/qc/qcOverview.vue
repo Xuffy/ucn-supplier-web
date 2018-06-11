@@ -123,7 +123,7 @@
                     if(e.qcStatusDictCode.value==='COMPLETED_QC'){
                         //跳qcOrderDetail
                         this.$windowOpen({
-                            url:'/warehouse/qcOrderDetail',
+                            url:'/warehouse/qcOrder',
                             params:{
                                 id:e.id.value
                             }
@@ -164,7 +164,6 @@
                             this.qcMethodsOption=v.codes;
                         }
                     });
-
                     this.getQcData();
                 }).catch(err=>{
 
