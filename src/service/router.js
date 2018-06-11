@@ -598,7 +598,7 @@ export const routerMap = [
           meta: {
             name: 'Category setting',
           },
-          component: () => import('../views/sellerSettings/CategorySetting'),
+          component: () => import('../views/settings/CategorySetting'),
         }
       ]
     }

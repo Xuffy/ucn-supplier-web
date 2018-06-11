@@ -24,6 +24,19 @@ const axios = Axios.create({
   transformRequest: [function (data) {
     return data;
   }],
+  transformResponse: [function (data) {
+    let res = JSON.parse(data);
+
+    if (res.status === 'SUCCESS') {
+      return data;
+    }
+
+    if (!validate_error(res.errorCode)){
+      throw new Error(`Interface return exception \n [requestUid] ${res.requestUid}`);
+    }
+
+
+  }],
 });
 
 /**
@@ -34,8 +47,8 @@ const axios = Axios.create({
 const validate_error = (code, msg) => {
   switch (code) {
     case 'AUTH-011': // 登录失效
-      return router.push('/login');
-
+      router.push('/login');
+      return true;
   }
 
   Message.warning(msg || $i.hintMessage.dataException);
@@ -116,7 +129,7 @@ const $ajax = (config) => {
     } else {
       switch (_options.method) {
         case 'DELETE':
-          return axios.delete(_options.url);
+          return axios.delete(_options.url, _options);
         case 'PUT':
           return axios.put(_options.url, options.data, _options);
         case 'GET':
@@ -218,7 +231,6 @@ axios.interceptors.request.use(config => {
     });
     Promise.reject();
     return config;
-  } else {
   }
 
   return config
@@ -237,17 +249,9 @@ axios.interceptors.response.use(
 
     NProgress.done();
 
-    if (_.isEmpty(response.data)) {
-      throw new Error(`api data is undefined - requestUid: ${response.data.requestUid}`);
-    }
-
     // 数据格式转换
     if (_.isString(response.data)) {
       response.data = JSON.parse(response.data);
-    }
-
-    if (response.data.status !== 'SUCCESS') {
-      return validate_error(response.data.errorCode, response.data.errorMsg);
     }
 
     // 缓存设置

@@ -26,7 +26,7 @@ const state = {
     list: [],
   },
   layout: {
-    hideMenu: !!(sessionStore.get('user_action') || {}).hideMenu,
+    hideMenu: false,
     paddingRight: 0
   },
   dic: '',

@@ -25,6 +25,10 @@
         this.layout.paddingRight = 0;
       }
     },
+    created() {
+      this.layout.hideMenu = this.$userAction.get('hideMenu');
+
+    }
   }
 </script>
 

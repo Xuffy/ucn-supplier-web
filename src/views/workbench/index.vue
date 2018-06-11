@@ -109,7 +109,7 @@
           .then(res => {
             if (!res.categoryInfo || !res.companyInfo || !res.departmentInfo) {
               this.settingStateShow = true;
-              this.layout.paddingRight = '250px'
+              this.layout.paddingRight = '240px'
               this.settingState = res;
             }
           })
@@ -133,7 +133,7 @@
   .welcome-box {
     position: fixed;
     top: 0;
-    right: 10px;
+    right: 0;
     width: 230px;
     height: 100%;
     padding: 100px 10px 10px 10px;

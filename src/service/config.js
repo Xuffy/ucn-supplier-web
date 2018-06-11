@@ -15,7 +15,7 @@ export default {
       USUPPLY_URL: '//192.168.51.148:11002', // 供应商端 dev
       USERVICE_URL: '//192.168.51.148:11003', // 服务商端
       UOSS_URL: '//192.168.51.148:', // 对象存储服务
-      UBIZLOG_URL: '//192.168.51.148:18100', // 业务日志
+      UBIZLOG_URL: '//192.168.51.148:13301', // 业务日志
       UWORKBENCH_URL: '//192.168.51.148:11010',
       UIE_URL: '//192.168.51.148:13003',
 
@@ -35,7 +35,7 @@ export default {
       USUPPLY_URL: '//192.168.51.208:11002', // 供应商端
       USERVICE_URL: '//192.168.51.208:11003', // 服务商端
       UOSS_URL: '//192.168.51.208:', // 对象存储服务
-      UBIZLOG_URL: '//192.168.51.208:18100', // 业务日志
+      UBIZLOG_URL: '//192.168.51.208:13301', // 业务日志
       UWORKBENCH_URL: '//192.168.51.208:11010',
       UIE_URL: '//192.168.51.208:13003',
 
@@ -82,8 +82,8 @@ export default {
   TIMEOUT: 60000,
 
   // 默认语言设置
-  LANGUAGE: 'zh-CN',
-  // LANGUAGE: 'en',
+  // LANGUAGE: 'zh-CN',
+  LANGUAGE: 'en',
 
   // 项目版本号
   VERSION: `2.0.${process.env.VERSION}`,

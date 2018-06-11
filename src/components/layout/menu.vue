@@ -11,7 +11,8 @@
           <i class="el-icon-menu" style="font-size: 16px"></i>
           <span v-text="$i.common.quickLink"></span>
         </div>
-        <el-menu-item v-for="(item,index) in quickLink.list" :index="'1-' + index" :key="index">
+        <el-menu-item v-for="(item,index) in quickLink.list"
+                      :index="'1-' + index" :key="index">
           <router-link :to="item.link || '/'">
             <el-tooltip :disabled="!layout.hideMenu" effect="dark" :content="item.label"
                         placement="right">
@@ -135,9 +136,8 @@
         return _.indexOf(param, user.userType) !== -1;
       },
       changeHideMenu() {
-        let userAction = this.$sessionStore.get('user_action') || {};
-        this.layout.hideMenu = userAction.hideMenu = !this.layout.hideMenu;
-        this.$sessionStore.set('user_action', userAction);
+        this.layout.hideMenu = !this.layout.hideMenu;
+        this.$userAction.set('hideMenu', this.layout.hideMenu);
       }
     }
   }

@@ -5,7 +5,7 @@
                @close="dialogClose">
       <el-checkbox-group v-model="checkedList">
         <el-row>
-          <el-col :span="8" v-for="item in $db.common.quickLink" :key="item.key" v-if="item.customer">
+          <el-col :span="8" v-for="item in $db.common.quickLink" :key="item.key">
             <el-checkbox :label="item.key">
               {{item.label}}
             </el-checkbox>
@@ -38,6 +38,7 @@
    */
 
   import {mapActions, mapState} from 'vuex';
+  import config from '../../../service/config'
 
   export default {
     name: 'VAddQuickLink',
@@ -62,27 +63,53 @@
       }),
     },
     watch: {},
+    created() {
+      let ql = {};
+
+      _.map(this.$db.common.quickLink, (val, key) => {
+        switch (config.CLIENT_TYPE) {
+          case 1:
+            if (val.customer) {
+              ql[key] = val;
+            }
+            break;
+          case 2:
+            if (val.supplier) {
+              ql[key] = val;
+            }
+            break;
+          case 3:
+            if (val.server) {
+              ql[key] = val;
+            }
+            break;
+        }
+      });
+      this.$db.common.quickLink = ql;
+
+    },
     mounted() {
       this.getQuickLink();
     },
     methods: {
       getQuickLink() {
-        this.$ajax.post(this.$apis.ITEMFAVORITE_PART, {bizCode: 'QUICK_LINK'}, {contentType: 'F'})
+        this.$ajax.post(this.$apis.ITEMFAVORITE_PART, {bizCode: 'QUICK_LINK', type: config.CLIENT_TYPE})
           .then((data) => {
             let list = [];
+
             this.checkedList = _.map(data, val => {
               let v = this.$db.common.quickLink[val.itemCode];
-              v.customer && list.push(this.$db.common.quickLink[val.itemCode]);
+              v && list.push(v);
               return val.itemCode;
             });
-            this.quickLink.list = list;
 
+            this.quickLink.list = list;
           });
       },
       updateQuickLink() {
         let data = [];
 
-        if (_.isEmpty(this.checkedList)) return this.quickLink.show = false;
+        // if (_.isEmpty(this.checkedList)) return this.quickLink.show = false;
 
         this.loading = true;
         _.map(this.checkedList, (val, index) => {

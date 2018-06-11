@@ -68,5 +68,17 @@ const authorize = {
   }
 }
 
+const image = {
+  bind(el, binding, value) {
+    console.log(el, binding)
+    console.log(el.style, el.clientWidth)
+    el.setAttribute('onerror', 'this.src="//iph.href.lu/40x40?text=%E5%9B%BE%E7%89%87&bg=F2F2F2";this.onerror=null');
+    /*if (_.indexOf(json, binding.value) === -1) {
+      el.style.display = 'none';
+    }*/
 
-export {authorize};
+  }
+}
+
+
+export {authorize, image};

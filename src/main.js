@@ -17,7 +17,6 @@ import {localStore} from 'service/store';
 import 'element-ui/lib/theme-chalk/base.css';
 
 
-
 ////////////////////////////////////////////////////////
 
 
@@ -35,14 +34,12 @@ Vue.prototype.$apis = apis;
 config.LANGUAGE = lang;
 
 
-// 屏蔽开发环境warn
-console.warn = () => {
-}
-
-
 // 去掉console
 if (config.ENV_FLAG === 'production') {
   console.log = () => {
+  }
+  // 屏蔽开发环境warn
+  console.warn = () => {
   }
 }
 

@@ -3,7 +3,7 @@
     <div class="title-box">
       <h3 class="ucn-content-title inline">{{$i.common.messageBoard}}</h3>
       <i class="el-icon-d-arrow-right"
-         @click="layout.paddingRight = layout.paddingRight ? 0 : '375px'"></i>
+         @click="changeShow"></i>
     </div>
 
     <div class="content">
@@ -76,7 +76,9 @@
     },
     watch: {},
     created() {
-      this.layout.paddingRight = '375px'
+      if(this.$userAction.get('messageBoard')){
+        this.layout.paddingRight = '367px'
+      }
     },
     mounted() {
       this.getMessage();
@@ -111,6 +113,10 @@
           .finally(() => {
             this.contentLoading = false;
           });
+      },
+      changeShow() {
+        this.layout.paddingRight = this.layout.paddingRight ? 0 : '365px';
+        this.$userAction.set('messageBoard', !!this.layout.paddingRight);
       }
     }
   }
@@ -123,7 +129,7 @@
   .ucn-message-board {
     width: 350px;
     position: fixed;
-    right: 10px;
+    right: 0;
     top: 0;
     height: 100%;
     z-index: 920;
@@ -164,12 +170,12 @@
     width: 50%;
     top: 60px;
     left: 0;
-    line-height: 40px;
-    height: 40px;
+    line-height: 36px;
+    height: 36px;
     position: absolute;
     transition: all .5s;
     transition-delay: .5s;
-    transform: translate(-130%, 0);
+    transform: translate(-150%, 0);
     box-sizing: border-box;
     background-color: #FFFFFF;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, .1);
