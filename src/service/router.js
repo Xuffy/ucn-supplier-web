@@ -582,26 +582,6 @@ export const routerMap = [
         }
       ]
     },
-    {
-      path: '/sellerSettings',
-      name: 'sellerSettings',
-      noDropdown: false,
-      component: Layout,
-      redirect: '/sellerSettings/CategorySetting',
-      meta: {
-        name: 'sellerSettings',
-      },
-      children: [
-        {
-          path: 'sellerCategorySetting',
-          name: 'sellerCategorySetting',
-          meta: {
-            name: 'Category setting',
-          },
-          component: () => import('../views/settings/CategorySetting'),
-        }
-      ]
-    }
   ]
 ;
 
