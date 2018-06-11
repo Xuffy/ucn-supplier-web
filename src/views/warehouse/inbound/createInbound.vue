@@ -13,10 +13,10 @@
                                     size="mini"
                                     :disabled="v.disabled"
                                     v-model="inboundData[v.key]"
-                                    :placeholder="v.sysCreate?'系统生成':'请输入'"></el-input>
+                                    :placeholder="v.sysCreate?$i.warehouse.systemCreate:$i.warehouse.pleaseInput"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
-                            <el-select class="speInput" size="mini" v-model="inboundData[v.key]" placeholder="请选择">
+                            <el-select class="speInput" size="mini" v-model="inboundData[v.key]" :placeholder="$i.warehouse.pleaseChoose">
                                 <el-option
                                         v-for="item in inboundTypeOption"
                                         :key="item.id"

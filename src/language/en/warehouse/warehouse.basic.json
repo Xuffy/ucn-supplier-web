@@ -3,7 +3,7 @@
   "status":"Status",
   "all":"All",
   "download":"Download",
-  "qcOverview":"QC Order Overview",
+  "qcOverview":"QC Overview",
   "create":"Create",
   "addProduct":"Add Product",
   "remove":"Remove",
@@ -20,5 +20,41 @@
   "submit":"Submit",
   "modify":"Modify",
   "invalid":"Invalid",
-  "restore":"Restore"
+  "restore":"Restore",
+
+  "inboundOverview":"入库总览",
+  "outboundOverview":"出库总览",
+  "inboundType":"入库类型",
+  "outBoundType":"出库类型",
+  "purchaseInbound":"采购入库",
+  "checkInbound":"验货入库",
+  "customerReturnInbound":"客户退货入库",
+  "preDeliveryInbound":"预发货退货入库",
+  "basicInfo":"基本信息",
+  "close":"关闭",
+  "productInfo":"产品信息",
+  "summary":"总计",
+  "removeProduct":"移除产品",
+  "search":"搜索",
+  "clear":"清空",
+
+  "sellingOutOfTheTreasury":"销售出库",
+  "collectionOfMaterialsFromTheWarehouse":"组装领料出库",
+  "stockTransfer":"转库",
+  "returnToSupplier":"退回供应商",
+
+  "payment":"付款信息",
+  "qcResult":"验货结果",
+  "applyRework":"返工申请",
+  "applyReturn":"退货申请",
+  "accept":"接受",
+  "acceptRework":"接受返工",
+  "acceptReturn":"接受退货",
+
+  "qcOrderDetail":"货单详情",
+  "detail":"详情",
+  "pressMoney":"催款",
+
+  "systemCreate":"系统生成",
+  "please Choose":"Please Choose"
 }
