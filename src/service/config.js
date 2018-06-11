@@ -82,8 +82,8 @@ export default {
   TIMEOUT: 60000,
 
   // 默认语言设置
-  // LANGUAGE: 'zh-CN',
-  LANGUAGE: 'en',
+  LANGUAGE: 'zh-CN',
+  // LANGUAGE: 'en',
 
   // 项目版本号
   VERSION: `2.0.${process.env.VERSION}`,

@@ -8,7 +8,7 @@
                 <span>{{$i.warehouse.inboundType}}</span>
                 <el-radio-group class="radios" @change="changeStatus" v-model="inboundConfig.inboundTypeDictCode" size="mini">
                     <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
-                    <el-radio-button v-for="v in inboundType" :key="v.id" :label="v.value">{{v.label}}</el-radio-button>
+                    <el-radio-button v-for="v in inboundType" :key="v.id" :label="v.value">{{v.name}}</el-radio-button>
                 </el-radio-group>
                 <select-search
                         class="search"
@@ -25,7 +25,7 @@
                         @action="btnClick">
                     <template slot="header">
                         <div class="btns">
-                            <el-button>{{$i.warehouse.download}}({{selectList.length===0?'All':selectList.length}})</el-button>
+                            <!--<el-button>{{$i.warehouse.download}}({{selectList.length===0?'All':selectList.length}})</el-button>-->
                             <el-button @click="createInbound">新建</el-button>
                         </div>
                     </template>
@@ -157,18 +157,19 @@
         },
         created(){
             this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE']).then(res=>{
+                console.log(res,'???')
                 this.inboundType=res[0].codes;
-                this.inboundType.forEach(v=>{
-                    if(v.value==='1'){
-                        v.label=this.$i.warehouse.purchaseInbound;
-                    }else if(v.value==='2'){
-                        v.label=this.$i.warehouse.checkInbound;
-                    }else if(v.value==='3'){
-                        v.label=this.$i.warehouse.customerReturnInbound;
-                    }else if(v.value==='4'){
-                        v.label=this.$i.warehouse.preDeliveryInbound;
-                    }
-                });
+                // this.inboundType.forEach(v=>{
+                //     if(v.value==='1'){
+                //         v.label=this.$i.warehouse.purchaseInbound;
+                //     }else if(v.value==='2'){
+                //         v.label=this.$i.warehouse.checkInbound;
+                //     }else if(v.value==='3'){
+                //         v.label=this.$i.warehouse.customerReturnInbound;
+                //     }else if(v.value==='4'){
+                //         v.label=this.$i.warehouse.preDeliveryInbound;
+                //     }
+                // });
                 this.getInboundData();
             });
         },

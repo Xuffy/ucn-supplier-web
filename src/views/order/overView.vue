@@ -194,7 +194,7 @@
                     ids: this.selectedNumber
                 })
                     .then((res) => {
-                        if (this.params.view == 1) {
+                        if (this.view === '1') {
                             this.getdata(this.$db.order.overviewByOrder)
                         } else {
                             this.getdata(this.$db.order.overviewBysku)
@@ -205,15 +205,29 @@
                     });
             },
             //get_orderlist数据
-            getData(query) {
+            getData() {
                 this.loading = true;
-                let url='';
+                let url='',query='';
                 url=(this.view==='1'?this.$apis.OVERVIEW_ORDERPAGE:this.$apis.OVERVIEW_SKUPAGE);
+                query=(this.view==='1'?this.$db.order.overviewByOrder:this.$db.order.overviewBysku);
                 this.$ajax.post(url, this.params)
                     .then((res) => {
                         this.loading = false;
                         this.tabData = this.$getDB(query, res.datas,e=>{
                             console.log(e)
+                            if(e.entryDt){
+                                e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
+                            }
+                            if(e.deliveryDt){
+                                e.deliveryDt.value=this.$dateFormat(e.deliveryDt.value,'yyyy-mm-dd');
+                            }
+                            if(e.customerAgreementDt){
+                                e.customerAgreementDt.value=this.$dateFormat(e.customerAgreementDt.value,'yyyy-mm-dd');
+                            }
+                            if(e.updateDt){
+                                e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
+                            }
+
                         });
                         this.pageData = res;
                     })
