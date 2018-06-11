@@ -13,7 +13,7 @@
                                     size="mini"
                                     :disabled="v.disabled"
                                     v-model="inboundData[v.key]"
-                                    :placeholder="v.sysCreate?$i.warehouse.systemCreate:$i.warehouse.pleaseInput"></el-input>
+                                    :placeholder="v.sysCreate?$i.warehouse.systemGeneration:$i.warehouse.pleaseInput"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
                             <el-select class="speInput" size="mini" v-model="inboundData[v.key]" :placeholder="$i.warehouse.pleaseChoose">
@@ -29,8 +29,8 @@
                             <el-input
                                     class="speInput"
                                     type="textarea"
-                                    autosize
-                                    placeholder="请输入"
+                                    :autosize="{ minRows: 2}"
+                                    :placeholder="$i.warehouse.pleaseInput"
                                     v-model="inboundData[v.key]">
                             </el-input>
                         </div>
@@ -40,8 +40,7 @@
                                     size="mini"
                                     v-model="inboundData[v.key]"
                                     :controls="false"
-                                    :min="0"
-                                    label="请输入"></el-input-number>
+                                    :min="0"></el-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -61,22 +60,22 @@
                                     v-model="inboundData[v.key]"
                                     align="right"
                                     type="date"
-                                    placeholder="选择日期"
+                                    :placeholder="$i.warehouse.pleaseChoose"
                                     :editable="false"
                                     :picker-options="pickerOptions1">
                             </el-date-picker>
+                        </div>
+                        <div v-else-if="v.showType==='attachment'">
+                            <v-upload :limit="20" ref="attachmentUpload"></v-upload>
                         </div>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
 
-        <div class="title">
-          {{$i.warehouse.attachment}}
-        </div>
-        <div style="margin-bottom: 20px">
-          <v-upload :list="inboundData.attachment" :limit="20" ref="uploadAttachment"></v-upload>
-        </div>
+
+        <!---->
+
 
         <div class="title">
             {{$i.warehouse.productInfo}}
@@ -433,6 +432,12 @@
 
             //提交表单
             submit(){
+                if(this.productData.length===0){
+                    return this.$message({
+                        message: this.$i.warehouse.pleaseAddProduct,
+                        type: 'warning'
+                    });
+                }
                 this.productData.forEach(v=>{
                     this.inboundData.inboundSkuBeanCreateParams.push({
                         customerName: v.customerName,
@@ -497,8 +502,7 @@
                         supplierOrderNo: v.supplierOrderNo,
                     });
                 });
-                this.inboundData.attachments = this.$refs.uploadAttachment.getFiles();
-
+                this.inboundData.attachments = this.$refs.attachmentUpload[0].getFiles();
                 this.disabledSubmit=true;
                 this.$ajax.post(this.$apis.add_inbound,this.inboundData).then(res=>{
                     this.disabledSubmit=false;

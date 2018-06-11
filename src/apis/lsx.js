@@ -94,6 +94,7 @@ export default {
     get_sellerOrderDetail:['/qc/getById','BASE_SELL','USUPPLY_URL'],
     get_sellerQcOrderProduct:['/qc/detail/page','BASE_SELL','USUPPLY_URL'],
     save_sellerQcOrder:['/qc/result/save','BASE_SELL','USUPPLY_URL'],
+    REWORK_HANDLE:['/qc/rework/handle','BASE_SELL','USUPPLY_URL'],
 
 
 

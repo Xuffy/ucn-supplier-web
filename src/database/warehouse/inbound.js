@@ -57,10 +57,10 @@ export default {
         showType:'textarea',
         fullLine:true
     },
-    // attachment:{
-    //     key:'attachment',
-    //     belong:'basicInfo',
-    //     showType:'textarea',
-    //     fullLine:true
-    // }
+    attachment:{
+        key:'attachments',
+        belong:'basicInfo',
+        showType:'attachment',
+        fullLine:true
+    }
 }

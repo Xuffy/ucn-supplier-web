@@ -315,6 +315,17 @@
             //接受返工
             acceptRework(){
                 console.log(this.selectSecond)
+                let ids=[];
+
+
+                // this.$ajax.post(this.$apis.REWORK_HANDLE,{
+                //     accept: true,
+                //     qcOrderDetailIds: ids,
+                // }).then(res=>{
+                //
+                // }).finally(err=>{
+                //
+                // });
             },
 
             /**

@@ -283,16 +283,19 @@
             <el-button :disabled="loadingData" :loading="disableClickSubmit" @click="submit" type="primary">{{$i.warehouse.submit}}</el-button>
             <el-button :disabled="loadingData" @click="cancel">{{$i.warehouse.cancel}}</el-button>
         </div>
+
+        <v-message-board module="qc" code="orderService" id="asdasf"></v-message-board>
     </div>
 </template>
 <script>
 
-    import {VTable } from '@/components/index';
+    import {VTable,VMessageBoard } from '@/components/index';
 
     export default {
         name:'qc-detail',
         components:{
-            VTable
+            VTable,
+            VMessageBoard
         },
         data(){
             return{
@@ -526,7 +529,7 @@
 
                 //获取验货员
                 // this.$ajax.get(this.$apis.get_serviceQcSurveyor).then(res=>{
-                //     // console.log(res)
+                //     console.log(res,'???????xxxx')
                 // }).catch(err=>{
                 //
                 // });

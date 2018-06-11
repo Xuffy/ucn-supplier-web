@@ -1370,7 +1370,6 @@
                         this.hasCancelOrder=true;
                     }
 
-
                     /**
                      * 获取payment数据
                      * */
@@ -1499,7 +1498,7 @@
                     this.$refs.HM.init(arr,[]);
                 }else if(type==='detail'){
                     this.$windowOpen({
-                        url:'/product/sourcingDetail',
+                        url:'/product/detail',
                         params:{
                             id:e.skuId.value
                         }
