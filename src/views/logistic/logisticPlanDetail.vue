@@ -13,7 +13,7 @@
       <!-- </el-col> -->
       <div class="input-item">
         <span>{{ $i.logistic.attachment }}:</span>
-        <attachment accept="all" ref="attachment" :title="$i.logistic.attachment" :edit="edit"/>
+        <attachment accept="all" ref="attachment" :readonly="attachmentReadonly" :list="attachmentList" :title="$i.logistic.attachment" :limit="20" :edit="edit"/>
       </div>
       
       <!-- <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/> -->
@@ -85,6 +85,7 @@ export default {
   data() {
     return {
       modefiyProductIndex: 0,
+      attachmentList:[],
       logisticsStatus:{},
       logisticsNo: '',
       remark: '',
@@ -159,6 +160,9 @@ export default {
     addProduct,
   },
   computed: {
+    attachmentReadonly(){
+      return !this.edit;
+    },
     planId () {
       return this.$route.query.id
     },
@@ -257,6 +261,7 @@ export default {
           loadingList : this.$route.query.loadingList
         };
         this.matchRate(res.currencyExchangeRate);
+        this.attachmentList = res.attachment;
         this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
           this.createdPaymentData(res)
         })
@@ -575,6 +580,7 @@ export default {
       _.mapObject(this.transportInfoObj, (value, key) => {
         this.oldPlanObject[key] = value
       })
+      this.oldPlanObject.attachment = this.$refs.attachment.getFiles();
       this.oldPlanObject.containerDetail = this.containerInfo
       this.oldPlanObject.fee = this.feeList && this.feeList.length>0 ? this.feeList[0] : null; 
       this.oldPlanObject.product = this.modifyProductArray;
@@ -608,7 +614,7 @@ export default {
           type: 'success',
           duration:3000,
           onClose:()=>{
-            this.$router.push('/logistic/'+this.$route.query.loadingList);
+            this.$router.push('/logistic/'+this.$route.query.loadingList || null);
           }
         })
       })
