@@ -3,13 +3,34 @@ export default {
     type: 'text',
     _hide: true
   },
+  "vId": {
+    type: 'text',
+    _hide: true
+  },
+  "argID": {
+    type: 'text',
+    _hide: true
+  },
+  "skuSupplierId": {
+    type: 'text',
+    _hide: true
+  },
   "orderNo": {
+    type: 'text',
+    _hide: true
+  },
+  "orderId": {
+    type: 'text',
+    _hide: true
+  },
+  "skuId": {
+    type: 'text',
+    _hide: true
+  },
+  "toShipCartonQty": {
     type: 'text'
   },
-  "quantityOfOuterCartonsToBeShipped": {
-    type: 'text'
-  },
-  "goodsToBeShipped": {
+  "toShipQty": {
     type: 'text'
   },
   "skuCode": {
@@ -21,76 +42,82 @@ export default {
   "skuNameCn": {
     type: 'text'
   },
-  "productDescription": {
+  "skuNameCustomer": {
     type: 'text'
   },
   "blSkuName": {
     type: 'text'
   },
-  "customsDeclarationNameCn": {
+  "skuCustomsNameCn": {
     type: 'text'
   },
-  "customsDeclarationNameEn": {
+  "skuCustomsNameEn": {
     type: 'text'
   },
   "hsCode": {
     type: 'text'
   },
-  "reportElements": {
+  "reportElement": {
     type: 'text'
   },
-  "supplierName": {
+  "skuSupplierName": {
     type: 'text'
   },
-  "supplierNo": {
+  "skuSupplierCode": {
     type: 'text'
   },
-  "customerSkuCode": {
+  "skuCustomerSkuCode": {
     type: 'text'
   },
-  "factorySKUCode": {
+  "factorySkuCode": {
     type: 'text'
   },
-  "unit": {
+  "skuUnit": {
     type: 'text'
   },
-  "exportUnitPrice": {
+  "unitExportPrice": {
     type: 'text'
   },
-  "totalPriceOfExport": {
+  "totalExportPrice": {
     type: 'text'
   },
   "currency": {
     type: 'text'
   },
-  "skuQuantityOfOuterCarton": {
+  "skuOuterCartonQty": {
     type: 'text'
   },
-  "outerCartonLength": {
+  "skuOuterCartonLength": {
     type: 'text'
   },
-  "outerCartonWidth": {
+  "skuOuterCartonWidth": {
     type: 'text'
   },
-  "outerCartonHeight": {
+  "skuOuterCartonHeight": {
     type: 'text'
   },
-  "outerCartonNetWeight": {
+  "skuOuterCartonNetWeight": {
     type: 'text'
   },
-  "outerCartonGrossWeight": {
+  "skuOuterCartonRoughWeight": {
     type: 'text'
   },
-  "outerCartonVolume": {
+  "skuOuterCartonVolume": {
     type: 'text'
   },
-  "shippingMarks": {
+  "skuShippingMarks": {
     type: 'text'
   },
-  "outerCartonBarCode": {
+  "skuOuterCartonBarCode": {
     type: 'text'
   },
-  "outerCartonSkuCode": {
+  "skuOuterCartonCode": {
+    type: 'text'
+  },
+  "skuSupplierCompanyId": {
+    type: 'text'
+  },
+  "skuSupplierTenantId": {
     type: 'text'
   }
 }

@@ -165,6 +165,9 @@
 import { selectSearch,VPagination } from '@/components/index'
 
 export default {
+  props:{
+    basicInfoArr:[String,Number,Array]
+  },
   components: {
     selectSearch,VPagination
   },
@@ -173,7 +176,8 @@ export default {
       tableData:[],
       pageParams: {
         pn: 1,
-        ps: 10
+        ps: 10,
+        skuSupplierIds:[]
       },
       selectArrData: [],
       options: [
@@ -189,17 +193,25 @@ export default {
           id: '3',
           label: 'Order No.'
         }
-      ]
+      ],
     }
   },
   mounted(){
-    this.getOrderList();
+    if(this.basicInfoArr[0].value){
+      this.getSupplierIds();
+    }
   },
   methods: {
     sizeChange(e) {
       this.pageParams.ps = e
       this.getOrderList();
     },
+    getSupplierIds(){
+      this.$ajax.get(this.$apis.logistics_plan_getSupplierIds,{logisticsNo:this.basicInfoArr[0].value}).then(res => {
+        this.$set(this.pageParams,'skuSupplierIds',res);
+        this.getOrderList();
+      })
+    },   
     pageChange(e) {
       this.pageParams.pn = e
       this.getOrderList()
@@ -218,7 +230,7 @@ export default {
       this.selectArrData = arr
     },
     productDetail(id){
-      window.open(`${window.location.origin}#/product/sourcingDetail?id=${id}`);
+      window.open(`${window.location.origin}#/product/detail?id=${id}`);
     }
   }
 }
