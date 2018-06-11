@@ -1,5 +1,11 @@
 {
   "pleaseChooseType":"Please Choose Type",
   "pleaseInput":"Please Input",
-  "pleaseChoose":"Please Choose"
+  "pleaseChoose":"Please Choose",
+  "pleaseCreate":"Please Create",
+  "deleteSuccess":"Delete Success",
+  "sureDelete":"Sure Delete?",
+  "handleSuccess":"Handle Success!",
+  "shippedSuccess":"Shipped Success!",
+  "saveSuccess":"Save Success!"
 }

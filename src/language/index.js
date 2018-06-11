@@ -46,13 +46,14 @@ const json = {
   order: _.extend({},
     require(`./${lang}/order/basicinfo.pending`),
     require(`./${lang}/order/overview`),
-    require(`./${lang}/order/productinfo.pending`),
     require(`./${lang}/order/payment`),
 
     //新引入
     require(`./${lang}/order/order.basic`),
     require(`./${lang}/order/order.prompt`),
     require(`./${lang}/order/order.overviewTable`),
+    require(`./${lang}/order/order.orderDetail`),
+    require(`./${lang}/order/order.inquiryOverview`),
     require(`./${lang}/order/order.orderDetail`),
   ),
   payment: _.extend({},
