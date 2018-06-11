@@ -25,11 +25,11 @@
                         :buttons="[{label: '详情', type: 1}]"
                         @change-checked="changeChecked"
                         @action="btnClick">
-                    <template slot="header">
-                        <div class="btns">
-                            <el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>
-                        </div>
-                    </template>
+                    <!--<template slot="header">-->
+                        <!--<div class="btns">-->
+                            <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
+                        <!--</div>-->
+                    <!--</template>-->
                 </v-table>
                 <page
                         @size-change="changeSize"

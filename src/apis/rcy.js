@@ -27,13 +27,7 @@ export default {
 
 
     //payment
-    paymentGetNo: ['/payment/genNo', 'USUPPLY_URL'],
-    paymentSave: ['/payment/save', 'USUPPLY_URL'],
-    paymentUpdata: ['/payment/update', 'USUPPLY_URL'],
-    paymentRecover: ['/payment/recover', 'USUPPLY_URL'],
-    paymentAbandon: ['/payment/abandon', 'USUPPLY_URL'],
-    paymentAccept: ['/payment/accept/{id}', 'USUPPLY_URL'],
-    paymentDunning: ['/payment/dunning/{orderNo}/{orderType}', 'USUPPLY_URL'],
+    PAYMENT_LIST:['/payment/list/{orderNo}/{orderType}','USUPPLY_URL'],
 
 
     //字典表数据

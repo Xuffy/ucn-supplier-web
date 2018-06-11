@@ -47,8 +47,8 @@ const json = {
     require(`./${lang}/order/basicinfo.pending`),
     require(`./${lang}/order/overview`),
     require(`./${lang}/order/payment`),
-
-    //新引入
+    //
+    // //新引入
     require(`./${lang}/order/order.basic`),
     require(`./${lang}/order/order.prompt`),
     require(`./${lang}/order/order.overviewTable`),
