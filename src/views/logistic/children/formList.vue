@@ -3,7 +3,7 @@
     <div class="hd" v-if="showHd"></div>
     <div class="hd active">{{ title }}</div>
     <el-row :gutter="10">
-      <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
+      <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="(a,listDataItem) of listData" :key="listDataItem">
         <div class="input-item">
           <div class="label" :title="a.label">{{ a.label }}:</div>
           <div class="proNo" v-if="!edit">
