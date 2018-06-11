@@ -11,7 +11,11 @@
           <p v-else>{{ remark }}</p>
         </div>
       <!-- </el-col> -->
-      <attachment accept="all" ref="attachment" :title="$i.logistic.attachment" :edit="edit"/>
+      <div class="input-item">
+        <span>{{ $i.logistic.attachment }}:</span>
+        <attachment accept="all" ref="attachment" :title="$i.logistic.attachment" :edit="edit"/>
+      </div>
+      
       <!-- <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/> -->
     </el-row>
     <form-list :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/>
@@ -53,7 +57,7 @@
       </div>
     </el-dialog>
     <el-dialog :title="$i.logistic.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeAddProduct(0)">
-      <add-product ref="addProduct"/> 
+      <add-product ref="addProduct" :basicInfoArr="basicInfoArr"/> 
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
@@ -65,7 +69,7 @@
 <script>
 
 import { VSimpleTable, containerInfo, selectSearch, VTable} from '@/components/index';
-import attachment from '@/components/base/attachment'
+import attachment from '@/components/common/upload/index';
 import formList from '@/views/logistic/children/formList'
 import oneLine from '@/views/logistic/children/oneLine'
 import feeInfo from '@/views/logistic/children/feeInfo'
@@ -175,6 +179,12 @@ export default {
           type: 2
         }
       )
+      this.$route.query.loadingList=='loadingList' ? aArr.splice(2,0,
+        {
+          label: 'Copy',         
+          type: 4
+        }
+      ) : aArr;
       return aArr;
     } 
   },
@@ -224,7 +234,7 @@ export default {
           }
         })
       })
-      this.inintData.ExchangeRateInfoArr = this.$depthClone(this.ExchangeRateInfoArr);
+      this.$set(this.inintData,'ExchangeRateInfoArr',this.$depthClone(this.ExchangeRateInfoArr));
     },
     registerRoutes () {
       this.$store.commit('SETDRAFT', {
@@ -237,12 +247,14 @@ export default {
       })
     },
     getDetails () {
-      this.$ajax.get(`${this.$apis.get_plan_details}${this.planId}`).then(res => {
+      let url = this.$route.query.loadingList ? this.$apis.get_order_details :this.$apis.get_plan_details
+      this.$ajax.get(`${url}${this.planId}`).then(res => {
         this.createdPlanData(res)
         this.logisticsStatus = {
           recived : res.recived,
           supplierRecived : res.supplierRecived,
-          status : res.logisticsStatus
+          status : res.logisticsStatus,
+          loadingList : this.$route.query.loadingList
         };
         this.matchRate(res.currencyExchangeRate);
         this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
@@ -266,15 +278,15 @@ export default {
       this.basicInfoArr.forEach(a => {
         a.value = stringArray.includes(a.key) ? res[a.key] : res[a.key];
       })
-      this.inintData.basicInfoArr = this.$depthClone( this.basicInfoArr);
+      this.$set(this.inintData,'basicInfoArr',this.$depthClone(this.basicInfoArr))
       this.transportInfoArr.forEach(a => {
         a.value = res[a.key]
       })
-      this.inintData.transportInfoArr = this.$depthClone( this.transportInfoArr);
+      this.$set(this.inintData,'transportInfoArr',this.$depthClone(this.transportInfoArr))
       this.exchangeRateList = res.currencyExchangeRate || []
       this.remark = res.remark
       this.containerInfo = res.containerDetail || [];
-      this.inintData.containerInfo = this.$depthClone(res.containerDetail) || [];
+      this.$set(this.inintData,'containerInfo',this.$depthClone(res.containerDetail) || [])
       this.feeList = [res.fee];
       this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
     },
@@ -299,6 +311,7 @@ export default {
       this.getDictionaryPart()
     },
     getDictionaryPart () {
+      this.$set(this.dictionaryPart,'logisticsStatus',this.$route.query.loadingList ? 'LS_STATUS' : 'LS_PLAN')
       const params = _.map(this.dictionaryPart, v => v)
       this.$ajax.post(this.$apis.get_dictionary, params).then(res => {
         _.mapObject(this.dictionaryPart, (v, k) => {
@@ -334,7 +347,12 @@ export default {
     },
     action (e, status, i) {
       if (status == 3){
-        return window.open(`${window.location.origin}#/product/sourcingDetail?id=${e.argID ? e.argID.value : e.id.value }`);
+        return window.open(`${window.location.origin}#/product/detail?id=${e.argID ? e.argID.value : e.id.value }`);
+      }else if(status==4){
+        let newAddArr = this.$depthClone(this.productList[i]);
+        newAddArr.id.value = null;
+        this.productList.splice(i+1,0,newAddArr);
+        return;
       }
       this.productInfoModifyStatus = status
       this.showProductDialog = true
@@ -352,7 +370,6 @@ export default {
     },
     addPayment () {
       const obj = this.basicInfoArr.find(a => a.key === 'exchangeCurrency')
-      console.log('obj',obj)
       this.$ajax.post(this.$apis.get_payment_no).then(res => this.paymentList.push({
         edit: true,
         no: res,
@@ -461,10 +478,25 @@ export default {
         case 'cancel':
             this.cancelPlan();
           break; 
+        case 'cancelLoadingList':
+            this.cancelLoadingList();
+          break; 
         default:
           break; 
       }
     },   
+    cancelLoadingList(){
+       this.$ajax.post(this.$apis.logistics_order_cancelByIds,{ids:[this.planId]}).then(res => {
+        this.$message({
+          message: '取消成功，正在跳转...',
+          type: 'success',
+          duration:3000,
+          onClose:()=>{
+            this.$router.push('/logistic/'+this.query.loadingList);
+          }
+        })
+      })
+    },
     receive(){
       this.$ajax.post(this.$apis.logistics_plan_receive,{id:this.planId}).then(res => {
         this.getDetails();
@@ -521,7 +553,7 @@ export default {
       })
     },
     sendData (keyString) {
-      let url = this.configUrl[this.pageName][keyString];
+      let url = this.$route.query.loadingList ? this.$apis.update_logistic_order : this.configUrl[this.pageName][keyString];    
       this.basicInfoArr.forEach(a => { 
         // this.$set(this.basicInfoObj, a.key, a.type=='date' ? a.value : a.value)
         this.$set(this.basicInfoObj, a.key, a.value)
@@ -576,7 +608,7 @@ export default {
           type: 'success',
           duration:3000,
           onClose:()=>{
-            this.$router.push('/logistic');
+            this.$router.push('/logistic/'+this.$route.query.loadingList);
           }
         })
       })

@@ -20,7 +20,7 @@
       <div class="fn btn">
         <div v-if="pageType === 'plan' || pageType === 'loadingList'">
           <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <!-- <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button> -->
+          <!-- <el-button @click.stop="addNew" v-if="pageType != 'loadingList'">{{ $i.logistic.placeLogisticPlan }}</el-button> -->
           <!-- <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button> -->
         </div>
         <div v-if="pageType === 'draft'">
@@ -237,7 +237,11 @@
         this.selectCount = arr
       },
       action(e) {
-        this.$router.push({path: `/logistic/${this.jumpPage[this.pageType]}`, query: {id: e.id.value}})
+        if(this.pageType == 'loadingList'){
+          this.$router.push({path: `/logistic/${this.jumpPage[this.pageType]}`, query: {id: e.id.value,loadingList:'loadingList'}})
+        }else{
+          this.$router.push({path: `/logistic/${this.jumpPage[this.pageType]}`, query: {id: e.id.value}})
+        }
       },
       searchFn(obj) {
         const {pn, ps} = this.pageParams
