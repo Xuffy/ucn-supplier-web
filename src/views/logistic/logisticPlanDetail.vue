@@ -13,7 +13,7 @@
       <!-- </el-col> -->
       <div class="input-item">
         <span>{{ $i.logistic.attachment }}:</span>
-        <attachment accept="all" ref="attachment" :title="$i.logistic.attachment" :edit="edit"/>
+        <attachment accept="all" ref="attachment" :title="$i.logistic.attachment" :limit="20" :edit="edit"/>
       </div>
       
       <!-- <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/> -->
@@ -575,6 +575,7 @@ export default {
       _.mapObject(this.transportInfoObj, (value, key) => {
         this.oldPlanObject[key] = value
       })
+      this.oldPlanObject.attachment = this.$refs.attachment.getFiles();
       this.oldPlanObject.containerDetail = this.containerInfo
       this.oldPlanObject.fee = this.feeList && this.feeList.length>0 ? this.feeList[0] : null; 
       this.oldPlanObject.product = this.modifyProductArray;
