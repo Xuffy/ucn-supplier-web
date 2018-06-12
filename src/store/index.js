@@ -8,19 +8,13 @@ Vue.use(Vuex);
 const state = {
   quickLink: {
     draft: {
-      show: false,
-      url: '',
-      params: {}
+      show: false
     },
     recycleBin: {
-      show: false,
-      url: '',
-      params: {}
+      show: false
     },
     log: {
-      show: false,
-      url: '',
-      params: {}
+      show: false
     },
     show: false,
     list: [],
@@ -58,8 +52,7 @@ const mutations = {
   },
   [type.SETLOG](state, params) {
     params.show = true;
-    params.url = params.url || '/logs/index';
-    console.log(params)
+    params.path = params.path || '/logs/index';
     state.quickLink.log = params;
   },
   [type.DIC](state, params) {
