@@ -1,8 +1,17 @@
 {
+  "equal": "等于",
+  "greater": "大于",
+  "greaterAndEqual": "大于等于",
+  "less": "小于",
+  "lessAndEqual": "小于等于",
+  "like": "包含",
+  "between": "区间",
+  "reset": "Reset",
   "asc": "Asc",
   "desc": "Desc",
   "tableFilter": "Table filter",
   "selectTheColumn": "select the column",
-  "selectionOperation": "selection operation"
+  "selectionOperation": "selection operation",
+  "action": "Action"
 }
 

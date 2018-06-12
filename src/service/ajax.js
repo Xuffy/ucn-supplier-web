@@ -43,7 +43,7 @@ const axios = Axios.create({
  */
 const validate_error = (res) => {
   Message.closeAll();
-  switch (res.code) {
+  switch (res.errorCode) {
     case 'AUTH-011': // 登录失效
       router.push('/login');
       break;
