@@ -3,7 +3,9 @@ export default {
   ENV: {
     local: {
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
-      LOGIN_URL: '//dev.auth.ucnscm.cn',
+      a_localtion:'//192.168.51.219:11002',
+      LOGIN_URL: 'http://dev.auth.ucnscm.cn',
+      // LOGIN_URL: 'http://192.168.51.138:8070',
       BASE_URL: '//192.168.51.148:11002', // 采购端
       USSO_URL: '//192.168.51.148:11006', // sso 服务
       UUSER_URL: '//192.168.51.148:11004', // 用户中心
@@ -23,7 +25,7 @@ export default {
 
     },
     develop: {
-      LOGIN_URL: '//dev.auth.ucnscm.cn',
+      LOGIN_URL: 'http://dev.auth.ucnscm.cn',
       BASE_URL: '//192.168.51.208:11002', // 采购端
       USSO_URL: '//192.168.51.208:11006', // sso 服务
       UUSER_URL: '//192.168.51.208:11004', // 用户中心
@@ -42,7 +44,7 @@ export default {
       OSS_BUCKET_PRIVATE: 'dev-private-ucn-oss'
     },
     test: {
-      LOGIN_URL: '//test.auth.ucnscm.cn', // 登录授权
+      LOGIN_URL: 'http://test.auth.ucnscm.cn', // 登录授权
       BASE_URL: '//test.usupply-facade.ucnscm.cn', // 采购端
       USSO_URL: '//test.usso-facade.ucnscm.cn', // sso 服务
       UUSER_URL: '//test.uuser-facade.ucnscm.cn', // 用户中心
