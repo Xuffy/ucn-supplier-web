@@ -57,7 +57,7 @@
         required: true,
       },
       id: {
-        type: String,
+        type: [String, Number],
         default: '',
       },
     },
@@ -76,7 +76,7 @@
     },
     watch: {},
     created() {
-      if(this.$userAction.get('messageBoard')){
+      if (this.$userAction.get('messageBoard')) {
         this.layout.paddingRight = '367px'
       }
     },

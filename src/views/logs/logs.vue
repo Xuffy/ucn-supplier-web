@@ -1,7 +1,7 @@
 <template>
     <div class="logs">
         <div class="title">
-           {{$i.logBasic.logs}}
+           {{$i.logs.logs}}
         </div>
         <div>
             <el-form label-width="130px" class="searchCondition">
@@ -10,17 +10,17 @@
                         <el-button type="primary">Download (ALL)</el-button>
                     </el-col> -->
                     <el-col :span="7">
-                        <el-form-item :label="$i.logBasic.description">
-                            <el-input type="text" v-model="search.description" @change="getbizlogs" style="max-width:200px"></el-input>
+                        <el-form-item :label="$i.logs.description">
+                            <el-input type="text" v-model="params.operationContent" @change="getbizlogs" clearable style="max-width:200px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="7">
-                        <el-form-item :label="$i.logBasic.operater">
-                            <el-input type="text" v-model="search.operater"  @change="getbizlogs" style="max-width:200px"></el-input>
+                        <el-form-item :label="$i.logs.operater">
+                            <el-input type="text" v-model="params.operatorName"  @change="getbizlogs"  clearable style="max-width:200px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item :label="$i.logBasic.operationDate">
+                        <el-form-item :label="$i.logs.operationDate">
                             <el-date-picker
                             v-model="date"
                             type="daterange"
@@ -50,20 +50,24 @@
         </div>
 
         <div class="body">
-           <v-table :data="logslist" :loading="tabLoad"></v-table>
+            <v-table :data="logslist" :loading="tabLoad" :height="500"></v-table>
+            <page
+              :page-data="pageData"
+              @change="handleSizeChange"
+              @size-change="pageSizeChange"></page>
         </div>
     </div>
 </template>
 
 <script>
+  import {VTable,selectSearch,VPagination} from '@/components/index';
 
-    import selectSearch from '@/components/common/fnCompon/selectSearch'
-    import VTable from '@/components/common/table/index'
     export default {
         name: "logs",
         components:{
             selectSearch,
-            VTable
+            VTable,
+            page:VPagination
         },
         data(){
             return{
@@ -97,59 +101,63 @@
                 date: '',
                 currentPage:1,
                 logsNumber:'All',           //日志数目
-                search:{
-                    description:'',
-                    operater:'',
-
-                },
                 logslist:[],
-                tabLoad: false
+                pageData:{},
+                tabLoad: false,
+                params:{
+                  moduleCode: '',   //模块编码
+                  bizCode: '',     //bizCode
+                  bizNo: '',       //务单据号；比如对应order的order_no 而不是ID
+                  operationType: '',
+                  operatorId: '',
+                  operatorName: '',
+                  operationDtStart:  '',
+                  operationDtEnd: '',
+                  operationContent:'',
+                  pn: 1,
+                  ps: 50,
+                }
             }
         },
         watch: {
-            date(){
-                  console.log(this.date[0])
-              console.log(this.search.operater)
-                  this.getbizlogs()
-            }
+          date(){
+               if (this.date != null){
+                 this.params.operationDtStart = this.date[0];
+                 this.params.operationDtEnd = this.date[1];
+                 this.getbizlogs()
+               }else{
+                 this.params.operationDtStart = '';
+                 this.params.operationDtEnd = '';
+                 this.getbizlogs()
+               }
+            },
         },
         methods:{
             formatter(row, column) {
                 return row.remark;
             },
-            //分页caoz
+            //分页
             handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+              this.params.pn = val;
+              this.getbizlogs();
             },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
+            pageSizeChange(val) {
+              this.params.ps = val;
+              this.getbizlogs();
             },
             getbizlogs(){
-                const params = {
-                    moduleCode: 'ORDER',   //模块编码
-                    bizCode: '',     //bizCode
-                    bizNo: '',       //务单据号；比如对应order的order_no 而不是ID
-                    operationType: '',
-                    operatorId: '',
-                    operatorName: this.search.operater || '',
-                    operationDtStart: this.date[0] || '',
-                    operationDtEnd: this.date[1] || '',
-                    operationContent:this.search.description || '',
-                    pn: 1,
-                    ps: 10,
-                    sorts: [
-                        {
-                        orderBy: 'id',
-                        orderType: 'DESC'
-                        }
-                    ]
-                }
+                this.params.moduleCode = this.$route.query.code;  // BIZ_PURCHASE_SUPPLIER/PRUCHASE_SUPPLIER
                 this.tabLoad = true;
-                this.$ajax.post(this.$apis.post_bizloQuery,params)
+                this.$ajax.post(this.$apis.post_bizloQuery,this.params)
                 .then(res => {
-                    console.log(res)
                      this.tabLoad = false;
-                    this.logslist = this.$getDB(this.$db.logs.table, res.datas);
+                     this.pageData = res
+                     this.logslist = this.$getDB(this.$db.logs.table, res.datas,  item => {
+                       _.mapObject(item, val => {
+                         val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                         return val
+                       })
+                     });
                 })
                 .catch((res) => {
                   this.tabLoad = false

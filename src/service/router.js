@@ -310,6 +310,12 @@ export const routerMap = [
             log: true,
           },
           component: () => import('../views/logs/logs.vue')
+        },
+        {
+          path: 'import',
+          name: 'logsImport',
+          meta: {},
+          component: () => import('../views/logs/import.vue')
         }
       ]
     },
