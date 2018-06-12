@@ -33,6 +33,8 @@ export default {
   add_departmentRole: ['/role', 'UUSER_URL'],
   delete_departmentRole: ['/role/{deptId}/{roleId}', 'UUSER_URL'],
   invite_departmentUser:['/user/invite','UUSER_URL'],
+  update_departmentRole:['/role','UUSER_URL'],
+  add_departmentUser:['/user','UUSER_URL'],
 
 
   /**
