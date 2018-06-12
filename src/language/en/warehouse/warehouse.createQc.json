@@ -14,10 +14,10 @@
   "return":"Return",
 
 
-  "skuNameCustomer":"SKU Name in Customer language",
-  "skuMaterialCn":"Material (Cn)",
-  "skuMaterialEn":"Material (En)",
-  "skuDescCn":"SKU Description (Cn)",
+  "skuNameCustomer":"SKU Name in Customer's language",
+  "skuMaterialCn":"Material (CN)",
+  "skuMaterialEn":"Material (EN)",
+  "skuDescCn":"SKU Description (CN)",
 
   "qcOrderNo":"QC Order No",
   "qcType":"QC Type",

@@ -1,9 +1,6 @@
 {
-  "status":"Status",
-  "supplierCode":"Supplier No.",
-
-  "pic":"Pic",
-  "pictures":"Picture",
+  "pic":"图片",
+  "status":"销售状态",
   "recycle":"是否失效",
   "code":"供应商货号",
   "nameCn":"产品中文名",
@@ -14,6 +11,7 @@
   "descCustomer":"产品客户语言描述",
   "customerSkuCode":"客户货号",
   "supplierName":"供应商名称",
+  "supplierCode":"供应商编号",
   "unit":"计量单位",
   "formation":"产品组成",
   "materialEn":"英文材质",
@@ -23,9 +21,9 @@
   "minOrderQty":"起订量",
   "deliveryDates":"交期",
   "design":"产品设计",
-  "categoryId":"Category",
+  "categoryId":"分类",
   "barcode":"产品条码",
-  "readilyAvailable":"Readily Available",
+  "readilyAvailable":"是否现货",
   "availableQty":"现货数量",
   "noneSellCountry":"不可销售国家",
   "applicableAge":"适用年龄",
@@ -118,4 +116,5 @@
   "otherPackInfoCn":"其他包装信息CN",
   "otherPackInfoEn":"其他包装信息EN",
   "adjustPackage":"产品或包装可否调整"
+
 }

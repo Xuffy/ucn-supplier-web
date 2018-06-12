@@ -6,5 +6,12 @@
   "pendingTask": "当前待处理",
   "futureTask": "未来任务",
   "fyiTask": "与我相关",
-  "pushTask": "消息提醒"
+  "pushTask": "消息提醒",
+  "number": "Number",
+  "inquiry": "Inquiry",
+  "order": "Order",
+  "payment": "Payment",
+  "logistic": "Logistic",
+  "warehouse": "Warehouse",
+  "content": "Content"
 }

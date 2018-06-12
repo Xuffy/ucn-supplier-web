@@ -1,6 +1,6 @@
 {
   "qcOrderNo":"QC Order No.",
-  "qcStatus":"QC status",
+  "qcStatus":"QC Status",
   "qcMethod":"QC Method",
   "surveyor":"Surveyor",
   "factoryAddress":"Factory address",
@@ -10,8 +10,8 @@
   "qualifiedProductsTotalQTYS":"Qualified products total QTYS",
   "qualifiedProductsTotalCBM":"Qualified products total CBM",
   "qualifiedProductTotalNW":"Qualified Product total NW",
-  "qualifiedProductTotalGW":"Qualified  Product total GW",
-  "unqualifiedProductsQTY":"Unqualified  products QTY",
+  "qualifiedProductTotalGW":"Qualified Product total GW",
+  "unqualifiedProductsQTY":"Unqualified Products QTY",
   "unqualifiedProductTotalCTNS":"Unqualified Product total CTNS",
   "unqualifiedProductTotalNW":"Unqualified Product total NW",
   "unqualifiedProductsTotalCBM":"Unqualified products total CBM",

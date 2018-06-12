@@ -1,5 +1,9 @@
 {
   "confirm": "确认",
   "cancel": "取消",
-  "addNewLinks": "添加新链接"
+  "addNewLinks": "添加新链接",
+  "add": "Add",
+  "modify": "Modify",
+  "upload": "Upload",
+  "delete": "Delete"
 }

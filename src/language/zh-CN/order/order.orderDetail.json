@@ -111,7 +111,7 @@
   "skuApplicableAge":"Applicable Age",
   "skuExpireDates":"Expirtion Days",
   "skuExpireUnit":"Unit of expition days",
-  "skuComments":"Explain",
+  "skuComments":"Comments",
   "skuStatus":"SKU Status",
   "skuSaleStatus":"SKU Sales Status",
   "skuLabel":"SKU Label",
@@ -138,13 +138,10 @@
   "skuAdditionalTwo":"Additional Pic 2",
   "skuAdditionalThree":"Additional Pic 3",
   "skuAdditionalFour":"Additional Pic 4",
-  "paymentDays":"Payment Days",
   "CNYUSD":"exchange rate(￥--$)",
   "CNYEUR":"exchange rate(￥--€)",
   "USDEUR":"exchange rate($--€)",
   "USDCNY":"exchange rate($--￥)",
   "EURCNY":"exchange rate(€--￥)",
-  "EURUSD":"exchange rate(€--$)",
-
-  "skuCategoryId":"CategoryId"
+  "EURUSD":"exchange rate(€--$)"
 }

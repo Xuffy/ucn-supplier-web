@@ -11,7 +11,7 @@
      "confirm":"确认",
      "modify":"修改",
      "restore":"恢复",
-
+    
      "paymentItem": "序号",
      "paymentNo": "付款编号",
     "estPayDate": "预计付款日期",
@@ -23,6 +23,5 @@
     "actRefundDate": "实际退款日期",
     "actRefundAmount": "实际退款金额",
     "currency": "币种",
-    "avilable": "有效性"
-
+    "avilable":"有效性"
 }

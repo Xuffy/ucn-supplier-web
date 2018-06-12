@@ -13,5 +13,10 @@
   "payment": "Payment",
   "logistic": "Logistic",
   "warehouse": "Warehouse",
-  "content": "Content"
+  "content": "Content",
+  "settingState":"Welcome! Please set your basic info",
+  "settingDepartment":"Set Department and User",
+  "settingCompany":"Set Company Info",
+  "settingCategory":"Set Category",
+  "goSet":"Go set"
 }

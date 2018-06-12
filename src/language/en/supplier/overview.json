@@ -1,13 +1,42 @@
 {
+    "sourcing":"sourcing",
+    "detail":"detail",
+    "bookmark":"bookmark",
+    "compareOverview": "Compare Overview",
+    "compareDetail":"compare detail",
+    "overview": "overview",
+    "overviewCustomer": "overview customer",
+    "supplierBookmark": "Supplier Bookmark",
+    "supplierSourcing": "Supplier Sourcing",
+
+    "supplierName": "Supplier Name",
+    "supplierType": "Supplier Type",
+    "skuNameEN": "SKU name EN",
+    "skuCode": "SKU Code",
+    "description": "Description",
+    "supplierNO": "Supplier No.",
+    "country": "Country",
+    "provideIncoterm": "Provide incoterm",
+    "exportLicense": "Export License",
+
+
     "customerName": "customer name",
     "customerType": "customer type",
     "customerCountry": "customer country",
     "city": "city",
+    "businessScope": "business scope",
     "paymentItem": "payment item",
-    "provideincoterm": "Provide incoterm",
-    "incoterm": "Incoterm",
+    "customerNO": "customer NO",
     "customerShortName": "customer short name",
-    "currency": "currency",
+    "mainBusinessScope": "Main Business Scope",
     "shipAgent": "ship agent ",
-    "customerNo": "customer NO"
+    "incoterm": "incoterm",
+
+
+    "provideincoterm": "Provide incoterm",
+    "currency": "currency",
+    "compareTime": "compare time",
+    "compareName": "compare name",
+    "compareItem": "compare item",
+    "operater": "operater"
 }

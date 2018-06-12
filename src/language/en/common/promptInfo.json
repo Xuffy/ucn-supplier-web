@@ -6,7 +6,7 @@
   "read": "The system has set the message to read",
   "addSuccess": "Add Success",
   "error": "Send failed",
-  "title": "Please enter the title",
+  "title": "Please enter title",
   "content": "Please enter contents",
   "release": "Release",
   "passwordAuthentication": "The new password cannot be the same as the original password",

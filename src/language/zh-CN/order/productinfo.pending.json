@@ -76,7 +76,7 @@
     "skuOuterCartonNetWeight": "外箱净重",
     "skuOuterCartonRoughWeight": "外箱毛重",
     "skuOuterCartonVolume": "外箱体积",
-    "skuOuterCartonMethodCn": "外包装方式EN",
+    "skuOuterCartonMethodEn": "外包装方式EN",
     "skuOuterCartonMethodCn": "外包装方式CN",
     "skuBrand": "品牌",
     "skuApplicableAge": "适用年龄",
@@ -102,7 +102,6 @@
     "skuSampleQty": "样品数量",
     "skuSamplePrice": "样品价格",
     "skuDeliveredQty": "发运数量",
-    "skuDeliveredQty": "订单交货日期",
     "skuUndeliveredQty": "未发运数",
     "skuQuotationNo": "询价单号",
     "skuRemarkOne": "备注",
@@ -113,6 +112,6 @@
     "skuAdditionalThree": "附图3",
     "skuAdditionalFour": "附图4",
     "skuUntestedQty": "合格产品数",
-    "skuQualifiedQty": "未验货数量"
-
+    "skuQualifiedQty": "未验货数量",
+    "skuDeliveredDate": "Delivery Date"
 }

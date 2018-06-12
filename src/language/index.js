@@ -47,8 +47,8 @@ const json = {
     require(`./${lang}/order/basicinfo.pending`),
     require(`./${lang}/order/overview`),
     require(`./${lang}/order/payment`),
-    //
-    // //新引入
+
+    //新引入
     require(`./${lang}/order/order.basic`),
     require(`./${lang}/order/order.prompt`),
     require(`./${lang}/order/order.overviewTable`),
@@ -71,7 +71,8 @@ const json = {
     require(`./${lang}/setting/department`),
     require(`./${lang}/setting/personalInfo`),
     require(`./${lang}/setting/setting.basic`),
-    require(`./${lang}/setting/companyInfo`)
+    require(`./${lang}/setting/companyInfo`),
+    require(`./${lang}/setting/setting.prompt`),
   ),
   supplier: _.extend({},
     require(`./${lang}/supplier/detail.pending`),
@@ -97,7 +98,6 @@ const json = {
     require(`./${lang}/warehouse/warehouse.createQc`),
     require(`./${lang}/warehouse/warehouse.qcOrderDetail`),
     require(`./${lang}/warehouse/warehouse.prompt`),
-    require(`./${lang}/warehouse/warehouse.inboundDetail`),
   ),
   workbench: _.extend({},
     require(`./${lang}/workbench/page`),
@@ -111,6 +111,9 @@ const json = {
   ),
   hintMessage: _.extend({},
     require(`./${lang}/hintMessage/index`)
+  ),
+  element: _.extend({},
+    require(`./${lang}/element/date`)
   ),
 }
 

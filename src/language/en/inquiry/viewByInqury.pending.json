@@ -2,11 +2,11 @@
     "inquiryNo": "Inquiry No.",
     "quotationNo": "Quotation No.",
     "status": "Status",
-    "supplierName": "supplierName",
-    "quantity": "quantity",
+    "supplierName": "Supplier Name",
+    "quantity": "Quantity",
     "currency": "Currency",
     "incoterm": "Incoterm",
     "departurePort": "Departure Port",
-    "destinationPort": "Destination port",
-    "inquiryRemark": "Inquiry remark"
+    "destinationPort": "Destination Port",
+    "inquiryRemark": "Inquiry Remark"
 }

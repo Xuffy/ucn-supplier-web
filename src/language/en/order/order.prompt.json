@@ -10,5 +10,6 @@
   "saveSuccess":"Save Success!",
   "sureAbandon":"Sure Abandon?",
   "sureRestore":"Sure Restore?",
-  "changeSuccess":"Change Success!"
+  "changeSuccess":"Change Success!",
+  "sureCancel":"Sure Cancel?"
 }

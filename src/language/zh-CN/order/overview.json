@@ -4,7 +4,7 @@
     "important": "是否标记为重要",
     "attachment": "是否有附件",
     "responsibility":"是否有提醒",
-    "archive":"是否归档",
+    "Recycle": "Recycle",
     "orderNo":"订单号",
     "orderDate":"订单日期",
     "status":"订单状态",
@@ -44,7 +44,7 @@
     "totalVolume":"外箱体积合计",
     "skuQty":"SKU款式数量",
 
-
+	
     "customerSKUCode":"客户货号",
     "SKUBarCode":"产品条码",
     "SKUcode":"供应商货号",
@@ -63,8 +63,10 @@
     "departureDate":"发运日期",
     "deliveredQuantity":"发运数量",
     "productStatus":"产品状态",
-    "incoterm":"价格条款",
-    "incotermarea":"价格条款区域"
+    "incoterm": "价格条款",
+    "incotermarea": "价格条款区域"
+
+
 
 
 

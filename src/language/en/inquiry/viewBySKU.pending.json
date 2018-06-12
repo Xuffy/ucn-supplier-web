@@ -3,7 +3,7 @@
     "quotationNo": "Quotation No.",
     "status": "Status",
     "supplierName": "Supplier name",
-    "skuCode": "sku code",
+    "skuCode": "Supplier SKU code",
     "skuNameEN": "SKU name EN",
     "price": "Price",
     "currency": "Currency",
