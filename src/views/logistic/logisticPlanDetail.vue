@@ -63,6 +63,7 @@
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
+    <messageBoard module="logistic" code="planDetail" :id="planId"></messageBoard>
     <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
   </div>
 </template>
@@ -70,6 +71,7 @@
 
 import { VSimpleTable, containerInfo, selectSearch, VTable} from '@/components/index';
 import attachment from '@/components/common/upload/index';
+import messageBoard from '@/components/common/messageBoard/index';
 import formList from '@/views/logistic/children/formList'
 import oneLine from '@/views/logistic/children/oneLine'
 import feeInfo from '@/views/logistic/children/feeInfo'
@@ -158,6 +160,7 @@ export default {
     btns,
     productModify,
     addProduct,
+    messageBoard
   },
   computed: {
     attachmentReadonly(){
