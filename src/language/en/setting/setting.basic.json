@@ -20,7 +20,22 @@
   "birthday":"Birthday",
   "lang":"Language",
   "status":"Active",
-  "remark":"Remark"
+  "remark":"Remark",
+  "departmentSetting":"Department setting",
+  "department":"Department",
+  "add":"Add",
+  "addDepartment":"Add Department",
+  "sure":"Sure",
+  "cancel":"Cancel",
+  "prompt":"Prompt",
+  "pleaseInputDepartment":"Please Input Department",
+  "pleaseInputRole":"Please Input Role",
+  "pleaseChoose":"Please Choose",
+  "role":"Role",
+  "all":"All",
+  "addRole":"Add Role",
+  "belongingUsers":"Belonging Users",
+  "invite":"Invite"
 
 
 

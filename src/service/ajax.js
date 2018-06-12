@@ -25,16 +25,13 @@ const axios = Axios.create({
     return data;
   }],
   transformResponse: [function (data) {
-    let res = JSON.parse(data);
+    let res = JSON.parse(data) || {};
 
     if (res.status === 'SUCCESS') {
       return data;
     }
 
-    if (!validate_error(res.errorCode)){
-      throw new Error(`Interface return exception \n [requestUid] ${res.requestUid}`);
-    }
-
+    validate_error(res);
 
   }],
 });
@@ -44,15 +41,17 @@ const axios = Axios.create({
  * @param code
  * @param msg
  */
-const validate_error = (code, msg) => {
-  switch (code) {
+const validate_error = (res) => {
+  Message.closeAll();
+  switch (res.code) {
     case 'AUTH-011': // 登录失效
       router.push('/login');
-      return true;
+      break;
   }
 
-  Message.warning(msg || $i.hintMessage.dataException);
-  throw new Error(`${msg || $i.hintMessage.dataException}`);
+  Message.warning(res.errorMsg || res.errorMsgs || $i.hintMessage.networkException);
+  throw new Error(`${res.errorMsg || res.errorMsgs || $i.hintMessage.networkException} \n
+  [requestUid] - ${res.requestUid}`);
 }
 
 
@@ -66,6 +65,11 @@ const $ajax = (config) => {
    */
   this.setUrl = (url, params) => {
     let p = {};
+
+    if (_.isEmpty(url)){
+      throw new Error('Request url exception');
+    }
+
     if (!_.isEmpty(params) && !params.length) {
       _.mapObject(params, (val, key) => {
         if (url.indexOf(`{${key}}`) < 0) {
@@ -277,7 +281,6 @@ axios.interceptors.response.use(
 
   },
   error => {
-    Message.warning(_.isObject(error) || !error ? $i.hintMessage.networkException : error);
     NProgress.done();
     return Promise.reject(error)
   }

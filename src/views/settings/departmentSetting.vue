@@ -545,7 +545,6 @@
        * render按钮生成
        * */
       renderDepartment(h, {node, data, store}) {
-        console.log(data)
         if (!data.children) {
           return
         } else {
@@ -611,36 +610,35 @@
       },
       getRoleData() {
         this.loadingRole = true;
-        this.$ajax.get(this.$apis.get_departmentRole, {
-          deptId: this.userData.deptId
-        }).then(res => {
-          this.roleData[0].children = res;
-          if (res) {
-            if (res.length === 1) {
-              this.disableAddUser = false;
+        this.$ajax.get(this.$apis.get_departmentRole, {deptId: this.userData.deptId})
+          .then(res => {
+            this.roleData[0].children = res;
+            if (res) {
+              if (res.length === 1) {
+                this.disableAddUser = false;
+              } else {
+                this.disableAddUser = true;
+              }
+              this.$nextTick(() => {
+                this.$refs.roleTree.setCheckedNodes(res);
+                this.getDepartmentUser();
+              })
             } else {
               this.disableAddUser = true;
             }
-            this.$nextTick(() => {
-              this.$refs.roleTree.setCheckedNodes(res);
-              this.getDepartmentUser();
-            })
-          } else {
-            this.disableAddUser = true;
-          }
-          // this.$ajax.post(this.$apis.get_departmentUser, this.userData).then(res => {
-          //     console.log(res,'???')
-          //     this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
-          //     this.$nextTick(() => {
-          //         if(this.roleData[0].children){
-          //             this.roleData[0].children.forEach(v => {
-          //                 this.$refs.roleTree.setChecked(v, true, false)
-          //             });
-          //         }
-          //     });
-          // });
+            // this.$ajax.post(this.$apis.get_departmentUser, this.userData).then(res => {
+            //     console.log(res,'???')
+            //     this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
+            //     this.$nextTick(() => {
+            //         if(this.roleData[0].children){
+            //             this.roleData[0].children.forEach(v => {
+            //                 this.$refs.roleTree.setChecked(v, true, false)
+            //             });
+            //         }
+            //     });
+            // });
 
-        }).finally(err => {
+          }).finally(err => {
           this.loadingRole = false;
         });
       },
