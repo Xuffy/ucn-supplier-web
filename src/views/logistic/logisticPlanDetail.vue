@@ -63,7 +63,7 @@
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
-    <messageBoard module="logistic" code="planDetail" :id="planId"></messageBoard>
+    <messageBoard v-if="planId" module="logistic" code="planDetail" :id="planId"></messageBoard>
     <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
   </div>
 </template>
