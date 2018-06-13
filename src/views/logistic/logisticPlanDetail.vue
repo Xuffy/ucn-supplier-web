@@ -617,7 +617,7 @@ export default {
           type: 'success',
           duration:3000,
           onClose:()=>{
-            this.$router.push('/logistic/'+this.$route.query.loadingList || null);
+            this.$router.push('/logistic/'+ (this.$route.query.loadingList || ''));
           }
         })
       })
