@@ -284,7 +284,7 @@
             <el-button :disabled="loadingData" @click="cancel">{{$i.warehouse.cancel}}</el-button>
         </div>
 
-        <v-message-board module="qc" code="orderService" id="asdasf"></v-message-board>
+        <v-message-board module="qc" code="orderService" :id="$route.query.id"></v-message-board>
     </div>
 </template>
 <script>
@@ -411,8 +411,6 @@
                     this.loadingProductInfoTable=false;
                 });
             },
-
-
 
             /**
              * product info表格事件

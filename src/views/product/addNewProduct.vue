@@ -1,14 +1,6 @@
 <template>
     <div class="add-product" v-loading="loadingData">
         <div class="title">{{$i.product.basicInformation}}</div>
-        <!--<div class="addPic">-->
-            <!--<div class="name">-->
-                <!--Pic:-->
-            <!--</div>-->
-            <!--<div class="btns">-->
-                <!--<v-upload :limit="20" :onlyImage="true" ref="upload"></v-upload>-->
-            <!--</div>-->
-        <!--</div>-->
         <el-form :model="productForm" :rules="rules" ref="productForm1" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <!--设置高度51px以免inputNumber错位-->
@@ -1299,10 +1291,9 @@
                     }
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
-
                     this.$ajax.post(this.$apis.add_newSKU,param).then(res=>{
                         this.$message({
-                            message: '新增成功',
+                            message: this.$i.product.successfullyAdd,
                             type: 'success'
                         });
                         this.disabledSubmit=false;
