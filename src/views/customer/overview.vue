@@ -254,7 +254,7 @@
             this.getData();
             this.getCodePart();
             this.getCountryAll();
-            this.getCategoryId();
+            // this.getCategoryId();
             this.setRecycleBin({
                 name: 'customerRecycleBinDetail',
                 show: true
