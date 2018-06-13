@@ -18,7 +18,6 @@
   "modify":"Modify",
   "invalid":"Invalid",
   "restore":"Restore",
-
   "inboundOverview":"入库总览",
   "outboundOverview":"出库总览",
   "inboundType":"入库类型",
@@ -47,7 +46,6 @@
   "acceptReturn":"接受退货",
   "qcOrderDetail":"货单详情",
   "detail":"详情",
-  "pressMoney":"催款"
-
-
+  "pressMoney":"催款",
+  "prompt":"提示"
 }

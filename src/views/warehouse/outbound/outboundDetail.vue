@@ -162,7 +162,12 @@
              * product table事件
              * */
             btnClick(e){
-                console.log(e)
+                this.$windowOpen({
+                    url:'/product/detail',
+                    params:{
+                        id:e.skuId.value
+                    }
+                })
             },
             changeChecked(e){
 

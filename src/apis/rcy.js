@@ -11,6 +11,8 @@ export default {
     ORDER_CANCEL:['/order/cancle','USUPPLY_URL'],
     ORDER_CONFIRM:['/order/confirm','USUPPLY_URL'],
     ORDER_UPDATE:['/order/update','USUPPLY_URL'],
+    ORDER_SKUS: ['/order/skus', 'BASE_URL'],
+    ORDER_MARK: ['/order/mark','BASE_URL'],
 
 
     //customer
