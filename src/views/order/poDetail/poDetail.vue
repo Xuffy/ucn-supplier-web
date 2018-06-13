@@ -447,7 +447,6 @@
             </el-table>
         </div>
 
-
         <div class="title">
             {{$i.order.productInfoBig}}
         </div>
@@ -469,7 +468,6 @@
         </v-table>
 
         <div class="footBtn">
-
             <div v-if="hasHandleOrder">
                 <div v-if="isModify">
                     <el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>
@@ -478,7 +476,7 @@
                 <div v-else>
                     <el-button :disabled="loadingPage || disableModify || hasCancelOrder" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
                     <el-button :disabled="loadingPage || disableConfirm || hasCancelOrder" @click="confirmOrder" type="primary">{{$i.order.confirm}}</el-button>
-                    <el-button :disabled="loadingPage || hasCancelOrder" @click="cancelOrder" type="info">{{$i.order.cancelOrder}}</el-button>
+                    <el-button :disabled="loadingPage || hasCancelOrder" @click="cancelOrder" type="danger">{{$i.order.cancelOrder}}</el-button>
                     <el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
                 </div>
             </div>
@@ -1310,6 +1308,9 @@
 
                 });
                 let ids=this.$route.query.ids;
+                if(!ids){
+                    return;
+                }
                 ids=ids.slice(0,ids.length-1);
                 this.loadingProductTable=true;
                 this.$ajax.post(this.$apis.ORDER_SKUS,ids.split(',')).then(res=>{
@@ -1327,6 +1328,7 @@
                 });
             },
             getDetail(e){
+                this.loadingPage=true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
                     orderId:this.$route.query.orderId,
                 }).then(res=>{
@@ -1369,6 +1371,10 @@
                     if(this.orderForm.status==='5'){
                         this.hasCancelOrder=true;
                     }
+
+                    //情况选中的product
+                    this.selectProductInfoTable=[];
+
 
                     /**
                      * 获取payment数据
@@ -1603,7 +1609,6 @@
                 return arr;
             },
 
-
             /**
              * payment事件
              * */
@@ -1683,8 +1688,6 @@
                     this.disableClickRefuse=false;
                 })
             },
-
-
 
             /**
              * quick create弹出框事件

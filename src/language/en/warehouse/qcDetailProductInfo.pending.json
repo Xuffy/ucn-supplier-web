@@ -67,5 +67,6 @@
     "outerCartonMarksResults": "Outer Carton Marks results",
     "QCPic": "QC Pic",
     "checkOuterCartons": "Check Outer Cartons",
-    "remark": "Remark"
+    "remark": "Remark",
+    "skuQcResultDictCode":"SKU QC Result"
 }

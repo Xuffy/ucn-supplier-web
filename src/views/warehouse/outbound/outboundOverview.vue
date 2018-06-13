@@ -25,7 +25,7 @@
                         @action="btnClick">
                     <template slot="header">
                         <div class="btns">
-                            <el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>
+                            <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
                             <el-button @click="createOutbound">新建</el-button>
                         </div>
                     </template>

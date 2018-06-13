@@ -133,7 +133,29 @@
                 </el-table>
             </el-tab-pane>
             <el-tab-pane :label="$i.warehouse.applyReturn">
-                <el-button type="primary">{{$i.warehouse.acceptReturn}}</el-button>
+                <el-button :disabled="selectThird.length===0" @click="acceptReturn" type="primary">{{$i.warehouse.acceptReturn}}</el-button>
+                <el-table
+                        v-loading="loadingProductTable"
+                        class="speTable"
+                        :data="productTable2"
+                        style="width: 100%;margin-top: 10px"
+                        border
+                        @selection-change="handleThirdTable">
+                    <el-table-column
+                            align="center"
+                            type="selection"
+                            :selectable='checkboxInit'
+                            width="55">
+                    </el-table-column>
+                    <el-table-column
+                            v-for="v in $db.warehouse.qcOrderTable"
+                            :label="$i.warehouse[v.key]"
+                            :key="v.key"
+                            :prop="v.key"
+                            width="160">
+                        <template slot-scope="scope">{{ scope.row[v.key] }}</template>
+                    </el-table-column>
+                </el-table>
             </el-tab-pane>
         </el-tabs>
 
@@ -299,33 +321,64 @@
                 this.selectSecond=e;
             },
             handleThirdTable(e){
-
+                this.selectThird=e;
             },
             //接受验货结果
             accept(){
-                if(this.selectFirst.length===0){
-                    this.$message({
-                        message: '请选择产品',
-                        type: 'warning'
-                    });
-                }else{
-                    this.dialogFormVisible=true;
-                }
+                this.dialogFormVisible=true;
             },
             //接受返工
             acceptRework(){
-                console.log(this.selectSecond)
                 let ids=[];
+                _.map(this.selectSecond,v=>{
+                    ids.push(v.id);
+                });
+                this.$ajax.post(this.$apis.REWORK_HANDLE,{
+                    accept: true,
+                    qcOrderDetailIds: ids,
+                }).then(res=>{
+                    this.getTableData();
+                    this.$message({
+                        type: 'success',
+                        message: this.$i.warehouse.reworkSuccess
+                    });
+                }).finally(()=>{
+
+                });
+            },
+            //接受退货
+            acceptReturn(){
+                this.$confirm(this.$i.warehouse.sureReturn, this.$i.warehouse.prompt, {
+                    confirmButtonText: this.$i.warehouse.sure,
+                    cancelButtonText: this.$i.warehouse.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    let ids=[];
+                    _.map(this.selectThird,v=>{
+                        ids.push(v.id);
+                    });
+                    this.$ajax.post(this.$apis.RETURN_HANDLE,{
+                        qcOrderDetailIds:ids
+                    }).then(res=>{
+                        this.getTableData();
+                        this.$message({
+                            type: 'success',
+                            message: this.$i.warehouse.returnSuccess
+                        });
+                    }).finally(()=>{
+
+                    })
 
 
-                // this.$ajax.post(this.$apis.REWORK_HANDLE,{
-                //     accept: true,
-                //     qcOrderDetailIds: ids,
-                // }).then(res=>{
-                //
-                // }).finally(err=>{
-                //
-                // });
+
+
+                }).catch(() => {
+
+                });
+
+
+
+
             },
 
             /**
