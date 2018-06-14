@@ -47,7 +47,7 @@
           <div class="bom-btn-wrap" v-show="!statusModify">
             <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
             <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.dataBase + ''!=='99'||tabData[0].status.dataBase+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button> -->
-            <el-button @click="modifyAction" :disabled="tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
+            <el-button @click="statusModify = true" :disabled="tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
             <el-button type="info" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.dataBase+''!== '22'&&tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
             <el-button>{{ $i.common.download }}</el-button>
           </div>
@@ -65,7 +65,7 @@
           :visible.sync="newSearchDialogVisible"
           width="70%"
           lock-scroll>
-      <el-radio-group v-model="radio" @change="fromChange">
+      <el-radio-group v-model="radio" @change="trig = new Date().getTime()">
         <el-radio-button label="product">{{ $i.common.fromNewSearch }}</el-radio-button>
         <el-radio-button label="bookmark">{{ $i.common.FromMyBookmark }}</el-radio-button>
       </el-radio-group>
@@ -175,12 +175,14 @@ export default {
     }
   },
   created() {
+    this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
+    this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
+
     this.submitData.id = this.$route.query.id;
     if (this.$localStore.get('$in_quiryCompare')) {
       this.compareConfig = this.$localStore.get('$in_quiryCompare');
     }
-    this.getDictionaries();
-    this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
+    this.getBaseData().then(this.getInquiryDetail);
   },
   watch: {
     ChildrenCheckList(val, oldVal) {
@@ -212,91 +214,60 @@ export default {
         cancelButtonText: this.$i.common.cancel,
         type: 'warning'
       }).then(() => {
-        this.$ajax
-          .post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
-            action: 'delete',
-            ids: [this.$route.query.id]
-          })
-          .then(res => {
-            this.$router.push('/negotiation/inquiry');
-          });
+        this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
+          action: 'delete',
+          ids: [this.$route.query.id]
+        }).then(() => {
+          this.$router.push('/negotiation/inquiry');
+        });
       });
     },
-    async getDictionaries() {
-      const postCodePart = () => {
-        // 通用字典
-        return this.$ajax.post(
-          this.$apis.POST_CODE_PART,
-          [
-            'INQUIRY_STATUS',
-            'PMT',
-            'ITM',
-            'EL_IS',
-            'SUPPLIER_TYPE',
-            'MD_TN',
-            'SKU_SALE_STATUS',
-            'SKU_UNIT',
-            'LH_UNIT',
-            'VE_UNIT',
-            'OEM_IS',
-            'UDB_IS',
-            'SKU_PG_IS'
-          ],
-          { cache: true }
-        );
-      };
-      const getCurrencyAll = () => {
-        // 币种 CY_UNIT
-        return this.$ajax.get(this.$apis.get_currency_all, '', {cache: true});
-      };
-      const getCountryAll = () => {
-        // 国家 COUNTRY
-        return this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache: true});
-      };
-      await this.$ajax.all([postCodePart(), getCurrencyAll(), getCountryAll()]).then(res => {
+    getBaseData() {
+      const postCodes = this.$ajax.post(
+        this.$apis.POST_CODE_PART,
+        [
+          'INQUIRY_STATUS',
+          'PMT',
+          'ITM',
+          'EL_IS',
+          'SUPPLIER_TYPE',
+          'MD_TN',
+          'SKU_SALE_STATUS',
+          'SKU_UNIT',
+          'LH_UNIT',
+          'VE_UNIT',
+          'OEM_IS',
+          'UDB_IS',
+          'SKU_PG_IS'
+        ],
+        { cache: true }
+      );
+      const getCurrencies = this.$ajax.get(this.$apis.get_currency_all, '', {cache: true});
+      const getCountries = this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache: true});
+      return this.$ajax.all([postCodes, getCurrencies, getCountries]).then(res => {
         let data = res[0];
-        data = res[0].concat({
+        data.push({
           code: 'CY_UNIT',
           name: 'CY_UNIT(币种)',
           codes: res[1]
         });
-        data = data.concat({
+        data.push({
           code: 'COUNTRY',
           name: 'COUNTRY(国家)',
           codes: res[2]
         });
         this.setDic(data);
+        return Promise.resolve(data);
       });
-      this.getInquiryDetail();
     },
     addProduct() {
-      let arr = [];
-      _.map(this.newProductTabData, item => {
-        if (!item._disabled) {
-          arr.push(item);
-        }
-      });
-      this.disabledLine = arr;
+      this.disabledLine = this.newProductTabData.filter(item => !item._disabled);
       this.trig = new Date().getTime();
       this.newSearchDialogVisible = true;
     },
-    handleOK(item) {
-      // 添加 product
-      if (item && !item.length) {
-        this.$message(this.$i.common.pleaseChooseGoods);
-        return;
-      }
-      let ids = [];
-      _.map(item, items => {
-        ids.push(_.findWhere(items, { key: 'id' }).value);
-      });
-    },
     startCompare() {
       // 前往比较
-      let arr = [];
-      this.compareConfig.forEach(item => {
-        arr.push(item.id);
-      });
+      let arr = this.compareConfig.map(i => i.id);
       this.$router.push({
         name: 'negotiationCompareDetail',
         params: {
@@ -337,53 +308,67 @@ export default {
       this.compareConfig.push(config);
       this.$localStore.set('$in_quiryCompare', this.compareConfig);
     },
-    markFieldHighlight(item, color, fieldDisplay) {
-      let fd = fieldDisplay || 'fieldDisplay';
+    markFieldHighlight(items, color) {
       let c = color || 'yellow';
-      typeof item === 'object' && item[fd].value && _.mapObject(item[fd].value, (val, key) => {
-        if (val === '1' && item[key]) {
-          item[key]._style = 'background-color: ' + c;
+      let remarks = items.filter(i => i._remark);
+      let lines = items.filter(i => !i._remark);
+      for (let line of lines) {
+        let fieldDisplay = line.fieldDisplay.value;
+        if (typeof fieldDisplay === 'object') {
+          Object.keys(fieldDisplay).forEach(k => {
+            if (fieldDisplay[k] === '1' && line[k]) {
+              line[k]._style = 'background-color: ' + c;
+            }
+          });
         }
-      });
+
+        let key = line.hasOwnProperty('skuId') ? 'skuId' : 'id';
+        let remark = remarks.find(i => i[key].value.toString() === line[key].value.toString());
+        let fieldRemarkDisplay = line.fieldRemarkDisplay.value;
+        if (typeof fieldRemarkDisplay === 'object') {
+          Object.keys(fieldRemarkDisplay).forEach(k => {
+            console.log(k);
+            if (fieldRemarkDisplay[k] === '1' && remark[k]) {
+              remark[k]._style = 'background-color: ' + c;
+            }
+          });
+        }
+      }
     },
     getInquiryDetail() {
       // 获取 Inquiry detail 数据
       if (!this.$route.query.id) {
-        return this.$message(this.$i.common.addressError);
+        this.$message(this.$i.common.addressError);
+        return;
       }
       this.$ajax.get(`${this.$apis.BUYER_GET_INQIIRY_DETAIL}/{id}`, {id: this.$route.query.id}).then(res => {
-        let basicInfoData, newProductTabData;
         // Basic Info
-        basicInfoData = this.$getDB(
+        this.tabData = this.newTabData = this.$getDB(
           this.$db.inquiry.basicInfo,
           this.$refs.HM.getFilterData([res]),
           item => {
             this.$filterDic(item);
-            this.markFieldHighlight(item);
             _.map(item, val => {
-              val.defaultData = _.isUndefined(val.dataBase) ? val.value : val.dataBase;
+              val.defaultData = val.dataBase || val.value;
             });
           }
         );
-        this.newTabData = basicInfoData;
-        this.tabData = basicInfoData;
+        this.markFieldHighlight(this.newTabData);
         // SKU_UNIT
         // Product Info
-        newProductTabData = this.$getDB(
+        this.productTabData = this.newProductTabData = this.$getDB(
           this.$db.inquiry.productInfo,
           this.$refs.HM.getFilterData(res.details, 'skuId'),
           item => {
             this.$filterDic(item);
-            this.markFieldHighlight(item);
             _.map(item, val => {
-              val.defaultData = _.isUndefined(val.dataBase) ? val.value : val.dataBase;
+              val.defaultData = val.dataBase || val.value;
             });
           }
         );
-        this.newProductTabData = newProductTabData;
-        this.productTabData = newProductTabData;
+        this.markFieldHighlight(this.newProductTabData);
         this.tableLoad = false;
-      }).catch(err => {
+      }).catch(() => {
         this.tableLoad = false;
       });
     },
@@ -402,72 +387,39 @@ export default {
       });
     },
     basicInfoBtn(item) {
-      // Basic info 按钮创建
-      if (item.id.value && this.statusModify) {
-        return [
-          {
-            label: this.$i.common.modify,
-            type: 'modify'
-          },
-          {
-            label: this.$i.common.histoty,
-            type: 'histoty'
-          }
-        ];
-      }
-
+      let options = [];
       if (item.id.value) {
-        return [
-          {
-            label: this.$i.common.histoty,
-            type: 'histoty'
-          }
-        ];
+        options.push({label: this.$i.common.histoty, type: 'histoty'});
+        if (this.statusModify) {
+          options.push({label: this.$i.common.modify, type: 'modify'});
+        }
       }
+      return options;
     },
     productInfoBtn(item) {
-      // Product info 按钮创建
-      if (this.statusModify && !item._disabled) {
-        return [
-          { label: this.$i.common.modify, type: 'modify' },
-          { label: this.$i.common.histoty, type: 'histoty' },
-          { label: this.$i.common.detail, type: 'detail' }
-        ];
-      }
-      if (this.statusModify && item._disabled) {
-        return [
-          { label: this.$i.common.modify, type: 'modify' },
-          { label: this.$i.common.histoty, type: 'histoty' },
-          { label: this.$i.common.detail, type: 'detail' }
-        ];
-      }
+      let options = null;
       if (!item._disabled) {
-        return [
-          { label: this.$i.common.histoty, type: 'histoty', _disabled: false },
-          { label: this.$i.common.detail, type: 'detail', _disabled: false }
+        options = [
+          {label: this.$i.common.histoty, type: 'histoty', _disabled: false},
+          {label: this.$i.common.detail, type: 'detail', _disabled: false}
         ];
+        if (this.statusModify) {
+          options.push({label: this.$i.common.modify, type: 'modify'});
+        }
       }
-    },
-    fromChange(val) {
-      this.trig = new Date().getTime();
-    },
-    modifyAction() {
-      // 打开页面编辑状态
-      this.statusModify = true;
+      return options;
     },
     save(data) {
       // modify 编辑完成反填数据
       let items = _.map(data, item => {
-        let changedFields = !item._remark ? {} : false;
+        let changedFields = {};
         _.map(item, (o, field) => {
-          if (['fieldDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
+          if (['fieldDisplay', 'fieldRemarkDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
             return;
           }
           if (o.value !== o.defaultData) {
-            o._style = 'background-color: yellow';
-            if (changedFields) {
-              changedFields[field] = '1';
-            }
+            o._style = 'background-color:yellow';
+            changedFields[field] = '1';
           } else {
             o._style = '';
           }
@@ -475,9 +427,7 @@ export default {
         if (item.id && item.id.value) {
           item.$pageState = 2;
         }
-        if (changedFields) {
-          item.$changedFields = changedFields;
-        }
+        item.$changedFields = changedFields;
         return item;
       });
 
@@ -492,12 +442,10 @@ export default {
     },
     fnBasicInfoHistoty(item, type, config) {
       // 查看历史记录
-      let arr = [];
+      let arr;
       if (item.$pageState && item.$pageState === 1) {
         if (config.type === 'modify') {
-          _.map(this.newProductTabData, items => {
-            if(_.findWhere(items, {'key': 'skuId'}).value === config.data) arr.push(items);
-          });
+          arr = this.newProductTabData.filter(i => i.skuId.value === config.data);
           this.$refs.HM.init(arr, [], true);
         }
         return;
@@ -505,19 +453,11 @@ export default {
       let historyApi = item.skuId ? this.$apis.BUYER_GET_INQUIRY_DETAIL_HISTORY : this.$apis.BUYER_GET_INQUIRY_HISTORY;
       this.$ajax.get(historyApi, {id: item.id.value}).then(res => {
         if (type === 'basicInfo') {
-          _.map(this.newTabData, items => {
-            if (_.findWhere(items, {'key': 'id'}).value+'' === config.data+'') arr.push(items);
-          });
+          arr = this.newTabData.filter(i => i.id.value.toString() === config.data.toString());
           this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), config.type === 'modify');
         } else {
-          _.map(this.newProductTabData, items => {
-            if (_.findWhere(items, {'key': 'skuId'}).value + '' === config.data + '') arr.push(items);
-          });
-          if (config.type === 'histoty') {
-            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
-          } else {
-            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
-          }
+          arr = this.newProductTabData.filter(i => i.skuId.value.toString() === config.data.toString());
+          this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), config.type === 'modify');
         }
         this.fromArg = arr[0];
       });
@@ -553,29 +493,23 @@ export default {
           break;
       }
     },
+    // 获取选中的单 集合
     changeChecked(item) {
-      // 获取选中的单 集合
       this.checkedAll = item;
     },
+    // 创建单
     toCreateInquire() {
-      // 创建单
       this.$router.push('/negotiation/createInquiry');
     },
+    // 接受单
     ajaxInqueryAction(type) {
-      // 接受单
-      this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {action: type, ids: [this.$route.query.id]}).then(res => {
+      this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {action: type, ids: [this.$route.query.id]}).then(() => {
         this.$router.push('/negotiation/inquiry');
       });
     },
+    // 删除product 某个单
     removeProduct() {
-      // 删除product 某个单
-      let arr = [];
-      _.map(this.newProductTabData, (item, index) => {
-        if (_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) {
-          arr.push(item);
-        }
-      });
-      this.newProductTabData = _.difference(this.newProductTabData, arr);
+      this.newProductTabData = this.newProductTabData.filter(item => this.checkedAll.map(i => i.skuId.value.toString()).indexOf(item.skuId.value.toString()) === -1);
       this.checkedAll = [];
     },
     modifyCancel() {
@@ -588,63 +522,52 @@ export default {
     modify() {
       // 页面编辑提交
       let parentNode = this.dataFilter(this.newTabData)[0] ? this.dataFilter(this.newTabData)[0] : '';
-      let arr = [];
-      _.map(this.newProductTabData, item => {
-        if (!item._disabled) {
-          arr.push(item);
-        }
-      });
+      let arr = this.newProductTabData.filter(i => !i._disabled);
       parentNode.details = this.dataFilter(arr);
       parentNode.draft = 0;
       this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SAVE, this.$filterModify(parentNode)).then(res => {
         this.newTabData[0].status.dataBase = res.status;
-        this.tabData = this.newTabData;
-        this.productTabData = this.newProductTabData;
-        this.productModify();
         this.statusModify = false;
+        this.getInquiryDetail();
       });
     },
-    dataFilter(data) {
-      let excludeColumns = '$changedFields,$pageState,entryDt,updateDt,status';
-      let arr = [], remark = {}, json = {};
-      data.forEach(item => {
-        remark = {};
-        if (item._remark) {
-          // 拼装remark 数据
-          for (let field in item) {
-            let value = item[field].value;
-            if (value && value.length > 0) {
-              remark[field] = value;
-            }
-          }
-          json.fieldRemark = remark;
-        } else {
-          json = {};
-          for (let k in item) {
-            if (excludeColumns.indexOf(k) > -1) continue;
-            if (k === 'fieldRemark') {
-              json[k] = remark;
-            } else if (k === 'fieldDisplay') {
-              json[k] = {};
-              if (item.$changedFields) {
-                for (let f in item.$changedFields) {
-                  if (item.$changedFields.hasOwnProperty(f)) {
-                    json[k][f] = item.$changedFields[f];
-                  }
-                }
-              }
-            } else {
-              if (item[k].dataType && item[k].dataType === 'boolean' && typeof item[k].value === 'string') {
-                json[k] = item[k].value === '1' || item[k].value === 'true';
-              } else {
-                json[k] = item[k].value;
-              }
-            }
-          }
-          arr.push(json);
+    getRemarkObject(remark) {
+      let o = {};
+      Object.keys(remark).forEach(field => {
+        if (!(/^[_$]/).test(field) && remark[field].value) {
+          o[field] = remark[field].value;
         }
       });
-      return arr;
+      return o;
+    },
+    dataFilter(data) {
+      let excludeColumns = '$changedFields,$pageState,fieldDisplay,fieldRemarkDisplay,entryDt,updateDt,status';
+      let datas = data.filter(item => !item._remark);
+      let remarks = data.filter(item => item._remark);
+
+      let list = [];
+      for (let item of datas) {
+        let o = {};
+        let isDetailInfo = item.hasOwnProperty('skuId');
+        let key = isDetailInfo ? 'skuId' : 'id';
+        let remark = remarks.find(i => i[key].value.toString() === item[key].value.toString());
+        o.fieldDisplay = item.$changedFields;
+        if (remark) {
+          o.fieldRemark = this.getRemarkObject(remark);
+          o.fieldRemarkDisplay = remark.$changedFields;
+        }
+        Object.keys(item).forEach(field => {
+          let val = item[field];
+          if (excludeColumns.indexOf(field) > -1) return;
+          if (val.dataType && val.dataType === 'boolean' && typeof val.value === 'string') {
+            o[field] = val.value === '1' || val.value === 'true';
+          } else {
+            o[field] = val.value;
+          }
+        });
+        list.push(o);
+      }
+      return list;
     },
     productCancel() {
       //  取消 product 编辑
