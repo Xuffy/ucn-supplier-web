@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="payment">
     <el-button type="primary" size="mini" @click.stop="$emit('addPayment')">{{ $i.logistic.applyForPayment }}</el-button>
-    <el-table :data="tableData" border style="width: 100%; margin-top: 20px" show-summary :sum-text="$i.logistic.sum" :summary-method="summaryMethod">
+    <el-table ref="table" :row-class-name="tableRowClassName" :data="tableData" border style="width: 100%; margin-top: 20px" show-summary :summary-method="summaryMethod">
       <el-table-column type="index" width="50" align="center"/>
       <el-table-column :label="$i.logistic.paymentNo" align="center" width="140">
         <template slot-scope="scope">
@@ -16,19 +16,18 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.supplierName" align="center" width="140">
         <template slot-scope="scope">
-          <!-- <el-select v-model="scope.row.payToId" placeholder="请输入内容" :clearable="true" v-if="scope.row.edit">
-            <el-option :label="item.skuSupplierName" :value="item.skuSupplierId" v-for="item of selectArr.supplier" :key="'supplier-arr-' + item.supplierId" v-if="selectArr.supplier"/>
-          </el-select> -->
           <el-col v-if="scope.row.edit">
-            <el-autocomplete
-              class="inline-input"
-              v-model="scope.row.payToId"
-              :fetch-suggestions="querySearch"
-              placeholder="请输入内容"
-              :trigger-on-focus="false"
-            ></el-autocomplete>
+            <el-select v-model="scope.row.payToCompanyId" filterable placeholder="请选择">
+              <el-option
+                v-for="item in selectArr.supplier"
+                :key="item.value"
+                :label="item.value"
+                :value="item.companyId">
+              </el-option>
+            </el-select>
           </el-col>
-          <span v-else>{{ computedCurrency('supplier', 'skuSupplierId', 'skuSupplierName', scope.row.payToId) }}</span>
+          <!-- <span v-else>{{ computedCurrency('supplier', 'skuSupplierId', 'skuSupplierName', scope.row.payToId) }}</span> 接手 注释 -->
+          <span v-else>{{ scope.row.payToCompanyName }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.estPayDate" align="center" width="260">
@@ -38,7 +37,7 @@
           <span v-else>{{ scope.row.planPayDt ? $dateFormat(scope.row.planPayDt, 'yyyy-mm-dd') : null }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.estAmount" align="center" width="180">
+      <el-table-column :label="$i.logistic.estAmount" prop="planPayAmount" align="center" width="180">
         <template slot-scope="scope">
           <el-input placeholder="请输入内容" v-model="scope.row.planPayAmount" v-if="scope.row.edit"></el-input>
           <span v-else>{{ scope.row.planPayAmount }}</span>
@@ -51,7 +50,7 @@
           <span v-else>{{ scope.row.actualPayDt ? $dateFormat(scope.row.actualPayDt, 'yyyy-mm-dd') : null }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.actAmount" align="center" width="180">
+      <el-table-column :label="$i.logistic.actAmount" prop="actualPayAmount" align="center" width="180">
         <template slot-scope="scope">
           <el-input placeholder="请输入内容" v-model="scope.row.actualPayAmount" v-if="scope.row.edit"></el-input>
           <span v-else>{{ scope.row.actualPayAmount }}</span>
@@ -76,7 +75,7 @@
             <el-button size="mini" type="primary" @click.stop="$emit('deletePaymentList', scope.$index)">取消</el-button>
           </div> -->
           <div v-if="scope.row.status === -1">
-            <el-button size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.recover_plan_payment)">恢复</el-button>
+            <el-button size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.recover_plan_payment)">{{ $i.logistic.recover }}</el-button>
           </div>
           <div v-if="scope.row.status === 20 || scope.row.status === 40">
             <div v-if="scope.row.edit">
@@ -102,8 +101,8 @@ export default {
         return []
       }
     },
-    ExchangeRateInfoArr:[Array,Object],
     currencyCode: String,
+    ExchangeRateInfoArr:[Array,Object],
     selectArr: {
       type: Object,
       default: () => {}
@@ -127,14 +126,17 @@ export default {
         },
         {
           code: 10,
+          hightLight:true,
           name: this.$i.logistic.tbcc
         },
         {
           code: 20,
+          hightLight:true,
           name: this.$i.logistic.tbcs
         },
         {
           code: 30,
+          hightLight:true,
           name: this.$i.logistic.tbcsp
         },
         {
@@ -186,16 +188,59 @@ export default {
         return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
-    summaryMethod () {
-      let SumArr = [this.$i.logistic.sum]
-      if (!this.paymentSum) return SumArr
+    summaryMethod (param) {
+      const { columns, data } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = this.$i.logistic.sum;
+            return;
+          }
+          const values = data.map(item => Number(item[column.property]));
+          //提取data 拼接成汇率的key 
+          const currencyCode = data.map(item => {
+            if(item.currencyCode!=this.currencyCode){
+              return item.currencyCode+this.currencyCode;
+            }else{
+              return this.currencyCode; 
+            }
+          });
+          let currencyCodeArr = [];
+          //拿到拼接的key 匹配汇率的key 推入数组
+          currencyCode.forEach((item)=>{
+            this.ExchangeRateInfoArr.forEach((findItem)=>{
+              if(findItem.key==item){
+                currencyCodeArr.push(findItem.value)
+              }
+            })
+            if(item == this.currencyCode){
+                currencyCodeArr.push(1)
+            }
+          })
+          if (!values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr,i) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return this.$numAdd(prev , this.$mul(curr,currencyCodeArr[i]));
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] += '';
+          } else {
+            sums[index] = '--';
+          }
+        });
 
-      SumArr[5] = this.paymentSum.planPayAmount
-      SumArr[7] = this.paymentSum.actualPayAmount
-      SumArr[8] = this.computedCurrency('exchangeCurrency', 'code', 'name', this.paymentSum.currencyCode)
-      return SumArr
+        return sums;
+    },
+    tableRowClassName({row, rowIndex}) {
+      if (this.paymentDec.find(a => a.code == row.status).hightLight) {
+        return 'warning-row';
+      }
     },
     computedCurrency (key, findKey, returnKey,currencyCode) {
+      // 'supplier', 'skuSupplierId', 'skuSupplierName', scope.row.payToId 接手注释
       if (!this.selectArr[key]) return null
       const obj = this.selectArr[key].find(a => a[findKey] === currencyCode)
       return obj ? obj[returnKey] : null
@@ -213,6 +258,29 @@ export default {
         this.$emit('updatePaymentWithView', { i, edit: false, status })
       })
     },
+  },
+  watch:{
+    currencyCode(v){
+      let param = {
+        columns : this.$refs.table.columns,
+        data : this.$refs.table.data
+      }
+      this.summaryMethod(param)
+    }
   }
 }
 </script>
+
+<style scoped lang="less">
+  .payment/deep/.el-table .warning-row {
+    background: #f56c6c;
+    td,th{
+      color:#fff;
+    }
+    &:hover{
+      td,th{
+        color:#1d1007;
+      }
+    }
+  }
+</style>
