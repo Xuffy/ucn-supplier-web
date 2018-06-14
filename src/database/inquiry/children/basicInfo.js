@@ -14,9 +14,6 @@ export default {
   _remark: {
     _hide: true
   },
-  fieldDisplay: {
-    _hide: true
-  },
   paymentTerm: {
     _inquiryHide: true,
     _hide: true
@@ -141,7 +138,7 @@ export default {
   supplierType: { // 供应商类型 ok
     rules: [],
     width: '150px',
-    type: 'String',
+    type: 'Select',
     _disabled: true,
     _inquiryHide: true,
     transForm: 'SUPPLIER_TYPE'
@@ -191,5 +188,11 @@ export default {
     sm: 24,
     md: 24,
     lg: 24
+  },
+  fieldDisplay: {
+    _hide: true
+  },
+  fieldRemarkDisplay: {
+    _hide: true
   }
 };

@@ -105,8 +105,9 @@
         this.contentLoading = true;
         this.$ajax.post(this.$apis.CHATMESSAGE_QUERY, {moduleCode: this.module, bizCode: this.code, bizNo: this.id,})
           .then(data => {
+            data = data || [];
             this.messageList = data.reverse();
-            this.$nextTick(() => {
+            this.$refs.messageBox && this.$nextTick(() => {
               this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
             })
           })
