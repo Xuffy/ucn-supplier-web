@@ -366,10 +366,7 @@ export default {
         let arr = this.$getDB(
           this.$db.inquiry.productInfo,
           this.$refs.HM.getFilterData(res, 'skuId'),
-          item => {
-            this.$filterDic(item);
-            item.$pageState = 1;
-          }
+          item => this.$filterDic(item)
         );
         this.newProductTabData = arr.concat(this.newProductTabData);
         this.newSearchDialogVisible = false;
@@ -403,7 +400,7 @@ export default {
       let items = _.map(data, item => {
         let changedFields = {};
         _.map(item, (o, field) => {
-          if (['fieldDisplay', '$pageState', 'fieldRemarkDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
+          if (['fieldDisplay', 'fieldRemarkDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
             return;
           }
           if (o.value !== o.defaultData) {
@@ -413,9 +410,6 @@ export default {
             o._style = '';
           }
         });
-        if (item.id && item.id.value) {
-          item.$pageState = 2;
-        }
         item.$changedFields = changedFields;
         return item;
       });
@@ -432,7 +426,7 @@ export default {
     fnBasicInfoHistoty(item, type, config) {
       // 查看历史记录
       let arr;
-      if (item.$pageState && item.$pageState === 1) {
+      if (item.id.value) {
         if (config.type === 'modify') {
           arr = this.newProductTabData.filter(i => i.skuId.value === config.data);
           this.$refs.HM.init(arr, [], true);
@@ -530,7 +524,7 @@ export default {
       return o;
     },
     dataFilter(data) {
-      let excludeColumns = '$changedFields,$pageState,fieldDisplay,fieldRemarkDisplay,entryDt,updateDt,status';
+      let excludeColumns = '$changedFields,fieldDisplay,fieldRemarkDisplay,entryDt,updateDt,status';
       let datas = data.filter(item => !item._remark);
       let remarks = data.filter(item => item._remark);
 
