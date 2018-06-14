@@ -357,9 +357,8 @@
                     _.map(this.selectThird,v=>{
                         ids.push(v.id);
                     });
-                    this.$ajax.post(this.$apis.RETURN_HANDLE,{
-                        qcOrderDetailIds:ids
-                    }).then(res=>{
+                    this.$ajax.post(this.$apis.RETURN_HANDLE,ids)
+                      .then(res=>{
                         this.getTableData();
                         this.$message({
                             type: 'success',
