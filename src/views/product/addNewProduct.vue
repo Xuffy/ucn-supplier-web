@@ -1178,12 +1178,12 @@
         methods:{
             //获取类别数据
             getCategoryId(){
-                this.$ajax.get(this.$apis.get_supply_category,{}).then(res=>{
+                this.$ajax.get(this.$apis.CATEGORY_SYSTEM,{}).then(res=>{
                     this.categoryList[0].children=res;
                 }).catch(err=>{
 
                 });
-                this.$ajax.get(this.$apis.get_supply_my_category,{}).then(res=>{
+                this.$ajax.get(this.$apis.CATEGORY_MINE,{}).then(res=>{
                     this.categoryList[1].children=res;
                 }).catch(err=>{
 

@@ -420,6 +420,8 @@
                         width="180">
                 </el-table-column>
                 <el-table-column
+                        fixed="right"
+                        align="center"
                         :label="$i.order.available"
                         width="180">
                     <template slot-scope="scope">
@@ -1754,7 +1756,6 @@
                     planRefundDt: data.planRefundDt,
                     version:data.version
                 };
-                console.log(param)
                 this.loadingPaymentTable=true;
                 this.$ajax.post(this.$apis.PAYMENT_UPDATE,param).then(res=>{
                     console.log(res)
@@ -1774,6 +1775,7 @@
                     });
                     this.$set(data,'isModify',false);
                     this.$set(data,'version',res.version);
+                    this.$set(data,'status',res.status);
                 }).finally(err=>{
                     this.loadingPaymentTable=false;
                 })
