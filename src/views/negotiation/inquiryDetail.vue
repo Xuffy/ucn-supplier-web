@@ -327,7 +327,6 @@ export default {
         let fieldRemarkDisplay = line.fieldRemarkDisplay.value;
         if (typeof fieldRemarkDisplay === 'object') {
           Object.keys(fieldRemarkDisplay).forEach(k => {
-            console.log(k);
             if (fieldRemarkDisplay[k] === '1' && remark[k]) {
               remark[k]._style = 'background-color: ' + c;
             }
@@ -346,26 +345,16 @@ export default {
         this.tabData = this.newTabData = this.$getDB(
           this.$db.inquiry.basicInfo,
           this.$refs.HM.getFilterData([res]),
-          item => {
-            this.$filterDic(item);
-            _.map(item, val => {
-              val.defaultData = val.dataBase || val.value;
-            });
-          }
+          item => this.$filterDic(item)
         );
-        this.markFieldHighlight(this.newTabData);
         // SKU_UNIT
         // Product Info
         this.productTabData = this.newProductTabData = this.$getDB(
           this.$db.inquiry.productInfo,
           this.$refs.HM.getFilterData(res.details, 'skuId'),
-          item => {
-            this.$filterDic(item);
-            _.map(item, val => {
-              val.defaultData = val.dataBase || val.value;
-            });
-          }
+          item => this.$filterDic(item)
         );
+        this.markFieldHighlight(this.newTabData);
         this.markFieldHighlight(this.newProductTabData);
         this.tableLoad = false;
       }).catch(() => {
@@ -414,7 +403,7 @@ export default {
       let items = _.map(data, item => {
         let changedFields = {};
         _.map(item, (o, field) => {
-          if (['fieldDisplay', 'fieldRemarkDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
+          if (['fieldDisplay', '$pageState', 'fieldRemarkDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
             return;
           }
           if (o.value !== o.defaultData) {
