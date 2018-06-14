@@ -292,8 +292,8 @@
             {{$i.order.payment}}
         </div>
         <div class="payment-table">
-            <el-button type="primary">{{$i.order.remindCustomerPay}}</el-button>
-            <el-button>{{$i.order.applyRefund}}</el-button>
+            <el-button :loading="disableClickPayback" :disabled="!hasHandleOrder" @click="applyPayback" type="primary">{{$i.order.applyRefund}}</el-button>
+            <el-button :disabled="!hasHandleOrder">{{$i.order.remindCustomerPay}}</el-button>
             <el-table
                     v-loading="loadingPaymentTable"
                     class="payTable"
@@ -330,9 +330,8 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                        prop="name"
                         :label="$i.order.planPayDt"
-                        width="200">
+                        width="180">
                     <template slot-scope="scope">
                         <el-date-picker
                                 v-if="scope.row.isNew || scope.row.isModify"
@@ -341,11 +340,10 @@
                                 type="date"
                                 :placeholder="$i.order.pleaseChoose">
                         </el-date-picker>
-                        <span v-else>{{$dateFormat(scope.row.planPayDt,'yyyy-mm-dd')}}</span>
+                        <span v-else>{{scope.row.planPayDt?$dateFormat(scope.row.planPayDt,'yyyy-mm-dd'):''}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                        prop="planPayAmount"
                         :label="$i.order.planPayAmount"
                         width="160">
                     <template slot-scope="scope">
@@ -359,22 +357,20 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                        prop="actualPayDt"
                         :label="$i.order.actualPayDt"
                         width="200">
                     <template slot-scope="scope">
                         <el-date-picker
-                                class="speDate"
                                 v-if="scope.row.isNew || scope.row.isModify"
+                                class="speDate"
                                 v-model="scope.row.actualPayDt"
                                 type="date"
                                 :placeholder="$i.order.pleaseChoose">
                         </el-date-picker>
-                        <span v-else>{{$dateFormat(scope.row.actualPayDt,'yyyy-mm-dd')}}</span>
+                        <span v-else>{{scope.row.actualPayDt?$dateFormat(scope.row.actualPayDt,'yyyy-mm-dd'):''}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                        prop="name"
                         :label="$i.order.actualPayAmount"
                         width="160">
                     <template slot-scope="scope">
@@ -389,19 +385,60 @@
                 </el-table-column>
                 <el-table-column
                         :label="$i.order.planRefundDt"
-                        width="180">
+                        width="200">
+                    <template slot-scope="scope">
+                        <el-date-picker
+                                v-if="scope.row.isNew || scope.row.isModify"
+                                class="speDate"
+                                v-model="scope.row.planRefundDt"
+                                type="date"
+                                :placeholder="$i.order.pleaseChoose">
+                        </el-date-picker>
+                        <span v-else>{{scope.row.planRefundDt?$dateFormat(scope.row.planRefundDt,'yyyy-mm-dd'):''}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
+                        prop="planRefundAmount"
                         :label="$i.order.planRefundAmount"
-                        width="180">
+                        width="160">
+                    <template slot-scope="scope">
+                        <el-input-number
+                                v-if="scope.row.isNew || scope.row.isModify"
+                                class="speNumber"
+                                v-model="scope.row.planRefundAmount"
+                                :controls="false"
+                                :min="0"></el-input-number>
+                        <span v-else>{{scope.row.planRefundAmount}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
+                        prop="actualRefundDt"
                         :label="$i.order.actualRefundDt"
-                        width="180">
+                        width="200">
+                    <template slot-scope="scope">
+                        <el-date-picker
+                                v-if="scope.row.isNew || scope.row.isModify"
+                                class="speDate"
+                                v-model="scope.row.actualRefundDt"
+                                type="date"
+                                :placeholder="$i.order.pleaseChoose">
+                        </el-date-picker>
+                        <span v-else>{{scope.row.actualRefundDt?$dateFormat(scope.row.actualRefundDt,'yyyy-mm-dd'):''}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
+                        prop="actualRefundAmount"
                         :label="$i.order.actualRefundAmount"
-                        width="180">
+                        width="160">
+                    <template slot-scope="scope">
+                        <el-input-number
+                                v-if="scope.row.isNew || scope.row.isModify"
+                                class="speNumber"
+                                v-model="scope.row.actualRefundAmount"
+                                :controls="false"
+                                :min="0"></el-input-number>
+                        <span v-else>{{scope.row.actualRefundAmount}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                         prop="currencyCode"
@@ -425,21 +462,29 @@
                         align="center"
                         width="125">
                     <template slot-scope="scope">
-                        <div v-if="scope.row.isNew">
-                            <el-button :disabled="!allowHandlePay" @click="saveNewPay(scope.row)" type="text" size="small">{{$i.order.save}}</el-button>
-                            <el-button :disabled="!allowHandlePay" type="text" size="small">{{$i.order.cancel}}</el-button>
+                        <div v-if="scope.row.status===20">
+                            <el-button @click="confirmPay(scope.row)" type="text">{{$i.order.confirm}}</el-button>
+                        </div>
+                        <div v-else-if="scope.row.status===40">
+
                         </div>
                         <div v-else>
-                            <div v-if="scope.row.status===-1">
-                                <el-button :disabled="!allowHandlePay" @click="restorePay(scope.row)" type="text">{{$i.order.restore}}</el-button>
-                            </div>
-                            <div v-else-if="scope.row.isModify">
-                                <el-button :disabled="!allowHandlePay" @click="saveModifyPay(scope.row)" type="text" size="small">{{$i.order.save}}</el-button>
-                                <el-button :disabled="!allowHandlePay" @click="cancelModifyPay(scope.row)" type="text" size="small">{{$i.order.cancel}}</el-button>
+                            <div v-if="scope.row.isNew">
+                                <el-button :disabled="false" @click="saveNewPay(scope.row)" type="text" size="small">{{$i.order.save}}</el-button>
+                                <el-button :disabled="false" type="text" size="small">{{$i.order.cancel}}</el-button>
                             </div>
                             <div v-else>
-                                <el-button @click="modifyPay(scope.row)" :disabled="!allowHandlePay" type="text">{{$i.order.modify}}</el-button>
-                                <el-button @click="abandonPay(scope.row)" :disabled="!allowHandlePay" type="text">{{$i.order.abandon}}</el-button>
+                                <div v-if="scope.row.status===-1">
+                                    <el-button :disabled="!allowHandlePay" @click="restorePay(scope.row)" type="text">{{$i.order.restore}}</el-button>
+                                </div>
+                                <div v-else-if="scope.row.isModify">
+                                    <el-button :disabled="!allowHandlePay" @click="saveModifyPay(scope.row)" type="text" size="small">{{$i.order.save}}</el-button>
+                                    <el-button :disabled="!allowHandlePay" @click="cancelModifyPay(scope.row)" type="text" size="small">{{$i.order.cancel}}</el-button>
+                                </div>
+                                <div v-else>
+                                    <el-button @click="modifyPay(scope.row)" :disabled="!allowHandlePay" type="text">{{$i.order.modify}}</el-button>
+                                    <el-button @click="abandonPay(scope.row)" :disabled="!allowHandlePay" type="text">{{$i.order.abandon}}</el-button>
+                                </div>
                             </div>
                         </div>
                     </template>
@@ -1065,6 +1110,7 @@
                  * payment 配置
                  * */
                 loadingPaymentTable:false,
+                disableClickPayback:false,
                 paymentData:[],
 
                 /**
@@ -1627,6 +1673,87 @@
                     this.loadingPaymentTable=false;
                 });
             },
+            confirmPay(data){
+                this.$confirm(this.$i.order.sureConfirm, this.$i.order.prompt, {
+                    confirmButtonText: this.$i.order.sure,
+                    cancelButtonText: this.$i.order.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    this.loadingPaymentTable=true;
+                    this.$ajax.post(this.$apis.PAYMENT_ACCEPT,{
+                        id:data.id,
+                        version:data.version
+                    }).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: this.$i.order.handleSuccess
+                        });
+                        this.$set(data,'status',40);
+                        this.$set(data,'version',res.version);
+                    }).finally(()=>{
+                        this.loadingPaymentTable=false;
+                    });
+                }).catch(() => {
+
+                });
+            },
+            applyPayback(){
+                this.disableClickPayback=true;
+                this.$ajax.post(this.$apis.PAYMENT_NO).then(res=>{
+                    this.paymentData.push({
+                        no:res,
+                        name:'',
+                        planRefundDt: "",
+                        planRefundAmount: 0,
+                        actualRefundDt: "",
+                        actualRefundAmount: 0,
+                        currencyCode:this.orderForm.currency,
+                        status:10,
+                        isNew:true,
+                    });
+                }).finally(()=>{
+                    this.disableClickPayback=false;
+                })
+            },
+            saveNewPay(data){
+                console.log(this.orderForm)
+                let param={
+                    actualRefundAmount: data.actualRefundAmount,
+                    actualRefundDt: data.actualRefundDt,
+                    currency: 0,
+                    currencyCode: "",
+                    name: data.name,
+                    no: data.no,
+                    orderNo: this.orderForm.orderNo,
+                    orderType: 10,
+                    payToCompanyId: this.orderForm.companyId,
+                    payToCompanyName: '',
+                    planRefundAmount: data.planRefundAmount,
+                    planRefundDt: data.planRefundDt,
+                    type: 20
+                }
+                _.map(this.currencyOption,v=>{
+                    if(v.code===data.currencyCode){
+                        param.currency=v.id;
+                        param.currencyCode=v.code;
+                    }
+                });
+                this.loadingPaymentTable=true;
+                this.$ajax.post(this.$apis.PAYMENT_SAVE,param).then(res=>{
+                    this.$message({
+                        message: this.$i.order.saveSuccess,
+                        type: 'success'
+                    });
+                    this.$set(data,'isNew',false);
+                    this.$set(data,'version',res.version);
+                    this.$set(data,'id',res.id);
+                }).finally(err=>{
+                    this.loadingPaymentTable=false;
+                });
+            },
+
+
+
 
             /**
              * 底部按钮事件
@@ -2065,6 +2192,12 @@
     }
     .payTable{
         margin-top: 10px;
+    }
+    .speDate{
+        width: 160px;
+    }
+    .speNumber >>> input{
+        text-align: left;
     }
 
     .footBtn{
