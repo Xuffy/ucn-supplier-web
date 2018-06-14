@@ -93,7 +93,7 @@
       this.getBasicInfo();
     },
     mounted() {
-      // this.setLog({name:'productSourcingOverview'});
+      // this.setLog({query:{code:'productSourcingOverview'}});
     },
     computed: {
       ...mapState({
