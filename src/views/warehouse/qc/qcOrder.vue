@@ -194,6 +194,8 @@
         </el-dialog>
 
 
+        <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
+
 
 
     </div>
@@ -201,13 +203,14 @@
 
 <script>
 
-    import {VTimeZone,VTable} from '@/components/index'
+    import {VTimeZone,VTable,VMessageBoard} from '@/components/index'
 
     export default {
         name: "qcOrder",
         components:{
             VTable,
-            VTimeZone
+            VTimeZone,
+            VMessageBoard
         },
         data(){
             return{
