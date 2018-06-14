@@ -603,10 +603,10 @@
         //选中部门就让他为false，避免触发全选时的多次重复事件
         this.userData = this.$options.data().userData;
         this.userData.deptId = data.deptId;
-        this.roleData[0].children = this.$depthClone(data.deptRoles);
+        this.roleData[0].children = this.$depthClone(data.deptRoles || []);
         this.$nextTick(() => {
           this.$refs.roleTree.setCheckedNodes(this.roleData[0].children);
-          this.getDepartmentUser();
+          this.roleCheckClick();
         })
       },
       roleCheckClick() {
@@ -615,7 +615,7 @@
 
         this.getDepartmentUser();
 
-        if (id.length === 1) {
+        if (_.compact(id).length === 1) {
           this.disableAddUser = false;
         } else {
           this.disableAddUser = true;
