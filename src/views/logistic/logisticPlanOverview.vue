@@ -76,7 +76,7 @@
         options: [
           {
             id: 'logisticsNo',
-            label: this.$i.logistic.logisticPlanNo
+            label: this.$i.logistic.logisticNo
           },
           {
             id: 'skuCode',

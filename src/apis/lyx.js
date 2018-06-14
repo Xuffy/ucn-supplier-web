@@ -31,6 +31,7 @@ export default {
   logistics_plan_confirm: ['/logistics/plan/confirm', 'a_localtion','USUPPLY_URL'],
   logistics_plan_cancel: ['/logistics/plan/cancel','a_localtion', 'USUPPLY_URL'],
   logistics_order_cancelByIds: ['/logistics/order/cancelByIds','a_localtion', 'BASE_URL'],
+  logistics_plan_cancelByIds: ['/logistics/plan/cancelByIds','a_localtion', 'BASE_URL'],
   logistics_plan_receive: ['/logistics/plan/receive', 'a_localtion','USUPPLY_URL'],
   logistics_plan_postLoadingList: ['/logistics/plan/postLoadingList','a_localtion', 'USUPPLY_URL'],
   logistics_plan_getSupplierIds: ['/logistics/plan/getSupplierIds','a_localtion', 'BASE_URL'],
