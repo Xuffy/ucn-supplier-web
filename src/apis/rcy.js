@@ -30,6 +30,12 @@ export default {
 
     //payment
     PAYMENT_LIST:['/payment/list/{orderNo}/{orderType}','USUPPLY_URL'],
+    PAYMENT_ACCEPT:['/payment/accept/{id}?version={version}','USUPPLY_URL'],
+    PAYMENT_NO:['/payment/genNo','USUPPLY_URL'],
+    PAYMENT_SAVE:['/payment/save','USUPPLY_URL'],
+
+
+
 
 
     //字典表数据
