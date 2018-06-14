@@ -1,44 +1,44 @@
 <template>
   <div class="peosonalSetting">
-    <el-form label-width="190px" ref="form" :model="form" :inline="true" >
+    <el-form label-width="190px" :rules="rules" ref="form" :model="form" :inline="true">
         <el-row>
             <el-col :span="12">
-                <el-form-item :label="$i.setting.email">
+                <el-form-item :label="$i.setting.email" prop="email">
                     <el-input type="email" style="max-width:200px;" v-model="form.email" disabled="disabled"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12" >
-                <el-form-item :label="$i.setting.userName">
-                    <el-input style="max-width:200px" v-model="form.userName"></el-input>
+                <el-form-item :label="$i.setting.userName"  prop="userName">
+                    <el-input style="max-width:200px" v-model="form.userName" :disabled="isModify"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
                 <el-form-item  label="Password">
-                    <el-input style="max-width:140px;" type="password" auto-complete="off"></el-input>
+                    <el-input style="max-width:140px;" type="password" auto-complete="off" :disabled="isModify"></el-input>
                     <span  @click="dialogVisibleO = true">Replace</span>
                     <!-- <el-button style=" " @click="dialogVisible = true">Replace</el-button> -->
                 </el-form-item>
             </el-col>
              <el-col :span="12">
-                <el-form-item  :label="$i.setting.tel">
-                    <el-input style="max-width:200px" v-model="form.tel"></el-input>
+                <el-form-item  :label="$i.setting.tel" prop="tel">
+                    <el-input style="max-width:200px" v-model="form.tel" :disabled="isModify"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item :label="$i.setting.birthday"  v-if="isVisible">
+                <el-form-item :label="$i.setting.birthday"  v-if="isVisible" >
                     <div style="display:flex;max-width:200px;">
-                        <el-date-picker type="date" placeholder="选择日期" value-format="timestamp" v-model="form.birthday"  style="max-width:300px;"></el-date-picker>
+                        <el-date-picker type="date" placeholder="选择日期" value-format="timestamp" v-model="form.birthday"  style="max-width:300px;" :disabled="isModify"></el-date-picker>
                     </div>
                 </el-form-item>
             </el-col>
             <el-col :span="12" >
-              <el-form-item prop="department" :label="$i.setting.department" v-if="isVisible">
+              <el-form-item  :label="$i.setting.department" v-if="isVisible">
                   <el-input style="max-width:200px"v-model="form.deptName"  disabled="disabled"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item prop="language" :label="$i.setting.language"  v-if="isVisible">
-                    <el-select v-model="form.lang" placeholder="请选择" style="width: 200px">
+                <el-form-item prop="lang" :label="$i.setting.language"  v-if="isVisible">
+                    <el-select v-model="form.lang" placeholder="请选择" style="width: 200px" :disabled="isModify">
                         <el-option
                                 v-for="item in language"
                                 :key="item.code"
@@ -55,8 +55,8 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item prop="gender" :label="$i.setting.gender"  v-if="isVisible">
-                    <el-select v-model="form.gender" placeholder="please input" style="width: 200px">
+                <el-form-item prop="gender" :label="$i.setting.gender"  v-if="isVisible" >
+                    <el-select v-model="form.gender" placeholder="please input" style="width: 200px" :disabled="isModify">
                         <el-option
                                 v-for="item in genderOptions"
                                 :key="item.key"
@@ -70,8 +70,15 @@
         </el-row>
     </el-form>
     <div class="button_div">
-        <el-button @click="putUserProfile">{{$i.common.modify}}</el-button>
-        <el-button  type="danger">{{$i.common.cancel}}</el-button>
+      <div class="summary-btn">
+        <div v-if="summaryDisabled">
+          <el-button @click="modifySummary">{{$i.common.modify}}</el-button>
+        </div>
+        <div v-else>
+          <el-button :loading="allowModifySummary" @click="submitFormInfo('form')" type="primary">{{$i.common.modify}}</el-button>
+          <el-button @click="cancelModifySummary">{{$i.common.cancel}}</el-button>
+        </div>
+      </div>
     </div>
     <el-dialog
         class="speDialog"
@@ -107,7 +114,7 @@ export default {
             if (this.modifyPass.comfirmNewPassword.length !== '') {
                 this.$refs.modifyPass.validateField('comfirmNewPassword');
             }
-            callback();
+            callback()
             }
         };
         var validatePass2 = (rule, value, callback) => {
@@ -120,6 +127,8 @@ export default {
             }
         };
       return {
+          summaryDisabled:true,
+          allowModifySummary:false,
            form: {
               email:'',
               userName:'',
@@ -154,30 +163,57 @@ export default {
                 label: 'Unknown',
                 key: 2
            }],
-           rules: {
-               password:[
-                   {min:6, message:'密码长度不少于6位', trigger: 'blur' },
-               ],
-                newPassword: [
-                    {min:6, message:'密码长度不少于6位', trigger: 'blur' },
-                    { validator: validatePass, trigger: 'blur' }
-                ],
-                comfirmNewPassword: [
-                    {min:6, message:'密码长度不少于6位', trigger: 'blur' },
-                    { validator: validatePass2, trigger: 'blur' }
-                ],
+            rules: {
+              email: [
+                { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+              ],
+              userName: [
+                { required: true, message: '请输入用户名称', trigger: 'blur' },
+              ],
+              tel: [
+                { required: true, message: '请输入联系方式', trigger: 'blur' },
+              ],
+              gender: [
+                { required: true, message: '请输入性别', trigger: 'blur' },
+              ],
+              lang: [
+                { required: true, message: '请输入语言', trigger: 'blur' },
+              ],
+              password:[
+                {min:6, message:'密码长度不少于6位', trigger: 'blur' },
+              ],
+              newPassword: [
+                {min:6, message:'密码长度不少于6位', trigger: 'blur' },
+                { validator: validatePass, trigger: 'blur' }
+              ],
+              comfirmNewPassword: [
+                {min:6, message:'密码长度不少于6位', trigger: 'blur' },
+                { validator: validatePass2, trigger: 'blur' }
+              ],
             },
             dialogVisibleO:false,
             formLabelWidth: '140px',
             language:[],
-            isVisible:false
+            isVisible:false,
+            isModify:true
         };
     },
     methods: {
-        submitForm(formName) {
+          submitForm(formName) {
+            this.$refs[formName].validate((valid) => {
+              if (valid) {
+                this.putUserPassword()
+              } else {
+                console.log('error submit!!');
+                return false;
+              }
+            });
+          },
+        submitFormInfo(formName) {
           this.$refs[formName].validate((valid) => {
             if (valid) {
-              this.putUserPassword()
+              this.putUserProfile()
+              this.isModify = true;
             } else {
               console.log('error submit!!');
               return false;
@@ -187,8 +223,12 @@ export default {
         getUserPrivilege(){
           this.$ajax.get(this.$apis.get_user_privilege)
             .then(res => {
-              //用户类型：0 管理员，1 普通用户
-              res.userType === this.isVisible
+              //用户类型：0 管理员，1 普通用户  2 english 1 chinese
+              if (res.userType === 1 ){
+                this.isVisible = true;
+              }else{
+                this.isVisible = false;
+              }
             })
         },
         postLanguage(){
@@ -203,21 +243,41 @@ export default {
                 this.form = res
             })
         },
+        modifySummary(){
+          this.summaryDisabled=false;
+          this.isModify = false;
+        },
+        cancelModifySummary(){
+          this.summaryDisabled=true;
+          this.isModify = true;
+        },
         putUserProfile(){
-            const params = {
-                userName: this.form.userName,
-                tel: this.form.tel,
-                gender: this.form.gender,
-                birthday: this.form.birthday,
-                lang: this.form.lang
-            }
+          const params = {
+            userName: this.form.userName,
+            tel: this.form.tel,
+            gender: this.form.gender,
+            birthday: this.form.birthday,
+            lang: this.form.lang
+          }
+          if (!this.isVisible){
+            params.birthday = new Date().getTime();
+            params.lang = '1';
+          }
+
+          this.allowModifySummary=true;
             this.$ajax.put(this.$apis.put_user_profile,params)
             .then(res => {
                 this.$message({
                     type: 'success',
                     message: '修改成功!'
                 });
-              this.getUserProfile()
+              this.summaryDisabled=true;
+              this.allowModifySummary=false;
+              this.getUserProfile();
+            }).catch(err=>{
+              this.allowModifySummary=false;
+              this.summaryDisabled=true;
+              this.getUserProfile();
             });
         },
         putUserPassword(){
@@ -229,11 +289,13 @@ export default {
                 });
                 return false;
             }
-            this.$ajax.put(this.$apis.put_user_profile_password,this.modifyPass)
-            .then(res => {
-              this.dialogVisibleO = false;
-              this.$message({type: 'success', message: '修改成功!'});
-            });
+
+           this.$ajax.put(this.$apis.put_user_profile_password,this.modifyPass)
+             .then(res => {
+               this.dialogVisibleO = false;
+               this.$message({type: 'success', message: '修改成功!'});
+               this.modifyPass = {}
+             });
         },
         handleClose(){
             this.dialogVisibleO = false;

@@ -235,7 +235,7 @@
                             :editable="false"
                             align="right"
                             type="date"
-                            :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
+                            :disabled="true"
                             :placeholder="$i.order.pleaseChoose"
                             :picker-options="pickerOptions1">
                     </el-date-picker>
@@ -251,7 +251,7 @@
                             align="right"
                             :editable="false"
                             type="date"
-                            :disabled="true"
+                            :disabled="scope.row.type!==1 && scope.row.type!==3 && scope.row.type!==5 || !isModify"
                             :placeholder="$i.order.pleaseChoose"
                             :picker-options="pickerOptions1">
                     </el-date-picker>
@@ -263,7 +263,7 @@
                     label="Remark">
                 <template slot-scope="scope">
                     <el-input
-                            :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
+                            :disabled="scope.row.type!==1 && scope.row.type!==3 && scope.row.type!==5 || !isModify"
                             :placeholder="$i.order.pleaseInput"
                             v-model="scope.row.remark"
                             clearable>
@@ -280,7 +280,7 @@
                             align="right"
                             type="date"
                             :editable="false"
-                            :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
+                            :disabled="scope.row.type!==1 && scope.row.type!==3 && scope.row.type!==5 || !isModify"
                             :placeholder="$i.order.pleaseChoose"
                             :picker-options="pickerOptions1">
                     </el-date-picker>
@@ -447,7 +447,6 @@
             </el-table>
         </div>
 
-
         <div class="title">
             {{$i.order.productInfoBig}}
         </div>
@@ -469,22 +468,21 @@
         </v-table>
 
         <div class="footBtn">
-
             <div v-if="hasHandleOrder">
                 <div v-if="isModify">
                     <el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>
-                    <el-button @click="cancelModify" type="danger">{{$i.order.cancel}}</el-button>
+                    <el-button :loading="disableClickCancelModify" @click="cancelModify" type="danger">{{$i.order.cancel}}</el-button>
                 </div>
                 <div v-else>
                     <el-button :disabled="loadingPage || disableModify || hasCancelOrder" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
                     <el-button :disabled="loadingPage || disableConfirm || hasCancelOrder" @click="confirmOrder" type="primary">{{$i.order.confirm}}</el-button>
-                    <el-button :disabled="loadingPage || hasCancelOrder" @click="cancelOrder" type="info">{{$i.order.cancelOrder}}</el-button>
+                    <el-button :disabled="loadingPage || hasCancelOrder" @click="cancelOrder" type="danger">{{$i.order.cancelOrder}}</el-button>
                     <el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
                 </div>
             </div>
             <div v-else>
                 <el-button :disabled="loadingPage" :loading="disableClickAccept" @click="acceptOrder" type="primary">{{$i.order.accept}}</el-button>
-                <el-button :disabled="loadingPage" :loading="disableClickRefuse" @click="refuseOrder" type="info">{{$i.order.refuse}}</el-button>
+                <el-button :disabled="loadingPage" :loading="disableClickRefuse" @click="refuseOrder" type="danger">{{$i.order.refuse}}</el-button>
             </div>
 
 
@@ -992,8 +990,6 @@
                 disableClickRefuse:false,
                 disableClickAccept:false,
 
-
-
                 /**
                  * 页面基础配置
                  * */
@@ -1004,6 +1000,7 @@
                 allowQuery:0,
                 loadingPage:false,
                 disableClickSend:false,
+                disableClickCancelModify:false,
                 disableClickSaveDraft:false,
                 labelPosition:'right',
                 pickerOptions1: {
@@ -1069,8 +1066,6 @@
                  * */
                 loadingPaymentTable:false,
                 paymentData:[],
-
-
 
                 /**
                  * 弹出框data配置
@@ -1310,6 +1305,9 @@
 
                 });
                 let ids=this.$route.query.ids;
+                if(!ids){
+                    return;
+                }
                 ids=ids.slice(0,ids.length-1);
                 this.loadingProductTable=true;
                 this.$ajax.post(this.$apis.ORDER_SKUS,ids.split(',')).then(res=>{
@@ -1327,6 +1325,7 @@
                 });
             },
             getDetail(e){
+                this.loadingPage=true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
                     orderId:this.$route.query.orderId,
                 }).then(res=>{
@@ -1370,12 +1369,17 @@
                         this.hasCancelOrder=true;
                     }
 
+                    //情况选中的product
+                    this.selectProductInfoTable=[];
+
+
                     /**
                      * 获取payment数据
                      * */
                     this.getPaymentData();
                 }).finally(err=>{
                     this.loadingPage=false;
+                    this.disableClickCancelModify=false;
                     if(e){
                         this.isModify=false;
                     }
@@ -1603,7 +1607,6 @@
                 return arr;
             },
 
-
             /**
              * payment事件
              * */
@@ -1625,8 +1628,6 @@
                 });
             },
 
-
-
             /**
              * 底部按钮事件
              * */
@@ -1634,6 +1635,7 @@
                 this.isModify=true;
             },
             cancelModify(){
+                this.disableClickCancelModify=true;
                 this.getDetail(true);
             },
             changeMarkImportant(e){
@@ -1641,7 +1643,10 @@
                     importantCustomer: e,
                     ids: [this.orderForm.id],
                 }).then(res=>{
-                    console.log(res)
+                    this.$message({
+                        message: this.$i.order.handleSuccess,
+                        type: 'success'
+                    });
                 }).finally(err=>{
 
                 });
@@ -1658,7 +1663,6 @@
 
                 });
             },
-
             acceptOrder(){
                 this.disableClickAccept=true;
                 this.$ajax.post(this.$apis.ORDER_ACCEPT,{
@@ -1670,21 +1674,30 @@
                 });
             },
             refuseOrder(){
-                this.disableClickRefuse=true;
-                this.$ajax.post(this.$apis.ORDER_CANCEL,{
-                    ids:[this.orderForm.id]
-                }).then(res=>{
-                    this.$message({
-                        message: this.$i.order.handleSuccess,
-                        type: 'success'
+                this.$confirm(this.$i.order.sureRefuse, this.$i.order.prompt, {
+                    confirmButtonText: this.$i.order.sure,
+                    cancelButtonText: this.$i.order.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    this.disableClickRefuse=true;
+                    this.$ajax.post(this.$apis.ORDER_CANCEL,{
+                        ids:[this.orderForm.id]
+                    }).then(res=>{
+                        this.$message({
+                            message: this.$i.order.handleSuccess,
+                            type: 'success'
+                        });
+                        this.$router.push('/order/overview');
+                    }).finally(err=>{
+                        this.disableClickRefuse=false;
                     });
-                    this.$router.push('/order/overview');
-                }).finally(err=>{
-                    this.disableClickRefuse=false;
-                })
+                }).catch(() => {
+
+                });
+
+
+
             },
-
-
 
             /**
              * quick create弹出框事件

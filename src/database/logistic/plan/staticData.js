@@ -199,27 +199,33 @@ export const basicInfoObj = {
 export const ExchangeRateInfo = {
   'CNYUSD':{
     type: 'input',
-    value: null
+    value: null,
+    disabled:true 
   },
   'USDCNY':{
     type: 'input',
-    value: null
+    value: null,
+    disabled:true 
   },
   'CNYEUR':{
     type: 'input',
-    value: null
+    value: null,
+    disabled:true 
   },
   'EURCNY':{
     type: 'input',
-    value: null
+    value: null,
+    disabled:true 
   },
   'USDEUR':{
     type: 'input',
-    value: null
+    value: null,
+    disabled:true 
   },
   'EURUSD':{
     type: 'input',
-    value: null
+    value: null,
+    disabled:true 
   },
 }
 

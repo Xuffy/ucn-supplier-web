@@ -23,7 +23,7 @@ export default {
     skype:{
         key: 'skype',
     },
-    QQ: {
+    qq: {
         key: 'qq',
     },
     id:{

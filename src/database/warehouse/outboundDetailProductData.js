@@ -1,4 +1,7 @@
 export default {
+    skuId:{
+        _hide:true
+    },
     skuBarCode:{},
     skuCode:{},
     skuNameCn:{},

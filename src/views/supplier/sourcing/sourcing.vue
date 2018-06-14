@@ -224,9 +224,6 @@
                 this.loading = true
                 this.$ajax.post(this.$apis.get_listSupplier, this.parms)
                     .then(res => {
-                        //分页组件的参数
-                        //                        res.datas.tc ? this.params.tc = res.datas.tc : this.params.tc = this.params.tc;
-                        //                        this.endpn = res.datas.end
                         this.loading = false
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
                         if (this.disabledLine.length > 0) {
@@ -259,13 +256,13 @@
                         console.slog(res)
                     });
             },
-            getCategoryId() {
-                this.$ajax.get(this.$apis.getCategory, {}).then(res => {
-                    this.dropData = res;
-                }).catch(err => {
-                    console.log(err)
-                });
-            },
+            // getCategoryId() {
+            //     this.$ajax.get(this.$apis.getCategory, {}).then(res => {
+            //         this.dropData = res;
+            //     }).catch(err => {
+            //         console.log(err)
+            //     });
+            // },
             //分页
             handleSizeChange(val) {
                 this.params.pn = val;
@@ -278,7 +275,7 @@
         },
         created() {
             this.get_data()
-            this.getCategoryId()
+            // this.getCategoryId()
         },
         watch: {}
     }

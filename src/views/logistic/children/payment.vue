@@ -102,6 +102,7 @@ export default {
         return []
       }
     },
+    ExchangeRateInfoArr:[Array,Object],
     currencyCode: String,
     selectArr: {
       type: Object,

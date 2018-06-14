@@ -36,7 +36,7 @@
     <div v-if="planId">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
-      <payment :tableData.sync="paymentList" :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView" :currencyCode="oldPlanObject.currency"/>
+      <payment :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView" :currencyCode="oldPlanObject.currency"/>
     </div>
     <div>
       <div class="hd"></div>
@@ -355,7 +355,7 @@ export default {
     },
     action (e, status, i) {
       if (status == 3){
-        return window.open(`${window.location.origin}#/product/detail?id=${e.argID ? e.argID.value : e.id.value }`);
+        return window.open(`${window.location.origin}#/product/detail?id=${ e.skuId.value }`);
       }else if(status==4){
         let newAddArr = this.$depthClone(this.productList[i]);
         newAddArr.id.value = null;
@@ -617,7 +617,7 @@ export default {
           type: 'success',
           duration:3000,
           onClose:()=>{
-            this.$router.push('/logistic/'+this.$route.query.loadingList || null);
+            this.$router.push('/logistic/'+ (this.$route.query.loadingList || ''));
           }
         })
       })
