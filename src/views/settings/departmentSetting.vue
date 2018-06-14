@@ -569,15 +569,16 @@
           let {end, pn, ps, tc, start} = res;
           this.userListPage = {end, pn, ps, tc, start};
           this.tableDataList = this.$getDB(this.$db.setting.department, res.datas, item => {
-            let gender, status;
+            let gender, status, lang;
             if (item.status.value !== 0) {
               item._disabledCheckbox = true;
             }
             gender = _.findWhere(this.genderOption, {code: item.gender.value});
             status = _.findWhere(this.actionOption, {code: item.status.value});
+            lang = _.findWhere(this.languageOption, {code: item.lang.value}) || {};
             item.gender._value = this.$i.setting[gender.name];
             item.status._value = this.$i.setting[status.name];
-            item.lang._value = _.findWhere(this.languageOption, {code: item.lang.value}).name;
+            item.lang._value = lang.name || '';
             return item;
           });
         });
@@ -603,10 +604,10 @@
         //选中部门就让他为false，避免触发全选时的多次重复事件
         this.userData = this.$options.data().userData;
         this.userData.deptId = data.deptId;
-        this.roleData[0].children = this.$depthClone(data.deptRoles);
+        this.roleData[0].children = this.$depthClone(data.deptRoles || []);
         this.$nextTick(() => {
           this.$refs.roleTree.setCheckedNodes(this.roleData[0].children);
-          this.getDepartmentUser();
+          this.roleCheckClick();
         })
       },
       roleCheckClick() {
@@ -615,7 +616,7 @@
 
         this.getDepartmentUser();
 
-        if (id.length === 1) {
+        if (_.compact(id).length === 1) {
           this.disableAddUser = false;
         } else {
           this.disableAddUser = true;
