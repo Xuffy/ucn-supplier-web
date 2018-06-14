@@ -33,6 +33,9 @@ export default {
     PAYMENT_ACCEPT:['/payment/accept/{id}?version={version}','USUPPLY_URL'],
     PAYMENT_NO:['/payment/genNo','USUPPLY_URL'],
     PAYMENT_SAVE:['/payment/save','USUPPLY_URL'],
+    PAYMENT_UPDATE:['/payment/update','BASE_URL'],
+    PAYMENT_ABANDON:['/payment/abandon/{id}?version={version}','BASE_URL'],
+    PAYMENT_RESTORE:['/payment/recover/{id}?version={version}','BASE_URL'],
 
 
 
