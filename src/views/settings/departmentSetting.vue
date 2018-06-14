@@ -569,15 +569,16 @@
           let {end, pn, ps, tc, start} = res;
           this.userListPage = {end, pn, ps, tc, start};
           this.tableDataList = this.$getDB(this.$db.setting.department, res.datas, item => {
-            let gender, status;
+            let gender, status, lang;
             if (item.status.value !== 0) {
               item._disabledCheckbox = true;
             }
             gender = _.findWhere(this.genderOption, {code: item.gender.value});
             status = _.findWhere(this.actionOption, {code: item.status.value});
+            lang = _.findWhere(this.languageOption, {code: item.lang.value}) || {};
             item.gender._value = this.$i.setting[gender.name];
             item.status._value = this.$i.setting[status.name];
-            item.lang._value = _.findWhere(this.languageOption, {code: item.lang.value}).name;
+            item.lang._value = lang.name || '';
             return item;
           });
         });
