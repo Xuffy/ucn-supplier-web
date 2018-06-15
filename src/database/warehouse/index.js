@@ -25,6 +25,7 @@ import qcOrder from './qcOrder';
 import inboundOverviewTable from './inboundOverviewTable';
 import warehouseOverview from './warehouseOverview';
 import outboundDetailProductData from './outboundDetailProductData';
+import qcOrderDetailBasicInfo from './qcOrderDetailBasicInfo';
 
 
 export default {
@@ -54,5 +55,6 @@ export default {
     qcOrderTable,
     inboundOverviewTable,
     warehouseOverview,
-    outboundDetailProductData
+    outboundDetailProductData,
+    qcOrderDetailBasicInfo
 }

@@ -11,10 +11,10 @@ export default {
     key: 'skuSysCode',
     _hide: true
   },
-  skuMethodPkgEn: {
+  skuWarehourceDefault: {
     _hide: true
   },
-  skuWarehourceDefault: {
+  skuMethodPkgEn: {
     _hide: true
   },
   tenantId: {
@@ -24,9 +24,6 @@ export default {
     _hide: true
   },
   _remark: {
-    _hide: true
-  },
-  fieldDisplay: {
     _hide: true
   },
   id: {
@@ -149,6 +146,7 @@ export default {
   readilyAvailable: {
     key: 'skuReadilyAvailable',
     type: 'Select',
+    _slot: 'readilyAvailable'
   },
   skuAvailable: {
     key: 'skuAvailableQty',
@@ -173,7 +171,8 @@ export default {
     key: 'skuExpireUnit',
     type: 'Select',
     state: 'Date',
-    time: 'yyyy-mm-dd'
+    time: 'yyyy-mm-dd',
+    _slot: 'expirationDateUnit'
   },
   explain: {
     key: 'skuComments',
@@ -558,5 +557,11 @@ export default {
     key: 'skuAdjustPackage',
     type: 'Select',
     transForm: 'SKU_PG_IS'
+  },
+  fieldDisplay: {
+    _hide: true
+  },
+  fieldRemarkDisplay: {
+    _hide: true
   }
 };

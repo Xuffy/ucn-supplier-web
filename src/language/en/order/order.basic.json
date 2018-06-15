@@ -53,5 +53,7 @@
   "waitServiceConfirm":"待服务商确认",
   "restore":"恢复",
   "remindCustomerPay":"提醒采购商付款",
-  "applyRefund":"申请退款"
+  "applyRefund":"申请退款",
+  "pleaseChoose":"Please Choose",
+  "pleaseInput":"Please Input"
 }

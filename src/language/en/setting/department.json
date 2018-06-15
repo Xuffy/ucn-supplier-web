@@ -3,5 +3,11 @@
   "userName":"User Name",
   "gender":"Gender",
   "status":"Status",
-  "search":"Search"
+  "search":"Search",
+  "man":"Man",
+  "woman":"Woman",
+  "unknown":"Unknown",
+  "notActive":"Not active",
+  "activated":"Activated",
+  "disable":"Disable"
 }

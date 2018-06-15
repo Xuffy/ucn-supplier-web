@@ -68,15 +68,23 @@
                                     placeholder="服务商填写">
                             </el-date-picker>
                         </div>
+                        <div v-else-if="v.showType==='attachment'">
+                            <v-upload readonly :limit="20" ref="upload" :list="qcOrderData[v.key]"></v-upload>
+                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
 
 
-        <div class="title" style="display: inline">
-            {{$i.warehouse.payment}}
-        </div>
+        <!--<div class="title" style="display: inline">-->
+            <!--{{$i.warehouse.payment}}-->
+        <!--</div>-->
+        <!--<div class="payment-table">-->
+
+        <!--</div>-->
+
+
 
         <div class="title" style="margin-top: 50px">
             {{$i.warehouse.productInfo}}
@@ -160,14 +168,9 @@
         </el-tabs>
 
 
-
-
         <div class="title" style="margin-top: 50px">
             {{$i.warehouse.summary}}
         </div>
-
-
-
 
         <el-dialog width="40%" title="将QC数据更新到产品库" :visible.sync="dialogFormVisible">
             <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAll">全选</el-checkbox>
@@ -194,6 +197,8 @@
         </el-dialog>
 
 
+        <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
+
 
 
     </div>
@@ -201,13 +206,15 @@
 
 <script>
 
-    import {VTimeZone,VTable} from '@/components/index'
+    import {VTimeZone,VTable,VMessageBoard,VUpload} from '@/components/index'
 
     export default {
         name: "qcOrder",
         components:{
             VTable,
-            VTimeZone
+            VTimeZone,
+            VMessageBoard,
+            VUpload
         },
         data(){
             return{
@@ -260,6 +267,11 @@
                     qcOrderDetailIds: [],
                 },
 
+                /**
+                 * payment data
+                 * */
+                paymentData:[],
+
 
                 /**
                  * 弹出框data
@@ -300,6 +312,16 @@
                     .catch(err=>{
                         this.loadingProductTable=false;
                     });
+            },
+            getPaymentData(){
+                this.$ajax.post(this.$apis.PAYMENT_LIST,{
+                    orderNo:this.qcOrderData.qcOrderNo,
+                    orderType:20
+                }).then(res=>{
+                    console.log(res)
+                }).finally(()=>{
+
+                })
             },
 
             checkboxInit(row,index){
@@ -357,9 +379,8 @@
                     _.map(this.selectThird,v=>{
                         ids.push(v.id);
                     });
-                    this.$ajax.post(this.$apis.RETURN_HANDLE,{
-                        qcOrderDetailIds:ids
-                    }).then(res=>{
+                    this.$ajax.post(this.$apis.RETURN_HANDLE,ids)
+                      .then(res=>{
                         this.getTableData();
                         this.$message({
                             type: 'success',

@@ -3,139 +3,158 @@
     <div class="hd" v-if="showHd"></div>
     <div class="hd active">{{ title }}</div>
     <el-row :gutter="10">
-      <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="(a,listDataItem) of listData" :key="listDataItem">
-        <div class="input-item">
-          <div class="label" :title="a.label">{{ a.label }}:</div>
-          <div class="proNo" v-if="!edit">
-            <p class="textFilter">{{ textFilter(a) }}</p>
-          </div>
+      <el-form label-width="300px" label-position="right" class="form" >
+        <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
+          <el-form-item v-if="!edit" :label="a.label+'：'">
+            <p class="textFilter" :style="fieldDisplay&&fieldDisplay.hasOwnProperty(a.key) ? definedStyle : ''">{{ textFilter(a) }}</p>
+          </el-form-item>
           <div v-else>
-            <el-input placeholder="请输入内容" v-model="a.value" :disabled="a.disabled" v-if="a.type === 'input'"/>
-            <el-select v-model="a.value" placeholder="请输入内容" v-if="a.type === 'selector'" :clearable="true" :disabled="a.disabled">
-              <el-option :label="item.name" :value="Number(item.code)" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code" v-if="selectArr[a.key]"/>
-            </el-select>
-            <el-date-picker v-if="a.type === 'date'" v-model="a.value" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
+            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'input'" prop="value">
+              <el-input placeholder="请输入内容" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" v-model="a.value" :disabled="a.disabled" @change="selectChange(a.value,a.key)"/>
+            </el-form-item>
+
+            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'selector'" prop="value">
+              <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" placeholder="请输入内容" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
+                <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
+                  v-if="selectArr[a.key]" />
+              </el-select>
+            </el-form-item>
+
+            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'date'" prop="value">
+              <el-date-picker v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
+            </el-form-item>
           </div>
-        </div>
-      </el-col>
+        </el-col>
+      </el-form>
     </el-row>
   </div>
 </template>
 <script>
-
-export default {
-  props: {
-    title: String,
-    showHd: {
-      type: Boolean,
-      default: true
-    },
-    edit: {
-      type: Boolean,
-      default: false
-    },
-    gap: {
-      type: Number,
-      default: 8
-    },
-    listData: {
-      type: Array,
-      default () {
-        return []
+  export default {
+    props: {
+      name:String,
+      definedStyle:{
+        type:Object,
+        default (){
+          return {
+            color: '#f56c6c',
+            'text-shadow': '2px 1px 2px'
+          }
+        }
+      },
+      fieldDisplay:Object,
+      title: String,
+      showHd: {
+        type: Boolean,
+        default: true
+      },
+      edit: {
+        type: Boolean,
+        default: false
+      },
+      gap: {
+        type: Number,
+        default: 8
+      },
+      listData: {
+        type: Array,
+        default () {
+          return []
+        }
+      },
+      selectArr: {
+        type: Object,
+        default: () => {}
       }
     },
-    selectArr: {
-      type: Object,
-      default: () => {}
-    }
-  },
-  data () {
-    return {
-      paymentList: [],
-      pickerOptions: {
-        // disabledDate(time) {
-        //   return time.getTime() > Date.now();
-        // },
-        shortcuts: [{
-          text: 'Today',
-          onClick(picker) {
-            picker.$emit('pick', new Date());
-          }
-        }, {
-          text: 'Yesterday',
-          onClick(picker) {
-            const date = new Date();
-            date.setTime(date.getTime() - 3600 * 1000 * 24);
-            picker.$emit('pick', date);
-          }
-        }, {
-          text: 'A week ago',
-          onClick(picker) {
-            const date = new Date();
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', date);
-          }
-        }]
+    data() {
+      return {
+        paymentList: [],
+        hightLightModify:{},
+        pickerOptions: {
+          // disabledDate(time) {
+          //   return time.getTime() > Date.now();
+          // },
+          shortcuts: [{
+            text: 'Today',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: 'Yesterday',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: 'A week ago',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        }
       }
-    }
-  },
-  methods: {
-    textFilter (a) {
-      if (a.type === 'input'||a.type === 'text') return a.value
-      if (a.type === 'date') return a.value ? this.$dateFormat(a.value, 'yyyy-mm-dd') : null
-      if (a.type === 'selector' && this.selectArr[a.key]) {
-        let obj = this.selectArr[a.key].find(item => item.code == a.value)
-        return obj ? obj.name : null
+    },
+    methods: {
+      selectChange(value,key){
+        if(key=='exchangeCurrency'){
+          this.$emit('selectChange',value); 
+        }
+        this.$set(this.hightLightModify,key,value);
+        this.$emit('hightLightModifyFun',this.hightLightModify,this.name);
+      },
+      textFilter(a) {
+        if (a.type === 'input' || a.type === 'text') return a.value
+        if (a.type === 'date') return a.value ? this.$dateFormat(a.value, 'yyyy-mm-dd') : null
+        if (a.type === 'selector' && this.selectArr[a.key]) {
+          let obj = this.selectArr[a.key].find(item => item.code == a.value)
+          return obj ? obj.name : null
+        }
       }
-    }
+    },
   }
-}
+
 </script>
 <style lang="less" scoped>
-.hd-top {
-  font-size: 18px;
-  color:#666;
-  height: 50px;
-  line-height:50px;
-  border-bottom:1px solid #ccc;
-  padding:0 15px;
-}
-.hd {
-  height: 40px;
-  line-height:40px;
-  border-bottom:1px solid #ccc;
-  padding:0 15px;
-  font-weight: bold;
-  &.active {
-    border:none;
+  .hd-top {
+    font-size: 18px;
+    color: #666;
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #ccc;
+    padding: 0 15px;
   }
-}
-.input-item {
-  display:flex;
-  align-items: center;
-  padding:10px 0;
-  .proNo>P,.label{
-    font-size:12px;
-    padding-right:10px;
-    box-sizing: border-box;
-    flex:1;
-    line-height: 14px;
+
+  .hd {
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #ccc;
+    padding: 0 15px;
+    font-weight: bold;
+    &.active {
+      border: none;
+    }
   }
-  .proNo>P{
-    width: 220px;
+  .form {
+    /deep/.el-form-item p{
+      min-width: 150px;
+    }
+    /deep/.el-input,
+    /deep/.el-input__inner {
+      width: 100%;
+      min-width: 150px;
+    }
+    /deep/.el-select{
+      width: 100%;
+      min-width: 150px;
+    }
+    /deep/.definedStyleClass input{
+      background:#f56c6c;
+      color:#fff;
+    }
   }
-  p.textFilter{
-    width: 170px;
-  }
-  .label{
-    text-align: right;
-    width: 200px;
-  }
-  /deep/input.el-input__inner{
-    width: 220px;
-  }
-  .el-select, .el-input {
-    flex:1;
-  }
-}
+
 </style>

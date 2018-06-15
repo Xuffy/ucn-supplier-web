@@ -136,7 +136,7 @@ export const basicInfoObj = {
   // customerName: {     type: 'selector',     value: null   },
   receiptCompany: {
     type: 'input',
-    value: null
+    value: null,
   },
   shippingAgent: {
     type: 'input',
@@ -144,11 +144,17 @@ export const basicInfoObj = {
   },
   exchangeCurrency: {
     type: 'selector',
-    value: null
+    value: null,
+    _rules:{
+      required:true
+    }
   },
   payment: {
     type: 'selector',
-    value: null
+    value: null,
+    _rules:{
+      required:true
+    }
   },
   paymentTerm: {
     type: 'input',
@@ -177,7 +183,10 @@ export const basicInfoObj = {
   // blQuantity: {     type: 'selector',     value: null   },
   blQty: {
     type: 'input',
-    value: ''
+    value: '',
+    _rules:{
+      type:'Number'
+    }
   },
   blNo: {
     type: 'input',
@@ -228,6 +237,7 @@ export const ExchangeRateInfo = {
     disabled:true 
   },
 }
+
 
 export const transportInfoObj = {
   transportCompany: {

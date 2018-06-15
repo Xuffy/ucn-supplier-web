@@ -1,8 +1,8 @@
 <template>
   <div class="place-logistic-plan">
-    <div class="hd-top" v-if="planId">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
+    <div class="hd-top" v-if="planId">{{ $i.logistic.loadingList + '    ' + logisticsNo}}</div>
     <div class="hd-top" v-else>{{ $i.logistic.placeNewLogisticPlan }}</div>
-    <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
+    <form-list name="BasicInfo" :fieldDisplay="fieldDisplay" :showHd="false" @selectChange="formListSelectChange" @hightLightModifyFun="hightLightModifyFun" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
     <el-row :gutter="10">
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
         <div class="input-item">
@@ -19,7 +19,7 @@
       <!-- <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/> -->
     </el-row>
     <form-list :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/>
-    <form-list :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle"/>
+    <form-list name="TransportInfo" :fieldDisplay="fieldDisplay" @hightLightModifyFun="hightLightModifyFun" :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle"/>
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
@@ -36,7 +36,7 @@
     <div v-if="planId">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
-      <payment :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView" :currencyCode="oldPlanObject.currency"/>
+     <payment ref="payment" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView" :currencyCode="oldPlanObject.currency"/>
     </div>
     <div>
       <div class="hd"></div>
@@ -48,6 +48,7 @@
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
         </div>
       </v-table>
+
     </div>
     <el-dialog :title="$i.logistic.negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeModify(0)">
       <product-modify ref="productModifyComponents" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"/>
@@ -70,6 +71,7 @@
 <script>
 
 import { VSimpleTable, containerInfo, selectSearch, VTable} from '@/components/index';
+import {mapActions, mapState} from 'vuex';
 import attachment from '@/components/common/upload/index';
 import messageBoard from '@/components/common/messageBoard/index';
 import formList from '@/views/logistic/children/formList'
@@ -89,6 +91,8 @@ export default {
       modefiyProductIndex: 0,
       attachmentList:[],
       logisticsStatus:{},
+      fieldDisplay:{},
+      hightLightObj:{},
       logisticsNo: '',
       remark: '',
       showProductDialog: false,
@@ -176,6 +180,10 @@ export default {
           type: 1        
         },
         {
+          label: 'Copy',         
+          type: 4
+        },
+        {
           label: 'Detail',
           type: 3
         }
@@ -186,16 +194,11 @@ export default {
           type: 2
         }
       )
-      this.$route.query.loadingList=='loadingList' ? aArr.splice(2,0,
-        {
-          label: 'Copy',         
-          type: 4
-        }
-      ) : aArr;
       return aArr;
     } 
   },
   mounted () {
+    this.setLog({query:{code:'planDetail'}});
     const arr = this.$route.fullPath.split('/')
     this.pageName =  arr[arr.length - 1].split('?')[0]
     this.registerRoutes()
@@ -210,7 +213,7 @@ export default {
       return value;
     })
     if (this.planId) {
-      this.getDetails()
+      this.getDetails();
     } else {
       this.edit = true
       this.basicInfoArr.forEach((item)=>{
@@ -224,6 +227,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+    hightLightModifyFun(v){
+      
+    },
     //获取实时汇率
     getRate(){
       this.$ajax.post(`${this.$apis.get_plan_rate}`).then(res => {
@@ -265,6 +272,7 @@ export default {
         };
         this.matchRate(res.currencyExchangeRate);
         this.attachmentList = res.attachment;
+        this.fieldDisplay = res.fieldDisplay;
         this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
           this.createdPaymentData(res)
         })
@@ -290,12 +298,13 @@ export default {
       this.transportInfoArr.forEach(a => {
         a.value = res[a.key]
       })
+      this.logisticsNo = res.logisticsNo
       this.$set(this.inintData,'transportInfoArr',this.$depthClone(this.transportInfoArr))
       this.exchangeRateList = res.currencyExchangeRate || []
       this.remark = res.remark
       this.containerInfo = res.containerDetail || [];
       this.$set(this.inintData,'containerInfo',this.$depthClone(res.containerDetail) || [])
-      this.feeList = [res.fee];
+      this.feeList = res.fee&&[res.fee];
       this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
     },
     createdPaymentData (res = this.oldPaymentObject) {
@@ -304,7 +313,8 @@ export default {
       this.paymentSum = res.statisticsDatas[0]
     },
     getNewLogisticsNo () {
-      this.$ajax.post(this.$apis.get_new_logistics_no).then(res => {
+      let url = this.$route.query.loadingList ? this.$apis.get_new_logistics_orderNo : this.$apis.get_new_logistics_no;
+      this.$ajax.post(url).then(res => {
         this.basicInfoArr.find(a => a.key === 'logisticsNo').value = res
         this.getSupplier(res)
       })
@@ -387,19 +397,18 @@ export default {
     },
     savePayment (i) {
       const currencyCode = this.paymentList[i].currencyCode
-      const payToId = this.paymentList[i].payToId
-      const skuSupplierObj = this.selectArr.supplier.find(a => a.skuSupplierId === payToId)
+      const payToCompanyId = this.paymentList[i].payToCompanyId
+      const skuSupplierObj = this.selectArr.supplier.find(a => a.companyId === payToCompanyId)
       const paymentData = {
         ...this.paymentList[i],
         currency: this.selectArr.exchangeCurrency.find(a => a.code === currencyCode).id,
         currencyCode,
         orderNo: this.oldPlanObject.logisticsNo,
         orderType: 30,
-        payToId,
-        payToName: skuSupplierObj ? skuSupplierObj.skuSupplierName : null,
+        payToCompanyId,
+        payToCompanyName: skuSupplierObj ? skuSupplierObj.skuSupplierName : null,
         type: 10
       }
-
       const url = paymentData.id ? this.$apis.update_plan_payment : this.$apis.save_plan_payment
       this.$ajax.post(url, paymentData).then(res => {
         this.paymentList[i] = res
@@ -457,7 +466,8 @@ export default {
       const currrentProduct = this.productModifyList[0]
       this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
       const id = currrentProduct.id.value
-      const vId = currrentProduct.vId.value
+      // const vId = currrentProduct.vId.value
+      const vId = +new Date()
       const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
       index === -1 ? this.modifyProductArray.push(this.restoreObj(currrentProduct)) : (this.modifyProductArray[index] = this.restoreObj(currrentProduct))
     },
@@ -489,10 +499,25 @@ export default {
         case 'cancelLoadingList':
             this.cancelLoadingList();
           break; 
+        case 'refuse':
+            this.refuse();
+          break; 
         default:
           break; 
       }
     },   
+    refuse(){
+      this.$ajax.post(this.$apis.logistics_plan_cancelByIds,{ids:[this.planId]}).then(res => {
+        this.$message({
+          message: '操作成功，正在跳转...',
+          type: 'success',
+          duration:3000,
+          onClose:()=>{
+            this.$router.push('/logistic/'+( this.$route.query.loadingList || ''));
+          }
+        })
+      })
+    },
     cancelLoadingList(){
        this.$ajax.post(this.$apis.logistics_order_cancelByIds,{ids:[this.planId]}).then(res => {
         this.$message({
@@ -500,7 +525,7 @@ export default {
           type: 'success',
           duration:3000,
           onClose:()=>{
-            this.$router.push('/logistic/'+this.query.loadingList);
+            this.$router.push('/logistic/'+( this.$route.query.loadingList || ''));
           }
         })
       })
@@ -560,6 +585,14 @@ export default {
         // return obj
       })
     },
+    hightLightModifyFun(v,name){
+      this.hightLightObj[name] = v ;
+      let obj = {};
+      _.mapObject(this.hightLightObj,(v,k)=>{
+        Object.assign(obj,v);
+      })
+      this.oldPlanObject.fieldDisplay = obj;
+    },
     sendData (keyString) {
       let url = this.$route.query.loadingList ? this.$apis.update_logistic_order : this.configUrl[this.pageName][keyString];    
       this.basicInfoArr.forEach(a => { 
@@ -611,6 +644,12 @@ export default {
           }
         })
       });
+      if(!this.planId){
+        this.oldPlanObject.fieldDisplay = null;
+      }
+      if(!this.$validateForm(this.oldPlanObject,this.$db.logistic.basicInfoObj)){
+        return;
+      }
       this.$ajax.post(url, this.oldPlanObject).then(res => {
         this.$message({
           message: '发送成功，正在跳转...',
@@ -622,6 +661,9 @@ export default {
         })
       })
     },
+    formListSelectChange(v){
+      this.$set(this.oldPlanObject,'currency',v);
+    }
   }
 }
 </script>

@@ -54,8 +54,8 @@ export default {
         fullLine:true
     },
     attachment:{
-        key:'attachment',
-        showType:'textarea',
+        key:'attachments',
+        showType:'attachment',
         fullLine:true
     },
 }

@@ -56,7 +56,7 @@
               <h3 class="ucn-content-title">{{$i.common.systemMessage}}（{{message.list.length}} {{$i.common.new}} ）</h3>
               <ul class="list" v-if="message.list.length">
                 <li class="unread" v-for="item in message.list">
-                  <p v-text="item.content"></p>
+                  <p v-text="item.title"></p>
                   <span v-text="$dateFormat(item.sendTime,'yyyy-mm-dd HH:MM:ss')"></span>
                 </li>
               </ul>
@@ -78,8 +78,6 @@
         </div>
 
         <div style="display: inline-block">
-          <!--<a href="javascript:void(0)">
-          </a>-->
           <el-dropdown trigger="click">
             <a href="javascript:void(0)" class="el-dropdown-link" style="cursor: pointer">
               {{userInfo.userType === 0 ? $i.common.admin : $i.common.user}}&nbsp;&nbsp;|&nbsp;&nbsp;
@@ -93,15 +91,6 @@
           </a>
         </div>
 
-        <!--<el-dropdown type="primary">
-          <a href="javascript:void(0)">
-            <i class="el-icon-goods"></i>
-          </a>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>User name</el-dropdown-item>
-            <el-dropdown-item>Sign out</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>-->
       </div>
 
     </div>
@@ -253,7 +242,8 @@
   }
 
   .logo {
-    width: 90px;
+    /*width: 90px;*/
+    /*margin-left: 20px;*/
     margin-left: 20px;
     margin-right: 20px;
     cursor: pointer;

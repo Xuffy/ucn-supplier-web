@@ -95,7 +95,7 @@
       getFilterData(data, checkList) {
         return _.map(data, val => {
           return _.mapObject(val, v => {
-            if (_.isObject(v)){
+            if (_.isObject(v)) {
               v._hide = checkList.indexOf(v.key) === -1;
             }
             return v;
@@ -106,7 +106,7 @@
         return this.$ajax.post(this.$apis.GRIDFAVORITE_LIST, {bizCode: this.code},
           {contentType: 'F', cache: true, updateCache: isUpdate})
           .then(res => {
-            let list = _.pluck(_.where(res, {isChecked: '1'}), 'property');
+            let list = _.pluck(_.where(res, {isChecked: 1}), 'property');
             this.dataList = res;
             this.$refs.columnTree.setCheckedKeys(list);
             return list;
@@ -114,12 +114,12 @@
       },
       submitFilter() {
         let selected = this.$refs.columnTree.getCheckedNodes()
-          , params = [];
+          , params = {bizCode: this.code, userGridFavoriteList: []};
         this.loading = true;
 
         _.map(selected, value => {
-          let {bizCode, id, seqNum} = value;
-          params.push({bizCode, seqNum, gridFieldId: id});
+          let {id, seqNum} = value;
+          params.userGridFavoriteList.push({seqNum, gridFieldId: id});
         });
 
         this.$ajax.post(this.$apis.GRIDFAVORITE_UPDATE, params)
@@ -136,7 +136,7 @@
       defaultChecked() {
         let list = [];
         _.map(this.dataList, val => {
-          if (val.isChecked === '1') {
+          if (val.isChecked === 1) {
             list.push(val.property);
           }
         });

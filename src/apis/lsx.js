@@ -1,9 +1,8 @@
 export default {
   //获取category
-  get_buyer_sys_category: ['/purchase/sys/category', 'UPURCHASE_URL'],
-  get_buyer_my_category: ['/purchase/category/tree', 'UPURCHASE_URL'],
-  get_supply_category: ['/sys/category', 'USUPPLY_URL'],
-  get_supply_my_category: ['/category/tree', 'USUPPLY_URL'],
+  CATEGORY_MINE:['/category','USUPPLY_URL'],
+  CATEGORY_SYSTEM:['/sys/category','USUPPLY_URL'],
+
 
 
   get_productCategory: ['/purchase/sys/category', 'UPURCHASE_URL'],
