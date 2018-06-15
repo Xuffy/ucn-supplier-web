@@ -31,11 +31,11 @@
                     <v-table  :data="address"  style='marginTop:10px'/>
                 </el-tab-pane>
                 
-                <el-tab-pane :label="$i.supplier.concats"  name="concats">
+                <el-tab-pane :label="$i.supplier.contactInfo"  name="concats">
                     <v-table  :data="concats"  style='marginTop:10px'/>
                 </el-tab-pane>
                 
-                <el-tab-pane :label="$i.supplier.document" name="document">
+                <el-tab-pane :label="$i.supplier.documentRequired" name="document">
                     <el-form label-width="200px" :model="documents">
                     <el-row>
                       <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
@@ -60,7 +60,7 @@
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.supplier.orderHistory" name="order">
-                    <!-- <v-table  :data="document"   style='marginTop:10px'/> -->
+                    <v-table  :data="tradeHistory"   style='marginTop:10px'/>
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.supplier.inquiryHistory"  name="inquiry">
@@ -68,10 +68,10 @@
                 </el-tab-pane>
 
                 <el-tab-pane label="attachment" name="attchment">
-                    <div class="section-btn" style="margin-bottom:10px;">
+                    <!-- <div class="section-btn" style="margin-bottom:10px;">
                       <el-button  @click="upload" type="primary">{{$i.button.upload}}</el-button>
-                    </div>
-                    <v-upload ref="uploadAttachment" :limit="20" />
+                    </div> -->
+                    <v-upload ref="uploadAttachment" :limit="20"  readonly/>
                 </el-tab-pane>
 
                  <el-tab-pane :label="$i.supplier.remark" name="remark">
@@ -158,7 +158,7 @@
                   version: null
                 },
                 orderHistoryData:{
-                    customerCode: null,
+                    customerCompanyId: null,
                     pn: 1,
                     ps: 50,
                 },
@@ -341,8 +341,9 @@
             },
             getOrderHistory(){
                 this.loading = true;
-                this.orderHistoryData.customerCode = this.basicDate.code;
+                this.orderHistoryData.customerCompanyId = Number(this.$route.query.companyId);
                 this.$ajax.post(this.$apis.post_supply_supplier_orderHistory,this.orderHistoryData).then(res=>{
+                    this.tradeHistory = this.$getDB(this.$db.supplier.detailTable, res.datas);
                    this.loading = false
                 })
                 .catch((res) => {

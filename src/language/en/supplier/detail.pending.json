@@ -80,6 +80,7 @@
 
     "documentRequired": "document required",
     "factoryInspectionReport": "factory inspection report",
+    "recentTransactionDate": "Recent transaction date",
     "invoice": "invoice",
     "packingList": "packing list",
     "examiningReport": "examining report",
@@ -111,6 +112,7 @@
     "orderHistory": "Order history",
     "time":"time",
     "version": "version",
-    "id": "id"
+    "id": "id",
+    "customerSource": "customer source"
 
 }
