@@ -48,5 +48,21 @@
   "detail":"详情",
   "pressMoney":"催款",
   "prompt":"提示",
-  "pleaseChoose":"Please Choose"
+  "pleaseChoose":"Please Choose",
+  "attachments":"Attachment",
+  "paymentNumber":"Payment Number",
+  "paymentName":"Payment Name",
+  "estPayDate":"Est. Pay Date",
+  "actPayDate":"Act. Pay Date",
+  "estAmount":"Est. Amount",
+  "actAmount":"Act. Amount",
+  "currency":"Currency",
+  "available":"Available",
+  "confirm":"Confirm",
+  "abandon":"废弃",
+  "waitCustomerConfirm":"待采购商确认",
+  "waitSupplierConfirm":"待供应商确认",
+  "waitServiceConfirm":"待服务商确认",
+  "hasConfirm":"已确认",
+  "sureConfirm":"Sure Confirm?"
 }

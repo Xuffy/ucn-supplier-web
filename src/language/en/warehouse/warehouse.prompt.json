@@ -13,5 +13,8 @@
   "invalidSuccess":"Invalid Success!",
   "sureRestore":"Sure Restore?",
   "restoreSuccess":"Restore Success!",
-  "pleaseAddProduct":"Please Add Product!"
+  "pleaseAddProduct":"Please Add Product!",
+  "sureDunning":"Sure Dunning?",
+  "dunningSuccess":"Dunning Success!",
+  "nothingDunning":"Nothing to dunning"
 }
