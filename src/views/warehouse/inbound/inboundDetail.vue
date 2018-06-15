@@ -68,6 +68,9 @@
                                     :picker-options="pickerOptions1">
                             </el-date-picker>
                         </div>
+                        <div v-else-if="v.showType==='attachment'">
+                            <v-upload :limit="20" :list="inboundData[v.key]" ref="attachmentUpload" readonly></v-upload>
+                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -151,13 +154,14 @@
 
 <script>
 
-    import {VTimeZone,VTable} from '@/components/index'
+    import {VTimeZone,VTable,VUpload} from '@/components/index'
 
     export default {
         name: "inboundDetail",
         components:{
             VTable,
-            VTimeZone
+            VTimeZone,
+            VUpload
         },
         data(){
             return{

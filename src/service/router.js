@@ -534,15 +534,6 @@ export const routerMap = [
           component: () => import('../views/warehouse/qc/qcOrder')
         },
         {
-          path: 'qcOrderDetail',
-          name: 'qc Order Detail',
-          hidden:true,
-          meta: {
-            name: 'qc Order Detail'
-          },
-          component: () => import('../views/warehouse/qc/QCOrderDetail')
-        },
-        {
           path: 'qcOrderService',
           name: 'qc Order Service',
           hidden:true,
@@ -550,6 +541,15 @@ export const routerMap = [
             name: 'qc Order Service'
           },
           component: () => import('../views/warehouse/qc/qcOrderService')
+        },
+        {
+          path: 'qcOrderDetail',
+          name: 'qc Order Detail',
+          hidden:true,
+          meta: {
+            name: 'qc Order Detail'
+          },
+          component: () => import('../views/warehouse/qc/qcOrderDetail')
         }
       ]
     },

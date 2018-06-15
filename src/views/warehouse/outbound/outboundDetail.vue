@@ -64,6 +64,9 @@
                                     placeholder="选择日期">
                             </el-date-picker>
                         </div>
+                        <div v-else-if="v.isAttachment">
+                            <v-upload readonly :limit="20" :list="outboundData[v.key]" ref="attachmentUpload"></v-upload>
+                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -90,12 +93,13 @@
 
 <script>
 
-    import VTable from '@/components/common/table/index'
+    import { VUpload, VTable} from '@/components/index'
 
     export default {
         name: "inboundDetail",
         components:{
-            VTable
+            VTable,
+            VUpload
         },
         data(){
             return{

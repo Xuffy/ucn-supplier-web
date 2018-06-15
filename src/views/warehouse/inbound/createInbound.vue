@@ -73,10 +73,6 @@
             </el-row>
         </el-form>
 
-
-        <!---->
-
-
         <div class="title">
             {{$i.warehouse.productInfo}}
         </div>
@@ -505,13 +501,12 @@
                 this.inboundData.attachments = this.$refs.attachmentUpload[0].getFiles();
                 this.disabledSubmit=true;
                 this.$ajax.post(this.$apis.add_inbound,this.inboundData).then(res=>{
-                    this.disabledSubmit=false;
                     this.$message({
-                        message: '新增成功',
+                        message: this.$i.warehouse.submitSuccess,
                         type: 'success'
                     });
                     this.$router.push('/warehouse/inbound');
-                }).catch(err=>{
+                }).finally(()=>{
                     this.disabledSubmit=false;
                 });
             },
