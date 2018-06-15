@@ -264,8 +264,6 @@
         const db = this.urlObj[this.pageType][this.viewBy].db
         this.tableLoading = true
         const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
-
-        this.pageType === 'draft' && (this.pageParams.planStatus = 1)
         this.$ajax.post(url, {lgStatus, ...this.pageParams}).then(res => {
           if (!res) return (this.tableLoading = false)
           this.tabData = this.$getDB(db, res.datas, item => {
