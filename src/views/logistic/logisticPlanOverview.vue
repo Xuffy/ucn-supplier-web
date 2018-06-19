@@ -198,10 +198,6 @@
     },
     methods: {
       registerRoutes() {
-        this.$store.commit('SETDRAFT', {
-          name: 'overviewDraft',
-          show: true
-        })
         this.$store.commit('SETRECYCLEBIN', {
           name: 'overviewArchive',
           show: true

@@ -51,7 +51,7 @@
 
     </div>
     <el-dialog :title="$i.logistic.negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeModify(0)">
-      <product-modify ref="productModifyComponents" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"/>
+      <product-modify ref="productModifyComponents" @productModifyfun="productModifyfun" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"/>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeModify(0)">{{ $i.logistic.cancel }}</el-button>
         <el-button type="primary" @click="closeModify(1)">{{ $i.logistic.confirm }}</el-button>
@@ -89,6 +89,7 @@ export default {
   data() {
     return {
       modefiyProductIndex: 0,
+      modefiyProductIndexArr:[],
       attachmentList:[],
       logisticsStatus:{},
       fieldDisplay:{},
@@ -150,6 +151,7 @@ export default {
         }
       },
       pageName:'',
+      prodFieldDisplay:{},
       inintData:{}, //存放初始数据的 便于取消还原数据 
     }
   },
@@ -306,6 +308,13 @@ export default {
       this.$set(this.inintData,'containerInfo',this.$depthClone(res.containerDetail) || [])
       this.feeList = res.fee&&[res.fee];
       this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
+      this.productList.forEach((item)=>{
+        if(item.fieldDisplay.value){
+          _.mapObject(item.fieldDisplay.value,(v,k)=>{
+            this.$set(item[k],'_color','red')
+          })
+        }
+      }) 
     },
     createdPaymentData (res = this.oldPaymentObject) {
       this.oldPaymentObject = JSON.parse(JSON.stringify(res))
@@ -375,6 +384,7 @@ export default {
       this.productInfoModifyStatus = status
       this.showProductDialog = true
       this.modefiyProductIndex = i
+      this.modefiyProductIndexArr.push(i);
       this.getProductHistory(e.id ? (e.argID ? e.argID.value : e.id.value) : null, status, i)
     },
     getProductHistory (productId, status, i) {
@@ -460,11 +470,22 @@ export default {
         this.$delete(this.productList, index)
       })
     },
+    productModifyfun(obj){
+      if(this.planId){
+        this.prodFieldDisplay = obj;
+      }
+    },
     closeModify (status) {
       this.showProductDialog = false
       if (!status) return this.productModifyList = []
       const currrentProduct = this.productModifyList[0]
       this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
+      this.productList.forEach(item=>{
+        this.$set(item.fieldDisplay, 'value', null);
+      })
+      this.modefiyProductIndexArr.forEach((item)=>{
+        this.$set(this.productList[item].fieldDisplay, 'value', this.prodFieldDisplay)
+      })
       const id = currrentProduct.id.value
       // const vId = currrentProduct.vId.value
       const vId = +new Date()
