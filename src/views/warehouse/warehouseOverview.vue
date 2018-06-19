@@ -23,6 +23,7 @@
             </div>
             <div class="section">
                 <v-table
+                        :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
                         :buttons="[{label: '详情', type: 1}]"

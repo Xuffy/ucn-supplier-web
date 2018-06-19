@@ -99,6 +99,8 @@ const json = {
     require(`./${lang}/warehouse/warehouse.qcOrderDetail`),
     require(`./${lang}/warehouse/warehouse.prompt`),
     require(`./${lang}/warehouse/warehouse.inboundDetail`),
+    require(`./${lang}/warehouse/warehouse.inboundOverviewTable`),
+    require(`./${lang}/warehouse/warehouse.outboundOverview`),
   ),
   workbench: _.extend({},
     require(`./${lang}/workbench/page`),
