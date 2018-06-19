@@ -12,6 +12,7 @@
   "tableFilter": "Table filter",
   "selectTheColumn": "select the column",
   "selectionOperation": "selection operation",
-  "action": "Action"
+  "action": "Action",
+  "checkAll": "全选"
 }
 

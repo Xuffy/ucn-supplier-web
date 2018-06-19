@@ -12,14 +12,14 @@
     "supplierName": "Supplier Name",
     "supplierType": "Supplier Type",
     "skuNameEN": "SKU name EN",
-    "skuCode": "Category",
+    "skuCode": "SKU Code",
     "description": "Description",
     "supplierNO": "Supplier No.",
     "country": "Country",
-    "provideIncoterm": "Payment terms",
+    "provideIncoterm": "Provide incoterm",
     "exportLicense": "Export License",
 
-   
+
     "customerName": "customer name",
     "customerType": "customer type",
     "customerCountry": "customer country",
@@ -32,7 +32,11 @@
     "shipAgent": "ship agent ",
     "incoterm": "incoterm",
 
-   
+
     "provideincoterm": "Provide incoterm",
-    "currency": "currency"
+    "currency": "currency",
+    "compareTime": "compare time",
+    "compareName": "compare name",
+    "compareItem": "compare item",
+    "operater": "operater"
 }

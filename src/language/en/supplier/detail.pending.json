@@ -12,7 +12,6 @@
     "payment": "Payment",
     "supplierShortName": "Supplier Abbreviation",
     "description": "Description",
-    "factoryName": "Factory Name",
     "factoryAddress": "Factory Address",
     "exportPort": "Export Port",
     "contacctPerson1": "Contacct person1",
@@ -25,6 +24,7 @@
     "beneficiaryBankName": "Beneficiary Bank Name",
     "beneficiaryBankSWIFT": "Beneficiary bank SWIFT",
     "accountType": "Account Type",
+    "factoryName": "factory Name",
     "name": "Name",
     "department": "Department",
     "gender": "Gender",
@@ -111,6 +111,7 @@
     "orderHistory": "Order history",
     "time":"time",
     "version": "version",
-    "id": "id"
+    "id": "id",
+    "factoryInfo": "Factory info"
 
 }
