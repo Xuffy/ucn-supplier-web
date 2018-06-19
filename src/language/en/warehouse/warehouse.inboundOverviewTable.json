@@ -14,5 +14,7 @@
   "carrierPhone":"送货人电话",
   "skuTotalVolume":"入库产品总体积",
   "skuTotalNetWeight":"入库产品总净重",
-  "skuTotalGrossWeight":"入库产品总毛重"
+  "skuTotalGrossWeight":"入库产品总毛重",
+  "updateName":"操作人",
+  "entryDt":"创建时间"
 }
