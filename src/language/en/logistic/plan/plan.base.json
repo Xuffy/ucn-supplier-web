@@ -209,5 +209,10 @@
   "USDEUR":"USD-EUR",
   "EURUSD":"EUR-USD",
   "transportationWayVal" : "海运",
-  "loadingTypeVal" : "集装箱"
+  "loadingTypeVal" : "集装箱",
+  "confirmModify": "确认修改",
+  "generateList": "生成装货清单",
+  "cancelModify": "取消修改",
+  "receive":"接受",
+  "refuse":"拒绝"
 }

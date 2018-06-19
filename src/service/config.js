@@ -3,7 +3,8 @@ export default {
   ENV: {
     local: {
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
-      a_localtion:'//192.168.51.219:11002',
+      // a_localtion:'//192.168.51.219:11002',
+      a_localtion:'//192.168.51.208:11002',
       LOGIN_URL: 'http://dev.auth.ucnscm.cn',
       // LOGIN_URL: 'http://192.168.51.138:8070',
       BASE_URL: '//192.168.51.208:11002', // 采购端
