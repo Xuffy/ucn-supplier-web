@@ -59,5 +59,11 @@
   "actAmount":"Act. Amount",
   "currency":"Currency",
   "available":"Available",
-  "confirm":"Confirm"
+  "confirm":"Confirm",
+  "abandon":"废弃",
+  "waitCustomerConfirm":"待采购商确认",
+  "waitSupplierConfirm":"待供应商确认",
+  "waitServiceConfirm":"待服务商确认",
+  "hasConfirm":"已确认",
+  "totalMoney":"总价"
 }

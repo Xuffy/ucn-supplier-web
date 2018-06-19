@@ -300,7 +300,8 @@ export default{
     },
     qcPic:{             //服务商上传
         key: 'qcPic',
-        type: 'String'
+        type: 'String',
+        showType:'attachment'
     },
     checkOuterCartonQty:{
         key: 'checkOuterCartonQty',

@@ -120,6 +120,8 @@
                     border
                     :row-class-name="tableRowClassName"
                     v-loading="loadingPaymentTable"
+                    show-summary
+                    :summary-method="getSummaries"
                     style="width: 100%">
                 <el-table-column
                         label="#"
@@ -384,6 +386,37 @@
                 }).catch(() => {
 
                 });
+            },
+            getSummaries(param) {
+                const { columns, data } = param;
+                const sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = this.$i.warehouse.totalMoney;
+                        return;
+                    }else if(index===4 || index===6){
+                        const values = data.map(item => {
+                            if(item.status===40){
+                                return Number(item[column.property])
+                            }
+                        });
+
+                        if (!values.every(value => isNaN(value))) {
+                            sums[index] = values.reduce((prev, curr) => {
+                                const value = Number(curr);
+                                if (!isNaN(value)) {
+                                    return prev + curr;
+                                } else {
+                                    return prev;
+                                }
+                            }, 0);
+                        }else{
+                            sums[index]=0;
+                        }
+                    }
+                });
+
+                return sums;
             },
 
 

@@ -76,16 +76,6 @@
             </el-row>
         </el-form>
 
-
-        <!--<div class="title" style="display: inline">-->
-            <!--{{$i.warehouse.payment}}-->
-        <!--</div>-->
-        <!--<div class="payment-table">-->
-
-        <!--</div>-->
-
-
-
         <div class="title" style="margin-top: 50px">
             {{$i.warehouse.productInfo}}
         </div>
