@@ -30,7 +30,7 @@
                                     :disabled="true"
                                     class="speInput"
                                     type="textarea"
-                                    autosize
+                                    :autosize="{ minRows: 2}"
                                     placeholder="请填写"
                                     v-model="outboundData[v.key]">
                             </el-input>
@@ -61,7 +61,7 @@
                                     v-model="outboundData[v.key]"
                                     align="right"
                                     type="date"
-                                    placeholder="选择日期">
+                                    :placeholder="$i.warehouse.pleaseChoose">
                             </el-date-picker>
                         </div>
                         <div v-else-if="v.isAttachment">

@@ -218,7 +218,7 @@
                 <el-row>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="orderNo" :label="$i.warehouse.orderNo">
-                            <el-select clearable size="mini" class="speInput" v-model="orderProduct.orderNo" placeholder="请选择">
+                            <el-select clearable size="mini" class="speInput" v-model="orderProduct.orderNo" :placeholder="$i.warehouse.pleaseChoose">
                                 <el-option
                                         v-for="item in orderNoOption"
                                         :key="item.id"
@@ -230,17 +230,17 @@
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuCode" :label="$i.warehouse.skuCode">
-                            <el-input placeholder="请输入" size="mini" class="speInput" v-model="orderProduct.skuCode"></el-input>
+                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput" v-model="orderProduct.skuCode"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuNameCn" :label="$i.warehouse.skuNameCn">
-                            <el-input placeholder="请输入" size="mini" class="speInput" v-model="orderProduct.skuNameCn"></el-input>
+                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput" v-model="orderProduct.skuNameCn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuBarCode" :label="$i.warehouse.skuBarCode">
-                            <el-input placeholder="请输入" size="mini" class="speInput" v-model="orderProduct.skuBarCode"></el-input>
+                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput" v-model="orderProduct.skuBarCode"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -256,8 +256,8 @@
                     @change-checked="changeChecked"></v-table>
 
             <div slot="footer" class="dialog-footer">
-                <el-button :disabled="disabledSearch" type="primary" @click="postData">确 定</el-button>
-                <el-button :disabled="disabledCancelSearch" @click="closeDialog">取 消</el-button>
+                <el-button :disabled="disabledSearch" type="primary" @click="postData">{{$i.warehouse.sure}}</el-button>
+                <el-button :disabled="disabledCancelSearch" @click="closeDialog">{{$i.warehouse.cancel}}</el-button>
             </div>
         </el-dialog>
     </div>
@@ -283,29 +283,9 @@
                 disabledSubmit:false,
                 orderNoOption:[],
                 pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
+                    // disabledDate(time) {
+                    //     return time.getTime() > Date.now();
+                    // },
                 },
                 addOrderDialogVisible:false,
                 productTableData:[],
@@ -633,21 +613,16 @@
                         });
                         console.log(this.productData,'this.productData')
 
-                        // console.log(res,'res')
-                        // res[0].skuList.forEach(v=>{
-                        //     this.productData.push(v);
-                        // });
-
                         /**
                          * 计算底部summary
                          * */
                         // inboundOutCartonTotalQty
-                        // let skuTotalCartonQty=0,
-                        //     skuTotalGrossWeight=0,
-                        //     skuTotalNetWeight=0,
-                        //     skuTotalQty=0,
-                        //     skuTotalVolume=0;
-                        //
+                        let skuTotalCartonQty=0,
+                            skuTotalGrossWeight=0,
+                            skuTotalNetWeight=0,
+                            skuTotalQty=0,
+                            skuTotalVolume=0;
+
                         // this.productData.forEach(v=>{
                         //     if(v.inboundOutCartonTotalQty){
                         //         skuTotalCartonQty+=v.inboundOutCartonTotalQty;

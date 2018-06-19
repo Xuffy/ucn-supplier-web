@@ -59,5 +59,6 @@
   "unqualifiedSkuVolume":"不合格产品总体积",
   "qualifiedSkuGrossWeight":"合格产品总毛重",
   "unqualifiedSkuGrossWeight":"不合格总产品毛重",
-  "checkOuterCartonQty":"检查外箱数"
+  "checkOuterCartonQty":"检查外箱数",
+  "attachments":"附件"
 }

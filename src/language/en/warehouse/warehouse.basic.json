@@ -66,5 +66,7 @@
   "waitServiceConfirm":"待服务商确认",
   "hasConfirm":"已确认",
   "totalMoney":"总价",
-  "action":"操作"
+  "action":"操作",
+  "sysGenerate":"系统生成",
+  "pleaseChoose":"请选择"
 }

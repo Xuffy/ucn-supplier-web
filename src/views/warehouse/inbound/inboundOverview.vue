@@ -21,13 +21,13 @@
                         :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
-                        :buttons="[{label: '详情', type: 1}]"
+                        :buttons="[{label: $i.warehouse.detail, type: 1}]"
                         @change-checked="changeChecked"
                         @action="btnClick">
                     <template slot="header">
                         <div class="btns">
                             <!--<el-button>{{$i.warehouse.download}}({{selectList.length===0?'All':selectList.length}})</el-button>-->
-                            <el-button @click="createInbound">新建</el-button>
+                            <el-button @click="createInbound">{{$i.warehouse.create}}</el-button>
                         </div>
                     </template>
                 </v-table>
