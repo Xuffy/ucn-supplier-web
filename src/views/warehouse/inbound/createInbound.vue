@@ -105,19 +105,19 @@
                     align="center"
                     width="180">
                 <template slot-scope="scope">
-                    <div v-if="v.belong==='skuList' && scope.row.skuList.length>0">
+                    <div v-if="v.belong==='skuList'">
                         <div v-if="v.showType==='input'">
                             <el-input
-                                    placeholder="请输入内容"
-                                    v-model="scope.row.skuList[0][v.key]"
+                                    :placeholder="$i.warehouse.pleaseInput"
+                                    v-model="scope.row[v.key]"
                                     clearable>
                             </el-input>
                         </div>
                         <div v-else>
-                            {{scope.row.skuList[0][v.key]}}
+                            {{scope.row[v.key]}}
                         </div>
                     </div>
-                    <div v-else-if="v.showType==='input' && scope.row.skuList.length>0">
+                    <div v-else-if="v.showType==='input'">
                         <!--<div v-if="v.needInput">-->
                             <!--<el-input-->
                                     <!--placeholder="请输入内容"-->
@@ -128,14 +128,14 @@
                         <!--</div>-->
                         <!--<div v-else>-->
                             <el-input
-                                    placeholder="请输入内容"
-                                    v-model="scope.row.skuList[0][v.key]"
+                                    :placeholder="$i.warehouse.pleaseInput"
+                                    v-model="scope.row[v.key]"
                                     clearable>
                             </el-input>
                         <!--</div>-->
                     </div>
-                    <div v-else-if="v.showType==='select' && scope.row.skuList.length>0">
-                        <el-select v-model="scope.row.skuList[0][v.key]" placeholder="请选择">
+                    <div v-else-if="v.showType==='select'">
+                        <el-select v-model="scope.row[v.key]" :placeholder="$i.warehouse.pleaseChoose">
                             <el-option
                                     v-for="item in v.options"
                                     :key="item.value"
@@ -149,8 +149,7 @@
                                 :disabled="v.computed"
                                 v-model="scope.row[v.key]"
                                 @blur="handleBlur(v.key,scope.$index)"
-                                :controls="false"
-                                label="请输入"></el-input-number>
+                                :controls="false"></el-input-number>
                     </div>
                     <div v-else-if="v.key==='unqualifiedType'">
                         0
@@ -162,11 +161,11 @@
             </el-table-column>
             <el-table-column
                     fixed="right"
-                    label="操作"
+                    :label="$i.warehouse.action"
                     align="center"
                     width="100">
                 <template slot-scope="scope">
-                    <el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
+                    <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -212,7 +211,7 @@
         </div>
 
         <el-dialog
-                title="从订单添加产品"
+                :title="$i.warehouse.addProduct"
                 :visible.sync="addOrderDialogVisible"
                 width="70%">
             <el-form :modal="orderProduct" ref="orderProduct" label-width="200px" :label-position="labelPosition">
@@ -411,16 +410,16 @@
 
             //移除产品
             removeProduct(){
-                this.$confirm('确定移除产品?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.warehouse.sureRemove, this.$i.warehouse.prompt, {
+                    confirmButtonText: this.$i.warehouse.sure,
+                    cancelButtonText: this.$i.warehouse.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.productData=_.difference(this.productData,this.selectOuterProductList);
                     console.log(this.productData,'data')
                     this.$message({
                         type: 'success',
-                        message: '移除成功!'
+                        message: this.$i.warehouse.removeSuccess
                     });
                 }).catch(() => {
                 });
@@ -603,7 +602,7 @@
                 let arr=this.$copyArr(this.selectList);
                 if(arr.length===0){
                     return this.$message({
-                        message: '请至少选择一个产品',
+                        message: this.$i.warehouse.pleaseChooseProduct,
                         type: 'warning'
                     });
                 }
@@ -625,9 +624,18 @@
                         skuIds:this.productIds,
                         orderNos:orderNos
                     }).then(res=>{
-                        res[0].skuList.forEach(v=>{
-                            this.productData.push(v);
+                        console.log(res,'res')
+                        _.map(res,v=>{
+                            _.map(v.skuList,e=>{
+                                this.productData.push(e);
+                            })
                         });
+                        console.log(this.productData,'this.productData')
+
+                        // console.log(res,'res')
+                        // res[0].skuList.forEach(v=>{
+                        //     this.productData.push(v);
+                        // });
 
                         /**
                          * 计算底部summary

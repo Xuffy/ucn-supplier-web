@@ -18,5 +18,8 @@
   "dunningSuccess":"Dunning Success!",
   "nothingDunning":"Nothing to dunning",
   "mustHaveQcResult":"Must have a Qc Result!",
-  "sureConfirm":"Sure Confirm?"
+  "sureConfirm":"Sure Confirm?",
+  "pleaseChooseProduct":"Please choose product",
+  "sureRemove":"Sure Remove?",
+  "removeSuccess":"Remove Success!"
 }
