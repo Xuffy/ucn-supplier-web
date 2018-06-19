@@ -131,7 +131,7 @@ export default {
               Message.warning(`请填正确的 ${item.label}`);
               return key;
             }
-            if (!/^([1-9]+(\.\d+)?|0\.\d+)$/.test(val)) {
+            if (!/^[0-9]+\.?[0-9]{0,9}$/.test(val)) {
               Message.warning(`请填正确的 ${item.label}`);
               return key;
             }
