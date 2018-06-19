@@ -1178,12 +1178,12 @@
         methods:{
             //获取类别数据
             getCategoryId(){
-                this.$ajax.get(this.$apis.get_supply_category,{}).then(res=>{
+                this.$ajax.get(this.$apis.CATEGORY_SYSTEM,{}).then(res=>{
                     this.categoryList[0].children=res;
                 }).catch(err=>{
 
                 });
-                this.$ajax.get(this.$apis.get_supply_my_category,{}).then(res=>{
+                this.$ajax.get(this.$apis.CATEGORY_MINE,{}).then(res=>{
                     this.categoryList[1].children=res;
                 }).catch(err=>{
 
@@ -1403,6 +1403,7 @@
                 this.loadingData=true;
                 this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT'],{cache:true}).then(res=>{
                     res.forEach(v=>{
+                        console.log(res)
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
                         }else if(v.code==='WT_UNIT'){

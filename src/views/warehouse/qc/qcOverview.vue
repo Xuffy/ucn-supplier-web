@@ -119,12 +119,13 @@
             },
 
             btnClick(e){
+                console.log(e.serviceProviderIsLoginUser.value,'???')
                 if(e.serviceProviderIsLoginUser.value){
                     //跳9.2.3
                     if(e.qcStatusDictCode.value==='COMPLETED_QC'){
                         //跳qcOrderDetail
                         this.$windowOpen({
-                            url:'/warehouse/qcOrder',
+                            url:'/warehouse/qcOrderDetail',
                             params:{
                                 id:e.id.value
                             }

@@ -366,6 +366,7 @@
                                 class="speDate"
                                 v-model="scope.row.planRefundDt"
                                 type="date"
+                                :picker-options="datePickOption"
                                 :placeholder="$i.order.pleaseChoose">
                         </el-date-picker>
                         <span v-else>{{scope.row.planRefundDt?$dateFormat(scope.row.planRefundDt,'yyyy-mm-dd'):''}}</span>
@@ -395,6 +396,7 @@
                                 class="speDate"
                                 v-model="scope.row.actualRefundDt"
                                 type="date"
+                                :picker-options="datePickOption1"
                                 :placeholder="$i.order.pleaseChoose">
                         </el-date-picker>
                         <span v-else>{{scope.row.actualRefundDt?$dateFormat(scope.row.actualRefundDt,'yyyy-mm-dd'):''}}</span>
@@ -420,6 +422,8 @@
                         width="180">
                 </el-table-column>
                 <el-table-column
+                        fixed="right"
+                        align="center"
                         :label="$i.order.available"
                         width="180">
                     <template slot-scope="scope">
@@ -1078,6 +1082,16 @@
                 activeTab:'product',
                 selectProductInfoTable:[],
                 disabledProductLine:[],
+                datePickOption:{
+                    disabledDate(time) {
+                        return time.getTime() < Date.now();
+                    },
+                },
+                datePickOption1:{
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    },
+                },
 
                 /**
                  * payment 配置
@@ -1754,7 +1768,6 @@
                     planRefundDt: data.planRefundDt,
                     version:data.version
                 };
-                console.log(param)
                 this.loadingPaymentTable=true;
                 this.$ajax.post(this.$apis.PAYMENT_UPDATE,param).then(res=>{
                     console.log(res)
@@ -1774,6 +1787,7 @@
                     });
                     this.$set(data,'isModify',false);
                     this.$set(data,'version',res.version);
+                    this.$set(data,'status',res.status);
                 }).finally(err=>{
                     this.loadingPaymentTable=false;
                 })

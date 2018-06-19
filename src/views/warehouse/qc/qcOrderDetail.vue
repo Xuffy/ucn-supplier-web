@@ -12,19 +12,17 @@
                     <el-col v-for="v in $db.warehouse.qcOrderDetailBasicInfo" :key="v.key" class="speCol" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                         <el-form-item :label="$i.warehouse[v.key]">
                             <div v-if="v.type==='input'">
-
-                                    <el-input
-                                            v-model="qcDetail[v.key]"
-                                            :disabled="v.disabled">
-                                    </el-input>
-
+                                <el-input
+                                        v-model="qcDetail[v.key]"
+                                        :disabled="true">
+                                </el-input>
                             </div>
                             <div v-else-if="v.type==='select'">
                                 <el-select
                                         class="speInput"
                                         v-model="qcDetail[v.key]"
                                         clearable
-                                        :disabled="v.disabled"
+                                        :disabled="true"
                                         :placeholder="$i.warehouse.pleaseChoose">
                                     <div v-if="v.isQcType">
                                         <el-option
@@ -83,6 +81,7 @@
                                         v-model="qcDetail[v.key]"
                                         align="right"
                                         type="date"
+                                        :disabled="true"
                                         :placeholder="$i.warehouse.pleaseChoose"
                                         :picker-options="pickerOptions1">
                                 </el-date-picker>
@@ -91,12 +90,12 @@
                                 <el-input-number
                                         :controls="false"
                                         v-model="qcDetail[v.key]"
-                                        :disabled="v.disabled"
+                                        :disabled="true"
                                         class="speInput speNumber"></el-input-number>
                             </div>
                             <div v-else-if="v.type==='textarea'">
                                 <el-input
-                                        :disabled="v.disabled"
+                                        :disabled="true"
                                         type="textarea"
                                         :autosize="{ minRows: 2}"
                                         :placeholder="$i.warehouse.pleaseInput"
@@ -115,13 +114,15 @@
             {{$i.warehouse.payment}}
         </div>
         <div class="payment-table">
-            <el-button class="payment-btn" type="primary">{{$i.warehouse.pressMoney}}</el-button>
+            <el-button class="payment-btn" @click="dunningPay" :disabled="loadingPaymentTable" :loading="disableDunning" type="primary">{{$i.warehouse.pressMoney}}</el-button>
             <el-table
-                    :data="tableData"
+                    :data="paymentData"
                     border
+                    :row-class-name="tableRowClassName"
+                    v-loading="loadingPaymentTable"
                     style="width: 100%">
                 <el-table-column
-                        label="No."
+                        label="#"
                         align="center"
                         width="60">
                     <template slot-scope="scope">
@@ -129,134 +130,87 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                        prop="date"
-                        label="Payment Number"
+                        prop="no"
+                        :label="$i.warehouse.paymentNumber"
                         width="180">
                 </el-table-column>
                 <el-table-column
                         prop="name"
-                        label="Payment Item"
+                        :label="$i.warehouse.paymentName"
                         width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="address"
-                        label="Est. Pay Date">
+                        prop="planPayDt"
+                        :label="$i.warehouse.estPayDate">
+                    <template slot-scope="scope">
+                        {{$dateFormat(scope.row.planPayDt,'yyyy-mm-dd')}}
+                    </template>
                 </el-table-column>
                 <el-table-column
-                        prop="address"
-                        label="Act. Pay Date">
+                        prop="planPayAmount"
+                        :label="$i.warehouse.estAmount">
                 </el-table-column>
                 <el-table-column
-                        prop="address"
-                        label="Est. Amount">
+                        prop="actualPayDt"
+                        :label="$i.warehouse.actPayDate">
+                    <template slot-scope="scope">
+                        {{$dateFormat(scope.row.actualPayDt,'yyyy-mm-dd')}}
+                    </template>
                 </el-table-column>
                 <el-table-column
-                        prop="address"
-                        label="Act. Amount">
+                        prop="actualPayAmount"
+                        :label="$i.warehouse.actAmount">
                 </el-table-column>
                 <el-table-column
-                        prop="address"
-                        label="Currency">
+                        prop="currencyCode"
+                        :label="$i.warehouse.currency">
                 </el-table-column>
                 <el-table-column
-                        prop="address"
-                        label="Available">
+                        prop="status"
+                        :label="$i.warehouse.available">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.status===-1">{{$i.warehouse.abandon}}</span>
+                        <span v-if="scope.row.status===10">{{$i.warehouse.waitCustomerConfirm}}</span>
+                        <span v-if="scope.row.status===20">{{$i.warehouse.waitSupplierConfirm}}</span>
+                        <span v-if="scope.row.status===30">{{$i.warehouse.waitServiceConfirm}}</span>
+                        <span v-if="scope.row.status===40">{{$i.warehouse.confirm}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                         fixed="right"
                         label="Action"
+                        align="center"
                         width="100">
                     <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-                        <el-button type="text" size="small">编辑</el-button>
+                        <el-button v-if="scope.row.status!==40 && scope.row.status!==-1" @click="confirmPay(scope.row)" type="text" size="small">{{$i.warehouse.confirm}}</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
-
         <div class="product-info">
-            <div class="second-title">
-                {{$i.warehouse.productInfo}}
-            </div>
-
-            <el-table
-                    class="product-table"
-                    v-loading="loadingProductInfoTable"
+            <v-table
+                    :loading="loadingProductInfoTable"
                     :data="productInfoData"
-                    height="250"
-                    border
-                    style="width: 100%">
-                <el-table-column
-                        align="center"
-                        fixed="left"
-                        type="selection"
-                        width="55">
-                </el-table-column>
-                <el-table-column
-                        v-for="v in $db.warehouse.qcDetailProductInfo"
-                        v-if="!v._hide"
-                        :prop="v.key"
-                        align="center"
-                        :key="v.value"
-                        :label="$i.warehouse[v.key]"
-                        width="180">
-                    <template slot-scope="scope">
-                        <div v-if="v.showType==='select'">
-                            <div v-if="v.isQcResult">
-                                <el-select clearable v-model="scope.row[v.key]" placeholder="请选择">
-                                    <el-option
-                                            v-for="item in qcResultOption"
-                                            :key="item.id"
-                                            :label="item.name"
-                                            :value="item.code">
-                                    </el-option>
-                                </el-select>
-                            </div>
-                            <div v-else-if="v.isBarCodeResult">
-                                <el-select clearable v-model="scope.row[v.key]" placeholder="请选择">
-                                    <el-option
-                                            v-for="item in barCodeResult"
-                                            :key="item.id"
-                                            :label="item.name"
-                                            :value="item.value">
-                                    </el-option>
-                                </el-select>
-                            </div>
-                            <div v-else>
-
-                            </div>
-                        </div>
-                        <div v-else-if="v.showType==='number'">
-                            <el-input-number
-                                    :controls="false"
-                                    v-model="scope.row[v.key]"
-                                    label="描述文字"></el-input-number>
-                        </div>
-                        <div v-else-if="v.showType==='input'">
-                            <el-input
-                                    placeholder="请输入内容"
-                                    v-model="scope.row[v.key]"
-                                    clearable>
-                            </el-input>
-                        </div>
-                        <div v-else>
-                            {{scope.row[v.key]}}
-                        </div>
-                    </template>
-                </el-table-column>
-            </el-table>
+                    :buttons="[{'label': $i.warehouse.detail, type: 1}]"
+                    @action="btnClick"
+                    @change-checked="changeChecked"
+                    :totalRow="true">
+                <template slot="header">
+                    <div class="second-title">
+                        {{$i.warehouse.productInfo}}
+                    </div>
+                </template>
+            </v-table>
         </div>
 
         <div class="footBtn">
-            <el-button :disabled="loadingData" :loading="disableClickSubmit" @click="submit" type="primary">{{$i.warehouse.submit}}</el-button>
-            <el-button :disabled="loadingData" @click="cancel">{{$i.warehouse.cancel}}</el-button>
+            <el-button @click="edit" v-if="qcDetail.qcStatusDictCode==='WAITING_QC'" type="primary">{{$i.warehouse.edit}}</el-button>
+            <el-button @click="cancel">{{$i.warehouse.cancel}}</el-button>
         </div>
-
         <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
     </div>
 </template>
 <script>
-
     import {VTable,VMessageBoard,VUpload } from '@/components/index';
 
     export default {
@@ -268,18 +222,19 @@
         },
         data(){
             return{
-                options:[],
                 qcDetail:{},
                 loadingData:false,
+                loadingPaymentTable:false,
                 pickerOptions1: {
                     disabledDate(time) {
                         return time.getTime()+3600 * 1000 * 24  < Date.now();
                     },
                 },
-                disableClickSubmit:false,
+                disableDunning:false,
                 /**
                  * 字典数据
                  * */
+                serviceList:[],
                 qcTypeOption:[],
                 qcMethodOption:[],
                 surveyorOption:[],
@@ -289,17 +244,11 @@
                 currencyOptions:[],
 
 
+
                 /**
                  * paymentTable data
                  * */
-                tableData: [
-                    {
-                        date: '2016-05-02',
-                        name: '王小虎',
-                        address: '上海市普陀区金沙江路 1518 弄'
-                    }
-                ],
-
+                paymentData: [],
 
                 /**
                  * product info data
@@ -319,140 +268,125 @@
                 },
                 productInfoData:[],
                 selectList:[],
-
-
-
-                /**
-                 * qcOrder Config
-                 * */
-                qcOrderConfig:{
-                    qcDate:'',
-                    qcMethodDictCode: "",
-                    qcOrderId: null,
-                    qcOrderNo: "",
-                    qcResultDetailParams: [],
-                    qcTypeDictCode: "",
-                    serviceFee: 0,
-                    surveyor: "",
-                },
-
             }
         },
         methods:{
             getQcOrderDetail(){
                 this.loadingData=true;
-                this.$ajax.get(`${this.$apis.get_sellerOrderDetail}?id=${this.$route.query.id}`)
+                this.$ajax.get(`${this.$apis.get_serviceOrderDetail}?id=${this.$route.query.id}`)
                     .then(res=>{
                         this.qcDetail=res;
-                        this.loadingData=false;
-                    }).catch(err=>{
+                        this.getPaymentInfo();
+                    }).finally(err=>{
                         this.loadingData=false;
                     }
                 );
             },
             getProductInfo(){
                 this.loadingProductInfoTable=true;
-                this.$ajax.post(this.$apis.get_sellerQcOrderProduct,this.productInfoConfig).then(res=>{
-                    this.productInfoData = res.datas;
-                    this.productInfoData.forEach(v=>{
-                        v.skuQcResultDictCode='';
-                    })
+                this.$ajax.post(this.$apis.get_serviceQcOrderProduct,this.productInfoConfig).then(res=>{
+                    this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas);
                     this.loadingProductInfoTable=false;
                 }).catch(err=>{
                     this.loadingProductInfoTable=false;
                 });
+            },
+            getPaymentInfo(){
+                this.loadingPaymentTable=true;
+                this.$ajax.post(this.$apis.PAYMENT_LIST,{
+                    orderNo:this.qcDetail.qcOrderNo,
+                    orderType:20
+                }).then(res=>{
+                    this.paymentData=res.datas;
+                }).finally(()=>{
+                    this.loadingPaymentTable=false;
+                })
             },
 
             /**
              * product info表格事件
              * */
             btnClick(e){
-                console.log(e)
+                this.$windowOpen({
+                    url:'/product/detail',
+                    params:{
+                        id:e.skuId.value
+                    }
+                });
+
             },
             changeChecked(e){
                 this.selectList=e;
             },
-
-            submit(){
-                this.qcOrderConfig.qcDate=this.qcDetail.qcDate;
-                this.qcOrderConfig.qcMethodDictCode=this.qcDetail.qcMethodDictCode;
-                this.qcOrderConfig.qcOrderId=this.$route.query.id;
-                this.qcOrderConfig.qcOrderNo=this.qcDetail.qcOrderNo;
-                this.qcOrderConfig.qcTypeDictCode=this.qcDetail.qcTypeDictCode;
-                this.qcOrderConfig.surveyor=this.qcDetail.surveyor;
-                this.qcOrderConfig.serviceFee=this.qcDetail.serviceFee;
-
-                // console.log(this.productInfoData,'productInfoData')
-                let allow=true;
-                this.productInfoData.forEach(v=>{
-                    if(v.actOuterCartonSkuQty || v.actOuterCartonInnerBoxQty || v.actInnerCartonSkuQty || v.innerCartonLength || v.innerCartonWidth || v.innerCartonHeight || v.innerCartonNetWeight || v.innerCartonGrossWeight || v.innerCartonVolume || v.outerCartonLength || v.outerCartonWidth || v.outerCartonHeight || v.outerCartonNetWeight || v.outerCartonGrossWeight || v.qualifiedSkuCartonTotalQty || v.unqualifiedSkuCartonTotalQty || v.unqualifiedType || v.skuBarCodeResultDictCode || v.skuLabelResultDictCode || v.innerPackingBarCodeResultDictCode || v.outerCartonBarCodeResultDictCode || v.shippingMarkResultDictCode || v.remarks){
-                        if(!v.skuQcResultDictCode){
-                            allow=false;
-                        }
+            edit(){
+                this.$router.push({
+                    path:'/warehouse/editQc',
+                    query:{
+                        id:this.$route.query.id
                     }
                 });
-                if(!allow){
+            },
+
+            /**
+             * payment事件
+             * */
+            tableRowClassName({row}) {
+                if(row.status===-1){
+                    return 'warning-row';
+                }
+                return '';
+            },
+            dunningPay(){
+                let params=[];
+                _.map(this.paymentData,v=>{
+                    if(v.status===40 && v.planPayAmount>v.actualPayAmount){
+                        params.push({
+                            id:v.id
+                        })
+                    }
+                });
+
+                if(params.length===0){
                     return this.$message({
-                        message: '产品填了数值之后必须选择验货结果',
+                        message: this.$i.warehouse.nothingDunning,
                         type: 'warning'
                     });
                 }
 
-                this.qcOrderConfig.qcResultDetailParams=[];
-                this.productInfoData.forEach(v=>{
-                    let skuQcResultDictCode;
-                    if(v.skuQcResultDictCode){
-                        skuQcResultDictCode=v.skuQcResultDictCode;
-                    }else{
-                        skuQcResultDictCode='WAIT_FOR_QC';
-                    }
-
-                    this.qcOrderConfig.qcResultDetailParams.push({
-                        actInnerCartonSkuQty: v.actInnerCartonSkuQty,
-                        actOuterCartonInnerBoxQty: v.actOuterCartonInnerBoxQty,
-                        actOuterCartonSkuQty: v.actOuterCartonSkuQty,
-                        checkOuterCartonQty: v.checkOuterCartonQty,
-                        innerCartonGrossWeight: v.innerCartonGrossWeight,
-                        innerCartonHeight: v.innerCartonHeight,
-                        innerCartonLength: v.innerCartonLength,
-                        innerCartonNetWeight: v.innerCartonNetWeight,
-                        innerCartonVolume: v.innerCartonVolume,
-                        innerCartonWidth: v.innerCartonWidth,
-                        innerPackingBarCodeResultDictCode: v.innerPackingBarCodeResultDictCode,
-                        outerCartonBarCodeResultDictCode: v.outerCartonBarCodeResultDictCode,
-                        outerCartonGrossWeight: v.outerCartonGrossWeight,
-                        outerCartonHeight: v.outerCartonHeight,
-                        outerCartonLength: v.outerCartonHeight,
-                        outerCartonNetWeight: v.outerCartonNetWeight,
-                        outerCartonWidth: v.outerCartonWidth,
-                        qcOrderDetailId: v.id,
-                        qcPic: v.qcPic,
-                        qualifiedSkuCartonTotalQty: v.qualifiedSkuCartonTotalQty,
-                        remark: v.remark,
-                        shippingMarkResultDictCode: v.shippingMarkResultDictCode,
-                        skuBarCodeResultDictCode: v.skuBarCodeResultDictCode,
-                        skuLabelResultDictCode: v.skuLabelResultDictCode,
-                        skuQcResultDictCode: skuQcResultDictCode,
-                        unqualifiedSkuCartonTotalQty: v.unqualifiedSkuCartonTotalQty,
-                        unqualifiedType: v.unqualifiedType
-                    });
-                });
-                this.disableClickSubmit=true;
-                this.$ajax.post(this.$apis.save_sellerQcOrder,this.qcOrderConfig).then(res=>{
-                    this.disableClickSubmit=false;
+                this.disableDunning=true;
+                this.$ajax.post(this.$apis.PAYMENT_DUNNING,params).then(res=>{
                     this.$message({
-                        message: '提交成功',
+                        message: this.$i.warehouse.dunningSuccess,
                         type: 'success'
                     });
-                    this.$router.push('/warehouse/qcOverview');
-                }).catch(err=>{
-                    this.disableClickSubmit=false;
+                }).finally(()=>{
+                    this.disableDunning=false;
+                })
+            },
+            confirmPay(data){
+                this.$confirm(this.$i.warehouse.sureConfirm, this.$i.warehouse.prompt, {
+                    confirmButtonText: this.$i.warehouse.sure,
+                    cancelButtonText: this.$i.warehouse.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    this.$ajax.post(this.$apis.PAYMENT_ACCEPT,{
+                        id:data.id,
+                        version:data.version
+                    }).then(res=>{
+                        this.$message({
+                            message: this.$i.warehouse.confirmSuccess,
+                            type: 'success'
+                        });
+                        this.getPaymentInfo();
+                    }).finally(()=>{
+
+                    });
+                }).catch(() => {
+
                 });
             },
 
-            cancel(){
-                window.close();
-            },
+
 
             /**
              * 选择服务商的方法
@@ -470,7 +404,6 @@
                         res.forEach(v=>{
                             this.serviceList.push(v);
                         });
-                        console.log(this.serviceList,'???')
                     }).catch(err=>{
 
                     });
@@ -479,7 +412,6 @@
 
                 });
             },
-
 
             /**
              * 获取字典
@@ -500,7 +432,6 @@
                             this.barCodeResult=v.codes;
                         }else if(v.code==='QC_STATUS'){
                             this.qcStatusOption=v.codes;
-                            console.log(this.qcStatusOption)
                         }
                     })
                 });
@@ -524,16 +455,23 @@
                 //     console.log(res)
                 // });
             },
+
+            cancel(){
+                window.close();
+            },
         },
         created(){
             this.getQcOrderDetail();
             this.getProductInfo();
-            this.getUnit();
             this.getService();
+            this.getUnit();
         }
     }
 </script>
 <style scoped>
+    .el-table >>> .warning-row {
+        background: #f5f7fa;
+    }
     .title{
         font-weight: bold;
         font-size: 18px;
@@ -552,13 +490,8 @@
     .product-info{
         margin-top: 10px;
     }
-
     .speInput{
         width: 100%;
-    }
-
-    .product-table >>> .el-checkbox{
-        margin: 0;
     }
     .speNumber >>> input{
         text-align: left;
