@@ -69,10 +69,10 @@
                    v-text="cItem._value || cItem.value"></div>
 
               <v-image class="img" v-else
-                       :src="getImage(cItem.value)"
+                       :src="getImage(cItem._value || cItem.value)"
                        height="30px"
                        width="30px"
-                       @click="$refs.tableViewPicture.show(cItem.value)"></v-image>
+                       @click="$refs.tableViewPicture.show(cItem._value || cItem.value)"></v-image>
             </td>
             <!--操作按钮显示-->
             <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
