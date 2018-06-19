@@ -111,68 +111,69 @@
                 </el-row>
             </el-form>
         </div>
-        <div class="second-title">
-            {{$i.warehouse.payment}}
-        </div>
-        <div class="payment-table">
-            <el-button class="payment-btn" type="primary">{{$i.warehouse.pressMoney}}</el-button>
-            <el-table
-                    :data="tableData"
-                    border
-                    style="width: 100%">
-                <el-table-column
-                        label="No."
-                        align="center"
-                        width="60">
-                    <template slot-scope="scope">
-                        {{scope.$index+1}}
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="date"
-                        label="Payment Number"
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="name"
-                        label="Payment Item"
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="address"
-                        label="Est. Pay Date">
-                </el-table-column>
-                <el-table-column
-                        prop="address"
-                        label="Act. Pay Date">
-                </el-table-column>
-                <el-table-column
-                        prop="address"
-                        label="Est. Amount">
-                </el-table-column>
-                <el-table-column
-                        prop="address"
-                        label="Act. Amount">
-                </el-table-column>
-                <el-table-column
-                        prop="address"
-                        label="Currency">
-                </el-table-column>
-                <el-table-column
-                        prop="address"
-                        label="Available">
-                </el-table-column>
-                <el-table-column
-                        fixed="right"
-                        label="Action"
-                        width="100">
-                    <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-                        <el-button type="text" size="small">编辑</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
+
+        <!--<div class="second-title">-->
+            <!--{{$i.warehouse.payment}}-->
+        <!--</div>-->
+        <!--<div class="payment-table">-->
+            <!--<el-button class="payment-btn" type="primary">{{$i.warehouse.pressMoney}}</el-button>-->
+            <!--<el-table-->
+                    <!--:data="tableData"-->
+                    <!--border-->
+                    <!--style="width: 100%">-->
+                <!--<el-table-column-->
+                        <!--label="No."-->
+                        <!--align="center"-->
+                        <!--width="60">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--{{scope.$index+1}}-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="date"-->
+                        <!--label="Payment Number"-->
+                        <!--width="180">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="name"-->
+                        <!--label="Payment Item"-->
+                        <!--width="180">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="address"-->
+                        <!--label="Est. Pay Date">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="address"-->
+                        <!--label="Act. Pay Date">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="address"-->
+                        <!--label="Est. Amount">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="address"-->
+                        <!--label="Act. Amount">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="address"-->
+                        <!--label="Currency">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--prop="address"-->
+                        <!--label="Available">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                        <!--fixed="right"-->
+                        <!--label="Action"-->
+                        <!--width="100">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>-->
+                        <!--<el-button type="text" size="small">编辑</el-button>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+            <!--</el-table>-->
+        <!--</div>-->
 
         <div class="product-info">
             <div class="second-title">
@@ -239,6 +240,9 @@
                                     clearable>
                             </el-input>
                         </div>
+                        <div v-else-if="v.showType==='attachment'">
+                            <v-upload :limit="20" :ref="'pictureUpload'+scope.$index"></v-upload>
+                        </div>
                         <div v-else>
                             {{scope.row[v.key]}}
                         </div>
@@ -288,7 +292,6 @@
                 qcStatusOption:[],
                 currencyOptions:[],
 
-
                 /**
                  * paymentTable data
                  * */
@@ -299,7 +302,6 @@
                         address: '上海市普陀区金沙江路 1518 弄'
                     }
                 ],
-
 
                 /**
                  * product info data
@@ -319,8 +321,6 @@
                 },
                 productInfoData:[],
                 selectList:[],
-
-
 
                 /**
                  * qcOrder Config
@@ -356,7 +356,7 @@
                     this.productInfoData = res.datas;
                     this.productInfoData.forEach(v=>{
                         v.skuQcResultDictCode='';
-                    })
+                    });
                     this.loadingProductInfoTable=false;
                 }).catch(err=>{
                     this.loadingProductInfoTable=false;
@@ -381,8 +381,6 @@
                 this.qcOrderConfig.qcTypeDictCode=this.qcDetail.qcTypeDictCode;
                 this.qcOrderConfig.surveyor=this.qcDetail.surveyor;
                 this.qcOrderConfig.serviceFee=this.qcDetail.serviceFee;
-
-                // console.log(this.productInfoData,'productInfoData')
                 let allow=true;
                 this.productInfoData.forEach(v=>{
                     if(v.actOuterCartonSkuQty || v.actOuterCartonInnerBoxQty || v.actInnerCartonSkuQty || v.innerCartonLength || v.innerCartonWidth || v.innerCartonHeight || v.innerCartonNetWeight || v.innerCartonGrossWeight || v.innerCartonVolume || v.outerCartonLength || v.outerCartonWidth || v.outerCartonHeight || v.outerCartonNetWeight || v.outerCartonGrossWeight || v.qualifiedSkuCartonTotalQty || v.unqualifiedSkuCartonTotalQty || v.unqualifiedType || v.skuBarCodeResultDictCode || v.skuLabelResultDictCode || v.innerPackingBarCodeResultDictCode || v.outerCartonBarCodeResultDictCode || v.shippingMarkResultDictCode || v.remarks){
@@ -393,11 +391,10 @@
                 });
                 if(!allow){
                     return this.$message({
-                        message: '产品填了数值之后必须选择验货结果',
+                        message: this.$i.warehouse.mustHaveQcResult,
                         type: 'warning'
                     });
                 }
-
                 this.qcOrderConfig.qcResultDetailParams=[];
                 this.productInfoData.forEach(v=>{
                     let skuQcResultDictCode;
@@ -437,17 +434,19 @@
                         unqualifiedType: v.unqualifiedType
                     });
                 });
-                this.disableClickSubmit=true;
-                this.$ajax.post(this.$apis.save_sellerQcOrder,this.qcOrderConfig).then(res=>{
-                    this.disableClickSubmit=false;
-                    this.$message({
-                        message: '提交成功',
-                        type: 'success'
-                    });
-                    this.$router.push('/warehouse/qcOverview');
-                }).catch(err=>{
-                    this.disableClickSubmit=false;
-                });
+                console.log(this.qcOrderConfig)
+                console.log(this.$refs.pictureUpload1)
+                // this.disableClickSubmit=true;
+                // this.$ajax.post(this.$apis.save_sellerQcOrder,this.qcOrderConfig).then(res=>{
+                //     this.disableClickSubmit=false;
+                //     this.$message({
+                //         message: this.$i.warehouse.submitSuccess,
+                //         type: 'success'
+                //     });
+                //     this.$router.push('/warehouse/qcOverview');
+                // }).catch(err=>{
+                //     this.disableClickSubmit=false;
+                // });
             },
 
             cancel(){
@@ -470,7 +469,6 @@
                         res.forEach(v=>{
                             this.serviceList.push(v);
                         });
-                        console.log(this.serviceList,'???')
                     }).catch(err=>{
 
                     });
@@ -479,7 +477,6 @@
 
                 });
             },
-
 
             /**
              * 获取字典
@@ -500,7 +497,6 @@
                             this.barCodeResult=v.codes;
                         }else if(v.code==='QC_STATUS'){
                             this.qcStatusOption=v.codes;
-                            console.log(this.qcStatusOption)
                         }
                     })
                 });

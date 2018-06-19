@@ -64,5 +64,6 @@
   "waitSupplierConfirm":"待供应商确认",
   "waitServiceConfirm":"待服务商确认",
   "hasConfirm":"已确认",
-  "sureConfirm":"Sure Confirm?"
+  "sureConfirm":"Sure Confirm?",
+  "totalMoney":"总价"
 }
