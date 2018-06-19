@@ -17,5 +17,6 @@
   "sureDunning":"Sure Dunning?",
   "dunningSuccess":"Dunning Success!",
   "nothingDunning":"Nothing to dunning",
-  "mustHaveQcResult":"Must have a Qc Result!"
+  "mustHaveQcResult":"Must have a Qc Result!",
+  "sureConfirm":"Sure Confirm?"
 }

@@ -48,6 +48,7 @@
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
         </div>
       </v-table>
+
     </div>
     <el-dialog :title="$i.logistic.negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeModify(0)">
       <product-modify ref="productModifyComponents" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"/>
@@ -179,6 +180,10 @@ export default {
           type: 1        
         },
         {
+          label: 'Copy',         
+          type: 4
+        },
+        {
           label: 'Detail',
           type: 3
         }
@@ -189,12 +194,6 @@ export default {
           type: 2
         }
       )
-      this.$route.query.loadingList=='loadingList' ? aArr.splice(2,0,
-        {
-          label: 'Copy',         
-          type: 4
-        }
-      ) : aArr;
       return aArr;
     } 
   },
@@ -645,6 +644,12 @@ export default {
           }
         })
       });
+      if(!this.planId){
+        this.oldPlanObject.fieldDisplay = null;
+      }
+      if(!this.$validateForm(this.oldPlanObject,this.$db.logistic.basicInfoObj)){
+        return;
+      }
       this.$ajax.post(url, this.oldPlanObject).then(res => {
         this.$message({
           message: '发送成功，正在跳转...',

@@ -9,18 +9,18 @@
             <p class="textFilter" :style="fieldDisplay&&fieldDisplay.hasOwnProperty(a.key) ? definedStyle : ''">{{ textFilter(a) }}</p>
           </el-form-item>
           <div v-else>
-            <el-form-item :label="a.label+'：'" v-if="a.type === 'input'" prop="value">
+            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'input'" prop="value">
               <el-input placeholder="请输入内容" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" v-model="a.value" :disabled="a.disabled" @change="selectChange(a.value,a.key)"/>
             </el-form-item>
 
-            <el-form-item :label="a.label+'：'" v-if="a.type === 'selector'" prop="value">
-              <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" placeholder="请输入内容" :clearable="true" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
+            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'selector'" prop="value">
+              <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" placeholder="请输入内容" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
                 <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
                   v-if="selectArr[a.key]" />
               </el-select>
             </el-form-item>
 
-            <el-form-item :label="a.label+'：'" v-if="a.type === 'date'" prop="value">
+            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'date'" prop="value">
               <el-date-picker v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
             </el-form-item>
           </div>

@@ -1,7 +1,7 @@
 {
-  "title": "标题",
-  "content": "内容",
-  "sendTime": "发送时间",
-  "read": "是否已读",
-  "sender": "发送人"
+  "title": "Title",
+  "content": "Content",
+  "sendTime": "Sending time",
+  "read": "Read",
+  "sender": "Sender"
 }

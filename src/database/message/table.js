@@ -6,10 +6,11 @@ export default {
     key: 'content'
   },
   sendTime: {
-    key: 'sendTime'
+    key: 'sendTime',
+    type:'textDate'
   },
   read: {
-    key: 'isRead'
+    key: 'read'
   },
   sender: {
     key: 'senderName'

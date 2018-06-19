@@ -1,6 +1,6 @@
 <template>
   <div class="payment">
-    <el-button type="primary" size="mini" @click.stop="$emit('addPayment')">{{ $i.logistic.applyForPayment }}</el-button>
+    <!-- <el-button type="primary" size="mini" @click.stop="$emit('addPayment')">{{ $i.logistic.applyForPayment }}</el-button> -->
     <el-table ref="table" :row-class-name="tableRowClassName" :data="tableData" border style="width: 100%; margin-top: 20px" show-summary :summary-method="summaryMethod">
       <el-table-column type="index" width="50" align="center"/>
       <el-table-column :label="$i.logistic.paymentNo" align="center" width="140">
@@ -70,22 +70,8 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.operation" align="center" width="200" fixed="right">
         <template slot-scope="scope">
-          <!-- <div v-if="!scope.row.edit">
-            <el-button size="mini" type="primary" @click.stop="$emit('savePayment', scope.$index)">保存</el-button>
-            <el-button size="mini" type="primary" @click.stop="$emit('deletePaymentList', scope.$index)">取消</el-button>
-          </div> -->
-          <div v-if="scope.row.status === -1">
-            <el-button size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.recover_plan_payment)">{{ $i.logistic.recover }}</el-button>
-          </div>
-          <div v-if="scope.row.status === 20 || scope.row.status === 40">
-            <div v-if="scope.row.edit">
-              <el-button size="mini" type="primary" @click.stop="$emit('savePayment', scope.$index)">{{ $i.logistic.save }}</el-button>
-              <el-button size="mini" type="primary" @click.stop="cancelPaymentModify(scope.$index)">{{ $i.logistic.cancel }}</el-button>
-            </div>
-            <div v-else>
-              <el-button size="mini" type="primary" @click.stop="switchModify(scope.$index)">{{ $i.logistic.modify }}</el-button>
-              <el-button size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.abandon_plan_payment)">{{ $i.logistic.invalid }}</el-button>
-            </div>
+          <div>
+            <el-button size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.logistics_accept_payment)">{{ $i.logistic.confirm }}</el-button>
           </div>
         </template>
       </el-table-column>
@@ -259,15 +245,15 @@ export default {
       })
     },
   },
-  watch:{
-    currencyCode(v){
-      let param = {
-        columns : this.$refs.table.columns,
-        data : this.$refs.table.data
-      }
-      this.summaryMethod(param)
-    }
-  }
+  // watch:{
+  //   currencyCode(v){
+  //     let param = {
+  //       columns : this.$refs.table.columns,
+  //       data : this.$refs.table.data
+  //     }
+  //     this.summaryMethod(param)
+  //   }
+  // }
 }
 </script>
 

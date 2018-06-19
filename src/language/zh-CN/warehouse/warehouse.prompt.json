@@ -1,6 +1,6 @@
 {
-  "sureRework":"Sure Rework",
-  "sureReturn":"Sure Return",
+  "sureRework":"Sure Rework?",
+  "sureReturn":"Sure Return?",
   "alreadyHandled":"Already Handled",
   "confirmSuccess":"Confirm Success",
   "reworkSuccess":"Rework Success!",
@@ -12,5 +12,6 @@
   "sureInvalid":"Sure Invalid?",
   "invalidSuccess":"Invalid Success!",
   "sureRestore":"Sure Restore?",
-  "restoreSuccess":"Restore Success!"
+  "restoreSuccess":"Restore Success!",
+  "sureConfirm":"Sure Confirm?"
 }

@@ -22,7 +22,7 @@
         <v-table
           :data="tabData"
           @change-checked="changeChecked"
-          :height="450"
+          :height="500"
           hide-filter-value
         />
         <page
@@ -175,19 +175,18 @@
         });
       },
       inputEnter(val) {
-       if (!val.keyType) return this.$message({
+        if (!val.keyType) return this.$message({
           message: 'please choose a type',
           type: 'warning'
         });
         this.params.mark = val.keyType;
         this.params.content = val.key;
-        this.getDataInfo();
         this.searchLoad = true;
+        this.getDataInfo();
       },
       getDataInfo() {
-        let url, column;
+        let url;
         this.tabLoad = true;
-        column = this.$db.message.table;
         if(this.viewByStatus + '' === '1') {
           url = this.$apis.post_systemmessage_query;
         } else {
@@ -195,16 +194,17 @@
         };
         this.$ajax.post(url, this.params)
           .then(res => {
-              this.tabData = this.$getDB(column, res.datas,item=>{
-                _.mapObject(item, val => {
+              this.tabData = this.$getDB(this.$db.message.table, res.datas, e => {
+                _.mapObject(e, val => {
                   val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'))
                   return val
                 })
-                if(item.isRead.value){
-                  item.isRead.value = '已读'
+                if(e.read.value){
+                  e.read.value = '已读'
                 }else{
-                  item.isRead.value = '未读'
+                  e.read.value = '未读'
                 }
+
               });
             this.pageData=res;
             this.tabLoad = false;
@@ -228,7 +228,11 @@
         });
         this.$ajax.post(url, arr)
           .then(res => {
-             this.$message('系统将消息置为已读');
+            this.$message({
+              type: 'success',
+              message: '系统将消息置为已读!'
+            });
+            this.getDataInfo()
           })
           .catch(() => {
 

@@ -48,8 +48,9 @@
   "detail":"详情",
   "pressMoney":"催款",
   "prompt":"提示",
-  "pleaseChoose":"Please Choose",
-  "attachments":"Attachment",
+  "sureConfirm":"Sure Confirm",
+  "sureRestartQc":"Sure Restart QC?",
+  "deleteSuccess":"删除成功!",
   "paymentNumber":"Payment Number",
   "paymentName":"Payment Name",
   "estPayDate":"Est. Pay Date",
@@ -64,6 +65,5 @@
   "waitSupplierConfirm":"待供应商确认",
   "waitServiceConfirm":"待服务商确认",
   "hasConfirm":"已确认",
-  "sureConfirm":"Sure Confirm?",
   "totalMoney":"总价"
 }

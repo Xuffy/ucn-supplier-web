@@ -241,7 +241,7 @@
                   this.$windowOpen({
                     url: '/logisticPlanDetail',
                     params: {
-                      number:item.orderNo.value
+                      logisticsNo:item.orderNo.value
                     }
                   });
               }

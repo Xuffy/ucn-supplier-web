@@ -1,7 +1,13 @@
 {
-  "email":"邮箱",
-  "userName":"用户名",
-  "gender":"性别",
-  "status":"状态",
-  "search":"搜索"
+  "email":"Email",
+  "userName":"User Name",
+  "gender":"Gender",
+  "status":"Status",
+  "search":"Search",
+  "man":"Man",
+  "woman":"Woman",
+  "unknown":"Unknown",
+  "notActive":"Not active",
+  "activated":"Activated",
+  "disable":"Disable"
 }
