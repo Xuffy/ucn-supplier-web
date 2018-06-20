@@ -65,8 +65,7 @@ export const basicInfoObj = {
   logisticsStatus: {
     type: 'selector',
     value: 2,
-    defaultVal: 2,
-    disabled:true 
+    defaultVal: 2
   },
   estContainerStuffingDate: {
     type: 'date',
@@ -268,5 +267,46 @@ export const transportInfoObj = {
   destinationPort: {
     type: 'input',
     value: null
+  }
+}
+
+export const payMentInfo = {
+  paymentItem: {
+    key:'name',
+    _rules:{
+      required:true
+    }
+  },
+  supplierName: {
+    key:'payToCompanyName',
+    _rules:{
+      required:true
+    }
+  },
+  estPayDate: {
+    key:'planPayDt',
+    _rules:{
+      required:true
+    }
+  },
+  estAmount: {
+    key:'planPayAmount',
+    _rules:{
+      type:'Number',
+      required:true
+    }
+  },
+  actPayDate: {
+    key:'actualPayDt',
+    _rules:{
+      required:true
+    }
+  },
+  actAmount: {
+    key:'actualPayAmount',
+    _rules:{
+      type:'Number',
+      required:true
+    }
   }
 }

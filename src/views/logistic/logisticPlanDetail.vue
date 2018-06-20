@@ -36,7 +36,10 @@
     <div v-if="planId">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
-     <payment ref="payment" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView" :currencyCode="oldPlanObject.currency"/>
+      <div class="hd active">
+        <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.logistic.Dept }}</el-button>
+      </div>
+      <payment ref="payment" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView" :currencyCode="oldPlanObject.currency"/>
     </div>
     <div>
       <div class="hd"></div>
@@ -410,7 +413,13 @@ export default {
       const payToCompanyId = this.paymentList[i].payToCompanyId
       const skuSupplierObj = this.selectArr.supplier.find(a => a.companyId === payToCompanyId)
       const paymentData = {
-        ...this.paymentList[i],
+        ..._.extend({
+          name:null,
+          actualPayAmount:null,
+          planPayAmount:null,
+          actualPayDt:null,
+          planPayDt:null,
+        },this.paymentList[i]),
         currency: this.selectArr.exchangeCurrency.find(a => a.code === currencyCode).id,
         currencyCode,
         orderNo: this.oldPlanObject.logisticsNo,
@@ -420,6 +429,9 @@ export default {
         type: 10
       }
       const url = paymentData.id ? this.$apis.update_plan_payment : this.$apis.save_plan_payment
+      if(this.$validateForm(paymentData,this.$db.logistic.payMentInfo)){
+        return;
+      }
       this.$ajax.post(url, paymentData).then(res => {
         this.paymentList[i] = res
         this.updatePaymentWithView({i, edit: false})
