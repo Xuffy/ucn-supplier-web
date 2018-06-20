@@ -29,7 +29,7 @@
                                     :disabled="true"
                                     class="speInput"
                                     type="textarea"
-                                    autosize
+                                    :autosize="{ minRows: 2}"
                                     v-model="inboundData[v.key]">
                             </el-input>
                         </div>
@@ -80,7 +80,7 @@
                 v-loading="loadProductTable"
                 class="speTable"
                 :data="productTable"
-                :buttons="[{label:'详情',type:1}]"
+                :buttons="[{label:$i.warehouse.detail,type:1}]"
                 @action="btnClick"
                 @change-checked="changeChecked">
             <template slot="header">
@@ -93,8 +93,6 @@
         <div class="title" style="margin-top: 50px">
             {{$i.warehouse.summary}}
         </div>
-
-
         <el-form class="speForm" label-width="200px" :label-position="labelPosition">
             <el-row>
                 <el-col class="speCol" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
@@ -145,6 +143,7 @@
             </el-row>
         </el-form>
 
+
         <div class="footBtn">
             <el-button @click="closeWindow" type="primary">{{$i.warehouse.close}}</el-button>
         </div>
@@ -174,26 +173,6 @@
                     disabledDate(time) {
                         return time.getTime() > Date.now();
                     },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
                 },
                 addOrderDialogVisible:false,
                 loadingTable:false,
@@ -215,13 +194,6 @@
                     skuTotalNetWeight: null,
                     skuTotalQty: null,
                     skuTotalVolume: null
-                },
-                summaryData:{
-                    cartonOfProducts:0,
-                    grossWeightOfProducts:0,
-                    volumeOfProducts:0,
-                    netWeightOfProducts:0,
-                    quantityOfProducts:0,
                 },
 
                 /**
@@ -250,16 +222,6 @@
                     }).then(res=>{
                         this.productTable = this.$getDB(this.$db.warehouse.inboundDetailProductTable, res.datas,(e)=>{
 
-                        });
-                        /**
-                         * 计算统计数据
-                         * */
-                        res.datas.forEach(v=>{
-                            this.summaryData.cartonOfProducts+=v.inboundOutCartonTotalQty;
-                            this.summaryData.grossWeightOfProducts+=v.inboundSkuTotalGrossWeight;
-                            this.summaryData.volumeOfProducts+=v.inboundSkuTotalVolume;
-                            this.summaryData.netWeightOfProducts+=v.inboundSkuTotalNetWeight;
-                            this.summaryData.quantityOfProducts+=v.inboundSkuTotalQty;
                         });
                         this.loadingTable=false;
                     }).catch(err=>{

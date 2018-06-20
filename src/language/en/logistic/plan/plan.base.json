@@ -214,5 +214,6 @@
   "generateList": "生成装货清单",
   "cancelModify": "取消修改",
   "receive":"接受",
-  "refuse":"拒绝"
+  "refuse":"拒绝",
+  "Dept":"催款"
 }

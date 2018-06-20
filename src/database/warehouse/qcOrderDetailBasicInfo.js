@@ -49,8 +49,9 @@ export default {
         fullLine:true,
         disabled:true
     },
-    attachments:{
+    attachment:{
         type:'attachment',
+        key:'attachments',
         disabled:true
     },
 }
