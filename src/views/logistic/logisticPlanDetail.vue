@@ -668,7 +668,8 @@ export default {
       if(!this.planId){
         this.oldPlanObject.fieldDisplay = null;
       }
-      if(!this.$validateForm(this.oldPlanObject,this.$db.logistic.basicInfoObj)){
+      console.log(this.$validateForm(this.oldPlanObject,this.$db.logistic.basicInfoObj))
+      if(this.$validateForm(this.oldPlanObject,this.$db.logistic.basicInfoObj)){
         return;
       }
       this.$ajax.post(url, this.oldPlanObject).then(res => {

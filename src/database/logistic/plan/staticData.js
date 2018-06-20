@@ -185,6 +185,7 @@ export const basicInfoObj = {
     type: 'input',
     value: '',
     _rules:{
+      required:true,
       type:'Number'
     }
   },
