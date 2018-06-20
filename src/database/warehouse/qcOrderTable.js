@@ -64,7 +64,9 @@ export default {
     outerCartonBarCodeResultDictCode:{},
     shippingMark:{},
     shippingMarkResultDictCode:{},
-    qcPic:{},
+    qcPic:{
+        key:'qcPics'
+    },
     checkOuterCartonQty:{},
     remark:{},
 

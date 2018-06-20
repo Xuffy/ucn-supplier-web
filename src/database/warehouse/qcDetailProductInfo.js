@@ -5,6 +5,9 @@ export default{
     skuId:{
         _hide:true
     },
+    orderNo:{
+        _hide:true
+    },
     skuQcResultDictCode: {
         key: 'skuQcResultDictCode',
         type: 'String',
@@ -307,7 +310,7 @@ export default{
         key: 'checkOuterCartonQty',
         type: 'Number'
     },
-    remarks:{
+    remark:{
         key: 'remark',
         type: 'String',
         showType:'input'

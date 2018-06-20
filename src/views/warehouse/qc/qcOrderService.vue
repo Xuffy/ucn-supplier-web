@@ -12,12 +12,11 @@
                     <el-col v-for="(v,k) in $db.warehouse.qcOrderDetailBasicInfo" :key="v.key" class="speCol" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                         <el-form-item :label="$i.warehouse[v.key]">
                             <div v-if="v.type==='input'">
-
-                                    <el-input
-                                            v-model="qcDetail[v.key]"
-                                            :disabled="v.disabled">
-                                    </el-input>
-
+                                <el-input
+                                        class="speInput"
+                                        v-model="qcDetail[v.key]"
+                                        :disabled="v.disabled">
+                                </el-input>
                             </div>
                             <div v-else-if="v.type==='select'">
                                 <el-select
@@ -179,7 +178,6 @@
             <div class="second-title">
                 {{$i.warehouse.productInfo}}
             </div>
-
             <el-table
                     class="product-table"
                     v-loading="loadingProductInfoTable"
@@ -247,9 +245,17 @@
                         </div>
                     </template>
                 </el-table-column>
+                <el-table-column
+                        fixed="right"
+                        align="center"
+                        :label="$i.warehouse.detail"
+                        width="100">
+                    <template slot-scope="scope">
+                        <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
-
 
 
         <div class="summary">
@@ -506,6 +512,14 @@
             changeChecked(e){
                 this.selectList=e;
             },
+            handleClick(data){
+                this.$windowOpen({
+                    url:'/product/detail',
+                    params:{
+                        id:data.skuId
+                    }
+                });
+            },
 
             submit(){
                 this.qcOrderConfig.qcDate=this.qcDetail.qcDate;
@@ -686,7 +700,7 @@
     }
 
     .speInput{
-        width: 100%;
+        width: 80%;
     }
 
     .product-table >>> .el-checkbox{

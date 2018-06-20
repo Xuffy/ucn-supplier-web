@@ -413,7 +413,7 @@
                         type: 'warning'
                     });
                 }
-                console.log(this.productData,'this.productData')
+
                 this.productData.forEach(v=>{
                     this.inboundData.inboundSkuBeanCreateParams.push({
                         customerName: v.customerName,
@@ -441,7 +441,7 @@
                         inventorySkuNetWeight: 0,
                         inventorySkuQty: 0,
                         inventorySkuVolume: 0,
-                        orderId: v.id,
+                        orderId: v.orderId,
                         orderNo: v.orderNo,
                         orderSkuQty: v.totalQty,
                         outboundOutCartonTotalQty: 0,

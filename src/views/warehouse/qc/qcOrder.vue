@@ -101,7 +101,24 @@
                             :key="v.key"
                             :prop="v.key"
                             width="160">
-                        <template slot-scope="scope">{{ scope.row[v.key] }}</template>
+                        <template slot-scope="scope">
+                            <div v-if="v.key==='qcPics'">
+                                {{ scope.row[v.key] }}
+                                <v-upload readonly :limit="20" :list="scope.row[v.key]"></v-upload>
+                            </div>
+                            <div v-else>
+                                {{ scope.row[v.key] }}
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            align="center"
+                            :label="$i.warehouse.detail"
+                            width="100">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-tab-pane>
@@ -128,6 +145,15 @@
                             width="160">
                         <template slot-scope="scope">{{ scope.row[v.key] }}</template>
                     </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            align="center"
+                            :label="$i.warehouse.detail"
+                            width="100">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </el-tab-pane>
             <el-tab-pane :label="$i.warehouse.applyReturn">
@@ -152,6 +178,15 @@
                             :prop="v.key"
                             width="160">
                         <template slot-scope="scope">{{ scope.row[v.key] }}</template>
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            align="center"
+                            :label="$i.warehouse.detail"
+                            width="100">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-tab-pane>
@@ -277,6 +312,13 @@
                 </el-row>
             </el-form>
         </div>
+
+
+        <div class="footBtn">
+            <el-button :disabled="loadingTable" type="danger" @click="cancel">{{$i.warehouse.cancel}}</el-button>
+        </div>
+
+
 
         <el-dialog width="40%" title="将QC数据更新到产品库" :visible.sync="dialogFormVisible">
             <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAll">全选</el-checkbox>
@@ -443,6 +485,9 @@
                     return 1;
                 }
             },
+            cancel(){
+                window.close();
+            },
 
 
             /**
@@ -512,6 +557,14 @@
 
 
 
+            },
+            handleClick(data){
+                this.$windowOpen({
+                    url:'/product/detail',
+                    params:{
+                        id:data.skuId
+                    }
+                });
             },
 
             /**
@@ -610,5 +663,16 @@
     }
     .speTable >>> .el-checkbox{
         margin-right: 0;
+    }
+    .footBtn{
+        border-top: 1px solid #e0e0e0;
+        height: 40px;
+        line-height: 40px;
+        background-color: #ffffff;
+        position: sticky;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        z-index:1000;
     }
 </style>

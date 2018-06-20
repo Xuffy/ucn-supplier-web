@@ -79,6 +79,7 @@
         <v-table
                 v-loading="loadProductTable"
                 class="speTable"
+                :total-row="totalRow"
                 :data="productTable"
                 :buttons="[{label:'Detail',type:1}]"
                 @action="btnClick"
@@ -129,16 +130,14 @@
                  * */
                 loadProductTable:false,
                 productTable:[],
-
+                totalRow:[],
             }
         },
         methods:{
             getData(){
                 this.loadingTable=true;
                 this.$ajax.get(`${this.$apis.get_outBoundDetail}?id=${this.$route.query.id}`).then(res=>{
-                    console.log(res)
                     this.outboundData=res;
-
                     this.$ajax.post(this.$apis.get_outboundDetailProductData,{
                         outboundId: this.$route.query.id,
                         pn: 1,
@@ -152,6 +151,16 @@
                         // ],
                     }).then(res=>{
                         this.productTable = this.$getDB(this.$db.warehouse.outboundDetailProductData, res.datas);
+                        _.map(res.datas,v=>{
+                            _.map(v,(val,key)=>{
+                                if(key==='outboundSkuTotalQty' || key==='outboundOutCartonTotalQty' || key==='outboundSkuTotalVolume' || key==='outboundSkuTotalNetWeight' || key==='outboundSkuTotalGrossWeight'){
+                                }else{
+                                    v[key]=null;
+                                }
+                            })
+                        })
+
+                        this.totalRow=this.$getDB(this.$db.warehouse.outboundDetailProductData, res.datas);
                         this.loadingTable=false;
                     }).catch(err=>{
                         this.loadingTable=false;
