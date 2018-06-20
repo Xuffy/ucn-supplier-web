@@ -5,10 +5,10 @@ export default {
   time: {
     key: 'submittedTime',
   },
-  descripition: {
+  description: {
     key: 'content',
   },
-  submiter: {
+  submitter: {
     key: 'submittedByUserName',
   },
   taskId: {
