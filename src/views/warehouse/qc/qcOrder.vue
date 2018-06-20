@@ -88,6 +88,8 @@
                         :data="productTable"
                         style="width: 100%;margin-top: 10px"
                         border
+                        :summary-method="getSummaries"
+                        show-summary
                         @selection-change="handleFirstTable">
                     <el-table-column
                             align="center"
@@ -103,8 +105,7 @@
                             width="160">
                         <template slot-scope="scope">
                             <div v-if="v.key==='qcPics'">
-                                {{ scope.row[v.key] }}
-                                <v-upload readonly :limit="20" :list="scope.row[v.key]"></v-upload>
+                                <v-image :src="scope.row[v.key][0]" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key])"></v-image>
                             </div>
                             <div v-else>
                                 {{ scope.row[v.key] }}
@@ -143,7 +144,14 @@
                             :key="v.key"
                             :prop="v.key"
                             width="160">
-                        <template slot-scope="scope">{{ scope.row[v.key] }}</template>
+                        <template slot-scope="scope">
+                            <div v-if="v.key==='qcPics'">
+                                <v-image :src="scope.row[v.key][0]" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key])"></v-image>
+                            </div>
+                            <div v-else>
+                                {{ scope.row[v.key] }}
+                            </div>
+                        </template>
                     </el-table-column>
                     <el-table-column
                             fixed="right"
@@ -177,7 +185,14 @@
                             :key="v.key"
                             :prop="v.key"
                             width="160">
-                        <template slot-scope="scope">{{ scope.row[v.key] }}</template>
+                        <template slot-scope="scope">
+                            <div v-if="v.key==='qcPics'">
+                                <v-image :src="scope.row[v.key][0]" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key])"></v-image>
+                            </div>
+                            <div v-else>
+                                {{ scope.row[v.key] }}
+                            </div>
+                        </template>
                     </el-table-column>
                     <el-table-column
                             fixed="right"
@@ -347,6 +362,8 @@
 
         <v-message-board module="warehouse" code="qcOrderData" :id="$route.query.id"></v-message-board>
 
+        <v-view-picture ref="pics"></v-view-picture>
+
 
 
     </div>
@@ -354,7 +371,7 @@
 
 <script>
 
-    import {VTimeZone,VTable,VMessageBoard,VUpload} from '@/components/index'
+    import {VTimeZone,VTable,VMessageBoard,VUpload,VImage,VViewPicture} from '@/components/index'
 
     export default {
         name: "qcOrder",
@@ -362,7 +379,9 @@
             VTable,
             VTimeZone,
             VMessageBoard,
-            VUpload
+            VUpload,
+            VImage,
+            VViewPicture
         },
         data(){
             return{
@@ -565,6 +584,33 @@
                         id:data.skuId
                     }
                 });
+            },
+            getSummaries(param) {
+                const { columns, data } = param;
+                const sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = this.$i.warehouse.totalMoney;
+                        return;
+                    }else if(index===17 || index===18 || index===21 || index===44 || index===45 || index===46 || index===47 || index===48 || index===49 || index===50 || index===51 || index===52 || index===53 || index===54 || index===67){
+                        const values = data.map(item => Number(item[column.property]));
+                        if (!values.every(value => isNaN(value))) {
+                            sums[index] = values.reduce((prev, curr) => {
+                                const value = Number(curr);
+                                if (!isNaN(value)) {
+                                    return prev + curr;
+                                } else {
+                                    return prev;
+                                }
+                            }, 0);
+                        } else {
+
+                        }
+                    }
+
+                });
+
+                return sums;
             },
 
             /**

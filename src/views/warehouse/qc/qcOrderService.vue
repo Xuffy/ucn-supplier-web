@@ -182,7 +182,9 @@
                     class="product-table"
                     v-loading="loadingProductInfoTable"
                     :data="productInfoData"
-                    height="250"
+                    height="300"
+                    :summary-method="getSummaries"
+                    show-summary
                     border
                     style="width: 100%">
                 <el-table-column
@@ -520,6 +522,33 @@
                     }
                 });
             },
+            getSummaries(param) {
+                const { columns, data } = param;
+                const sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = this.$i.warehouse.totalMoney;
+                        return;
+                    }else if(index===17 || index===18 || index===21 || index===44 || index===45 || index===46 || index===47 || index===48 || index===49 || index===50 || index===51 || index===52 || index===53 || index===54 || index===68){
+                        const values = data.map(item => Number(item[column.property]));
+                        if (!values.every(value => isNaN(value))) {
+                            sums[index] = values.reduce((prev, curr) => {
+                                const value = Number(curr);
+                                if (!isNaN(value)) {
+                                    return prev + curr;
+                                } else {
+                                    return prev;
+                                }
+                            }, 0);
+                        } else {
+
+                        }
+                    }
+
+                });
+
+                return sums;
+            },
 
             submit(){
                 this.qcOrderConfig.qcDate=this.qcDetail.qcDate;
@@ -583,9 +612,8 @@
                     });
                 });
                 _.map(this.qcOrderConfig.qcResultDetailParams,(v,k)=>{
-                    v.qcPic=this.$refs['pictureUpload'+k][0].getFiles();
+                    v.qcPics=this.$refs['pictureUpload'+k][0].getFiles();
                 });
-
                 this.disableClickSubmit=true;
                 this.$ajax.post(this.$apis.save_sellerQcOrder,this.qcOrderConfig).then(res=>{
                     this.disableClickSubmit=false;

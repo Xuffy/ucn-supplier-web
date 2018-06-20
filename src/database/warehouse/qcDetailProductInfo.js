@@ -302,9 +302,10 @@ export default{
         isBarCodeResult:true
     },
     qcPic:{             //服务商上传
-        key: 'qcPic',
+        key: 'qcPics',
         type: 'String',
-        showType:'attachment'
+        showType:'attachment',
+        _image:true
     },
     checkOuterCartonQty:{
         key: 'checkOuterCartonQty',
