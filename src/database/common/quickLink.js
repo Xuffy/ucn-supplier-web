@@ -91,7 +91,7 @@ export default {
     supplier: false,
     server: false,
   },
-  inquiry: {
+  inquiryOverview: {
     icon: 'icon-xunpan',
     link: '/negotiation/inquiry',
     customer: true,
@@ -105,21 +105,21 @@ export default {
     supplier: true,
     server: false,
   },
-  warehouse: { // todo not
+  warehouseOverview: {
     icon: '',
     link: '/warehouse/overview',
     customer: true,
     supplier: true,
     server: false,
   },
-  inbound: {
+  inboundOverview: {
     icon: 'icon-ruku',
     link: '/warehouse/inbound',
     customer: false,
     supplier: true,
     server: false,
   },
-  outbound: {
+  outboundOverview: {
     icon: 'icon-chuku',
     link: '/warehouse/outbound',
     customer: false,
@@ -140,7 +140,7 @@ export default {
     supplier: false,
     server: false,
   },
-  loardinglistOrderOverview: { // todo not
+  loadingListOrderOverview: { // todo not
     icon: '',
     link: '/logistic/planDetail',
     customer: true,

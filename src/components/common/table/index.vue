@@ -36,7 +36,7 @@
             <td v-if="rowspan < 2">
               <div>#</div>
             </td>
-            <td v-for="item in dataColumn" v-if="!item._hide && item.key">
+            <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && item.key">
               <div v-text="item.label">
               </div>
             </td>
@@ -61,7 +61,7 @@
               <div v-text="index + 1"></div>
             </td>
 
-            <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && cItem.key"
+            <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && !cItem._hidden && cItem.key"
                 :style="cItem._style">
               <!-- 是否为图片显示 -->
               <div v-if="!cItem._image"
@@ -95,7 +95,7 @@
             </td>
             <td v-if="rowspan < 2">
             </td>
-            <td v-for="item in dataColumn" v-if="!item._hide && typeof item === 'object'">
+            <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && typeof item === 'object'">
               <div v-text="totalItem[item.key].value"></div>
             </td>
             <td v-if="buttons">

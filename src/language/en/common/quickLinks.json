@@ -12,16 +12,17 @@
   "bookmarkOverview": "Bookmark  Overview",
   "compareInquiryOverview": "Compare inquiry Overview",
   "supplierOverview": "Supplier Overview",
-  "inquiry": "Inquiry Overview",
+  "inquiryOverview": "Inquiry Overview",
   "orderOverview": "Order Overview",
-  "warehouse": "Warehouse",
-  "inbound": "Inbound",
-  "outbound": "Outbound",
+  "warehouseOverview": "Warehouse Overview",
+  "inboundOverview": "Inbound Overview",
+  "outboundOverview": "Outbound Overview",
   "QCOrderOverview": "QC Order Overview",
   "logisticPlanOverview": "Logistic plan Overview",
-  "loardinglistOrderOverview": "Loadinglist Order Overview",
+  "loadingListOrderOverview": "Loading list Order Overview",
   "track": "Track",
   "compareSupplierOverview": "Compare Supplier Overview",
   "productOverview": "Product Overview",
-  "customerOverview": "Customer Overview"
+  "customerOverview": "Customer Overview",
+  "addSupplier": "Add Supplier"
 }
