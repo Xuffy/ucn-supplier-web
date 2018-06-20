@@ -322,29 +322,23 @@ export default {
       return data ? JSON.parse(_.clone(JSON.stringify(data))) : data;
     };
 
-    Vue.prototype.$filterDic = (data, transForm = 'transForm', dataBase = 'dataBase') => {
+    Vue.prototype.$filterDic = (data, transForm = 'transForm') => {
       _.mapObject(data, (val, k) => {
         val.dataType = typeof val.value;
-        if (_.isBoolean(val.value)) {
-          val.value ? val.value = 1 : val.value = 0;
-        }
-        val.defaultData = val.value;
-        val[dataBase] = val.value;
+        val.originValue = val.value;
         if (val[transForm] && !data._remark && ['entryDt', 'updateDt', 'fieldDisplay', 'fieldRemarkDisplay'].indexOf(k) < 0) {
           switch (val[transForm]) {
             case 'time':
-              val.value = DateFormat(val.value, val.time ? val.time : 'yyyy-dd-mm');
+              val._value = DateFormat(val.value, val.time ? val.time : 'yyyy-dd-mm');
               break;
             default:
               if (!store.state.dic.length) return;
               let dic = _.findWhere(store.state.dic, {'code': val[transForm]});
               if (!dic || !dic.codes) return;
               val._option = dic.codes;
-              let code = _.findWhere(val._option, {'code': val[dataBase] + ''});
+              let code = _.findWhere(dic.codes, {'value': val.originValue});
               if (code) {
                 val._value = code.name || code[val.name];
-                val.value = code.code;
-                val[dataBase] = val.value;
               }
           }
         }
