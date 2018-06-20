@@ -45,10 +45,10 @@
               :selection="statusModify"
               :hideFilterColumn="statusModify"/>
           <div class="bom-btn-wrap" v-show="!statusModify">
-            <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
-            <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.dataBase + ''!=='99'||tabData[0].status.dataBase+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button> -->
-            <el-button @click="statusModify = true" :disabled="tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
-            <el-button type="info" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.dataBase+''!== '22'&&tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
+            <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.originValue+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
+            <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.originValue + ''!=='99'||tabData[0].status.originValue+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button> -->
+            <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
+            <el-button type="info" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.originValue+''!== '22'&&tabData[0].status.originValue+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
             <el-button>{{ $i.common.download }}</el-button>
           </div>
           <div class="bom-btn-wrap" v-show="statusModify">
@@ -104,6 +104,8 @@ import {
 import { getData } from '@/service/base';
 import product from '@/views/product/addProduct';
 import { mapActions, mapState } from 'vuex';
+import codeUtils from '@/lib/code-utils';
+
 export default {
   name: 'inquiryDetail',
   data() {
@@ -249,7 +251,7 @@ export default {
           name: 'COUNTRY(国家)',
           codes: res[2]
         });
-        this.setDic(data);
+        this.setDic(codeUtils.convertDicValueType(data));
         return Promise.resolve(data);
       });
     },
@@ -396,7 +398,7 @@ export default {
           if (['fieldDisplay', 'fieldRemarkDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
             return;
           }
-          if (o.value !== o.defaultData) {
+          if (o.value !== o.originValue) {
             o._style = 'background-color:yellow';
             changedFields[field] = '1';
           } else {
@@ -516,7 +518,7 @@ export default {
       let saveData = this.$filterModify(parentNode);
       saveData.attachment = null;
       this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SAVE, saveData).then(res => {
-        this.newTabData[0].status.dataBase = res.status;
+        this.newTabData[0].status.originValue = res.status;
         this.statusModify = false;
         this.getInquiryDetail();
       });
@@ -549,11 +551,7 @@ export default {
         Object.keys(item).forEach(field => {
           let val = item[field];
           if (excludeColumns.indexOf(field) > -1) return;
-          if (val.dataType && val.dataType === 'boolean' && typeof val.value === 'string') {
-            o[field] = val.value === '1' || val.value === 'true';
-          } else {
-            o[field] = val.value;
-          }
+          o[field] = val.value;
         });
         list.push(o);
       }
