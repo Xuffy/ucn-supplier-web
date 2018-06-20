@@ -200,6 +200,7 @@
       },
       setList(list) {
         if (_.isEmpty(list)) {
+          this.fileList = [];
           return false;
         }
 
