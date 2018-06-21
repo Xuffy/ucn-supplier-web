@@ -61,4 +61,9 @@ export default {
         type: 'input',
         belong:'summary'
     },
+    logo:{
+        key: 'logo',
+        type: 'function',
+        belong:'summary'
+    }
 }

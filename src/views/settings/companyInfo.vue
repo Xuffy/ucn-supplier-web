@@ -5,13 +5,6 @@
         </div>
         <div class="summary">
             <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
-               <div style="overflow: hidden">
-                  <v-upload ref="uploadFile" onlyImage style="float: left" />
-                  <!--<img :src="companyInfo.logo" class="logo"/>-->
-                </div>
-                <div class="section-btn" style="padding-top:10px">
-                  <el-button @click="uploadLogo" type="primary">{{$i.button.upload}}</el-button>
-                </div>
                 <el-row class="speZone">
                     <el-col :class="{speCol:v.key!=='description'}" v-if="v.belong==='summary'" v-for="v in $db.setting.companyInfo" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                         <el-form-item class="speWidth" :prop="v.key"  :label="v.label">
@@ -30,7 +23,7 @@
                                             v-for="item in options[v.key]"
                                             :key="item.code"
                                             :label="item.name"
-                                            :value="item.typeCode === 'EL_IS' ? !!parseInt(item.code) : item.code">
+                                            :value="item.typeCode === 'EL_IS' ? !!parseInt(item.code) : Number(item.code) || item.code">
                                     </el-option>
                                 </el-select>
                             </div>
@@ -43,6 +36,14 @@
                                         placeholder="请输入内容"
                                         v-model="companyInfo[v.key]">
                                 </el-input>
+                            </div>
+                            <div v-if="v.type==='function'">
+                                <v-upload 
+                                ref="uploadFile" 
+                                only-image
+                                oss-private 
+                                :list="companyInfo.logo"
+                                :readonly="summaryDisabled"/>
                             </div>
                         </el-form-item>
                     </el-col>
@@ -108,9 +109,9 @@
 
                 <el-tab-pane :label="$i.setting.attachment">
                   <div class="section-btn">
-                    <el-button @click="upload" type="primary">{{$i.button.upload}}</el-button>
+                    <el-button @click="upload" type="primary" >{{$i.button.save}}</el-button>
                   </div>
-                  <v-upload ref="uploadAttachment" :limit="20" />
+                  <v-upload ref="uploadAttachment" :limit="20" oss-private  :list="companyInfo.attachments"/>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -451,7 +452,12 @@
                 this.cloneData=Object.assign({},this.companyInfo);
             },
             saveModifySummary(){
-                let params={
+               if( this.companyInfo.exportLicense ==='yes'){
+                    this.companyInfo.exportLicense = true;
+               }else{
+                    this.companyInfo.exportLicense = false;
+               }
+               let params={
                     city: this.companyInfo.city,
                     country: this.companyInfo.country,
                     currency: this.companyInfo.currency,
@@ -479,6 +485,12 @@
                     this.allowModifySummary=false;
                     this.summaryDisabled=true;
                 });
+                  //logo上传
+                this.logoParmas.id = this.companyInfo.id;
+                this.logoParmas.url = this.$refs.uploadFile[0].getFiles()[0]
+                this.$ajax.post(this.$apis.post_oss_company_upload,this.logoParmas).then(res=>{
+                    this.getWholeData();
+                })
             },
             cancelModifySummary(){
                 this.companyInfo=Object.assign({},this.cloneData);
@@ -632,7 +644,6 @@
                 this.accountDialogVisible=true;
             },
             deleteAccount(e){
-                console.log(e)
                 this.$confirm('确定删除该账户信息?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -737,23 +748,13 @@
            * logo操作
            * */
           uploadLogo(){
-            this.logoParmas.id = this.companyInfo.id;
-            this.logoParmas.url = this.$refs.uploadFile.getFiles()[0];
-            console.log(this.$refs.uploadFile.getFiles()[0])
-            this.$ajax.post(this.$apis.post_oss_company_upload,this.logoParmas).then(res=>{
-              this.getWholeData();
-              this.$message({
-                message: '上传成功',
-                type: 'success'
-              })
-            })
+            
 
           },
            /**
            * Attachment操作
            * */
           upload(){
-            console.log(this.$refs.uploadAttachment.getFiles())
               //ATTACHMENT,文件 PICTURE 图片
             const uploadParams = {
               id: this.companyInfo.id,
@@ -790,9 +791,9 @@
 
                this.getCurrency();
                this.getCountryAll();
-               this.getCodePart();
                this.getDepartment();
                this.getWholeData();
+               this.getCodePart();
             // console.log(this.$db,'db')
         },
         watch:{
@@ -840,6 +841,7 @@
     }
     .summary-btn{
         text-align: center;
+        padding-top: 10px;
     }
     .section-btn{
         margin-bottom: 10px;
