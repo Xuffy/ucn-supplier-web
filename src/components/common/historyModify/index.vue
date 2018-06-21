@@ -20,13 +20,13 @@
 
           <template slot-scope="{ row }" v-if="row[item.key] && !row[item.key]._hide">
             <div v-if="!row[item.key]._edit || row[item.key]._title">
-              {{row[item.key].value}}
+              {{row[item.key]._value || row[item.key].value}}
               <p v-if="row[item.key]._title" v-text="row[item.key]._title"></p>
             </div>
 
             <div v-else>
               <span v-if="(row[item.key]._disabled && !row._remark) || !isModify"
-                    v-text="row[item.key].value"></span>
+                    v-text="row[item.key]._value || row[item.key].value"></span>
 
               <div v-else-if="row[item.key]._slot && !row._remark">
                 <slot :name="item._slot" :data="row[item.key]"></slot>

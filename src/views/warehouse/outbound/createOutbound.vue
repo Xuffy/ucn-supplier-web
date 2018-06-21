@@ -77,9 +77,6 @@
             </el-row>
         </el-form>
 
-        <div class="title">
-            {{$i.warehouse.attachment}}
-        </div>
 
         <div class="title">
             {{$i.warehouse.productInfo}}

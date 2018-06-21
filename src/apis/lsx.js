@@ -6,7 +6,7 @@ export default {
 
 
   get_productCategory: ['/purchase/sys/category', 'UPURCHASE_URL'],
-  get_productDetail: ['/sku/{id}','TEST_CS', 'USUPPLY_URL'],
+  get_productDetail: ['/sku/{id}', 'USUPPLY_URL'],
   delete_product: ['/sku/{id}/delete', 'USUPPLY_URL'],
   change_productStatus: ['/sku/{id}/status', 'USUPPLY_URL'],
   get_productList: ['/sku/listSkuByParams', 'USUPPLY_URL'],

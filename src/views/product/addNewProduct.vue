@@ -25,7 +25,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isCountry">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" multiple filterable placeholder="please choose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" multiple filterable collapse-tags placeholder="please choose">
                                     <el-option
                                             v-for="item in countryOption"
                                             :key="item.id"
@@ -556,7 +556,7 @@
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
                             <div v-if="v.isCountry">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" filterable multiple placeholder="please choose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" filterable multiple collapse-tags placeholder="please choose">
                                     <el-option
                                             v-for="item in countryOption"
                                             :key="item.id"
