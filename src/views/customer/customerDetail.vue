@@ -28,31 +28,31 @@
         <div class="body">
             <el-tabs v-model="tabName" type="card" @tab-click="handleClick">          
                 <el-tab-pane :label="$i.supplier.address" name="address">
-                    <v-table  :data="address"  style='marginTop:10px'/>
+                    <v-table  :data="address"  :selection="false"  style='marginTop:10px'/>
                 </el-tab-pane>
                 
                 <el-tab-pane :label="$i.supplier.contactInfo"  name="concats">
-                    <v-table  :data="concats"  style='marginTop:10px'/>
+                    <v-table  :data="concats"  :selection="false"  style='marginTop:10px'/>
                 </el-tab-pane>
                 
                 <el-tab-pane :label="$i.supplier.documentRequired" name="document">
                     <el-form label-width="200px" :model="documents">
                     <el-row>
                       <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
-                        <el-form-item  :label="$i.setting.documentRequired">
-                          <el-input size="mini" v-model="documents.document"  placeholder="请输入内容"></el-input>
+                        <el-form-item  :label="$i.setting.documentRequired +':'">
+                            <span>{{documents.document}}</span>
                         </el-form-item>
-                        <el-form-item :label="$i.setting.factoryInspectionReport">
-                          <el-input size="mini" v-model="documents.aduitDetails" placeholder="请输入内容"></el-input>
+                        <el-form-item :label="$i.setting.factoryInspectionReport +':'">
+                            <span>{{documents.aduitDetails}}</span>
                         </el-form-item>
-                        <el-form-item  :label="$i.setting.packingList">
-                          <el-input size="mini"  v-model="documents.packingList" placeholder="请输入内容"></el-input>
+                        <el-form-item  :label="$i.setting.packingList +':'">
+                            <span>{{documents.packingList}}</span>
                         </el-form-item>
-                        <el-form-item :label="$i.setting.invoice">
-                          <el-input size="mini" v-model="documents.invoice" placeholder="请输入内容"></el-input>
+                        <el-form-item :label="$i.setting.invoice +':'">
+                            <span>{{documents.invoice}}</span>
                         </el-form-item>
-                        <el-form-item :label="$i.setting.examiningReport">
-                          <el-input size="mini" v-model="documents.examiningReport" placeholder="请输入内容"></el-input>
+                        <el-form-item :label="$i.setting.examiningReport +':'">
+                            <span>{{documents.examiningReport}}</span>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -60,11 +60,11 @@
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.supplier.orderHistory" name="order">
-                    <v-table  :data="tradeHistory"   style='marginTop:10px'/>
+                    <v-table  :data="tradeHistory"  :selection="false"  style='marginTop:10px'/>
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.supplier.inquiryHistory"  name="inquiry">
-                    <v-table  :data="inquiryData"   style='marginTop:10px'/>
+                    <v-table  :data="inquiryData"  :selection="false"  style='marginTop:10px'/>
                 </el-tab-pane>
 
                 <el-tab-pane label="attachment" name="attchment">
@@ -76,13 +76,14 @@
 
                  <el-tab-pane :label="$i.supplier.remark" name="remark">
                     <div class="section-btn">
-                    <el-button  @click="createRemark" type="primary">{{$i.button.add}}</el-button>
+                    <el-button  @click="createRemark"   type="primary">{{$i.button.add}}</el-button>
                     </div>
                   <v-table
                     :data="remarkData"
                     style='marginTop:10px'
-                    :buttons="[{label: 'view', type: 1},{label: 'modify', type: 2},{label: 'delete', type: 3}]"
-                    @action="remarkAction"/>
+                    :buttons="[{label: 'Modify', type: 2},{label: 'Delete', type: 3}]"
+                    @action="remarkAction"
+                    :selection="false"/>
                 </el-tab-pane>
 
             </el-tabs>
@@ -102,22 +103,6 @@
               <el-button @click="addRemarkFormVisible = false">{{$i.button.cancel}}</el-button>
             </div>
         </el-dialog>
-
-         <el-dialog :title="$i.supplier.remark" :visible.sync="lookRemarkFormVisible" center width="600px">
-            <el-form :model="addRemarkData">
-              <el-form-item :label="$i.supplier.remark" :label-width="formLabelWidth">
-                <el-input
-                  type="textarea"
-                  :rows="4"
-                  v-model="addRemarkData.remark">
-                </el-input>
-              </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-              <!--<el-button :loading="disableCreateRemark" type="primary" >{{$i.button.submit}}</el-button>-->
-              <el-button @click="lookRemarkFormVisible = false">{{$i.button.cancel}}</el-button>
-            </div>
-          </el-dialog>
 
     </div>
 </template>
@@ -196,7 +181,7 @@
                     case 4:
                     this.getInquiryHistory();
                     break;
-                    case 5:
+                    case 6:
                     this.getListRemark();
                     break;
                 }
@@ -208,7 +193,12 @@
                 }
                 this.$ajax.post(`${this.$apis.post_getCustomerListRemark}/${this.id}`,remark)
                 .then(res => {
-                    this.remarkData = this.$getDB(this.$db.supplier.detailTable, res.datas);
+                    this.remarkData = this.$getDB(this.$db.supplier.remark, res.datas, item=>{
+                        _.mapObject(item, val => {
+                            val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                            return val
+                        })
+                    });
                 })
                 .catch((res) => {
                     console.log(res)
@@ -227,17 +217,8 @@
               this.addRemarkFormVisible=true;
               this.addRemarkData = {}
             },
-            lookRemark(e){
-              var result = {}
-              result.remark = e.remark.value;
-              this.addRemarkData=Object.assign({}, result);
-              this.lookRemarkFormVisible=true;
-            },
             remarkAction(item,type){
               switch(type) {
-                case 1:
-                  this.lookRemark(item);
-                  break;
                 case 2:
                   this.modifyRemark(item);
                   break;
@@ -343,7 +324,12 @@
                 this.loading = true;
                 this.orderHistoryData.customerCompanyId = Number(this.$route.query.companyId);
                 this.$ajax.post(this.$apis.post_supply_supplier_orderHistory,this.orderHistoryData).then(res=>{
-                    this.tradeHistory = this.$getDB(this.$db.supplier.detailTable, res.datas);
+                    this.tradeHistory = this.$getDB(this.$db.supplier.detailTable, res.datas, item =>{
+                         _.mapObject(item, val => {
+                            val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                            return val
+                        })
+                    });
                    this.loading = false
                 })
                 .catch((res) => {
@@ -355,7 +341,12 @@
                 this.inquiryHistoryData.companyId = Number(this.$route.query.companyId);
                 this.loading = true;
                 this.$ajax.post(this.$apis.post_supply_supplier_getInquiryHistory,this.inquiryHistoryData).then(res=>{
-                   this.inquiryData = this.$getDB(this.$db.supplier.detailTable, res.datas);  
+                   this.inquiryData = this.$getDB(this.$db.supplier.detailTable, res.datas, item => {
+                        _.mapObject(item, val => {
+                            val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                            return val
+                        })
+                   });  
                    this.loading = false
                 })
                 .catch((res) => {
