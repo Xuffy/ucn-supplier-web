@@ -37,7 +37,7 @@
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
       <div class="hd active">
-        <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.logistic.Dept }}</el-button>
+        <el-button type="primary" size="mini" :disabled="dunningDisabled" @click.stop="batchDunning">{{ $i.logistic.Dept }}</el-button>
       </div>
       <payment ref="payment" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView" :currencyCode="oldPlanObject.currency"/>
     </div>
@@ -45,7 +45,7 @@
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <!-- <v-table :data.sync="productList" @action="action" :buttons="edit ? productbButtons : null" @change-checked="selectProduct"> -->
-      <v-table :data.sync="productList" @action="action" :buttons="productbButtons" @change-checked="selectProduct">
+      <v-table code="ulogistics_PlanDetail" :data.sync="productList" @action="action" :buttons="productbButtons" @change-checked="selectProduct">
         <div slot="header" class="product-header" v-if="edit">
           <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.logistic.addProduct }}</el-button>
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
@@ -91,6 +91,7 @@ export default {
   name: 'logisticPlanDetail',
   data() {
     return {
+      dunningDisabled:false,
       modefiyProductIndex: 0,
       modefiyProductIndexArr:[],
       attachmentList:[],
@@ -255,6 +256,20 @@ export default {
       })
       this.$set(this.inintData,'ExchangeRateInfoArr',this.$depthClone(this.ExchangeRateInfoArr));
     },
+    batchDunning(){
+      let argArr = [];
+      this.paymentList.forEach((item)=>{
+        if(item.planPayAmount>item.actualPayAmount){
+          argArr.push({'id':item.id,'version':item.version})
+        }
+      });
+      this.$ajax.post(`${this.$apis.logistics_payment_batchDunning}`,argArr).then(res => {
+        this.$message({
+          type: 'success',
+          message: '催款成功!'
+        })
+      })
+    },
     registerRoutes () {
       this.$store.commit('SETDRAFT', {
         name: 'overviewDraft',
@@ -322,6 +337,7 @@ export default {
     createdPaymentData (res = this.oldPaymentObject) {
       this.oldPaymentObject = JSON.parse(JSON.stringify(res))
       this.paymentList = res.datas
+      this.dunningDisabled = this.paymentList.every((item)=> item.planPayAmount > item.actualPayAmount);
       this.paymentSum = res.statisticsDatas[0]
     },
     getNewLogisticsNo () {
@@ -359,7 +375,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.selectionContainer.forEach(i => this.arraySplite(this.containerInfo, i))
+        this.oldPlanObject.rmContainerDetail = this.selectionContainer.map((item)=>{
+          return item.id;
+        })
+        this.containerInfo = _.difference(this.containerInfo,this.selectionContainer);
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -680,7 +699,6 @@ export default {
       if(!this.planId){
         this.oldPlanObject.fieldDisplay = null;
       }
-      console.log(this.$validateForm(this.oldPlanObject,this.$db.logistic.basicInfoObj))
       if(this.$validateForm(this.oldPlanObject,this.$db.logistic.basicInfoObj)){
         return;
       }
