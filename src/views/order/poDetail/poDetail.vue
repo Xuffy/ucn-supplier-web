@@ -543,27 +543,36 @@
                 :title="$i.order.addProduct"
                 :visible.sync="productTableDialogVisible"
                 width="70%">
-            <el-tabs v-model="activeTab" type="card" @tab-click="handleClick">
-                <el-tab-pane :label="$i.order.fromNewSearch" name="product">
-                    <v-product
-                            :disabledLine="disabledProductLine"
-                            :forceUpdateNumber="updateProduct"
-                            :hideBtn="true"
-                            :isInModify="true"
-                            :type="type1"
-                            @handleOK="handleProductOk"></v-product>
-                </el-tab-pane>
-                <el-tab-pane :label="$i.order.fromBookmark" name="bookmark">
-                    <v-product
-                            :disablePostCustomerCreate="true"
-                            :disabledLine="disabledProductLine"
-                            :forceUpdateNumber="updateBookmark"
-                            :hideBtn="true"
-                            :isInModify="true"
-                            @handleOK="handleProductOk"
-                            :type="type2"></v-product>
-                </el-tab-pane>
-            </el-tabs>
+            <v-product
+                    :disabledLine="disabledProductLine"
+                    :forceUpdateNumber="updateProduct"
+                    :hideBtn="true"
+                    :isInModify="true"
+                    :type="type1"
+                    @handleOK="handleProductOk"></v-product>
+
+
+            <!--<el-tabs v-model="activeTab" type="card" @tab-click="handleClick">-->
+                <!--<el-tab-pane :label="$i.order.fromNewSearch" name="product">-->
+                    <!--<v-product-->
+                            <!--:disabledLine="disabledProductLine"-->
+                            <!--:forceUpdateNumber="updateProduct"-->
+                            <!--:hideBtn="true"-->
+                            <!--:isInModify="true"-->
+                            <!--:type="type1"-->
+                            <!--@handleOK="handleProductOk"></v-product>-->
+                <!--</el-tab-pane>-->
+                <!--<el-tab-pane :label="$i.order.fromBookmark" name="bookmark">-->
+                    <!--<v-product-->
+                            <!--:disablePostCustomerCreate="true"-->
+                            <!--:disabledLine="disabledProductLine"-->
+                            <!--:forceUpdateNumber="updateBookmark"-->
+                            <!--:hideBtn="true"-->
+                            <!--:isInModify="true"-->
+                            <!--@handleOK="handleProductOk"-->
+                            <!--:type="type2"></v-product>-->
+                <!--</el-tab-pane>-->
+            <!--</el-tabs>-->
         </el-dialog>
 
         <v-history-modify
@@ -761,6 +770,7 @@
                     class="speNumber spx"
                     :controls="false"
                     slot="skuPrice"
+                    :disabled="true"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
             <el-input-number
