@@ -498,7 +498,7 @@
                 <div v-else>
                     <el-button :disabled="loadingPage || disableModify || hasCancelOrder" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
                     <el-button :disabled="loadingPage || disableConfirm || hasCancelOrder" @click="confirmOrder" type="primary">{{$i.order.confirm}}</el-button>
-                    <el-button :disabled="loadingPage || hasCancelOrder" @click="cancelOrder" type="danger">{{$i.order.cancelOrder}}</el-button>
+                    <el-button :disabled="loadingPage || hasCancelOrder" @click="refuseOrder" type="danger">{{$i.order.cancelOrder}}</el-button>
                     <el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
                 </div>
             </div>
@@ -1471,6 +1471,7 @@
                     if(_.isArray(v.skuLabelPic)){
                         v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
                     }
+                    v.skuSample=v.skuSample==='1'?true:false;
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
                 this.disableClickSend=true;
