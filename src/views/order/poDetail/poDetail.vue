@@ -569,9 +569,6 @@
         <v-history-modify
                 @save="saveNegotiate"
                 ref="HM">
-            <!--<div slot="skuPic" slot-scope="{data}">-->
-            <!--<v-upload :limit="20" readonly></v-upload>-->
-            <!--</div>-->
             <el-select
                     slot="skuFobCurrency"
                     v-model="data.value"
@@ -626,7 +623,7 @@
             </el-select>
             <el-select
                     slot="skuUnit"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -634,12 +631,12 @@
                         v-for="item in skuUnitOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
                     slot="skuUnitWeight"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -647,12 +644,12 @@
                         v-for="item in weightOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
                     slot="skuUnitLength"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -660,12 +657,12 @@
                         v-for="item in lengthOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
                     slot="skuUnitVolume"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -673,12 +670,12 @@
                         v-for="item in volumeOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
                     slot="skuExpireUnit"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -686,12 +683,12 @@
                         v-for="item in expirationDateOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
                     slot="skuSample"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -699,7 +696,33 @@
                         v-for="item in isNeedSampleOption"
                         :key="item.id"
                         :label="item.name"
+                        :value="item.name">
+                </el-option>
+            </el-select>
+            <el-select
+                    slot="skuInspectQuarantineCategory"
+                    v-model="data.value"
+                    slot-scope="{data}"
+                    clearable
+                    :placeholder="$i.order.pleaseChoose">
+                <el-option
+                        v-for="item in quarantineTypeOption"
+                        :key="item.id"
+                        :label="item.name"
                         :value="item.code">
+                </el-option>
+            </el-select>
+            <el-select
+                    slot="skuStatus"
+                    v-model="data._value"
+                    slot-scope="{data}"
+                    clearable
+                    :placeholder="$i.order.pleaseChoose">
+                <el-option
+                        v-for="item in skuStatusOption"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.name">
                 </el-option>
             </el-select>
 
@@ -924,22 +947,27 @@
                     slot="skuSamplePrice"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
-
-
-            <el-date-picker
-                    class="spx"
+            <el-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    :controls="false"
                     slot="skuDeliveryDates"
                     slot-scope="{data}"
-                    v-model="data.value"
-                    align="right"
-                    type="date"
-                    :placeholder="$i.order.pleaseChoose"
-                    :picker-options="pickerOptions1">
-            </el-date-picker>
+                    v-model="data.value"></el-input-number>
 
+            <!--<el-date-picker-->
+            <!--class="spx"-->
+            <!--slot="skuDeliveryDates"-->
+            <!--slot-scope="{data}"-->
+            <!--v-model="data.value"-->
+            <!--align="right"-->
+            <!--type="date"-->
+            <!--:placeholder="$i.order.pleaseChoose"-->
+            <!--:picker-options="pickerOptions1">-->
+            <!--</el-date-picker>-->
 
             <div slot="skuLabelPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuLabelPic" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
             <div slot="skuPkgMethodPic" slot-scope="{data}">
                 <v-upload ref="uploadSkuPkgMethodPic" :limit="20"></v-upload>
@@ -1002,6 +1030,8 @@
                 isNeedSampleOption:[],
                 orderStatusOption:[],
                 countryOption:[],
+                quarantineTypeOption:[],
+
 
                 /**
                  * 底部按钮禁用状态
@@ -1029,26 +1059,6 @@
                     disabledDate(time) {
                         return time.getTime() > Date.now();
                     },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
                 },
                 quickCreateDialogVisible:false,
                 tableData:[],
@@ -1333,6 +1343,8 @@
                             this.isNeedSampleOption=v.codes;
                         }else if(v.code==='ORDER_STATUS'){
                             this.orderStatusOption=v.codes;
+                        }else if(v.code==='QUARANTINE_TYPE'){
+                            this.quarantineTypeOption=v.codes;
                         }
                     })
                 }).finally(err=>{
@@ -1364,6 +1376,20 @@
                     orderId:this.$route.query.orderId,
                 }).then(res=>{
                     this.orderForm=res;
+                    if(this.orderForm.status==='2' || this.orderForm.status==='3' || this.orderForm.status==='5'){
+                        this.skuStatusOption=[
+                            {
+                                code:'1',
+                                name:'Process'
+                            },
+                            {
+                                code:'0',
+                                name:'Cancel'
+                            }
+                        ];
+                    }else{
+                        this.skuStatusOption=[];
+                    }
                     _.map(this.supplierOption,v=>{
                         if(v.code===res.supplierCode){
                             this.orderForm.supplierName=v.id;
@@ -1371,16 +1397,26 @@
                     });
                     this.changePayment(res.payment);
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
+                        item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                        item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                        item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                        item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
+                        item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+                        item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
+                        }else{
+                            item.skuSample._value=item.skuSample.value?'YES':'NO';
+                            item.skuSample.value=item.skuSample.value?'1':'0';
                         }
                     });
                     this.productTableData=[];
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     });
-                    this.markImportant=this.orderForm.importantCustomer;
+                    this.markImportant=this.orderForm.importantSupplier;
 
                     //判断底部按钮能不能点
                     if(res.status!=='1' && res.status!=='3' && res.status!=='4'){
@@ -1405,7 +1441,6 @@
 
                     //情况选中的product
                     this.selectProductInfoTable=[];
-
 
                     /**
                      * 获取payment数据
@@ -1438,7 +1473,6 @@
                     }
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
-
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
                     console.log(res)
@@ -1526,8 +1560,6 @@
             productInfoAction(e,type){
                 if(type==='negotiate'){
                     let arr=[];
-                    console.log(e.skuSysCode.value,'e????')
-                    console.log(this.productTableData)
                     _.map(this.productTableData,v=>{
                         if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
                             arr.push(v);
@@ -1540,6 +1572,28 @@
                         params:{
                             id:e.skuId.value
                         }
+                    })
+                }else if(type==='history'){
+                    let param={
+                        operatorFilters: [],
+                        orderId: this.$route.query.orderId,
+                        pn: 1,
+                        ps: 50,
+                        skuId: e.skuId.value,
+                        sorts: [],
+                    };
+                    let data=_.filter(this.productTableData, (m) =>
+                        m.skuSysCode.value === e.skuSysCode.value
+                    );
+                    console.log(param)
+                    this.$ajax.post(this.$apis.ORDER_HISTORY,param).then(res=>{
+                        let arr=[];
+                        _.map(res.datas,v=>{
+                            arr.push(JSON.parse(v.history));
+                        });
+                        this.$refs.HM.init(data,this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(arr, 'skuSysCode')),false);
+                    }).finally(()=>{
+
                     })
                 }
             },
@@ -1605,6 +1659,7 @@
                 });
             },
             saveNegotiate(e){
+                console.log(e,'e')
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
@@ -1632,7 +1687,25 @@
                             if (json[k] === 'fieldRemark') {
                                 json[k] = jsons;
                             } else {
-                                json[k] = item[k].value;
+                                if(item[k]._value){
+                                    if(item[k].key==='skuUnit'){
+                                        json[k]=_.findWhere(this.skuUnitOption,{name:item[k]._value}).code;
+                                    }else if(item[k].key==='skuUnitWeight'){
+                                        json[k]=_.findWhere(this.weightOption,{name:item[k]._value}).code;
+                                    }else if(item[k].key==='skuUnitLength'){
+                                        json[k]=_.findWhere(this.lengthOption,{name:item[k]._value}).code;
+                                    }else if(item[k].key==='skuUnitVolume'){
+                                        json[k]=_.findWhere(this.volumeOption,{name:item[k]._value}).code;
+                                    }else if(item[k].key==='skuExpireUnit'){
+                                        json[k]=_.findWhere(this.expirationDateOption,{name:item[k]._value}).code;
+                                    }else if(item[k].key==='skuStatus'){
+                                        json[k]=_.findWhere(this.skuStatusOption,{name:item[k]._value}).code;
+                                    }else if(item[k].key==='skuSample'){
+                                        json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
+                                    }
+                                }else{
+                                    json[k] = item[k].value;
+                                }
                             }
                         };
                         arr.push(json);
@@ -1867,7 +1940,7 @@
             },
             changeMarkImportant(e){
                 this.$ajax.post(this.$apis.ORDER_MARK,{
-                    importantCustomer: e,
+                    importantSupplier: e,
                     ids: [this.orderForm.id],
                 }).then(res=>{
                     this.$message({

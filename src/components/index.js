@@ -4,7 +4,6 @@ import VImage from './common/image/index';
 import VTimeZone from './common/timeZone/index';
 import VImportTemplate from './common/importTemplate/index';
 import VTable from './common/table/index';
-// import VTableFilter from './common/table/filter';
 import VPagination from './common/table/pagination';
 import VHistoryModify from './common/historyModify';
 import dropDown from './common/fnCompon/dropDown';
@@ -16,8 +15,6 @@ import VMessageBoard from './common/messageBoard/index';
 import selectSearch from './common/fnCompon/selectSearch';
 import VViewPicture from './common/viewPicture/index';
 import compareList from '@/views/product/compareList';
-
-import bigPhoto from './common/bigPhoto/bigPhoto';
 import containerInfo from '@/views/logistic/children/containerInfo';
 import dropDownSingle from './common/fnCompon/dropDownSingle';
 import VAddQuickLink from './common/addQuickLink/index';
@@ -40,8 +37,6 @@ export {
   VFilterValue,
   messageBoard,
   selectSearch,
-  // product,                      //product页面组件
-  bigPhoto,
   VViewPicture,
   compareList,
   containerInfo,
@@ -49,5 +44,4 @@ export {
   paymentTable,
   VHistory,
   addNewInqury
-//timeSelection
 }

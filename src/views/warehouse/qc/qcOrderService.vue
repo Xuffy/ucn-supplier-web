@@ -12,12 +12,11 @@
                     <el-col v-for="(v,k) in $db.warehouse.qcOrderDetailBasicInfo" :key="v.key" class="speCol" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                         <el-form-item :label="$i.warehouse[v.key]">
                             <div v-if="v.type==='input'">
-
-                                    <el-input
-                                            v-model="qcDetail[v.key]"
-                                            :disabled="v.disabled">
-                                    </el-input>
-
+                                <el-input
+                                        class="speInput"
+                                        v-model="qcDetail[v.key]"
+                                        :disabled="v.disabled">
+                                </el-input>
                             </div>
                             <div v-else-if="v.type==='select'">
                                 <el-select
@@ -179,12 +178,13 @@
             <div class="second-title">
                 {{$i.warehouse.productInfo}}
             </div>
-
             <el-table
                     class="product-table"
                     v-loading="loadingProductInfoTable"
                     :data="productInfoData"
-                    height="250"
+                    height="300"
+                    :summary-method="getSummaries"
+                    show-summary
                     border
                     style="width: 100%">
                 <el-table-column
@@ -247,9 +247,17 @@
                         </div>
                     </template>
                 </el-table-column>
+                <el-table-column
+                        fixed="right"
+                        align="center"
+                        :label="$i.warehouse.detail"
+                        width="100">
+                    <template slot-scope="scope">
+                        <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
-
 
 
         <div class="summary">
@@ -506,6 +514,41 @@
             changeChecked(e){
                 this.selectList=e;
             },
+            handleClick(data){
+                this.$windowOpen({
+                    url:'/product/detail',
+                    params:{
+                        id:data.skuId
+                    }
+                });
+            },
+            getSummaries(param) {
+                const { columns, data } = param;
+                const sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = this.$i.warehouse.totalMoney;
+                        return;
+                    }else if(index===17 || index===18 || index===21 || index===44 || index===45 || index===46 || index===47 || index===48 || index===49 || index===50 || index===51 || index===52 || index===53 || index===54 || index===68){
+                        const values = data.map(item => Number(item[column.property]));
+                        if (!values.every(value => isNaN(value))) {
+                            sums[index] = values.reduce((prev, curr) => {
+                                const value = Number(curr);
+                                if (!isNaN(value)) {
+                                    return prev + curr;
+                                } else {
+                                    return prev;
+                                }
+                            }, 0);
+                        } else {
+
+                        }
+                    }
+
+                });
+
+                return sums;
+            },
 
             submit(){
                 this.qcOrderConfig.qcDate=this.qcDetail.qcDate;
@@ -569,9 +612,8 @@
                     });
                 });
                 _.map(this.qcOrderConfig.qcResultDetailParams,(v,k)=>{
-                    v.qcPic=this.$refs['pictureUpload'+k][0].getFiles();
+                    v.qcPics=this.$refs['pictureUpload'+k][0].getFiles();
                 });
-
                 this.disableClickSubmit=true;
                 this.$ajax.post(this.$apis.save_sellerQcOrder,this.qcOrderConfig).then(res=>{
                     this.disableClickSubmit=false;
@@ -686,7 +728,7 @@
     }
 
     .speInput{
-        width: 100%;
+        width: 80%;
     }
 
     .product-table >>> .el-checkbox{

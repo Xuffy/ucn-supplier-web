@@ -672,7 +672,7 @@
 
         <div class="title">{{$i.product.attachment}}</div>
         <div style="margin-bottom: 20px">
-            <v-upload :list="productForm.attachments" :limit="20" ref="uploadAttachment"></v-upload>
+            <v-upload oss-private :list="productForm.attachments" :limit="20" ref="uploadAttachment"></v-upload>
         </div>
 
         <div class="footBtn">
@@ -793,26 +793,6 @@
                     disabledDate(time) {
                         return time.getTime() > Date.now();
                     },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
                 },
                 categoryList:[
                     {
@@ -1245,9 +1225,11 @@
 
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
+                    console.log(param,'param')
+
                     this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
                         this.$message({
-                            message: '修改成功',
+                            message: this.$i.product.modifySuccess,
                             type: 'success'
                         });
                         this.disabledSubmit=false;
@@ -1318,6 +1300,7 @@
                             }
                         }
                     });
+                    console.log(this.productForm,'this.productForm')
                     this.loadingData=false;
                 }).catch(err=>{
                     this.loadingData=false;
@@ -1403,7 +1386,6 @@
                 this.loadingData=true;
                 this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT'],{cache:true}).then(res=>{
                     res.forEach(v=>{
-                        console.log(res)
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
                         }else if(v.code==='WT_UNIT'){

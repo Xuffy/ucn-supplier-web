@@ -378,7 +378,6 @@
                     });
                 });
                 this.outboundData.attachments = this.$refs.attachmentUpload[0].getFiles();
-
                 this.disabledSubmit = true;
                 this.$ajax.post(this.$apis.add_outbound, this.outboundData).then(res => {
                     this.disabledSubmit = false;

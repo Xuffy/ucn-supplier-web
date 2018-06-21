@@ -88,6 +88,8 @@
                         :data="productTable"
                         style="width: 100%;margin-top: 10px"
                         border
+                        :summary-method="getSummaries"
+                        show-summary
                         @selection-change="handleFirstTable">
                     <el-table-column
                             align="center"
@@ -101,7 +103,23 @@
                             :key="v.key"
                             :prop="v.key"
                             width="160">
-                        <template slot-scope="scope">{{ scope.row[v.key] }}</template>
+                        <template slot-scope="scope">
+                            <div v-if="v.key==='qcPics'">
+                                <v-image :src="scope.row[v.key][0]" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key])"></v-image>
+                            </div>
+                            <div v-else>
+                                {{ scope.row[v.key] }}
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            align="center"
+                            :label="$i.warehouse.detail"
+                            width="100">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-tab-pane>
@@ -126,7 +144,23 @@
                             :key="v.key"
                             :prop="v.key"
                             width="160">
-                        <template slot-scope="scope">{{ scope.row[v.key] }}</template>
+                        <template slot-scope="scope">
+                            <div v-if="v.key==='qcPics'">
+                                <v-image :src="scope.row[v.key][0]" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key])"></v-image>
+                            </div>
+                            <div v-else>
+                                {{ scope.row[v.key] }}
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            align="center"
+                            :label="$i.warehouse.detail"
+                            width="100">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-tab-pane>
@@ -151,7 +185,23 @@
                             :key="v.key"
                             :prop="v.key"
                             width="160">
-                        <template slot-scope="scope">{{ scope.row[v.key] }}</template>
+                        <template slot-scope="scope">
+                            <div v-if="v.key==='qcPics'">
+                                <v-image :src="scope.row[v.key][0]" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key])"></v-image>
+                            </div>
+                            <div v-else>
+                                {{ scope.row[v.key] }}
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            align="center"
+                            :label="$i.warehouse.detail"
+                            width="100">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-tab-pane>
@@ -278,6 +328,13 @@
             </el-form>
         </div>
 
+
+        <div class="footBtn">
+            <el-button :disabled="loadingTable" type="danger" @click="cancel">{{$i.warehouse.cancel}}</el-button>
+        </div>
+
+
+
         <el-dialog width="40%" title="将QC数据更新到产品库" :visible.sync="dialogFormVisible">
             <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAll">全选</el-checkbox>
             <el-checkbox-group v-model="acceptConfig.fields" @change="handleCheckedCitiesChange">
@@ -305,6 +362,8 @@
 
         <v-message-board module="warehouse" code="qcOrderData" :id="$route.query.id"></v-message-board>
 
+        <v-view-picture ref="pics"></v-view-picture>
+
 
 
     </div>
@@ -312,7 +371,7 @@
 
 <script>
 
-    import {VTimeZone,VTable,VMessageBoard,VUpload} from '@/components/index'
+    import {VTimeZone,VTable,VMessageBoard,VUpload,VImage,VViewPicture} from '@/components/index'
 
     export default {
         name: "qcOrder",
@@ -320,7 +379,9 @@
             VTable,
             VTimeZone,
             VMessageBoard,
-            VUpload
+            VUpload,
+            VImage,
+            VViewPicture
         },
         data(){
             return{
@@ -443,6 +504,9 @@
                     return 1;
                 }
             },
+            cancel(){
+                window.close();
+            },
 
 
             /**
@@ -512,6 +576,41 @@
 
 
 
+            },
+            handleClick(data){
+                this.$windowOpen({
+                    url:'/product/detail',
+                    params:{
+                        id:data.skuId
+                    }
+                });
+            },
+            getSummaries(param) {
+                const { columns, data } = param;
+                const sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = this.$i.warehouse.totalMoney;
+                        return;
+                    }else if(index===17 || index===18 || index===21 || index===44 || index===45 || index===46 || index===47 || index===48 || index===49 || index===50 || index===51 || index===52 || index===53 || index===54 || index===67){
+                        const values = data.map(item => Number(item[column.property]));
+                        if (!values.every(value => isNaN(value))) {
+                            sums[index] = values.reduce((prev, curr) => {
+                                const value = Number(curr);
+                                if (!isNaN(value)) {
+                                    return prev + curr;
+                                } else {
+                                    return prev;
+                                }
+                            }, 0);
+                        } else {
+
+                        }
+                    }
+
+                });
+
+                return sums;
             },
 
             /**
@@ -610,5 +709,16 @@
     }
     .speTable >>> .el-checkbox{
         margin-right: 0;
+    }
+    .footBtn{
+        border-top: 1px solid #e0e0e0;
+        height: 40px;
+        line-height: 40px;
+        background-color: #ffffff;
+        position: sticky;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        z-index:1000;
     }
 </style>

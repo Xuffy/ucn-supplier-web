@@ -6,7 +6,7 @@ export default {
 
 
   get_productCategory: ['/purchase/sys/category', 'UPURCHASE_URL'],
-  get_productDetail: ['/sku/{id}', 'USUPPLY_URL'],
+  get_productDetail: ['/sku/{id}','TEST_CS', 'USUPPLY_URL'],
   delete_product: ['/sku/{id}/delete', 'USUPPLY_URL'],
   change_productStatus: ['/sku/{id}/status', 'USUPPLY_URL'],
   get_productList: ['/sku/listSkuByParams', 'USUPPLY_URL'],
@@ -45,7 +45,7 @@ export default {
   delete_sellerProduct: ['/sku/deleteAll', 'USUPPLY_URL'],
   get_sellerCustomer: ['/supplier/sku/setting/listCustomers', 'USUPPLY_URL'],
   get_sellerCustomerGroup: ['/supplier/sku/setting/getCustomerByIds', 'USUPPLY_URL'],
-  update_buyerProductDetail: ['/sku/{id}', 'USUPPLY_URL'],
+  update_buyerProductDetail: ['/sku/{id}','TEST_CS', 'USUPPLY_URL'],
   get_sellerProductList: ['/sku/listSkuByParams', 'USUPPLY_URL'],
 
   //product buyer
