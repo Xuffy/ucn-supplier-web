@@ -19,12 +19,18 @@ export default {
     supplierCompanyName:{
         key: 'name',
         type: 'input',
-        belong:'summary'
+        belong:'summary',
+        _rules:{
+            required:true,
+          }
     },
     supplierType:{
         key: 'type',
         type: 'select',
-        belong:'summary'
+        belong:'summary',
+        _rules:{
+            required:true,
+          }
     },
     country:{
         key: 'country',

@@ -7,7 +7,7 @@
             <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
                 <el-row class="speZone">
                     <el-col :class="{speCol:v.key!=='description'}" v-if="v.belong==='summary'" v-for="v in $db.setting.companyInfo" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
-                        <el-form-item class="speWidth" :prop="v.key"  :label="v.label">
+                        <el-form-item class="speWidth"   :label="v.label" :required="v._rules?v._rules.required:false">
                             <div v-if="v.type==='input'">
                                 <el-input
                                         :disabled="v.key==='code' ? true :summaryDisabled"
@@ -70,8 +70,9 @@
                         <v-table
                         :data="addressDatas"
                         :height="500"
-                        :buttons="[{label: 'modify', type: 1},{label: 'delete', type: 2}]"
+                        :buttons="[{label: 'Modify', type: 1},{label: 'Delete', type: 2}]"
                         @action="btnAddressClick"
+                        :selection="false"
                         />
                     </div>
                 </el-tab-pane>
@@ -84,8 +85,9 @@
                             <v-table
                             :data="accountsData"
                             :height="500"
-                            :buttons="[{label: 'modify', type: 1},{label: 'delete', type: 2}]"
+                            :buttons="[{label: 'Modify', type: 1},{label: 'Delete', type: 2}]"
                             @action="btnClick"
+                            :selection="false"
                             />
                         </div>
                     </div>
@@ -100,8 +102,9 @@
                             <v-table
                             :data="contactDatas"
                             :height="500"
-                            :buttons="[{label: 'modify', type: 1},{label: 'delete', type: 2}]"
+                            :buttons="[{label: 'Modify', type: 1},{label: 'Delete', type: 2}]"
                             @action="btnContactClick"
+                            :selection="false"
                             />
                         </div>
                     </div>
@@ -120,12 +123,12 @@
             <el-form label-width="200px" :model="addressData">
                 <el-row>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.factoryName">
+                    <el-form-item  :label="$i.setting.factoryName" required>
                       <el-input size="mini" v-model="addressData.name" placeholder="请输入内容" required="required"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                  <el-form-item  :label="$i.setting.factoryAddress">
+                  <el-form-item  :label="$i.setting.factoryAddress" required>
                      <el-input size="mini" v-model="addressData.address" placeholder="请输入内容" required="required"></el-input>
                   </el-form-item>
                 </el-col>
@@ -135,12 +138,12 @@
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.ContacctPerson1">
+                    <el-form-item  :label="$i.setting.ContacctPerson1" required>
                       <el-input size="mini" v-model="addressData.contactPerson1" placeholder="请输入内容" required="required"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.contactPhoneNo1">
+                    <el-form-item  :label="$i.setting.contactPhoneNo1" required>
                       <el-input size="mini" v-model="addressData.concatPhone1" placeholder="请输入内容" required="required"></el-input>
                     </el-form-item>
                   </el-col>
@@ -166,12 +169,12 @@
             <el-form label-width="200px" :model="accountData">
                 <el-row>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item  :label="$i.setting.beneficiaryName">
+                        <el-form-item  :label="$i.setting.beneficiaryName" required>
                             <el-input size="mini" v-model="accountData.beneficiaryName" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item  :label="$i.setting.beneficiaryAccount">
+                        <el-form-item  :label="$i.setting.beneficiaryAccount" required>
                             <el-input size="mini" v-model="accountData.beneficiaryAccount" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
@@ -219,7 +222,7 @@
         <el-form label-width="200px" :model="contactData">
           <el-row>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item  :label="$i.setting.name">
+              <el-form-item  :label="$i.setting.name" required>
                 <el-input size="mini" v-model="contactData.name" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
@@ -242,7 +245,7 @@
                 </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.mobileNumber">
+                <el-form-item  :label="$i.setting.mobileNumber" required>
                   <el-input size="mini" v-model="contactData.cellphone" placeholder="请输入内容"></el-input>
                 </el-form-item>
             </el-col>
@@ -267,7 +270,7 @@
                 </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.QQ">
+                <el-form-item  :label="$i.setting.qq">
                     <el-input size="mini" v-model="contactData.qq" placeholder="请输入内容"></el-input>
                 </el-form-item>
             </el-col>
@@ -298,15 +301,15 @@
                 genderOptions:[{
                   value: '男',
                   label: 'Male',
-                  key: 1
+                  code: 1
                 }, {
                   value: '女',
                   label: 'Female',
-                  key: 0
+                  code: 0
                 }, {
                   value: '未知',
                   label: 'Unknown',
-                  key: 2
+                  code: 2
                 }],
                 //页面page绑定
                 companyInfo:{
@@ -401,8 +404,18 @@
             getWholeData(){
                 this.$ajax.get(this.$apis.get_supplierWhile).then(res=>{
                     // this.addressData contactData
-                     this.accountsData = this.$getDB(this.$db.setting.supplierAccount, res.accounts);
-                     this.contactDatas = this.$getDB(this.$db.setting.supplierContact, res.concats);
+                     this.accountsData = this.$getDB(this.$db.setting.supplierAccount, res.accounts, e=>{
+                        let currency;
+                        currency = _.findWhere(this.options.currency, {code: e.currency.value}) || {};
+                        e.currency._value = currency.name || '';
+                        return e;
+                     });
+                     this.contactDatas = this.$getDB(this.$db.setting.supplierContact, res.concats, e=>{
+                        let gender;
+                        gender = _.findWhere(this.genderOptions, {code: e.gender.value}) || {};
+                        e.gender._value = gender.label || '';
+                        return e;
+                     });
                      this.addressDatas = this.$getDB(this.$db.setting.supplierAddress, res.address);
                      res.exportLicense ? res.exportLicense = 'YES' : res.exportLicense = 'NO'
                      this.companyInfo=res;
@@ -457,6 +470,9 @@
                }else{
                     this.companyInfo.exportLicense = false;
                }
+               if (this.$validateForm(this.companyInfo, this.$db.setting.companyInfo)) {
+                  return false;
+                }
                let params={
                     city: this.companyInfo.city,
                     country: this.companyInfo.country,
@@ -517,6 +533,9 @@
             sureAddAddress(){
                 this.allowAddAddress=true;
                 this.addressData.supplierId=this.companyInfo.id;
+                if (this.$validateForm(this.addressData, this.$db.setting.supplierAddress)) {
+                  return false;
+                }
                 if(this.isModifyAddress){
                     //表示是在修改地址
                     this.$ajax.post(`${this.$apis.post_supplier_address_id}/${this.addressData.id}`,this.addressData).then(res=>{
@@ -598,7 +617,9 @@
             sureAddAccount(){
                 this.allowAddContact=true;
                 this.accountData.supplierId=this.companyInfo.id;
-
+                if (this.$validateForm(this.accountData, this.$db.setting.supplierAccount)) {
+                  return false;
+                }
                 if(this.isModifyContact){
                     //表示是在修改account
                     this.$ajax.post(`${this.$apis.post_supplier_account_id}/${this.accountData.id}`,this.accountData).then(res=>{
@@ -681,6 +702,9 @@
             sureAddContact(){
                 this.allowAddContact=true;
                 this.contactData.supplierId=this.companyInfo.id;
+                if (this.$validateForm(this.contactData, this.$db.setting.supplierContact)) {
+                  return false;
+                }
                 if(this.isModifyContact){
                     //表示是在修改account
                     this.$ajax.post(`${this.$apis.post_supplier_contact_id}/${this.contactData.id}`,this.contactData).then(res=>{
