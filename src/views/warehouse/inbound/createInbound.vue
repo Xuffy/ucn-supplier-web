@@ -251,6 +251,7 @@
             </div>
 
             <v-table
+                    :height="500"
                     v-loading="loadingTable"
                     :data="tableDataList"
                     @change-checked="changeChecked"></v-table>
@@ -365,12 +366,14 @@
                     /**
                      * 每次打开弹窗时进行置灰判断
                      * */
+                    console.log(this.productData,'this.productData')
+                    console.log(this.tableDataList,'this.tableDataList')
                     this.tableDataList.forEach(v=>{
                         if(v.skuId.value===0){  //id为0的是脏数据，不能选
                             this.$set(v,'_disabled',true);
                         }else{
                             this.productData.forEach(m=>{
-                                if(v.skuId.value===m.skuList[0].skuId){
+                                if(v.skuId.value===m.skuId && m.orderNo===v.orderNo.value){
                                     this.$set(v,'_disabled',true);
                                     this.$set(v,'_checked',true);
                                     this.selectList.push(v);
@@ -596,8 +599,6 @@
                         orderNos.push(v.orderNo.value);
                     }
                 });
-                console.log(this.productIds,'this.productIds')
-                console.log(orderNos,'orderNos')
                 if(this.productIds.length!==0){
                     //表示有新增产品
                     this.loadingProductTable=true;
@@ -605,13 +606,11 @@
                         skuIds:this.productIds,
                         orderNos:orderNos
                     }).then(res=>{
-                        console.log(res,'res')
                         _.map(res,v=>{
                             _.map(v.skuList,e=>{
                                 this.productData.push(e);
                             })
                         });
-                        console.log(this.productData,'this.productData')
 
                         /**
                          * 计算底部summary
@@ -714,12 +713,12 @@
                 }
             },
             handleClick(e){
-                // this.$windowOpen({
-                //     url:'',
-                //     params:{
-                //         id:e.skuList[0].skuId
-                //     }
-                // })
+                this.$windowOpen({
+                    url:'/product/detail',
+                    params:{
+                        id:e.skuId
+                    }
+                })
             },
 
             /**

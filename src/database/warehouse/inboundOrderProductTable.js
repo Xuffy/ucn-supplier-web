@@ -189,7 +189,7 @@ export default {
         key:'customerNo'
     },
     customerName:{
-        key:'customerName',
+        key:'skuCustomsNameCn',
     },
     supplierName:{
         key:'supplierName',

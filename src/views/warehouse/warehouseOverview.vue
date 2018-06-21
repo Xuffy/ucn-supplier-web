@@ -26,7 +26,7 @@
                         :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
-                        :buttons="[{label: '详情', type: 1}]"
+                        :buttons="[{label: $i.warehouse.detail, type: 1}]"
                         @change-checked="changeChecked"
                         @action="btnClick">
                     <!--<template slot="header">-->
