@@ -399,10 +399,7 @@ export default {
             return;
           }
           if (o.value !== o.originValue) {
-            o._style = 'background-color:yellow';
             changedFields[field] = '1';
-          } else {
-            o._style = '';
           }
         });
         item.$changedFields = changedFields;
@@ -430,7 +427,7 @@ export default {
       }
       let historyApi = item.skuId ? this.$apis.BUYER_GET_INQUIRY_DETAIL_HISTORY : this.$apis.BUYER_GET_INQUIRY_HISTORY;
       // 历史中始终要显示的列
-      let excludeColumns = ['id', 'skuId', 'fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay', 'entryDt', '_remark'];
+      let excludeColumns = ['id', 'skuId', 'fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay', 'updateDt', '_remark'];
       this.$ajax.get(historyApi, {id: item.id.value}).then(res => {
         // 处理只显示修改列
         res.forEach(i => {

@@ -324,6 +324,9 @@ export default {
 
     Vue.prototype.$filterDic = (data, transForm = 'transForm') => {
       _.mapObject(data, (val, k) => {
+        if (val.value === true || val.value === false) {
+          val.value = val.value ? 1 : 0;
+        }
         val.dataType = typeof val.value;
         val.originValue = val.value;
         if (val[transForm] && !data._remark && ['entryDt', 'updateDt', 'fieldDisplay', 'fieldRemarkDisplay'].indexOf(k) < 0) {
