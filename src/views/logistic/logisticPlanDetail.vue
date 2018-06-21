@@ -183,11 +183,13 @@ export default {
       let aArr = [
         {
           label: 'Negociate',
-          type: 1        
+          type: 1,
+          disabled:!this.edit     
         },
         {
           label: 'Copy',         
-          type: 4
+          type: 4,
+          disabled:!this.edit 
         },
         {
           label: 'Detail',
@@ -197,7 +199,8 @@ export default {
       this.$route.name=='placeLogisticPlan' ?  aArr : aArr.splice(1,0,
         {
           label: 'History',         
-          type: 2
+          type: 2,
+          disabled:!this.edit 
         }
       )
       return aArr;
@@ -271,10 +274,6 @@ export default {
       })
     },
     registerRoutes () {
-      this.$store.commit('SETDRAFT', {
-        name: 'overviewDraft',
-        show: true
-      })
       this.$store.commit('SETRECYCLEBIN', {
         name: 'overviewArchive',
         show: true
