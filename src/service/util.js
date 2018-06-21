@@ -131,15 +131,15 @@ export default {
               Message.warning(`请填正确的 ${item.label}`);
               return key;
             }
-            if (!_.isNumber(Number(val))) {
+            if (!/^[0-9]+\.?[0-9]{0,9}$/.test(val)) {
               Message.warning(`请填正确的 ${item.label}`);
               return key;
             }
-            if (validate.max && validate.max < val) {
+            if (validate.max && validate.max < Number(val)) {
               Message.warning(`${item.label} 值不能大于${validate.max}`);
               return key;
             }
-            if (validate.min && validate.min > val) {
+            if (validate.min && validate.min > Number(val)) {
               Message.warning(`${item.label} 值不能小于${validate.max}`);
               return key;
             }
@@ -322,28 +322,26 @@ export default {
       return data ? JSON.parse(_.clone(JSON.stringify(data))) : data;
     };
 
-    Vue.prototype.$filterDic = (data, transForm = 'transForm', dataBase = 'dataBase') => {
+    Vue.prototype.$filterDic = (data, transForm = 'transForm') => {
       _.mapObject(data, (val, k) => {
-        val.dataType = typeof val.value;
-        if (_.isBoolean(val.value)) {
-          val.value ? val.value = 1 : val.value = 0;
+        if (val.value === true || val.value === false) {
+          val.value = val.value ? 1 : 0;
         }
-        val[dataBase] = val.value;
-        if (val[transForm] && !data._remark && ['entryDt', 'updateDt', 'fieldDisplay'].indexOf(k) < 0) {
+        val.dataType = typeof val.value;
+        val.originValue = val.value;
+        if (val[transForm] && !data._remark && ['entryDt', 'updateDt', 'fieldDisplay', 'fieldRemarkDisplay'].indexOf(k) < 0) {
           switch (val[transForm]) {
             case 'time':
-              val.value = DateFormat(val.value, val.time ? val.time : 'yyyy-dd-mm');
+              val._value = DateFormat(val.value, val.time ? val.time : 'yyyy-dd-mm');
               break;
             default:
               if (!store.state.dic.length) return;
               let dic = _.findWhere(store.state.dic, {'code': val[transForm]});
               if (!dic || !dic.codes) return;
               val._option = dic.codes;
-              let code = _.findWhere(val._option, {'code': val[dataBase] + ''});
+              let code = _.findWhere(dic.codes, {'value': val.originValue});
               if (code) {
                 val._value = code.name || code[val.name];
-                val.value = code.code;
-                val[dataBase] = val.value;
               }
           }
         }
@@ -377,43 +375,45 @@ export default {
       url = _.template(url)(config.params || {});
       return window.open(`${url}?${serialization(p)}`, '_blank');
     };
-    Vue.prototype.$mul = function(){ 
-      //解决JS 精度问题 乘法
-      let m = 0, 
-          s2 = '',
-          strArr = 1
-          
-      for (let i = 0; i < arguments.length; i++) {
-          if (arguments[i].toString().indexOf('.') > 0) {
-              m += arguments[i].toString().split(".")[1].length;
-              arguments[i] = Number(arguments[i].toString().replace(".", ""));
-          }
 
-          strArr *= Number(arguments[i]);
+
+    Vue.prototype.$mul = function () {
+      //解决JS 精度问题 乘法
+      let m = 0,
+        s2 = '',
+        strArr = 1
+
+      for (let i = 0; i < arguments.length; i++) {
+        if (arguments[i].toString().indexOf('.') > 0) {
+          m += arguments[i].toString().split(".")[1].length;
+          arguments[i] = Number(arguments[i].toString().replace(".", ""));
+        }
+
+        strArr *= Number(arguments[i]);
       }
 
       return strArr / Math.pow(10, m);
     },
-    Vue.prototype.$sub = (num1, num2) =>{  
+    Vue.prototype.$sub = (num1, num2) =>{
       //解决JS 精度问题(减法)
-      let baseNum, 
-          baseNum1, 
+      let baseNum,
+          baseNum1,
           baseNum2,
           precision // 精度
 
-      try {
+        try {
           baseNum1 = num1.toString().split(".")[1].length;
-      } 
-      catch (e) {
+        }
+        catch (e) {
           baseNum1 = 0;
-      }
+        }
 
-      try {
+        try {
           baseNum2 = num2.toString().split(".")[1].length;
-      } 
-      catch (e) {
+        }
+        catch (e) {
           baseNum2 = 0;
-      }
+        }
 
       baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
       precision = (baseNum1 >= baseNum2) ? baseNum1 : baseNum2;
@@ -440,25 +440,25 @@ export default {
     },
     Vue.prototype.$numAdd = (num1, num2)=>{
       // 加法
-      var baseNum, 
-          baseNum1, 
+      var baseNum,
+          baseNum1,
           baseNum2;
 
-      try {
+        try {
           baseNum1 = num1.toString().split(".")[1].length;
-      } 
-      catch (e) {
+        }
+        catch (e) {
           baseNum1 = 0;
-      }
+        }
 
-      try {
+        try {
           baseNum2 = num2.toString().split(".")[1].length;
-      } 
-      catch (e) {
+        }
+        catch (e) {
           baseNum2 = 0;
-      }
+        }
 
-      baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
+        baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
 
       return (num1 * baseNum + num2 * baseNum) / baseNum;
     },
@@ -475,7 +475,6 @@ export default {
         arr.push(ranNum);
         }
       }
-      return arr;
     }
   }
 }

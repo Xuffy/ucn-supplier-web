@@ -71,7 +71,7 @@
       <el-table-column :label="$i.logistic.operation" align="center" width="200" fixed="right">
         <template slot-scope="scope">
           <div>
-            <el-button size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.logistics_accept_payment)">{{ $i.logistic.confirm }}</el-button>
+            <el-button :disabled="scope.row.status==40||scope.row.status==-1" size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.logistics_accept_payment)">{{ $i.logistic.confirm }}</el-button>
           </div>
         </template>
       </el-table-column>
@@ -108,7 +108,7 @@ export default {
       paymentDec: [
         {
           code: -1,
-          name: this.$i.logistic.confirmed
+          name: this.$i.logistic.invalid
         },
         {
           code: 10,

@@ -30,6 +30,10 @@ export default {
   "toShipCartonQty": {
     type: 'text'
   },
+  "fieldDisplay":{
+    type:'text',
+    _hide: true
+  },
   "toShipQty": {
     type: 'text'
   },

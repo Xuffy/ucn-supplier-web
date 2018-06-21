@@ -13,6 +13,7 @@ export default {
     ORDER_UPDATE:['/order/update','USUPPLY_URL'],
     ORDER_SKUS: ['/order/skus', 'BASE_URL'],
     ORDER_MARK: ['/order/mark','BASE_URL'],
+    ORDER_HISTORY:['/order/skuHistory','BASE_URL'],
 
 
     //customer

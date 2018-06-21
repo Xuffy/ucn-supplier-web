@@ -14,7 +14,6 @@ export default {
     supplierName:{},
     supplierOrderNo:{},
     incoterm:{},
-    incotermArea:{},
     lcNo:{},
     payment:{},
     currency:{},

@@ -93,30 +93,30 @@ export default {
         length: 10,
         belongPage:'sellerProductOverview'
     },
-    country:{
-        key: 'country',
-        type: 'String',
-        showType:'select',
-        length: 10,
-        belongPage:'sellerProductOverview',
-        options:[
-            {
-                label:'中国',
-                value:1
-            },
-            {
-                label:'美国',
-                value:2
-            }
-        ],
-    },
-    supplierNameLike:{
-        key: 'supplierNameLike',
-        type: 'String',
-        showType:'input',
-        length: 10,
-        belongPage:'sellerProductOverview'
-    },
+    // country:{
+    //     key: 'country',
+    //     type: 'String',
+    //     showType:'select',
+    //     length: 10,
+    //     belongPage:'sellerProductOverview',
+    //     options:[
+    //         {
+    //             label:'中国',
+    //             value:1
+    //         },
+    //         {
+    //             label:'美国',
+    //             value:2
+    //         }
+    //     ],
+    // },
+    // supplierNameLike:{
+    //     key: 'supplierNameLike',
+    //     type: 'String',
+    //     showType:'input',
+    //     length: 10,
+    //     belongPage:'sellerProductOverview'
+    // },
     outerCartonMethodEnLike:{
         key: 'outerCartonMethodEnLike',
         type: 'String',

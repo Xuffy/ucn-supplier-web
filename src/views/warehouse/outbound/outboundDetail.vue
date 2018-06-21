@@ -30,7 +30,7 @@
                                     :disabled="true"
                                     class="speInput"
                                     type="textarea"
-                                    autosize
+                                    :autosize="{ minRows: 2}"
                                     placeholder="请填写"
                                     v-model="outboundData[v.key]">
                             </el-input>
@@ -61,7 +61,7 @@
                                     v-model="outboundData[v.key]"
                                     align="right"
                                     type="date"
-                                    placeholder="选择日期">
+                                    :placeholder="$i.warehouse.pleaseChoose">
                             </el-date-picker>
                         </div>
                         <div v-else-if="v.isAttachment">
@@ -79,6 +79,7 @@
         <v-table
                 v-loading="loadProductTable"
                 class="speTable"
+                :total-row="totalRow"
                 :data="productTable"
                 :buttons="[{label:'Detail',type:1}]"
                 @action="btnClick"
@@ -129,16 +130,14 @@
                  * */
                 loadProductTable:false,
                 productTable:[],
-
+                totalRow:[],
             }
         },
         methods:{
             getData(){
                 this.loadingTable=true;
                 this.$ajax.get(`${this.$apis.get_outBoundDetail}?id=${this.$route.query.id}`).then(res=>{
-                    console.log(res)
                     this.outboundData=res;
-
                     this.$ajax.post(this.$apis.get_outboundDetailProductData,{
                         outboundId: this.$route.query.id,
                         pn: 1,
@@ -152,6 +151,16 @@
                         // ],
                     }).then(res=>{
                         this.productTable = this.$getDB(this.$db.warehouse.outboundDetailProductData, res.datas);
+                        _.map(res.datas,v=>{
+                            _.map(v,(val,key)=>{
+                                if(key==='outboundSkuTotalQty' || key==='outboundOutCartonTotalQty' || key==='outboundSkuTotalVolume' || key==='outboundSkuTotalNetWeight' || key==='outboundSkuTotalGrossWeight'){
+                                }else{
+                                    v[key]=null;
+                                }
+                            })
+                        })
+
+                        this.totalRow=this.$getDB(this.$db.warehouse.outboundDetailProductData, res.datas);
                         this.loadingTable=false;
                     }).catch(err=>{
                         this.loadingTable=false;

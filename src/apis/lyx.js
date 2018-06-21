@@ -36,4 +36,5 @@ export default {
   logistics_plan_postLoadingList: ['/logistics/plan/postLoadingList','a_localtion', 'USUPPLY_URL'],
   logistics_plan_getSupplierIds: ['/logistics/plan/getSupplierIds','a_localtion', 'BASE_URL'],
   logistics_accept_payment: ['/payment/accept','a_localtion', 'BASE_URL'],
+  logistics_payment_batchDunning: ['/payment/batchDunning','a_localtion', 'BASE_URL']
 }

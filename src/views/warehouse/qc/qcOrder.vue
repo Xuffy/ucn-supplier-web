@@ -53,7 +53,7 @@
                                     :disabled="true"
                                     class="speInput"
                                     type="textarea"
-                                    autosize
+                                    :autosize="{ minRows: 2}"
                                     v-model="qcOrderData[v.key]">
                             </el-input>
                         </div>
@@ -76,16 +76,6 @@
             </el-row>
         </el-form>
 
-
-        <!--<div class="title" style="display: inline">-->
-            <!--{{$i.warehouse.payment}}-->
-        <!--</div>-->
-        <!--<div class="payment-table">-->
-
-        <!--</div>-->
-
-
-
         <div class="title" style="margin-top: 50px">
             {{$i.warehouse.productInfo}}
         </div>
@@ -98,6 +88,8 @@
                         :data="productTable"
                         style="width: 100%;margin-top: 10px"
                         border
+                        :summary-method="getSummaries"
+                        show-summary
                         @selection-change="handleFirstTable">
                     <el-table-column
                             align="center"
@@ -111,7 +103,23 @@
                             :key="v.key"
                             :prop="v.key"
                             width="160">
-                        <template slot-scope="scope">{{ scope.row[v.key] }}</template>
+                        <template slot-scope="scope">
+                            <div v-if="v.key==='qcPics' && scope.row[v.key]">
+                                <v-image :src="scope.row[v.key][0]" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key])"></v-image>
+                            </div>
+                            <div v-else>
+                                {{ scope.row[v.key] }}
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            align="center"
+                            :label="$i.warehouse.detail"
+                            width="100">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-tab-pane>
@@ -136,7 +144,23 @@
                             :key="v.key"
                             :prop="v.key"
                             width="160">
-                        <template slot-scope="scope">{{ scope.row[v.key] }}</template>
+                        <template slot-scope="scope">
+                            <div v-if="v.key==='qcPics'">
+                                <v-image :src="scope.row[v.key][0]" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key])"></v-image>
+                            </div>
+                            <div v-else>
+                                {{ scope.row[v.key] }}
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            align="center"
+                            :label="$i.warehouse.detail"
+                            width="100">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-tab-pane>
@@ -161,16 +185,155 @@
                             :key="v.key"
                             :prop="v.key"
                             width="160">
-                        <template slot-scope="scope">{{ scope.row[v.key] }}</template>
+                        <template slot-scope="scope">
+                            <div v-if="v.key==='qcPics'">
+                                <v-image :src="scope.row[v.key][0]" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key])"></v-image>
+                            </div>
+                            <div v-else>
+                                {{ scope.row[v.key] }}
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            align="center"
+                            :label="$i.warehouse.detail"
+                            width="100">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-tab-pane>
         </el-tabs>
 
 
-        <div class="title" style="margin-top: 50px">
-            {{$i.warehouse.summary}}
+        <div class="summary">
+            <div class="second-title">
+                {{$i.warehouse.summary}}
+            </div>
+            <el-form label-width="280px">
+                <el-row class="speZone">
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.cartonOfQualifiedProducts">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="qcOrderData.qualifiedSkuCartonTotalQty"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.quantityOfQualifiedProducts">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="qcOrderData.qualifiedSkuQty"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.volumeOfQualifiedProducts">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="qcOrderData.qualifiedSkuVolume"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.netWeightOfQualifiedProducts">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="qcOrderData.qualifiedSkuNetWeight"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.grossWeightOfQualifiedProducts">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="qcOrderData.qualifiedSkuGrossWeight"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.quantityOfSubQualityProducts">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="qcOrderData.unqualifiedSkuQty"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.cartonOfSubQualityProducts">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="qcOrderData.unqualifiedSkuCartonTotalQty"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.netWeightOfSubQualityProducts">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="qcOrderData.unqualifiedSkuNetWeight"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.volumeOfSubQualityProducts">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="qcOrderData.unqualifiedSkuVolume"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.grossWeightOfSubQualityProducts">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="qcOrderData.unqualifiedSkuGrossWeight"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.skuQuantity">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="summaryData.skuQuantity"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
         </div>
+
+
+        <div class="footBtn">
+            <el-button :disabled="loadingTable" type="danger" @click="cancel">{{$i.warehouse.cancel}}</el-button>
+        </div>
+
+
 
         <el-dialog width="40%" title="将QC数据更新到产品库" :visible.sync="dialogFormVisible">
             <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAll">全选</el-checkbox>
@@ -197,7 +360,9 @@
         </el-dialog>
 
 
-        <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
+        <v-message-board module="warehouse" code="qcOrderData" :id="$route.query.id"></v-message-board>
+
+        <v-view-picture ref="pics"></v-view-picture>
 
 
 
@@ -206,7 +371,7 @@
 
 <script>
 
-    import {VTimeZone,VTable,VMessageBoard,VUpload} from '@/components/index'
+    import {VTimeZone,VTable,VMessageBoard,VUpload,VImage,VViewPicture} from '@/components/index'
 
     export default {
         name: "qcOrder",
@@ -214,7 +379,9 @@
             VTable,
             VTimeZone,
             VMessageBoard,
-            VUpload
+            VUpload,
+            VImage,
+            VViewPicture
         },
         data(){
             return{
@@ -231,13 +398,6 @@
                 qcOrderData:{},
                 qcTypeOption:[],
                 qcMethodOption:[],
-                summaryData:{
-                    cartonOfProducts:0,
-                    grossWeightOfProducts:0,
-                    volumeOfProducts:0,
-                    netWeightOfProducts:0,
-                    quantityOfProducts:0,
-                },
 
                 /**
                  * productTable配置
@@ -274,6 +434,14 @@
 
 
                 /**
+                 * summary Data
+                 * */
+                summaryData:{
+                    skuQuantity:0
+                },
+
+
+                /**
                  * 弹出框data
                  * */
                 checkAll:true,
@@ -295,6 +463,11 @@
                 this.$ajax.post(this.$apis.get_qcOrderProductData,this.tableConfig)
                     .then(res=>{
                         this.productTable=res.datas;
+                        let diffData=[];
+                        _.map(this.productTable,v=>{
+                            diffData.push(v.skuId+v.orderNo);
+                        });
+                        this.summaryData.skuQuantity=_.uniq(diffData).length;
                         this.tableConfig.skuInventoryStatusDictCode='APPLY_FOR_REWORK';
                         this.$ajax.post(this.$apis.get_qcOrderProductData,this.tableConfig).then(res=>{
                             this.productTable1=res.datas;
@@ -330,6 +503,9 @@
                 }else{
                     return 1;
                 }
+            },
+            cancel(){
+                window.close();
             },
 
 
@@ -401,6 +577,41 @@
 
 
             },
+            handleClick(data){
+                this.$windowOpen({
+                    url:'/product/detail',
+                    params:{
+                        id:data.skuId
+                    }
+                });
+            },
+            getSummaries(param) {
+                const { columns, data } = param;
+                const sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = this.$i.warehouse.totalMoney;
+                        return;
+                    }else if(index===17 || index===18 || index===21 || index===44 || index===45 || index===46 || index===47 || index===48 || index===49 || index===50 || index===51 || index===52 || index===53 || index===54 || index===67){
+                        const values = data.map(item => Number(item[column.property]));
+                        if (!values.every(value => isNaN(value))) {
+                            sums[index] = values.reduce((prev, curr) => {
+                                const value = Number(curr);
+                                if (!isNaN(value)) {
+                                    return prev + curr;
+                                } else {
+                                    return prev;
+                                }
+                            }, 0);
+                        } else {
+
+                        }
+                    }
+
+                });
+
+                return sums;
+            },
 
             /**
              * 弹出框事件
@@ -465,7 +676,6 @@
                     this.isIndeterminate=false;
                     this.checkAll=true;
                     this.acceptConfig.fields=['innerCartonLength','innerCartonWidth','innerCartonHeight','innerCartonNetWeight','innerCartonGrossWeight','innerCartonVolume','outerCartonLength','outerCartonWidth','outerCartonHeight','outerCartonNetWeight','outerCartonGrossWeight','outerCartonVolume'];
-
                 }
             }
         },
@@ -480,6 +690,12 @@
         line-height: 32px;
         color:#666666;
     }
+    .second-title{
+        font-weight: bold;
+        font-size: 16px;
+        color: #666666;
+        padding: 10px 0;
+    }
 
     .speInput{
         width: 80%;
@@ -493,5 +709,16 @@
     }
     .speTable >>> .el-checkbox{
         margin-right: 0;
+    }
+    .footBtn{
+        border-top: 1px solid #e0e0e0;
+        height: 40px;
+        line-height: 40px;
+        background-color: #ffffff;
+        position: sticky;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        z-index:1000;
     }
 </style>

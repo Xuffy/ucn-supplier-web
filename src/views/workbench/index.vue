@@ -2,22 +2,22 @@
   <div class="workbench">
     <ul class="welcome-box ucn-container-right" :class="{show:settingStateShow}">
       <li class="title" v-text="$i.workbench.settingState"></li>
-      <li>
-        <el-checkbox :checked="settingState.departmentInfo" disabled>{{$i.workbench.settingDepartment}}</el-checkbox>
+      <li v-if="!settingState.departmentInfo">
+        <el-checkbox disabled>{{$i.workbench.settingDepartment}}</el-checkbox>
         <br>
         <router-link to="/settings/department">
           <el-button type="text">Go set>></el-button>
         </router-link>
       </li>
-      <li>
-        <el-checkbox :checked="settingState.companyInfo" disabled>{{$i.workbench.settingCompany}}</el-checkbox>
+      <li v-if="!settingState.companyInfo">
+        <el-checkbox disabled>{{$i.workbench.settingCompany}}</el-checkbox>
         <br>
         <router-link to="/settings/companyInfo">
           <el-button type="text">Go set>></el-button>
         </router-link>
       </li>
-      <li>
-        <el-checkbox :checked="settingState.categoryInfo" disabled>{{$i.workbench.settingCategory}}</el-checkbox>
+      <li v-if="!settingState.categoryInfo">
+        <el-checkbox disabled>{{$i.workbench.settingCategory}}</el-checkbox>
         <br>
         <router-link to="/settings/category">
           <el-button type="text">{{$i.workbench.goSet}}>></el-button>
@@ -54,7 +54,6 @@
         <v-table-data :type="4"></v-table-data>
       </el-col>
     </el-row>
-
     <!--<v-import-template ref="importFile" code="PRODUCT_SUPPLIER" biz-code="PRODUCT_SUPPLIER"></v-import-template>-->
     <!--<v-message-board module="workbench" code="workbench" id="123"></v-message-board>-->
   </div>
@@ -90,7 +89,8 @@
       }
     },
     created() {
-      this.getBasicInfo();
+      let {userType} = this.$localStore.get('user') || {};
+      userType === 0 && this.getBasicInfo();
     },
     mounted() {
       // this.setLog({query:{code:'productSourcingOverview'}});

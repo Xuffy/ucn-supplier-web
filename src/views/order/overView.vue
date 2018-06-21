@@ -122,6 +122,8 @@
                  * 字典
                  * */
                 orderStatusOption: [],
+                incotermOption:[],
+                paymentOption:[],
             }
         },
         methods: {
@@ -163,19 +165,13 @@
                 if (val.keyType === 1) {
                     this.params.orderNo = val.key;
                     this.params.skuCode = '';
-                    if (this.params.view === '1') {
-                        this.getData(this.$db.order.overviewByOrder)
-                    } else {
-                        this.getData(this.$db.order.overviewBysku)
-                    }
+                    this.view='1';
+                    this.getData()
                 } else {
                     this.params.orderNo = '';
                     this.params.skuCode = val.key;
-                    if (this.params.view === '1') {
-                        this.getData(this.$db.order.overviewByOrder)
-                    } else {
-                        this.getData(this.$db.order.overviewBysku)
-                    }
+                    this.view='2';
+                    this.getData()
                 }
             },
             download() {
@@ -227,6 +223,15 @@
                             if(e.updateDt){
                                 e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
                             }
+                            if(e.status){
+                                e.status.value=this.$change(this.orderStatusOption,'status',e,true).name;
+                            }
+                            if(e.incoterm){
+                                e.incoterm.value=this.$change(this.incotermOption,'incoterm',e,true).name;
+                            }
+                            if(e.payment){
+                                e.payment.value=this.$change(this.paymentOption,'payment',e,true).name;
+                            }
 
                         });
                         this.pageData = res;
@@ -238,14 +243,19 @@
 
             //获取字典
             getUnit() {
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
+                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                    console.log(res)
+                });
 
-                this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS'], {cache: true}).then(res => {
+
+                this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS','ITM','PMT'], {cache: true}).then(res => {
                     res.forEach(v => {
                         if (v.code === 'ORDER_STATUS') {
                             this.orderStatusOption = v.codes;
+                        }else if(v.code==='ITM'){
+                            this.incotermOption=v.codes;
+                        }else if(v.code==='PMT'){
+                            this.paymentOption=v.codes;
                         }
                     });
                     this.getData(this.$db.order.overviewByOrder);

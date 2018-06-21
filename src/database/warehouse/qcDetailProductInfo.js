@@ -5,6 +5,9 @@ export default{
     skuId:{
         _hide:true
     },
+    orderNo:{
+        _hide:true
+    },
     skuQcResultDictCode: {
         key: 'skuQcResultDictCode',
         type: 'String',
@@ -299,14 +302,16 @@ export default{
         isBarCodeResult:true
     },
     qcPic:{             //服务商上传
-        key: 'qcPic',
-        type: 'String'
+        key: 'qcPics',
+        type: 'String',
+        showType:'attachment',
+        _image:true
     },
     checkOuterCartonQty:{
         key: 'checkOuterCartonQty',
         type: 'Number'
     },
-    remarks:{
+    remark:{
         key: 'remark',
         type: 'String',
         showType:'input'

@@ -8,7 +8,7 @@
                 <span>{{$i.warehouse.outBoundType}}</span>
                 <el-radio-group class="radios" @change="changeStatus" v-model="outboundConfig.outboundTypeDictCode" size="mini">
                     <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
-                    <el-radio-button v-for="v in outboundType" :key="v.id" :label="v.value">{{v.label}}</el-radio-button>
+                    <el-radio-button v-for="v in outboundType" :key="v.id" :label="v.code">{{v.name}}</el-radio-button>
                 </el-radio-group>
                 <select-search
                         class="search"
@@ -18,15 +18,16 @@
             </div>
             <div class="section">
                 <v-table
+                        :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
-                        :buttons="[{label: '详情', type: 1}]"
+                        :buttons="[{label: $i.warehouse.detail, type: 1}]"
                         @change-checked="changeChecked"
                         @action="btnClick">
                     <template slot="header">
                         <div class="btns">
                             <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
-                            <el-button @click="createOutbound">新建</el-button>
+                            <el-button @click="createOutbound">{{$i.warehouse.create}}</el-button>
                         </div>
                     </template>
                 </v-table>
@@ -146,17 +147,18 @@
             getUnit(){
                 this.$ajax.post(this.$apis.get_partUnit,['OBD_STATUS']).then(res=>{
                     this.outboundType=res[0].codes;
-                    this.outboundType.forEach(v=>{
-                        if(v.value==='1'){
-                            v.label=this.$i.warehouse.sellingOutOfTheTreasury;
-                        }else if(v.value==='2'){
-                            v.label=this.$i.warehouse.collectionOfMaterialsFromTheWarehouse;
-                        }else if(v.value==='3'){
-                            v.label=this.$i.warehouse.stockTransfer;
-                        }else if(v.value==='4'){
-                            v.label=this.$i.warehouse.returnToSupplier;
-                        }
-                    });
+                    console.log(this.outboundType)
+                    // this.outboundType.forEach(v=>{
+                    //     if(v.value==='1'){
+                    //         v.label=this.$i.warehouse.sellingOutOfTheTreasury;
+                    //     }else if(v.value==='2'){
+                    //         v.label=this.$i.warehouse.collectionOfMaterialsFromTheWarehouse;
+                    //     }else if(v.value==='3'){
+                    //         v.label=this.$i.warehouse.stockTransfer;
+                    //     }else if(v.value==='4'){
+                    //         v.label=this.$i.warehouse.returnToSupplier;
+                    //     }
+                    // });
 
                     this.getOutboundData();
 

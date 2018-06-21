@@ -16,10 +16,10 @@
                                     size="mini"
                                     :disabled="v.disabled"
                                     v-model="outboundData[v.key]"
-                                    :placeholder="v.sysCreate?'系统生成':'请输入'"></el-input>
+                                    :placeholder="v.sysCreate?$i.warehouse.sysGenerate:$i.warehouse.pleaseInput"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
-                            <el-select class="speInput" size="mini" v-model="outboundData[v.key]" placeholder="请选择">
+                            <el-select class="speInput" size="mini" v-model="outboundData[v.key]" :placeholder="$i.warehouse.pleaseChoose">
                                 <el-option
                                         v-for="item in outboundTypeOption"
                                         :key="item.id"
@@ -65,7 +65,7 @@
                                     v-model="outboundData[v.key]"
                                     align="right"
                                     type="date"
-                                    placeholder="选择日期"
+                                    :placeholder="$i.warehouse.pleaseChoose"
                                     :picker-options="pickerOptions1">
                             </el-date-picker>
                         </div>
@@ -104,6 +104,7 @@
             <el-table-column
                     type="selection"
                     align="center"
+                    fixed="left"
                     class="table-checkbox"
                     width="55">
             </el-table-column>
@@ -133,11 +134,11 @@
             </el-table-column>
             <el-table-column
                     fixed="right"
-                    label="操作"
+                    :label="$i.warehouse.action"
                     align="center"
                     width="100">
                 <template slot-scope="scope">
-                    <el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
+                    <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -150,7 +151,7 @@
         </div>
 
         <el-dialog
-                title="从订单添加产品"
+                :title="$i.warehouse.addProduct"
                 :visible.sync="addOrderDialogVisible"
                 width="70%">
             <el-form :modal="orderProduct" ref="orderProduct" label-width="200px" :label-position="labelPosition">
@@ -158,8 +159,9 @@
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="orderNo" :label="$i.warehouse.orderNo">
 
-                            <el-select clearable size="mini" class="speInput" v-model="orderProduct.orderNo"
-                                       placeholder="请选择">
+                            <el-select clearable size="mini" class="speInput"
+                                       v-model="orderProduct.orderNo"
+                                       :placeholder="$i.warehouse.pleaseChoose">
                                 <el-option
                                         v-for="item in orderNoOption"
                                         :key="item.id"
@@ -171,25 +173,25 @@
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuCode" :label="$i.warehouse.skuCode">
-                            <el-input placeholder="请输入" size="mini" class="speInput"
+                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput"
                                       v-model="orderProduct.skuCode"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuNameCn" :label="$i.warehouse.skuNameCn">
-                            <el-input placeholder="请输入" size="mini" class="speInput"
+                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput"
                                       v-model="orderProduct.skuNameCn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuBarCode" :label="$i.warehouse.skuBarCode">
-                            <el-input placeholder="请输入" size="mini" class="speInput"
+                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput"
                                       v-model="orderProduct.skuBarCode"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="inboundNo" :label="$i.warehouse.inboundNo">
-                            <el-input placeholder="请输入" size="mini" class="speInput"
+                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput"
                                       v-model="orderProduct.inboundNo"></el-input>
                         </el-form-item>
                     </el-col>
@@ -206,8 +208,8 @@
                     :data="tableDataList"
                     @change-checked="changeChecked"></v-table>
             <div slot="footer" class="dialog-footer">
-                <el-button :disabled="disabledSearch" type="primary" @click="postData">确 定</el-button>
-                <el-button :disabled="disabledCancelSearch" @click="addOrderDialogVisible = false">取 消</el-button>
+                <el-button :disabled="disabledSearch" type="primary" @click="postData">{{$i.warehouse.sure}}</el-button>
+                <el-button :disabled="disabledCancelSearch" @click="addOrderDialogVisible = false">{{$i.warehouse.cancel}}</el-button>
             </div>
         </el-dialog>
     </div>
@@ -233,29 +235,9 @@
                 disableRemoveProduct: true,
                 disabledSubmit: false,
                 pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
+                    // disabledDate(time) {
+                    //     return time.getTime() > Date.now();
+                    // },
                 },
                 addOrderDialogVisible: false,
                 productTableData: [],
@@ -396,7 +378,6 @@
                     });
                 });
                 this.outboundData.attachments = this.$refs.attachmentUpload[0].getFiles();
-
                 this.disabledSubmit = true;
                 this.$ajax.post(this.$apis.add_outbound, this.outboundData).then(res => {
                     this.disabledSubmit = false;
@@ -462,6 +443,7 @@
                         res.datas.forEach(v => {
                             this.productData.push(v);
                         });
+                        console.log(this.productData,'this.productData')
                         this.productData.forEach(v => {
                             v.inboundVo.inboundDate = this.$dateFormat(v.inboundVo.inboundDate, 'yyyy-mm-dd')
                         });
@@ -478,7 +460,7 @@
                 const sums = [];
                 columns.forEach((column, index) => {
                     if (index === 0) {
-                        sums[index] = '总价';
+                        sums[index] = this.$i.warehouse.totalMoney;
                     } else {
                         if (index === 9) {
                             const values = data.map(item => Number(item[column.property]));

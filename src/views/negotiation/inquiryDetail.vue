@@ -45,10 +45,10 @@
               :selection="statusModify"
               :hideFilterColumn="statusModify"/>
           <div class="bom-btn-wrap" v-show="!statusModify">
-            <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
-            <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.dataBase + ''!=='99'||tabData[0].status.dataBase+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button> -->
-            <el-button @click="statusModify = true" :disabled="tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
-            <el-button type="info" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.dataBase+''!== '22'&&tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
+            <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.originValue+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
+            <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.originValue + ''!=='99'||tabData[0].status.originValue+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button> -->
+            <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue+''!=='21'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
+            <el-button type="info" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.originValue+''!== '22'&&tabData[0].status.originValue+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
             <el-button>{{ $i.common.download }}</el-button>
           </div>
           <div class="bom-btn-wrap" v-show="statusModify">
@@ -86,7 +86,6 @@
 <script>
 /**
  * @param ChildrenCheckList Basic Info 多选框选中值
- * @param ProductCheckList Product Info 多选框选中值
  * @param keyWord search框 值
  * @param value 下拉框选中的值
  * @param options 下拉框原始数据
@@ -105,6 +104,8 @@ import {
 import { getData } from '@/service/base';
 import product from '@/views/product/addProduct';
 import { mapActions, mapState } from 'vuex';
+import codeUtils from '@/lib/code-utils';
+
 export default {
   name: 'inquiryDetail',
   data() {
@@ -132,7 +133,6 @@ export default {
       newSearchDialogVisible: false,
       compareConfig: [],
       ChildrenCheckList: [],
-      ProductCheckList: [],
       keyWord: '',
       value: '',
       switchStatus: false,
@@ -196,14 +196,6 @@ export default {
         }
       });
       this.newTabData = data;
-    },
-    ProductCheckList(val, oldVal) {
-      if (val[0] + '' === 0) {
-        this.newProductTabData = this.$table.setHighlight(
-          this.newProductTabData
-        );
-      }
-      this.newProductTabData = arr;
     }
   },
   methods: {
@@ -242,21 +234,24 @@ export default {
         ],
         { cache: true }
       );
-      const getCurrencies = this.$ajax.get(this.$apis.get_currency_all, '', {cache: true});
+      const getCurrencies = this.$ajax.get(this.$apis.get_currency_all, '', {cache: false});
       const getCountries = this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache: true});
       return this.$ajax.all([postCodes, getCurrencies, getCountries]).then(res => {
         let data = res[0];
         data.push({
           code: 'CY_UNIT',
           name: 'CY_UNIT(币种)',
-          codes: res[1]
+          codes: (() => {
+            res[1].forEach(item => item.name = item.code);
+            return res[1];
+          })()
         });
         data.push({
           code: 'COUNTRY',
           name: 'COUNTRY(国家)',
           codes: res[2]
         });
-        this.setDic(data);
+        this.setDic(codeUtils.convertDicValueType(data));
         return Promise.resolve(data);
       });
     },
@@ -403,11 +398,8 @@ export default {
           if (['fieldDisplay', 'fieldRemarkDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
             return;
           }
-          if (o.value !== o.defaultData) {
-            o._style = 'background-color:yellow';
+          if (o.value !== o.originValue) {
             changedFields[field] = '1';
-          } else {
-            o._style = '';
           }
         });
         item.$changedFields = changedFields;
@@ -426,7 +418,7 @@ export default {
     fnBasicInfoHistoty(item, type, config) {
       // 查看历史记录
       let arr;
-      if (item.id.value) {
+      if (!item.id.value) {
         if (config.type === 'modify') {
           arr = this.newProductTabData.filter(i => i.skuId.value === config.data);
           this.$refs.HM.init(arr, [], true);
@@ -434,7 +426,30 @@ export default {
         return;
       }
       let historyApi = item.skuId ? this.$apis.BUYER_GET_INQUIRY_DETAIL_HISTORY : this.$apis.BUYER_GET_INQUIRY_HISTORY;
+      // 历史中始终要显示的列
+      let excludeColumns = ['id', 'skuId', 'fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay', 'updateDt', '_remark'];
       this.$ajax.get(historyApi, {id: item.id.value}).then(res => {
+        // 处理只显示修改列
+        res.forEach(i => {
+          if (i.fieldDisplay) {
+            let fs = Object.keys(i.fieldDisplay);
+            if(fs.length === 0) return;
+            Object.keys(i).forEach(field => {
+              if (!excludeColumns.includes(field) && !fs.includes(field)) {
+                i[field] = null;
+              }
+            });
+          }
+          if (i.fieldRemarkDisplay) {
+            let fs = Object.keys(i.fieldRemarkDisplay);
+            if(fs.length === 0) return;
+            Object.keys(i.fieldRemark).forEach(field => {
+              if (!excludeColumns.includes(field) && !fs.includes(field)) {
+                i.fieldRemark[field] = null;
+              }
+            });
+          }
+        });
         if (type === 'basicInfo') {
           arr = this.newTabData.filter(i => i.id.value.toString() === config.data.toString());
           this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), config.type === 'modify');
@@ -445,40 +460,29 @@ export default {
         this.fromArg = arr[0];
       });
     },
+    // basic info 按钮操作
     basicInfoAction(data, type) {
-      // basic info 按钮操作
+      if (['histoty', 'modify'].indexOf(type) === -1) return;
       this.idType = 'basicInfo';
       this.historyColumn = this.$db.inquiry.basicInfo;
-      switch (type) {
-        case 'histoty':
-          this.fnBasicInfoHistoty(data, 'basicInfo', {type: 'histoty', data: data.id.value});
-          break;
-        case 'modify':
-          this.fnBasicInfoHistoty(data, 'basicInfo', {type: 'modify', data: data.id.value});
-          this.oSwitch = true;
-          break;
-      }
+      this.fnBasicInfoHistoty(data, 'basicInfo', {type, data: data.id.value});
+      if (type === 'modify') this.onSwitch = true;
     },
+    // Produc info 按钮操作
     producInfoAction(data, type) {
-      // Produc info 按钮操作
+      if (type === 'detail') {
+        this.$router.push({path: '/product/sourcingDetail', query: {id: data.skuId.value}});
+        return;
+      }
+      if (['histoty', 'modify'].indexOf(type) === -1) return;
       this.idType = 'producInfo';
       this.historyColumn = this.$db.inquiry.productInfo;
-      switch (type) {
-        case 'histoty':
-          this.fnBasicInfoHistoty(data, 'productInfo', {type: 'histoty', data: data.skuId.value});
-          break;
-        case 'modify':
-          this.oSwitch = true;
-          this.fnBasicInfoHistoty(data, 'productInfo', {type: 'modify', data: data.skuId.value});
-          break;
-        case 'detail':
-          this.$router.push({path: '/product/sourcingDetail', query: {id: data.skuId.value}});
-          break;
-      }
+      this.fnBasicInfoHistoty(data, 'productInfo', {type, data: data.skuId.value});
+      if (type === 'modify') this.onSwitch = true;
     },
     // 获取选中的单 集合
     changeChecked(item) {
-      this.checkedAll = item;
+      this.checkedAll = item.filter(i => !i._remark);
     },
     // 创建单
     toCreateInquire() {
@@ -508,8 +512,10 @@ export default {
       let arr = this.newProductTabData.filter(i => !i._disabled);
       parentNode.details = this.dataFilter(arr);
       parentNode.draft = 0;
-      this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SAVE, this.$filterModify(parentNode)).then(res => {
-        this.newTabData[0].status.dataBase = res.status;
+      let saveData = this.$filterModify(parentNode);
+      saveData.attachment = null;
+      this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SAVE, saveData).then(res => {
+        this.newTabData[0].status.originValue = res.status;
         this.statusModify = false;
         this.getInquiryDetail();
       });
@@ -542,11 +548,7 @@ export default {
         Object.keys(item).forEach(field => {
           let val = item[field];
           if (excludeColumns.indexOf(field) > -1) return;
-          if (val.dataType && val.dataType === 'boolean' && typeof val.value === 'string') {
-            o[field] = val.value === '1' || val.value === 'true';
-          } else {
-            o[field] = val.value;
-          }
+          o[field] = val.value;
         });
         list.push(o);
       }

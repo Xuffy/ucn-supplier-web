@@ -101,7 +101,7 @@ export default {
   },
   methods: {
     handleSelectionChange (val) {
-      this.$emit('handleSelectionChange', val.map(a => a.index))
+      this.$emit('handleSelectionChange', val.map(a => a))
     },
     tableRowClassName({row, rowIndex}) {
       row.index = rowIndex;
