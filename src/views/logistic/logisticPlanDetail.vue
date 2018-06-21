@@ -495,9 +495,12 @@ export default {
     },
     removeProduct () {
       this.selectProductArr.forEach(a => {
-        const index = this.productList.indexOf(a)
-        this.removeProductList.push(this.productList[index])
-        this.$delete(this.productList, index)
+        this.productList.forEach((item,index)=>{
+          if(item.id.value==a.id.value){
+            this.removeProductList.push(this.productList[index])
+            this.productList.splice(index,1);
+          }
+        })
       })
     },
     productModifyfun(obj){
@@ -678,13 +681,13 @@ export default {
         delete item['label'];
         return item;
       });
-      // this.oldPlanObject.rmProduct = this.removeProductList.map(a => {
-      //   const obj = {}
-      //   _.mapObject(a, (value, key) => {
-      //     obj[key] = value.value
-      //   })
-      //   return obj
-      // })
+      this.oldPlanObject.rmProduct = this.removeProductList.map(a => {
+        const obj = {}
+        _.mapObject(a, (value, key) => {
+          obj[key] = value.value
+        })
+        return obj
+      })
       // this.oldPlanObject.product = this.restoreArr(this.removeProductList)
       this.oldPlanObject.product = this.productList.map((item,i)=>{        
         return _.mapObject(item,(v,k)=>{
