@@ -6,8 +6,10 @@ const codeConfig = {
   'INQUIRY_STATUS': {valueType: Number},
   'ITM': {valueType: Number},
   'LH_UNIT': {valueType: Number},
+  'ED_UNIT': {valueType: Number},
   'MD_TN': {valueType: Number},
   'OEM_IS': {valueType: Number}, // Boolean
+  'RA_IS': {valueType: Number}, // Boolean
   'PMT': {valueType: Number},
   'SKU_PG_IS': {valueType: Number}, // Boolean
   'SKU_SALE_STATUS': {valueType: Number},

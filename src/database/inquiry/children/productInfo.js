@@ -1,7 +1,6 @@
 export default {
-  _firstColumn: {
+  updateDt: {
     key: 'updateDt',
-    label: ' 2',
     type: 'text',
     _disabled: true,
     _title: 'remark',
@@ -52,10 +51,6 @@ export default {
     key: 'skuStatus',
     _disabled: true,
     transForm: 'SKU_SALE_STATUS'
-  },
-  deleteOrNotRecycle: {
-    key: 'skuRecycle',
-    _disabled: true
   },
   skuCode: {
     key: 'skuCode',
@@ -146,7 +141,7 @@ export default {
   readilyAvailable: {
     key: 'skuReadilyAvailable',
     type: 'Select',
-    _slot: 'readilyAvailable'
+    transForm: 'RA_IS'
   },
   skuAvailable: {
     key: 'skuAvailableQty',
@@ -170,9 +165,7 @@ export default {
   expirationDateUnit: {
     key: 'skuExpireUnit',
     type: 'Select',
-    state: 'Date',
-    time: 'yyyy-mm-dd',
-    _slot: 'expirationDateUnit'
+    transForm: 'ED_UNIT'
   },
   explain: {
     key: 'skuComments',
@@ -242,14 +235,14 @@ export default {
   rateOfValueAddedTax: {
     key: 'skuRateValueAddedTax',
     type: 'Number',
-    state: 'rate',
+    unit: '%',
     max: 100,
     min: 0
   },
   taxRefundRate: {
     key: 'skuTaxRefundRate',
     type: 'Number',
-    state: 'rate',
+    unit: '%',
     max: 100,
     min: 0
   },
@@ -455,7 +448,7 @@ export default {
     key: 'skuOuterCartonMethodEn',
     max: 45
   },
-  OEM: {
+  oem: {
     key: 'skuOem',
     type: 'Select',
     transForm: 'OEM_IS'
