@@ -6,7 +6,7 @@
         <slot name="header"></slot>
       </div>
       <div class="fixed">
-        <v-filter-value v-if="!hideFilterValue && code" ref="tableFilter" :code="code"
+        <v-filter-value v-if="!hideFilterValue && code" ref="tableFilter" :code="code" :data="dataColumn"
                         @change="val => {$emit('filter-value',val)}"></v-filter-value>
 
         <v-filter-column v-if="!hideFilterColumn && code" ref="filterColumn" :code="code"
@@ -215,9 +215,6 @@
       data(val) {
         this.setDataList(val, true);
       },
-      column() {
-        this.filterColumn();
-      },
       checkedAll(value) {
         this.setDataList(_.map(this.dataList, val => {
           if (!val._disabled && !val._disabledCheckbox) {
@@ -233,13 +230,10 @@
       this.setDataList(this.data, true);
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
 
-      this.interval = setInterval(() => {
-        this.updateTable();
-      }, 500);
+      this.interval = setInterval(this.updateTable, 200);
     },
     methods: {
       onFilterColumn(checked) {
-        // todo 需过滤column
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
       },
       filterColumn() {
@@ -315,8 +309,8 @@
           this.$refs.tableBox.scrollTop = 0;
         }
 
-        if (!this.hideFilterColumn && this.code) {
-          this.$refs.filterColumn.getConfig().then(res => {
+        if (!this.hideFilterColumn && this.code && !_.isEmpty(val)) {
+          this.$refs.filterColumn.getConfig(false, val).then(res => {
             let to = setTimeout(() => {
               clearTimeout(to);
               this.dataList = this.$refs.filterColumn.getFilterData(val, res);

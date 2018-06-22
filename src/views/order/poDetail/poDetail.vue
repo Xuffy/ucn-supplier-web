@@ -31,8 +31,7 @@
                                     :placeholder="isModify?$i.order.pleaseChoose:''"
                                     class="speInput"
                                     align="right"
-                                    type="date"
-                                    :picker-options="pickerOptions1">
+                                    type="date">
                             </el-date-picker>
                         </div>
                         <div v-else-if="v.type==='select'">
@@ -1039,6 +1038,7 @@
                 orderStatusOption:[],
                 countryOption:[],
                 quarantineTypeOption:[],
+                skuSaleStatusOption:[],
 
 
                 /**
@@ -1329,7 +1329,7 @@
 
                 });
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS']).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS','SKU_SALE_STATUS']).then(res=>{
                     this.allowQuery++;
                     res.forEach(v=>{
                         if(v.code==='ITM'){
@@ -1354,6 +1354,8 @@
                             this.orderStatusOption=v.codes;
                         }else if(v.code==='QUARANTINE_TYPE'){
                             this.quarantineTypeOption=v.codes;
+                        }else if(v.code==='SKU_SALE_STATUS'){
+                            this.skuSaleStatusOption=v.codes;
                         }
                     })
                 }).finally(err=>{
@@ -1383,6 +1385,7 @@
                 this.loadingPage=true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
                     orderId:this.$route.query.orderId,
+                    orderNo:this.$route.query.orderNo
                 }).then(res=>{
                     this.orderForm=res;
                     if(this.orderForm.status==='2' || this.orderForm.status==='3' || this.orderForm.status==='5'){
@@ -1529,7 +1532,6 @@
 
             //获取订单号(先手动生成一个)
             getOrderNo(){
-                this.orderForm.orderNo=this.$route.query.orderId;
                 this.getSupplier();
             },
 
@@ -1747,6 +1749,8 @@
                                         json[k]=_.findWhere(this.skuStatusOption,{name:item[k]._value}).code;
                                     }else if(item[k].key==='skuSample'){
                                         json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
+                                    }else{
+                                        json[k] = item[k].value;
                                     }
                                 }else{
                                     json[k] = item[k].value;
