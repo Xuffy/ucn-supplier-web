@@ -146,5 +146,5 @@
   "EURCNY":"exchange rate(€--￥)",
   "EURUSD":"exchange rate(€--$)",
 
-  "skuCategoryId":"CategoryId"
+  "skuCategoryId":"Category"
 }
