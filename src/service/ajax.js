@@ -233,8 +233,7 @@ axios.interceptors.request.use(config => {
         router.push('/login');
       }
     });
-    Promise.reject();
-    return config;
+    throw new Error($i.hintMessage.loginExpired);
   }
 
   return config

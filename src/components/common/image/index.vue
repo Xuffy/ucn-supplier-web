@@ -33,8 +33,7 @@
         iconSize: 0
       }
     },
-    watch: {
-    },
+    watch: {},
     mounted() {
       let {clientHeight, clientWidth} = this.$refs.image;
       this.iconSize = clientHeight <= clientWidth ? clientHeight : clientWidth;

@@ -1,7 +1,10 @@
 <template>
   <div class="logs-import">
     <br>
-    <h3 class="ucn-content-title inline" v-text="$i.logs.importTitle"></h3>
+    <h3 class="ucn-content-title inline" v-text="$i.logs.importTitle"></h3>&nbsp;&nbsp;&nbsp;&nbsp;
+    <el-button icon="el-icon-refresh" type="primary" :loading="loading"
+               @click="getDataList">{{$i.logs.refreshTask}}
+    </el-button>
     <br>
     <br>
     <el-table
@@ -98,7 +101,8 @@
       return {
         loading: false,
         resData: {},
-        paging: {pn: 0, ps: 10}
+        paging: {pn: 0, ps: 10},
+
       }
     },
     watch: {},
@@ -112,9 +116,7 @@
           .then(res => {
             this.resData = res;
           })
-          .finally(() => {
-            this.loading = false;
-          });
+          .finally(() => this.loading = false);
       },
       pageSizeChange(val) {
         this.paging.ps = val;

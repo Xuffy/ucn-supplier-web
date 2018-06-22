@@ -1,6 +1,9 @@
 <template>
-  <div class="login">
-    <iframe :src="loginUrl" style="width: 100%;height: 100%;position: fixed;top: 0;left: 0"></iframe>
+  <div class="login"
+       v-loading="loading"
+       element-loading-background="rgba(255, 255, 255, 1)"
+       :element-loading-text="$i.common.goSignIn">
+    <iframe ref="login" :src="loginUrl" class="iframe"></iframe>
   </div>
 </template>
 
@@ -13,7 +16,8 @@
     name: 'login',
     data() {
       return {
-        loginUrl: ''
+        loginUrl: '',
+        loading: true
       }
     },
     created() {
@@ -30,6 +34,14 @@
 
       window.__authorize = this.getUserInfo;
     },
+    mounted() {
+      let iframe = this.$refs.login;
+      if (iframe.attachEvent) {
+        iframe.attachEvent('onload', () => this.loading = false);
+      } else {
+        iframe.onload = () => this.loading = false;
+      }
+    },
     methods: {
       getUserInfo(token) {
         if (!token) return false;
@@ -43,6 +55,20 @@
     }
   }
 </script>
-<style scoped lang="less">
+<style scoped>
+  .login {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+  }
 
+  .iframe {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
 </style>

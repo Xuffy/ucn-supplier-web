@@ -340,7 +340,7 @@ export default {
               val._option = dic.codes;
               let code = _.findWhere(dic.codes, {'value': val.originValue});
               if (code) {
-                val._value = code.name || code[val.name];
+                val._value = code.name || code[val.name] || '';
               }
           }
         }
