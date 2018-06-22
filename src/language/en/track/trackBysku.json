@@ -76,8 +76,10 @@
     "destinationPort ": "Destination Port",
     "shippingAgent": "Shipping agent",
     "contactPersonOfBuyer": "Contact person of buyer",
-    "email": "Email",
-    "phone": "Phone",
+    "emailOfBuyer": "Email Of Buyer",
+    "phoneOfBuyer": "Phone Of Buyer",
+    "emailOfSeller": "Email Of Seller",
+    "phoneOfSeller": "Phone Of Seller",
     "contactPersonOfSeller": "Contact person of seller",
     "sealine": "Shipping Company",
     "BLtype": "B/L type (release or document)",
@@ -100,5 +102,9 @@
     "insuranseUah ": "Insurance ",
     "container": "Container Number",
     "truckNumber": "Truck Number",
-    "shipServiceProvider": "Shipping Service Provider"
+    "shipServiceProvider": "Shipping Service Provider",
+    "categoryLevel1": "category Level 1",
+    "categoryLevel2": "category Level 2",
+    "categoryLevel3": "category Level 3",
+    "categoryLevel4": "category Level 4"
 }
