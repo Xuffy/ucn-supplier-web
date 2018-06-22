@@ -453,7 +453,7 @@ export default {
         if (type === 'basicInfo') {
           arr = this.newTabData.filter(i => i.id.value.toString() === config.data.toString());
           this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), config.type === 'modify');
-        } else {
+        } else {z
           arr = this.newProductTabData.filter(i => i.skuId.value.toString() === config.data.toString());
           this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), config.type === 'modify');
         }

@@ -3,10 +3,10 @@
         <div class="title">
             {{$i.warehouse.basicInfo}}
         </div>
-        <el-form :modal="inboundData" ref="basicInfo" class="speForm" label-width="200px" :label-position="labelPosition">
+        <el-form ref="basicInfo" class="speForm" label-width="200px" :label-position="labelPosition">
             <el-row>
                 <el-col class="speCol" v-for="v in $db.warehouse.inbound" v-if="v.belong==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:8" :md="v.fullLine?24:8" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
-                    <el-form-item :prop="v.key" :label="v.label">
+                    <el-form-item :label="v.label" :required="v._rules?v._rules.required:false">
                         <div v-if="v.showType==='input'">
                             <el-input
                                     class="speInput"
@@ -410,6 +410,9 @@
 
             //提交表单
             submit(){
+                if(this.$validateForm(this.inboundData, this.$db.warehouse.inbound)){
+                    return;
+                }
                 if(this.productData.length===0){
                     return this.$message({
                         message: this.$i.warehouse.pleaseAddProduct,
@@ -728,6 +731,10 @@
                 this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE'],{cache:true}).then(res=>{
                     this.inboundTypeOption=res[0].codes;
                 });
+
+
+
+
                 // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{
                 //     console.log(res)
                 // });

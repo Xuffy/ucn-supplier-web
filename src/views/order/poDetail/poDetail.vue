@@ -10,14 +10,14 @@
                         <div v-if="v.type==='input'">
                             <div v-if="v.key==='lcNo'">
                                 <el-input
-                                        :placeholder="v.isQuotationNo?$i.order.pleaseCreate:(isModify?$i.order.pleaseInput:'')"
+                                        :placeholder="v.isQuotationNo?(isModify?$i.order.pleaseCreate:''):(isModify?$i.order.pleaseInput:'')"
                                         class="speInput"
                                         :disabled="v.disabled || disabledLcNo || !isModify"
                                         v-model="orderForm[v.key]"></el-input>
                             </div>
                             <div v-else>
                                 <el-input
-                                        :placeholder="v.isQuotationNo?$i.order.pleaseCreate:(isModify?$i.order.pleaseInput:'')"
+                                        :placeholder="v.isQuotationNo?(isModify?$i.order.pleaseCreate:''):(isModify?$i.order.pleaseInput:'')"
                                         class="speInput"
                                         :disabled="v.disabled || v.disableDetail || !isModify"
                                         v-model="orderForm[v.key]"></el-input>
@@ -1417,6 +1417,7 @@
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
                         }else{
+                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
                             item.skuSample._value=item.skuSample.value?'YES':'NO';
                             item.skuSample.value=item.skuSample.value?'1':'0';
                         }
