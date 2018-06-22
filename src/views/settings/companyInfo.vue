@@ -7,7 +7,7 @@
             <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
                 <el-row class="speZone">
                     <el-col :class="{speCol:v.key!=='description'}" v-if="v.belong==='summary'" v-for="v in $db.setting.companyInfo" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
-                        <el-form-item class="speWidth"   :label="v.label" :required="v._rules?v._rules.required:false">
+                        <el-form-item class="speWidth"   :label="v.label+':' " :required="v._rules?v._rules.required:false">
                             <div v-if="v.type==='input'">
                                 <el-input
                                         :disabled="v.key==='code' ? true :summaryDisabled"
@@ -123,37 +123,37 @@
             <el-form label-width="200px" :model="addressData">
                 <el-row>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.factoryName" required>
+                    <el-form-item  :label="$i.setting.factoryName+':'" required>
                       <el-input size="mini" v-model="addressData.name" placeholder="请输入内容" required="required"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                  <el-form-item  :label="$i.setting.factoryAddress" required>
+                  <el-form-item  :label="$i.setting.factoryAddress+':'" required>
                      <el-input size="mini" v-model="addressData.address" placeholder="请输入内容" required="required"></el-input>
                   </el-form-item>
                 </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.exportPort">
+                    <el-form-item  :label="$i.setting.exportPort+':'">
                       <el-input size="mini" v-model="addressData.exportPort" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.ContacctPerson1" required>
+                    <el-form-item  :label="$i.setting.ContacctPerson1+':'" required>
                       <el-input size="mini" v-model="addressData.contactPerson1" placeholder="请输入内容" required="required"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.contactPhoneNo1" required>
+                    <el-form-item  :label="$i.setting.contactPhoneNo1+':'" required>
                       <el-input size="mini" v-model="addressData.concatPhone1" placeholder="请输入内容" required="required"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.contacctPerson2">
+                    <el-form-item  :label="$i.setting.contacctPerson2+':'">
                         <el-input size="mini" v-model="addressData.contactPerson2" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.contactPhoneNo2">
+                    <el-form-item  :label="$i.setting.contactPhoneNo2+':'">
                       <el-input size="mini" v-model="addressData.contactPhone2" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
@@ -169,37 +169,37 @@
             <el-form label-width="200px" :model="accountData">
                 <el-row>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item  :label="$i.setting.beneficiaryName" required>
+                        <el-form-item  :label="$i.setting.beneficiaryName+':'" required>
                             <el-input size="mini" v-model="accountData.beneficiaryName" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item  :label="$i.setting.beneficiaryAccount" required>
+                        <el-form-item  :label="$i.setting.beneficiaryAccount+':'" required>
                             <el-input size="mini" v-model="accountData.beneficiaryAccount" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item  :label="$i.setting.beneficiaryAddress">
+                        <el-form-item  :label="$i.setting.beneficiaryAddress+':'">
                             <el-input size="mini" v-model="accountData.beneficiaryAddress" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item  :label="$i.setting.beneficiaryBankName">
+                        <el-form-item  :label="$i.setting.beneficiaryBankName+':'">
                             <el-input size="mini" v-model="accountData.beneficiaryBankName" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item  :label="$i.setting.beneficiaryBankSWIFT">
+                        <el-form-item  :label="$i.setting.beneficiaryBankSWIFT+':'">
                             <el-input size="mini" v-model="accountData.beneficiaryBankSwift" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.accountType">
+                    <el-form-item  :label="$i.setting.accountType+':'">
                       <el-input size="mini" v-model="accountData.accountType" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.currency">
+                    <el-form-item  :label="$i.setting.currency+':'">
                       <el-select  v-model="accountData.currency" placeholder="请选择"  style="width: 230px;">
                         <el-option
                           v-for="item in options.currency"
@@ -222,17 +222,17 @@
         <el-form label-width="200px" :model="contactData">
           <el-row>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item  :label="$i.setting.name" required>
+              <el-form-item  :label="$i.setting.name+':'" required>
                 <el-input size="mini" v-model="contactData.name" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item :label="$i.setting.department">
+              <el-form-item :label="$i.setting.department+':'">
                 <el-input size="mini" v-model="contactData.deptId" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.gender">
+                <el-form-item  :label="$i.setting.gender+':'">
                   <el-select v-model="contactData.gender" placeholder="please input" style="width: 230px">
                     <el-option
                       v-for="item in genderOptions"
@@ -245,32 +245,32 @@
                 </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.mobileNumber" required>
+                <el-form-item  :label="$i.setting.mobileNumber+':'" required>
                   <el-input size="mini" v-model="contactData.cellphone" placeholder="请输入内容"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.telNumber">
+                <el-form-item  :label="$i.setting.telNumber+':'">
                   <el-input size="mini" v-model="contactData.telphone" placeholder="请输入内容"></el-input>
                 </el-form-item>
             </el-col>
              <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.faxNumber">
+                <el-form-item  :label="$i.setting.faxNumber+':'">
                   <el-input size="mini" v-model="contactData.fax" placeholder="请输入内容"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.emailAddress">
+                <el-form-item  :label="$i.setting.emailAddress+':'">
                   <el-input size="mini" v-model="contactData.email" placeholder="请输入内容"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.skype">
+                <el-form-item  :label="$i.setting.skype+':'">
                     <el-input size="mini" v-model="contactData.skype" placeholder="请输入内容"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.qq">
+                <el-form-item  :label="$i.setting.qq+':'">
                     <el-input size="mini" v-model="contactData.qq" placeholder="请输入内容"></el-input>
                 </el-form-item>
             </el-col>

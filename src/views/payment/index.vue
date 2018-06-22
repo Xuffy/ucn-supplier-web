@@ -1,7 +1,7 @@
 <template>
     <div class="payment">
         <div class="title">
-            {{$db.payment.title.orderOverview.key}}
+             {{$i.payment.orderOverview}}
         </div>
         <div class="body">
             <div class="head">
@@ -9,8 +9,8 @@
                     <span class="text">Status : </span>
                     <el-radio-group size="mini" v-model="params.conditions.overdue" @change="getList">
                         <el-radio-button label="-1" border>{{$i.common.all}}</el-radio-button>
-                        <el-radio-button label="1" >已逾期</el-radio-button>
-                        <el-radio-button label="0" >未逾期</el-radio-button>
+                        <el-radio-button label="1" >{{$i.payment.overdue}}</el-radio-button>
+                        <el-radio-button label="0" >{{$i.payment.future}}</el-radio-button>
                     </el-radio-group>
                 </div>
                 <div class="spe-div">
@@ -32,7 +32,7 @@
                         </select-search>
                     </div>
                     <div class="Date">
-                        <span class="text">Time : </span>
+                        <span class="text" style="width:170px">{{$i.payment.orderCreateDate}} : </span>
                         <el-date-picker
                                 v-model="date"
                                 type="daterange"
@@ -63,6 +63,7 @@
                 :page-data.sync="params"
                 @change="handleSizeChange"
                 @size-change="pageSizeChange"
+                :page-sizes="[50,100,200]"
               />
             </div>
         </div>
@@ -81,7 +82,6 @@
         data(){
             return{
                 // flag:true,
-                pazeSize: [10, 20, 30, 40, 50, 100],
                 pageTotal:0,
                 searchLoad: false,
                 viewByStatus:'',
@@ -225,16 +225,16 @@
                 //点击进入对应po detail 10、lo detail 30、QC order detail 20页面
                 if(item.orderType.value == 10){
                   this.$windowOpen({
-                    url: '/product/sourcingDetail',
+                    url: '/order/detail',
                     params: {
-                      number:item.orderNo.value
+                      orderNo:item.orderNo.value
                     }
                   });
               }else if(item.orderType.value == 20){
                   this.$windowOpen({
-                    url: '/',
+                    url: '/warehouse/qcDetail',
                     params: {
-                      number:item.orderNo.value
+                      orderNo:item.orderNo.value
                     }
                   });
               }else{

@@ -10,7 +10,7 @@
                           <el-col :xs="24" :sm="12" :md="8" :lg="8"
                            v-for='(v,index) in $db.supplier.overview'
                            :key="index+'j'">
-                            <el-form-item class="speWidth" :prop="v.key"  :label="v.label">
+                            <el-form-item class="speWidth" :prop="v.key"  :label="v.label + ':' ">
                               <div v-if="v.type==='input'">
                                 <el-input
                                   size="mini"
@@ -50,13 +50,13 @@
         </div>
 <!--        表格-->
           <div style="margin-top: 20px;">
-              <el-button @click="deleteCustomer" type="primary">{{$i.button.delete}}</el-button>
+              <!-- <el-button @click="deleteCustomer" type="primary">{{$i.button.delete}}</el-button> -->
           </div>
              <v-table
                     :height=360
                     :loading='loading'
                     :data="tabData"
-                    :buttons="[{label: 'detail', type: 1}]"
+                    :buttons="[{label: 'Detail', type: 1}]"
                     @action="detail"
                     @change-checked='checked'
                     style='marginTop:10px'/>
