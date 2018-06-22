@@ -111,7 +111,8 @@ export default {
     },
     inquiryDate: {
         key: 'entryDt',
-        belong: "inquiry"
+        belong: "inquiry",
+        type: "textDate"
     },
     incoterm: {
         key: 'incoterm',
@@ -123,7 +124,8 @@ export default {
     },
     quantityOfCarton: {
         key: 'updateDt',
-        belong: "inquiry"
+        belong: "inquiry",
+        type: "textDate"
     },
     totalNetWeight: {
         key: '',
@@ -144,7 +146,8 @@ export default {
     },
     orderDate: {
         key: 'entryDt',
-        belong: "order"
+        belong: "order",
+        type: "textDate"
     },
     orderStatus: {
         key: 'status',
@@ -152,7 +155,8 @@ export default {
     },
     actDeliveryDate: {
         key: 'deliveryDt',
-        belong: "order"
+        belong: "order",
+        type: "textDate"
     },
     quantityOfSKU: {
         key: 'skuQty',
@@ -176,33 +180,12 @@ export default {
     },
     loadingDate: {
         key: '',
-        belong: "order"
+        belong: "order",
+        type: "textDate"
     },
     dateOfBL: {
         key: '',
         belong: "order"
     },
-     // remark
-    date: {
-        key: 'updateDt',
-        belong: "remark"
-    },
-    remark: {
-        key: 'remark',
-        belong: "remark"
-    },
-    operater: {
-        key: 'entryName',
-        belong: "remark"
-    },
-    version: {
-        key: 'version',
-        belong: "remark",
-        _hide: true,
-    },
-    id: {
-        key: 'id',
-        belong: "remark",
-        _hide: true,
-    },
+    
 }

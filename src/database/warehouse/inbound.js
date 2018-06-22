@@ -9,7 +9,10 @@ export default {
     inboundDate:{
         key:'inboundDate',
         belong:'basicInfo',
-        showType:'date'
+        showType:'date',
+        _rules:{
+            required:true
+        }
     },
     warehouseNo:{
         key:'warehouseNo',
@@ -20,6 +23,9 @@ export default {
         key:'warehouseName',
         belong:'basicInfo',
         showType:'input',
+        _rules:{
+            required:true
+        }
     },
     inboundTypeDictCode:{
         key:'inboundTypeDictCode',

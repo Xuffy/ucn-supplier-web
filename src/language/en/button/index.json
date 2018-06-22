@@ -6,5 +6,6 @@
   "modify": "Modify",
   "upload": "Upload",
   "delete": "Delete",
-  "submit": "submit"
+  "submit": "submit",
+  "save": "save"
 }
