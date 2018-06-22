@@ -47,6 +47,7 @@
   "logistic": "Logistics",
   "logisticPlanOverview": "Logistics Plan Overview",
   "logisticLoadingList": "Loading List",
+  "logisticLoadingListOverview": "Loading List Overview",
   "logisticLoadingDraft": "Logistics Draft",
   "logisticLoadingRecycle": "Logistics Archive",
   "logisticPlaceLogisticPlan": "Place Logistics Plan",

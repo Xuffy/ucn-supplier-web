@@ -258,7 +258,10 @@ export const transportInfoObj = {
   },
   departurePort: {
     type: 'input',
-    value: null
+    value: null,
+    _rules:{
+      required:true
+    }
   },
   destinationCountry: {
     type: 'input',
@@ -266,7 +269,10 @@ export const transportInfoObj = {
   },
   destinationPort: {
     type: 'input',
-    value: null
+    value: null,
+    _rules:{
+      required:true
+    }
   }
 }
 
@@ -297,16 +303,9 @@ export const payMentInfo = {
     }
   },
   actPayDate: {
-    key:'actualPayDt',
-    _rules:{
-      required:true
-    }
+    key:'actualPayDt'
   },
   actAmount: {
-    key:'actualPayAmount',
-    _rules:{
-      type:'Number',
-      required:true
-    }
+    key:'actualPayAmount'
   }
 }

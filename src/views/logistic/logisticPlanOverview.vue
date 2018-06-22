@@ -234,7 +234,7 @@
       },
       action(e) {
         if(this.pageType == 'loadingList'){
-          this.$router.push({path: `/logistic/${this.jumpPage[this.pageType]}`, query: {id: e.id.value,loadingList:'loadingList'}})
+          this.$router.push({path: `/logistic/loadingListDetail`, query: {id: e.id.value,loadingList:'loadingList'}})
         }else{
           this.$router.push({path: `/logistic/${this.jumpPage[this.pageType]}`, query: {id: e.id.value}})
         }

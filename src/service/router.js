@@ -170,7 +170,7 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-            name: $i.router.logisticLoadingList
+            name: $i.router.logisticLoadingListOverview
           },
           component: () => import('../views/logistic/overviewWrapper')
         },
@@ -219,7 +219,19 @@ export const routerMap = [
 
           },
           component: () => import('../views/logistic/logisticPlanDetail')
-        }
+        },
+        {
+          path: 'loadingListDetail',
+          name: 'loadingListDetail',
+          hidden: true,
+          meta: {
+            draft: '/logistic/draft',
+            recycleBin: false,
+            log: true,
+            name: $i.router.logisticLoadingList
+          },
+          component: () => import('../views/logistic/logisticPlanDetail')
+        },
       ]
     },
     {
