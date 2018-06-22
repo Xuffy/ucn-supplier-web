@@ -2,7 +2,7 @@ export default {
     id:{
         _hide:true
     },
-    importantCustomer:{},
+    importantSupplier:{},
     attachment:{},
     remind:{},      //是否有提醒
     archive:{},

@@ -5,7 +5,7 @@
         </div>
         <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && v.type!=='supplierNo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col :class="{speCol:v.type!=='textarea' && v.type!=='attachment'}" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && v.type!=='supplierNo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.type==='input'">
                             <div v-if="v.key==='lcNo'">
@@ -1529,9 +1529,10 @@
                     });
                     this.changePayment(res.payment);
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
+                        console.log(item,'???')
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
-                            item.skuPic._image=false;
+                            item.skuPictures._image=false;
                             item.skuLabelPic._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
@@ -1793,7 +1794,7 @@
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
-                            item.skuPic._image=false;
+                            item.skuPictures._image=false;
                             item.skuLabelPic._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
@@ -2555,6 +2556,9 @@
         line-height: 32px;
         color:#666666;
         margin-top: 10px;
+    }
+    .speCol{
+        height: 47px;
     }
     .speInput{
         width: 80%;

@@ -19,9 +19,10 @@ export default {
         _hide:true
     },
     skuPic:{
-        _slot:'skuPic',
+        _slot:'skuPictures',
         type:'pic',
-        _image:true
+        _image:true,
+        key:'skuPictures'
         // disabled:true
     },
     skuNameEn:{
