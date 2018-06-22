@@ -5,40 +5,39 @@ export default {
     orderType: {
         key: 'orderType'
     },
-    orderStatus: {
-        key: 'status'
-    },
-    ordercreatedate: {
+    // orderStatus: {
+    //     key: 'status'
+    // },
+    orderCreateDate: {
         key: 'orderEntryDt',
        type: 'textDate',
     },
-    paymentUpdateDate: {
-        key: 'updateDt',
-       type: 'textDate',
+    currency: {
+      key: 'currencyCode'
     },
     payable: {
-        key: 'planPayAmount' //应付
+      key: 'planPayAmount' //应付
     },
     paid: {
-        key: 'actualPayAmount'
+      key: 'actualPayAmount'
     },
     waitPayment: {
-        _important:true,
-        key: '' //待付
+      _important:true,
+      key: '' //待付
     },
     planDateOfPayment: {   //应付时间
-        key: 'planPayDt',
-       type: 'textDate',
+      key: 'planPayDt',
+      type: 'textDate',
     },
     actualDateOfPayment: {
-        key: 'actualPayDt',
-        type: 'textDate',
+      key: 'actualPayDt',
+      type: 'textDate',
     },
     receivable: {
-        key: 'planReceiveAmount'  //应收
+      key: 'planReceiveAmount'  //应收
     },
     received: {
-        key: 'actualReceiveAmount'
+      key: 'actualReceiveAmount'
     },
     waitReceipt: {
         _important:true,
@@ -48,15 +47,26 @@ export default {
        key:'planReceiveDt',
        type: 'textDate',
     },
-    actualDateOfReceipt: {
-        key: 'actualReceiveDt',
-        type: 'textDate',
-    },
-    currencyCode: {
-        key: 'currencyCode'
+    actualDateOfReceipt: {  //应收时间
+      key:'actualReceiveDt',
+      type: 'textDate',
     },
     _totalRow:{
         _important:true,
         _hide:true
-    }
+    },
+    paymentId: {
+      _important:true,
+      key: 'paymentId',
+      _hide:true
+    },
+    version: {
+      _important:true,
+      key: 'version',
+      _hide:true
+    },
+    type: {
+      key: 'type',
+      _hide:true
+    },
   }
