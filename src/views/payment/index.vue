@@ -1,21 +1,21 @@
 <template>
     <div class="payment">
         <div class="title">
-            {{$db.payment.title.orderOverview.key}}
+            {{$i.payment.orderOverview}}
         </div>
         <div class="body">
             <div class="head">
                 <div>
-                    <span class="text">Status : </span>
+                    <span class="text">{{$i.payment.status}} : </span>
                     <el-radio-group size="mini" v-model="params.conditions.overdue" @change="getList">
                         <el-radio-button label="-1" border>{{$i.common.all}}</el-radio-button>
-                        <el-radio-button label="1" >已逾期</el-radio-button>
-                        <el-radio-button label="0" >未逾期</el-radio-button>
+                        <el-radio-button label="1" >{{$i.payment.overdue}}</el-radio-button>
+                        <el-radio-button label="0" >{{$i.payment.future}}</el-radio-button>
                     </el-radio-group>
                 </div>
                 <div class="spe-div">
                     <div class="View">
-                        <span class="text">View : </span>
+                        <span class="text">{{$i.payment.view}} : </span>
                         <el-radio-group size="mini"  v-model="params.conditions.orderType"  @change="getList">
                             <el-radio-button label="" border>{{$i.common.all}}</el-radio-button>
                             <el-radio-button label="30">{{$i.common.logisticOrder}}</el-radio-button>
@@ -25,6 +25,7 @@
                     </div>
                     <div class="search">
                         <select-search
+                          v-model="searchId"
                           class="search"
                           :options=options
                           @inputEnter="inputEnter"
@@ -32,15 +33,15 @@
                         </select-search>
                     </div>
                     <div class="Date">
-                        <span class="text">Time : </span>
+                        <span class="text" style="width:170px">{{$i.payment.orderCreateDate}} : </span>
                         <el-date-picker
                                 v-model="date"
                                 type="daterange"
                                 align="right"
                                 unlink-panels
-                                range-separator="至"
-                                start-placeholder="开始日期"
-                                end-placeholder="结束日期"
+                                :range-separator="$i.element.to"
+                                :start-placeholder="$i.element.startDate"
+                                :end-placeholder="$i.element.endDate"
                                 value-format="timestamp"
                                 :picker-options="dateOptions">
                         </el-date-picker>
@@ -56,14 +57,14 @@
                 :buttons="setButtons"
                 @action="action"
                 :rowspan="1"
-                :height="450"
+                :height="500"
                 @filter-value="onFilterValue"
                 ></v-table>
-              <v-pagination
-                :page-data.sync="params"
+               <page
+                :page-data="pageData"
                 @change="handleSizeChange"
-                @size-change="pageSizeChange"
-              />
+                :page-sizes="[50,100,200]"
+                @size-change="pageSizeChange"></page>
             </div>
         </div>
     </div>
@@ -76,7 +77,7 @@
         components:{
             selectSearch,
             VTable,
-            VPagination
+            page:VPagination
         },
         data(){
             return{
@@ -87,6 +88,8 @@
                 viewByStatus:'',
                 date:'',
                 tabLoad:false,
+                searchId:'1',
+                pageData:{},
                 options: [{
                   id: '1',
                   label: 'Order No'
@@ -100,16 +103,7 @@
                     overdue: -1
                   },
                   pn: 1,
-                  ps: 10,
-                  tc:0,
-                  // sorts: [
-                  //   {
-                  //     nativeSql: true,
-                  //     orderBy: "",
-                  //     orderType: "",
-                  //     resultMapId: ""
-                  //   }
-                  // ]
+                  ps: 50
                 },
                 dateOptions:{
                     shortcuts: [{
@@ -140,14 +134,19 @@
                 },
                 //底部table数据
                 tableDataList:[],
-                totalRow: []
+                totalRow: [],
+                currency:[]
             }
         },
         watch: {
             date(){
-                console.log(this.date)
-              this.params.conditions.orderEntryStartDt = this.date[0]
-              this.params.conditions.orderEntryEndDt = this.date[1]
+              if (this.date){
+                this.params.conditions.orderEntryStartDt = this.date[0]
+                this.params.conditions.orderEntryEndDt = this.date[1]
+              }else{
+                this.params.conditions.orderEntryStartDt ='';
+                this.params.conditions.orderEntryEndDt = '';
+              }
               this.getList()
             },
         },
@@ -166,44 +165,66 @@
               this.getList()
             },
             handleSizeChange(val) {
-              this.params.pn = val;
+                this.params.pn = val;
+                this.getList();
             },
             pageSizeChange(val) {
-              this.params.ps = val;
+                this.params.ps = val;
+                this.getList();
+            },
+            //获取币种
+            getCurrency(){
+              this.$ajax.get(this.$apis.get_currency_all).then(res=>{
+                this.currency = res
+                console.log(this.currency)
+              }).catch(err=>{
+                console.log(err)
+              });
             },
             getList(){
               this.tabLoad = true;
               this.$ajax.post(this.$apis.post_ledgerPage, this.params)
                 .then(res => {
-                  res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
                   this.tabLoad = false;
                   this.searchLoad = false;
                   this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
-                    item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
-                    item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
-                    // this.flag = item.waitPayment.value === 0;
-                    // this.$set(this.flag,item.waitPayment.value === 0)
+                    item.waitPayment.value = (Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8);
+                    item.waitReceipt.value = (Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8);
+                    let currency;
+                    currency = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
+                    item.currencyCode._value = currency.name || '';
 
                     _.mapObject(item, val => {
                       val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                       return val
                     })
 
+                    switch (item.orderType.value)
+                    {
+                      case 10:
+                       item.orderType._value = 'Purchase order'
+                        break;
+                      case 20:
+                        item.orderType._value = 'QC order'
+                        break;
+                      case 30:
+                        item.orderType._value = 'Logisttic order'
+                        break;
+
+                    }
                     return item;
                   });
 
                   this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
                     item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
                     item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
-                    // if(item.currencyCode.value ==='BTC'){
-                    //   item._totalRow.label = 'BTC';
-                    // }else if(item.currencyCode.value ==='HKD'){
-                    //   item._totalRow.label = 'HKD';
-                    // }else{
-                    //   item._totalRow.label = 'EUR';
-                    // }
+                    let currency;
+                    currency = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
+                    item.currencyCode._value = currency.name || '';
+                    console.log(item.currencyCode._value)
                     return item;
                   });
+                  this.pageData=res;
                 })
                 .catch((res) => {
                   this.tabLoad = false;
@@ -225,16 +246,16 @@
                 //点击进入对应po detail 10、lo detail 30、QC order detail 20页面
                 if(item.orderType.value == 10){
                   this.$windowOpen({
-                    url: '/product/sourcingDetail',
+                    url: '/order/detail',
                     params: {
-                      number:item.orderNo.value
+                      orderNo:item.orderNo.value
                     }
                   });
               }else if(item.orderType.value == 20){
                   this.$windowOpen({
-                    url: '/',
+                    url: '/warehouse/qcDetail',
                     params: {
-                      number:item.orderNo.value
+                      orderNo:item.orderNo.value
                     }
                   });
               }else{
@@ -250,26 +271,29 @@
               // ① 催款，此操作会给对应付款人发一条提示付款的信息，在对方的workbench显示；
               // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
               this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}`)
-                .then(res => {
-                  this.$message({
-                    type: 'success',
-                    message: '催促成功!'
-                  });
-                })
+              .then(res => {
+
+                this.$message({
+                  type: 'success',
+                  message: '催促成功!'
+                });
+              }).catch((res) => {
+
+              });
             },
             setButtons(item){
-                if(_.findWhere(item, {'key': 'waitPayment'}).value + '' === '0') return [{label: 'urging payment', type: '1',disabled:true},{label: 'detail', type: '2'}]
-                return [{label: 'urging payment', type: '1',disabled:false},{label: 'detail', type: '2'}];
-
+              // disabled:true/false   10 付款 20 退款
+                if(_.findWhere(item, {'key': 'type'}).value === 20) return [{label: 'Urging Payment', type: '1'},{label: 'Detail', type: '2'}]
+                 return [{label: 'Detail', type: '2'}];
             },
             handleSizeChange(val) {
                 this.params.ps = val;
             },
-
         },
         created(){
            this.viewByStatus = '1';
            this.getList();
+           this.getCurrency();
         },
     }
 </script>
@@ -296,6 +320,7 @@
         content: '';
         display: table;
         clear: both;
+      overflow: hidden;
     }
     .spe-div .View{
         float: left;

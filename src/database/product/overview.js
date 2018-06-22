@@ -86,7 +86,7 @@ export default {
         length: 10,
         belongPage:'sellerProductOverview'
     },
-    materialEnLike:{
+    materialEn:{
         key: 'materialEnLike',
         type: 'String',
         showType:'input',
@@ -117,14 +117,14 @@ export default {
     //     length: 10,
     //     belongPage:'sellerProductOverview'
     // },
-    outerCartonMethodEnLike:{
+    outerCartonMethodEn:{
         key: 'outerCartonMethodEnLike',
         type: 'String',
         showType:'input',
         length: 10,
         belongPage:'sellerProductOverview'
     },
-    methodPkgEnLike:{
+    methodPkgEn:{
         key: 'methodPkgEnLike',
         type: 'String',
         showType:'input',

@@ -2,7 +2,7 @@ export default {
     id:{
         _hide:true
     },
-    importantCustomer:{},
+    importantSupplier:{},
     attachment:{},
     remind:{},      //是否有提醒
     archive:{},
@@ -24,16 +24,16 @@ export default {
     customerAgreementDt:{},
     remark:{},
     totalSkuPrice:{},
-    paidAmount:{},
-    unpaidAmount:{},
+    // paidAmount:{},
+    // unpaidAmount:{},
     inboundQty:{},
     deliveredQty:{},
     updateDt:{},
     quotationNo:{},
     totalQty:{},
     totalOuterCartonQty:{},
-    totalGrossWeight:{},
-    totalNetWeight:{},
-    totalVolume:{},
+    // totalGrossWeight:{},
+    // totalNetWeight:{},
+    // totalVolume:{},
     skuQty:{}
 }
