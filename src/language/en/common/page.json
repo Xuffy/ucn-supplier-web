@@ -11,6 +11,8 @@
   "log": "Log",
   "admin": "Admin",
   "user": "User",
-  "home": "Home"
+  "home": "Home",
+  "goSignIn": "ÕıÔÚÌø×ªµÇÂ¼",
+  "cleanCache": "Clean up the data cache"
 }
 

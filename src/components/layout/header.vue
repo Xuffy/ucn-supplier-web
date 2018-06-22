@@ -83,7 +83,7 @@
               {{userInfo.userType === 0 ? $i.common.admin : $i.common.user}}&nbsp;&nbsp;|&nbsp;&nbsp;
             </a>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item><span @click="clearData">清理数据缓存</span></el-dropdown-item>
+              <el-dropdown-item><span @click="clearData">{{$i.common.cleanCache}}</span></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <a href="javascript:void(0)" @click="logout">
