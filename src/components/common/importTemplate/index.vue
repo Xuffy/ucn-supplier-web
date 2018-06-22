@@ -2,6 +2,7 @@
   <div class="ucn-import">
     <el-dialog
       class="ucn-import-dialog"
+      :close-on-click-modal="false"
       :title="$i.importTemplate.import"
       :visible.sync="dialogVisible"
       width="50%">

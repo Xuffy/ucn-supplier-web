@@ -3,8 +3,8 @@ import App from './App'
 import router from 'service/router'
 import ajax from 'service/ajax'
 import config from 'service/config';
-import * as filters from 'service/filters'
-import * as directive from 'service/directive'
+import filters from 'service/filters'
+import directive from 'service/directive'
 import apis from '@/apis/index';
 import util from 'service/util';
 import '../theme/index.css';
@@ -24,7 +24,6 @@ const lang = localStore.get('language') || config.LANGUAGE;
 
 locale.use(require(`element-ui/lib/locale/lang/${lang}`).default);
 
-Vue.use(util);
 Vue.use(ElementUI, {size: 'mini'});
 
 Vue.config.productionTip = false;
@@ -49,6 +48,10 @@ Object.keys(filters).forEach(key => {
 
 Object.keys(directive).forEach(key => {
   Vue.directive(key, directive[key]);
+});
+
+Object.keys(util).forEach(key => {
+  Vue.prototype[key] = util[key];
 });
 
 config.AUTH = config.ENV_FLAG === 'local' ? config.AUTH : true;
