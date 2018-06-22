@@ -78,7 +78,10 @@
           {label: $i.workbench.submitter, id: 'submittedByUserName'}
         ],
         typeLabel: [
-          this.$i.workbench.pendingTask, this.$i.workbench.futureTask, this.$i.workbench.pushTask, this.$i.workbench.fyiTask
+          this.$i.workbench.pendingTask,
+          this.$i.workbench.futureTask,
+          this.$i.workbench.pushTask,
+          this.$i.workbench.fyiTask
         ],
         dataList: [
           {
@@ -188,6 +191,22 @@
       },
       goDetail(item) {
         let tab = this.dataList[this.tabIndex];
+        switch (tab.type) {
+          case 'LOGISTIC':
+            let param = {code: item.bizNo.value}
+            if (item.bizCode === 'BIZ_LOGISTIC_ORDER') {
+              param.loadingList = 'loadingList';
+            }
+            return this.$router.push({path: tab.url, query:param});
+          case 'PAYMENT':
+            this.$ajax.post(this.$apis.PAYMENT_GETORDERBYPAYMENTNOS, {paymentNos: item.bizNo.value})
+              .then(res => {
+
+              });
+            break;
+          default:
+            return this.$router.push({path: tab.url, query: {code: item.bizNo.value}});
+        }
       }
     }
   }

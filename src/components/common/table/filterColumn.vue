@@ -10,16 +10,14 @@
       <div v-loading="loading">
         <el-input v-model="filterText" :placeholder="$i.common.content" prefix-icon="el-icon-search"
                   size="mini" clearable style="margin-bottom: 10px"></el-input>
-        <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate">{{$i.table.checkAll}}</el-checkbox>
         <div style="height: 200px;overflow: auto">
           <el-tree
             show-checkbox
             default-expand-all
-            class="filter-tree"
             node-key="property"
             :data="dataList"
-            @check-change="changeCheck"
-            :props="{children: 'children',label: 'name'}"
+            :props="{label: '_name'}"
+            :indent="5"
             :filter-node-method="filterNode"
             ref="columnTree">
           </el-tree>
@@ -39,16 +37,11 @@
 </template>
 
 <script>
+  import $i from '../../../language/index';
 
   export default {
     name: 'VFilterColumn',
     props: {
-      data: {
-        type: Array,
-        default() {
-          return [];
-        },
-      },
       code: {
         type: String,
         default: '',
@@ -58,32 +51,19 @@
       return {
         loading: false,
         visible: false,
-        checkedList: [],
-        dataList: [],
+        dataList: [{_name: $i.table.checkAll, children: []}],
         checkAll: false,
         filterText: '',
         isIndeterminate: true,
+        columns: []
       }
     },
     watch: {
-      data() {
-        // this.defaultChecked();
-      },
       filterText(val) {
         this.$refs.columnTree.filter(val);
-      },
-      checkAll(val) {
-        val ? this.$refs.columnTree.setCheckedKeys(_.pluck(this.dataList, 'property'))
-          : this.$refs.columnTree.setCheckedKeys([]);
-      },
-      checkedList(value) {
-        let checkedCount = value.length;
-        this.checkAll = checkedCount === this.dataList.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.dataList.length;
       }
     },
     created() {
-      // this.getConfig();
     },
     mounted() {
     },
@@ -96,19 +76,37 @@
         return _.map(data, val => {
           return _.mapObject(val, v => {
             if (_.isObject(v)) {
-              v._hidden = checkList.indexOf(v.key) === -1;
+              v._hidden = checkList.indexOf(v._filed || v.key) === -1;
             }
             return v;
           });
         });
       },
-      getConfig(isUpdate = false) {
+      getConfig(isUpdate = false, data = []) {
+
+        if (!_.isEmpty(data)) {
+          this.columns = data[0];
+        }
+
         return this.$ajax.post(this.$apis.GRIDFAVORITE_LIST, {bizCode: this.code},
           {contentType: 'F', cache: true, updateCache: isUpdate})
           .then(res => {
-            let list = _.pluck(_.where(res, {isChecked: 1}), 'property');
-            this.dataList = res;
-            this.$refs.columnTree.setCheckedKeys(list);
+            let list = _.pluck(_.where(res, {isChecked: 1}), 'property')
+              , dataList = [];
+
+            _.map(this.columns, (val, key) => {
+              let item = _.findWhere(res, {property: val._filed || key})
+              if (!val._hide && item) {
+                item._name = val.label;
+                dataList.push(item);
+              }
+            });
+
+            this.dataList[0].children = dataList;
+
+            this.$nextTick(() => {
+              this.$refs.columnTree.setCheckedKeys(list);
+            });
             return list;
           });
       },
@@ -119,7 +117,7 @@
 
         _.map(selected, value => {
           let {id, seqNum} = value;
-          params.userGridFavoriteList.push({seqNum, gridFieldId: id});
+          id && params.userGridFavoriteList.push({seqNum, gridFieldId: id});
         });
 
         this.$ajax.post(this.$apis.GRIDFAVORITE_UPDATE, params)
@@ -140,9 +138,6 @@
             list.push(val.property);
           }
         });
-      },
-      changeCheck(val) {
-        this.checkedList = this.$refs.columnTree.getCheckedKeys();
       }
     }
   }

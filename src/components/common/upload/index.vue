@@ -14,7 +14,8 @@
           <span v-text="item.showName"></span>
         </template>
 
-        <v-image class="img-box" v-else-if="item.url" :src="item.url"></v-image>
+        <v-image class="img-box" v-else-if="item.url && item.url.indexOf('http') > -1"
+                 :src="item.url"></v-image>
         <div :class="{close:!item.progress || item.progress === 1}" class="progress"
              :style="{width: (item.progress * 100) + '%'}">
         </div>
@@ -41,6 +42,9 @@
   import config from '../../../service/config';
 
   const imageType = ['JPG', 'PNG'];
+  const prohibitType = ['EXE'];
+  const maxSize = 128; // MB
+
 
   export default {
     name: 'VUpload',
@@ -88,7 +92,7 @@
       this.bucket = this.ossPrivate ? config.ENV.OSS_BUCKET_PRIVATE : config.ENV.OSS_BUCKET_PUBLIC;
     },
     watch: {
-      fileList() {
+      fileList(val) {
       },
       list(val) {
         this.setList(val);
@@ -102,6 +106,13 @@
             , fileNames = _.pluck(_.values(this.fileList), 'fileName');
 
           _.map(files, val => {
+            if (_.indexOf(prohibitType, val.name.split('.').pop().toLocaleUpperCase()) > -1) {
+              return this.$message.warning(`${this.$i.upload.typeLimit}: ${prohibitType.join()} `);
+            }
+
+            if (val.size > 1024 * 1024 * maxSize) {
+              return this.$message.warning(`${this.$i.upload.sizeLimit}: ${maxSize}MB`);
+            }
             _.indexOf(fileNames, val.name) === -1 && this.startUpload(client, val);
           });
 
@@ -115,7 +126,7 @@
           , fileKey = `${this.tenantId}/${uid}/${files.name}`;
 
         if (_.values(_this.fileList).length >= this.limit) {
-          return this.$message.warning(`只能上传${this.limit}个文件`);
+          return this.$message.warning(`${this.$i.upload.numberLimit}: ${this.limit}`);
         }
 
         params = _.extend(this.filterType(files.name), {
@@ -207,7 +218,8 @@
         }
 
         _.map(list, value => {
-          let param = this.filterType(decodeURIComponent(value));
+          let urls = value.split('?')
+            , param = this.filterType(`${decodeURIComponent(urls[0])}${urls[1] ? ('?' + urls[1]) : ''}`);
 
           if (_.isEmpty(this.fileList[param.id])) {
             this.$set(this.fileList, param.id, param);

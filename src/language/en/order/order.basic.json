@@ -55,5 +55,8 @@
   "remindCustomerPay":"提醒采购商付款",
   "applyRefund":"申请退款",
   "pleaseChoose":"Please Choose",
-  "pleaseInput":"Please Input"
+  "pleaseInput":"Please Input",
+  "summary":"Summary",
+  "skuQtys":"SKU Quantity",
+  "importantSupplier":"Important Supplier"
 }

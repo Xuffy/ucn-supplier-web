@@ -2,6 +2,7 @@
   <div class="ucn-import">
     <el-dialog
       class="ucn-import-dialog"
+      :close-on-click-modal="false"
       :title="$i.importTemplate.import"
       :visible.sync="dialogVisible"
       width="50%">
@@ -11,7 +12,7 @@
           <el-upload
             :action="$apis.IMPORTFILE_IMPORTTASKE"
             :headers="{'U-Session-Token':$localStore.get('token')}"
-            :on-preview="handlePreview"
+            :on-preview="()=>$router.push({path:'/logs/import'})"
             :limit="10"
             :data="{templateCode:code,bizCode:bizCode}"
             name="importFile"
@@ -34,10 +35,6 @@
           </router-link>
         </el-form-item>
       </el-form>
-      <!--<div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{$i.common.cancel}}</el-button>
-        <el-button type="primary" @click="dialogVisible = false">{{$i.common.confirm}}</el-button>
-      </div>-->
     </el-dialog>
   </div>
 </template>
@@ -76,11 +73,12 @@
     created() {
     },
     mounted() {
-      this.getTemplate();
+      // this.getTemplate();
     },
     methods: {
       show() {
         this.dialogVisible = true;
+        this.getTemplate();
       },
       beforeAvatarUpload(file) {
         if (file.name.indexOf('.zip') < 0 && file.name.indexOf('.xls') < 0) {
@@ -89,13 +87,10 @@
         }
       },
       getTemplate() {
-        this.$ajax.post(this.$apis.IMPORTTEMPLATE_DOWNLOADURL, [this.code])
+        this.$ajax.post(this.$apis.IMPORTTEMPLATE_DOWNLOADURL, [this.code], {cache: true})
           .then(res => {
-            this.downTemplate = res[0].filePath;
+            this.downTemplate = res[0] ? res[0].filePath : '';
           });
-      },
-      handlePreview(file) {
-        console.log(file);
       },
       handleExceed(files, fileList) {
         this.$message.warning('导入文件超出限制，请稍候再试');

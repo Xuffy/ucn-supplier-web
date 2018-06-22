@@ -221,6 +221,7 @@ export default {
           'INQUIRY_STATUS',
           'PMT',
           'ITM',
+          'AE_IS',
           'EL_IS',
           'RA_IS',
           'SUPPLIER_TYPE',
@@ -229,6 +230,7 @@ export default {
           'SKU_UNIT',
           'ED_UNIT',
           'LH_UNIT',
+          'WT_UNIT',
           'VE_UNIT',
           'OEM_IS',
           'UDB_IS',
@@ -516,6 +518,7 @@ export default {
       parentNode.draft = 0;
       let saveData = this.$filterModify(parentNode);
       saveData.attachment = null;
+      saveData.skuQty = saveData.details.length;
       this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SAVE, saveData).then(res => {
         this.newTabData[0].status.originValue = res.status;
         this.statusModify = false;

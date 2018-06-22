@@ -460,6 +460,7 @@
             },
             getTableData(){
                 this.loadingProductTable=true;
+                this.tableConfig.skuInventoryStatusDictCode='';
                 this.$ajax.post(this.$apis.get_qcOrderProductData,this.tableConfig)
                     .then(res=>{
                         this.productTable=res.datas;

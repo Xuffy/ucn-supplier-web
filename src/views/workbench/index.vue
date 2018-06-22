@@ -2,24 +2,31 @@
   <div class="workbench">
     <ul class="welcome-box ucn-container-right" :class="{show:settingStateShow}">
       <li class="title" v-text="$i.workbench.settingState"></li>
-      <li v-if="!settingState.departmentInfo">
+      <li v-if="!settingState.departmentInfo && userInfo.userType === 0">
         <el-checkbox disabled>{{$i.workbench.settingDepartment}}</el-checkbox>
         <br>
         <router-link to="/settings/department">
           <el-button type="text">Go set>></el-button>
         </router-link>
       </li>
-      <li v-if="!settingState.companyInfo">
+      <li v-if="!settingState.companyInfo && userInfo.userType === 0">
         <el-checkbox disabled>{{$i.workbench.settingCompany}}</el-checkbox>
         <br>
         <router-link to="/settings/companyInfo">
           <el-button type="text">Go set>></el-button>
         </router-link>
       </li>
-      <li v-if="!settingState.categoryInfo">
+      <li v-if="!settingState.categoryInfo && userInfo.userType === 0">
         <el-checkbox disabled>{{$i.workbench.settingCategory}}</el-checkbox>
         <br>
         <router-link to="/settings/category">
+          <el-button type="text">{{$i.workbench.goSet}}>></el-button>
+        </router-link>
+      </li>
+      <li v-if="!settingState.personalInfo">
+        <el-checkbox disabled>{{$i.workbench.settingPersonal}}</el-checkbox>
+        <br>
+        <router-link to="/settings/Personal">
           <el-button type="text">{{$i.workbench.goSet}}>></el-button>
         </router-link>
       </li>
@@ -54,6 +61,7 @@
         <v-table-data :type="4"></v-table-data>
       </el-col>
     </el-row>
+    <!--<v-upload></v-upload>-->
     <!--<v-import-template ref="importFile" code="PRODUCT_SUPPLIER" biz-code="PRODUCT_SUPPLIER"></v-import-template>-->
     <!--<v-message-board module="workbench" code="workbench" id="123"></v-message-board>-->
   </div>
@@ -86,11 +94,12 @@
         settingState: {},
         settingStateShow: false,
         settingStateLoading: false,
+        userInfo: this.$localStore.get('user') || {}
       }
     },
     created() {
-      let {userType} = this.$localStore.get('user') || {};
-      userType === 0 && this.getBasicInfo();
+      this.getBasicInfo();
+      this.$auth();
     },
     mounted() {
       // this.setLog({query:{code:'productSourcingOverview'}});
@@ -107,15 +116,16 @@
         this.settingStateLoading = true;
         this.$ajax.post(this.$apis.USER_CUSTOMER_ISSETUSERINFO, {type: config.CLIENT_TYPE}, {cache: true})
           .then(res => {
-            if (!res.categoryInfo || !res.companyInfo || !res.departmentInfo) {
+            if (!res.categoryInfo || !res.companyInfo || !res.departmentInfo || !res.personalInfo) {
               this.settingStateShow = true;
               this.layout.paddingRight = '240px'
               this.settingState = res;
             }
           })
-          .finally(() => {
-            this.settingStateLoading = false;
-          });
+          .catch((err) => {
+            console.log(err)
+          })
+          .finally(() => this.settingStateLoading = false);
       }
     }
   }

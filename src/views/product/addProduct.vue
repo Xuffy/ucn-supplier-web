@@ -10,7 +10,7 @@
         <div>
             <el-form ref="productFormTop" :model="productForm" :rules="productFormRules" label-width="190px">
                 <el-row class="speZone">
-                    <el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.buyerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                    <el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.overview" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
                             <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="categoryList" :defaultProps="defaultProps"
                             ref="dropDown" :expandOnClickNode="false"></drop-down>
@@ -31,7 +31,7 @@
         <div class="body" :class="{hide:hideBody}">
             <el-form ref="productForm" :rule="productFormRules" :model="productForm" label-width="190px">
                 <el-row class="speZone">
-                    <el-col v-if="!v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.buyerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                    <el-col v-if="!v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.overview" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
                             <drop-down
                                     v-if="v.showType==='dropdown'"

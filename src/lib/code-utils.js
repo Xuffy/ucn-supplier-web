@@ -2,6 +2,7 @@
  * 定义Code的值类型等配置
  */
 const codeConfig = {
+  'AE_IS': {valueType: Number}, // Boolean
   'EL_IS': {valueType: Number}, // Boolean
   'INQUIRY_STATUS': {valueType: Number},
   'ITM': {valueType: Number},
@@ -16,6 +17,7 @@ const codeConfig = {
   'SKU_UNIT': {valueType: Number},
   'SUPPLIER_TYPE': {valueType: Number},
   'UDB_IS': {valueType: Number}, // Boolean
+  'WT_UNIT': {valueType: Number},
   'VE_UNIT': {valueType: Number},
   'CY_UNIT': {valueType: String},
   'COUNTRY': {valueType: String}

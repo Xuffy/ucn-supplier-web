@@ -166,6 +166,7 @@
                    @click="inviteUser">
           {{$i.setting.invite}}
         </el-button>
+        <el-button type="primary" @click="()=>$refs.importUser.show()">Upload</el-button>
       </div>
       <div class="content">
         <el-form :inline="true">
@@ -217,6 +218,7 @@
     <!--修改/添加 用户信息-->
     <el-dialog
       class="speDialog"
+      :close-on-click-modal="false"
       :title="editUserdialog.title[editUserdialog.type]"
       :visible.sync="editUserdialog.show"
       width="50%">
@@ -323,12 +325,14 @@
         <el-button @click="editUserdialog.show = false">{{$i.setting.cancel}}</el-button>
       </div>
     </el-dialog>
+
+    <v-import-template ref="importUser" code="USER_IMPORT" biz-code="BIZ_USER"></v-import-template>
   </div>
 </template>
 
 <script>
 
-  import {VTable, VPagination} from '@/components/index'
+  import {VTable, VPagination, VImportTemplate} from '@/components/index'
   import config from 'service/config'
   import {Base64} from 'js-base64';
   import Qs from 'qs';
@@ -339,7 +343,8 @@
     name: "department-setting",
     components: {
       VTable,
-      VPagination
+      VPagination,
+      VImportTemplate
     },
     data() {
       return {
@@ -484,11 +489,12 @@
             if (item.status.value !== 0) {
               item._disabledCheckbox = true;
             }
-            gender = _.findWhere(this.genderOption, {code: item.gender.value});
-            status = _.findWhere(this.actionOption, {code: item.status.value});
+            item.birthday.value = this.$dateFormat(item.birthday.value, 'yyyy-mm-dd');
+            gender = _.findWhere(this.genderOption, {code: item.gender.value}) || {};
+            status = _.findWhere(this.actionOption, {code: item.status.value}) || {};
             lang = _.findWhere(this.languageOption, {code: item.lang.value}) || {};
-            // item.gender._value = this.$i.setting[gender.name];
-            // item.status._value = this.$i.setting[status.name];
+            item.gender._value = gender.name || '';
+            item.status._value = status.name || '';
             item.lang._value = lang.name || '';
             return item;
           });
@@ -527,7 +533,9 @@
       },
       addDepartment(item) {
         this.$prompt(this.$i.setting.pleaseInputDepartment,
-          this.$i.setting[item ? 'prompt' : 'addDepartment'], {
+          this.$i.setting[item ? 'prompt' : 'addDepartment'],
+          {
+            closeOnClickModal: false,
             confirmButtonText: this.$i.setting.sure,
             cancelButtonText: this.$i.setting.cancel,
             inputValue: ' ' + (item ? item.deptName : ''),
@@ -559,7 +567,7 @@
               http = () => item ? this.$ajax.put : this.$ajax.post;
 
               http()(this.$apis.get_department, params).then(res => {
-                this.$message.success(this.$i.setting.createSuccess);
+                this.$message.success(this.$i.setting.successfulOperation);
                 this.getDepartmentData();
               }).finally(() => this.loadingDepartment = false);
             }
@@ -567,7 +575,9 @@
       },
       addRole(item) {
         this.$prompt(this.$i.setting.pleaseInputRole,
-          this.$i.setting[item ? 'prompt' : 'addRole'], {
+          this.$i.setting[item ? 'prompt' : 'addRole'],
+          {
+            closeOnClickModal: false,
             confirmButtonText: this.$i.setting.sure,
             cancelButtonText: this.$i.setting.cancel,
             inputValue: ' ' + (item ? item.roleName : ''),
@@ -600,6 +610,7 @@
               }
 
               http()(this.$apis.add_departmentRole, params).then(res => {
+                this.$message.success(this.$i.setting.successfulOperation);
                 this.getDepartmentData(true);
               }).finally(() => this.loadingRole = false);
             }

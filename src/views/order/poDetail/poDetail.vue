@@ -5,7 +5,7 @@
         </div>
         <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && v.type!=='supplierNo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col :class="{speCol:v.type!=='textarea' && v.type!=='attachment'}" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && v.type!=='supplierNo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.type==='input'">
                             <div v-if="v.key==='lcNo'">
@@ -31,8 +31,7 @@
                                     :placeholder="isModify?$i.order.pleaseChoose:''"
                                     class="speInput"
                                     align="right"
-                                    type="date"
-                                    :picker-options="pickerOptions1">
+                                    type="date">
                             </el-date-picker>
                         </div>
                         <div v-else-if="v.type==='select'">
@@ -485,6 +484,106 @@
                 </div>
             </template>
         </v-table>
+
+        <div class="summary">
+            <div class="second-title">
+                {{$i.order.summary}}
+            </div>
+            <el-form label-width="280px">
+                <el-row class="speZone">
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalQty">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalQty"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.skuQtys">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.skuQty"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalSkuPrice">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalSkuPrice"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalOuterCartonQty">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalOuterCartonQty"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                    <!--<el-form-item :label="$i.order.totalGrossWeight">-->
+                    <!--<el-input-->
+                    <!--class="summaryInput"-->
+                    <!--size="mini"-->
+                    <!--v-model="orderForm.totalGrossWeight"-->
+                    <!--:disabled="true">-->
+                    <!--</el-input>-->
+                    <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                    <!--<el-form-item :label="$i.order.totalNetWeight">-->
+                    <!--<el-input-->
+                    <!--class="summaryInput"-->
+                    <!--size="mini"-->
+                    <!--v-model="orderForm.totalNetWeight"-->
+                    <!--:disabled="true">-->
+                    <!--</el-input>-->
+                    <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                    <!--<el-form-item :label="$i.order.totalVolume">-->
+                    <!--<el-input-->
+                    <!--class="summaryInput"-->
+                    <!--size="mini"-->
+                    <!--v-model="orderForm.totalVolume"-->
+                    <!--:disabled="true">-->
+                    <!--</el-input>-->
+                    <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                    <!--<el-form-item :label="$i.order.paidAmount">-->
+                    <!--<el-input-->
+                    <!--class="summaryInput"-->
+                    <!--size="mini"-->
+                    <!--v-model="orderForm.paidAmount"-->
+                    <!--:disabled="true">-->
+                    <!--</el-input>-->
+                    <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                    <!--<el-form-item :label="$i.order.unpaidAmount">-->
+                    <!--<el-input-->
+                    <!--class="summaryInput"-->
+                    <!--size="mini"-->
+                    <!--v-model="orderForm.unpaidAmount"-->
+                    <!--:disabled="true">-->
+                    <!--</el-input>-->
+                    <!--</el-form-item>-->
+                    <!--</el-col>-->
+                </el-row>
+            </el-form>
+        </div>
 
         <div class="footBtn">
             <div v-if="hasHandleOrder">
@@ -1039,6 +1138,7 @@
                 orderStatusOption:[],
                 countryOption:[],
                 quarantineTypeOption:[],
+                skuSaleStatusOption:[],
 
 
                 /**
@@ -1294,9 +1394,9 @@
              * 获取页面数据
              * */
             getUnit(){
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
+                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                    console.log(res)
+                });
                 //获取币种
                 this.$ajax.get(this.$apis.CURRENCY_ALL,{}).then(res=>{
                     this.currencyOption=res;
@@ -1329,7 +1429,40 @@
 
                 });
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS']).then(res=>{
+                this.skuStatusTotalOption=[
+                    {
+                        code:'1',
+                        name:'TBCBYSUPPLIER'
+                    },
+                    {
+                        code:'2',
+                        name:'TBCBYCUSTOMER'
+                    },
+                    {
+                        code:'3',
+                        name:'PROCESS'
+                    },
+                    {
+                        code:'4',
+                        name:'FINISHED'
+                    },
+                    {
+                        code:'5',
+                        name:'CANCLED'
+                    },
+                ];
+                this.skuStatusOption=[
+                    {
+                        code:'3',
+                        name:'PROCESS'
+                    },
+                    {
+                        code:'5',
+                        name:'CANCLED'
+                    },
+                ];
+
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS','SKU_SALE_STATUS']).then(res=>{
                     this.allowQuery++;
                     res.forEach(v=>{
                         if(v.code==='ITM'){
@@ -1354,6 +1487,9 @@
                             this.orderStatusOption=v.codes;
                         }else if(v.code==='QUARANTINE_TYPE'){
                             this.quarantineTypeOption=v.codes;
+                            console.log(this.quarantineTypeOption,'this.quarantineTypeOption')
+                        }else if(v.code==='SKU_SALE_STATUS'){
+                            this.skuSaleStatusOption=v.codes;
                         }
                     })
                 }).finally(err=>{
@@ -1383,22 +1519,9 @@
                 this.loadingPage=true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
                     orderId:this.$route.query.orderId,
+                    orderNo:this.$route.query.orderNo
                 }).then(res=>{
                     this.orderForm=res;
-                    if(this.orderForm.status==='2' || this.orderForm.status==='3' || this.orderForm.status==='5'){
-                        this.skuStatusOption=[
-                            {
-                                code:'1',
-                                name:'Process'
-                            },
-                            {
-                                code:'0',
-                                name:'Cancel'
-                            }
-                        ];
-                    }else{
-                        this.skuStatusOption=[];
-                    }
                     _.map(this.supplierOption,v=>{
                         if(v.code===res.supplierCode){
                             this.orderForm.supplierName=v.id;
@@ -1406,20 +1529,33 @@
                     });
                     this.changePayment(res.payment);
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
-                        item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
-                        item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
-                        item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
-                        item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
-                        item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
-                        item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
-
+                        console.log(item,'???')
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
-                            item.skuPic._image=false;
-                        }else{
+                            item.skuPictures._image=false;
+                            item.skuLabelPic._image=false;
+                            item.skuPkgMethodPic._image=false;
+                            item.skuInnerCartonPic._image=false;
+                            item.skuOuterCartonPic._image=false;
+                            item.skuAdditionalOne._image=false;
+                            item.skuAdditionalTwo._image=false;
+                            item.skuAdditionalThree._image=false;
+                            item.skuAdditionalFour._image=false;
+                        }
+                        else{
                             item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
                             item.skuSample._value=item.skuSample.value?'YES':'NO';
                             item.skuSample.value=item.skuSample.value?'1':'0';
+                            item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                            item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                            item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                            item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
+                            item.skuStatus._value=this.$change(this.skuStatusTotalOption,'skuStatus',item,true).name;
+                            item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+                            item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
+                            if(item.skuCategoryId.value){
+                                item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            }
                         }
                     });
                     this.productTableData=[];
@@ -1484,6 +1620,7 @@
                     v.skuSample=v.skuSample==='1'?true:false;
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
+                console.log(params,'????')
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
                     this.isModify=false;
@@ -1519,7 +1656,6 @@
 
             //获取订单号(先手动生成一个)
             getOrderNo(){
-                this.orderForm.orderNo=this.$route.query.orderId;
                 this.getSupplier();
             },
 
@@ -1658,7 +1794,30 @@
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
-                            item.skuPic._image=false;
+                            item.skuPictures._image=false;
+                            item.skuLabelPic._image=false;
+                            item.skuPkgMethodPic._image=false;
+                            item.skuInnerCartonPic._image=false;
+                            item.skuOuterCartonPic._image=false;
+                            item.skuAdditionalOne._image=false;
+                            item.skuAdditionalTwo._image=false;
+                            item.skuAdditionalThree._image=false;
+                            item.skuAdditionalFour._image=false;
+                        }
+                        else{
+                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
+                            item.skuSample._value=item.skuSample.value?'YES':'NO';
+                            item.skuSample.value=item.skuSample.value?'1':'0';
+                            item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                            item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                            item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                            item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
+                            item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+                            item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+                            item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
+                            if(item.skuCategoryId.value){
+                                item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            }
                         }
                     });
                     _.map(data,v=>{
@@ -1713,9 +1872,11 @@
                                     }else if(item[k].key==='skuExpireUnit'){
                                         json[k]=_.findWhere(this.expirationDateOption,{name:item[k]._value}).code;
                                     }else if(item[k].key==='skuStatus'){
-                                        json[k]=_.findWhere(this.skuStatusOption,{name:item[k]._value}).code;
+                                        json[k]=_.findWhere(this.skuStatusTotalOption,{name:item[k]._value}).code;
                                     }else if(item[k].key==='skuSample'){
                                         json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
+                                    }else{
+                                        json[k] = item[k].value;
                                     }
                                 }else{
                                     json[k] = item[k].value;
@@ -2344,7 +2505,30 @@
             }
         },
         created(){
-            this.getOrderNo();
+
+            let category=[];
+            this.category=[];
+            this.loadingPage=true;
+            this.$ajax.get(this.$apis.CATEGORY_SYSTEM,{}).then(res=>{
+                _.map(res,v=>{
+                    category.push(v);
+                });
+                this.$ajax.get(this.$apis.CATEGORY_MINE,{}).then(data=>{
+                    _.map(data,v=>{
+                        category.push(v);
+                    });
+                    _.map(category,data=>{
+                        _.map(data.children,ele=>{
+                            this.category.push(ele);
+                        })
+                    });
+                    this.getOrderNo();
+                }).catch(err=>{
+                    this.loadingPage=false;
+                });
+            }).catch(err=>{
+                this.loadingPage=false;
+            });
         },
         watch:{
             allowQuery(n){
@@ -2364,6 +2548,17 @@
         line-height: 32px;
         color:#666666;
         margin-top: 10px;
+    }
+    .second-title{
+        font-weight: bold;
+        font-size: 18px;
+        height: 32px;
+        line-height: 32px;
+        color:#666666;
+        margin-top: 10px;
+    }
+    .speCol{
+        height: 47px;
     }
     .speInput{
         width: 80%;

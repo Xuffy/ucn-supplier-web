@@ -6,7 +6,7 @@
         <slot name="header"></slot>
       </div>
       <div class="fixed">
-        <v-filter-value v-if="!hideFilterValue && code" ref="tableFilter" :code="code"
+        <v-filter-value v-if="!hideFilterValue && code" ref="tableFilter" :code="code" :data="dataColumn"
                         @change="val => {$emit('filter-value',val)}"></v-filter-value>
 
         <v-filter-column v-if="!hideFilterColumn && code" ref="filterColumn" :code="code"
@@ -17,7 +17,8 @@
     <div class="table-container" ref="tableContainer">
       <div class="fixed-left" v-if="selection"
            ref="fixedLeft" :class="{show:dataColumn.length}">
-        <input type="checkbox" v-model="checkedAll" :class="{visibility:selectionRadio}" ref="checkboxAll"/>
+        <input type="checkbox" v-model="checkedAll" :class="{visibility:selectionRadio}" ref="checkboxAll"
+               @change="changeCheckedAll"/>
       </div>
       <div class="fixed-right" v-if="buttons"
            ref="fixedRight" :class="{show:dataColumn.length}">
@@ -96,7 +97,7 @@
             <td v-if="rowspan < 2">
             </td>
             <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && typeof item === 'object'">
-              <div v-text="totalItem[item.key].value"></div>
+              <div v-text="totalItem[item.key]._value && totalItem[item.key].value"></div>
             </td>
             <td v-if="buttons">
               <div></div>
@@ -214,32 +215,16 @@
     watch: {
       data(val) {
         this.setDataList(val, true);
-      },
-      column() {
-        this.filterColumn();
-      },
-      checkedAll(value) {
-        this.setDataList(_.map(this.dataList, val => {
-          if (!val._disabled && !val._disabledCheckbox) {
-            this.$set(val, '_checked', value);
-          }
-          return val;
-        }));
-        this.changeCheck(this.dataList, value);
-      },
+      }
     },
     mounted() {
-
       this.setDataList(this.data, true);
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
 
-      this.interval = setInterval(() => {
-        this.updateTable();
-      }, 500);
+      this.interval = setInterval(this.updateTable, 200);
     },
     methods: {
       onFilterColumn(checked) {
-        // todo 需过滤column
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
       },
       filterColumn() {
@@ -284,7 +269,6 @@
           });
 
           this.$refs.tableTitle.style.transform = `translate3d(0,${!ele.scrollTop ? 0 : st}px,0)`;
-
         });
       },
       getImage(value, split = ',') {
@@ -297,6 +281,8 @@
         return value[0];
       },
       changeCheck(item, value) {
+        let selected = this.getSelected();
+
         if (this.selectionRadio) {
           this.setDataList(_.map(this.dataList, val => {
             val._checked = false;
@@ -304,7 +290,9 @@
           }));
           item._checked = true;
         }
-        this.$emit('change-checked', this.getSelected());
+
+        this.checkedAll = selected.length === this.dataList.length;
+        this.$emit('change-checked', selected);
       },
       getSelected() {
         return this.selectionRadio ? _.findWhere(this.dataList, {_checked: true}) :
@@ -315,8 +303,8 @@
           this.$refs.tableBox.scrollTop = 0;
         }
 
-        if (!this.hideFilterColumn && this.code) {
-          this.$refs.filterColumn.getConfig().then(res => {
+        if (!this.hideFilterColumn && this.code && !_.isEmpty(val)) {
+          this.$refs.filterColumn.getConfig(false, val).then(res => {
             let to = setTimeout(() => {
               clearTimeout(to);
               this.dataList = this.$refs.filterColumn.getFilterData(val, res);
@@ -333,6 +321,15 @@
       },
       changeFilterColumn(data) {
         this.dataList = this.$refs.filterColumn.getFilterData(this.dataList, data);
+      },
+      changeCheckedAll() {
+        this.setDataList(_.map(this.dataList, val => {
+          if (!val._disabled && !val._disabledCheckbox) {
+            this.$set(val, '_checked', this.checkedAll);
+          }
+          return val;
+        }));
+        this.changeCheck(this.dataList, this.checkedAll);
       }
     },
     beforeDestroy() {

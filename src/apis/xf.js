@@ -24,5 +24,6 @@ export default {
   PRIVILEGE_DATA_BIZDOMAIN: ['/privilege/data/biz-domain', 'UUSER_URL'],
   PRIVILEGE_RESOURCE: ['/privilege/resource', 'UUSER_URL'],
   ROLE_PRIVILEGE: ['/role/privilege', 'UUSER_URL'],
+  PAYMENT_GETORDERBYPAYMENTNOS: ['/payment/getOrderByPaymentNos', 'UUSER_URL'],
   // IMPORTTEMPLATE_DOWNLOADURL: ['/customer/isSetCompanyInfo', 'UIE_URL']
 }

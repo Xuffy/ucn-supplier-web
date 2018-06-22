@@ -1,8 +1,11 @@
 <template>
   <div class="nav-bar-box">
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item v-for="(item,index) in navBarList" :key="index"
+      <!--<el-breadcrumb-item v-for="(item,index) in navBarList" :key="index"
                           :to="{path:index === navBarList.length - 1 ? null : (item.redirect||item.path)}">
+        {{item.meta ? item.meta.name : ''}}
+      </el-breadcrumb-item>-->
+      <el-breadcrumb-item v-for="(item,index) in navBarList" :key="index">
         {{item.meta ? item.meta.name : ''}}
       </el-breadcrumb-item>
     </el-breadcrumb>
@@ -22,14 +25,27 @@
     },
     methods: {
       updateBreadcrumb() {
-        let matched = this.$route.matched.filter(item => {
+        let matched = [], first = {}, htmlTitle = 'UCN';
+
+        matched = this.$route.matched.filter(item => {
           return item.meta ? item.meta.name : '';
         });
-        const first = matched[0];
+        first = matched[0];
+
         if (first && first.meta && (first.meta.name !== this.$i.common.home || first.path !== '')) {
           matched = [{meta: {name: this.$i.common.home}, path: '/'}].concat(matched)
         }
-        this.navBarList = matched;
+        this.navBarList = _.clone(matched);
+
+        matched.shift();
+
+        _.map(matched, val => {
+          if (val.meta) {
+            htmlTitle += `-${val.meta.name}`;
+          }
+        });
+
+        document.title = htmlTitle;
       }
     },
     watch: {
