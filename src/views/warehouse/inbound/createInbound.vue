@@ -3,10 +3,10 @@
         <div class="title">
             {{$i.warehouse.basicInfo}}
         </div>
-        <el-form :modal="inboundData" ref="basicInfo" class="speForm" label-width="200px" :label-position="labelPosition">
+        <el-form ref="basicInfo" class="speForm" label-width="200px" :label-position="labelPosition">
             <el-row>
                 <el-col class="speCol" v-for="v in $db.warehouse.inbound" v-if="v.belong==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:8" :md="v.fullLine?24:8" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
-                    <el-form-item :prop="v.key" :label="v.label">
+                    <el-form-item :label="v.label" :required="v._rules?v._rules.required:false">
                         <div v-if="v.showType==='input'">
                             <el-input
                                     class="speInput"
@@ -251,6 +251,7 @@
             </div>
 
             <v-table
+                    :height="500"
                     v-loading="loadingTable"
                     :data="tableDataList"
                     @change-checked="changeChecked"></v-table>
@@ -365,12 +366,14 @@
                     /**
                      * 每次打开弹窗时进行置灰判断
                      * */
+                    console.log(this.productData,'this.productData')
+                    console.log(this.tableDataList,'this.tableDataList')
                     this.tableDataList.forEach(v=>{
                         if(v.skuId.value===0){  //id为0的是脏数据，不能选
                             this.$set(v,'_disabled',true);
                         }else{
                             this.productData.forEach(m=>{
-                                if(v.skuId.value===m.skuList[0].skuId){
+                                if(v.skuId.value===m.skuId && m.orderNo===v.orderNo.value){
                                     this.$set(v,'_disabled',true);
                                     this.$set(v,'_checked',true);
                                     this.selectList.push(v);
@@ -407,6 +410,9 @@
 
             //提交表单
             submit(){
+                if(this.$validateForm(this.inboundData, this.$db.warehouse.inbound)){
+                    return;
+                }
                 if(this.productData.length===0){
                     return this.$message({
                         message: this.$i.warehouse.pleaseAddProduct,
@@ -596,8 +602,6 @@
                         orderNos.push(v.orderNo.value);
                     }
                 });
-                console.log(this.productIds,'this.productIds')
-                console.log(orderNos,'orderNos')
                 if(this.productIds.length!==0){
                     //表示有新增产品
                     this.loadingProductTable=true;
@@ -605,13 +609,11 @@
                         skuIds:this.productIds,
                         orderNos:orderNos
                     }).then(res=>{
-                        console.log(res,'res')
                         _.map(res,v=>{
                             _.map(v.skuList,e=>{
                                 this.productData.push(e);
                             })
                         });
-                        console.log(this.productData,'this.productData')
 
                         /**
                          * 计算底部summary
@@ -714,12 +716,12 @@
                 }
             },
             handleClick(e){
-                // this.$windowOpen({
-                //     url:'',
-                //     params:{
-                //         id:e.skuList[0].skuId
-                //     }
-                // })
+                this.$windowOpen({
+                    url:'/product/detail',
+                    params:{
+                        id:e.skuId
+                    }
+                })
             },
 
             /**
@@ -729,6 +731,10 @@
                 this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE'],{cache:true}).then(res=>{
                     this.inboundTypeOption=res[0].codes;
                 });
+
+
+
+
                 // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{
                 //     console.log(res)
                 // });

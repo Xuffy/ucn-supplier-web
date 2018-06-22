@@ -97,7 +97,7 @@
                 this.$ajax.post(this.$apis.get_inboundData,this.inboundConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.warehouse.inboundOverviewTable, res.datas,e=>{
 
-                        e.inboundTypeDictCode.value=this.$change(this.inboundType,'inboundTypeDictCode',e).label;
+                        e.inboundTypeDictCode.value=this.$change(this.inboundType,'inboundTypeDictCode',e).name;
 
                         e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
                         e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
@@ -158,8 +158,8 @@
         },
         created(){
             this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE']).then(res=>{
-                console.log(res,'???')
                 this.inboundType=res[0].codes;
+                console.log(this.inboundType)
                 // this.inboundType.forEach(v=>{
                 //     if(v.value==='1'){
                 //         v.label=this.$i.warehouse.purchaseInbound;

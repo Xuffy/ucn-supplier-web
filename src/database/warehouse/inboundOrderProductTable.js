@@ -55,7 +55,7 @@ export default {
         // ],
     },
     totalQty:{
-        key:'totalQty'
+        key:'skuQty'
     },
     inboundSkuTotalQty:{        //入库产品总数量
         key:'inboundSkuTotalQty',       //需要计算
@@ -189,7 +189,7 @@ export default {
         key:'customerNo'
     },
     customerName:{
-        key:'customerName',
+        key:'skuCustomsNameCn',
     },
     supplierName:{
         key:'supplierName',

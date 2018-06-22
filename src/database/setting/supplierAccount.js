@@ -1,9 +1,15 @@
 export default {
     beneficiaryName: {
         key: 'beneficiaryName',
+        _rules:{
+            required:true,
+          }
     },
     beneficiaryAccount:{
         key: 'beneficiaryAccount',
+        _rules:{
+            required:true,
+          }
     },
     beneficiaryAddress: {
         key: 'beneficiaryAddress',

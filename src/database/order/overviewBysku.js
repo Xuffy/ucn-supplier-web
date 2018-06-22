@@ -7,23 +7,31 @@ export default {
     skuBarCode:{},
     skuCode:{},
     supplierName:{},
-    //中文品名
+    skuNameCn:{},
     skuNameEn:{},
     skuNameCustomer:{},
     skuDescEn:{},
-    //中文材质
-    //英文材质
-    //单价
+    skuMaterialCn:{},
+    skuMaterialEn:{},
+    skuFobCurrency:{},
+    skuFobPrice:{},
+    skuFobPort:{},
+    skuExwCurrency:{},
+    skuExwPrice:{},
+    skuCifCurrency:{},
+    skuCifPrice:{},
+    skuCifPort:{},
+    skuDduCurrency:{},
+    skuDduPrice:{},
+    skuDduPort:{},
+    incoterm:{
+        key:'skuIncoterm'
+    },
     totalQty:{},
     totalSkuPrice:{},
     entryDt:{},
     deliveryDt:{},
-    //发运日期
-    //发运数量
-    //产品状态
-    incoterm:{},
-    currency:{},
-    incotermArea:{},
+    skuDeliveredQty:{},
+    skuStatus:{},
     updateDt:{},
-    // remark:{},
 }

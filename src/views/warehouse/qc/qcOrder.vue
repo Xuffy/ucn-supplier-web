@@ -104,7 +104,7 @@
                             :prop="v.key"
                             width="160">
                         <template slot-scope="scope">
-                            <div v-if="v.key==='qcPics'">
+                            <div v-if="v.key==='qcPics' && scope.row[v.key]">
                                 <v-image :src="scope.row[v.key][0]" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key])"></v-image>
                             </div>
                             <div v-else>

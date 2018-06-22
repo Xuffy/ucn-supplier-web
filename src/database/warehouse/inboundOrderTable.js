@@ -14,17 +14,14 @@ export default {
     skuBarCode:{
         key:'skuBarCode',
     },
-    skuCode:{
-        key:'skuCode'
-    },
     skuNameCn:{
         key:'skuNameCn'
     },
-    skuCustomsNameCn:{
-        key:'skuCustomsNameCn'
-    },
     skuNameEn:{
         key:'skuNameEn'
+    },
+    skuCustomsNameCn:{
+        key:'skuNameCustomer'
     },
     skuMaterialCn:{
         key:'skuMaterialCn'
@@ -35,6 +32,7 @@ export default {
     skuCustomerSkuCode:{
         key:'skuCustomerSkuCode'
     },
+    skuCode:{},
     skuDescCn:{
         key:'skuDescCn'
     },
@@ -44,11 +42,6 @@ export default {
     skuBrand:{
         key:'skuBrand'
     },
-    skuInnerCartonVolume:{
-        key:'skuInnerCartonVolume'
-    },
-
-
 
     /**
      * 需要传递的字段
@@ -58,7 +51,7 @@ export default {
         _hide:true
     },
     customerOrderNo:{
-        key:''
+        _hide:true
     },
 
 }

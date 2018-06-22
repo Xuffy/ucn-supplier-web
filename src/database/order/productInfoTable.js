@@ -15,6 +15,9 @@ export default {
     skuSupplierCode:{
         _hide:true
     },
+    entryDt:{
+        _hide:true
+    },
     skuPic:{
         _slot:'skuPic',
         type:'pic',

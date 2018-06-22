@@ -222,10 +222,12 @@ export default {
           'PMT',
           'ITM',
           'EL_IS',
+          'RA_IS',
           'SUPPLIER_TYPE',
           'MD_TN',
           'SKU_SALE_STATUS',
           'SKU_UNIT',
+          'ED_UNIT',
           'LH_UNIT',
           'VE_UNIT',
           'OEM_IS',
@@ -399,10 +401,7 @@ export default {
             return;
           }
           if (o.value !== o.originValue) {
-            o._style = 'background-color:yellow';
             changedFields[field] = '1';
-          } else {
-            o._style = '';
           }
         });
         item.$changedFields = changedFields;
@@ -430,7 +429,7 @@ export default {
       }
       let historyApi = item.skuId ? this.$apis.BUYER_GET_INQUIRY_DETAIL_HISTORY : this.$apis.BUYER_GET_INQUIRY_HISTORY;
       // 历史中始终要显示的列
-      let excludeColumns = ['id', 'skuId', 'fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay', 'entryDt', '_remark'];
+      let excludeColumns = ['id', 'skuId', 'fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay', 'updateDt', '_remark'];
       this.$ajax.get(historyApi, {id: item.id.value}).then(res => {
         // 处理只显示修改列
         res.forEach(i => {
@@ -455,10 +454,10 @@ export default {
         });
         if (type === 'basicInfo') {
           arr = this.newTabData.filter(i => i.id.value.toString() === config.data.toString());
-          this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), config.type === 'modify');
+          this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res), i => this.$filterDic(i)), config.type === 'modify');
         } else {
           arr = this.newProductTabData.filter(i => i.skuId.value.toString() === config.data.toString());
-          this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), config.type === 'modify');
+          this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId'), i => this.$filterDic(i)), config.type === 'modify');
         }
         this.fromArg = arr[0];
       });
