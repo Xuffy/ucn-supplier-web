@@ -1552,7 +1552,9 @@
                             item.skuStatus._value=this.$change(this.skuStatusTotalOption,'skuStatus',item,true).name;
                             item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                             item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
-                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            if(tem.skuCategoryId.value){
+                                item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            }
                         }
                     });
                     this.productTableData=[];
@@ -1812,7 +1814,9 @@
                             item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
                             item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                             item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
-                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            if(tem.skuCategoryId.value){
+                                item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            }
                         }
                     });
                     _.map(data,v=>{
