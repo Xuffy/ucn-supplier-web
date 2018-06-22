@@ -10,12 +10,6 @@ export default {
     key: 'skuSysCode',
     _hide: true
   },
-  skuWarehourceDefault: {
-    _hide: true
-  },
-  skuMethodPkgEn: {
-    _hide: true
-  },
   tenantId: {
     _hide: true
   },
@@ -51,6 +45,11 @@ export default {
     key: 'skuStatus',
     _disabled: true,
     transForm: 'SKU_SALE_STATUS'
+  },
+  deleteOrNotRecycle: {
+    key: 'skuRecycle',
+    _disabled: true,
+    transForm: 'AE_IS'
   },
   skuCode: {
     key: 'skuCode',
@@ -183,6 +182,7 @@ export default {
   },
   referenceFobPriceUsd: {
     key: 'skuRefFobPrice',
+    type: 'Number',
     _disabled: true
   },
   fobPort: {
@@ -204,10 +204,11 @@ export default {
   },
   referenceCifPriceUsd: {
     key: 'skuRefCifPrice',
+    type: 'Number',
     _disabled: true
   },
-  otherIncotermCurrency: {
-    key: 'skuOtherIncotermCurrency',
+  cifCurrency: {
+    key: 'skuCifCurrency',
     type: 'Select',
     transForm: 'CY_UNIT'
   },
@@ -221,6 +222,7 @@ export default {
   },
   referenceDdupriceUsd: {
     key: 'skuRefDduPrice',
+    type: 'Number',
     _disabled: true
   },
   dduCurrency: {
@@ -346,7 +348,7 @@ export default {
     max: 45
   },
   packingMethodEn: {
-    key: 'skuMethodPkgE',
+    key: 'skuMethodPkgEn',
     type: 'String',
     max: 45
   },
@@ -484,7 +486,7 @@ export default {
     max: 100
   },
   defaultWarehouse: {
-    key: 'skuWarehourceDefaul',
+    key: 'skuWarehourceDefault',
     type: 'String',
     max: 100
   },
@@ -520,9 +522,8 @@ export default {
   },
   yearOfListed: {
     key: 'skuYearListed',
-    type: 'Select',
     state: 'Date',
-    time: 'yyyy-mm-dd'
+    time: 'yyyy-mm'
   },
   useDisplayBoxOrNot: {
     key: 'skuUseDisplayBox',

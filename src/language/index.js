@@ -120,6 +120,9 @@ const json = {
   element: _.extend({},
     require(`./${lang}/element/date`)
   ),
+  upload: _.extend({},
+    require(`./${lang}/upload/message`)
+  )
 }
 
 export default json;

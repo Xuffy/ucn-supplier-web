@@ -59,7 +59,7 @@ export default {
       USERVICE_URL: '//test.uservice.ucnscm.cn', // 服务商端
       UBIZLOG_URL: '//test.ubizlog.ucnscm.cn', // 业务日志
       UWORKBENCH_URL: '//test.uworkbench-facade.ucnscm.cn',
-      UIE_URL: '//192.168.51.208:13003',
+      UIE_URL: '//test.uie.ucnscm.cn',
 
       OSS_BUCKET_PUBLIC: 'test-public-ucn-oss',
       OSS_BUCKET_PRIVATE: 'test-private-ucn-oss'

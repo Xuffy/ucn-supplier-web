@@ -2,10 +2,6 @@
   <div class="filter-value">
     <i class="iconfont icon-shaixuan" @click="visible = !visible"></i>
 
-    <!--<v-filter-column :data="setFiledData" @filter-column="onFilterColumn"
-                     v-if="!hideFilterColumn">
-    </v-filter-column>-->
-
     <el-dialog :title="$i.table.tableFilter"
                :visible.sync="visible" width="1000px">
       <ul v-loading="loading">
@@ -16,8 +12,8 @@
                      @change="selectCondition(cItem)">
             <el-option
               v-for="item in dataList"
-              :key="item.name"
-              :label="item.name"
+              :key="item.id"
+              :label="item._name"
               :value="item.property">
             </el-option>
           </el-select>
@@ -32,16 +28,17 @@
           </el-select>
 
           <div v-if="cItem.operator" style="display: inline-block">
-            <el-input class="compute-value" v-if="cItem.dataType === 1" v-model="cItem.value"></el-input>
+            <el-input class="compute-value" v-if="cItem.dataType === 1" v-model="cItem.value" clearable></el-input>
 
             <el-input-number v-if="cItem.dataType === 2 || cItem.dataType === 3"
                              v-model="cItem.value"
-                             controls-position="right" :min="0">
+                             controls-position="right" :min="0" clearable>
             </el-input-number>
 
             <el-date-picker v-if="cItem.dataType === 4"
                             v-model="cItem.value"
                             align="right"
+                            clearable
                             :type="cItem.operator === 'between' ? 'daterange' : 'date'"
                             :editable="false"
                             :start-placeholder="$i.element.startDate"
@@ -51,6 +48,7 @@
             <el-date-picker v-if="cItem.dataType === 5"
                             v-model="cItem.value"
                             align="right"
+                            clearable
                             :type="cItem.operator === 'between' ? 'datetimerange' : 'datetime'"
                             :editable="false"
                             :start-placeholder="$i.element.startDate"
@@ -60,11 +58,11 @@
 
           </div>
 
-          <el-radio-group style="display: inline-block;vertical-align: top"
+          <!--<el-radio-group style="display: inline-block;vertical-align: top"
                           v-model="cItem.sort" size="mini">
             <el-radio-button label="asc">{{$i.table.asc}}</el-radio-button>
             <el-radio-button label="desc">{{$i.table.desc}}</el-radio-button>
-          </el-radio-group>
+          </el-radio-group>-->
 
           <el-button style="margin-left: 10px!important" icon="el-icon-edit-outline" @click="addCompute"></el-button>
           <el-button icon="el-icon-delete" @click="cutCompute(index)"></el-button>
@@ -99,7 +97,7 @@
   export default {
     name: 'VFilterValue',
     props: {
-      data: {
+      data: { // columns 数据
         type: Array,
         default() {
           return [];
@@ -117,6 +115,7 @@
         loading: false,
         dataList: [],
         setFiledData: [],
+        columns: [],
         conditionList: [
           {property: '', operator: '', value: '', sort: '', tooltipShow: false}
         ],
@@ -130,12 +129,14 @@
         if (val) {
           this.getConfig();
         }
+      },
+      data(val) {
+        if (!_.isEmpty(val)) {
+          this.columns = val;
+        }
       }
     },
     methods: {
-      change(e) {
-        console.log(e)
-      },
       addCompute() {
         this.conditionList.push(this.$options.data().conditionList[0])
       },
@@ -150,13 +151,21 @@
       },
       getConfig() {
         this.loading = true;
-        this.$ajax.post(this.$apis.GRIDFIELDSETTING_PART, [this.code], {cache: true})
+        this.$ajax.post(this.$apis.GRIDFAVORITE_LIST, {bizCode: this.code}, {cache: true, contentType: 'F'})
           .then(res => {
-            this.dataList = res;
+            let dataList = [];
+
+            _.map(this.columns, val => {
+              let item = _.findWhere(res, {property: val.key});
+              if (!val._hide && item && item.isChecked === 1) {
+                item._name = val.label;
+                dataList.push(item);
+              }
+            });
+
+            this.dataList = dataList;
           })
-          .finally(() => {
-            this.loading = false;
-          })
+          .finally(() => this.loading = false)
       },
       selectCondition(item) {
         let data = _.findWhere(this.dataList, {property: item.property})
@@ -175,17 +184,6 @@
         item.sortable = data.sortable;
         item.dataType = data.dataType;
 
-      },
-      onFilterColumn(val) {
-        /*this.$ajax.get(this.$apis.get_itemfavoriteList).then(data => {
-          this.setFiledData = _.map(this.dataList, val => {
-            if (!_.isEmpty(_.findWhere(data, {gridFieldId: val.name}))) {
-              val._checked = true;
-            }
-            return val;
-          });
-        });*/
-        this.$emit('filter-column', val);
       },
       submitFilter(type) {
         let operatorFilters = []

@@ -196,11 +196,6 @@ export default {
       ],
     }
   },
-  mounted(){
-    if(this.basicInfoArr[0].value){
-      this.getSupplierIds();
-    }
-  },
   methods: {
     sizeChange(e) {
       this.pageParams.ps = e

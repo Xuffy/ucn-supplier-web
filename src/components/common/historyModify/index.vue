@@ -4,6 +4,7 @@
       :title="isModify ? 'Modify' : 'History'"
       width="80%"
       @close="closeDialog"
+      :close-on-click-modal="false"
       :visible.sync="showDialog">
 
       <el-table

@@ -1,0 +1,5 @@
+{
+  "typeLimit": "Cannot upload file type",
+  "sizeLimit": "Upload file size cannot exceed",
+  "numberLimit":"Only upload the number of files"
+}

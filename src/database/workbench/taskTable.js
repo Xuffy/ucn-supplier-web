@@ -15,4 +15,7 @@ export default {
     key: 'taskId',
     _hide: true
   },
+  bizCode:{
+    _hide: true
+  }
 }
