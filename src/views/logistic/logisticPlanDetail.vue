@@ -3,7 +3,7 @@
     <div class="hd-top" v-if="planId&&!isLoadingList">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
     <div class="hd-top" v-if="!planId">{{ $i.logistic.placeNewLogisticPlan }}</div>
     <div class="hd-top" v-if="isLoadingList">{{ $i.logistic.loadingList + '    ' + logisticsNo}}</div>
-    <form-list name="BasicInfo" :fieldDisplay="fieldDisplay" :showHd="false" @selectChange="formListSelectChange" @hightLightModifyFun="hightLightModifyFun" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
+    <form-list :DeliveredEdit="DeliveredEdit" name="BasicInfo" :fieldDisplay="fieldDisplay" :showHd="false" @selectChange="formListSelectChange" @hightLightModifyFun="hightLightModifyFun" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
     <el-row :gutter="10">
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
         <div class="input-item">
@@ -19,8 +19,8 @@
       
       <!-- <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/> -->
     </el-row>
-    <form-list :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/>
-    <form-list name="TransportInfo" :fieldDisplay="fieldDisplay" @hightLightModifyFun="hightLightModifyFun" :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle"/>
+    <form-list :DeliveredEdit="DeliveredEdit" :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/>
+    <form-list :DeliveredEdit="DeliveredEdit" name="TransportInfo" :fieldDisplay="fieldDisplay" @hightLightModifyFun="hightLightModifyFun" :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle"/>
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
@@ -69,7 +69,7 @@
       </div>
     </el-dialog>
     <messageBoard v-if="planId" module="logistic" code="planDetail" :id="planId"></messageBoard>
-    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
+    <btns :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
   </div>
 </template>
 <script>
@@ -92,6 +92,7 @@ export default {
   name: 'logisticPlanDetail',
   data() {
     return {
+      DeliveredEdit:false,
       dunningDisabled:false,
       modefiyProductIndex: 0,
       modefiyProductIndexArr:[],
@@ -146,6 +147,9 @@ export default {
         placeLogisticPlan: {
           saveAsDraft: this.$apis.save_draft_logistic_plan,
           send: this.$apis.send_logistic_plan
+        },
+        loadingListDetail: {
+          send: this.$apis.update_logistic_plan
         },
         planDetail: {
           send: this.$apis.update_logistic_plan
@@ -578,6 +582,12 @@ export default {
           break; 
         case 'modify':
             this.edit = true;
+          break; 
+        case 'DeliveredEdit':
+            this.DeliveredEdit = true;
+          break; 
+        case 'DeliveredEditExit':
+            this.DeliveredEdit = false;
           break; 
         case 'cancelModify':
             this.edit = false;
