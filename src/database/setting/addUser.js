@@ -8,6 +8,9 @@ export default {
   },
   userName: {
     key: 'userName',
+    _rules: {
+      required: true
+    }
   },
   lang: {
     key: 'lang',

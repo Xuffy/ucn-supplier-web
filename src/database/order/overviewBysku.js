@@ -6,7 +6,7 @@ export default {
     skuCustomerSkuCode:{},
     skuBarCode:{},
     skuCode:{},
-    supplierName:{},
+    skuSupplierName:{},
     skuNameCn:{},
     skuNameEn:{},
     skuNameCustomer:{},
@@ -27,8 +27,8 @@ export default {
     incoterm:{
         key:'skuIncoterm'
     },
-    totalQty:{},
-    totalSkuPrice:{},
+    skuQty:{},
+    skuPrice:{},
     entryDt:{},
     deliveryDt:{},
     skuDeliveredQty:{},

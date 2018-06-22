@@ -16,8 +16,7 @@ export default {
     _hide: true
   },
   "orderNo": {
-    type: 'text',
-    _hide: true
+    type: 'text'
   },
   "orderId": {
     type: 'text',
@@ -28,20 +27,22 @@ export default {
     _hide: true
   },
   "toShipCartonQty": {
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "fieldDisplay":{
     type:'text',
     _hide: true
   },
   "toShipQty": {
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "skuCode": {
     type: 'text'
   },
   "skuNameEn": {
-    type: 'text'
+    type: 'text',
   },
   "skuNameCn": {
     type: 'text'
@@ -80,12 +81,48 @@ export default {
     type: 'text'
   },
   "unitExportPrice": {
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "totalExportPrice": {
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "currency": {
+    type: 'text'
+  },
+  "containerNo":{
+    type: 'text'
+  },
+  "containerType":{
+    type: 'text'
+  },
+  "totalQuantityInContainer":{
+    key:'totalContainerQty',
+    _filed:'totalContainerQty',
+    type: 'text',
+    _important:true
+  },
+  "totalVolumeInContainer":{
+    key:'totalContainerVolume',
+    _filed:'totalContainerVolume',
+    type: 'text',
+    _important:true
+  },
+  "totalNetWeightInContainer":{
+    key:'totalContainerNetWeight',
+    _filed:'totalContainerNetWeight',
+    type: 'text',
+    _important:true
+  },
+  "totalQuantityOfOuterCartonsInContainer":{ 
+    key:'totalContainerOuterCartonsQty',
+    _filed:'totalContainerOuterCartonsQty',
+    type: 'text',
+    _important:true
+  },
+  "shipmentStatus":{
+    _hide: true,
     type: 'text'
   },
   "skuOuterCartonQty": {

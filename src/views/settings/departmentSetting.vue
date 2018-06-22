@@ -533,7 +533,9 @@
       },
       addDepartment(item) {
         this.$prompt(this.$i.setting.pleaseInputDepartment,
-          this.$i.setting[item ? 'prompt' : 'addDepartment'], {
+          this.$i.setting[item ? 'prompt' : 'addDepartment'],
+          {
+            closeOnClickModal: false,
             confirmButtonText: this.$i.setting.sure,
             cancelButtonText: this.$i.setting.cancel,
             inputValue: ' ' + (item ? item.deptName : ''),
@@ -565,7 +567,7 @@
               http = () => item ? this.$ajax.put : this.$ajax.post;
 
               http()(this.$apis.get_department, params).then(res => {
-                this.$message.success(this.$i.setting.createSuccess);
+                this.$message.success(this.$i.setting.successfulOperation);
                 this.getDepartmentData();
               }).finally(() => this.loadingDepartment = false);
             }
@@ -573,7 +575,9 @@
       },
       addRole(item) {
         this.$prompt(this.$i.setting.pleaseInputRole,
-          this.$i.setting[item ? 'prompt' : 'addRole'], {
+          this.$i.setting[item ? 'prompt' : 'addRole'],
+          {
+            closeOnClickModal: false,
             confirmButtonText: this.$i.setting.sure,
             cancelButtonText: this.$i.setting.cancel,
             inputValue: ' ' + (item ? item.roleName : ''),
@@ -606,6 +610,7 @@
               }
 
               http()(this.$apis.add_departmentRole, params).then(res => {
+                this.$message.success(this.$i.setting.successfulOperation);
                 this.getDepartmentData(true);
               }).finally(() => this.loadingRole = false);
             }

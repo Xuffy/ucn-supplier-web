@@ -1,8 +1,11 @@
 <template>
   <div class="nav-bar-box">
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item v-for="(item,index) in navBarList" :key="index"
+      <!--<el-breadcrumb-item v-for="(item,index) in navBarList" :key="index"
                           :to="{path:index === navBarList.length - 1 ? null : (item.redirect||item.path)}">
+        {{item.meta ? item.meta.name : ''}}
+      </el-breadcrumb-item>-->
+      <el-breadcrumb-item v-for="(item,index) in navBarList" :key="index">
         {{item.meta ? item.meta.name : ''}}
       </el-breadcrumb-item>
     </el-breadcrumb>

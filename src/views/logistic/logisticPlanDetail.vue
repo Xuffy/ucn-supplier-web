@@ -46,7 +46,7 @@
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <!-- <v-table :data.sync="productList" @action="action" :buttons="edit ? productbButtons : null" @change-checked="selectProduct"> -->
-      <v-table code="ulogistics_PlanDetail" :data.sync="productList" @action="action" :buttons="productbButtons" @change-checked="selectProduct">
+      <v-table code="ulogistics_PlanDetail" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons" @change-checked="selectProduct">
         <div slot="header" class="product-header" v-if="edit">
           <el-button type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
@@ -55,7 +55,7 @@
 
     </div>
     <el-dialog :title="$i.logistic.negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeModify(0)">
-      <product-modify ref="productModifyComponents" @productModifyfun="productModifyfun" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"/>
+      <product-modify ref="productModifyComponents" :containerType="selectArr.containerType" @productModifyfun="productModifyfun" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"/>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeModify(0)">{{ $i.logistic.cancel }}</el-button>
         <el-button type="primary" @click="closeModify(1)">{{ $i.logistic.confirm }}</el-button>
@@ -174,6 +174,24 @@ export default {
     messageBoard
   },
   computed: {
+    productListTotal(){
+      let obj = {};
+      if(this.productList.length<=0){return}
+      this.productList.forEach((item,i)=>{
+        _.mapObject(item,(v,k)=>{
+          if(v._important){
+            obj[k] = {
+              value: Number(v.value)+Number(obj[k] ? obj[k].value : 0)
+            };
+          }else{
+            obj[k] = {
+              value: '--'
+            };
+          }
+        })
+      });
+      return [obj];
+    },
     attachmentReadonly(){
       return !this.edit;
     },
@@ -334,6 +352,10 @@ export default {
       this.containerInfo = res.containerDetail || [];
       this.$set(this.inintData,'containerInfo',this.$depthClone(res.containerDetail) || [])
       this.feeList = res.fee&&[res.fee];
+      res.product = res.product.map((item,i)=>{
+        item.vId = i;
+        return item;
+      });
       this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
       this.productList.forEach((item)=>{
         if(item.fieldDisplay.value){
@@ -480,7 +502,8 @@ export default {
 
       if (!status || !selectArrData.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
       selectArrData.forEach(a => {
-        a.argID = this.$depthClone(a.id);
+        let sliceStr = this.selectArr.skuIncoterm.find(item => item.code == a.skuIncoterm).name;
+        sliceStr = sliceStr.slice(0,1)+sliceStr.slice(1-sliceStr.length).toLowerCase();
         a.id = null
         a.vId = +new Date()
         a.blSkuName = ''
@@ -490,11 +513,18 @@ export default {
         a.toShipQty = ''
         a.reportElement = ''
         a.factorySkuCode = ''
-        a.unitExportPrice = ''
-        a.totalExportPrice = '';
+        a.unitExportPrice = a['sku'+sliceStr+'Price']
+        a.totalExportPrice = a.skuPrice || 0;
+        a.currency = a['sku'+sliceStr+'Currency'];
+        a.containerNo = '';
+        a.containerType = '';
+        a.totalContainerQty = '';
+        a.totalContainerVolume = '';
+        a.totalContainerNetWeight = '';
+        a.totalContainerOuterCartonsQty = '';
+        a.shipmentStatus = '';
         !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
       })
-
       this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList]
       // console.log(selectArrData)
       // TODO
@@ -507,7 +537,7 @@ export default {
     removeProduct () {
       this.selectProductArr.forEach(a => {
         this.productList.forEach((item,index)=>{
-          if(item.id.value==a.id.value){
+          if(item.vId.value==a.vId.value){
             this.removeProductList.push(this.productList[index])
             this.productList.splice(index,1);
           }
@@ -520,9 +550,13 @@ export default {
       }
     },
     closeModify (status) {
-      this.showProductDialog = false
-      if (!status) return this.productModifyList = []
+      if (!status){ this.productModifyList = [] ;this.showProductDialog = false; return};
       const currrentProduct = this.productModifyList[0]
+      let obj  = _.mapObject(currrentProduct,v => Number(v.value) || v.value)
+      if(this.$validateForm(obj,this.$db.logistic.dbProductInfo)){
+        return;
+      }
+      this.showProductDialog = false
       this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
       this.productList.forEach(item=>{
         this.$set(item.fieldDisplay, 'value', null);

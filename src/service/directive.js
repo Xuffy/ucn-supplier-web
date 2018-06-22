@@ -62,7 +62,8 @@ const json = ["WORKBENCH", "WORKBENCH:DATA_DASHBOARD", "PRODUCT", "PRODUCT:LOG",
 const authorize = {
   bind(el, binding) {
     if (_.indexOf(json, binding.value) === -1) {
-      el.style.display = 'none';
+      // el.style.display = 'none';
+      el.remove();
     }
 
   }
@@ -81,4 +82,4 @@ const image = {
 }
 
 
-export {authorize, image};
+export default {authorize, image};

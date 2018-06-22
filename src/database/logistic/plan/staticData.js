@@ -309,3 +309,55 @@ export const payMentInfo = {
     key:'actualPayAmount'
   }
 }
+
+export const dbProductInfo = {
+  "toShipCartonQty": {
+    _rules:{
+      type:'Number'
+    }
+  },
+  "containerNo":{
+    _rules:{
+      required:true
+    }
+  },
+  "containerType":{
+    _rules:{
+      required:true
+    }
+  },
+  "totalQuantityInContainer":{
+    key:'totalContainerQty',
+    _rules:{
+      type:'Number'
+    }
+  },
+  "totalVolumeInContainer":{
+    key:'totalContainerVolume',
+    _rules:{
+      type:'Number'
+    }
+  },
+  "totalNetWeightInContainer":{
+    key:'totalContainerNetWeight',
+    _rules:{
+      type:'Number'
+    }
+  },
+  "totalQuantityOfOuterCartonsInContainer":{ 
+    key:'totalContainerOuterCartonsQty',
+    _rules:{
+      type:'Number'
+    }
+  },
+  // "shipmentStatus":{
+  //   _rules:{
+  //     required:true
+  //   }
+  // },
+  "toShipQty": {
+    _rules:{
+      type:'Number'
+    }
+  }
+}

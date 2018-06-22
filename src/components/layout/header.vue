@@ -9,7 +9,7 @@
 
           <template v-for="(item,index) in routerList">
 
-            <el-menu-item v-if="item.children.length&&item.noDropdown&&!item.hidden"
+            <el-menu-item v-if="item.children.length && item.noDropdown && !item.hidden && menuAuth(item)"
                           :index="index + ''">
               <router-link class="link"
                            :to="item.path+'/'+item.children[0].path">
@@ -19,15 +19,15 @@
 
 
             <el-submenu
-              v-if="!item.noDropdown&&!item.hidden" :index="index + ''">
+              v-if="!item.noDropdown && !item.hidden && menuAuth(item)" :index="index + ''">
               <template slot="title">
                 <span v-if="item.meta" v-text="item.meta.name"></span>
               </template>
 
-              <template v-if="item.children.length&&!item.noDropdown&&!item.hidden"
+              <template v-if="item.children.length && !item.noDropdown && !item.hidden"
                         v-for="(cItem,cIndex) in item.children">
                 <el-menu-item class="ucn-header-submenu"
-                              v-if="!cItem.hidden" :index="index +'-'+cIndex">
+                              v-if="!cItem.hidden && menuAuth(cItem)" :index="index +'-'+cIndex">
                   <router-link class="link" :to="item.path+'/'+cItem.path">
                     {{cItem.meta ? cItem.meta.name : ''}}
                   </router-link>
@@ -210,6 +210,9 @@
         // console.log(this.$sessionStore)
         this.$sessionStore.remove('request_cache');
         history.go(0);
+      },
+      menuAuth(item) {
+        return !(item.meta && item.meta.auth && !this.$auth(item.meta.auth));
       }
     },
   }

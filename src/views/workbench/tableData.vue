@@ -191,7 +191,6 @@
       },
       goDetail(item) {
         let tab = this.dataList[this.tabIndex];
-        return console.log(tab, item)
         switch (tab.type) {
           case 'LOGISTIC':
             let param = {code: item.bizNo.value}
