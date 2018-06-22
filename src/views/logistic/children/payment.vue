@@ -71,7 +71,7 @@
       <el-table-column :label="$i.logistic.operation" align="center" width="200" fixed="right">
         <template slot-scope="scope">
           <div>
-            <el-button :disabled="scope.row.status==40||scope.row.status==-1" size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.logistics_accept_payment)">{{ $i.logistic.confirm }}</el-button>
+            <el-button :disabled="scope.row.status==40||scope.row.status==-1" size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.logistics_accept_payment,$i.logistic.confirm)">{{ $i.logistic.confirm }}</el-button>
           </div>
         </template>
       </el-table-column>
@@ -239,10 +239,16 @@ export default {
       if (!this.tableData[i].id) return this.tableData.splice(i, 1)
       this.$emit('updatePaymentWithView', { i, edit: false })
     },
-    switchStatus (i, url) {
-      this.$ajax.post(`${url}/${this.tableData[i].id}?version=${this.tableData[i].version}`).then(({ status }) => {
-        this.$emit('updatePaymentWithView', { i, edit: false, status })
-      })
+    switchStatus (i, url,title) {
+      this.$confirm('此操作将'+title+'该数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$ajax.post(`${url}/${this.tableData[i].id}?version=${this.tableData[i].version}`).then(({ status }) => {
+          this.$emit('updatePaymentWithView', { i, edit: false, status })
+        })
+      })    
     },
   }
 }
