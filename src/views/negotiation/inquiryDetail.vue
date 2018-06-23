@@ -334,12 +334,16 @@ export default {
       }
     },
     getInquiryDetail() {
-      // 获取 Inquiry detail 数据
-      if (!this.$route.query.id) {
+      let promise = null;
+      if (this.$route.query.id) {
+        promise = this.$ajax.get(`${this.$apis.BUYER_GET_INQIIRY_DETAIL}/{id}`, {id: this.$route.query.id});
+      } else if (this.$route.query.code) {
+        promise = this.$ajax.get(`${this.$apis.BUYER_GET_INQIIRY_DETAIL_BY_CODE}?code=${this.$route.query.code}`);
+      } else {
         this.$message(this.$i.common.addressError);
         return;
       }
-      this.$ajax.get(`${this.$apis.BUYER_GET_INQIIRY_DETAIL}/{id}`, {id: this.$route.query.id}).then(res => {
+      promise.then(res => {
         // Basic Info
         this.tabData = this.newTabData = this.$getDB(
           this.$db.inquiry.basicInfo,
