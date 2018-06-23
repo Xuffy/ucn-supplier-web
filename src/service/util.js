@@ -1,7 +1,7 @@
 import dateFormat from 'dateformat';
 import {localStore, sessionStore} from 'service/store';
 import database from '../database/index';
-import language from '../language/index';
+import $i from '../language/index';
 import router from 'service/router'
 import _config from "./config";
 import store from '@/store';
@@ -58,7 +58,7 @@ export default {
   /**
    * 国际化语言配置
    */
-  $i: language,
+  $i,
 
   /**
    * 字段配置
@@ -170,7 +170,7 @@ export default {
       validate = item._rules;
 
       if (validate.required && !/\S/.test(val)) {
-        Message.warning(`请必须填写 ${item.label}`);
+        Message.warning(`${$i.util.validateRequired} ${item.label}`);
         return key;
       }
 
@@ -179,43 +179,43 @@ export default {
       switch (validate.type) {
         case 'Number':
           if (_.isRegExp(validate.reg) && !validate.reg.test(val)) {
-            Message.warning(`请填正确的 ${item.label}`);
+            Message.warning(`${$i.util.validateCorrect} ${item.label}`);
             return key;
           }
           if (!/^[0-9]+\.?[0-9]{0,9}$/.test(val)) {
-            Message.warning(`请填正确的 ${item.label}`);
+            Message.warning(`${$i.util.validateCorrect} ${item.label}`);
             return key;
           }
           if (validate.max && validate.max < Number(val)) {
-            Message.warning(`${item.label} 值不能大于${validate.max}`);
+            Message.warning(`${item.label} ${$i.util.validateValueGreater} ${validate.max}`);
             return key;
           }
           if (validate.min && validate.min > Number(val)) {
-            Message.warning(`${item.label} 值不能小于${validate.max}`);
+            Message.warning(`${item.label} ${$i.util.validateValueLess} ${validate.max}`);
             return key;
           }
           break;
         case 'Email':
           if (!/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(val)) {
-            Message.warning(`请填正确的 ${item.label}`);
+            Message.warning(`${$i.util.validateCorrect} ${item.label}`);
             return key;
           }
           break;
         case 'Regexp':
           if (_.isRegExp(validate.reg) && !validate.reg.test(val)) {
-            Message.warning(item.label || `请填正确的 ${item.label}`);
+            Message.warning(item.label || `${$i.util.validateCorrect} ${item.label}`);
             return key;
           }
           break;
       }
 
       if (validate.length && validate.length < val.length) {
-        Message.warning(`${item.label} 长度不能大于${validate.length}位`);
+        Message.warning(`${item.label} ${$i.util.validateLengthGreater} ${validate.length} ${$i.util.validateDigits}`);
         return key;
       }
 
       if (validate.minLength && validate.minLength > val.length) {
-        Message.warning(`${item.label} 长度不能小于${validate.length}位`);
+        Message.warning(`${item.label} ${$i.util.validateLengthLess} ${validate.minLength} ${$i.util.validateDigits}`);
         return key;
       }
 
