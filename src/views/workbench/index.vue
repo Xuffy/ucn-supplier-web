@@ -23,13 +23,13 @@
           <el-button type="text">{{$i.workbench.goSet}}>></el-button>
         </router-link>
       </li>
-      <li v-if="!settingState.personalInfo">
+      <!--<li v-if="!settingState.personalInfo">
         <el-checkbox disabled>{{$i.workbench.settingPersonal}}</el-checkbox>
         <br>
         <router-link to="/settings/Personal">
           <el-button type="text">{{$i.workbench.goSet}}>></el-button>
         </router-link>
-      </li>
+      </li>-->
     </ul>
 
     <div class="quickLink">
@@ -98,10 +98,9 @@
       }
     },
     created() {
-      this.getBasicInfo();
-      this.$auth();
     },
     mounted() {
+      this.userInfo.userType === 0 && this.getBasicInfo();
       // this.setLog({query:{code:'productSourcingOverview'}});
     },
     computed: {
