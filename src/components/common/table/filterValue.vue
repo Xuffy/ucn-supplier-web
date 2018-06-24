@@ -156,7 +156,7 @@
             let dataList = [];
 
             _.map(this.columns, val => {
-              let item = _.findWhere(res, {property: val.key});
+              let item = _.findWhere(res, {property: val._filed || val.key});
               if (!val._hide && item && item.isChecked === 1) {
                 item._name = val.label;
                 dataList.push(item);

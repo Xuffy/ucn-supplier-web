@@ -533,7 +533,9 @@
       },
       addDepartment(item) {
         this.$prompt(this.$i.setting.pleaseInputDepartment,
-          this.$i.setting[item ? 'prompt' : 'addDepartment'], {
+          this.$i.setting[item ? 'prompt' : 'addDepartment'],
+          {
+            closeOnClickModal: false,
             confirmButtonText: this.$i.setting.sure,
             cancelButtonText: this.$i.setting.cancel,
             inputValue: ' ' + (item ? item.deptName : ''),
@@ -565,7 +567,7 @@
               http = () => item ? this.$ajax.put : this.$ajax.post;
 
               http()(this.$apis.get_department, params).then(res => {
-                this.$message.success(this.$i.setting.createSuccess);
+                this.$message.success(this.$i.setting.successfulOperation);
                 this.getDepartmentData();
               }).finally(() => this.loadingDepartment = false);
             }
@@ -573,7 +575,9 @@
       },
       addRole(item) {
         this.$prompt(this.$i.setting.pleaseInputRole,
-          this.$i.setting[item ? 'prompt' : 'addRole'], {
+          this.$i.setting[item ? 'prompt' : 'addRole'],
+          {
+            closeOnClickModal: false,
             confirmButtonText: this.$i.setting.sure,
             cancelButtonText: this.$i.setting.cancel,
             inputValue: ' ' + (item ? item.roleName : ''),
@@ -606,6 +610,7 @@
               }
 
               http()(this.$apis.add_departmentRole, params).then(res => {
+                this.$message.success(this.$i.setting.successfulOperation);
                 this.getDepartmentData(true);
               }).finally(() => this.loadingRole = false);
             }
@@ -719,7 +724,7 @@
             this.getDepartmentUser();
             this.editUserdialog.show = false;
             this.addUser = this.$options.data().addUser;
-            this.$message.success('操作成功');
+            this.$message.success(this.$i.setting.successfulOperation);
           }).finally(err => {
             this.addUserLoading = false;
           }
@@ -735,7 +740,7 @@
           this.$ajax.put(type ? this.$apis.USER_DISABLE : this.$apis.USER_ENABLE, {userId})
             .then(res => {
               this.getDepartmentData(true);
-              this.$message.success('操作成功');
+              this.$message.success(this.$i.setting.successfulOperation);
             });
         });
 
@@ -751,7 +756,7 @@
         this.$ajax.post(this.$apis.invite_departmentUser,
           {
             emails,
-            callback: `${config.ENV.LOGIN_URL}/#/activation?activeToken=%s&email=%s&redirect=${Base64.encode(window.location.origin)}`
+            callback: `${config.ENV.LOGIN_URL}/#/activation?activeToken=%s&email=%s&redirect=${Base64.encode(window.location.origin + '/#/login')}`
           })
           .then(res => {
             this.$message.success('邀请成功');

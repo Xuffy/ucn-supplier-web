@@ -7,7 +7,7 @@ export default {
   },
   sendTime: {
     key: 'sendTime',
-    type:'textDate'
+    type: 'textDate'
   },
   read: {
     key: 'read'

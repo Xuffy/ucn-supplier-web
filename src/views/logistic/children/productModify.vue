@@ -12,13 +12,63 @@
           <span>{{ scope.row.orderNo.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.toShipCartonQty" width="300" align="center" sortable>
+      <el-table-column :label="$i.logistic.toShipCartonQty" width="150" align="center" sortable>
         <template slot-scope="scope">
           <el-input placeholder="请输入内容" v-model="scope.row.toShipCartonQty.value" @change="currentChange(scope.row.toShipCartonQty.key,scope.row.toShipCartonQty.value)" v-if="scope.row.toShipCartonQty.edit"></el-input>
           <span v-else>{{ scope.row.toShipCartonQty.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.toShipQty" width="160" align="center" sortable>
+
+
+      <el-table-column :label="$i.logistic.containerNo" width="150" align="center" sortable>
+        <template slot-scope="scope">
+          <el-input placeholder="请输入内容" v-model="scope.row.containerNo.value" @change="currentChange(scope.row.containerNo.key,scope.row.containerNo.value)" v-if="scope.row.toShipCartonQty.edit"></el-input>
+          <span v-else>{{ scope.row.containerNo.value }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$i.logistic.containerType" width="150" align="center" sortable>
+        <template slot-scope="scope">
+          <el-select v-if="scope.row.toShipCartonQty.edit" v-model="scope.row.containerType.value" placeholder="请输入内容" @change="currentChange(scope.row.containerType.key,scope.row.containerType.value)">
+            <el-option v-for="item in containerType" :key="item.id" :label="item.name" :value="item.code"/>
+          </el-select>
+          <span v-else>{{ scope.row.containerType.value }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$i.logistic.totalQuantityInContainer" width="200" align="center" sortable>
+        <template slot-scope="scope">
+          <el-input placeholder="请输入内容" v-model="scope.row.totalContainerQty.value" @change="currentChange(scope.row.totalContainerQty.key,scope.row.totalContainerQty.value)" v-if="scope.row.toShipCartonQty.edit"></el-input>
+          <span v-else>{{ scope.row.totalContainerQty.value }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$i.logistic.totalVolumeInContainer" width="200" align="center" sortable>
+        <template slot-scope="scope">
+          <el-input placeholder="请输入内容" v-model="scope.row.totalContainerVolume.value" @change="currentChange(scope.row.totalContainerVolume.key,scope.row.totalContainerVolume.value)" v-if="scope.row.toShipCartonQty.edit"></el-input>
+          <span v-else>{{ scope.row.totalContainerVolume.value }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$i.logistic.totalNetWeightInContainer" width="200" align="center" sortable>
+        <template slot-scope="scope">
+          <el-input placeholder="请输入内容" v-model="scope.row.totalContainerNetWeight.value" @change="currentChange(scope.row.totalContainerNetWeight.key,scope.row.totalContainerNetWeight.value)" v-if="scope.row.toShipCartonQty.edit"></el-input>
+          <span v-else>{{ scope.row.totalContainerNetWeight.value }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$i.logistic.totalQuantityOfOuterCartonsInContainer" width="200" align="center" sortable>
+        <template slot-scope="scope">
+          <el-input placeholder="请输入内容" v-model="scope.row.totalContainerOuterCartonsQty.value" @change="currentChange(scope.row.totalContainerOuterCartonsQty.key,scope.row.totalContainerOuterCartonsQty.value)" v-if="scope.row.toShipCartonQty.edit"></el-input>
+          <span v-else>{{ scope.row.totalContainerOuterCartonsQty.value }}</span>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column :label="$i.logistic.shipmentStatus" width="200" align="center" sortable>
+        <template slot-scope="scope">
+          <el-select v-if="scope.row.toShipCartonQty.edit" v-model="scope.row.shipmentStatus.value" placeholder="请输入内容" @change="currentChange(scope.row.shipmentStatus.key,scope.row.shipmentStatus.value)">
+            <el-option v-for="item in containerType" :key="item.id" :label="item.name" :value="item.code"/>
+          </el-select>
+          <span v-else>{{ scope.row.shipmentStatus.value }}</span>
+        </template>
+      </el-table-column> -->
+
+
+      <el-table-column :label="$i.logistic.toShipQty" width="150" align="center" sortable>
         <template slot-scope="scope">
           <el-input placeholder="请输入内容" v-model="scope.row.toShipQty.value" @change="currentChange(scope.row.toShipQty.key,scope.row.toShipQty.value)" v-if="scope.row.toShipQty.edit"></el-input>
           <span v-else>{{ scope.row.toShipQty.value }}</span>
@@ -167,6 +217,7 @@
 
 export default {
   props: {
+    containerType:[Object,Array],
     productInfoModifyStatus: {
       type: Number,
       default: 0

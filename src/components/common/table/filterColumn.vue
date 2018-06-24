@@ -76,7 +76,7 @@
         return _.map(data, val => {
           return _.mapObject(val, v => {
             if (_.isObject(v)) {
-              v._hidden = checkList.indexOf(v.key) === -1;
+              v._hidden = checkList.indexOf(v._filed || v.key) === -1;
             }
             return v;
           });
@@ -95,7 +95,7 @@
               , dataList = [];
 
             _.map(this.columns, (val, key) => {
-              let item = _.findWhere(res, {property: key})
+              let item = _.findWhere(res, {property: val._filed || key})
               if (!val._hide && item) {
                 item._name = val.label;
                 dataList.push(item);

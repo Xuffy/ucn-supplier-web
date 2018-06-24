@@ -8,8 +8,8 @@
     <el-menu class="menu-box">
       <el-menu-item-group style="border-bottom: 1px solid rgba(255,255,255,.5);padding-bottom: 10px">
         <div slot="title">
-          <i class="el-icon-menu" style="font-size: 16px"></i>
-          <span v-text="$i.common.quickLink"></span>
+          <i class="el-icon-menu" style="font-size: 22px;vertical-align: middle"></i>
+          <span v-text="$i.common.quickLink" style="vertical-align: middle"></span>
         </div>
         <el-menu-item v-for="(item,index) in quickLink.list"
                       :index="'1-' + index" :key="index">
