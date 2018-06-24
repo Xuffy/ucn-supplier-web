@@ -1233,7 +1233,7 @@
                             type: 'success'
                         });
                         this.disabledSubmit=false;
-                        // this.$router.push('/product/overview');
+                        this.$router.push('/product/overview');
                     }).catch(err=>{
                         this.disabledSubmit=false;
                     });
