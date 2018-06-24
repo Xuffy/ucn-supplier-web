@@ -1224,6 +1224,7 @@
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
 
+                    console.log(params,'????params')
 
                     this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
                         this.$message({
