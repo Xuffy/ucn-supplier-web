@@ -1,29 +1,65 @@
 export default {
     email: {
-        key: 'email',
+      key: 'email',
+      _rules:{
+        required:true,
+      }
     },
     userName:{
-        key: 'userName',
+      key: 'userName',
+      _rules:{
+        required:true,
+      }
     },
     password: {
-        key: '',
+      key: '',
     },
     tel:{
-        key: 'tel',
+      key: 'tel',
+      _rules:{
+        required:true,
+        type:'Number',
+      }
     },
     gender: {
-        key: 'gender',
+      key: 'gender',
+      _rules:{
+        required:true,
+      }
     },
     language:{
-        key: 'lang',
+      key: 'lang',
+      _rules:{
+        required:true,
+      }
     },
     department: {
-        key: 'deptName',
+      key: 'deptName',
     },
     role:{
-        key: 'roleName',
+      key: 'roleName',
     },
     birthday: {
-        key: 'birthday',
-    }
-}
+      key: 'birthday',
+    },
+    password:{
+      _rules:{
+        required:true,
+        min:6,
+      }
+    },
+    newPassword:{
+      _rules:{
+        required:true,
+        min:6,
+      }
+    },
+    comfirmNewPassword:{
+      _rules:{
+        required:true,
+        min:6,
+      }
+    },
+  
+  }
+  

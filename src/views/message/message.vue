@@ -28,7 +28,8 @@
         <page
           :page-data="pageData"
           @change="handleSizeChange"
-          @size-change="pageSizeChange"></page>
+          @size-change="pageSizeChange"
+          :page-sizes="[50,100,200]"></page>
       </div>
 
       <div v-show="isShow" class="box">

@@ -14,7 +14,8 @@
           <page
           :page-data="pageData"
           @change="handleSizeChange"
-          @size-change="pageSizeChange"></page>
+          @size-change="pageSizeChange"
+          :page-sizes="[50,100,200]"></page>
         </div>
 
         <el-dialog
@@ -96,11 +97,6 @@
             //点击外部取消时的提示
             handleClose(done) {
                 console.log('取消了')
-                // this.$confirm('确认关闭？')
-                //     .then(_ => {
-                //         done();
-                //     })
-                //     .catch(_ => {});
                 done();
             },
           cencl(){
@@ -112,11 +108,6 @@
             this.tabLoad = true;
             column = this.$db.message.table;
             url = this.$apis.post_company_queryownlist;
-            // if(this.$route.query.type == 1) {;
-            //   url = this.$apis.post_sys_queryownlist;
-            // } else {
-            //   url = this.$apis.post_company_queryownlist;
-            // };
             this.$ajax.post(url,this.pData)
               .then(res => {
                 this.tabData = this.$getDB(column, res.datas,item=>{
