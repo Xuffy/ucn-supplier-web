@@ -15,8 +15,8 @@ export default {
         key:'pictures',
         _image:true
     },
-    status: {
-
+    skuSaleStatus: {
+        key:'status'
     },
     recycle:{
 

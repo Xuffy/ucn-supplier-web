@@ -122,7 +122,7 @@
                     <span style="color:red">暂时接口还没做</span>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
-
+                    <v-upload :limit="20" readonly :list="productForm.attachments" ref="uploadAttachmemt"></v-upload>
                 </el-tab-pane>
                 <!--<el-tab-pane :label="$t('productSeller.page.remark')" name="Remark">-->
                     <!--<span style="color:red">暂时接口还没做</span>-->
@@ -134,7 +134,7 @@
 </template>
 
 <script>
-    import {VTable,VImage} from '@/components/index'
+    import {VTable,VImage,VUpload} from '@/components/index'
     import addTable from '../product/addlineTable'
 
     export default {
@@ -142,7 +142,8 @@
         components:{
             addTable,
             VTable,
-            VImage
+            VImage,
+            VUpload
         },
         data(){
             return{

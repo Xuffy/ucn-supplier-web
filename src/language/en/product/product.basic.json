@@ -95,5 +95,6 @@
   "sureDelete":"Sure Delete?",
   "prompt":"Prompt",
   "sure":"Sure",
-  "priceType":"Price Type"
+  "priceType":"Price Type",
+  "skuSaleStatus":"SKU Sale Status"
 }
