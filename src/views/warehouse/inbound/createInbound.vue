@@ -595,9 +595,8 @@
                             });
                         }
                     });
-                    this.loadingTable=false;
-                    this.disabledClickSubmit=false;
-                }).catch(err=>{
+                    this.pageData=res;
+                }).finally(err=>{
                     this.loadingTable=false;
                     this.disabledClickSubmit=false;
                 });
