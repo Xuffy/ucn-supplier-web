@@ -16,12 +16,12 @@
                                     placeholder="请填写"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
-                            <el-select :disabled="true" class="speInput" size="mini" v-model="outboundData[v.key]" placeholder="请选择">
+                            <el-select :disabled="true" class="speInput" size="mini" v-model="outboundData[v.key]" :placeholder="$i.warehouse.pleaseChoose">
                                 <el-option
-                                        v-for="item in v.options"
+                                        v-for="item in outboundOption"
                                         :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                        :label="item.name"
+                                        :value="item.code">
                                 </el-option>
                             </el-select>
                         </div>
@@ -31,7 +31,7 @@
                                     class="speInput"
                                     type="textarea"
                                     :autosize="{ minRows: 2}"
-                                    placeholder="请填写"
+                                    :placeholder="$i.warehouse.pleaseInput"
                                     v-model="outboundData[v.key]">
                             </el-input>
                         </div>
@@ -42,8 +42,7 @@
                                     size="mini"
                                     v-model="outboundData[v.key]"
                                     :controls="false"
-                                    :min="0"
-                                    label="请填写"></el-input-number>
+                                    :min="0"></el-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -110,6 +109,7 @@
                 labelPosition:'right',
                 addOrderDialogVisible:false,
                 loadingTable:false,
+                outboundOption:[],
 
                 outboundData:{
                     inboundNo:'',
@@ -170,7 +170,6 @@
                 });
             },
 
-
             /**
              * product table事件
              * */
@@ -189,10 +188,22 @@
             //关闭窗口
             closeWindow(){
                 window.close();
-            }
+            },
+
+            getUnit(){
+                this.$ajax.post(this.$apis.get_partUnit,['OBD_STATUS'],{cache:true}).then(res=>{
+                    this.outboundOption=res[0].codes;
+                    console.log(this.outboundOption,'this.outboundOption')
+                    this.getData();
+                }).catch(err=>{
+
+                })
+
+            },
         },
         created(){
-            this.getData();
+            this.getUnit();
+
         },
     }
 </script>
