@@ -1,4 +1,7 @@
 export default {
+    priceType:{
+        key:'status'
+    },
     fobCurrency: {},
     fobPrice: {},
     fobPort: {},

@@ -1232,7 +1232,12 @@
                             type: 'success'
                         });
                         this.disabledSubmit=false;
-                        this.$router.push('/product/overview');
+                        this.$router.push({
+                            path:'/product/detail',
+                            query:{
+                                id:res
+                            },
+                        });
                     }).catch(err=>{
                         this.disabledSubmit=false;
                     });
@@ -1280,7 +1285,12 @@
                             type: 'success'
                         });
                         this.disabledSubmit=false;
-                        this.$router.push('/product/overview');
+                        this.$router.push({
+                            path:'/product/detail',
+                            query:{
+                                id:res
+                            },
+                        });
                     }).catch(err=>{
                         this.disabledSubmit=false;
                     });
