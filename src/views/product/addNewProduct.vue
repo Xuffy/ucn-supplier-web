@@ -1187,7 +1187,6 @@
             removeCustomer(data){
                 let item=_.findWhere(this.tableData,{code:data.code});
                 this.tableData=_.difference(this.tableData,[item]);
-
             },
 
             //完成新增

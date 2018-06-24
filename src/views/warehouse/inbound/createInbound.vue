@@ -255,6 +255,11 @@
                     v-loading="loadingTable"
                     :data="tableDataList"
                     @change-checked="changeChecked"></v-table>
+            <v-pagination
+                    :page-sizes="[50,100,200,500]"
+                    @size-change="changeSize"
+                    @change="changePage"
+                    :page-data="pageData"></v-pagination>
 
             <div slot="footer" class="dialog-footer">
                 <el-button :disabled="disabledSearch" type="primary" @click="postData">{{$i.warehouse.sure}}</el-button>
@@ -266,14 +271,15 @@
 
 <script>
 
-    import {VTimeZone,VTable,VUpload} from '@/components/index'
+    import {VTimeZone,VTable,VUpload,VPagination} from '@/components/index'
 
     export default {
         name: "createInbound",
         components:{
             VTable,
             VTimeZone,
-            VUpload
+            VUpload,
+            VPagination
         },
         data(){
             return{
@@ -293,6 +299,8 @@
                 selectProductList:[],
                 loadingProductTable:false,
                 inboundTypeOption:[],
+                pageData:{},
+
                 /**
                  * 外部展示数据
                  * */
@@ -349,6 +357,9 @@
                 //先把在外部的数据的id取出来，拿到内部去对比
                 this.selectList=[];
                 this.addOrderDialogVisible=true;
+                this.getProductData();
+            },
+            getProductData(){
                 this.loadingTable=true;
                 this.disabledSearch=true;
                 this.disabledCancelSearch=true;
@@ -379,10 +390,8 @@
                             });
                         }
                     });
-                    this.disabledSearch=false;
-                    this.disabledCancelSearch=false;
-                    this.loadingTable=false;
-                }).catch(err=>{
+                    this.pageData=res;
+                }).finally(err=>{
                     this.disabledSearch=false;
                     this.disabledCancelSearch=false;
                     this.loadingTable=false;
@@ -677,6 +686,21 @@
                 this.addOrderDialogVisible = false;
                 this.clearSearchData();
             },
+
+
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                this.orderProduct.pn=e;
+                this.getProductData();
+            },
+            changeSize(e){
+                this.orderProduct.ps=e;
+                this.getProductData();
+            },
+
+
 
             /**
              * 页面表格事件
