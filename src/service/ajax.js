@@ -76,6 +76,9 @@ const $ajax = (config) => {
           p[key] = val;
         }
       });
+      console.log(url,'url')
+      console.log(params,'params')
+      console.log({url: _.template(url)(params), params: p},'?????')
       return {url: _.template(url)(params), params: p};
     }
     return {url, params};

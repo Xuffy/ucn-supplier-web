@@ -1225,21 +1225,15 @@
                     if(!param.visibility){
                         param.ids=[];
                     }
-
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
-
-                    param.id=1111;
-
-                    console.log(param,'????params')
-
                     this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
                         this.$message({
                             message: this.$i.product.modifySuccess,
                             type: 'success'
                         });
                         this.disabledSubmit=false;
-                        this.$router.push('/product/overview');
+                        // this.$router.push('/product/overview');
                     }).catch(err=>{
                         this.disabledSubmit=false;
                     });
