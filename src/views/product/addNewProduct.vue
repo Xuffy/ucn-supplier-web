@@ -682,7 +682,7 @@
 
                         <el-form-item prop="name" :label="$i.product.customerName">
                             <el-input
-                                    placeholder="请输入"
+                                    :placeholder="$i.product.pleaseInput"
                                     size="mini"
                                     v-model="customerQuery.name"></el-input>
                         </el-form-item>
@@ -1224,7 +1224,7 @@
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
 
-                    console.log(params,'????params')
+                    console.log(param,'????params')
 
                     this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
                         this.$message({
@@ -1383,10 +1383,6 @@
 
                 });
 
-                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                    console.log(res,'???')
-                })
-
                 this.loadingData=true;
                 this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT'],{cache:true}).then(res=>{
                     res.forEach(v=>{
@@ -1406,7 +1402,6 @@
                             this.udbOption=v.codes;
                         }else if(v.code==='SKU_PG_IS'){
                             this.skuPkgOption=v.codes;
-                            console.log(this.skuPkgOption,'this.skuPkgOption')
                         }else if(v.code==='RA_IS'){
                             this.readilyOption=v.codes;
                         }else if(v.code==='SKU_UNIT'){
