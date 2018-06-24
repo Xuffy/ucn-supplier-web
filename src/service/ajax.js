@@ -70,7 +70,7 @@ const $ajax = (config) => {
       throw new Error('Request url exception');
     }
 
-    if (params && !params.length) {
+    if (params && params.length) {
         params.forEach((val,key)=>{
             if (url.indexOf(`{${key}}`) < 0) {
                 console.log(key,'key')
@@ -83,8 +83,7 @@ const $ajax = (config) => {
       //       console.log(key,'key')
       //     p[key] = val;
       //   }
-      // }
-      );
+      // });
 
       console.log({url: _.template(url)(params), params: p},'?????')
       return {url: _.template(url)(params), params: p};
