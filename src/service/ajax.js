@@ -64,22 +64,21 @@ const $ajax = (config) => {
    * @returns {*}
    */
   this.setUrl = (url, params) => {
-      console.log(url,'url1111')
-      console.log(params,'params1111')
     let p = {};
 
     if (_.isEmpty(url)){
       throw new Error('Request url exception');
     }
-
+      console.log(url,'url')
+      console.log(params,'params')
     if (!_.isEmpty(params) && !params.length) {
       _.mapObject(params, (val, key) => {
         if (url.indexOf(`{${key}}`) < 0) {
+            console.log(key,'key')
           p[key] = val;
         }
       });
-      console.log(url,'url')
-      console.log(params,'params')
+
       console.log({url: _.template(url)(params), params: p},'?????')
       return {url: _.template(url)(params), params: p};
     }
