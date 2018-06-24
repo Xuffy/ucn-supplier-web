@@ -73,6 +73,7 @@ const $ajax = (config) => {
       console.log(params,'params')
     if (!_.isEmpty(params) && !params.length) {
       _.mapObject(params, (val, key) => {
+          console.log(val,'val')
         if (url.indexOf(`{${key}}`) < 0) {
             console.log(key,'key')
           p[key] = val;
