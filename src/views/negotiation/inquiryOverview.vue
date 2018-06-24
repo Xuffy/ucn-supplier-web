@@ -30,9 +30,9 @@
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
-                <el-radio-group v-model="viewByStatus"  size="mini">
-                    <el-radio-button label="0">{{$i.common.inquiry}}</el-radio-button>
-                    <el-radio-button label="1" >{{$i.common.SKU}}</el-radio-button>
+                <el-radio-group v-model="viewByStatus" @change="gettabData" size="mini">
+                    <el-radio-button :label="0">{{$i.common.inquiry}}</el-radio-button>
+                    <el-radio-button :label="1" >{{$i.common.SKU}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>
@@ -53,191 +53,194 @@
     </div>
 </template>
 <script>
-    /**
-     * @param selectChange 下拉框 值发生变更触发
-     * @param options 下拉框 原始数据
-    */
-    import { selectSearch, VTable, VPagination } from '@/components/index';
-    import { mapActions } from 'vuex'
-    export default {
-        name:'',
-        data() {
-            return {
-                checkedData:[],
-                pazeSize: [30, 40, 50, 100],
-                searchLoad: false,
-                options: [{
-                    id: 'INQUIRY_NO',
-                    label: '询价单号'
-                }, {
-                    id: 'QUOTATION_NO',
-                    label: '询价单号（供应商自有）'
-                }, {
-                    id: 'SUPPLIER_NAME',
-                    label: '供应商名称'
-                }, {
-                    id: 'SUPPLIER_TYPE',
-                    label: '供应商类型'
-                }, {
-                    id: 'PAYMENT_METHOD',
-                    label: '支付方式'
-                }],
+/**
+  * @param selectChange 下拉框 值发生变更触发
+  * @param options 下拉框 原始数据
+*/
+import { selectSearch, VTable, VPagination } from '@/components/index';
+import { mapActions } from 'vuex';
+export default {
+  name: '',
+  data() {
+    return {
+      checkedData: [],
+      pazeSize: [50, 100, 200],
+      searchLoad: false,
+      options: [{
+        id: 'supplierName',
+        label: this.$i.inquiry.supplierName,
+        operator: 'like'
+      }, {
+        id: 'inquiryNo',
+        label: this.$i.inquiry.InquiryNo,
+        operator: 'like'
+      }, {
+        id: 'quotationNo',
+        label: this.$i.inquiry.quotationNo,
+        operator: 'like'
+      }, {
+        id: 'updateDt',
+        label: this.$i.inquiry.updateDt,
+        type: 'dateRange',
+        operator: 'between'
+      }],
 
-                tabData: [],
-                viewByStatus: '',
-                params: {
-                    status: 21,
-                    keyType: '',
-                    key: '',
-                    ps: 50,
-                    pn: 1,
-                    tc: 0,
-                    recycleSupplier: false,
-                    draft: false
-                },
-                tabLoad:false,
-                _id: ''
-            }
-        },
-        components: {
-            'select-search': selectSearch,
-            'v-table': VTable,
-            'v-pagination': VPagination
-        },
-        created() {
-            this.viewByStatus = 0;
-            this.setRecycleBin({
-                name: 'negotiationRecycleBin',
-                params: {
-                    type: 'inquiry'
-                },
-                show: true
-            });
-        },
-        watch: {
-            viewByStatus() {
-                this.gettabData();
-            },
-            params: {
-                handler(val, oldVal) {
-                    this.gettabData();
-                },
-                deep: true
-            }
-        },
-        methods: {
-            ...mapActions([
-                'setRecycleBin',
-                'setDic'
-            ]),
-            inputEnter(val) {
-                if(!val.keyType) return this.$message('请选中搜索类型');
-                if(!val.key) return this.$message('搜索内容不能为空');
-                this.params.keyType = val.keyType;
-                this.params.key = val.key;
-                this.searchLoad = true;
-            },
-            gettabData() {
-                let url, column;
-                this.tabLoad = true;
-                if(this.viewByStatus + '' === '0') {
-                    url = this.$apis.BUYER_POST_INQIIRY_LIST;
-                    column = this.$db.inquiry.viewByInqury;
-                } else {
-                    url = this.$apis.BUYER_POST_INQIIRY_LIST_SKU;
-                    column = this.$db.inquiry.viewBySKU;
-                };
-                this.$ajax.post(url, this.params)
-                .then(res => {
-                    this.params.tc = res.tc;
-                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], {cache:true})
-                    .then(data => {
-                        this.setDic(data);
-                        this.tabData = this.$getDB(column, res.datas, (item) => {
-                            this.$filterDic(item);
-                        });
-                        this.tabLoad = false;
-                        this.searchLoad = false;
-                        this.checkedData = [];
-                    });
-                })
-                .catch(() => {
-                    this.searchLoad = false;
-                    this.tabLoad = false;
-                })
-            },
-            cancelInquiry() { //取消询价单
-                this.ajaxInqueryAction('cancel')
-            },
-            deleteInquiry() { //删除询价单
-                this.$confirm('确认删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.ajaxInqueryAction('delete');
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
-            },
-            ajaxInqueryAction(type) {
-                const argId = this.getChildrenId();
-                this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
-                    action: type,
-                    ids:argId
-                })
-                .then(res => {
-                    this.gettabData();
-                    this.checkedData = [];
-                });
-            },
-            action(item, type) {
-                switch(type) {
-                    case 'detail':
-                        this.detail(item);
-                        break;
-                }
-            },
-            detail(item) {
-                this.$router.push({
-                    path: '/negotiation/inquiryDetail',
-                    query: {
-                        id: _.findWhere(item, {'key': 'id'}).value
-                    }
-                });
-            },
-            getChildrenId(type) {
-                let arr = [];
-                _.map(this.checkedData, item => {
-                    if(!_.isUndefined(item)) arr.push(_.findWhere(item, {'key': 'id'}).value);
-                });
-                if(typeof type === 'string') arr.join(',')
-                return arr;
-            },
-            toCompare() {
-                let argId = this.getChildrenId('str');
-                this.$windowOpen({
-                    url: '/negotiation/compareDetail/{type}',
-                    params: {
-                        type: 'new',
-                        ids: argId.join(',')
-                    }
-                });
-            },
-            pageSizeChange(no) {
-                this.params.pn = no;
-            },
-            handleSizeChange(val) {
-                this.params.ps = val;
-            },
-            changeChecked(item) { //tab 勾选
-                this.checkedData = item;
-            }
-        }
+      tabData: [],
+      viewByStatus: 0,
+      params: {
+        status: 21,
+        ps: 50,
+        pn: 1,
+        tc: 0,
+        draft: 0,
+        recycleSupplier: false,
+        operatorFilters: []
+      },
+      tabLoad: false
+    };
+  },
+  components: {
+    'select-search': selectSearch,
+    'v-table': VTable,
+    'v-pagination': VPagination
+  },
+  created() {
+    this.setRecycleBin({
+      name: 'negotiationRecycleBin',
+      params: {
+        type: 'inquiry'
+      },
+      show: true
+    });
+    this.gettabData();
+  },
+  watch: {
+    params: {
+      handler(val, oldVal) {
+        this.gettabData();
+      },
+      deep: true
     }
+  },
+  methods: {
+    ...mapActions([
+      'setRecycleBin',
+      'setDic'
+    ]),
+    inputEnter(val) {
+      if (!val.id || !val.value) {
+        this.params.operatorFilters = [];
+      } else {
+        let value = val.type === 'dateRange' ? {start: val.value[0].getTime(), end: val.value[1].getTime()} : val.value;
+        this.params.operatorFilters = [{property: val.id, value, operator: val.operator}];
+      }
+      this.searchLoad = true;
+    },
+    gettabData() {
+      let url, column;
+      this.tabLoad = true;
+      if (this.viewByStatus === 0) {
+        url = this.$apis.BUYER_POST_INQIIRY_LIST;
+        column = this.$db.inquiry.viewByInqury;
+      } else {
+        url = this.$apis.BUYER_POST_INQIIRY_LIST_SKU;
+        column = this.$db.inquiry.viewBySKU;
+      }
+      this.$ajax.post(url, this.params)
+        .then(res => {
+          this.params.tc = res.tc;
+          this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], {cache: true})
+            .then(data => {
+              this.setDic(data);
+              this.tabData = this.$getDB(column, res.datas, (item) => {
+                this.$filterDic(item);
+              });
+              this.tabLoad = false;
+              this.searchLoad = false;
+              this.checkedData = [];
+            });
+        })
+        ['catch'](() => {
+          this.searchLoad = false;
+          this.tabLoad = false;
+        });
+    },
+    cancelInquiry() { // 取消询价单
+      this.ajaxInqueryAction('cancel');
+    },
+    deleteInquiry() { // 删除询价单
+      this.$confirm('确认删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.ajaxInqueryAction('delete');
+      })['catch'](() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    ajaxInqueryAction(type) {
+      const argId = this.getChildrenId();
+      this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
+        action: type,
+        ids: argId
+      })
+        .then(res => {
+          this.gettabData();
+          this.checkedData = [];
+        });
+    },
+    action(item, type) {
+      switch (type) {
+        case 'detail':
+          this.detail(item);
+          break;
+      }
+    },
+    detail(item) {
+      this.$router.push({
+        path: '/negotiation/inquiryDetail',
+        query: {
+          id: _.findWhere(item, {'key': 'id'}).value
+        }
+      });
+    },
+    getChildrenId(type) {
+      let arr = [];
+      _.map(this.checkedData, item => {
+        if (!_.isUndefined(item)) {
+          arr.push(_.findWhere(item, {'key': 'id'}).value);
+        }
+      });
+      if (typeof type === 'string') {
+        arr.join(',');
+      }
+      return arr;
+    },
+    toCompare() {
+      let argId = this.getChildrenId('str');
+      this.$windowOpen({
+        url: '/negotiation/compareDetail/{type}',
+        params: {
+          type: 'new',
+          ids: argId.join(',')
+        }
+      });
+    },
+    pageSizeChange(no) {
+      this.params.pn = no;
+    },
+    handleSizeChange(val) {
+      this.params.ps = val;
+    },
+    changeChecked(item) { // tab 勾选
+      this.checkedData = item;
+    }
+  }
+};
 </script>
 <style lang="less" scoped>
     .inquiry {

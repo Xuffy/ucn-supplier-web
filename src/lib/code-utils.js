@@ -5,13 +5,13 @@ const codeConfig = {
   'AE_IS': {valueType: Number}, // Boolean
   'EL_IS': {valueType: Number}, // Boolean
   'INQUIRY_STATUS': {valueType: Number},
-  'ITM': {valueType: Number},
+  'ITM': {valueType: String},
   'LH_UNIT': {valueType: Number},
   'ED_UNIT': {valueType: Number},
-  'MD_TN': {valueType: Number},
+  'MD_TN': {valueType: String},
   'OEM_IS': {valueType: Number}, // Boolean
   'RA_IS': {valueType: Number}, // Boolean
-  'PMT': {valueType: Number},
+  'PMT': {valueType: String},
   'SKU_PG_IS': {valueType: Number}, // Boolean
   'SKU_SALE_STATUS': {valueType: Number},
   'SKU_UNIT': {valueType: Number},

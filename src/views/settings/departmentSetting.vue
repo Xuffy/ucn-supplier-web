@@ -724,7 +724,7 @@
             this.getDepartmentUser();
             this.editUserdialog.show = false;
             this.addUser = this.$options.data().addUser;
-            this.$message.success('操作成功');
+            this.$message.success(this.$i.setting.successfulOperation);
           }).finally(err => {
             this.addUserLoading = false;
           }
@@ -740,7 +740,7 @@
           this.$ajax.put(type ? this.$apis.USER_DISABLE : this.$apis.USER_ENABLE, {userId})
             .then(res => {
               this.getDepartmentData(true);
-              this.$message.success('操作成功');
+              this.$message.success(this.$i.setting.successfulOperation);
             });
         });
 
@@ -756,7 +756,7 @@
         this.$ajax.post(this.$apis.invite_departmentUser,
           {
             emails,
-            callback: `${config.ENV.LOGIN_URL}/#/activation?activeToken=%s&email=%s&redirect=${Base64.encode(window.location.origin)}`
+            callback: `${config.ENV.LOGIN_URL}/#/activation?activeToken=%s&email=%s&redirect=${Base64.encode(window.location.origin + '/#/login')}`
           })
           .then(res => {
             this.$message.success('邀请成功');

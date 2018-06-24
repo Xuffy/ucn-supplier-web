@@ -4,8 +4,7 @@
 				ref="popover5"
 				:placement="placement"
 				trigger="click"
-				v-model="visible"
-			>
+				v-model="visible">
 			<div class="deepBox">
 				<el-input
 					:placeholder="searchPlaceholder"
@@ -129,7 +128,9 @@
 		},
 		methods: {
 			getChecked(item) {
-				if(this.expandOnClickNode) if(item[this.defaultProps.children] && item[this.defaultProps.children].length) return;
+                if(this.expandOnClickNode && item[this.defaultProps.children] && item[this.defaultProps.children].length || item._disableClick){
+			        return;
+                }
 				this.selectedList = item;
 				this.visible = false;
 			},

@@ -81,6 +81,43 @@ export const routerMap = [
     ]
   },
     {
+        path: '/product',
+        component: Layout,
+        redirect: '/product/overview',
+        name: 'product',
+        meta: {
+            name: '产品'
+        },
+        // hidden: true,
+        children: [
+            {
+                path: 'overview',
+                name: 'overview',
+                meta: {
+                    name: '总览'
+                },
+                component: () => import('../views/product/overview')
+            },
+            {
+                path: 'addNewProduct',
+                name: 'Add New Product',
+                meta: {
+                    name: '新增产品'
+                },
+                component: () => import('../views/product/addNewProduct')
+            },
+            {
+                path: 'detail',
+                name: 'Detail',
+                hidden:true,
+                meta: {
+                    name: '产品详情'
+                },
+                component: () => import('../views/product/detail')
+            },
+        ]
+    },
+    {
       path: '/payment',
       meta: {name: 'Payment'},
       component: Layout,
@@ -359,43 +396,7 @@ export const routerMap = [
       ],
     },
     // todo 供应商路由
-    {
-      path: '/product',
-      component: Layout,
-      redirect: '/product/overview',
-      name: 'product',
-      meta: {
-        name: '产品'
-      },
-      // hidden: true,
-      children: [
-        {
-          path: 'overview',
-          name: 'overview',
-          meta: {
-            name: '总览'
-          },
-          component: () => import('../views/product/overview')
-        },
-        {
-          path: 'addNewProduct',
-          name: 'Add New Product',
-          meta: {
-            name: '新增产品'
-          },
-          component: () => import('../views/product/addNewProduct')
-        },
-        {
-          path: 'detail',
-          name: 'Detail',
-          hidden:true,
-          meta: {
-            name: '产品详情'
-          },
-          component: () => import('../views/product/detail')
-        },
-      ]
-    },
+
     //draft  草稿箱路由
     {
       path: '/draft',

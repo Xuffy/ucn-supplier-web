@@ -57,6 +57,6 @@ export default {
   post_oss_company_upload: ['/supplier/purchase/oss/company/upload','BASE_CS','USUPPLY_URL'],
 
   //track
-  get_track_getTrackInfoByPage: ['/track/getTrackInfoByPage','WORKBENCH_URL','WORKBENCH_URL'],
+  get_track_getTrackInfoByPage: ['/track/getTrackInfoByPage','UWORKBENCH_URL'],
 
 }

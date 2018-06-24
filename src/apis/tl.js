@@ -28,6 +28,7 @@ export default {
     POST_INQIIRY_LIST_SKU: ['/inquiry/list/sku', 'UPURCHASE_URL', 'UPURCHASE_URL'], // inquiry list sku
     POST_INQUIRY_ACTION: ['/inquiry/action', 'UPURCHASE_URL', 'UPURCHASE_URL'], // inquiry操作
     GET_INQIIRY_DETAIL: ['/inquiry', 'UPURCHASE_URL', 'UPURCHASE_URL'], //获取inquiry详情
+    GET_INQIIRY_DETAIL_BY_CODE: ['/inquiry/detail', 'UPURCHASE_URL', 'UPURCHASE_URL'], //获取inquiry详情
     POST_INQUIRY_SAVE: ['/inquiry/save', 'UPURCHASE_URL', 'UPURCHASE_URL'], // 提交
     POST_INQUIRY_SKUS: ['/inquiry/skus', 'UPURCHASE_URL', 'UPURCHASE_URL'], // sku 转换接口
     POST_INQUIRY_COMPARE_DELETE: ['/inquiry/compare/delete', 'UPURCHASE_URL', 'UPURCHASE_URL'],
@@ -43,6 +44,7 @@ export default {
     BUYER_POST_INQIIRY_LIST_SKU: ['/inquiry/list/sku', 'USUPPLY_URL', 'USUPPLY_URL'], // inquiry list sku
     BUYER_POST_INQUIRY_SAVE: ['/inquiry/save', 'USUPPLY_URL', 'USUPPLY_URL'], // 提交
     BUYER_GET_INQIIRY_DETAIL: ['/inquiry', 'USUPPLY_URL', 'USUPPLY_URL'], // 获取inquiry 详情
+    BUYER_GET_INQIIRY_DETAIL_BY_CODE: ['/inquiry/detail', 'USUPPLY_URL', 'USUPPLY_URL'], // 获取inquiry 详情
     BUYER_GET_INQUIRY_HISTORY: ['/inquiry/{id}/history', 'USUPPLY_URL', 'USUPPLY_URL'], // 获取inquiry 历史
     BUYER_POST_INQUIRY_SKUS: ['/inquiry/skus', 'USUPPLY_URL', 'USUPPLY_URL'], // sku 转换接口
     BUYER_POST_INQUIRY_ACTION: ['/inquiry/action', 'USUPPLY_URL', 'USUPPLY_URL'], // 操作

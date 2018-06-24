@@ -21,5 +21,6 @@
   "sureConfirm":"Sure Confirm?",
   "pleaseChooseProduct":"Please choose product",
   "sureRemove":"Sure Remove?",
-  "removeSuccess":"Remove Success!"
+  "removeSuccess":"Remove Success!",
+  "keywordMustInput":"还有必填字段未填写"
 }

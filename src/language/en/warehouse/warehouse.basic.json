@@ -68,5 +68,6 @@
   "totalMoney":"总价",
   "action":"操作",
   "sysGenerate":"系统生成",
-  "pleaseChoose":"请选择"
+  "pleaseChoose":"请选择",
+  "skuQty":"合同数量"
 }
