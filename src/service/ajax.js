@@ -71,6 +71,7 @@ const $ajax = (config) => {
     }
       console.log(url,'url')
       console.log(params,'params')
+      console.log(_.isEmpty,'_.isEmpty')
     if (!_.isEmpty(params) && !params.length) {
       _.mapObject(params, (val, key) => {
           console.log(val,'val')
