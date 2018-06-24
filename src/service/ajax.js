@@ -64,6 +64,8 @@ const $ajax = (config) => {
    * @returns {*}
    */
   this.setUrl = (url, params) => {
+      console.log(url,'url1111')
+      console.log(params,'params1111')
     let p = {};
 
     if (_.isEmpty(url)){
