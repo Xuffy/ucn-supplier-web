@@ -69,11 +69,9 @@ const $ajax = (config) => {
     if (_.isEmpty(url)){
       throw new Error('Request url exception');
     }
-      console.log(url,'url')
-      console.log(params,'params')
-      console.log(_.isEmpty,'_.isEmpty')
-      console.log(_.mapObject,'_.mapObject')
+
     if (!_.isEmpty(params) && !params.length) {
+        console.log(11111)
       _.mapObject(params, (val, key) => {
           console.log(val,'val')
         if (url.indexOf(`{${key}}`) < 0) {
