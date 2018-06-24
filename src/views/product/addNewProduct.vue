@@ -556,7 +556,7 @@
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
                             <div v-if="v.isCountry">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" filterable multiple collapse-tags placeholder="please choose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" filterable multiple collapse-tags :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in countryOption"
                                             :key="item.id"
@@ -566,7 +566,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isUDB">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in udbOption"
                                             :key="item.id"
@@ -576,17 +576,17 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isSkuPkg">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in skuPkgOption"
                                             :key="item.id"
                                             :label="item.name"
-                                            :value="item.value">
+                                            :value="item.code">
                                     </el-option>
                                 </el-select>
                             </div>
                             <div v-else>
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in v.options"
                                             :key="item.value"
@@ -600,7 +600,7 @@
                             <el-input
                                     :disabled="v.disabledInput"
                                     size="mini"
-                                    placeholder="请输入"
+                                    :placeholder="$i.product.pleaseInput"
                                     clearable
                                     v-model="productForm[v.key]">
                             </el-input>
@@ -611,7 +611,7 @@
                                     size="mini"
                                     type="textarea"
                                     autosize
-                                    placeholder="请填写"
+                                    :placeholder="$i.product.pleaseInput"
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
@@ -622,8 +622,7 @@
                                         size="mini"
                                         :controls="false"
                                         v-model="boxSize.length"
-                                        :min="0"
-                                        label="描述文字">
+                                        :min="0">
                                 </el-input-number>
                                 <div class="speIcon">*</div>
                                 <el-input-number
@@ -631,8 +630,7 @@
                                         size="mini"
                                         :controls="false"
                                         v-model="boxSize.width"
-                                        :min="0"
-                                        label="描述文字">
+                                        :min="0">
                                 </el-input-number>
                                 <div class="speIcon">*</div>
                                 <el-input-number
@@ -640,8 +638,7 @@
                                         size="mini"
                                         :controls="false"
                                         v-model="boxSize.height"
-                                        :min="0"
-                                        label="描述文字">
+                                        :min="0">
                                 </el-input-number>
                             </div>
                             <div v-else>
@@ -650,8 +647,7 @@
                                         size="mini"
                                         :controls="false"
                                         v-model="productForm[v.key]"
-                                        :min="0"
-                                        label="描述文字">
+                                        :min="0">
                                 </el-input-number>
                             </div>
                         </div>
@@ -661,7 +657,7 @@
                                     v-model="productForm[v.key]"
                                     align="right"
                                     type="month"
-                                    placeholder="选择日期"
+                                    :placeholder="$i.product.pleaseChoose"
                                     :editable="false">
                             </el-date-picker>
                         </div>
@@ -1198,7 +1194,7 @@
                     //代表是编辑
                     let param=Object.assign({},this.productForm);
                     _.mapObject(param,(e,k)=>{
-                        if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
+                        if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox'){
                             param[k]=parseInt(param[k]);
                         }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
                             let item='';
@@ -1214,6 +1210,8 @@
                                 });
                                 param[k]=item;
                             }
+                        }else if(k==='adjustPackage'){
+                            param[k]=param[k]==='1'?true:false;
                         }
                     });
                     if(!param.readilyAvailable){
@@ -1225,7 +1223,7 @@
 
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
-                    console.log(param,'param')
+
 
                     this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
                         this.$message({
@@ -1292,15 +1290,16 @@
                 this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
                     this.productForm=res;
                     _.mapObject(this.productForm,(e,k)=>{
-                        if(k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox' || k==='adjustPackage'){
+                        if(k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox'){
                             this.productForm[k]=String(this.productForm[k]);
                         }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
                             if(this.productForm[k]){
                                 this.productForm[k]=this.productForm[k].split(',');
                             }
+                        }else if(k==='adjustPackage'){
+                            this.productForm[k]=this.productForm[k]?'1':'0';
                         }
                     });
-                    console.log(this.productForm,'this.productForm')
                     this.loadingData=false;
                 }).catch(err=>{
                     this.loadingData=false;
@@ -1383,6 +1382,10 @@
 
                 });
 
+                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                    console.log(res,'???')
+                })
+
                 this.loadingData=true;
                 this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT'],{cache:true}).then(res=>{
                     res.forEach(v=>{
@@ -1396,20 +1399,13 @@
                             this.lengthOption=v.codes;
                         }else if(v.code==='SKU_SALE_STATUS'){
                             this.saleStatusOption=v.codes;
-                            // console.log(this.saleStatusOption,'saleStatusOption')
-                            // this.saleStatusOption.forEach(v=>{
-                            //     if(v.code==='1'){
-                            //         v.label='上架';
-                            //     }else if(v.code==='0'){
-                            //         v.label='下架';
-                            //     }
-                            // })
                         }else if(v.code==='OEM_IS'){
                             this.oemOption=v.codes;
                         }else if(v.code==='UDB_IS'){
                             this.udbOption=v.codes;
                         }else if(v.code==='SKU_PG_IS'){
                             this.skuPkgOption=v.codes;
+                            console.log(this.skuPkgOption,'this.skuPkgOption')
                         }else if(v.code==='RA_IS'){
                             this.readilyOption=v.codes;
                         }else if(v.code==='SKU_UNIT'){
