@@ -70,15 +70,21 @@ const $ajax = (config) => {
       throw new Error('Request url exception');
     }
 
-    if (!_.isEmpty(params) && !params.length) {
-        console.log(11111)
-      _.mapObject(params, (val, key) => {
-          console.log(val,'val')
-        if (url.indexOf(`{${key}}`) < 0) {
-            console.log(key,'key')
-          p[key] = val;
-        }
-      });
+    if (params && !params.length) {
+        params.forEach((val,key)=>{
+            if (url.indexOf(`{${key}}`) < 0) {
+                console.log(key,'key')
+                p[key] = val;
+            }
+        })
+      // _.mapObject(params, (val, key) => {
+      //     console.log(val,'val')
+      //   if (url.indexOf(`{${key}}`) < 0) {
+      //       console.log(key,'key')
+      //     p[key] = val;
+      //   }
+      // }
+      );
 
       console.log({url: _.template(url)(params), params: p},'?????')
       return {url: _.template(url)(params), params: p};
