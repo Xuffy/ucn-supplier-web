@@ -1,7 +1,7 @@
 <template>
     <div class="select-wrap">
         <div class="select" v-if="selectHide">
-            <el-select v-model="keyObject" value-key="id" placeholder="select" :clearable="true">
+            <el-select v-model="keyObject" value-key="id" placeholder="select" :clearable="false">
                 <el-option
                     v-for="item in options"
                     :key="item.id"
@@ -78,7 +78,7 @@
         display:flex;
         align-items:center;
         .select {
-            width: 110px;
+            /*width: 110px;*/
             margin-right:5px;
         }
         .set {
