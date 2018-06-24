@@ -90,7 +90,7 @@
 
         <el-dialog
                 class="speDialog"
-                title="提示"
+                :title="$i.product.prompt"
                 :visible.sync="partDialogVisible"
                 width="30%">
             <span>当前所选有上架产品，是否下架该产品?</span>
@@ -240,6 +240,7 @@
                         }
                     });
                     this.tableDataList = this.$getDB(this.$db.product.overviewTable, res.datas);
+                    this.pageData=res;
                     this.disabledSearch=false;
                     this.loadingTable=false;
                 }).catch(err=>{

@@ -115,8 +115,12 @@
                             </div>
                         </div>
                         <div v-if="v.showType==='dropdown'">
-                            <drop-down class="speSelect" v-model="productForm[v.key]" :list="categoryList" :defaultProps="defaultProps"
-                                       ref="dropDown" :expandOnClickNode="false"></drop-down>
+                            <drop-down
+                                    class="speSelect"
+                                    v-model="productForm[v.key]"
+                                    :list="categoryList"
+                                    :defaultProps="defaultProps"
+                                    ref="dropDown"></drop-down>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -1299,11 +1303,14 @@
                         }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
                             if(this.productForm[k]){
                                 this.productForm[k]=this.productForm[k].split(',');
+                            }else{
+                                this.productForm[k]=[];
                             }
                         }else if(k==='adjustPackage'){
                             this.productForm[k]=this.productForm[k]?'1':'0';
                         }
                     });
+                    console.log(this.productForm,'this.productForm')
                     this.loadingData=false;
                 }).catch(err=>{
                     this.loadingData=false;
@@ -1478,7 +1485,7 @@
     }
 
     .speTextarea{
-        width: 80%;
+        width: 90%;
     }
     .speSelect{
         width: 80%;
