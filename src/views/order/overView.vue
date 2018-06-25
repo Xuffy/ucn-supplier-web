@@ -161,15 +161,15 @@
                 }
             },
             inputEnter(val) {
-                if (!val.keyType) return this.$message(this.$i.order.pleaseChooseType);
-                if (val.keyType === 1) {
-                    this.params.orderNo = val.key;
+                if (!val.id) return this.$message(this.$i.order.pleaseChooseType);
+                if (val.id === 1) {
+                    this.params.orderNo = val.value;
                     this.params.skuCode = '';
                     this.view='1';
                     this.getData()
                 } else {
                     this.params.orderNo = '';
-                    this.params.skuCode = val.key;
+                    this.params.skuCode = val.value;
                     this.view='2';
                     this.getData()
                 }
@@ -261,10 +261,9 @@
 
             //获取字典
             getUnit() {
-                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                    console.log(res)
-                });
-
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // });
 
                 this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS','ITM','PMT'], {cache: true}).then(res => {
                     res.forEach(v => {

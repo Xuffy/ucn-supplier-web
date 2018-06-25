@@ -77,6 +77,7 @@
         </el-form>
 
         <v-table
+                code="uwarehouse_inbound_sku"
                 v-loading="loadProductTable"
                 class="speTable"
                 :data="productTable"
