@@ -23,6 +23,7 @@
             </div>
             <div class="section">
                 <v-table
+                        code="uwarehouse_overview"
                         :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
@@ -48,6 +49,7 @@
 <script>
     import {VPagination,VTable} from '@/components/index'
     import selectSearch from '@/components/common/fnCompon/selectSearch'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "warehouseOverview",
@@ -110,6 +112,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             changeStatus(e){
                 this.warehouseConfig.pn=1;
                 if(e==='0'){
@@ -138,22 +141,22 @@
 
             searchInbound(e){
                 // this.warehouseConfig.inboundNo=e.key;
-                if(!e.keyType){
+                if(!e.id){
                     this.$message({
-                        message: '请至少选择一个类别',
+                        message: this.$i.warehouse.pleaseChooseAType,
                         type: 'warning'
                     });
                     return;
-                }else if(e.keyType===1){    //订单号
+                }else if(e.id===1){    //订单号
                     this.warehouseConfig.inboundNo='';
-                    this.warehouseConfig.orderNo=e.key;
+                    this.warehouseConfig.orderNo=e.value;
                     this.warehouseConfig.skuCode='';
-                }else if(e.keyType===2){    //供应商货号
+                }else if(e.id===2){    //供应商货号
                     this.warehouseConfig.inboundNo='';
                     this.warehouseConfig.orderNo='';
-                    this.warehouseConfig.skuCode=e.key;
-                }else if(e.keyType===3){    //入库单号
-                    this.warehouseConfig.inboundNo=e.key;
+                    this.warehouseConfig.skuCode=e.value;
+                }else if(e.id===3){    //入库单号
+                    this.warehouseConfig.inboundNo=e.value;
                     this.warehouseConfig.orderNo='';
                     this.warehouseConfig.skuCode='';
                 }
@@ -188,6 +191,9 @@
         },
         created(){
             this.getWarehouseData();
+        },
+        mounted(){
+            this.setLog({query: {code: 'WAREHOUSE'}});
         },
         watch:{
             selectList(n){

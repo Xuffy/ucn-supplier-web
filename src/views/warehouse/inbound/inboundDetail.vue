@@ -77,6 +77,7 @@
         </el-form>
 
         <v-table
+                code="uwarehouse_inbound_sku"
                 v-loading="loadProductTable"
                 class="speTable"
                 :data="productTable"
@@ -154,6 +155,7 @@
 <script>
 
     import {VTimeZone,VTable,VUpload} from '@/components/index'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "inboundDetail",
@@ -204,6 +206,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             getData(){
                 this.loadingTable=true;
                 this.$ajax.get(`${this.$apis.get_inboundDetail}?id=${this.$route.query.id}`).then(res=>{
@@ -269,6 +272,9 @@
         created(){
             this.getData();
             this.getUnit();
+        },
+        mounted(){
+            this.setLog({query: {code: 'WAREHOUSE'}});
         },
     }
 </script>

@@ -16,8 +16,11 @@
                         v-model="searchId"
                         :options="searchOptions"></select-search>
             </div>
+            <br>
+            <br>
             <div class="section">
                 <v-table
+                        code="uwarehouse_outbound_overview"
                         :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
@@ -43,6 +46,7 @@
 <script>
     import {VPagination,VTable} from '@/components/index'
     import selectSearch from '@/components/common/fnCompon/selectSearch'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "inboundOverview",
@@ -85,6 +89,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             changeStatus(){
                 this.outboundConfig.pn=1;
                 this.getOutboundData();
@@ -116,14 +121,14 @@
             },
 
             searchInbound(e){
-                if(!e.keyType){
+                if(!e.id){
                     this.$message({
-                        message: '请选择一个类别',
+                        message: this.$i.warehouse.pleaseChooseAType,
                         type: 'warning'
                     });
                     return;
                 }
-                this.outboundConfig.outboundNo=e.key;
+                this.outboundConfig.outboundNo=e.value;
                 this.getOutboundData();
             },
 
@@ -183,6 +188,9 @@
         },
         created(){
             this.getUnit();
+        },
+        mounted(){
+            this.setLog({query: {code: 'WAREHOUSE'}});
         },
         watch:{
             selectList(n){

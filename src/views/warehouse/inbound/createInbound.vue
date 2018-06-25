@@ -686,7 +686,6 @@
                 this.clearSearchData();
             },
 
-
             /**
              * 分页操作
              * */
@@ -771,10 +770,8 @@
             getUnit(){
                 this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE'],{cache:true}).then(res=>{
                     this.inboundTypeOption=res[0].codes;
+                    console.log(this.inboundTypeOption,'this.inboundTypeOption')
                 });
-
-
-
 
                 // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{
                 //     console.log(res)

@@ -20,6 +20,7 @@
             </div>
             <div class="section">
                 <v-table
+                        code="uwarehouse_qc_order_overview"
                         :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
@@ -44,6 +45,7 @@
 <script>
     import {VPagination,VTable} from '@/components/index'
     import selectSearch from '@/components/common/fnCompon/selectSearch'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "qcOverview",
@@ -87,6 +89,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             changeStatus(){
                 this.qcOrderConfig.pn=1;
                 this.getQcData();
@@ -107,19 +110,18 @@
             },
 
             searchInbound(e){
-                if(!e.keyType){
+                if(!e.id){
                     return this.$message({
-                        message: '请选择搜索类别',
+                        message: this.$i.warehouse.pleaseChooseAType,
                         type: 'warning'
                     });
                 }else{
-                    this.qcOrderConfig.qcOrderNo=e.key;
+                    this.qcOrderConfig.qcOrderNo=e.value;
                     this.getQcData();
                 }
             },
 
             btnClick(e){
-                console.log(e.serviceProviderIsLoginUser.value,'???')
                 if(e.serviceProviderIsLoginUser.value){
                     //跳9.2.3
                     if(e.qcStatusDictCode.value==='COMPLETED_QC'){
@@ -186,6 +188,9 @@
         },
         created(){
             this.getUnit();
+        },
+        mounted(){
+            this.setLog({query: {code: 'WAREHOUSE'}});
         },
         watch:{
             selectList(n){

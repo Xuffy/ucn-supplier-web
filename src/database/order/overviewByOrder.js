@@ -35,5 +35,7 @@ export default {
     // totalGrossWeight:{},
     // totalNetWeight:{},
     // totalVolume:{},
-    skuQty:{}
+    skuQuantity:{
+        key:'skuQty'
+    }
 }

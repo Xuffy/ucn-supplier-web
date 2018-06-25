@@ -191,6 +191,8 @@
         </div>
         <div class="product-info">
             <v-table
+                    :height="500"
+                    code="uwarehouse_qc_order_detail"
                     :loading="loadingProductInfoTable"
                     :data="productInfoData"
                     :buttons="[{'label': $i.warehouse.detail, type: 1}]"
@@ -337,6 +339,7 @@
 </template>
 <script>
     import {VTable,VMessageBoard,VUpload } from '@/components/index';
+    import {mapActions} from 'vuex'
 
     export default {
         name:'qc-detail',
@@ -404,6 +407,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             getQcOrderDetail(){
                 this.loadingData=true;
                 this.$ajax.get(`${this.$apis.get_serviceOrderDetail}?id=${this.$route.query.id}`)
@@ -660,7 +664,10 @@
             this.getProductInfo();
             this.getService();
             this.getUnit();
-        }
+        },
+        mounted(){
+            this.setLog({query: {code: 'WAREHOUSE'}});
+        },
     }
 </script>
 <style scoped>
