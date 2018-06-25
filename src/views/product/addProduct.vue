@@ -91,6 +91,7 @@
             </v-table>
             <!--分页-->
             <page
+                    :page-sizes="[50,100,200,500]"
                     @change="changePage"
                     :page-data="pageData"></page>
             <div class="footer-btn" v-if="hideBtn && type!=='recycle'">
