@@ -2,6 +2,9 @@ export default {
   pic: {
     key: 'pic'
   },
+  orderNo: {
+    key: 'orderNo'
+  },
   purchaseOrderNumber: {
     key: 'customerOrderNo'
   },
@@ -235,13 +238,13 @@ export default {
     key: 'qualifiedSkuQty'
   },
   deliveredQuantity: {
-    key: ''
+    key: 'totalContainerQty'
   },
   undeliveredQuantity: {
     key: 'skuUndeliveredQty'
   },
   country: {
-    key: 'country'
+    key: 'customerCountry'
   },
   destinationPort: {
     key: 'destinationPort'
