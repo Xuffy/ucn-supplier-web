@@ -127,7 +127,7 @@
             plan: {
               key: 3,
               label: 'plan',
-              text: this.$i.logistic.plan,
+              text: this.$i.logistic.loadingList,
               url: this.$apis.get_loading_list_plan,
               db: this.$db.logistic.planList
             },
