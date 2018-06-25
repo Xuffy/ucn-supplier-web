@@ -20,6 +20,7 @@
             </div>
             <div class="section">
                 <v-table
+                        code="uwarehouse_qc_order_overview"
                         :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
