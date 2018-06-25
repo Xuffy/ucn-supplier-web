@@ -668,7 +668,7 @@
 
         <div class="title">{{$i.product.attachment}}</div>
         <div style="margin-bottom: 20px">
-            <v-upload oss-private :list="productForm.attachments" :limit="20" ref="uploadAttachment"></v-upload>
+            <v-upload :list="productForm.attachments" :limit="20" ref="uploadAttachment"></v-upload>
         </div>
 
         <div class="footBtn">

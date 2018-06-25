@@ -68,6 +68,7 @@
         </div>
         <div class="footer">
             <v-table
+                    code="udata_supply_sku_overview"
                     :height="500"
                     :loading="loadingTable"
                     :data="tableDataList"
@@ -79,6 +80,7 @@
                         <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
                         <el-button :disabled="disabledDeleteGoods" :loading="disableClickSetUp" @click="setUp">{{$i.product.setUp}}</el-button>
                         <el-button :disabled="disabledDeleteGoods" :loading="disableClickSetDown" @click="setDown">{{$i.product.setDown}}</el-button>
+                        <el-button @click="()=>$refs.importCategory.show()">{{$i.button.upload}}</el-button>
                         <!--<el-button>{{$i.product.downloadSelected}}({{selectList.length?selectList.length:'All'}})</el-button>-->
                         <!--<el-button @click="upload">{{$i.product.uploadProduct}}</el-button>-->
                         <!--<el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger">{{$i.product.delete}}</el-button>-->
@@ -104,13 +106,14 @@
                 <el-button type="primary" @click="partDialogVisible = false">下架产品</el-button>
             </span>
         </el-dialog>
+
+        <v-import-template ref="importCategory" code="PRODUCT_SUPPLIER" biz-code="PRODUCT_SUPPLIER"></v-import-template>
     </div>
 </template>
 
 <script>
-    import {dropDownSingle} from '@/components/index'
     import sectionNumber from '../product/sectionNumber'
-    import {VPagination,VTable} from '@/components/index'
+    import {VPagination,VTable,dropDownSingle,VImportTemplate} from '@/components/index'
 
     export default {
         name: "overview",
@@ -118,7 +121,8 @@
             dropDown:dropDownSingle,
             sectionNumber,
             VTable,
-            page:VPagination
+            page:VPagination,
+            VImportTemplate
         },
         props:{
 
@@ -162,7 +166,7 @@
                     // ],
                     outerCartonMethodEnLike: "",
                     pn: 1,
-                    ps: 10,
+                    ps: 50,
                     readilyAvailable: null,
                     recycle: false,             //recycleBin里传true,其他地方传false
                     //初始搜索的时候不传，当有筛选条件之后再传
@@ -201,6 +205,19 @@
                 tableDataList:[],
                 dataColumn:[],
                 pageData:{},
+
+
+                /**
+                 * 字典
+                 * */
+                statusOption:[],
+                weightOption:[],
+                dateOption:[],
+                volumeOption:[],
+                lengthOption:[],
+                skuUnitOption:[],
+                countryOption:[],
+
             }
         },
         methods:{
@@ -230,13 +247,13 @@
                 this.disabledSearch=true;
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_productList,this.productForm).then(res=>{
-                    res.datas.forEach(v=>{
-                        if(v.status===0){
-                            v.status='下架';
-                        }else if(v.status===1){
-                            v.status='上架';
-                        }
-                    });
+                    // res.datas.forEach(v=>{
+                    //     if(v.status===0){
+                    //         v.status='下架';
+                    //     }else if(v.status===1){
+                    //         v.status='上架';
+                    //     }
+                    // });
                     this.tableDataList = this.$getDB(this.$db.product.overviewTable, res.datas);
                     this.pageData=res;
                     this.disabledSearch=false;
@@ -257,11 +274,17 @@
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_productList,this.productForm).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.overviewTable, res.datas,e=>{
-                        if(e.status.value===0){
-                            e.status.value='下架';
-                        }else if(e.status.value===1){
-                            e.status.value='上架';
-                        }
+                        // if(e.status.value===0){
+                        //     e.status.value='下架';
+                        // }else if(e.status.value===1){
+                        //     e.status.value='上架';
+                        // }
+                        e.status.value = this.$change(this.statusOption, 'status', e, true).name;
+                        e.expireUnit.value = this.$change(this.dateOption, 'expireUnit', e, true).name;
+                        e.unit.value = this.$change(this.skuUnitOption, 'unit', e, true).name;
+                        e.unitLength.value = this.$change(this.lengthOption, 'unitLength', e, true).name;
+                        e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
+                        e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
 
                         e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm-dd');
                         return e;
@@ -438,8 +461,33 @@
             }
         },
         created(){
-            this.getData();
-            this.getCategoryId();
+            this.$ajax.post(this.$apis.get_partUnit, ['SKU_SALE_STATUS', 'WT_UNIT', 'ED_UNIT', 'VE_UNIT', 'LH_UNIT', 'SKU_UNIT'], {cache: true}).then(res => {
+                res.forEach(v => {
+                    if (v.code === 'SKU_SALE_STATUS') {
+                        this.statusOption = v.codes;
+                    } else if (v.code === 'WT_UNIT') {
+                        this.weightOption = v.codes;
+                    } else if (v.code === 'ED_UNIT') {
+                        this.dateOption = v.codes;
+                    } else if (v.code === 'VE_UNIT') {
+                        this.volumeOption = v.codes;
+                    } else if (v.code === 'LH_UNIT') {
+                        this.lengthOption = v.codes;
+                    } else if (v.code === 'SKU_UNIT') {
+                        this.skuUnitOption = v.codes;
+                    }
+                });
+                //国家
+                this.$ajax.get(this.$apis.get_country, {}, {cache: true}).then(res => {
+                    this.countryOption = res;
+                    this.getData();
+                    this.getCategoryId();
+                }).catch(err => {
+
+                });
+            }).catch(err => {
+
+            });
         },
 
         watch:{

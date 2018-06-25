@@ -58,5 +58,6 @@
   "pleaseInput":"Please Input",
   "summary":"Summary",
   "skuQtys":"SKU Quantity",
-  "importantSupplier":"Important Supplier"
+  "importantSupplier":"Important Supplier",
+  "skuQuantity":"SKU Quantity"
 }

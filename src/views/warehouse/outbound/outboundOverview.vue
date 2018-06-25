@@ -18,6 +18,7 @@
             </div>
             <div class="section">
                 <v-table
+                        code="uwarehouse_outbound_overview"
                         :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
@@ -116,14 +117,14 @@
             },
 
             searchInbound(e){
-                if(!e.keyType){
+                if(!e.id){
                     this.$message({
-                        message: '请选择一个类别',
+                        message: this.$i.warehouse.pleaseChooseAType,
                         type: 'warning'
                     });
                     return;
                 }
-                this.outboundConfig.outboundNo=e.key;
+                this.outboundConfig.outboundNo=e.value;
                 this.getOutboundData();
             },
 

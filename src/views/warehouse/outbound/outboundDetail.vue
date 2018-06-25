@@ -78,7 +78,6 @@
         <v-table
                 v-loading="loadProductTable"
                 class="speTable"
-                :total-row="totalRow"
                 :data="productTable"
                 :buttons="[{label:'Detail',type:1}]"
                 @action="btnClick"

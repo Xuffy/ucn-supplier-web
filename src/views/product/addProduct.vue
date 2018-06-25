@@ -69,6 +69,7 @@
         </div>
         <div class="footer">
             <v-table
+                    code="udata_supply_sku_overview"
                     :loading="loadingTable"
                     :data="tableDataList"
                     :buttons="type==='recycle'?[]:[{label: 'Detail', type: 1}]"
@@ -91,6 +92,7 @@
             </v-table>
             <!--分页-->
             <page
+                    :page-sizes="[50,100,200,500]"
                     @change="changePage"
                     :page-data="pageData"></page>
             <div class="footer-btn" v-if="hideBtn && type!=='recycle'">
