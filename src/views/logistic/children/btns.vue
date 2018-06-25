@@ -20,7 +20,7 @@
         <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','refuse')">{{ $i.logistic.refuse }}</el-button>
       </div>
       <div v-else>
-        <el-button size="mini" type="primary" v-if="!edit&&DeliveredEdit" :disabled="logisticsStatus.recived==0 || (logisticsStatus.status!=1&&logisticsStatus.status!=3)"
+        <el-button size="mini" type="primary" v-if="!edit&&!DeliveredEdit" :disabled="logisticsStatus.recived==0 || (logisticsStatus.status!=1&&logisticsStatus.status!=3)"
           @click.stop="$emit('switchEdit', 'modify')">{{ $i.logistic.modify }}</el-button>
         <el-button size="mini" type="danger" v-if="edit" @click.stop="$emit('switchEdit', 'cancelModify')">{{ $i.logistic.cancelModify }}</el-button>
         <el-button size="mini" type="danger" v-if="edit" @click.stop="$emit('sendData', 'send')">{{ $i.logistic.confirmModify }}</el-button>
