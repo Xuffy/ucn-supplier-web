@@ -43,13 +43,11 @@
             @action="action"
             @change-checked="changeChecked"
             :loading="tabLoad"
-            ref="tab"
-        />
+            ref="tab"/>
         <v-pagination
             :page-data.sync="params"
             @size-change="handleSizeChange"
-            @change="pageSizeChange"
-        />
+            @change="pageSizeChange"/>
     </div>
 </template>
 <script>
@@ -78,11 +76,6 @@ export default {
         id: 'quotationNo',
         label: this.$i.inquiry.quotationNo,
         operator: 'like'
-      }, {
-        id: 'updateDt',
-        label: this.$i.inquiry.updateDt,
-        type: 'dateRange',
-        operator: 'between'
       }],
 
       tabData: [],

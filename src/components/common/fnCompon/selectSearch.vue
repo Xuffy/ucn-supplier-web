@@ -67,7 +67,17 @@ export default {
     },
     methods: {
         inputEnter() {
-            this.$emit('inputEnter', this.keyObject);
+            let operatorFilters = [];
+            if (this.keyObject.id && this.keyObject.value) {
+                let value;
+                if (this.keyObject.type === 'dateRange') {
+                    value = {start: this.keyObject.value[0].getTime(), end: this.keyObject.value[1].getTime()};
+                } else {
+                    value = this.keyObject.value;
+                }
+                operatorFilters.push({property: this.keyObject.id, value, operator: this.keyObject.operator || '='});
+            }
+            this.$emit('inputEnter', this.keyObject, operatorFilters);
         }
     }
 }
