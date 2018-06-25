@@ -11,8 +11,8 @@
 
       <el-button size="mini" type="danger" v-if="edit" @click.stop="$emit('switchEdit', 'cancelModify')">{{ $i.logistic.cancelModify }}</el-button>
       <el-button size="mini" type="danger" v-if="edit" @click.stop="$emit('sendData', 'send')">{{ $i.logistic.confirmModify }}</el-button>
-      <el-button size="mini" type="primary" v-if="!edit" @click.stop="$emit('switchEdit','download')">{{ $i.logistic.download }}</el-button>
-      <el-button size="mini" type="primary" v-if="!edit" :disabled="logisticsStatus.status==4" @click.stop="$emit('switchEdit','cancelLoadingList')">{{ $i.logistic.cancel }}</el-button>
+      <el-button size="mini" type="primary" v-if="!edit&&!DeliveredEdit" @click.stop="$emit('switchEdit','download')">{{ $i.logistic.download }}</el-button>
+      <el-button size="mini" type="primary" v-if="!edit&&!DeliveredEdit" @click.stop="$emit('switchEdit','cancelLoadingList')">{{ $i.logistic.cancel }}</el-button>
     </div>
     <div v-if="!logisticsStatus.loadingList&&logisticsStatus.loadingList!='loadingList'&&logisticsStatus.status!=5">
       <div v-if="logisticsStatus.supplierRecived==0">
@@ -27,8 +27,8 @@
         <el-button size="mini" type="primary" v-if="!edit" :disabled="logisticsStatus.recived==0 || (logisticsStatus.status!=1&&logisticsStatus.status!=2&&logisticsStatus.status!=3)"
           @click.stop="$emit('switchEdit','confirm')">{{ $i.logistic.confirm }}</el-button>
         <el-button size="mini" type="primary" v-if="!edit && logisticsStatus.status!=4" :disabled="logisticsStatus.recived==0" @click.stop="$emit('switchEdit','generateList')">{{ $i.logistic.generateList }}</el-button>
-        <el-button size="mini" type="primary" v-if="!edit" :disabled="logisticsStatus.recived==0" @click.stop="$emit('switchEdit','download')">{{ $i.logistic.download }}</el-button>
-        <el-button size="mini" type="primary" v-if="!edit" :disabled="logisticsStatus.recived==0 || logisticsStatus.status==4" @click.stop="$emit('switchEdit','cancel')">{{ $i.logistic.cancel }}</el-button>
+        <el-button size="mini" type="primary" v-if="!edit" @click.stop="$emit('switchEdit','download')">{{ $i.logistic.download }}</el-button>
+        <el-button size="mini" type="primary" v-if="!edit" @click.stop="$emit('switchEdit','cancelLoadingList')">{{ $i.logistic.cancel }}</el-button>
       </div>
     </div>
 
