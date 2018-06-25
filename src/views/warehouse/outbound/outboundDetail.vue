@@ -76,6 +76,8 @@
         </div>
 
         <v-table
+                :height="500"
+                code="uwarehouse_outbound_sku"
                 v-loading="loadProductTable"
                 class="speTable"
                 :data="productTable"
@@ -93,6 +95,7 @@
 <script>
 
     import { VUpload, VTable} from '@/components/index'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "inboundDetail",
@@ -133,6 +136,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             getData(){
                 this.loadingTable=true;
                 this.$ajax.get(`${this.$apis.get_outBoundDetail}?id=${this.$route.query.id}`).then(res=>{
@@ -202,7 +206,9 @@
         },
         created(){
             this.getUnit();
-
+        },
+        mounted(){
+            this.setLog({query: {code: 'WAREHOUSE'}});
         },
     }
 </script>

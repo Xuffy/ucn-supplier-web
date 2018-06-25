@@ -1105,6 +1105,7 @@
 
     import {VTable,VPagination,selectSearch,VUpload,VHistoryModify,VMessageBoard} from '@/components/index'
     import VProduct from '@/views/product/addProduct';
+    import {mapActions} from 'vuex'
 
     export default {
         name: "createOrder",
@@ -1390,6 +1391,9 @@
             }
         },
         methods:{
+            ...mapActions([
+                'setLog'
+            ]),
             /**
              * 获取页面数据
              * */
@@ -2561,7 +2565,6 @@
             }
         },
         created(){
-
             let category=[];
             this.category=[];
             this.loadingPage=true;
@@ -2585,6 +2588,9 @@
             }).catch(err=>{
                 this.loadingPage=false;
             });
+        },
+        mounted(){
+            this.setLog({query: {code: 'ORDER'}});
         },
         watch:{
             allowQuery(n){

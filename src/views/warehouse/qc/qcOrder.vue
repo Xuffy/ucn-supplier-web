@@ -372,6 +372,7 @@
 <script>
 
     import {VTimeZone,VTable,VMessageBoard,VUpload,VImage,VViewPicture} from '@/components/index'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "qcOrder",
@@ -450,6 +451,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             getData(){
                 this.$ajax.get(`${this.$apis.get_qcOrderDetail}?id=${this.$route.query.id}`).then(res=>{
                     this.qcOrderData=res;
@@ -670,6 +672,9 @@
                 this.getData();
                 this.getTableData();
             });
+        },
+        mounted(){
+            this.setLog({query: {code: 'WAREHOUSE'}});
         },
         watch:{
             dialogFormVisible(n){

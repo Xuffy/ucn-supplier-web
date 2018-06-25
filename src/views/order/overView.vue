@@ -25,6 +25,7 @@
 
         <!--form-->
         <v-table
+                code="uorder_list"
                 ref='vtable'
                 :data="tabData"
                 :buttons="[{label: 'Detail', type: 1}]"
@@ -128,7 +129,7 @@
         },
         methods: {
             ...mapActions([
-                'setRecycleBin', 'setDraft'
+                'setRecycleBin', 'setDraft','setLog'
             ]),
             onAction(item) {
                 this.$windowOpen({
@@ -295,7 +296,8 @@
             this.getUnit();
         },
         mounted() {
-            this.loading = false
+            this.loading = false;
+            this.setLog({query: {code: 'ORDER'}});
         },
         watch: {
             selectedList(n){

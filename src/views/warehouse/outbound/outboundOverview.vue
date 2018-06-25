@@ -16,6 +16,8 @@
                         v-model="searchId"
                         :options="searchOptions"></select-search>
             </div>
+            <br>
+            <br>
             <div class="section">
                 <v-table
                         code="uwarehouse_outbound_overview"
@@ -44,6 +46,7 @@
 <script>
     import {VPagination,VTable} from '@/components/index'
     import selectSearch from '@/components/common/fnCompon/selectSearch'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "inboundOverview",
@@ -86,6 +89,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             changeStatus(){
                 this.outboundConfig.pn=1;
                 this.getOutboundData();
@@ -184,6 +188,9 @@
         },
         created(){
             this.getUnit();
+        },
+        mounted(){
+            this.setLog({query: {code: 'WAREHOUSE'}});
         },
         watch:{
             selectList(n){

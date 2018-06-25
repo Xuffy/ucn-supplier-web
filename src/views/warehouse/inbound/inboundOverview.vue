@@ -16,6 +16,8 @@
                         v-model="searchId"
                         :options="searchOptions"></select-search>
             </div>
+            <br>
+            <br>
             <div class="section">
                 <v-table
                         code="uwarehouse_inbound_overview"
@@ -44,6 +46,7 @@
 <script>
     import {VPagination,VTable} from '@/components/index'
     import selectSearch from '@/components/common/fnCompon/selectSearch'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "inboundOverview",
@@ -87,11 +90,11 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             changeStatus(){
                 this.inboundConfig.pn=1;
                 this.getInboundData();
             },
-
             //获取表格数据
             getInboundData(){
                 this.loadingTable=true;
@@ -174,6 +177,9 @@
                 // });
                 this.getInboundData();
             });
+        },
+        mounted(){
+            this.setLog({query: {code: 'WAREHOUSE'}});
         },
     }
 </script>

@@ -136,6 +136,7 @@
 <script>
     import {VTable,VImage,VUpload} from '@/components/index'
     import addTable from '../product/addlineTable'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "detail",
@@ -308,6 +309,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
             },
@@ -441,6 +443,7 @@
         },
         mounted(){
             this.getGoodsData();
+            this.setLog({query: {code: 'PRODUCT'}});
         },
     }
 </script>

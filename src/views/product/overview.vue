@@ -114,6 +114,7 @@
 <script>
     import sectionNumber from '../product/sectionNumber'
     import {VPagination,VTable,dropDownSingle,VImportTemplate} from '@/components/index'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "overview",
@@ -221,6 +222,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             //切换body的收缩展开状态
             switchDisplay(){
                 this.hideBody=!this.hideBody;
@@ -488,6 +490,9 @@
             }).catch(err => {
 
             });
+        },
+        mounted(){
+            this.setLog({query: {code: 'PRODUCT'}});
         },
 
         watch:{

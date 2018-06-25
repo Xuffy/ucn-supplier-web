@@ -453,9 +453,6 @@ export const routerMap = [
           path: 'overview',
           name: 'Warehouse Overview',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: '仓库总览'
           },
           component: () => import('../views/warehouse/warehouseOverview.vue'),
@@ -464,9 +461,6 @@ export const routerMap = [
           path: 'inbound',
           name: 'Inbound Overview',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: '入库总览'
           },
           component: () => import('../views/warehouse/inbound/inboundOverview.vue'),
@@ -476,9 +470,6 @@ export const routerMap = [
           name: 'create Inbound',
           hidden:true,
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: '创建入库单'
           },
           component: () => import('../views/warehouse/inbound/createInbound'),
@@ -488,9 +479,6 @@ export const routerMap = [
           name: 'inbound Detail',
           hidden:true,
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: '入库详情',
           },
           component: () => import('../views/warehouse/inbound/inboundDetail'),
@@ -499,9 +487,6 @@ export const routerMap = [
           path: 'outbound',
           name: 'Outbound Overview',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: '出库总览'
           },
           component: () => import('../views/warehouse/outbound/outboundOverview'),
@@ -511,9 +496,6 @@ export const routerMap = [
           name: 'create Outbound',
           hidden:true,
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: '创建出库单'
           },
           component: () => import('../views/warehouse/outbound/createOutbound'),
