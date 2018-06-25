@@ -80,6 +80,7 @@
                         <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
                         <el-button :disabled="disabledDeleteGoods" :loading="disableClickSetUp" @click="setUp">{{$i.product.setUp}}</el-button>
                         <el-button :disabled="disabledDeleteGoods" :loading="disableClickSetDown" @click="setDown">{{$i.product.setDown}}</el-button>
+                        <el-button @click="()=>$refs.importCategory.show()">{{$i.button.upload}}</el-button>
                         <!--<el-button>{{$i.product.downloadSelected}}({{selectList.length?selectList.length:'All'}})</el-button>-->
                         <!--<el-button @click="upload">{{$i.product.uploadProduct}}</el-button>-->
                         <!--<el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger">{{$i.product.delete}}</el-button>-->
@@ -105,13 +106,14 @@
                 <el-button type="primary" @click="partDialogVisible = false">下架产品</el-button>
             </span>
         </el-dialog>
+
+        <v-import-template ref="importCategory" code="PRODUCT_SUPPLIER" biz-code="PRODUCT_SUPPLIER"></v-import-template>
     </div>
 </template>
 
 <script>
-    import {dropDownSingle} from '@/components/index'
     import sectionNumber from '../product/sectionNumber'
-    import {VPagination,VTable} from '@/components/index'
+    import {VPagination,VTable,dropDownSingle,VImportTemplate} from '@/components/index'
 
     export default {
         name: "overview",
@@ -119,7 +121,8 @@
             dropDown:dropDownSingle,
             sectionNumber,
             VTable,
-            page:VPagination
+            page:VPagination,
+            VImportTemplate
         },
         props:{
 

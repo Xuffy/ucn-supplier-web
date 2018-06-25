@@ -18,6 +18,7 @@
             </div>
             <div class="section">
                 <v-table
+                        code="uwarehouse_outbound_overview"
                         :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
