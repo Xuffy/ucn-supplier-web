@@ -42,19 +42,8 @@ export default {
     skuUnit:{
         key:'skuUnit',          //字典
         belong:'skuList',
-        // showType:'select',
-        // options:[
-        //     {
-        //         label:'kg',
-        //         value:1
-        //     },
-        //     {
-        //         label:'g',
-        //         value:2
-        //     }
-        // ],
     },
-    totalQty:{
+    skuQty:{
         key:'skuQty'
     },
     inboundSkuTotalQty:{        //入库产品总数量
@@ -65,7 +54,8 @@ export default {
     inboundOutCartonTotalQty:{      //入库产品总箱数
         key:'inboundOutCartonTotalQty',     //需要填写
         showType:'number',
-        needInput:true
+        needInput:true,
+        must:true
     },
     inboundSkuTotalVolume:{     //入库产品总体积
         key:'inboundSkuTotalVolume',    //需要计算
@@ -89,17 +79,20 @@ export default {
     skuOuterCartonVolume:{
         key:'skuOuterCartonVolume',         //可修改，必填
         // belong:'skuList',
-        showType:'number'
+        showType:'number',
+        must:true
     },
     skuOuterCartonRoughWeight:{
         key:'skuOuterCartonRoughWeight',        //可修改，必填
         // belong:'skuList',
-        showType:'number'
+        showType:'number',
+        must:true
     },
     skuOuterCartonNetWeight:{
         key:'skuOuterCartonNetWeight',        //可修改，必填
         // belong:'skuList',
-        showType:'number'
+        showType:'number',
+        must:true
     },
     unqualifiedType:{   //不合格类型====>>>默认为0，页面上只展示0即可
         key:'unqualifiedType',
@@ -139,32 +132,38 @@ export default {
     skuNetWeight:{
         key:'skuNetWeight',         //可修改，必填
         belong:'skuList',
-        showType:'input'
+        showType:'input',
+        must:true
     },
     skuInnerCartonLength:{
         key:'skuInnerCartonLength',         //可修改，必填
         belong:'skuList',
-        showType:'input'
+        showType:'input',
+        must:true
     },
     skuInnerCartonWidth:{
         key:'skuInnerCartonWidth',         //可修改，必填
         belong:'skuList',
-        showType:'input'
+        showType:'input',
+        must:true
     },
     skuInnerCartonHeight:{
         key:'skuInnerCartonHeight',         //可修改，必填
         belong:'skuList',
-        showType:'input'
+        showType:'input',
+        must:true
     },
     skuInnerCartonWeightNet:{
         key:'skuInnerCartonWeightNet',         //可修改，必填
         belong:'skuList',
-        showType:'input'
+        showType:'input',
+        must:true
     },
     skuInnerCartonRoughWeight:{
         key:'skuInnerCartonRoughWeight',         //可修改，必填
         belong:'skuList',
-        showType:'input'
+        showType:'input',
+        must:true
     },
     skuBrand:{
         key:'skuBrand',

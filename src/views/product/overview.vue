@@ -8,11 +8,14 @@
             </el-button>
         </div>
         <div>
-            <el-form ref="productFormTop" :model="productForm" :rules="productFormRules" label-width="190px">
+            <el-form ref="productFormTop" :model="productForm" label-width="190px">
                 <el-row class="speZone">
                     <el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.overview" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
-                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="categoryList" :defaultProps="defaultProps"
+                            <drop-down v-model="productForm[v.key]"
+                                       v-if="v.showType==='dropdown'"
+                                       :list="categoryList"
+                                       :defaultProps="defaultProps"
                                        ref="dropDown" :expandOnClickNode="false"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
                             <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="不限">
@@ -29,7 +32,7 @@
             </el-form>
         </div>
         <div class="body" :class="{hide:hideBody}">
-            <el-form ref="productForm" :rule="productFormRules" :model="productForm" label-width="190px">
+            <el-form ref="productForm" :model="productForm" label-width="190px">
                 <el-row class="speZone">
                     <el-col v-if="!v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.overview" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
@@ -83,6 +86,7 @@
                 </template>
             </v-table>
             <page
+                    :page-sizes="[50,100,200,500]"
                     @size-change="changeSize"
                     @change="changePage"
                     :page-data="pageData"></page>
@@ -90,7 +94,7 @@
 
         <el-dialog
                 class="speDialog"
-                title="提示"
+                :title="$i.product.prompt"
                 :visible.sync="partDialogVisible"
                 width="30%">
             <span>当前所选有上架产品，是否下架该产品?</span>
@@ -170,12 +174,6 @@
                     // ],
                     supplierNameLike: "",
                 },
-                //表格验证参数
-                productFormRules:{
-                    nameCnLike: [
-                        { max: 10, message: `长度在 3 到 10 个字符`, trigger: 'blur' }
-                    ],
-                },
                 defaultProps:{
                     label:'name',
                     children:'children'
@@ -240,6 +238,7 @@
                         }
                     });
                     this.tableDataList = this.$getDB(this.$db.product.overviewTable, res.datas);
+                    this.pageData=res;
                     this.disabledSearch=false;
                     this.loadingTable=false;
                 }).catch(err=>{

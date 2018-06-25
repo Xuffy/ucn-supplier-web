@@ -100,7 +100,7 @@
             <el-table-column
                     v-for="v in $db.warehouse.inboundOrderProductTable"
                     :key="v.key"
-                    :label="$i.warehouse[v.key]"
+                    :label="(v.must?'*':'')+$i.warehouse[v.key]"
                     :prop="v.key"
                     align="center"
                     width="180">
@@ -255,6 +255,11 @@
                     v-loading="loadingTable"
                     :data="tableDataList"
                     @change-checked="changeChecked"></v-table>
+            <v-pagination
+                    :page-sizes="[50,100,200,500]"
+                    @size-change="changeSize"
+                    @change="changePage"
+                    :page-data="pageData"></v-pagination>
 
             <div slot="footer" class="dialog-footer">
                 <el-button :disabled="disabledSearch" type="primary" @click="postData">{{$i.warehouse.sure}}</el-button>
@@ -266,14 +271,15 @@
 
 <script>
 
-    import {VTimeZone,VTable,VUpload} from '@/components/index'
+    import {VTimeZone,VTable,VUpload,VPagination} from '@/components/index'
 
     export default {
         name: "createInbound",
         components:{
             VTable,
             VTimeZone,
-            VUpload
+            VUpload,
+            VPagination
         },
         data(){
             return{
@@ -293,6 +299,8 @@
                 selectProductList:[],
                 loadingProductTable:false,
                 inboundTypeOption:[],
+                pageData:{},
+
                 /**
                  * 外部展示数据
                  * */
@@ -349,6 +357,9 @@
                 //先把在外部的数据的id取出来，拿到内部去对比
                 this.selectList=[];
                 this.addOrderDialogVisible=true;
+                this.getProductData();
+            },
+            getProductData(){
                 this.loadingTable=true;
                 this.disabledSearch=true;
                 this.disabledCancelSearch=true;
@@ -366,8 +377,6 @@
                     /**
                      * 每次打开弹窗时进行置灰判断
                      * */
-                    console.log(this.productData,'this.productData')
-                    console.log(this.tableDataList,'this.tableDataList')
                     this.tableDataList.forEach(v=>{
                         if(v.skuId.value===0){  //id为0的是脏数据，不能选
                             this.$set(v,'_disabled',true);
@@ -381,10 +390,8 @@
                             });
                         }
                     });
-                    this.disabledSearch=false;
-                    this.disabledCancelSearch=false;
-                    this.loadingTable=false;
-                }).catch(err=>{
+                    this.pageData=res;
+                }).finally(err=>{
                     this.disabledSearch=false;
                     this.disabledCancelSearch=false;
                     this.loadingTable=false;
@@ -410,12 +417,30 @@
 
             //提交表单
             submit(){
-                if(this.$validateForm(this.inboundData, this.$db.warehouse.inbound)){
-                    return;
-                }
+                // if(this.$validateForm(this.inboundData, this.$db.warehouse.inbound)){
+                //     return;
+                // }
                 if(this.productData.length===0){
                     return this.$message({
                         message: this.$i.warehouse.pleaseAddProduct,
+                        type: 'warning'
+                    });
+                }
+
+                console.log(this.productData,'this.productData')
+
+                let allow=true;
+                let mustKey=['inboundOutCartonTotalQty','skuOuterCartonVolume','skuOuterCartonRoughWeight','skuOuterCartonNetWeight','skuNetWeight','skuInnerCartonLength','skuInnerCartonWidth','skuInnerCartonHeight','skuInnerCartonWeightNet','skuInnerCartonRoughWeight'];
+                _.map(this.productData,v=>{
+                    _.map(mustKey,k=>{
+                        if(!v[k]){
+                            allow=false;
+                        }
+                    })
+                });
+                if(!allow){
+                    return this.$message({
+                        message: this.$i.warehouse.keywordMustInput,
                         type: 'warning'
                     });
                 }
@@ -512,7 +537,7 @@
                     if (index === 0) {
                         sums[index] = '总价';
                     }else{
-                        if(index===13 || index===14 || index===15 || index===16 || index===17){
+                        if(index===11 || index===12 || index===13 || index===14 || index===15 || index===16 || index===17){
                             const values = data.map(item => Number(item[column.property]));
                             if (!values.every(value => isNaN(value))) {
                                 sums[index] = values.reduce((prev, curr) => {
@@ -527,7 +552,9 @@
                             } else {
                                 sums[index] = 0;
                             }
-                            if(index===13){
+                            if(index===12){
+                                this.inboundData.skuTotalQty=sums[index];
+                            }else if(index===13){
                                 this.inboundData.skuTotalCartonQty=sums[index];
                             }else if(index===14){
                                 this.inboundData.skuTotalVolume=sums[index];
@@ -536,7 +563,7 @@
                             }else if(index===16){
                                 this.inboundData.skuTotalGrossWeight=sums[index];
                             }else if(index===17){
-                                this.inboundData.skuTotalQty=sums[index];
+
                             }
                         }
                     }
@@ -568,9 +595,8 @@
                             });
                         }
                     });
-                    this.loadingTable=false;
-                    this.disabledClickSubmit=false;
-                }).catch(err=>{
+                    this.pageData=res;
+                }).finally(err=>{
                     this.loadingTable=false;
                     this.disabledClickSubmit=false;
                 });
@@ -659,6 +685,21 @@
                 this.addOrderDialogVisible = false;
                 this.clearSearchData();
             },
+
+
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                this.orderProduct.pn=e;
+                this.getProductData();
+            },
+            changeSize(e){
+                this.orderProduct.ps=e;
+                this.getProductData();
+            },
+
+
 
             /**
              * 页面表格事件

@@ -7,9 +7,9 @@
             <div class="detail">
                 <el-row>
                     <el-col :span="6">
-                        <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
+                        <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="300px">
                             <el-carousel-item v-for="item in productForm.pictures" :key="item">
-                                <img :src="item" style="max-width: 100%;max-height: 100%" alt="">
+                                <v-image :src="item"></v-image>
                             </el-carousel-item>
                         </el-carousel>
                     </el-col>
@@ -122,7 +122,7 @@
                     <span style="color:red">暂时接口还没做</span>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
-
+                    <v-upload :limit="20" readonly :list="productForm.attachments" ref="uploadAttachmemt"></v-upload>
                 </el-tab-pane>
                 <!--<el-tab-pane :label="$t('productSeller.page.remark')" name="Remark">-->
                     <!--<span style="color:red">暂时接口还没做</span>-->
@@ -134,14 +134,16 @@
 </template>
 
 <script>
-    import VTable from '@/components/common/table/index'
+    import {VTable,VImage,VUpload} from '@/components/index'
     import addTable from '../product/addlineTable'
 
     export default {
         name: "detail",
         components:{
             addTable,
-            VTable
+            VTable,
+            VImage,
+            VUpload
         },
         data(){
             return{

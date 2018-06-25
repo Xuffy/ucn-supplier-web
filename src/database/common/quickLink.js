@@ -79,7 +79,7 @@ export default {
   },
   compareInquiryOverview: {// todo not
     icon: '',
-    link: '/negotiation/compareDetail/inquiry',
+    link: '/negotiation/compare',
     customer: true,
     supplier: false,
     server: false,
@@ -142,7 +142,7 @@ export default {
   },
   loadingListOrderOverview: { // todo not
     icon: '',
-    link: '/logistic/planDetail',
+    link: '/logistic/loadingList',
     customer: true,
     supplier: true,
     server: false,

@@ -94,5 +94,7 @@
   "changeRemark":"Change Remark",
   "sureDelete":"Sure Delete?",
   "prompt":"Prompt",
-  "sure":"Sure"
+  "sure":"Sure",
+  "priceType":"Price Type",
+  "skuSaleStatus":"SKU Sale Status"
 }

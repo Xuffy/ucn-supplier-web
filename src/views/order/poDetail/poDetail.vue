@@ -1099,12 +1099,14 @@
             </div>
 
         </v-history-modify>
+
+        <v-message-board module="order" code="detail" :id="$route.query.orderId"></v-message-board>
     </div>
 </template>
 
 <script>
 
-    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify} from '@/components/index'
+    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify,VMessageBoard} from '@/components/index'
     import VProduct from '@/views/product/addProduct';
 
     export default {
@@ -1115,7 +1117,8 @@
             selectSearch,
             VUpload,
             VProduct,
-            VHistoryModify
+            VHistoryModify,
+            VMessageBoard
         },
         data(){
             return{

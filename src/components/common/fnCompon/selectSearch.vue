@@ -1,29 +1,29 @@
 <template>
     <div class="select-wrap">
         <div class="select" v-if="selectHide">
-            <el-select v-model="keyType" placeholder="select" :clearable="true">
+            <el-select v-model="keyType" placeholder="select" :clearable="false">
                 <el-option
-                    v-for="item in options"
-                    :key="item.id"
-                    :label="item.label"
-                    :value="item.id" 
+                        v-for="item in options"
+                        :key="item.id"
+                        :label="item.label"
+                        :value="item.id"
                 />
             </el-select>
         </div>
         <div class="search">
-            <el-input 
-                v-model="keyWord" 
-                clearable 
-                placeholder="search" 
-                style="max-width:150px;" 
-                @keyup.enter.native="inputEnter" 
+            <el-input
+                    v-model="keyWord"
+                    clearable
+                    placeholder="search"
+                    style="max-width:150px;"
+                    @keyup.enter.native="inputEnter"
             />
-            <el-button 
-                type="primary" 
-                slot="append" 
-                icon="el-icon-search" 
-                @click="inputEnter" 
-                :loading="searchLoad" 
+            <el-button
+                    type="primary"
+                    slot="append"
+                    icon="el-icon-search"
+                    @click="inputEnter"
+                    :loading="searchLoad"
             />
         </div>
     </div>
@@ -94,7 +94,7 @@
         display:flex;
         align-items:center;
         .select {
-            width: 110px;
+            /*width: 110px;*/
             margin-right:5px;
         }
         .set {

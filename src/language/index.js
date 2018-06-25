@@ -66,6 +66,7 @@ const json = {
     require(`./${lang}/product/productOverview`),
     require(`./${lang}/product/productOverviewTable`),
     require(`./${lang}/product/product.prompt`),
+    require(`./${lang}/product/product.customer`),
   ),
   setting: _.extend({},
     require(`./${lang}/setting/department`),
@@ -73,6 +74,7 @@ const json = {
     require(`./${lang}/setting/setting.basic`),
     require(`./${lang}/setting/companyInfo`),
     require(`./${lang}/setting/setting.prompt`),
+    require(`./${lang}/setting/category`),
   ),
   supplier: _.extend({},
     require(`./${lang}/supplier/detail.pending`),
@@ -122,6 +124,9 @@ const json = {
   ),
   upload: _.extend({},
     require(`./${lang}/upload/message`)
+  ),
+  util: _.extend({},
+    require(`./${lang}/util/index`)
   )
 }
 

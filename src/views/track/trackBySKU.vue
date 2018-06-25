@@ -15,13 +15,15 @@
             </select-search>
           </div>
         </div>
-            <v-table 
-            :data="dataList" 
+            <v-table
+            :data="dataList"
             :height="500"
+            :selection="false"
             :loading='loading'></v-table>
-             <page
+            <page
               :page-data="pageData"
               @change="handleSizeChange"
+              :page-sizes="[50,100,200]"
               @size-change="pageSizeChange"></page>
     </div>
 </template>
@@ -41,16 +43,20 @@
                 dataList: [],
                 searchLoad: false,
                 loading: false,
-                searchId:'1',
+                searchId:'',
                 pageData:{},
                 params:{
-                    pn: 1,
-                    ps: 10,
-                    skuCode:'',
+                    "pn": 1,
+                    "ps": 50,
+                    "skuCodeLike":'',
+                    "orderNoLike":'',
                 },
               options: [{
                 id: '1',
                 label: 'skuCode'
+              },{
+                id: '2',
+                label: 'orderNo'
               }],
             }
         },
@@ -70,10 +76,14 @@
                 this.getList();
             },
             inputEnter(val) {
-              if (!val.keyType) return this.$message('请选中搜索类型');
-              if (!val.key) return this.$message('搜索内容不能为空');
+              if (!val.keyType) return this.$message({
+                message: 'please choose a type',
+                type: 'warning'
+              });
               if (val.keyType == '1') {
-                this.params.skuCode= val.key
+                this.params.skuCodeLike= val.key
+              }else{
+                this.params.orderNoLike= val.key
               }
               this.getList()
             },
@@ -82,8 +92,19 @@
                 this.$ajax.post(this.$apis.get_track_getTrackInfoByPage,this.params).then(res=>{
                     this.loading = false;
                     this.dataList = this.$getDB(this.$db.track.track, res.datas,item=>{
-                        return item;
-                    });
+                      const one = item.skuCategoryOne.value || '';
+                      const two = item.skuCategoryTwo.value || '';
+                      const three = item.skuCategoryThree.value || ''
+                      const four = item.skuCategoryFour.value || ''
+                      if (one || two || three || four){
+                        item.category.value = one+','+two+','+three+','+four
+                      }
+                      _.mapObject(item, val => {
+                        val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                        return val
+                      })
+                      return item;
+                });
                 this.pageData=res;
               }).catch(err=>{
                 this.loading = false;
