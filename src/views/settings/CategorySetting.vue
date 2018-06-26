@@ -1,5 +1,8 @@
 <template>
   <div class="category-common">
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <el-button type="primary" @click="()=>$refs.importCategory.show()">{{$i.button.upload}}</el-button>
     <span style="display:none;" v-text="upDataPage"></span>
     <div class="hd">{{ $i.common.categorycommonTitle }}</div>
     <div class="category-wrap">
@@ -20,8 +23,7 @@
             :filter-node-method="filterNode"
             ref="tree2"
             default-expand-all
-            v-show="mappingRelationData.length >= 1"
-          />
+            v-show="mappingRelationData.length >= 1"></el-tree>
           <div v-show="mappingRelationData.length <= 0" class="mappingRelation">{{ $i.common.mappingNoData }}</div>
         </div>
       </div>
@@ -40,7 +42,8 @@
             default-expand-all
             highlight-current
             :filter-node-method="filterNode"
-            :expand-on-click-node="true"
+            :expand-on-click-node="false"
+            @node-click="myCategoryChange"
             ref="tree">
             <div slot-scope="{ node, data }" style="width: 100%">
               <div class="custom-tree-node" style="width: 100%">
@@ -70,23 +73,29 @@
             show-checkbox
             default-expand-all
             node-key="id"
-            ref="tree1"
+            ref="generalTree"
             highlight-current
             :filter-node-method="filterNode"
             :props="defaultProps"
-            @check-change="generalCategoryChange"
-          />
+            @check-change="generalCategoryChange"></el-tree>
           <div class="btn-wrap">
-            <el-button type="primary" @click="save">{{ $i.common.save }}</el-button>
+            <el-button type="primary" @click="save" :disabled="!myCategory">{{ $i.common.save }}</el-button>
           </div>
         </div>
       </div>
     </div>
+
+    <v-import-template ref="importCategory" code="USER_IMPORT" biz-code="BIZ_USER"></v-import-template>
   </div>
 </template>
 <script>
+  import {VImportTemplate} from '@/components/index'
+
   export default {
     name: 'Categorycommon',
+    components: {
+      VImportTemplate
+    },
     data() {
       return {
         upDataPage: 0,
@@ -251,35 +260,17 @@
 
         });
       },
-      genCheckBox(id, list) {
-        list.forEach(items => {
-          if (id === items.id + '') this.$refs.tree1.setChecked(items.id, true, true);
-          if (items[this.defaultProps.children] && items[this.defaultProps.children].length) this.genCheckBox(id, items[this.defaultProps.children]);
-        });
-      },
-      setCheckBox(list) {
-        list.forEach(items => {
-          this.$refs.tree1.setChecked(items.id, false, true);
-          if (items[this.defaultProps.children] && items[this.defaultProps.children].length) this.setCheckBox(items[this.defaultProps.children]);
-        });
-      },
       myCategoryChange(val) {
-        if (val.children && val.children.length) return this.myCategory = '';
+        if (val.children && val.children.length) {
+          this.$refs.generalTree.setCheckedKeys([]);
+          return this.myCategory = '';
+        }
         this.myCategory = val.id;
         this.$ajax.get(this.$apis.GET_PURCHASE_CHANGE_MAPPING_CATEGORY, {
           id: val.id
-        })
-          .then(res => {
-            this.setCheckBox(this.mgeneralCategoryData)
-            if (res) {
-              const genCheckBox = res.split(',');
-              genCheckBox.forEach(item => {
-                this.genCheckBox(item, this.mgeneralCategoryData)
-              });
-            } else {
-              this.genCheckBox('', this.mgeneralCategoryData)
-            }
-          });
+        }).then(res => {
+          this.$refs.generalTree.setCheckedKeys(res ? res.split(',') : []);
+        });
       },
       save() {
         let nodes = [];
@@ -290,18 +281,15 @@
           categoryId: this.myCategory,
           sysId: nodes.toString()
         };
-        if (!params.categoryId) return this.$message({
-          type: 'info',
-          message: this.$i.common.pleaseSelectTheLeafNode
-        });
         this.$ajax.post(this.$apis.POST_PURCHASE_SAVE_MAPPING_CATEGORY, params)
           .then(res => {
+            this.$message.success(this.$i.hintMessage.operationSuccessful);
             this.mappingRelationData = res;
             this.mappingRelationDataSplit(this.mappingRelationData);
           });
       },
       generalCategoryChange(data) {
-        this.selectedNodes = this.$refs.tree1.getCheckedNodes(true);
+        this.selectedNodes = this.$refs.generalTree.getCheckedNodes(true);
       }
     },
     watch: {
@@ -309,7 +297,7 @@
         this.$refs.tree.filter(val);
       },
       generalCategoryKeyWord(val) {
-        this.$refs.tree1.filter(val);
+        this.$refs.generalTree.filter(val);
       },
       mapingCategoryKeyWord(val) {
         this.$refs.tree2.filter(val);

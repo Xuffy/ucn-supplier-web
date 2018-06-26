@@ -207,7 +207,6 @@
           });
       },
       clearData() {
-        // console.log(this.$sessionStore)
         this.$sessionStore.remove('request_cache');
         history.go(0);
       },

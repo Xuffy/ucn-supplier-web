@@ -363,7 +363,7 @@ export default {
       if (val[transForm] && !data._remark && ['fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay'].indexOf(k) < 0) {
         switch (val[transForm]) {
           case 'time':
-            val._value = dateFormat(val.value, val.time || 'yyyy-mm-dd HH:MM');
+            val._value = val.value ? dateFormat(val.value, val.time || 'yyyy-mm-dd HH:MM') : null;
             break;
           default:
             if (!store.state.dic.length) return;

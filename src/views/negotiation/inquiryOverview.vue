@@ -4,13 +4,12 @@
         <div class="status">
             <div class="state">
                 <span>{{ $i.common.Status }}</span>
-                <el-radio-group v-model="params.status" size="mini">
+                <el-radio-group v-model="params.status" @change="gettabData" size="mini">
                     <el-radio-button :label="null">{{$i.common.all}}</el-radio-button>
                     <el-radio-button
                         v-for="item in $db.inquiry.overoiewState"
                         :label="item.id"
-                        :key="item.id"
-                    >
+                        :key="item.id">
                     {{ item.text }}
                     </el-radio-button>
                 </el-radio-group>
@@ -107,26 +106,14 @@ export default {
     });
     this.gettabData();
   },
-  watch: {
-    params: {
-      handler(val, oldVal) {
-        this.gettabData();
-      },
-      deep: true
-    }
-  },
   methods: {
     ...mapActions([
       'setRecycleBin',
       'setDic'
     ]),
-    inputEnter(val) {
-      if (!val.id || !val.value) {
-        this.params.operatorFilters = [];
-      } else {
-        let value = val.type === 'dateRange' ? {start: val.value[0].getTime(), end: val.value[1].getTime()} : val.value;
-        this.params.operatorFilters = [{property: val.id, value, operator: val.operator}];
-      }
+    inputEnter(val, operatorFilters) {
+      this.params.operatorFilters = operatorFilters;
+      this.gettabData();
       this.searchLoad = true;
     },
     gettabData() {
@@ -194,11 +181,10 @@ export default {
       }
     },
     detail(item) {
+      let id = _.findWhere(item, {'key': 'inquiryId'}) ? _.findWhere(item, {'key': 'inquiryId'}).value : _.findWhere(item, {'key': 'id'}).value;
       this.$router.push({
         path: '/negotiation/inquiryDetail',
-        query: {
-          id: _.findWhere(item, {'key': 'id'}).value
-        }
+        query: {id}
       });
     },
     getChildrenId(type) {
@@ -225,9 +211,12 @@ export default {
     },
     pageSizeChange(no) {
       this.params.pn = no;
+      this.gettabData();
     },
     handleSizeChange(val) {
+      this.params.pn = 1;
       this.params.ps = val;
+      this.gettabData();
     },
     changeChecked(item) { // tab 勾选
       this.checkedData = item;

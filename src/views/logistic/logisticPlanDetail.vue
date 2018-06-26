@@ -1,8 +1,7 @@
 <template>
   <div class="place-logistic-plan">
-    <div class="hd-top" v-if="planId&&!isLoadingList">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
-    <div class="hd-top" v-if="!planId">{{ $i.logistic.placeNewLogisticPlan }}</div>
-    <div class="hd-top" v-if="isLoadingList">{{ $i.logistic.loadingList + '    ' + logisticsNo}}</div>
+    <div class="hd-top" v-if="$route.name=='logisticPlanDetail'">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
+    <div class="hd-top" v-if="$route.name=='loadingListDetail'">{{ $i.logistic.loadingList + '    ' + logisticsNo}}</div>
     <form-list :DeliveredEdit="DeliveredEdit" name="BasicInfo" :fieldDisplay="fieldDisplay" :showHd="false" @selectChange="formListSelectChange" @hightLightModifyFun="hightLightModifyFun" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
     <el-row :gutter="10">
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
@@ -602,9 +601,6 @@ export default {
         case 'generateList':
             this.generateList();
           break; 
-        case 'cancel':
-            this.cancelPlan();
-          break; 
         case 'cancelLoadingList':
             this.cancelLoadingList();
           break; 
@@ -628,7 +624,8 @@ export default {
       })
     },
     cancelLoadingList(){
-       this.$ajax.post(this.$apis.logistics_order_cancelByIds,{ids:[this.planId]}).then(res => {
+      let url = this.$route.name =='loadingListDetail' ? 'logistics_order_cancelByIds' : 'logistics_plan_cancelByIds';
+      this.$ajax.post(this.$apis[url],{ids:[this.planId]}).then(res => {
         this.$message({
           message: '取消成功，正在跳转...',
           type: 'success',
@@ -653,18 +650,6 @@ export default {
       this.$ajax.post(this.$apis.logistics_plan_confirm,{id:this.planId}).then(res => {
          this.$message({
           message: '发送成功，正在跳转...',
-          type: 'success',
-          duration:3000,
-          onClose:()=>{
-            this.$router.push('/logistic');
-          }
-        })
-      })
-    },
-    cancelPlan(){
-      this.$ajax.post(this.$apis.logistics_plan_cancel,{id:this.planId}).then(res => {
-        this.$message({
-          message: '取消成功，正在跳转...',
           type: 'success',
           duration:3000,
           onClose:()=>{

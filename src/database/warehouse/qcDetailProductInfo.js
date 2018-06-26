@@ -309,7 +309,8 @@ export default{
     },
     checkOuterCartonQty:{
         key: 'checkOuterCartonQty',
-        type: 'Number'
+        type: 'Number',
+        showType:'input'
     },
     remark:{
         key: 'remark',

@@ -330,7 +330,7 @@
 
 
         <div class="footBtn">
-            <el-button :disabled="loadingTable" type="danger" @click="cancel">{{$i.warehouse.cancel}}</el-button>
+            <el-button :disabled="loadingTable" type="danger" @click="cancel">{{$i.warehouse.exit}}</el-button>
         </div>
 
 

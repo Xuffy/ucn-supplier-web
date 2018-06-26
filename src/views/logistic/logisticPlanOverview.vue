@@ -5,7 +5,7 @@
       <div class="btn-wrap">
         <div v-if="pageType === 'plan' || pageType === 'loadingList'">
           <span>{{ $i.logistic.status}}:</span>
-          <el-radio-group v-model="fillterVal" size="mini" @change="fetchDataList">
+          <el-radio-group v-model="fillterVal" size="mini" @change="fetchDataList('elRadioGroup')">
             <el-radio-button label="all">{{ $i.logistic.all }}</el-radio-button>
             <el-radio-button :label="+a.code" v-for="a of ls_plan" :key="'status-' + a.code">{{a.name}}
             </el-radio-button>
@@ -43,8 +43,9 @@
       </div>
     </div>
     <v-table
+      :code="urlObj[pageType][viewBy].setTheField"
       :data="tabData"
-      :buttons="viewBy === 'plan' ? [{label: 'detail', type: 'detail'}] : null"
+      :buttons="[{label: 'detail', type: 'detail'}]"
       @action="action"
       @change-checked="changeChecked"
       :loading="tableLoading"
@@ -103,6 +104,7 @@
           plan: {
             plan: {
               key: 0,
+              setTheField:'ulogistics_PlanOverviewPlanNo',
               label: 'plan',
               text: this.$i.logistic.plan,
               url: this.$apis.gei_plan_list,
@@ -110,6 +112,7 @@
             },
             transportation: {
               key: 1,
+              setTheField:'ulogistics_PlanOverviewByUnit',
               label: 'transportation',
               text: this.$i.logistic.transportationUnit,
               url: this.$apis.get_transportation_list,
@@ -117,6 +120,7 @@
             },
             sku: {
               key: 2,
+              setTheField:'ulogistics_PlanOverviewSkuCode',
               label: 'sku',
               text: this.$i.logistic.sku,
               url: this.$apis.get_sku_list,
@@ -126,6 +130,7 @@
           loadingList: {
             plan: {
               key: 3,
+              setTheField:'ulogistics_OrderOverviewPlanNo',
               label: 'plan',
               text: this.$i.logistic.loadingList,
               url: this.$apis.get_loading_list_plan,
@@ -133,6 +138,7 @@
             },
             transportation: {
               key: 4,
+              setTheField:'ulogistics_OrderOverviewByUnit',
               label: 'transportation',
               text: this.$i.logistic.transportationUnit,
               url: this.$apis.get_loading_list_unit,
@@ -140,6 +146,7 @@
             },
             sku: {
               key: 5,
+              setTheField:'ulogistics_OrderOverviewSkuCode',
               label: 'sku',
               text: this.$i.logistic.sku,
               url: this.$apis.get_loading_list_sku,
@@ -149,6 +156,7 @@
           draft: {
             plan: {
               key: 0,
+              setTheField:'ulogistics_PlanOverviewPlanNo',
               label: 'plan',
               text: this.$i.logistic.plan,
               url: this.$apis.gei_plan_list,
@@ -156,6 +164,7 @@
             },
             transportation: {
               key: 1,
+              setTheField:'ulogistics_PlanOverviewByUnit',
               label: 'transportation',
               text: this.$i.logistic.transportationUnit,
               url: this.$apis.get_transportation_list,
@@ -164,6 +173,7 @@
             sku: {
               key: 2,
               label: 'sku',
+              setTheField:'ulogistics_PlanOverviewSkuCode',
               text: this.$i.logistic.sku,
               url: this.$apis.get_sku_list,
               db: this.$db.logistic.sku
@@ -180,6 +190,7 @@
     watch: {
       viewBy(newVal) {
         this.selectCount = []
+        this.initPage();
         this.fetchDataList()
       },
       pageType() {
@@ -197,6 +208,12 @@
       this.registerRoutes()
     },
     methods: {
+      initPage(){
+        this.pageParams = {
+          pn: 1,
+          ps: 10
+        };
+      },
       registerRoutes() {
         this.$store.commit('SETRECYCLEBIN', {
           name: 'overviewArchive',
@@ -209,8 +226,10 @@
           this.getContainerType()
         }
         if (this.pageType === 'loadingList') {
+          this.getContainerType()
           this.getDictionary(['LS_STATUS'])
         }
+        this.initPage();
         this.fetchDataList()
       },
       deleteData() {
@@ -220,6 +239,7 @@
           type: 'warning'
         }).then(() => {
           this.$ajax.post(this.$apis.delete_by_ids, {ids: this.selectCount.map(a => a.id.value)}).then(res => {
+            this.initPage();
             this.fetchDataList()
             this.selectCount = []
             this.$message({
@@ -255,7 +275,10 @@
       addNew() {
         this.$router.push('/logistic/placeLogisticPlan')
       },
-      fetchDataList() {
+      fetchDataList(arg) {
+        if(arg){
+         this.initPage();
+        }
         const url = this.urlObj[this.pageType][this.viewBy].url
         const db = this.urlObj[this.pageType][this.viewBy].db
         this.tableLoading = true
