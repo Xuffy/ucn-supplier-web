@@ -234,6 +234,9 @@
         });
 
         return type ? {key, url: _.pluck(_.values(this.fileList), 'url')} : key;
+      },
+      reset() {
+        this.setList({});
       }
     },
   }
