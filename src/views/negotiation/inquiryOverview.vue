@@ -107,26 +107,14 @@ export default {
     });
     this.gettabData();
   },
-  watch: {
-    params: {
-      handler(val, oldVal) {
-        this.gettabData();
-      },
-      deep: true
-    }
-  },
   methods: {
     ...mapActions([
       'setRecycleBin',
       'setDic'
     ]),
-    inputEnter(val) {
-      if (!val.id || !val.value) {
-        this.params.operatorFilters = [];
-      } else {
-        let value = val.type === 'dateRange' ? {start: val.value[0].getTime(), end: val.value[1].getTime()} : val.value;
-        this.params.operatorFilters = [{property: val.id, value, operator: val.operator}];
-      }
+    inputEnter(val, operatorFilters) {
+      this.params.operatorFilters = operatorFilters;
+      this.gettabData();
       this.searchLoad = true;
     },
     gettabData() {
@@ -225,9 +213,12 @@ export default {
     },
     pageSizeChange(no) {
       this.params.pn = no;
+      this.gettabData();
     },
     handleSizeChange(val) {
+      this.params.pn = 1;
       this.params.ps = val;
+      this.gettabData();
     },
     changeChecked(item) { // tab 勾选
       this.checkedData = item;
