@@ -166,7 +166,7 @@
                    @click="inviteUser">
           {{$i.setting.invite}}
         </el-button>
-        <el-button type="primary" @click="()=>$refs.importUser.show()">Upload</el-button>
+        <el-button type="primary" @click="()=>$refs.importUser.show()">{{$i.button.upload}}</el-button>
       </div>
       <div class="content">
         <el-form :inline="true">

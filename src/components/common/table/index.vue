@@ -6,8 +6,8 @@
         <slot name="header"></slot>
       </div>
       <div class="fixed">
-        <v-filter-value v-if="!hideFilterValue && code" ref="tableFilter" :code="code" :data="dataColumn"
-                        @change="val => {$emit('filter-value',val)}"></v-filter-value>
+        <!--<v-filter-value v-if="!hideFilterValue && code" ref="tableFilter" :code="code" :data="dataColumn"
+                        @change="val => {$emit('filter-value',val)}"></v-filter-value>-->
 
         <v-filter-column v-if="!hideFilterColumn && code" ref="filterColumn" :code="code"
                          @change="changeFilterColumn"></v-filter-column>
@@ -97,7 +97,7 @@
             <td v-if="rowspan < 2">
             </td>
             <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && typeof item === 'object'">
-              <div v-text="totalItem[item.key]._value && totalItem[item.key].value"></div>
+              <div v-text="totalItem[item.key]._value || totalItem[item.key].value"></div>
             </td>
             <td v-if="buttons">
               <div></div>
@@ -215,13 +215,17 @@
     watch: {
       data(val) {
         this.setDataList(val, true);
+      },
+      dataList(val) {
+        let selected = this.getSelected();
+        this.checkedAll = selected.length === val.length;
       }
     },
     mounted() {
       this.setDataList(this.data, true);
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
 
-      this.interval = setInterval(this.updateTable, 200);
+      this.interval = setInterval(this.updateTable, 400);
     },
     methods: {
       onFilterColumn(checked) {

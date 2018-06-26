@@ -170,20 +170,30 @@
                 <el-col style="height: 51px;" v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
-                            <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
-                                <el-option
-                                        v-for="item in skuStatusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
+                            <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <div v-if="v.key==='inspectQuarantineCategory'">
+                                    <el-option
+                                            v-for="item in quarantineTypeOption"
+                                            :key="item.id"
+                                            :label="item.code"
+                                            :value="item.code">
+                                    </el-option>
+                                </div>
+                                <div v-else>
+                                    <el-option
+                                            v-for="item in skuStatusOption"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </div>
                             </el-select>
                         </div>
                         <div v-if="v.showType==='input'">
                             <el-input
                                     :disabled="v.disabledInput"
                                     size="mini"
-                                    placeholder="请填写"
+                                    :placeholder="$i.product.pleaseInput"
                                     clearable
                                     v-model="productForm[v.key]">
                             </el-input>
@@ -194,7 +204,7 @@
                                     size="mini"
                                     type="textarea"
                                     autosize
-                                    placeholder="请填写"
+                                    :placeholder="$i.product.pleaseInput"
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
@@ -204,8 +214,7 @@
                                     size="mini"
                                     :controls="false"
                                     v-model="productForm[v.key]"
-                                    :min="0"
-                                    label="描述文字">
+                                    :min="0">
                             </el-input-number>
                         </div>
                     </el-form-item>
@@ -776,6 +785,7 @@
                 skuPkgOption:[],        //产品包装可否调整
                 readilyOption:[],       //是否现货
                 skuUnitOption:[],       //计量单位
+                quarantineTypeOption:[],//检疫类别单位
 
                 loadingData:true,
                 labelPosition:'left',
@@ -792,14 +802,14 @@
                 },
                 categoryList:[
                     {
-                        id:123,
-                        name:"系统分类",
+                        id:5125,
+                        name:"自己的分类",
                         children:[],
                         _disableClick:true,
                     },
                     {
-                        id:5125,
-                        name:"自己的分类",
+                        id:123,
+                        name:"系统分类",
                         children:[],
                         _disableClick:true,
                     },
@@ -1398,8 +1408,12 @@
 
                 });
 
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // })
+
                 this.loadingData=true;
-                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT','QUARANTINE_TYPE'],{cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
@@ -1421,6 +1435,8 @@
                             this.readilyOption=v.codes;
                         }else if(v.code==='SKU_UNIT'){
                             this.skuUnitOption=v.codes;
+                        }else if(v.code==='QUARANTINE_TYPE'){
+                            this.quarantineTypeOption=v.codes;
                         }
                     });
                     this.loadingData=false;

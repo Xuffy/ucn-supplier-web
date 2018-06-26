@@ -42,7 +42,11 @@ export default {
     outboundOutCartonTotalQty:{
         key:'outboundOutCartonTotalQty',        //需要传的参数
         showType:'number',
-        isNeed:true
+        isNeed:true,
+        _rules:{
+            required:true,
+            type:'Number'
+        }
     },
     outboundSkuTotalVolume:{
         key:'outboundSkuTotalVolume',
@@ -116,4 +120,5 @@ export default {
     skuLabel:{
         key:'skuLabel',
     },
+
 }

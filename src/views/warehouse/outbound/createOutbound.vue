@@ -3,13 +3,18 @@
         <div class="title">
             {{$i.warehouse.basicInfo}}
         </div>
-        <el-form :modal="outboundData" ref="basicInfo" class="speForm" label-width="200px"
-                 :label-position="labelPosition">
+        <el-form  class="speForm" label-width="200px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.warehouse.outbound"
-                        v-if="v.belong==='basicInfo' && v.showType!=='timeZone'" :key="v.key" :xs="24"
-                        :sm="v.fullLine?24:8" :md="v.fullLine?24:8" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
-                    <el-form-item :prop="v.key" :label="v.label">
+                <el-col class="speCol"
+                        v-for="v in $db.warehouse.outbound"
+                        v-if="v.belong==='basicInfo' && v.showType!=='timeZone'"
+                        :key="v.key"
+                        :xs="24"
+                        :sm="v.fullLine?24:8"
+                        :md="v.fullLine?24:8"
+                        :lg="v.fullLine?24:8"
+                        :xl="v.fullLine?24:8">
+                    <el-form-item :label="v.label" :required="v._rules?v._rules.required:false">
                         <div v-if="v.showType==='input'">
                             <el-input
                                     class="speInput"
@@ -109,7 +114,7 @@
                     v-for="v in $db.warehouse.outboundProduct"
                     :key="v.key"
                     :prop="v.key"
-                    :label="$i.warehouse[v.key]"
+                    :label="((v._rules && v._rules.required)?'*':'')+$i.warehouse[v.key]"
                     align="center"
                     width="180">
                 <template slot-scope="scope">
@@ -365,6 +370,14 @@
 
             //提交表单
             submit() {
+                if(this.$validateForm(this.outboundData, this.$db.warehouse.outbound)){
+                    return;
+                }
+                _.map(this.productData,v=>{
+                    if(this.$validateForm(v, this.$db.warehouse.outboundProduct)){
+                        return;
+                    }
+                });
                 this.outboundData.outboundSkuCreateParams = [];
                 this.productData.forEach(v => {
                     this.outboundData.outboundSkuCreateParams.push({

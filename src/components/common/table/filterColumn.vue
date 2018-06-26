@@ -3,7 +3,7 @@
     <el-popover
       :width="200"
       v-model="visible"
-      @hide="defaultChecked"
+      @after-leave="getConfig()"
       placement="bottom-end"
       trigger="click">
       <i slot="reference" class="iconfont icon-shezhi"></i>
@@ -28,7 +28,7 @@
             <el-button size="mini" style="width: 100%" @click="submitFilter">{{$i.common.confirm}}</el-button>
           </el-col>
           <el-col :span="12">
-            <el-button size="mini" style="width: 100%" @click="visible =  false">{{$i.common.cancel}}</el-button>
+            <el-button size="mini" style="width: 100%" @click="cancel">{{$i.common.cancel}}</el-button>
           </el-col>
         </el-row>
       </div>
@@ -70,7 +70,7 @@
     methods: {
       filterNode(value, data) {
         if (!value) return true;
-        return data.name.toLowerCase().indexOf(value.toLowerCase()) !== -1;
+        return data._name.toLowerCase().indexOf(value.toLowerCase()) !== -1;
       },
       getFilterData(data, checkList) {
         return _.map(data, val => {
@@ -131,13 +131,9 @@
             this.loading = false;
           });
       },
-      defaultChecked() {
-        let list = [];
-        _.map(this.dataList, val => {
-          if (val.isChecked === 1) {
-            list.push(val.property);
-          }
-        });
+      cancel() {
+        this.visible = false;
+        this.getConfig();
       }
     }
   }

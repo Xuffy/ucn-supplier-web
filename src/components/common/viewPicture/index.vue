@@ -63,9 +63,13 @@
   }
 </style>
 <style>
+  .ucn-view-picture .ucn-image {
+    background: none !important;
+  }
+
   .ucn-view-picture {
-    background-color: rgba(0, 0, 0, 0);
-    box-shadow: inherit;
+    background-color: rgba(0, 0, 0, 0) !important;
+    box-shadow: inherit !important;
   }
 
   .ucn-view-picture .el-dialog__header {
@@ -89,8 +93,9 @@
     display: inline-block;
     vertical-align: middle;
   }
-  .ucn-view-picture .el-carousel__item .img .image{
-    background-size: 100% 100%;
+
+  .ucn-view-picture .el-carousel__item .img .image {
+    /*background-size: 100% 100%;*/
   }
 
   .ucn-view-picture .el-dialog__body {
