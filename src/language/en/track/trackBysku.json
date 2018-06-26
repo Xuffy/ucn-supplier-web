@@ -108,5 +108,11 @@
     "categoryLevel3": "category Level 3",
     "categoryLevel4": "category Level 4",
     "orderNo": "Order No",
-    "trackBySKU": "trackBySKU"
-}
+    "trackBySKU": "Tracking Overview",
+    "tbcC": "TBC-C",
+    "tbcS": "TBC-S",
+    "process": "Process",
+    "shipped": "Shipped",
+    "canceled": "Canceled"
+  }
+  

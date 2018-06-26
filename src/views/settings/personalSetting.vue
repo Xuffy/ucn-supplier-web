@@ -15,7 +15,7 @@
         <el-col :span="12">
           <el-form-item  :label="$i.setting.password+':'">
             <el-input style="max-width:140px;" type="password" disabled="disabled" name="fakeusernameremembered" auto-complete="new-password"></el-input>
-            <button :class="isModify?'Disbutton':'button'" :disabled="isModify"  @click="dialogVisibleO = true">Replace</button>
+            <button type="button" :class="isModifyPass?'Disbutton':'button'"   @click="modifyPassword()">Replace</button>
             <!-- <el-button style=" " @click="dialogVisible = true">Replace</el-button> -->
           </el-form-item>
         </el-col>
@@ -167,7 +167,8 @@
         formLabelWidth: '160px',
         language:[],
         isVisible:false,
-        isModify:true
+        isModify:true,
+        isModifyPass:false,
       };
     },
     methods: {
@@ -197,23 +198,36 @@
       modifySummary(){
         this.summaryDisabled=false;
         this.isModify = false;
+        this.isModifyPass = true;
       },
       cancelModifySummary(){
         this.summaryDisabled=true;
         this.isModify = true;
+        this.isModifyPass = false;
         this.getUserProfile();
       },
       cancelPassword(){
         this.dialogVisibleO = false;
-        this.modifyPass = {}
+        this.modifyPass = {
+          password:'',
+          newPassword:'',
+          comfirmNewPassword:''
+        }
       },
       okPassword(){
         if (this.$validateForm(this.modifyPass, this.$db.setting.personalInfo)) {
           return false;
         }else{
-          this.dialogVisibleO = false;
+          if (this.modifyPass.newPassword === this.modifyPass.comfirmNewPassword ){
+            this.putUserPassword();
+          }else{
+            this.$message({
+              type: 'warning',
+              message: '两次输入的密码请保持一致！'
+            });
+            return  false;
+          }
         }
-
       },
       putUserProfile(){
         if (!this.isVisible){
@@ -238,9 +252,7 @@
               type: 'success',
               message: '修改成功!'
             });
-            if (Object.keys(this.modifyPass).length!== 0){
-              this.putUserPassword();
-            }
+            this.isModifyPass = false;
             this.summaryDisabled=true;
             this.allowModifySummary=false;
           }).catch(err=>{
@@ -263,19 +275,29 @@
           .then(res => {
             this.dialogVisibleO = false;
             this.$message({type: 'success', message: '修改成功!'});
-            this.modifyPass = {}
-          });
+            this.modifyPass = {
+              password:'',
+              newPassword:'',
+              comfirmNewPassword:''
+            }
+          })
       },
       handleClose(){
         this.dialogVisibleO = false;
+      },
+      modifyPassword(){
+        if (this.isModifyPass){
+          return false;
+        }else{
+          this.dialogVisibleO = true;
+        }
       }
     },
     created(){
       this.getUserPrivilege();
       this.getUserProfile();
       this.postLanguage();
-
-    }
+    },
   }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

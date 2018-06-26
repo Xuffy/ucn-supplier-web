@@ -24,6 +24,7 @@ export default {
         key: 'concatPhone1',
         _rules:{
             required:true,
+            type:'Number',
           }
     },
     contacctPerson2:{
@@ -31,6 +32,9 @@ export default {
     },
     contactPhoneNo2: {
         key: 'contactPhone2',
+        _rules:{
+            type:'Number',
+          }
     },
     id:{
         key: 'id',
