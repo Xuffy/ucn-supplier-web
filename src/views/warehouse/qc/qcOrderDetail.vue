@@ -332,7 +332,8 @@
 
         <div class="footBtn">
             <el-button @click="edit" v-if="qcDetail.qcStatusDictCode==='WAITING_QC'" type="primary">{{$i.warehouse.edit}}</el-button>
-            <el-button @click="cancel">{{$i.warehouse.cancel}}</el-button>
+            <el-button @click="cancel"  v-if="qcDetail.qcStatusDictCode==='WAITING_QC'" >{{$i.warehouse.cancel}}</el-button>
+            <el-button @click="cancel"  v-if="qcDetail.qcStatusDictCode!=='WAITING_QC'" >{{$i.warehouse.exit}}</el-button>
         </div>
         <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
     </div>
@@ -654,7 +655,6 @@
                 //     console.log(res)
                 // });
             },
-
             cancel(){
                 window.close();
             },

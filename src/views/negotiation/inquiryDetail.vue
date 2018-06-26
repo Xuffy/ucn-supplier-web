@@ -68,10 +68,6 @@
           :visible.sync="newSearchDialogVisible"
           width="70%"
           lock-scroll>
-      <el-radio-group v-model="radio" @change="trig = new Date().getTime()">
-        <el-radio-button label="product">{{ $i.common.fromNewSearch }}</el-radio-button>
-        <el-radio-button label="bookmark">{{ $i.common.FromMyBookmark }}</el-radio-button>
-      </el-radio-group>
       <v-product
           :hideBtns="true"
           :hideBtn="true"
@@ -427,10 +423,13 @@ export default {
       }
       let historyApi = item.skuId ? this.$apis.BUYER_GET_INQUIRY_DETAIL_HISTORY : this.$apis.BUYER_GET_INQUIRY_HISTORY;
       // 历史中始终要显示的列
-      let excludeColumns = ['id', 'skuId', 'fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay', 'updateDt', '_remark'];
+      let excludeColumns = ['id', 'skuId', 'fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay', 'updateDt', 'updateId', 'updateName', 'status', '_remark'];
       this.$ajax.get(historyApi, {id: item.id.value}).then(res => {
         // 处理只显示修改列
-        res.forEach(i => {
+        res.forEach((i, idx) => {
+          if (idx === res.length - 1) {
+            return;
+          }
           if (i.fieldDisplay) {
             let fs = Object.keys(i.fieldDisplay);
             if(fs.length === 0) return;

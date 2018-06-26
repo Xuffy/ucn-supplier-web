@@ -78,8 +78,9 @@
 
                 value.list = [];
                 _.map(resVal.items, itemVal => {
-                  let v = _.findWhere(us.codes, {code: itemVal.unit});
-                  value.list.push({unit: v ? v.value || '' : itemVal.unit || '', value: itemVal.value || ''})
+                  let v = _.findWhere(us.codes, {code: itemVal.unit})
+                    , val = itemVal.value ? Number(Number(itemVal.value).toFixed(8)) : '';
+                  value.list.push({unit: v ? v.value || '' : itemVal.unit || '', value: val})
                 });
                 this.dataList.push(value)
               });

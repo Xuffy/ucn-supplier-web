@@ -20,6 +20,9 @@ export default {
         key:'outboundDate',
         belong:'basicInfo',
         showType:'date',
+        _rules:{
+            required:true
+        }
     },
     outboundOperator:{
         key:'outboundOperator',

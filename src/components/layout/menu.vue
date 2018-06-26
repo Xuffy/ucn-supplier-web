@@ -13,13 +13,13 @@
         </div>
         <el-menu-item v-for="(item,index) in quickLink.list"
                       :index="'1-' + index" :key="index">
-          <router-link :to="item.link || '/'">
-            <el-tooltip :disabled="!layout.hideMenu" effect="dark" :content="item.label"
-                        placement="right">
+          <el-tooltip :effect="layout.hideMenu ? 'dark' : 'light'" :content="item.label"
+                      placement="right">
+            <router-link :to="item.link || '/'">
               <i class="iconfont" :class="[item.icon || 'icon-sousuo']"></i>
-            </el-tooltip>
-            <span v-text="item.label"></span>
-          </router-link>
+              <span v-text="item.label"></span>
+            </router-link>
+          </el-tooltip>
         </el-menu-item>
         <el-menu-item @click="quickLink.show = true" index="1-0">
           <i class="el-icon-more"></i>

@@ -6,7 +6,7 @@ export default {
 
 
   get_productCategory: ['/purchase/sys/category', 'UPURCHASE_URL'],
-  get_productDetail: ['/sku/{id}', 'TEST_CS','USUPPLY_URL'],
+  get_productDetail: ['/sku/{id}','USUPPLY_URL'],
   delete_product: ['/sku/{id}/delete', 'USUPPLY_URL'],
   change_productStatus: ['/sku/{id}/status', 'USUPPLY_URL'],
   get_productList: ['/sku/listSkuByParams', 'USUPPLY_URL'],
@@ -21,6 +21,7 @@ export default {
   update_contact: ['/supplier/contact/{id}', 'USUPPLY_URL'],
   add_contact: ['/supplier/contact', 'USUPPLY_URL'],
   update_supplier: ['/supplier/{id}', 'USUPPLY_URL'],
+  get_productTradeHistory:['/sku/history','USUPPLY_URL'],
 
 
   //department setting
@@ -116,15 +117,14 @@ export default {
   get_buyerWarehouseOverview: ['/warehouse/overview/page', 'UPURCHASE_URL'],
   set_qcResultConfirm: ['/qc/result/confirm', 'UPURCHASE_URL'],
 
-
   /**
    * service warehouse
    * */
-  get_serviceQcOrder: ['/qc/page', 'USERVICE_URL'],
-  get_serviceOrderDetail: ['/qc/getById', 'USERVICE_URL'],
-  get_serviceQcOrderProduct: ['/qc/detail/page', 'USERVICE_URL'],
+  get_serviceQcOrder: ['/qc/page', 'USUPPLY_URL'],
+  get_serviceOrderDetail: ['/qc/getById', 'USUPPLY_URL'],
+  get_serviceQcOrderProduct: ['/qc/detail/page', 'USUPPLY_URL'],
   get_serviceQcSurveyor: ['/user/list', 'UUSER_URL'],
-  save_serviceQcOrder: ['/qc/result/save', 'USERVICE_URL'],
+  save_serviceQcOrder: ['/qc/result/save', 'USUPPLY_URL'],
 
 
   /**

@@ -1824,6 +1824,9 @@
                 this.loadingProductTable=true;
                 this.productTableDialogVisible=false;
                 this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
+                    _.map(res,v=>{
+                        v.skuStatus='2';
+                    })
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;

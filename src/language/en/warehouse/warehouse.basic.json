@@ -69,5 +69,7 @@
   "action":"操作",
   "sysGenerate":"系统生成",
   "pleaseChoose":"请选择",
-  "skuQty":"合同数量"
+  "skuQty":"合同数量",
+  "costPrice":"成本价",
+  "basicQuotation":"基础报价"
 }
