@@ -5,7 +5,12 @@
     </div>
     <el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" ref="multipleTable">
       <el-table-column type="selection" width="30"></el-table-column>
-      <el-table-column :label="$i.logistic.skuCode" align="center">
+      <el-table-column :label="$i.logistic.orderNo" width="140" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.orderNo }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$i.logistic.skuCode" width="140" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.skuCode }}</span>
         </template>
@@ -203,7 +208,7 @@ export default {
     },
     getSupplierIds(){
       this.$ajax.get(this.$apis.logistics_plan_getSupplierIds,{logisticsNo:this.basicInfoArr[0].value}).then(res => {
-        this.$set(this.pageParams,'skuSupplierIds',res);
+        this.$set(this.pageParams,'skuSupplierIds',res.content);
         this.getOrderList();
       })
     },   
@@ -225,7 +230,7 @@ export default {
       this.selectArrData = arr
     },
     productDetail(id){
-      window.open(`${window.location.origin}#/product/detail?id=${id}`);
+      window.open(`${window.location.origin}#/product/sourcingDetail?id=${id}`);
     }
   }
 }
