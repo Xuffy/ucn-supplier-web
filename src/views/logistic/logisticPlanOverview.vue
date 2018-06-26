@@ -5,7 +5,7 @@
       <div class="btn-wrap">
         <div v-if="pageType === 'plan' || pageType === 'loadingList'">
           <span>{{ $i.logistic.status}}:</span>
-          <el-radio-group v-model="fillterVal" size="mini" @change="fetchDataList">
+          <el-radio-group v-model="fillterVal" size="mini" @change="fetchDataList('elRadioGroup')">
             <el-radio-button label="all">{{ $i.logistic.all }}</el-radio-button>
             <el-radio-button :label="+a.code" v-for="a of ls_plan" :key="'status-' + a.code">{{a.name}}
             </el-radio-button>
@@ -44,7 +44,7 @@
     </div>
     <v-table
       :data="tabData"
-      :buttons="viewBy === 'plan' ? [{label: 'detail', type: 'detail'}] : null"
+      :buttons="[{label: 'detail', type: 'detail'}]"
       @action="action"
       @change-checked="changeChecked"
       :loading="tableLoading"
@@ -180,6 +180,7 @@
     watch: {
       viewBy(newVal) {
         this.selectCount = []
+        this.initPage();
         this.fetchDataList()
       },
       pageType() {
@@ -197,6 +198,12 @@
       this.registerRoutes()
     },
     methods: {
+      initPage(){
+        this.pageParams = {
+          pn: 1,
+          ps: 10
+        };
+      },
       registerRoutes() {
         this.$store.commit('SETRECYCLEBIN', {
           name: 'overviewArchive',
@@ -209,8 +216,10 @@
           this.getContainerType()
         }
         if (this.pageType === 'loadingList') {
+          this.getContainerType()
           this.getDictionary(['LS_STATUS'])
         }
+        this.initPage();
         this.fetchDataList()
       },
       deleteData() {
@@ -220,6 +229,7 @@
           type: 'warning'
         }).then(() => {
           this.$ajax.post(this.$apis.delete_by_ids, {ids: this.selectCount.map(a => a.id.value)}).then(res => {
+            this.initPage();
             this.fetchDataList()
             this.selectCount = []
             this.$message({
@@ -255,7 +265,10 @@
       addNew() {
         this.$router.push('/logistic/placeLogisticPlan')
       },
-      fetchDataList() {
+      fetchDataList(arg) {
+        if(arg){
+         this.initPage();
+        }
         const url = this.urlObj[this.pageType][this.viewBy].url
         const db = this.urlObj[this.pageType][this.viewBy].db
         this.tableLoading = true

@@ -3,7 +3,6 @@
     <div class="hd" v-if="showHd"></div>
     <div class="hd active">{{ title }}</div>
     <el-row :gutter="10">
-      {{DeliveredEdit}}
       <el-form label-width="300px" label-position="right" class="form" >
         <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
 
@@ -33,7 +32,7 @@
             </el-form-item>
 
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'date'" prop="value">
-              <el-date-picker v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
+              <el-date-picker format="yyyy-MM-dd" v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
             </el-form-item>
           </div>
         </el-col>
