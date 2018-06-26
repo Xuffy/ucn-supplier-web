@@ -276,7 +276,7 @@ export default {
     inspectQuarantineCategory:{
         key:'inspectQuarantineCategory',
         type: 'String',
-        showType:'input',
+        showType:'select',
         belongTab:'customerInfo',
     },
     brand:{

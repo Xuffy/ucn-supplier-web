@@ -654,7 +654,6 @@
                 //     console.log(res)
                 // });
             },
-
             cancel(){
                 window.close();
             },
