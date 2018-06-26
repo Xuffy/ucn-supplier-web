@@ -3,5 +3,6 @@
   "pleaseChoose":"Please Choose",
   "deleteSuccess":"Delete Success!",
   "modifySuccess":"Modify Success!",
-  "notAddDifferentSupplierProduct":"Can't Add Different Supplier Product!"
+  "notAddDifferentSupplierProduct":"Can't Add Different Supplier Product!",
+  "supplierSkuCodeIsRequired": "供应商货号不能为空！"
 }

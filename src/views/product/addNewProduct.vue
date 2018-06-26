@@ -1018,6 +1018,7 @@
                         {max:80,message: '最大长度为80',}
                     ],
                     code:[
+                        {required: true, message: this.$i.product.supplierSkuCodeIsRequired, trigger: 'blur' },
                         {max:40,message: '最大长度为40',}
                     ],
                     unit:[
