@@ -433,7 +433,7 @@
                 let mustKey=['inboundOutCartonTotalQty','skuOuterCartonVolume','skuOuterCartonRoughWeight','skuOuterCartonNetWeight','skuNetWeight','skuInnerCartonLength','skuInnerCartonWidth','skuInnerCartonHeight','skuInnerCartonWeightNet','skuInnerCartonRoughWeight'];
                 _.map(this.productData,v=>{
                     _.map(mustKey,k=>{
-                        if(!v[k]){
+                        if(v[k]!==0 && v[k]!=='0' && !v[k]){
                             allow=false;
                         }
                     })
@@ -771,7 +771,6 @@
             getUnit(){
                 this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE'],{cache:true}).then(res=>{
                     this.inboundTypeOption=res[0].codes;
-                    console.log(this.inboundTypeOption,'this.inboundTypeOption')
                 });
 
                 // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{
