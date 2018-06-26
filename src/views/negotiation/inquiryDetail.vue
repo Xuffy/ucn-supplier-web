@@ -68,10 +68,6 @@
           :visible.sync="newSearchDialogVisible"
           width="70%"
           lock-scroll>
-      <el-radio-group v-model="radio" @change="trig = new Date().getTime()">
-        <el-radio-button label="product">{{ $i.common.fromNewSearch }}</el-radio-button>
-        <el-radio-button label="bookmark">{{ $i.common.FromMyBookmark }}</el-radio-button>
-      </el-radio-group>
       <v-product
           :hideBtns="true"
           :hideBtn="true"
