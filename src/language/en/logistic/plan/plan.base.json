@@ -133,7 +133,6 @@
   "supplierName": "Supplier Name",
   "supplierNo": "Supplier No",
   "customerSkuCode": "Customer SKU Code",
-  "factorySKUCode": "Supplier Supplier SKU code",
   "unit": "Unit",
   "exportUnitPrice": "Export Unit Price",
   "totalPriceOfExport": "Total Price Of Export",
@@ -155,7 +154,7 @@
   "exit": "Exit",
   "addProductFromOrder": "Add Product From Order",
   "detail": "Detail",
-  "factorySkuCode": "Supplier Supplier SKU code",
+  "factorySkuCode": "Factory SKU code",
   "departurePort": "Departure Port",
   "ate": "Est. quantity of outer cartons to be shipped",
   "vendorSkuCode": "Supplier SKU code",
@@ -212,6 +211,11 @@
   "receive":"接受",
   "refuse":"拒绝",
   "Dept":"催款",
+  "logisticDraftDetail":"Logistic Draft",
+  "lcNo":"LC Number",
+  "customerOrderNo":"Customer Order No",
+  "supplierOrderNo":"Supplier Order No",
+  "skuBarCode":"SKU Bar-Code",
   "productInfo":{
 
   }
