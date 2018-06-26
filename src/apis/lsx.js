@@ -116,15 +116,14 @@ export default {
   get_buyerWarehouseOverview: ['/warehouse/overview/page', 'UPURCHASE_URL'],
   set_qcResultConfirm: ['/qc/result/confirm', 'UPURCHASE_URL'],
 
-
   /**
    * service warehouse
    * */
-  get_serviceQcOrder: ['/qc/page', 'USERVICE_URL'],
-  get_serviceOrderDetail: ['/qc/getById', 'USERVICE_URL'],
-  get_serviceQcOrderProduct: ['/qc/detail/page', 'USERVICE_URL'],
+  get_serviceQcOrder: ['/qc/page', 'USUPPLY_URL'],
+  get_serviceOrderDetail: ['/qc/getById', 'USUPPLY_URL'],
+  get_serviceQcOrderProduct: ['/qc/detail/page', 'USUPPLY_URL'],
   get_serviceQcSurveyor: ['/user/list', 'UUSER_URL'],
-  save_serviceQcOrder: ['/qc/result/save', 'USERVICE_URL'],
+  save_serviceQcOrder: ['/qc/result/save', 'USUPPLY_URL'],
 
 
   /**
