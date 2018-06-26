@@ -182,7 +182,6 @@
                     class="product-table"
                     v-loading="loadingProductInfoTable"
                     :data="productInfoData"
-                    height="300"
                     :summary-method="getSummaries"
                     show-summary
                     border
