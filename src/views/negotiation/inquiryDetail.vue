@@ -15,6 +15,8 @@
           </div>
           <div class="tab-msg-wrap">
             <v-table
+                code="inquiry_list"
+                hide-filter-value
                 :height="450"
                 :data.sync="newTabData"
                 :selection="false"
@@ -30,10 +32,12 @@
           <div class="status">
             <div class="btn-wrap">
               <el-button @click="addProduct" :disabled="!statusModify">{{ $i.common.addProduct }}</el-button>
-              <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i.common.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
+              <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i.common.remove }} <span>({{checkedAll.length}})</span></el-button>
             </div>
           </div>
           <v-table
+              code="inquiry"
+              hide-filter-value
               :data.sync="newProductTabData"
               :buttons="productInfoBtn"
               :loading="tableLoad"
@@ -137,9 +141,7 @@ export default {
       switchStatus: false,
       list: [],
       tableColumn: '',
-      submitData: {
-        deleteDetailIds: []
-      },
+      deleteDetailIds: [],
       idType: ''
     };
   },
@@ -169,7 +171,6 @@ export default {
     this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
     this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
 
-    this.submitData.id = this.$route.query.id;
     if (this.$localStore.get('$in_quiryCompare')) {
       this.compareConfig = this.$localStore.get('$in_quiryCompare');
     }
@@ -496,13 +497,15 @@ export default {
     // 删除product 某个单
     removeProduct() {
       this.newProductTabData = this.newProductTabData.filter(item => this.checkedAll.map(i => i.skuId.value.toString()).indexOf(item.skuId.value.toString()) === -1);
+      this.deleteDetailIds = this.deleteDetailIds.concat(this.checkedAll.filter(item => item.id.value).map(item => item.id.value));
       this.checkedAll = [];
     },
     modifyCancel() {
       // 页面编辑取消
       this.newTabData = this.tabData;
       this.newProductTabData = this.productTabData;
-      this.productCancel();
+      this.$set(this.newProductTabData, 'length', this.productTabData.length);
+      this.deleteDetailIds = [];
       this.statusModify = false;
     },
     modify() {
@@ -514,6 +517,7 @@ export default {
       let saveData = this.$filterModify(parentNode);
       saveData.attachment = null;
       saveData.skuQty = saveData.details.length;
+      saveData.deleteDetailIds = this.deleteDetailIds;
       this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SAVE, saveData).then(res => {
         this.newTabData[0].status.originValue = res.status;
         this.statusModify = false;
@@ -553,26 +557,6 @@ export default {
         list.push(o);
       }
       return list;
-    },
-    productCancel() {
-      //  取消 product 编辑
-      this.newProductTabData.forEach((item, index) => {
-        if (!item._remove && item._disabled) {
-          item._disabled = false;
-          item._remove = false;
-        }
-        this.$set(this.newProductTabData, index, item);
-      });
-    },
-    productModify() {
-      //  提交 product 编辑
-      this.newProductTabData.forEach((item, index) => {
-        if (!item._remove && item._disabled) {
-          item._remove = true;
-          this.submitData.deleteDetailIds.push(item);
-        }
-        this.$set(this.newProductTabData, index, item);
-      });
     }
   }
 };

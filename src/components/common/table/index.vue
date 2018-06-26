@@ -303,7 +303,7 @@
           this.$refs.tableBox.scrollTop = 0;
         }
 
-        if (!this.hideFilterColumn && this.code && !_.isEmpty(val)) {
+        if (!this.hideFilterColumn && this.$refs.filterColumn && this.code && !_.isEmpty(val)) {
           this.$refs.filterColumn.getConfig(false, val).then(res => {
             let to = setTimeout(() => {
               clearTimeout(to);

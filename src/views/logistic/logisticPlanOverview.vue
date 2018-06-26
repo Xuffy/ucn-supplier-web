@@ -43,6 +43,7 @@
       </div>
     </div>
     <v-table
+      :code="urlObj[pageType][viewBy].setTheField"
       :data="tabData"
       :buttons="[{label: 'detail', type: 'detail'}]"
       @action="action"
@@ -103,6 +104,7 @@
           plan: {
             plan: {
               key: 0,
+              setTheField:'ulogistics_PlanOverviewPlanNo',
               label: 'plan',
               text: this.$i.logistic.plan,
               url: this.$apis.gei_plan_list,
@@ -110,6 +112,7 @@
             },
             transportation: {
               key: 1,
+              setTheField:'ulogistics_PlanOverviewByUnit',
               label: 'transportation',
               text: this.$i.logistic.transportationUnit,
               url: this.$apis.get_transportation_list,
@@ -117,6 +120,7 @@
             },
             sku: {
               key: 2,
+              setTheField:'ulogistics_PlanOverviewSkuCode',
               label: 'sku',
               text: this.$i.logistic.sku,
               url: this.$apis.get_sku_list,
@@ -126,6 +130,7 @@
           loadingList: {
             plan: {
               key: 3,
+              setTheField:'ulogistics_OrderOverviewPlanNo',
               label: 'plan',
               text: this.$i.logistic.loadingList,
               url: this.$apis.get_loading_list_plan,
@@ -133,6 +138,7 @@
             },
             transportation: {
               key: 4,
+              setTheField:'ulogistics_OrderOverviewByUnit',
               label: 'transportation',
               text: this.$i.logistic.transportationUnit,
               url: this.$apis.get_loading_list_unit,
@@ -140,6 +146,7 @@
             },
             sku: {
               key: 5,
+              setTheField:'ulogistics_OrderOverviewSkuCode',
               label: 'sku',
               text: this.$i.logistic.sku,
               url: this.$apis.get_loading_list_sku,
@@ -149,6 +156,7 @@
           draft: {
             plan: {
               key: 0,
+              setTheField:'ulogistics_PlanOverviewPlanNo',
               label: 'plan',
               text: this.$i.logistic.plan,
               url: this.$apis.gei_plan_list,
@@ -156,6 +164,7 @@
             },
             transportation: {
               key: 1,
+              setTheField:'ulogistics_PlanOverviewByUnit',
               label: 'transportation',
               text: this.$i.logistic.transportationUnit,
               url: this.$apis.get_transportation_list,
@@ -164,6 +173,7 @@
             sku: {
               key: 2,
               label: 'sku',
+              setTheField:'ulogistics_PlanOverviewSkuCode',
               text: this.$i.logistic.sku,
               url: this.$apis.get_sku_list,
               db: this.$db.logistic.sku
