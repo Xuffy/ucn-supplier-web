@@ -35,6 +35,7 @@
                     </template>
                 </v-table>
                 <page
+                        :page-sizes="[50,100,200,500]"
                         @size-change="changeSize"
                         @change="changePage"
                         :page-data="pageData"></page>
@@ -69,7 +70,7 @@
                 inboundConfig:{
                     inboundNo: "",
                     pn: 1,
-                    ps: 10,
+                    ps: 50,
                     // sorts: [
                     //     {
                     //         orderBy: "",

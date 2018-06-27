@@ -40,13 +40,14 @@ export default {
   /**
    * seller product
    * */
-  add_newSKU: ['/sku', 'USUPPLY_URL'],
+  add_newSKU: ['/supplier/sku/setting/addSku', 'USUPPLY_URL'],
   set_sellerProductPutAway: ['/sku/putaway', 'USUPPLY_URL'],
   set_sellerProductPutDown: ['/sku/soldout', 'USUPPLY_URL'],
   delete_sellerProduct: ['/sku/deleteAll', 'USUPPLY_URL'],
   get_sellerCustomer: ['/supplier/sku/setting/listCustomers', 'USUPPLY_URL'],
+  get_sellerCustomerList:['/supplier/sku/setting/listCustomers/{id}', 'USUPPLY_URL'],
   get_sellerCustomerGroup: ['/supplier/sku/setting/getCustomerByIds', 'USUPPLY_URL'],
-  update_buyerProductDetail: ['/sku/', 'USUPPLY_URL'],
+  update_buyerProductDetail: ['/supplier/sku/setting/updateSku/{id}', 'USUPPLY_URL'],
   get_sellerProductList: ['/sku/listSkuByParams', 'USUPPLY_URL'],
 
   //product buyer

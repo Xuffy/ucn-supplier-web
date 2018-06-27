@@ -220,6 +220,7 @@
 <script>
 
     import {VTimeZone, VUpload, VTable} from '@/components/index'
+    import Math from 'mathjs'
 
     export default {
         name: "createInbound",
@@ -513,13 +514,13 @@
                     console.log(this.productData[index], 'productData')
                     console.log(this.productData[index].outerCartonSkuQty, '外箱产品数')
                     //出库产品总数量
-                    this.productData[index].outboundSkuTotalQty = value * this.productData[index].outerCartonSkuQty;
+                    this.productData[index].outboundSkuTotalQty = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonSkuQty)).done();
                     //出库产品总体积
-                    this.productData[index].outboundSkuTotalVolume = value * this.productData[index].outerCartonVolume;
+                    this.productData[index].outboundSkuTotalVolume = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonVolume)).done();
                     //出库产品总净重
-                    this.productData[index].outboundSkuTotalNetWeight = value * this.productData[index].outerCartonNetWeight;
+                    this.productData[index].outboundSkuTotalNetWeight = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonNetWeight)).done();
                     //出库产品总毛重
-                    this.productData[index].outboundSkuTotalGrossWeight = value * this.productData[index].outerCartonGrossWeight;
+                    this.productData[index].outboundSkuTotalGrossWeight =Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonGrossWeight)).done();
                 }
             },
 
