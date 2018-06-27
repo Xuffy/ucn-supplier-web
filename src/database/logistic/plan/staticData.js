@@ -1,61 +1,6 @@
 /*
- * created by lu.yixin on 2018/05/02
+ * created by L_Recall on 2018/05/28
  */
-// export const basicInfoInput = [
-//   'logisticsNo',
-//   'shipServiceProvider',
-//   'receiptCompany',
-//   'shippingAgent',
-//   'paymentTerm',
-//   'loadingType',
-//   'blQty',
-//   'blNo',
-//   'shipper',
-//   'consignee',
-//   'notify',
-
-//   'transportCompany',
-//   'vesselName',
-//   'vesselNo',
-//   'departureCountry',
-//   'departurePort',
-//   'destinationCountry',
-//   'destinationPort',
-//   // 'customerName'
-// ]
-
-// export const basicInfoSelector = [
-//   'logisticsStatus',
-//   'exchangeCurrency',
-//   'payment',
-//   'permitedForTransportation',
-//   'blType',
-//   'transportationWay'
-// ]
-
-// export const basicInfoDate = [
-//   'createDate',
-//   'declareDate',
-//   'bookingDate',
-//   'estContainerStuffingDate',
-//   'estCustomsCleanceDate',
-//   'estDepartureDate',
-//   'estArrivalDate',
-//   'estReleaseDate',
-//   'estDelivaryDate',
-//   'actDeliveryDate',
-//   'actContainerStuffingDate',
-//   'actCustomsCleanceDate',
-//   'actDepartureDate',
-//   'actArrivalDate',
-//   'actReleaseDate'
-// ]
-
-// export const disabledFields = [
-//   'logisticsNo',
-//   // 'customerName',
-//   'logisticsStatus'
-// ]
 export const basicInfoObj = {
   logisticsNo: {
     type: 'input',
@@ -65,9 +10,23 @@ export const basicInfoObj = {
   logisticsStatus: {
     type: 'selector',
     value: 2,
-    defaultVal: 2
+    defaultVal: 2,
+    disabled:true 
+  },
+  customerName: {
+    type: 'input',
+    value: null,
+    disabled:true 
+  },
+  bookingDate: {
+    type: 'date',
+    value: null
   },
   estContainerStuffingDate: {
+    type: 'date',
+    value: null
+  },
+  actContainerStuffingDate: {
     type: 'date',
     value: null
   },
@@ -75,7 +34,15 @@ export const basicInfoObj = {
     type: 'date',
     value: null
   },
+  actCustomsCleanceDate: {
+    type: 'date',
+    value: null
+  },
   estDepartureDate: {
+    type: 'date',
+    value: null
+  },
+  actDepartureDate: {
     type: 'date',
     value: null
   },
@@ -83,11 +50,24 @@ export const basicInfoObj = {
     type: 'date',
     value: null
   },
+  actArrivalDate: {
+    type: 'date',
+    value: null
+  },
   estReleaseDate: {
     type: 'date',
     value: null
   },
-  estDelivaryDate: {
+  actReleaseDate: {
+    type: 'date',
+    value: null
+  },
+  estDeliveryDate: {
+    key:'estDelivaryDate',
+    type: 'date',
+    value: null
+  },
+  actDeliveryDate: {
     type: 'date',
     value: null
   },
@@ -96,35 +76,6 @@ export const basicInfoObj = {
     value: null
   },
   declareDate: {
-    type: 'date',
-    value: null
-  },
-  bookingDate: {
-    type: 'date',
-    value: null
-  },
-  actDeliveryDate: {
-    type: 'date',
-    value: null
-  },
-  actContainerStuffingDate: {
-    type: 'date',
-    value: null
-  },
-  actCustomsCleanceDate: {
-    type: 'date',
-    value: null
-  },
-  actDepartureDate: {
-    type: 'date',
-    value: null
-  },
-  actArrivalDate: {
-    type: 'date',
-    value: null
-  },
-
-  actReleaseDate: {
     type: 'date',
     value: null
   },
@@ -179,7 +130,6 @@ export const basicInfoObj = {
     type: 'selector',
     value: null
   },
-  // blQuantity: {     type: 'selector',     value: null   },
   blQty: {
     type: 'input',
     value: '',
@@ -303,12 +253,13 @@ export const payMentInfo = {
     }
   },
   actPayDate: {
-    key:'actualPayDt'
+    key:'actualPayDt',
   },
   actAmount: {
     key:'actualPayAmount'
   }
 }
+
 
 export const dbProductInfo = {
   "toShipCartonQty": {

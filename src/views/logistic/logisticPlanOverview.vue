@@ -254,14 +254,14 @@
       },
       action(e) {
         if(this.pageType == 'loadingList'){
-          this.$router.push({path: `/logistic/loadingListDetail`, query: {id: e.id.value,loadingList:'loadingList'}})
+          this.$router.push({path: `/logistic/loadingListDetail`, query: {id: e.id.value}})
         }else{
           this.$router.push({path: `/logistic/${this.jumpPage[this.pageType]}`, query: {id: e.id.value}})
         }
       },
       searchFn(obj) {
         const {pn, ps} = this.pageParams
-        this.pageParams = {pn, ps, [obj.keyType]: obj.key}
+        this.pageParams = {pn, ps, [obj.id]: obj.value}
         this.fetchDataList()
       },
       sizeChange(e) {

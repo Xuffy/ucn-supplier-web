@@ -741,9 +741,9 @@
                     @change-checked="changeChecked"
                     @action="btnClick">
                 <!--<template slot="header">-->
-                    <!--<div class="btns">-->
-                        <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
-                    <!--</div>-->
+                <!--<div class="btns">-->
+                <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
+                <!--</div>-->
                 <!--</template>-->
             </v-table>
 
