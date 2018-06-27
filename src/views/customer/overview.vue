@@ -218,7 +218,18 @@
                     .then(res => {
                         this.pageData=res;
                         this.loading = false
-                        this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
+                        this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas,e=>{
+                        let country,payment,type,incoterm;
+                        country = _.findWhere(this.options.country, {code: e.country.value}) || {};
+                        payment = _.findWhere(this.options.payment, {code:(e.payment.value)+''}) || {};
+                        type = _.findWhere(this.options.type, {code: (e.type.value)+''}) || {};
+                        incoterm=_.findWhere(this.options.incoterm, {code: (e.incoterm.value)+''}) || {};
+                        e.country._value = country.name || '';
+                        e.payment._value = payment.name || '';
+                        e.type._value = type.name || '';
+                        e.incoterm._value = incoterm.name || '';
+                        return e;
+                      });
                     })
                     .catch((res) => {
                         this.loading = false
