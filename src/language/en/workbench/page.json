@@ -14,10 +14,10 @@
   "logistic": "Logistic",
   "warehouse": "Warehouse",
   "content": "Content",
-  "settingState":"Welcome! Please set your basic info",
-  "settingDepartment":"Set Department and User",
-  "settingCompany":"Set Company Info",
-  "settingCategory":"Set Category",
-  "settingPersonal":"Set Personal",
-  "goSet":"Go set"
+  "settingState": "Welcome! Please set your basic info",
+  "settingDepartment": "Department setting",
+  "settingCompany": "Company setting",
+  "settingCategory": "Category setting",
+  "settingPersonal": "Personal setting",
+  "goSet": "Go set"
 }

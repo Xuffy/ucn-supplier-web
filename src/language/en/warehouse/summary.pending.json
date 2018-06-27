@@ -1,13 +1,13 @@
 {
-    "cartonOfQualifiedProducts": "Carton of Qualified Products",
-    "quantityOfQualifiedProducts": "Quantity of Qualified Products",
-    "volumeOfQualifiedProducts": "Volume of Qualified Products",
-    "netWeightOfQualifiedProducts": "N.W. of Qualified Products",
-    "grossWeightOfQualifiedProducts": "G.W. of Qualified Products",
-    "quantityOfSubQualityProducts": "Quantity of Sub-quality Products",
-    "cartonOfSubQualityProducts": "Carton of Sub-quality Products",
-    "NetWeightOfSubQualityProducts": "N.W. of Sub-quality Products",
-    "volumeOfSubQualityProducts": "Volume of Sub-quality Products",
-    "grossWeightOfSubQualityProducts": "G.W. of Sub-quality Products",
-    "SKUQuantity": "SKU Quantity"
+  "cartonOfQualifiedProducts": "Carton of Qualified Products",
+  "quantityOfQualifiedProducts": "Quantity of Qualified Products",
+  "volumeOfQualifiedProducts": "Volume of Qualified Products",
+  "netWeightOfQualifiedProducts": "N.W. of Qualified Products",
+  "grossWeightOfQualifiedProducts": "G.W. of Qualified Products",
+  "quantityOfSubQualityProducts": "Quantity of unqualified Products",
+  "cartonOfSubQualityProducts": "Carton of unqualified Products",
+  "NetWeightOfSubQualityProducts": "N.W. of unqualified Products",
+  "volumeOfSubQualityProducts": "Volume of unqualified Products",
+  "grossWeightOfSubQualityProducts": "G.W. of unqualified Products",
+  "SKUQuantity": "SKU Quantity"
 }

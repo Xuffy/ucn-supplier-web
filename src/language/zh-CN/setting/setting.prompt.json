@@ -1,11 +1,11 @@
 {
-  "pleaseInput":"Please Input",
-  "canNotRepeatDepartmentName":"The department can't be repeat",
-  "canNotRepeatRole":"The role can't be repeat",
-  "createSuccess":"Create Success!",
-  "pleaseRemoveRoleUser":"Please Remove this department role and user!",
-  "sureDelete":"Sure Delete?",
-  "deleteSuccess":"Delete Success!",
-  "modifySuccess":"Modify Success!",
-  "pleaseInputRole":"Please Input Role"
+  "pleaseInput": "Please Input",
+  "canNotRepeatDepartmentName": "The department can't be repeat",
+  "canNotRepeatRole": "The role can't be repeat",
+  "createSuccess": "Create Success!",
+  "pleaseRemoveRoleUser": "Please Remove this department role and user!",
+  "sureDelete": "Sure Delete?",
+  "deleteSuccess": "Delete Success!",
+  "modifySuccess": "Modify Success!",
+  "pleaseInputRole": "Please Input Role"
 }

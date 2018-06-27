@@ -1,6 +1,6 @@
 {
-  "to":"to",
-  "startDate":"start date",
-  "endDate":"end date",
-  "selectionDate":"selection date"
+  "to": "to",
+  "startDate": "起始日期",
+  "endDate": "终止日期",
+  "selectionDate": "选择日期"
 }

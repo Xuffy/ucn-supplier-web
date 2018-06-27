@@ -6,13 +6,13 @@
   "lessAndEqual": "小于等于",
   "like": "包含",
   "between": "区间",
-  "reset": "Reset",
-  "asc": "Asc",
-  "desc": "Desc",
-  "tableFilter": "Table filter",
-  "selectTheColumn": "select the column",
-  "selectionOperation": "selection operation",
-  "action": "Action",
+  "reset": "重置",
+  "asc": "正序",
+  "desc": "倒序",
+  "tableFilter": "表格过滤器",
+  "selectTheColumn": "选择列",
+  "selectionOperation": "选择操作",
+  "action": "执行",
   "checkAll": "全选"
 }
 

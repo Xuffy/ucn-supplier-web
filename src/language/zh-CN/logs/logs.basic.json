@@ -1,8 +1,7 @@
 {
-    "logs": "Log",
-    "description": "Description",
-    "operater": "Operator",
-    "operationDate": "Operation Date",
-    "operationType": "Operation Type"
-
+  "logs": "日志",
+  "description": "描述",
+  "operater": "操作人",
+  "operationDate": "操作日期",
+  "operationType": "Operation Type"
 }
