@@ -637,7 +637,7 @@
                     }).then(res=>{
                         _.map(res,v=>{
                             _.map(v.skuList,e=>{
-                                e.skuQty=res.totalQty;
+                                // e.skuQty=res.totalQty;
                                 this.productData.push(e);
                             })
                         });

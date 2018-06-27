@@ -1237,7 +1237,7 @@
                     }
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
-                    this.$ajax.post(this.$apis.update_buyerProductDetail+param.id,param).then(res=>{
+                    this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
                         this.$message({
                             message: this.$i.product.modifySuccess,
                             type: 'success'
