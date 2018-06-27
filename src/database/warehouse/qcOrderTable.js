@@ -9,7 +9,9 @@ export default {
     skuDesign:{},
     packingMethodCn:{},
     innerCartonPackingMethodCn:{},
-    deliveryDate:{},
+    deliveryDate:{
+
+    },
     skuUnitDictCode:{},
     lengthUnitDictCode:{},
     volumeUnitDictCode:{},
