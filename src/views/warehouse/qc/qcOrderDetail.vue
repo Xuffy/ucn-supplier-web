@@ -332,7 +332,8 @@
 
         <div class="footBtn">
             <el-button @click="edit" v-if="qcDetail.qcStatusDictCode==='WAITING_QC'" type="primary">{{$i.warehouse.edit}}</el-button>
-            <el-button @click="cancel">{{$i.warehouse.cancel}}</el-button>
+            <el-button @click="cancel"  v-if="qcDetail.qcStatusDictCode==='WAITING_QC'" >{{$i.warehouse.cancel}}</el-button>
+            <el-button @click="cancel"  v-if="qcDetail.qcStatusDictCode!=='WAITING_QC'" >{{$i.warehouse.exit}}</el-button>
         </div>
         <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
     </div>
@@ -370,6 +371,10 @@
                 barCodeResult:[],
                 qcStatusOption:[],
                 currencyOptions:[],
+                skuUnitOption:[],       //计量单位
+                lengthOption:[],
+                volumeOption:[],
+                weightOption:[],
 
 
                 /**
@@ -422,7 +427,13 @@
             getProductInfo(){
                 this.loadingProductInfoTable=true;
                 this.$ajax.post(this.$apis.get_serviceQcOrderProduct,this.productInfoConfig).then(res=>{
-                    this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas);
+                    this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas,e=>{
+                        e.deliveryDate._value=this.$dateFormat(e.deliveryDate.value,'yyyy-mm-dd');
+                        e.skuUnitDictCode._value=_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}).name;
+                        e.volumeUnitDictCode._value=_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}).name;
+                        e.weightUnitDictCode._value=_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}).name;
+                        e.lengthUnitDictCode._value=_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}).name;
+                    });
 
                     let diffData=[];
                     _.map(this.productInfoData,v=>{
@@ -585,8 +596,6 @@
                 return sums;
             },
 
-
-
             /**
              * 选择服务商的方法
              * */
@@ -616,7 +625,7 @@
              * 获取字典
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_QC_RS','PB_CODE','QC_STATUS'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_QC_RS','PB_CODE','QC_STATUS','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT'],{cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='QC_TYPE'){
                             this.qcTypeOption=v.codes;
@@ -631,6 +640,14 @@
                             this.barCodeResult=v.codes;
                         }else if(v.code==='QC_STATUS'){
                             this.qcStatusOption=v.codes;
+                        }else if(v.code==='SKU_UNIT'){
+                            this.skuUnitOption=v.codes;
+                        }else if(v.code==='LH_UNIT'){
+                            this.lengthOption=v.codes;
+                        }else if(v.code==='VE_UNIT'){
+                            this.volumeOption=v.codes;
+                        }else if(v.code==='WT_UNIT'){
+                            this.weightOption=v.codes;
                         }
                     })
                 });
@@ -654,7 +671,6 @@
                 //     console.log(res)
                 // });
             },
-
             cancel(){
                 window.close();
             },

@@ -1,14 +1,19 @@
 <template>
   <div class="place-logistic-plan">
-    <div class="hd-top" v-if="$route.name=='logisticPlanDetail'">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
-    <div class="hd-top" v-if="$route.name=='loadingListDetail'">{{ $i.logistic.loadingList + '    ' + logisticsNo}}</div>
+    <div class="hd-top" v-if="pageTypeCurr=='logisticPlanDetail'">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
+    <div class="hd-top" v-if="pageTypeCurr=='loadingListDetail'">{{ $i.logistic.loadingList + '    ' + logisticsNo}}</div>
     <form-list :DeliveredEdit="DeliveredEdit" name="BasicInfo" :fieldDisplay="fieldDisplay" :showHd="false" @selectChange="formListSelectChange" @hightLightModifyFun="hightLightModifyFun" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
     <el-row :gutter="10">
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
         <div class="input-item">
           <span>{{ $i.logistic.remark }}:</span>
-          <el-input class="el-input" type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容" v-model="remark" v-if="edit"></el-input>
-          <p v-else>{{ remark }}</p>
+          <el-input @change="hightLightModifyFun({remark:remark},'remark')" 
+          :class="[{definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('remark')},'el-input']" 
+          type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容" v-model="remark" v-if="edit"></el-input>
+          <p v-else :style="fieldDisplay&&fieldDisplay.hasOwnProperty('remark') ? {
+            'color': '#f56c6c',
+            'text-shadow': '2px 1px 2px'
+          } : ''">{{ remark }}</p>
         </div>
       <!-- </el-col> -->
       <div class="input-item">
@@ -27,13 +32,13 @@
     </div>
 
     <!-- <div v-if="planId && feeList"> -->
-    <div v-if="planId">
+    <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.feeInfoTitle }}</div>
       <fee-info :edit="edit" :tableData.sync="feeList" :selectArr="selectArr"></fee-info>
     </div>
 
-    <div v-if="planId">
+    <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
       <div class="hd active">
@@ -67,12 +72,11 @@
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
-    <messageBoard v-if="planId" module="logistic" code="planDetail" :id="planId"></messageBoard>
-    <btns :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
+    <messageBoard v-if="!isParams" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
+    <btns :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
   </div>
 </template>
 <script>
-
 import { VSimpleTable, containerInfo, selectSearch, VTable} from '@/components/index';
 import {mapActions, mapState} from 'vuex';
 import attachment from '@/components/common/upload/index';
@@ -91,6 +95,7 @@ export default {
   name: 'logisticPlanDetail',
   data() {
     return {
+      planId:'',
       DeliveredEdit:false,
       dunningDisabled:false,
       modefiyProductIndex: 0,
@@ -198,11 +203,11 @@ export default {
     attachmentReadonly(){
       return !this.edit;
     },
-    planId () {
-      return this.$route.query.id
+    pageTypeCurr(){
+      return this.$route.name;
     },
-    isLoadingList () {
-      return this.$route.query.loadingList
+    isParams(){
+      return _.isEmpty(this.$route.query)
     },
     productbButtons(){
       let aArr = [
@@ -246,7 +251,7 @@ export default {
     this.transportInfoArr = _.map(this.$db.logistic.transportInfoObj, (value, key) => {
       return value;
     })
-    if (this.planId) {
+    if (this.pageTypeCurr.slice(-6) == 'Detail') {
       this.getDetails();
     } else {
       this.edit = true
@@ -256,15 +261,12 @@ export default {
       this.transportInfoArr.forEach((item)=>{
         this.$set(item,'value',item.defaultVal);
       })
-      this.getNewLogisticsNo()
       this.getRate();
+      this.getNewLogisticsNo()
     }
   },
   methods: {
     ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
-    hightLightModifyFun(v){
-      
-    },
     //获取实时汇率
     getRate(){
       this.$ajax.post(`${this.$apis.get_plan_rate}`).then(res => {
@@ -290,20 +292,6 @@ export default {
         this.$refs.addProduct.getSupplierIds();
       })
     }, 
-    batchDunning(){
-      let argArr = [];
-      this.paymentList.forEach((item)=>{
-        if(item.planPayAmount>item.actualPayAmount){
-          argArr.push({'id':item.id,'version':item.version})
-        }
-      });
-      this.$ajax.post(`${this.$apis.logistics_payment_batchDunning}`,argArr).then(res => {
-        this.$message({
-          type: 'success',
-          message: '催款成功!'
-        })
-      })
-    },
     registerRoutes () {
       this.$store.commit('SETRECYCLEBIN', {
         name: 'overviewArchive',
@@ -311,14 +299,14 @@ export default {
       })
     },
     getDetails () {
-      let url = this.$route.query.loadingList ? this.$apis.get_order_details :this.$apis.get_plan_details
-      this.$ajax.get(`${url}${this.planId}`).then(res => {
-        this.createdPlanData(res)
+      let url = this.pageTypeCurr=="loadingListDetail" ? this.$apis.get_order_details : this.$apis.get_plan_details;
+      this.$ajax.get(`${url}?id=${this.$route.query.id || ''}&logisticsNo=${this.$route.query.code || '' }`).then(res => {
+        this.planId = res.id;
+        this.createdPlanData(res);
         this.logisticsStatus = {
           recived : res.recived,
           supplierRecived : res.supplierRecived,
-          status : res.logisticsStatus,
-          loadingList : this.$route.query.loadingList
+          status : res.logisticsStatus
         };
         this.matchRate(res.currencyExchangeRate);
         this.attachmentList = res.attachment;
@@ -334,8 +322,8 @@ export default {
         this.selectArr.supplier = res;
       })
     },
-    createdPlanData (res = this.oldPlanObject) {
-      this.oldPlanObject = JSON.parse(JSON.stringify(res))
+    createdPlanData (res = this.oldPlanObject,qrg) {
+      this.oldPlanObject = this.$depthClone(res);
       const stringArray = [
         'payment',
         'permitedForTransportation',
@@ -359,6 +347,7 @@ export default {
         item.vId = i;
         return item;
       });
+
       this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
       this.productList.forEach((item)=>{
         if(item.fieldDisplay.value){
@@ -368,14 +357,31 @@ export default {
         }
       }) 
     },
+    batchDunning(){
+      let argArr = [];
+      this.paymentList.forEach((item)=>{
+        if(item.planPayAmount>item.actualPayAmount){
+          argArr.push({'id':item.id,'version':item.version})
+        }
+      });
+      this.$ajax.post(`${this.$apis.logistics_payment_batchDunning}`,argArr).then(res => {
+        this.$message({
+          type: 'success',
+          message: '催款成功!'
+        })
+        this.$ajax.post(`${this.$apis.get_payment_list}${this.logisticsNo}/30`).then(res => {
+          this.createdPaymentData(res)
+        })
+      })
+    },
     createdPaymentData (res = this.oldPaymentObject) {
       this.oldPaymentObject = JSON.parse(JSON.stringify(res))
       this.paymentList = res.datas
-      this.dunningDisabled = this.paymentList.every((item)=> item.planPayAmount > item.actualPayAmount);
+      this.dunningDisabled = !this.paymentList.some((item)=> item.planPayAmount > item.actualPayAmount);
       this.paymentSum = res.statisticsDatas[0]
     },
     getNewLogisticsNo () {
-      let url = this.$route.query.loadingList ? this.$apis.get_new_logistics_orderNo : this.$apis.get_new_logistics_no;
+      let url = this.pageTypeCurr=="loadingListDetail" ? this.$apis.get_new_logistics_orderNo : this.$apis.get_new_logistics_no;
       this.$ajax.post(url).then(res => {
         this.basicInfoArr.find(a => a.key === 'logisticsNo').value = res
         this.getSupplier(res)
@@ -391,7 +397,7 @@ export default {
       this.getDictionaryPart()
     },
     getDictionaryPart () {
-      this.$set(this.dictionaryPart,'logisticsStatus',this.$route.query.loadingList ? 'LS_STATUS' : 'LS_PLAN')
+      this.$set(this.dictionaryPart,'logisticsStatus',this.pageTypeCurr=="loadingListDetail" ? 'LS_STATUS' : 'LS_PLAN')
       const params = _.map(this.dictionaryPart, v => v)
       this.$ajax.post(this.$apis.get_dictionary, params).then(res => {
         _.mapObject(this.dictionaryPart, (v, k) => {
@@ -446,8 +452,8 @@ export default {
     getProductHistory (productId, status, i) {
       // 修改处
       const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
-
-      productId ? this.$ajax.get(`${this.$apis.get_product_history}?productId=${productId}`).then(res => {
+      let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
+      productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
         res.history.length ? (this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify, res.history)])
         : (this.productModifyList = [ currentProduct ])
       })
@@ -548,7 +554,7 @@ export default {
       })
     },
     productModifyfun(obj){
-      if(this.planId){
+      if(this.pageTypeCurr.slice(-6) == 'Detail'){
         this.prodFieldDisplay = obj;
       }
     },
@@ -618,20 +624,20 @@ export default {
           type: 'success',
           duration:3000,
           onClose:()=>{
-            this.$router.push('/logistic/'+( this.$route.query.loadingList || ''));
+            this.$router.push('/logistic/'+( this.pageTypeCurr=="loadingListDetail" ? 'loadingList' : ''));
           }
         })
       })
     },
     cancelLoadingList(){
-      let url = this.$route.name =='loadingListDetail' ? 'logistics_order_cancelByIds' : 'logistics_plan_cancelByIds';
+      let url = this.pageTypeCurr =='loadingListDetail' ? 'logistics_order_cancelByIds' : 'logistics_plan_cancelByIds';
       this.$ajax.post(this.$apis[url],{ids:[this.planId]}).then(res => {
         this.$message({
           message: '取消成功，正在跳转...',
           type: 'success',
           duration:3000,
           onClose:()=>{
-            this.$router.push('/logistic/'+( this.$route.query.loadingList || ''));
+            this.$router.push('/logistic/'+( this.pageTypeCurr=="loadingListDetail" ? 'loadingList' : ''));
           }
         })
       })
@@ -643,23 +649,16 @@ export default {
     },
     generateList(){
       this.$ajax.post(this.$apis.logistics_plan_postLoadingList,{id:this.planId}).then(res => {
-        this.getDetails();
+        window.open(`${window.location.origin}#/logistic/loadingListDetail?id=${ this.planId }`);
       })
     },
     conformPlan(){
       this.$ajax.post(this.$apis.logistics_plan_confirm,{id:this.planId}).then(res => {
-         this.$message({
-          message: '发送成功，正在跳转...',
-          type: 'success',
-          duration:3000,
-          onClose:()=>{
-            this.$router.push('/logistic');
-          }
-        })
+        this.getDetails();
       })
     },
     toExit () {
-      if (this.planId) {
+      if (this.pageTypeCurr.slice(-6) == 'Detail') {
         return this.$router.go(-1)
       }
       this.edit = !this.edit
@@ -688,7 +687,7 @@ export default {
       this.oldPlanObject.fieldDisplay = obj;
     },
     sendData (keyString) {
-      let url = this.$route.query.loadingList ? this.$apis.update_logistic_order : this.configUrl[this.pageName][keyString];    
+      let url = this.pageTypeCurr=="loadingListDetail" ? this.$apis.update_logistic_order : this.configUrl[this.pageName][keyString];    
       this.basicInfoArr.forEach(a => { 
         // this.$set(this.basicInfoObj, a.key, a.type=='date' ? a.value : a.value)
         this.$set(this.basicInfoObj, a.key, a.value)
@@ -738,7 +737,7 @@ export default {
           }
         })
       });
-      if(!this.planId){
+      if(this.isParams){
         this.oldPlanObject.fieldDisplay = null;
       }
       if(this.$validateForm(this.oldPlanObject,this.$db.logistic.basicInfoObj)){
@@ -753,7 +752,7 @@ export default {
           type: 'success',
           duration:3000,
           onClose:()=>{
-            this.$router.push('/logistic/'+ (this.$route.query.loadingList || ''));
+            this.$router.push('/logistic/'+ (this.pageTypeCurr=="loadingListDetail" ? 'loadingList' : ''));
           }
         })
       })
@@ -805,6 +804,10 @@ export default {
   }
   .product-header {
     margin-bottom: 20px;
+  }
+  /deep/.definedStyleClass textarea{
+    background:#f56c6c;
+    color:#fff;
   }
 }
 </style>

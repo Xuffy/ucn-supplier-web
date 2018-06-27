@@ -117,9 +117,12 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-
                 <el-tab-pane :label="$i.product.tradeHistory" name="History">
-                    <span style="color:red">暂时接口还没做</span>
+                    <v-table
+                            :height="500"
+                            :loading="loadingHistoryTable"
+                            :data="historyData">
+                    </v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
                     <v-upload :limit="20" readonly :list="productForm.attachments" ref="uploadAttachmemt"></v-upload>
@@ -152,6 +155,7 @@
                 tabName:'Basic Info',
                 labelPosition:'left',               //文字靠边参数，left或者right
                 loadingTable:false,
+                loadingHistoryTable:false,
                 //页面数据
                 productForm:{
                     id: '',                         //新增传空
@@ -306,6 +310,16 @@
                 compareConfig:{
                     showCompareList:false,      //是否显示比较列表
                 },
+                incotermOption:[],
+                historyData:[],
+                tradeHistory:{
+                    pn:1,
+                    ps:100,
+                    skuCode:'',
+                    sorts:[
+
+                    ],
+                },
             }
         },
         methods:{
@@ -319,7 +333,6 @@
             handleClick(){
                 //切换tab页
             },
-
             //获取产品详情
             getGoodsData(){
                 this.loadingTable=true;
@@ -333,12 +346,31 @@
                     });
                     if(this.productForm.status===1){
                         this.btnInfo=this.$i.product.setDown;
-                    }else if(this.productForm.status===0){
+                    }
+                    else if(this.productForm.status===0){
                         this.btnInfo=this.$i.product.setUp;
                     }
-                    this.tableData = this.$getDB(this.$db.product.detailPriceTable, this.productForm.price);
-                    this.loadingTable=false;
-                    console.log(this.productForm)
+                    this.tableData = this.$getDB(this.$db.product.detailPriceTable, this.productForm.price,e=>{
+                        e.status._value=e.status.value===1?this.$i.warehouse.costPrice:this.$i.warehouse.basicQuotation;
+                        return e;
+                    });
+                    this.tradeHistory.skuCode=this.productForm.code;
+                    this.loadingHistoryTable=true;
+                    this.$ajax.post(this.$apis.get_productTradeHistory,this.tradeHistory).then(res=>{
+                        if(res){
+                            this.historyData=this.$getDB(this.$db.product.tradeHistory,res.datas,e=>{
+                                e.incoterm._value=_.findWhere(this.incotermOption,{code:e.incoterm.value}).name;
+                                e.actDeliveryDt._value=this.$dateFormat(e.actDeliveryDt.value,'yyyy-mm-dd');
+                                e.confirmQcDt._value=this.$dateFormat(e.confirmQcDt.value,'yyyy-mm-dd');
+                                e.actDepartureDt._value=this.$dateFormat(e.actDepartureDt.value,'yyyy-mm-dd');
+                            });
+                        }
+                    }).finally(()=>{
+                        this.loadingTable=false;
+                        this.loadingHistoryTable=false;
+                    });
+
+                    console.log(this.productForm,'this.productForm')
                 }).catch(err=>{
                     this.loadingTable=false;
                 });
@@ -442,7 +474,13 @@
             },
         },
         mounted(){
-            this.getGoodsData();
+            this.loadingTable=true;
+            this.$ajax.post(this.$apis.get_partUnit,['ITM'],{cache:true}).then(res=>{
+                this.incotermOption=res[0].codes;
+                this.getGoodsData();
+            }).finally(()=>{
+                this.loadingTable=false;
+            });
             this.setLog({query: {code: 'PRODUCT'}});
         },
     }

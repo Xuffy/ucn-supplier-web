@@ -131,7 +131,7 @@
         },
         methods: {
                ...mapActions([
-                'setRecycleBin','setDraft'
+                 'setLog'
             ]),
             handleSizeChange(val) {
               this.params.pn = val;
@@ -254,12 +254,9 @@
             this.getData();
             this.getCodePart();
             this.getCountryAll();
-            // this.getCategoryId();
-            this.setRecycleBin({
-                name: 'customerRecycleBinDetail',
-                show: true
-            });
-
+        },
+        mounted(){
+          this.setLog({query:{code:'SUPPLIER_CUSTOMER_REMARK'}});
         },
         watch: {}
     }

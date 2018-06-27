@@ -170,20 +170,30 @@
                 <el-col style="height: 51px;" v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
-                            <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
-                                <el-option
-                                        v-for="item in skuStatusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
+                            <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <div v-if="v.key==='inspectQuarantineCategory'">
+                                    <el-option
+                                            v-for="item in quarantineTypeOption"
+                                            :key="item.id"
+                                            :label="item.code"
+                                            :value="item.code">
+                                    </el-option>
+                                </div>
+                                <div v-else>
+                                    <el-option
+                                            v-for="item in skuStatusOption"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </div>
                             </el-select>
                         </div>
                         <div v-if="v.showType==='input'">
                             <el-input
                                     :disabled="v.disabledInput"
                                     size="mini"
-                                    placeholder="请填写"
+                                    :placeholder="$i.product.pleaseInput"
                                     clearable
                                     v-model="productForm[v.key]">
                             </el-input>
@@ -194,7 +204,7 @@
                                     size="mini"
                                     type="textarea"
                                     autosize
-                                    placeholder="请填写"
+                                    :placeholder="$i.product.pleaseInput"
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
@@ -204,8 +214,7 @@
                                     size="mini"
                                     :controls="false"
                                     v-model="productForm[v.key]"
-                                    :min="0"
-                                    label="描述文字">
+                                    :min="0">
                             </el-input-number>
                         </div>
                     </el-form-item>
@@ -724,20 +733,13 @@
                 <el-button :disabled="loadingTable" @click="searchCustomer" type="primary">{{$i.warehouse.search}}</el-button>
                 <el-button :disabled="loadingTable" @click="clearCustomerSearch">{{$i.warehouse.clear}}</el-button>
             </div>
-
             <v-table
                     :height="500"
                     :loading="loadingTable"
                     :data="tableDataList"
                     @change-checked="changeChecked"
                     @action="btnClick">
-                <!--<template slot="header">-->
-                    <!--<div class="btns">-->
-                        <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
-                    <!--</div>-->
-                <!--</template>-->
             </v-table>
-
             <div slot="footer" class="dialog-footer">
                 <el-button :disabled="loadingTable" :loading="disableClickPost" type="primary" @click="postData">{{$i.product.sure}}</el-button>
                 <el-button :disabled="loadingTable" @click="addCustomerDialogVisible = false">{{$i.product.cancel}}</el-button>
@@ -776,6 +778,7 @@
                 skuPkgOption:[],        //产品包装可否调整
                 readilyOption:[],       //是否现货
                 skuUnitOption:[],       //计量单位
+                quarantineTypeOption:[],//检疫类别单位
 
                 loadingData:true,
                 labelPosition:'left',
@@ -792,14 +795,14 @@
                 },
                 categoryList:[
                     {
-                        id:123,
-                        name:"系统分类",
+                        id:5125,
+                        name:"自己的分类",
                         children:[],
                         _disableClick:true,
                     },
                     {
-                        id:5125,
-                        name:"自己的分类",
+                        id:123,
+                        name:"系统分类",
                         children:[],
                         _disableClick:true,
                     },
@@ -1008,6 +1011,7 @@
                         {max:80,message: '最大长度为80',}
                     ],
                     code:[
+                        {required: true, message: this.$i.product.supplierSkuCodeIsRequired, trigger: 'blur' },
                         {max:40,message: '最大长度为40',}
                     ],
                     unit:[
@@ -1155,12 +1159,12 @@
             //获取类别数据
             getCategoryId(){
                 this.$ajax.get(this.$apis.CATEGORY_SYSTEM,{}).then(res=>{
-                    this.categoryList[0].children=res;
+                    this.categoryList[1].children=res;
                 }).catch(err=>{
 
                 });
                 this.$ajax.get(this.$apis.CATEGORY_MINE,{}).then(res=>{
-                    this.categoryList[1].children=res;
+                    this.categoryList[0].children=res;
                 }).catch(err=>{
 
                 });
@@ -1178,8 +1182,10 @@
                                 this.$set(e,'_disabled',true);
                                 this.$set(e,'_checked',true);
                             }
-                        })
+                        });
                     });
+                    console.log(this.tableDataList,'this.tableDataList')
+                    console.log(this.tableData,'this.tableData')
                 }).catch(err=>{
                     this.loadingTable=false;
                 });
@@ -1221,12 +1227,17 @@
                     if(!param.readilyAvailable){
                         param.availableQty=0;
                     }
-                    if(!param.visibility){
+                    if(param.visibility){
                         param.ids=[];
+                    }else{
+                        param.ids=[];
+                        this.tableData.forEach(v=>{
+                            param.ids.push(v.id);
+                        });
                     }
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
-                    this.$ajax.post(this.$apis.update_buyerProductDetail+param.id,param).then(res=>{
+                    this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
                         this.$message({
                             message: this.$i.product.modifySuccess,
                             type: 'success'
@@ -1315,7 +1326,25 @@
                             this.productForm[k]=this.productForm[k]?'1':'0';
                         }
                     });
-                    console.log(this.productForm,'this.productForm')
+
+                    this.$ajax.post(this.$apis.get_sellerCustomerList,{
+                        id:this.productForm.id,
+                        pn:1,
+                        ps:1000
+                    }).then(res=>{
+                        this.tableData=res.datas;
+                        // this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
+                        //     this.tableData.forEach(v=>{
+                        //         if(v.id===e.id.value){
+                        //             this.$set(e,'_disabled',true);
+                        //             this.$set(e,'_checked',true);
+                        //         }
+                        //     })
+                        // });
+
+                    }).catch(err=>{
+
+                    });
                     this.loadingData=false;
                 }).catch(err=>{
                     this.loadingData=false;
@@ -1367,7 +1396,7 @@
                     this.$ajax.post(this.$apis.get_sellerCustomerGroup,id).then(res=>{
                         res.forEach(v=>{
                             this.tableData.push(v);
-                        })
+                        });
                         this.addCustomerDialogVisible=false;
                         this.disableClickPost=false;
                     }).catch(err=>{
@@ -1398,8 +1427,12 @@
 
                 });
 
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // })
+
                 this.loadingData=true;
-                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT','QUARANTINE_TYPE'],{cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
@@ -1421,6 +1454,8 @@
                             this.readilyOption=v.codes;
                         }else if(v.code==='SKU_UNIT'){
                             this.skuUnitOption=v.codes;
+                        }else if(v.code==='QUARANTINE_TYPE'){
+                            this.quarantineTypeOption=v.codes;
                         }
                     });
                     this.loadingData=false;

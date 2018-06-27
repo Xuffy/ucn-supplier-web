@@ -8,10 +8,11 @@ export default {
   get_new_logistics_no: ['/logistics/plan/getNo', 'a_localtion','USUPPLY_URL'],
   get_currency: ['/currency/all','a_localtion', 'UMETA_URL'],
   get_container_type: ['/containertype/all','UMETA_URL'],
-  get_plan_details: ['/logistics/plan/get/', 'a_localtion','USUPPLY_URL'],
-  get_order_details: ['/logistics/order/get/','a_localtion', 'BASE_URL'],
+  get_plan_details: ['/logistics/plan/detail', 'a_localtion','USUPPLY_URL'],
+  get_order_details: ['/logistics/order/detail','a_localtion', 'BASE_URL'],
   get_payment_list: ['/payment/list/', 'a_localtion','USUPPLY_URL'],
   get_product_history: ['/logistics/plan/getProductHistory','a_localtion', 'USUPPLY_URL'],
+  get_product_order_history: ['/logistics/order/getProductHistory','a_localtion', 'USUPPLY_URL'],
   get_order_list_with_page: ['/order/skuAllPage', 'a_localtion','USUPPLY_URL'],
   get_loading_list_plan: ['/logistics/order/pageByPlanNo','a_localtion', 'USUPPLY_URL'],
   get_loading_list_unit: ['/logistics/order/pageByUnit', 'a_localtion','USUPPLY_URL'],
@@ -35,6 +36,7 @@ export default {
   logistics_plan_receive: ['/logistics/plan/receive', 'a_localtion','USUPPLY_URL'],
   logistics_plan_postLoadingList: ['/logistics/plan/postLoadingList','a_localtion', 'USUPPLY_URL'],
   logistics_plan_getSupplierIds: ['/logistics/plan/getSupplierIds','a_localtion', 'BASE_URL'],
+  logistics_order_getSupplierIds: ['/logistics/order/getSupplierIds','LJ', 'BASE_URL'],
   logistics_accept_payment: ['/payment/accept','a_localtion', 'BASE_URL'],
   logistics_payment_batchDunning: ['/payment/batchDunning','a_localtion', 'BASE_URL']
 }

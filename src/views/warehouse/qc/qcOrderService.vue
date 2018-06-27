@@ -421,6 +421,10 @@
                 barCodeResult:[],
                 qcStatusOption:[],
                 currencyOptions:[],
+                skuUnitOption:[],       //计量单位
+                lengthOption:[],
+                volumeOption:[],
+                weightOption:[],
 
                 /**
                  * paymentTable data
@@ -494,6 +498,11 @@
                     this.productInfoData = res.datas;
                     this.productInfoData.forEach(v=>{
                         v.skuQcResultDictCode='';
+                        v.deliveryDate=this.$dateFormat(v.deliveryDate,'yyyy-mm-dd');
+                        v.skuUnitDictCode=_.findWhere(this.skuUnitOption,{code:v.skuUnitDictCode}).name;
+                        v.volumeUnitDictCode=_.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name;
+                        v.weightUnitDictCode=_.findWhere(this.weightOption,{code:v.weightUnitDictCode}).name;
+                        v.lengthUnitDictCode=_.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name;
                     });
                     let diffData=[];
                     _.map(this.productInfoData,v=>{
@@ -615,6 +624,7 @@
                 _.map(this.qcOrderConfig.qcResultDetailParams,(v,k)=>{
                     v.qcPics=this.$refs['pictureUpload'+k][0].getFiles();
                 });
+
                 this.disableClickSubmit=true;
                 this.$ajax.post(this.$apis.save_sellerQcOrder,this.qcOrderConfig).then(res=>{
                     this.disableClickSubmit=false;
@@ -661,7 +671,7 @@
              * 获取字典
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_QC_RS','PB_CODE','QC_STATUS'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_QC_RS','PB_CODE','QC_STATUS','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT'],{cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='QC_TYPE'){
                             this.qcTypeOption=v.codes;
@@ -676,6 +686,14 @@
                             this.barCodeResult=v.codes;
                         }else if(v.code==='QC_STATUS'){
                             this.qcStatusOption=v.codes;
+                        }else if(v.code==='SKU_UNIT'){
+                            this.skuUnitOption=v.codes;
+                        }else if(v.code==='LH_UNIT'){
+                            this.lengthOption=v.codes;
+                        }else if(v.code==='VE_UNIT'){
+                            this.volumeOption=v.codes;
+                        }else if(v.code==='WT_UNIT'){
+                            this.weightOption=v.codes;
                         }
                     })
                 });

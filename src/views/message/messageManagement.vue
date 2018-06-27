@@ -65,7 +65,7 @@
                   language:''
                 },
                 pData:{
-                  ps:10,
+                  ps:50,
                   pn:1
                 },
                 dialogVisible:false,            //弹出框显示隐藏

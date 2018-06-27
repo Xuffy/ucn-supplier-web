@@ -330,7 +330,7 @@
 
 
         <div class="footBtn">
-            <el-button :disabled="loadingTable" type="danger" @click="cancel">{{$i.warehouse.cancel}}</el-button>
+            <el-button :disabled="loadingTable" type="danger" @click="cancel">{{$i.warehouse.exit}}</el-button>
         </div>
 
 
@@ -448,6 +448,14 @@
                 checkAll:true,
                 isIndeterminate: false,
                 totalCheckList:['innerCartonLength','innerCartonWidth','innerCartonHeight','innerCartonNetWeight','innerCartonGrossWeight','innerCartonVolume','outerCartonLength','outerCartonWidth','outerCartonHeight','outerCartonNetWeight','outerCartonGrossWeight','outerCartonVolume'],
+
+                /**
+                 * 字典数据
+                 * */
+                skuUnitOption:[],       //计量单位
+                lengthOption:[],
+                volumeOption:[],
+                weightOption:[],
             }
         },
         methods:{
@@ -465,18 +473,38 @@
                 this.tableConfig.skuInventoryStatusDictCode='';
                 this.$ajax.post(this.$apis.get_qcOrderProductData,this.tableConfig)
                     .then(res=>{
+                        console.log(res.datas,'????')
                         this.productTable=res.datas;
                         let diffData=[];
                         _.map(this.productTable,v=>{
                             diffData.push(v.skuId+v.orderNo);
+                            v.deliveryDate=this.$dateFormat(v.deliveryDate,'yyyy-mm-dd');
+                            v.skuUnitDictCode=_.findWhere(this.skuUnitOption,{code:v.skuUnitDictCode}).name;
+                            v.volumeUnitDictCode=_.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name;
+                            v.weightUnitDictCode=_.findWhere(this.weightOption,{code:v.weightUnitDictCode}).name;
+                            v.lengthUnitDictCode=_.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name;
                         });
                         this.summaryData.skuQuantity=_.uniq(diffData).length;
                         this.tableConfig.skuInventoryStatusDictCode='APPLY_FOR_REWORK';
                         this.$ajax.post(this.$apis.get_qcOrderProductData,this.tableConfig).then(res=>{
                             this.productTable1=res.datas;
+                            _.map(this.productTable1,v=>{
+                                v.deliveryDate=this.$dateFormat(v.deliveryDate,'yyyy-mm-dd');
+                                v.skuUnitDictCode=_.findWhere(this.skuUnitOption,{code:v.skuUnitDictCode}).name;
+                                v.volumeUnitDictCode=_.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name;
+                                v.weightUnitDictCode=_.findWhere(this.weightOption,{code:v.weightUnitDictCode}).name;
+                                v.lengthUnitDictCode=_.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name;
+                            });
                             this.tableConfig.skuInventoryStatusDictCode='APPLY_FOR_RETURN';
                             this.$ajax.post(this.$apis.get_qcOrderProductData,this.tableConfig).then(res=>{
                                 this.productTable2=res.datas;
+                                _.map(this.productTable2,v=>{
+                                    v.deliveryDate=this.$dateFormat(v.deliveryDate,'yyyy-mm-dd');
+                                    v.skuUnitDictCode=_.findWhere(this.skuUnitOption,{code:v.skuUnitDictCode}).name;
+                                    v.volumeUnitDictCode=_.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name;
+                                    v.weightUnitDictCode=_.findWhere(this.weightOption,{code:v.weightUnitDictCode}).name;
+                                    v.lengthUnitDictCode=_.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name;
+                                });
                                 this.loadingProductTable=false;
                             }).catch(err=>{
                                 this.loadingProductTable=false;
@@ -499,7 +527,6 @@
 
                 })
             },
-
             checkboxInit(row,index){
                 if(row.skuQcResultDictCode === 'WAIT_FOR_QC'){
                     return 0;
@@ -661,12 +688,20 @@
         },
         created(){
             this.loadingTable=true;
-            this.$ajax.post(this.$apis.get_partUnit,['QC_MD','QC_TYPE'],{cache:true}).then(res=>{
+            this.$ajax.post(this.$apis.get_partUnit,['QC_MD','QC_TYPE','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT'],{cache:true}).then(res=>{
                 res.forEach(v=>{
                     if(v.code==='QC_MD'){
                         this.qcMethodOption=v.codes;
                     }else if(v.code==='QC_TYPE'){
                         this.qcTypeOption=v.codes;
+                    }else if(v.code==='SKU_UNIT'){
+                        this.skuUnitOption=v.codes;
+                    }else if(v.code==='LH_UNIT'){
+                        this.lengthOption=v.codes;
+                    }else if(v.code==='VE_UNIT'){
+                        this.volumeOption=v.codes;
+                    }else if(v.code==='WT_UNIT'){
+                        this.weightOption=v.codes;
                     }
                 });
                 this.getData();

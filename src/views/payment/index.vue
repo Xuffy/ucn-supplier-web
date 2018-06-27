@@ -14,15 +14,15 @@
           </el-radio-group>
         </div>
         <div class="spe-div">
-            <div class="View">
-                <span class="text">{{$i.payment.view}} : </span>
-                <el-radio-group size="mini"  v-model="params.conditions.orderType"  @change="getList">
-                    <el-radio-button label="" border>{{$i.common.all}}</el-radio-button>
-                    <el-radio-button label="30">{{$i.common.logisticOrder}}</el-radio-button>
-                    <el-radio-button label="10">{{$i.common.purchaseOrder}}</el-radio-button>
-                    <el-radio-button label="20">{{$i.common.qcOrder}}</el-radio-button>
-                </el-radio-group>
-            </div>
+          <div class="View">
+            <span class="text">{{$i.payment.view}} : </span>
+            <el-radio-group size="mini"  v-model="params.conditions.orderType"  @change="getList">
+              <el-radio-button label="" border>{{$i.common.all}}</el-radio-button>
+              <el-radio-button label="30">{{$i.common.logisticOrder}}</el-radio-button>
+              <el-radio-button label="10">{{$i.common.purchaseOrder}}</el-radio-button>
+              <el-radio-button label="20">{{$i.common.qcOrder}}</el-radio-button>
+            </el-radio-group>
+          </div>
           <div class="search">
             <select-search
               v-model="searchId"
@@ -52,6 +52,7 @@
       <!-- ref="tab" @action="action"  @page-change="pageChange" -->
       <div class="main">
         <v-table :data="tableDataList"
+                 code="ledger"
                  :totalRow="totalRow"
                  :loading="tabLoad"
                  :buttons="setButtons"
@@ -155,12 +156,12 @@
         console.log(val);
       },
       inputEnter(val) {
-        if (!val.keyType) return this.$message({
+        if (!val.id) return this.$message({
           message: 'please choose a type',
           type: 'warning'
         });
-        if (val.keyType == '1') {
-          this.params.conditions.orderNoLike = val.key
+        if (val.id == '1') {
+          this.params.conditions.orderNoLike = val.value
         }
         this.getList()
       },
@@ -176,7 +177,6 @@
       getCurrency(){
         this.$ajax.get(this.$apis.get_currency_all).then(res=>{
           this.currency = res
-          console.log(this.currency)
         }).catch(err=>{
           console.log(err)
         });
@@ -188,8 +188,52 @@
             this.tabLoad = false;
             this.searchLoad = false;
             this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
-              item.waitPayment.value = (Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8);
-              item.waitReceipt.value = (Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8);
+              const statusType = {
+                10: 'Purchase order',
+                20: 'QC order',
+                30: 'Logisttic order',
+              }
+              const statusGroupA = {
+                1: '待供应商确认',
+                2: '待客户确认',
+                3: '进行中',
+                4: '已完成',
+                5: '已取消',
+              }
+              const statusGroupB = {
+                0: 'LS_DRAFT',
+                1: 'LS_PLAN',
+                2: 'LS_PLAN',
+                3: 'LS_PLAN',
+                4: 'LS_PLAN',
+                5: 'LS_PLAN',
+              }
+
+              if(Number(item.orderType.value) === 10){
+                if (Number(item.orderStatus.value) >= 1 && Number(item.orderStatus.value)<= 5) {
+                  item.orderStatus._value = statusGroupA[Number(item.orderStatus.value)]
+                }
+              }
+              if(Number(item.orderType.value) === 30){
+                if (Number(item.orderStatus.value) >= 1 && Number(item.orderStatus.value)<= 5) {
+                  item.orderStatus._value = statusGroupB[Number(item.orderStatus.value)]
+                }
+              }
+              if(Number(item.orderType.value) === 20){
+                switch(item.orderStatus.value) {
+                  case 'WAITING_QC':
+                    item.orderStatus._value = '未验货';
+                    break;
+                  case 'COMPLETED_QC':
+                    item.orderStatus._value = '已验货';
+                    break;
+                }
+              }
+              if (Number(item.orderType.value) >= 10 && Number(item.orderType.value)<= 30) {
+                item.orderType._value = statusType[Number(item.orderType.value)]
+              }
+              item.waitPayment.value = Number((Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8));
+              item.waitReceipt.value = Number((Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8));
               let currency;
               currency = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
               item.currencyCode._value = currency.name || '';
@@ -198,26 +242,13 @@
                 val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                 return val
               })
-
-              switch (item.orderType.value)
-              {
-                case 10:
-                  item.orderType._value = 'Purchase order'
-                  break;
-                case 20:
-                  item.orderType._value = 'QC order'
-                  break;
-                case 30:
-                  item.orderType._value = 'Logisttic order'
-                  break;
-
-              }
               return item;
             });
 
+
             this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
-              item.waitPayment.value = (Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8);
-              item.waitReceipt.value = (Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8);
+              item.waitPayment.value = Number((Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8));
+              item.waitReceipt.value = Number((Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8));
               let currencyCode;
               currencyCode = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
               item.currencyCode._value = currencyCode.name || '';
@@ -247,21 +278,21 @@
           this.$windowOpen({
             url: '/order/detail',
             params: {
-              orderNo:item.orderNo.value
+              code:item.orderNo.value
             }
           });
         }else if(item.orderType.value == 20){
           this.$windowOpen({
             url: '/warehouse/qcDetail',
             params: {
-              orderNo:item.orderNo.value
+              code:item.orderNo.value
             }
           });
         }else{
           this.$windowOpen({
             url: '/logisticPlanDetail',
             params: {
-              logisticsNo:item.orderNo.value
+              code:item.orderNo.value
             }
           });
         }
@@ -271,6 +302,7 @@
         // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
         this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}`)
           .then(res => {
+            // console.log(res)
             this.$message({
               type: 'success',
               message: '催促成功!'
@@ -281,7 +313,7 @@
       },
       setButtons(item){
         // disabled:true/false   10 付款 20 退款
-        if(_.findWhere(item, {'key': 'type'}).value === 10 && _.findWhere(item, {'key': 'planPayAmount'}).value !== _.findWhere(item, {'key': 'actualPayAmount'}).value) return [{label: 'Urging Payment', type: '1'},{label: 'Detail', type: '2'}];
+        if(_.findWhere(item, {'key': 'type'}).value === 10 && _.findWhere(item, {'key': 'planReceiveAmount'}).value !== _.findWhere(item, {'key': 'actualReceiveAmount'}).value) return [{label: 'Urging Payment', type: '1'},{label: 'Detail', type: '2'}];
         return [{label: 'Detail', type: '2'}];
       },
       handleSizeChange(val) {

@@ -218,7 +218,7 @@
                 <el-row>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="orderNo" :label="$i.warehouse.orderNo">
-                            <el-select clearable size="mini" class="speInput" v-model="orderProduct.orderNo" :placeholder="$i.warehouse.pleaseChoose">
+                            <el-select clearable size="mini" class="speInput" v-model="orderProduct.orderNo" filterable :placeholder="$i.warehouse.pleaseChoose">
                                 <el-option
                                         v-for="item in orderNoOption"
                                         :key="item.id"
@@ -417,9 +417,9 @@
 
             //提交表单
             submit(){
-                // if(this.$validateForm(this.inboundData, this.$db.warehouse.inbound)){
-                //     return;
-                // }
+                if(this.$validateForm(this.inboundData, this.$db.warehouse.inbound)){
+                    return;
+                }
                 if(this.productData.length===0){
                     return this.$message({
                         message: this.$i.warehouse.pleaseAddProduct,
@@ -637,7 +637,7 @@
                     }).then(res=>{
                         _.map(res,v=>{
                             _.map(v.skuList,e=>{
-                                e.skuQty=res.totalQty;
+                                // e.skuQty=res.totalQty;
                                 this.productData.push(e);
                             })
                         });

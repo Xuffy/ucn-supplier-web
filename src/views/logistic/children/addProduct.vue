@@ -1,9 +1,9 @@
 <template>
   <el-row>
     <div class="select-search-wrap">
-      <select-search :options="options"/>
+      <select-search :options="options" @inputEnter="searchFn"/>
     </div>
-    <el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" ref="multipleTable">
+    <el-table height="500" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" ref="multipleTable">
       <el-table-column type="selection" width="30"></el-table-column>
       <el-table-column :label="$i.logistic.orderNo" width="140" align="center">
         <template slot-scope="scope">
@@ -187,28 +187,30 @@ export default {
       selectArrData: [],
       options: [
         {
-          id: '1',
-          label: 'logistic Plan No'
+          id: 'skuCode',
+          label: this.$i.logistic.skuCode
         },
         {
-          id: '2',
-          label: 'SKU Code'
-        },
-        {
-          id: '3',
-          label: 'Order No.'
+          id: 'orderNo',
+          label: this.$i.logistic.orderNo
         }
       ],
     }
   },
   methods: {
+    searchFn(obj){
+      const {pn, ps} = this.pageParams
+      this.pageParams = {pn, ps, [obj.id]: obj.value}
+      this.getOrderList()
+    },
     sizeChange(e) {
       this.pageParams.ps = e
       this.getOrderList();
     },
     getSupplierIds(){
-      this.$ajax.get(this.$apis.logistics_plan_getSupplierIds,{logisticsNo:this.basicInfoArr[0].value}).then(res => {
-        this.$set(this.pageParams,'skuSupplierIds',res.content);
+      let url = this.$route.name = 'loadingListDetail' ? 'logistics_order_getSupplierIds' : 'logistics_plan_getSupplierIds';
+      this.$ajax.get(this.$apis[url],{logisticsNo:this.basicInfoArr[0].value}).then(res => {
+        this.$set(this.pageParams,'skuSupplierIds',res);
         this.getOrderList();
       })
     },   

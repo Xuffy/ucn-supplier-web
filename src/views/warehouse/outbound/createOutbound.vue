@@ -3,13 +3,18 @@
         <div class="title">
             {{$i.warehouse.basicInfo}}
         </div>
-        <el-form :modal="outboundData" ref="basicInfo" class="speForm" label-width="200px"
-                 :label-position="labelPosition">
+        <el-form  class="speForm" label-width="200px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.warehouse.outbound"
-                        v-if="v.belong==='basicInfo' && v.showType!=='timeZone'" :key="v.key" :xs="24"
-                        :sm="v.fullLine?24:8" :md="v.fullLine?24:8" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
-                    <el-form-item :prop="v.key" :label="v.label">
+                <el-col class="speCol"
+                        v-for="v in $db.warehouse.outbound"
+                        v-if="v.belong==='basicInfo' && v.showType!=='timeZone'"
+                        :key="v.key"
+                        :xs="24"
+                        :sm="v.fullLine?24:8"
+                        :md="v.fullLine?24:8"
+                        :lg="v.fullLine?24:8"
+                        :xl="v.fullLine?24:8">
+                    <el-form-item :label="v.label" :required="v._rules?v._rules.required:false">
                         <div v-if="v.showType==='input'">
                             <el-input
                                     class="speInput"
@@ -109,7 +114,7 @@
                     v-for="v in $db.warehouse.outboundProduct"
                     :key="v.key"
                     :prop="v.key"
-                    :label="$i.warehouse[v.key]"
+                    :label="((v._rules && v._rules.required)?'*':'')+$i.warehouse[v.key]"
                     align="center"
                     width="180">
                 <template slot-scope="scope">
@@ -215,6 +220,7 @@
 <script>
 
     import {VTimeZone, VUpload, VTable} from '@/components/index'
+    import Math from 'mathjs'
 
     export default {
         name: "createInbound",
@@ -365,6 +371,14 @@
 
             //提交表单
             submit() {
+                if(this.$validateForm(this.outboundData, this.$db.warehouse.outbound)){
+                    return;
+                }
+                _.map(this.productData,v=>{
+                    if(this.$validateForm(v, this.$db.warehouse.outboundProduct)){
+                        return;
+                    }
+                });
                 this.outboundData.outboundSkuCreateParams = [];
                 this.productData.forEach(v => {
                     this.outboundData.outboundSkuCreateParams.push({
@@ -438,6 +452,11 @@
                         ids: id
                     }).then(res => {
                         res.datas.forEach(v => {
+                            v.outboundOutCartonTotalQty=0;
+                            v.outboundSkuTotalGrossWeight=0;
+                            v.outboundSkuTotalNetWeight=0;
+                            v.outboundSkuTotalQty=0;
+                            v.outboundSkuTotalVolume=0;
                             this.productData.push(v);
                         });
                         console.log(this.productData,'this.productData')
@@ -500,13 +519,13 @@
                     console.log(this.productData[index], 'productData')
                     console.log(this.productData[index].outerCartonSkuQty, '外箱产品数')
                     //出库产品总数量
-                    this.productData[index].outboundSkuTotalQty = value * this.productData[index].outerCartonSkuQty;
+                    this.productData[index].outboundSkuTotalQty = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonSkuQty)).done();
                     //出库产品总体积
-                    this.productData[index].outboundSkuTotalVolume = value * this.productData[index].outerCartonVolume;
+                    this.productData[index].outboundSkuTotalVolume = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonVolume)).done();
                     //出库产品总净重
-                    this.productData[index].outboundSkuTotalNetWeight = value * this.productData[index].outerCartonNetWeight;
+                    this.productData[index].outboundSkuTotalNetWeight = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonNetWeight)).done();
                     //出库产品总毛重
-                    this.productData[index].outboundSkuTotalGrossWeight = value * this.productData[index].outerCartonGrossWeight;
+                    this.productData[index].outboundSkuTotalGrossWeight =Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonGrossWeight)).done();
                 }
             },
 

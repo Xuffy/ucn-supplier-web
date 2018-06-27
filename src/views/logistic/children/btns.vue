@@ -1,6 +1,6 @@
 <template>
   <el-row class="btns" :style="{ width: '100%', paddingLeft: hideMune ? '65px' : '195px' }">
-    <div v-if="logisticsStatus.loadingList&&logisticsStatus.loadingList=='loadingList'&&logisticsStatus.status!=5">
+    <div v-if="pageType=='loadingListDetail'&&logisticsStatus.status!=5">
       <el-button size="mini" type="primary" v-if="!edit&&logisticsStatus.status!=2"
         @click.stop="$emit('switchEdit', 'modify')">{{ $i.logistic.modify }}</el-button>
         
@@ -14,7 +14,7 @@
       <el-button size="mini" type="primary" v-if="!edit&&!DeliveredEdit" @click.stop="$emit('switchEdit','download')">{{ $i.logistic.download }}</el-button>
       <el-button size="mini" type="primary" v-if="!edit&&!DeliveredEdit" @click.stop="$emit('switchEdit','cancelLoadingList')">{{ $i.logistic.cancel }}</el-button>
     </div>
-    <div v-if="!logisticsStatus.loadingList&&logisticsStatus.loadingList!='loadingList'&&logisticsStatus.status!=5">
+    <div v-if="pageType!='loadingListDetail'&&logisticsStatus.status!=5">
       <div v-if="logisticsStatus.supplierRecived==0">
         <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','receive')">{{ $i.logistic.receive }}</el-button>
         <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','refuse')">{{ $i.logistic.refuse }}</el-button>
@@ -24,7 +24,7 @@
           @click.stop="$emit('switchEdit', 'modify')">{{ $i.logistic.modify }}</el-button>
         <el-button size="mini" type="danger" v-if="edit" @click.stop="$emit('switchEdit', 'cancelModify')">{{ $i.logistic.cancelModify }}</el-button>
         <el-button size="mini" type="danger" v-if="edit" @click.stop="$emit('sendData', 'send')">{{ $i.logistic.confirmModify }}</el-button>
-        <el-button size="mini" type="primary" v-if="!edit" :disabled="logisticsStatus.recived==0 || (logisticsStatus.status!=1&&logisticsStatus.status!=2&&logisticsStatus.status!=3)"
+        <el-button size="mini" type="primary" v-if="!edit" :disabled="logisticsStatus.recived==0 || (logisticsStatus.status!=1&&logisticsStatus.status!=3)"
           @click.stop="$emit('switchEdit','confirm')">{{ $i.logistic.confirm }}</el-button>
         <el-button size="mini" type="primary" v-if="!edit && logisticsStatus.status!=4" :disabled="logisticsStatus.recived==0" @click.stop="$emit('switchEdit','generateList')">{{ $i.logistic.generateList }}</el-button>
         <el-button size="mini" type="primary" v-if="!edit" @click.stop="$emit('switchEdit','download')">{{ $i.logistic.download }}</el-button>
@@ -53,6 +53,9 @@
       }
     },
     computed: {
+      pageType(){
+        return this.$route.name;
+      },
       hideMune() {
         return this.$store.state.layout.hideMenu
       }
