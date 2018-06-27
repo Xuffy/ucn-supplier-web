@@ -230,13 +230,12 @@ export default {
       const getCountries = this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache: true});
       return this.$ajax.all([postCodes, getCurrencies, getCountries]).then(res => {
         let data = res[0];
+
+        res[1].forEach(item => item.name = item.code);
         data.push({
           code: 'CY_UNIT',
           name: 'CY_UNIT(币种)',
-          codes: (() => {
-            res[1].forEach(item => item.name = item.code);
-            return res[1];
-          })()
+          codes: res[1]
         });
         data.push({
           code: 'COUNTRY',
@@ -301,7 +300,7 @@ export default {
       let lines = items.filter(i => !i._remark);
       for (let line of lines) {
         let fieldDisplay = line.fieldDisplay.value;
-        if (typeof fieldDisplay === 'object') {
+        if (fieldDisplay && typeof fieldDisplay === 'object') {
           Object.keys(fieldDisplay).forEach(k => {
             if (fieldDisplay[k] === '1' && line[k]) {
               line[k]._style = 'background-color: ' + c;
@@ -312,7 +311,7 @@ export default {
         let key = line.hasOwnProperty('skuId') ? 'skuId' : 'id';
         let remark = remarks.find(i => i[key].value.toString() === line[key].value.toString());
         let fieldRemarkDisplay = line.fieldRemarkDisplay.value;
-        if (typeof fieldRemarkDisplay === 'object') {
+        if (fieldRemarkDisplay && typeof fieldRemarkDisplay === 'object') {
           Object.keys(fieldRemarkDisplay).forEach(k => {
             if (fieldRemarkDisplay[k] === '1' && remark[k]) {
               remark[k]._style = 'background-color: ' + c;
@@ -331,26 +330,27 @@ export default {
         this.$message(this.$i.common.addressError);
         return;
       }
-      promise.then(res => {
-        // Basic Info
-        this.tabData = this.newTabData = this.$getDB(
-          this.$db.inquiry.basicInfo,
-          this.$refs.HM.getFilterData([res]),
-          item => this.$filterDic(item)
-        );
-        // SKU_UNIT
-        // Product Info
-        this.productTabData = this.newProductTabData = this.$getDB(
-          this.$db.inquiry.productInfo,
-          this.$refs.HM.getFilterData(res.details, 'skuId'),
-          item => this.$filterDic(item)
-        );
-        this.markFieldHighlight(this.newTabData);
-        this.markFieldHighlight(this.newProductTabData);
-        this.tableLoad = false;
-      }).catch(() => {
+      promise.then(this.showData, () => {
         this.tableLoad = false;
       });
+    },
+    showData(res) {
+      this.tableLoad = false;
+      // Basic Info
+      this.tabData = this.newTabData = this.$getDB(
+        this.$db.inquiry.basicInfo,
+        this.$refs.HM.getFilterData([res]),
+        item => this.$filterDic(item)
+      );
+      // SKU_UNIT
+      // Product Info
+      this.productTabData = this.newProductTabData = this.$getDB(
+        this.$db.inquiry.productInfo,
+        this.$refs.HM.getFilterData(res.details, 'skuId'),
+        item => this.$filterDic(item)
+      );
+      this.markFieldHighlight(this.newTabData);
+      this.markFieldHighlight(this.newProductTabData);
     },
     queryAndAddProduction(ids) {
       this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SKUS, ids).then(res => {
@@ -517,10 +517,12 @@ export default {
       saveData.attachment = null;
       saveData.skuQty = saveData.details.length;
       saveData.deleteDetailIds = this.deleteDetailIds;
+
+      this.tableLoad = true;
       this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SAVE, saveData).then(res => {
         this.newTabData[0].status.originValue = res.status;
         this.statusModify = false;
-        this.getInquiryDetail();
+        this.showData(res);
       });
     },
     getRemarkObject(remark) {
