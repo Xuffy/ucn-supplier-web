@@ -1326,6 +1326,16 @@
                             this.productForm[k]=this.productForm[k]?'1':'0';
                         }
                     });
+
+                    this.$ajax.post(this.$apis.get_sellerCustomerList,{
+                        id:this.productForm.id,
+
+                    }).then(res=>{
+                        console.log(res,"???????")
+                    }).catch(err=>{
+
+                    })
+
                     console.log(this.productForm,'this.productForm')
                     this.loadingData=false;
                 }).catch(err=>{
