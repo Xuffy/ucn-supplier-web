@@ -10,8 +10,7 @@ export const basicInfoObj = {
   logisticsStatus: {
     type: 'selector',
     value: 2,
-    defaultVal: 2,
-    disabled:true 
+    defaultVal: 2
   },
   customerName: {
     type: 'input',
@@ -262,11 +261,6 @@ export const payMentInfo = {
 
 
 export const dbProductInfo = {
-  "toShipCartonQty": {
-    _rules:{
-      type:'Number'
-    }
-  },
   "containerNo":{
     _rules:{
       required:true
@@ -306,9 +300,4 @@ export const dbProductInfo = {
   //     required:true
   //   }
   // },
-  "toShipQty": {
-    _rules:{
-      type:'Number'
-    }
-  }
 }
