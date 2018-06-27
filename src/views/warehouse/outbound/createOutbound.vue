@@ -452,6 +452,11 @@
                         ids: id
                     }).then(res => {
                         res.datas.forEach(v => {
+                            v.outboundOutCartonTotalQty=0;
+                            v.outboundSkuTotalGrossWeight=0;
+                            v.outboundSkuTotalNetWeight=0;
+                            v.outboundSkuTotalQty=0;
+                            v.outboundSkuTotalVolume=0;
                             this.productData.push(v);
                         });
                         console.log(this.productData,'this.productData')
