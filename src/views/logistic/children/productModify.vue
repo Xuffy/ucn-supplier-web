@@ -14,12 +14,17 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.toShipCartonQty" width="150" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.toShipCartonQty.value" @change="currentChange(scope.row.toShipCartonQty.key,scope.row.toShipCartonQty.value)" v-if="scope.row.toShipCartonQty.edit"></el-input>
-          <span v-else>{{ scope.row.toShipCartonQty.value }}</span>
+          <!-- <el-input placeholder="请输入内容" v-model="scope.row.toShipCartonQty.value" @change="currentChange(scope.row.toShipCartonQty.key,scope.row.toShipCartonQty.value)" v-if="scope.row.toShipCartonQty.edit"></el-input> -->
+          <span>{{ scope.row.toShipCartonQty.value }}</span>
         </template>
       </el-table-column>
 
-
+      <el-table-column :label="$i.logistic.toShipQty" width="150" align="center" sortable>
+        <template slot-scope="scope">
+          <!-- <el-input placeholder="请输入内容" v-model="scope.row.toShipQty.value" @change="currentChange(scope.row.toShipQty.key,scope.row.toShipQty.value)" v-if="scope.row.toShipQty.edit"></el-input> -->
+          <span>{{ scope.row.toShipQty.value }}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$i.logistic.containerNo" width="150" align="center" sortable>
         <template slot-scope="scope">
           <el-input placeholder="请输入内容" v-model="scope.row.containerNo.value" @change="currentChange(scope.row.containerNo.key,scope.row.containerNo.value)" v-if="scope.row.toShipCartonQty.edit"></el-input>
@@ -66,14 +71,6 @@
           <span v-else>{{ scope.row.shipmentStatus.value }}</span>
         </template>
       </el-table-column> -->
-
-
-      <el-table-column :label="$i.logistic.toShipQty" width="150" align="center" sortable>
-        <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.toShipQty.value" @change="currentChange(scope.row.toShipQty.key,scope.row.toShipQty.value)" v-if="scope.row.toShipQty.edit"></el-input>
-          <span v-else>{{ scope.row.toShipQty.value }}</span>
-        </template>
-      </el-table-column>
       <el-table-column :label="$i.logistic.skuCode" width="140" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.skuCode.value }}</span>
