@@ -835,30 +835,35 @@
                     :controls="false"
                     slot="skuFobPrice"
                     slot-scope="{data}"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuExwPrice"
                     slot-scope="{data}"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuCifPrice"
                     slot-scope="{data}"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuDduPrice"
                     slot-scope="{data}"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuQty"
                     slot-scope="{data}"
+                    @blur="handlePriceBlur(data)"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
@@ -1094,7 +1099,6 @@
             <div slot="skuAdditionalFour" slot-scope="{data}">
                 <v-upload ref="uploadSkuAdditionalFour" :limit="20"></v-upload>
             </div>
-
         </v-history-modify>
 
         <v-message-board module="order" code="detail" :id="$route.query.orderId"></v-message-board>
@@ -1212,6 +1216,9 @@
                         return time.getTime() > Date.now();
                     },
                 },
+                chooseProduct:{},
+                savedIncoterm:'',           //用来存储incoterm
+
 
                 /**
                  * payment 配置
@@ -1551,6 +1558,7 @@
                     orderNo:this.$route.query.orderNo
                 }).then(res=>{
                     this.orderForm=res;
+                    this.savedIncoterm=Object.assign({},res).incoterm;
                     _.map(this.supplierOption,v=>{
                         if(v.code===res.supplierCode){
                             this.orderForm.supplierName=v.id;
@@ -1742,10 +1750,14 @@
                     let arr=[];
                     _.map(this.productTableData,v=>{
                         if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
+                            if(!v._remark){
+                                this.chooseProduct=v;
+                                this.handlePriceBlur({},v);
+                            }
                             arr.push(v);
                         }
                     });
-                    this.$refs.HM.init(arr,[]);
+                    this.chooseProduct=this.$refs.HM.init(arr, []);
                 }else if(type==='detail'){
                     this.$windowOpen({
                         url:'/product/detail',
@@ -1926,6 +1938,45 @@
                 });
                 return arr;
             },
+
+            /**
+             * history部分事件
+             * */
+            handlePriceBlur(e,item){
+                if(!this.orderForm.incoterm){return;}
+                let obj;
+                obj=item?item:this.chooseProduct[0];
+                if(this.savedIncoterm==='1'){
+                    //fob
+                    if(obj.skuFobPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuFobPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
+                }else if(this.savedIncoterm==='2'){
+                    //exw
+                    if(obj.skuExwPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuExwPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
+                }else if(this.savedIncoterm==='3'){
+                    //cif
+                    if(obj.skuCifPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuCifPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
+                }else if(this.savedIncoterm==='4'){
+                    //ddu
+                    if(obj.skuDduPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuDduPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
+                }
+            },
+
 
             /**
              * payment事件

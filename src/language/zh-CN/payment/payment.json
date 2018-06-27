@@ -1,4 +1,8 @@
 {
-    "orderOverview": "Order Overview"
+  "orderOverview": "订单总览",
+  "orderCreateDate": "Order Create Date",
+  "view": "View",
+  "status": "Status",
+  "overdue": "Overdue",
+  "future": "Future"
 }
-  

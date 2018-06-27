@@ -7,8 +7,13 @@
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
         <div class="input-item">
           <span>{{ $i.logistic.remark }}:</span>
-          <el-input class="el-input" type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容" v-model="remark" v-if="edit"></el-input>
-          <p v-else>{{ remark }}</p>
+          <el-input @change="hightLightModifyFun({remark:remark},'remark')" 
+          :class="[{definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('remark')},'el-input']" 
+          type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容" v-model="remark" v-if="edit"></el-input>
+          <p v-else :style="fieldDisplay&&fieldDisplay.hasOwnProperty('remark') ? {
+            'color': '#f56c6c',
+            'text-shadow': '2px 1px 2px'
+          } : ''">{{ remark }}</p>
         </div>
       <!-- </el-col> -->
       <div class="input-item">
@@ -364,6 +369,9 @@ export default {
           type: 'success',
           message: '催款成功!'
         })
+        this.$ajax.post(`${this.$apis.get_payment_list}${this.logisticsNo}/30`).then(res => {
+          this.createdPaymentData(res)
+        })
       })
     },
     createdPaymentData (res = this.oldPaymentObject) {
@@ -444,8 +452,8 @@ export default {
     getProductHistory (productId, status, i) {
       // 修改处
       const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
-
-      productId ? this.$ajax.get(`${this.$apis.get_product_history}?productId=${productId}`).then(res => {
+      let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
+      productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
         res.history.length ? (this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify, res.history)])
         : (this.productModifyList = [ currentProduct ])
       })
@@ -641,19 +649,12 @@ export default {
     },
     generateList(){
       this.$ajax.post(this.$apis.logistics_plan_postLoadingList,{id:this.planId}).then(res => {
-        this.getDetails();
+        window.open(`${window.location.origin}#/logistic/loadingListDetail?id=${ this.planId }`);
       })
     },
     conformPlan(){
       this.$ajax.post(this.$apis.logistics_plan_confirm,{id:this.planId}).then(res => {
-         this.$message({
-          message: '发送成功，正在跳转...',
-          type: 'success',
-          duration:3000,
-          onClose:()=>{
-            this.$router.push('/logistic');
-          }
-        })
+        this.getDetails();
       })
     },
     toExit () {
@@ -803,6 +804,10 @@ export default {
   }
   .product-header {
     margin-bottom: 20px;
+  }
+  /deep/.definedStyleClass textarea{
+    background:#f56c6c;
+    color:#fff;
   }
 }
 </style>

@@ -1,10 +1,11 @@
 {
-  "confirm": "Confirm",
-  "cancel": "Cancel",
-  "addNewLinks": "Add new links",
-  "add": "Add",
-  "modify": "Modify",
-  "upload": "Upload",
-  "delete": "Delete",
-  "submit": "submit"
+  "confirm": "确认",
+  "cancel": "取消",
+  "addNewLinks": "添加新链接",
+  "add": "添加",
+  "modify": "编辑",
+  "upload": "上传",
+  "delete": "删除",
+  "submit": "submit",
+  "save": "Save"
 }

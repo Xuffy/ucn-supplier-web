@@ -1,12 +1,12 @@
 <template>
   <el-row>
     <!--<v-table-filter :hideFilterValue="true" class="filter"/>-->
-    <el-table :data="tableData" style="width: 100%" class="table" max-height="400">
-      <el-table-column :label="$i.logistic.negotiate" width="120" align="center">
+    <el-table ref="aa" :data="tableData" style="width: 100%" class="table" max-height="400">
+      <!-- <el-table-column :label="$i.logistic.negotiate" width="120" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.entryDt ? $dateFormat(scope.row.entryDt.value, 'yyyy-mm-dd') : null }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column :label="$i.logistic.orderNo" width="100" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.orderNo.value }}</span>

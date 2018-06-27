@@ -333,7 +333,6 @@
             handleClick(){
                 //切换tab页
             },
-
             //获取产品详情
             getGoodsData(){
                 this.loadingTable=true;
@@ -347,7 +346,8 @@
                     });
                     if(this.productForm.status===1){
                         this.btnInfo=this.$i.product.setDown;
-                    }else if(this.productForm.status===0){
+                    }
+                    else if(this.productForm.status===0){
                         this.btnInfo=this.$i.product.setUp;
                     }
                     this.tableData = this.$getDB(this.$db.product.detailPriceTable, this.productForm.price,e=>{
@@ -369,6 +369,8 @@
                         this.loadingTable=false;
                         this.loadingHistoryTable=false;
                     });
+
+                    console.log(this.productForm,'this.productForm')
                 }).catch(err=>{
                     this.loadingTable=false;
                 });

@@ -208,8 +208,9 @@ export default {
       this.getOrderList();
     },
     getSupplierIds(){
-      this.$ajax.get(this.$apis.logistics_plan_getSupplierIds,{logisticsNo:this.basicInfoArr[0].value}).then(res => {
-        this.$set(this.pageParams,'skuSupplierIds',res.content);
+      let url = this.$route.name = 'loadingListDetail' ? 'logistics_order_getSupplierIds' : 'logistics_plan_getSupplierIds';
+      this.$ajax.get(this.$apis[url],{logisticsNo:this.basicInfoArr[0].value}).then(res => {
+        this.$set(this.pageParams,'skuSupplierIds',res);
         this.getOrderList();
       })
     },   

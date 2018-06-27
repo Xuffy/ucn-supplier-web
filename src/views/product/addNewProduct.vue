@@ -1,7 +1,7 @@
 <template>
     <div class="add-product" v-loading="loadingData">
         <div class="title">{{$i.product.basicInformation}}</div>
-<el-form :model="productForm" :rules="rules" ref="productForm1" class="speForm" label-width="230px" :label-position="labelPosition">
+        <el-form :model="productForm" :rules="rules" ref="productForm1" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <!--设置高度51px以免inputNumber错位-->
                 <el-col style="height: 51px;" class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -733,20 +733,13 @@
                 <el-button :disabled="loadingTable" @click="searchCustomer" type="primary">{{$i.warehouse.search}}</el-button>
                 <el-button :disabled="loadingTable" @click="clearCustomerSearch">{{$i.warehouse.clear}}</el-button>
             </div>
-
             <v-table
                     :height="500"
                     :loading="loadingTable"
                     :data="tableDataList"
                     @change-checked="changeChecked"
                     @action="btnClick">
-                <!--<template slot="header">-->
-                    <!--<div class="btns">-->
-                        <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
-                    <!--</div>-->
-                <!--</template>-->
             </v-table>
-
             <div slot="footer" class="dialog-footer">
                 <el-button :disabled="loadingTable" :loading="disableClickPost" type="primary" @click="postData">{{$i.product.sure}}</el-button>
                 <el-button :disabled="loadingTable" @click="addCustomerDialogVisible = false">{{$i.product.cancel}}</el-button>
@@ -1166,12 +1159,12 @@
             //获取类别数据
             getCategoryId(){
                 this.$ajax.get(this.$apis.CATEGORY_SYSTEM,{}).then(res=>{
-                    this.categoryList[0].children=res;
+                    this.categoryList[1].children=res;
                 }).catch(err=>{
 
                 });
                 this.$ajax.get(this.$apis.CATEGORY_MINE,{}).then(res=>{
-                    this.categoryList[1].children=res;
+                    this.categoryList[0].children=res;
                 }).catch(err=>{
 
                 });
@@ -1189,8 +1182,10 @@
                                 this.$set(e,'_disabled',true);
                                 this.$set(e,'_checked',true);
                             }
-                        })
+                        });
                     });
+                    console.log(this.tableDataList,'this.tableDataList')
+                    console.log(this.tableData,'this.tableData')
                 }).catch(err=>{
                     this.loadingTable=false;
                 });
@@ -1202,116 +1197,115 @@
 
             //完成新增
             finish(){
-                this.$refs['productForm1'].validate((valid) => {
-                    if (valid) {
-                        let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
-                        this.$set(this.productForm,'lengthWidthHeight',size);
-                        this.disabledSubmit=true;
-                        if(this.$route.query.id && this.$route.query.isEdit){
-                            //代表是编辑
-                            let param=Object.assign({},this.productForm);
-                            _.mapObject(param,(e,k)=>{
-                                if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox'){
-                                    param[k]=parseInt(param[k]);
-                                }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
-                                    let item='';
-                                    if(param[k].length===0){
-                                        param[k]='';
-                                    }else{
-                                        param[k].forEach((v,index)=>{
-                                            if(index===param[k].length-1){
-                                                item+=v;
-                                            }else{
-                                                item+=(v+',');
-                                            }
-                                        });
-                                        param[k]=item;
-                                    }
-                                }else if(k==='adjustPackage'){
-                                    param[k]=param[k]==='1'?true:false;
-                                }
-                            });
-                            if(!param.readilyAvailable){
-                                param.availableQty=0;
-                            }
-                            if(!param.visibility){
-                                param.ids=[];
-                            }
-                            param.pictures=this.$refs.upload.getFiles();
-                            param.attachments=this.$refs.uploadAttachment.getFiles();
-                            this.$ajax.post(this.$apis.update_buyerProductDetail+param.id,param).then(res=>{
-                                this.$message({
-                                    message: this.$i.product.modifySuccess,
-                                    type: 'success'
-                                });
-                                this.disabledSubmit=false;
-                                this.$router.push({
-                                    path:'/product/detail',
-                                    query:{
-                                        id:res
-                                    },
-                                });
-                            }).catch(err=>{
-                                this.disabledSubmit=false;
-                            });
-                        }
-                        else{
-                            //代表是新增
-                            let param=Object.assign({},this.productForm);
-                            _.mapObject(param,(e,k)=>{
-                                if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox'){
-                                    param[k]=parseInt(param[k]);
-                                }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
-                                    let item='';
-                                    if(param[k].length===0){
-                                        param[k]='';
-                                    }else{
-                                        param[k].forEach((v,index)=>{
-                                            if(index===param[k].length-1){
-                                                item+=v;
-                                            }else{
-                                                item+=(v+',');
-                                            }
-                                        });
-                                        param[k]=item;
-                                    }
-                                }else if(k==='adjustPackage'){
-                                    param[k]=param[k]==='1'?true:false;
-                                }
-                            });
-                            if(!param.readilyAvailable){
-                                param.availableQty=0;
-                            }
-                            if(param.visibility){
-                                param.ids=[];
+                let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
+                this.$set(this.productForm,'lengthWidthHeight',size);
+                this.disabledSubmit=true;
+                if(this.$route.query.id && this.$route.query.isEdit){
+                    //代表是编辑
+                    let param=Object.assign({},this.productForm);
+                    _.mapObject(param,(e,k)=>{
+                        if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox'){
+                            param[k]=parseInt(param[k]);
+                        }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
+                            let item='';
+                            if(param[k].length===0){
+                                param[k]='';
                             }else{
-                                param.ids=[];
-                                this.tableData.forEach(v=>{
-                                    param.ids.push(v.id);
+                                param[k].forEach((v,index)=>{
+                                    if(index===param[k].length-1){
+                                        item+=v;
+                                    }else{
+                                        item+=(v+',');
+                                    }
                                 });
+                                param[k]=item;
                             }
-                            param.pictures=this.$refs.upload.getFiles();
-                            param.attachments=this.$refs.uploadAttachment.getFiles();
-                            this.$ajax.post(this.$apis.add_newSKU,param).then(res=>{
-                                this.$message({
-                                    message: this.$i.product.successfullyAdd,
-                                    type: 'success'
-                                });
-                                this.disabledSubmit=false;
-                                this.$router.push({
-                                    path:'/product/detail',
-                                    query:{
-                                        id:res
-                                    },
-                                });
-                            }).catch(err=>{
-                                this.disabledSubmit=false;
-                            });
+                        }else if(k==='adjustPackage'){
+                            param[k]=param[k]==='1'?true:false;
                         }
-                    } else {
-                        return valid;
+                    });
+                    if(!param.readilyAvailable){
+                        param.availableQty=0;
                     }
-                });
+                    if(param.visibility){
+                        param.ids=[];
+                    }else{
+                        param.ids=[];
+                        this.tableData.forEach(v=>{
+                            param.ids.push(v.id);
+                        });
+                    }
+                    param.pictures=this.$refs.upload.getFiles();
+                    param.attachments=this.$refs.uploadAttachment.getFiles();
+                    this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
+                        this.$message({
+                            message: this.$i.product.modifySuccess,
+                            type: 'success'
+                        });
+                        this.disabledSubmit=false;
+                        this.$router.push({
+                            path:'/product/detail',
+                            query:{
+                                id:res
+                            },
+                        });
+                    }).catch(err=>{
+                        this.disabledSubmit=false;
+                    });
+                }
+                else{
+                    //代表是新增
+                    let param=Object.assign({},this.productForm);
+                    _.mapObject(param,(e,k)=>{
+                        if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox'){
+                            param[k]=parseInt(param[k]);
+                        }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
+                            let item='';
+                            if(param[k].length===0){
+                                param[k]='';
+                            }else{
+                                param[k].forEach((v,index)=>{
+                                    if(index===param[k].length-1){
+                                        item+=v;
+                                    }else{
+                                        item+=(v+',');
+                                    }
+                                });
+                                param[k]=item;
+                            }
+                        }else if(k==='adjustPackage'){
+                            param[k]=param[k]==='1'?true:false;
+                        }
+                    });
+                    if(!param.readilyAvailable){
+                        param.availableQty=0;
+                    }
+                    if(param.visibility){
+                        param.ids=[];
+                    }else{
+                        param.ids=[];
+                        this.tableData.forEach(v=>{
+                            param.ids.push(v.id);
+                        });
+                    }
+                    param.pictures=this.$refs.upload.getFiles();
+                    param.attachments=this.$refs.uploadAttachment.getFiles();
+                    this.$ajax.post(this.$apis.add_newSKU,param).then(res=>{
+                        this.$message({
+                            message: this.$i.product.successfullyAdd,
+                            type: 'success'
+                        });
+                        this.disabledSubmit=false;
+                        this.$router.push({
+                            path:'/product/detail',
+                            query:{
+                                id:res
+                            },
+                        });
+                    }).catch(err=>{
+                        this.disabledSubmit=false;
+                    });
+                }
             },
 
             //获取产品详情
@@ -1332,7 +1326,25 @@
                             this.productForm[k]=this.productForm[k]?'1':'0';
                         }
                     });
-                    console.log(this.productForm,'this.productForm')
+
+                    this.$ajax.post(this.$apis.get_sellerCustomerList,{
+                        id:this.productForm.id,
+                        pn:1,
+                        ps:1000
+                    }).then(res=>{
+                        this.tableData=res.datas;
+                        // this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
+                        //     this.tableData.forEach(v=>{
+                        //         if(v.id===e.id.value){
+                        //             this.$set(e,'_disabled',true);
+                        //             this.$set(e,'_checked',true);
+                        //         }
+                        //     })
+                        // });
+
+                    }).catch(err=>{
+
+                    });
                     this.loadingData=false;
                 }).catch(err=>{
                     this.loadingData=false;
@@ -1384,7 +1396,7 @@
                     this.$ajax.post(this.$apis.get_sellerCustomerGroup,id).then(res=>{
                         res.forEach(v=>{
                             this.tableData.push(v);
-                        })
+                        });
                         this.addCustomerDialogVisible=false;
                         this.disableClickPost=false;
                     }).catch(err=>{

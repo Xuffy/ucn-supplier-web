@@ -1,5 +1,4 @@
 {
-  "updateDt": "time",
   "operater": "Operator",
   "pic": "pic",
   "skuSaleStatus": "SKU Sale Status",
@@ -40,14 +39,13 @@
   "exwCurrency": "EXW Currency",
   "cifPrice": "CIF Price",
   "referenceCifPriceUsd": "Reference CIF price（USD）",
-  "cifCurrency": "CIF Currency",
   "cifArea": "CIF Area",
   "dduOrice": "DDU Price",
   "referenceDdupriceUsd": "Reference DDU price（USD）",
   "dduCurrency": "DDU Currency",
   "dduArea": "DDU Area",
-  "rateOfValueAddedTax": "Rate of Value-Added Tax (%)",
-  "taxRefundRate": "Tax Refund Rate (%)",
+  "rateOfValueAddedTax": "Rate of Value-Added Tax",
+  "taxRefundRate": "Tax Refund Rate",
   "hsCode": "HS Code",
   "customsDeclarationNameCn": "Customs Declaration Name(CN)",
   "customsDeclarationNameEn": "Customs Declaration Name(EN)",
@@ -117,5 +115,7 @@
   "lengthBreadthAndHeightOfDisplayBox": "Length breadth and height of display box",
   "otherPackingInformationCn": "Other Packing Information CN",
   "otherPackingInformationEn": "Other Packing Information EN",
-  "adjustSkuAndPackageOrNot": "Adjust SKU and package or not"
+  "adjustSkuAndPackageOrNot": "Adjust SKU and package or not",
+  "updateDt": "time",
+  "cifCurrency": "CIF Currency"
 }

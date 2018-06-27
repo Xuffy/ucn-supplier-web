@@ -1,8 +1,11 @@
 {
-  "successfullyAdd":"Successfully Add !",
-  "pleaseChoose":"Please Choose",
-  "deleteSuccess":"Delete Success!",
-  "modifySuccess":"Modify Success!",
-  "notAddDifferentSupplierProduct":"Can't Add Different Supplier Product!",
-  "supplierSkuCodeIsRequired": "The supplier sku code is required!"
+  "successfullyAdd": "Successfully Add !",
+  "pleaseChoose": "Please Choose",
+  "deleteSuccess": "Delete Success!",
+  "modifySuccess": "Modify Success!",
+  "notAddDifferentSupplierProduct": "Can't Add Different Supplier Product!",
+  "pleaseInputCompareName": "Please Input Compare Name",
+  "cantAddCustomerProduct": "Can't add customer's product",
+  "customerProductCanNotAddToOrder": "Customer Product can't create order",
+  "compareRecordMustLessThan100": "Compare record must less than 100"
 }

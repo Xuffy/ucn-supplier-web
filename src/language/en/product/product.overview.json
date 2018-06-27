@@ -1,18 +1,17 @@
 {
-  "categoryId":"分类",
-  "nameCnLike":"产品中文名",
-  "readilyAvailable":"是否有现货",
-  "customerSkuCodeLike":"客户货号",
-  "exwPrice":"EXW价格",
-  "codeLike":"供应商货号",
-  "nameEnLike":"产品英文名",
-  "fobPrice":"FOB价格",
-  "materialEnLike":"产品英文材质",
-  "supplierNameLike":"供应商名称",
-  "outerCartonMethodEnLike":"外包装方式EN",
-  "methodPkgEnLike":"产品包装方式EN",
-  "deliveryDates":"交期",
-  "descEnLike":"产品英文描述",
-  "descCnLike":"产品中文描述"
-
+  "categoryId": "category ID",
+  "nameCnLike": "SKU name (CN)",
+  "readilyAvailable": "readily available",
+  "customerSkuCodeLike": "customer SKU code",
+  "exwPrice": "EXW price",
+  "codeLike": "supplier SKU code",
+  "nameEnLike": "SKU name(EN)",
+  "fobPrice": "FOB price",
+  "materialEnLike": "SKU material (EN)",
+  "supplierNameLike": "supplier name",
+  "outerCartonMethodEnLike": "outer packaging method(EN)",
+  "methodPkgEnLike": "SKU packaging method(EN)",
+  "deliveryDates": "delivery date",
+  "descEnLike": "description (EN)",
+  "descCnLike": "description (CN)"
 }

@@ -41,85 +41,78 @@ export const routerMap = [
         }
       ]
     },
-  {
-    path: '/negotiation',
-    name: 'negotiation',
-    noDropdown: true,
-    component: Layout,
-    redirect: '/negotiation/inquiry',
-    meta: {
-      name: 'negotiation',
-      draft: true,
-
-    },
-    children: [
-      {
-        path: 'inquiry',
-        name: 'inquiry',
-        meta: {
-          name: 'negotiation inquiry',
-          recycleBin: 'INQUIRY:OVERVIEW:RECYCLE_BIN'
-        },
-        component: () => import('../views/negotiation/inquiryOverview')
-      },
-      {
-        path: 'inquiryDetail',
-        name: 'inquiryDetail',
-        hidden: true,
-        meta: {
-          name: 'Inquiry Detail',
-          recycleBin: 'INQUIRY:DETAIL:RECYCLE_BIN',
-          messageBoard: 'INQUIRY:DETAIL:MESSAGE_BOARD'
-        },
-        component: () => import('../views/negotiation/inquiryDetail')
-      },
-      {
-        path: 'recycleBin/:type',
-        name: 'negotiationRecycleBin',
-        component: () => import('../views/negotiation/recycleBin')
-      }
-    ]
-  },
     {
-        path: '/product',
-        component: Layout,
-        redirect: '/product/overview',
-        name: 'product',
-        meta: {
-            name: '产品'
+      path: '/negotiation',
+      name: 'negotiation',
+      noDropdown: true,
+      component: Layout,
+      redirect: '/negotiation/inquiry',
+      meta: {name: $i.router.negotiation},
+      children: [
+        {
+          path: 'inquiry',
+          name: 'inquiry',
+          meta: {
+            name: $i.router.negotiationInquiryOverview,
+            recycleBin: 'INQUIRY:OVERVIEW:RECYCLE_BIN'
+          },
+          component: () => import('../views/negotiation/inquiryOverview')
         },
-        // hidden: true,
-        children: [
-            {
-                path: 'overview',
-                name: 'overview',
-                meta: {
-                    name: '总览'
-                },
-                component: () => import('../views/product/overview')
-            },
-            {
-                path: 'addNewProduct',
-                name: 'Add New Product',
-                meta: {
-                    name: '新增产品'
-                },
-                component: () => import('../views/product/addNewProduct')
-            },
-            {
-                path: 'detail',
-                name: 'Detail',
-                hidden:true,
-                meta: {
-                    name: '产品详情'
-                },
-                component: () => import('../views/product/detail')
-            },
-        ]
+        {
+          path: 'inquiryDetail',
+          name: 'inquiryDetail',
+          hidden: true,
+          meta: {
+            name: $i.router.negotiationInquiryDetail,
+            recycleBin: 'INQUIRY:DETAIL:RECYCLE_BIN',
+            messageBoard: 'INQUIRY:DETAIL:MESSAGE_BOARD'
+          },
+          component: () => import('../views/negotiation/inquiryDetail')
+        },
+        {
+          path: 'recycleBin/:type',
+          name: 'negotiationRecycleBin',
+          component: () => import('../views/negotiation/recycleBin')
+        }
+      ]
+    },
+    {
+      path: '/product',
+      component: Layout,
+      redirect: '/product/overview',
+      name: 'product',
+      meta: {name: $i.router.product},
+      children: [
+        {
+          path: 'overview',
+          name: 'overview',
+          meta: {
+            name: $i.router.productSourcingOverview
+          },
+          component: () => import('../views/product/overview')
+        },
+        {
+          path: 'addNewProduct',
+          name: 'addNewProduct',
+          meta: {
+            name: $i.router.addNewProduct
+          },
+          component: () => import('../views/product/addNewProduct')
+        },
+        {
+          path: 'detail',
+          name: 'Detail',
+          hidden: true,
+          meta: {
+            name: $i.router.productSourcingDetail
+          },
+          component: () => import('../views/product/detail')
+        },
+      ]
     },
     {
       path: '/payment',
-      meta: {name: 'Payment'},
+      meta: {name: $i.router.payment},
       component: Layout,
       redirect: '/payment/index',
       noDropdown: true,
@@ -140,7 +133,7 @@ export const routerMap = [
       path: '/order',
       component: Layout,
       redirect: '/order/overview',
-      meta: {name: 'Order'},
+      meta: {name: $i.router.order},
       noDropdown: true,
       children: [
         {
@@ -148,7 +141,7 @@ export const routerMap = [
           name: 'order',
           meta: {
             log: true,
-            name: 'Overview'
+            name: $i.router.orderOverview
           },
           component: () => import('../views/order/overView.vue')
         },
@@ -159,7 +152,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Detail'
+            name: $i.router.orderDetail
           },
           component: () => import('../views/order/poDetail/poDetail.vue')
         }, {
@@ -169,7 +162,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Draft Overview'
+            name: $i.router.orderDraft
           },
           component: () => import('../views/order/draftOverview.vue')
         }, {
@@ -179,7 +172,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'recycleBin Overview'
+            name: $i.router.orderRecycleBin
           },
           component: () => import('../views/order/recycleBin.vue')
         }
@@ -285,7 +278,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-          auth: [0],
+            auth: [0],
             name: $i.router.settingsDepartment
           },
           component: () => import('../views/settings/departmentSetting.vue')
@@ -297,7 +290,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-          auth: [0],
+            auth: [0],
             name: $i.router.settingsCategory
           },
           component: () => import('../views/settings/CategorySetting')
@@ -320,7 +313,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-          auth: [0],
+            auth: [0],
             name: $i.router.settingsCompany
           },
           component: () => import('../views/settings/companyInfo')
@@ -468,7 +461,7 @@ export const routerMap = [
         {
           path: 'createInbound',
           name: 'create Inbound',
-          hidden:true,
+          hidden: true,
           meta: {
             name: '创建入库单'
           },
@@ -477,7 +470,7 @@ export const routerMap = [
         {
           path: 'inboundDetail',
           name: 'inbound Detail',
-          hidden:true,
+          hidden: true,
           meta: {
             name: '入库详情',
           },
@@ -494,7 +487,7 @@ export const routerMap = [
         {
           path: 'createOutbound',
           name: 'create Outbound',
-          hidden:true,
+          hidden: true,
           meta: {
             name: '创建出库单'
           },
@@ -503,7 +496,7 @@ export const routerMap = [
         {
           path: 'outboundDetail',
           name: 'outbound Detail',
-          hidden:true,
+          hidden: true,
           meta: {
             draft: true,
             recycleBin: true,
@@ -526,7 +519,7 @@ export const routerMap = [
         {
           path: 'qcOrder',
           name: 'qc Order',
-          hidden:true,
+          hidden: true,
           meta: {
             name: 'qc Order'
           },
@@ -535,7 +528,7 @@ export const routerMap = [
         {
           path: 'qcOrderService',
           name: 'qc Order Service',
-          hidden:true,
+          hidden: true,
           meta: {
             name: 'qc Order Service'
           },
@@ -544,7 +537,7 @@ export const routerMap = [
         {
           path: 'qcOrderDetail',
           name: 'qc Order Detail',
-          hidden:true,
+          hidden: true,
           meta: {
             name: 'qc Order Detail'
           },
@@ -570,14 +563,14 @@ export const routerMap = [
             draft: false,
             recycleBin: false,
             log: false,
-            name:'客户总览'
+            name: '客户总览'
           },
           component: () => import('../views/customer/overview.vue')
         },
         {
           path: 'detail',
           name: 'customerDetail',
-          hidden:true,
+          hidden: true,
           meta: {
             draft: false,
             recycleBin: false,
