@@ -2,39 +2,46 @@
     <div class="souringDetail">
         <div class="head">
             <div class="title">
-                <img :src='basicDate.logo'/> 
+                <img :src='basicDate.logo'/>
                 <span>{{basicDate.name}}</span>
             </div>
-            <div class="detail">             
-                 <el-form  label-width="190px">          
-                    <el-row>             
-                        <el-row class="right">
-                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8"
-                                   v-for='(item,index) in $db.supplier.detail'
-                                   :key='index'
-                                   >                         
-                                    <el-form-item label-width="260px" :prop="item.key" :label="item.label+' :'">
-                                       {{basicDate[item.key]}}
-                                    </el-form-item>
-                            </el-col>                          
-                        </el-row>
-
-                </el-row>
+            <div class="detail">
+                 <el-form  label-width="190px">
+                   <el-row>
+                     <el-col :span="4">
+                       <v-image :src="basicDate.logo"/>
+                     </el-col>
+                     <el-col :span="20">
+                       <el-form>
+                         <el-row>
+                           <el-col
+                             v-for='(item,index) in $db.supplier.detail'
+                             :key='index'
+                             :xs="24" :sm="item.fullLine?24:8" :md="item.fullLine?24:8" :lg="item.fullLine?24:8" :xl="item.fullLine?24:8"
+                           >
+                             <el-form-item label-width="260px" :prop="item.key" :label="item.label+' :'">
+                               {{basicDate[item.key]}}
+                             </el-form-item>
+                           </el-col>
+                         </el-row>
+                       </el-form>
+                     </el-col>
+                   </el-row>
                   </el-form>
                 <div class="btns" v-if="noEdit">
                 </div>
             </div>
         </div>
         <div class="body">
-            <el-tabs v-model="tabName" type="card" @tab-click="handleClick">          
+            <el-tabs v-model="tabName" type="card" @tab-click="handleClick">
                 <el-tab-pane :label="$i.supplier.address" name="address">
                     <v-table  :data="address"  :selection="false"  style='marginTop:10px'/>
                 </el-tab-pane>
-                
+
                 <el-tab-pane :label="$i.supplier.contactInfo"  name="concats">
                     <v-table  :data="concats"  :selection="false"  style='marginTop:10px'/>
                 </el-tab-pane>
-                
+
                 <el-tab-pane :label="$i.supplier.documentRequired" name="document">
                     <el-form label-width="200px" :model="documents">
                     <el-row>
@@ -111,16 +118,17 @@
     import VCompareList from '../product/compareList'
     import VAttachment from './attachment'
     import {
-        VTable,VUpload
+        VTable,VUpload,VImage
     } from '@/components/index';
 
     export default {
         name: "customerDetail",
         components: {
-            VTable,
-            VCompareList,
-            VAttachment,
-            VUpload
+          VTable,
+          VCompareList,
+          VAttachment,
+          VUpload,
+          VImage
         },
         data() {
             return {
@@ -135,6 +143,11 @@
                 tradeHistory:[],
                 remarkData: [],
                 inquiryData:[],
+                incoterm:[],
+                payment:[],
+                type:[],
+                country:[],
+                currency:[],
                 addRemarkData:{
                   customerId: null,
                   id: null,
@@ -299,6 +312,33 @@
                         console.log(res)
                     });
             },
+            //获取国家
+            getCountryAll(){
+              this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+                this.country = res
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
+            //获取币种
+            getCurrency(){
+              this.$ajax.get(this.$apis.get_currency_all).then(res=>{
+                this.currency = res
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
+            //获取字典
+            getCodePart(){
+              this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS","SEX"]).then(res=>{
+                this.payment = _.findWhere(res, {'code': 'PMT'}).codes;
+                this.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
+                this.type = _.findWhere(res, {'code': 'CUSTOMER_TYPE'}).codes;
+                this.sex = _.findWhere(res, {'code': 'SEX'}).codes;
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
             //..................获取数据
             get_data() {
                 this.loading = true
@@ -308,12 +348,35 @@
                 .then(res => {
                     this.code = res.code
                     this.basicDate = res;
-                    this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);                    
-                    this.address = this.$getDB(this.$db.supplier.detailTable, res.address);                   
-                    this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);
+                    this.basicDate.filingDate = this.$dateFormat(this.basicDate.filingDate, 'yyyy-mm-dd');
+                    let country,type,payment,currency;
+                    country = _.findWhere(this.country, {code: this.basicDate.country}) || {};
+                    type = _.findWhere(this.type, {code: (this.basicDate.type)+''}) || {};
+                    payment = _.findWhere(this.payment, {code: (this.basicDate.payment)+''}) || {};
+                    currency = _.findWhere(this.currency, {code: this.basicDate.currency}) || {};
+                    this.basicDate.type = type.name || '';
+                    this.basicDate.country = country.name || '';
+                    this.basicDate.payment = payment.name || '';
+                    this.basicDate.currency = currency.name || '';
+
+                    this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
+                    this.address = this.$getDB(this.$db.supplier.detailTable, res.address, e => {
+                      let country,receiveCountry;
+                      country = _.findWhere(this.country, {code: e.country.value}) || {};
+                      receiveCountry = _.findWhere(this.country, {code: e.receiveCountry.value}) || {};
+                      e.country._value = country.name || '';
+                      e.receiveCountry._value = receiveCountry.name || '';
+                      return e;
+                    });
+                    this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats , e => {
+                      let gender;
+                      gender = _.findWhere(this.sex, {code: e.gender.value+''}) || {};
+                      e.gender._value = gender.name || '';
+                      return e;
+                    });
                     if(res.documents[0]){
                         this.documents = res.documents[0];
-                    }                    
+                    }
                     this.loading = false
                 })
                 .catch((res) => {
@@ -341,12 +404,12 @@
                 this.inquiryHistoryData.companyId = Number(this.$route.query.companyId);
                 this.loading = true;
                 this.$ajax.post(this.$apis.post_supply_supplier_getInquiryHistory,this.inquiryHistoryData).then(res=>{
-                   this.inquiryData = this.$getDB(this.$db.supplier.detailTable, res.datas, item => {
+                   this.inquiryData = this.$getDB(this.$db.supplier.inquiryHistory, res.datas, item => {
                         _.mapObject(item, val => {
                             val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                             return val
                         })
-                   });  
+                   });
                    this.loading = false
                 })
                 .catch((res) => {
@@ -389,9 +452,12 @@
               })
             }
           },
-        },       
+        },
         created() {
-             this.get_data();
+          this.get_data();
+          this.getCountryAll();
+          this.getCodePart();
+          this.getCurrency();
         },
     }
 
