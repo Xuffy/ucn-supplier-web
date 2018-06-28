@@ -22,10 +22,9 @@
                 </selectSearch>
             </div>
         </div>
-
         <!--form-->
         <v-table
-                code="uorder_list"
+                :code="tableCode"
                 ref='vtable'
                 :data="tabData"
                 :buttons="[{label: 'Detail', type: 1}]"
@@ -118,6 +117,7 @@
                 },
                 selectedList: [],
                 selectedNumber: [],
+                tableCode:'uorder_list',
 
                 /**
                  * 字典
@@ -146,19 +146,20 @@
                 this.selectedList = item;
             },
             changeStatus() {
-                console.log(this.params)
                 if (this.view === '1') {
-                    this.getData(this.$db.order.overviewByOrder);
+                    this.getData();
                 } else {
-                    this.getData(this.$db.order.overviewBysku);
+                    this.getData();
                 }
             },
             changeView() {
                 this.disableFinish=true;
                 if (this.view === '1') {
-                    this.getData(this.$db.order.overviewByOrder)
+                    this.tableCode='uorder_list';
+                    this.getData()
                 } else {
-                    this.getData(this.$db.order.overviewBysku)
+                    this.tableCode='uorder_sku_list';
+                    this.getData()
                 }
             },
             inputEnter(val) {
