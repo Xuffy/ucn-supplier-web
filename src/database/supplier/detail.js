@@ -1,41 +1,55 @@
 export default {
     customerNO: {
-        key: 'code'
+      key: 'code',
+      fullLine:false,
     },
     customerName: {
-        key: 'name'
+      key: 'name',
+      ullLine:false,
     },
     customerShortName: {
-        key: 'shortName'
+      key: 'shortName',
+      ullLine:false,
     },
     customerType: {
-        key: 'type'
+      key: 'type',
+      ullLine:false,
     },
     customerCountry: {
-        key: 'country'
+      key: 'country',
+      ullLine:false,
     },
     city: {
-        key: 'city'
-    }, 
+      key: 'city',
+      ullLine:false,
+    },
     customerSource:{
-        key:'customerSource'
-    },  
+      key:'customerSource',
+      ullLine:false,
+    },
     paymentItem: {
-        key: 'payment'
+      key: 'payment',
+      ullLine:false,
     },
     currency: {
-        key: 'currency'
+      key: 'currency',
+      ullLine:false,
     },
     filingDate:{
-        key:'filingDate'
+      key:'filingDate',
+      ullLine:false,
+      type:'textdate'
     },
     factoryInspectionReport:{
-        key:'currentInquiryDate'
+      key:'currentInquiryDate',
+      ullLine:false,
     },
     recentTransactionDate:{
-        key:'recentDealDate'
+      key:'recentDealDate',
+      ullLine:false,
     },
     TaxpayerQualification:{
-         key:'taxpayer'
+      key:'taxpayer',
+      ullLine:false,
     }
 }

@@ -5,6 +5,7 @@ import detailTable from './detailTable';
 import remark from './remark';
 import compareView from './compareView';
 import compareDetail from './compareDetail';
+import inquiryHistory from './inquiryHistory'
 export default {
     overview,
     overviewtable,
@@ -12,5 +13,6 @@ export default {
     detailTable,
     remark,
     compareView,
-    compareDetail
+    compareDetail,
+    inquiryHistory
 }

@@ -39,7 +39,7 @@ export default {
           _hide: true,
           key: "id",
       },
-  
+
     //.............concats
     contactName: {
         key: 'name',
@@ -104,41 +104,7 @@ export default {
     examiningReport:{
         key:"examiningReport"
     },
-    //询价历史
-    inquiryNo: {
-        key: 'inquiryNo',
-        belong: "inquiry"
-    },
-    inquiryDate: {
-        key: 'entryDt',
-        belong: "inquiry",
-        type: "textDate"
-    },
-    incoterm: {
-        key: 'incoterm',
-        belong: "inquiry"
-    },
-    skuQuantityOfInquiry: {
-        key: 'skuQty',
-        belong: "inquiry"
-    },
-    quantityOfCarton: {
-        key: 'updateDt',
-        belong: "inquiry",
-        type: "textDate"
-    },
-    totalNetWeight: {
-        key: '',
-        belong: "inquiry"
-    },
-    totalRoughWeight: {
-        key: '',
-        belong: "inquiry"
-    },
-    totalVolum: {
-        key: '',
-        belong: "inquiry"
-    },
+
     //order
     orderNumber: {
         key: 'orderNo',
@@ -187,5 +153,5 @@ export default {
         key: '',
         belong: "order"
     },
-    
+
 }
