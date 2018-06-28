@@ -66,7 +66,7 @@
       </div>
     </el-dialog>
     <el-dialog :title="$i.logistic.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeAddProduct(0)">
-      <add-product ref="addProducts" :basicInfoArr="basicInfoArr"/> 
+      <add-product ref="addProduct" :basicInfoArr="basicInfoArr"/> 
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
@@ -144,7 +144,8 @@ export default {
         blType: 'BL_TYPE',
         logisticsStatus: 'LS_PLAN',
         transportationWay: 'MD_TN',
-        payment: 'PMT'
+        payment: 'PMT',
+        skuIncoterm: 'ITM'
       },
       configUrl: {
         placeLogisticPlan: {
@@ -286,7 +287,7 @@ export default {
     getSupplierIds(){
       this.showAddProductDialog = true;
       this.$nextTick(()=>{
-        this.$refs.addProducts.getSupplierIds();
+        this.$refs.addProduct.getSupplierIds();
       })
     }, 
     registerRoutes () {
