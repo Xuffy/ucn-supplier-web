@@ -422,10 +422,12 @@
                         return e;
                      });
                      this.contactDatas = this.$getDB(this.$db.setting.supplierContact, res.concats, e=>{
-                        let gender;
-                        gender = _.findWhere(this.sex, {code: (e.gender.value).toString()}) || {};
-                        e.gender._value = gender.name || '';
-                        return e;
+                       let gender,deptId;
+                       gender = _.findWhere(this.sex, {code: (e.gender.value)+''}) || {};
+                       deptId = _.findWhere(this.department, {deptId: e.deptId.value}) || {};
+                       e.gender._value = gender.name || '';
+                       e.deptId._value = deptId.deptName || '';
+                       return e;
                      });
                      this.addressDatas = this.$getDB(this.$db.setting.supplierAddress, res.address);
                      res.exportLicense ? res.exportLicense = 'YES' : res.exportLicense = 'NO'
@@ -795,24 +797,32 @@
               type: "ATTACHMENT",
               urls: this.$refs.uploadAttachment.getFiles()
             };
-            if (this.$refs.uploadAttachment.getFiles().length === 1){
-              this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
-                this.getWholeData();
-                this.$message({
-                  message: '上传成功',
-                  type: 'success'
-                });
-              })
+           if (this.$refs.uploadAttachment.getFiles().length !== 0){
+             if (this.$refs.uploadAttachment.getFiles().length === 1){
+               this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
+                 this.$message({
+                   message: '上传成功',
+                   type: 'success'
+                 });
+                 this.getWholeData();
+               })
 
-            }else{
-              this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
-                this.getWholeData();
-                this.$message({
-                  message: '上传成功',
-                  type: 'success'
-                });
-              })
-            }
+             }else{
+               this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
+                 this.$message({
+                   message: '上传成功',
+                   type: 'success'
+                 });
+                 this.getWholeData();
+               })
+             }
+           }else{
+             this.$message({
+               message: '请选择上传文件',
+               type: 'warning'
+             });
+             return false;
+           }
           },
         },
         created(){

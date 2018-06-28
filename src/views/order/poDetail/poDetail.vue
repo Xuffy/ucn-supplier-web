@@ -804,7 +804,7 @@
             </el-select>
             <el-select
                     slot="skuInspectQuarantineCategory"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -812,7 +812,7 @@
                         v-for="item in quarantineTypeOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
@@ -1501,7 +1501,6 @@
                             this.orderStatusOption=v.codes;
                         }else if(v.code==='QUARANTINE_TYPE'){
                             this.quarantineTypeOption=v.codes;
-                            console.log(this.quarantineTypeOption,'this.quarantineTypeOption')
                         }else if(v.code==='SKU_SALE_STATUS'){
                             this.skuSaleStatusOption=v.codes;
                         }
@@ -1597,20 +1596,22 @@
                             if(item.skuCategoryId.value){
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
+                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory?this.$change(this.quarantineTypeOption,'skuInspectQuarantineCategory',item,true).name:'';
+
 
                             //图片处理
                             let skuLabelPic=item.skuLabelPic.value,
                                 skuPkgMethodPic=item.skuPkgMethodPic.value,
                                 skuInnerCartonPic=item.skuInnerCartonPic.value,
                                 skuOuterCartonPic=item.skuOuterCartonPic.value;
-                            item.skuLabelPic._value=[skuLabelPic];
-                            item.skuLabelPic.value=[skuLabelPic];
-                            item.skuPkgMethodPic._value=[skuPkgMethodPic];
-                            item.skuPkgMethodPic.value=[skuPkgMethodPic];
-                            item.skuInnerCartonPic._value=[skuInnerCartonPic];
-                            item.skuInnerCartonPic.value=[skuInnerCartonPic];
-                            item.skuOuterCartonPic._value=[skuOuterCartonPic];
-                            item.skuOuterCartonPic.value=[skuOuterCartonPic];
+                            item.skuLabelPic._value=skuLabelPic?[skuLabelPic]:[];
+                            item.skuLabelPic.value=skuLabelPic?[skuLabelPic]:[];
+                            item.skuPkgMethodPic._value=skuPkgMethodPic?[skuPkgMethodPic]:[];
+                            item.skuPkgMethodPic.value=skuPkgMethodPic?[skuPkgMethodPic]:[];
+                            item.skuInnerCartonPic._value=skuInnerCartonPic?[skuInnerCartonPic]:[];
+                            item.skuInnerCartonPic.value=skuInnerCartonPic?[skuInnerCartonPic]:[];
+                            item.skuOuterCartonPic._value=skuOuterCartonPic?[skuOuterCartonPic]:[];
+                            item.skuOuterCartonPic.value=skuOuterCartonPic?[skuOuterCartonPic]:[];
                         }
                     });
                     this.productTableData=[];
@@ -1675,12 +1676,17 @@
                     }
                     v.skuSample=v.skuSample==='1'?true:false;
                     if(v.skuInspectQuarantineCategory){
-                        console.log(v.skuInspectQuarantineCategory,'v.skuInspectQuarantineCategory')
-                        console.log(this.quarantineTypeOption,'this.quarantineTypeOption')
-                        v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{name:v.skuInspectQuarantineCategory}).code;
+                        v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code;
                     }
+                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    _.map(picKey,item=>{
+                        if(_.isArray(v[item])){
+                            v[item]=(v[item][0]?v[item][0]:null);
+                        }
+                    })
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
+                console.log(params,'params')
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
                     this.isModify=false;
@@ -1803,6 +1809,7 @@
                     if(this.$refs.uploadSkuAdditionalFour){
                         this.$refs.uploadSkuAdditionalFour.reset();
                     }
+                    console.log(arr,'arr')
                     this.chooseProduct=this.$refs.HM.init(arr, []);
                 }else if(type==='detail'){
                     this.$windowOpen({
