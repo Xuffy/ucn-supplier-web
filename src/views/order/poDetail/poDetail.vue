@@ -1075,29 +1075,32 @@
             <!--:picker-options="pickerOptions1">-->
             <!--</el-date-picker>-->
 
+            <div slot="skuPictures" slot-scope="{data}">
+                <v-upload ref="uploadSkuPictures" readonly :list="data.value" :onlyImage="true" :limit="20"></v-upload>
+            </div>
             <div slot="skuLabelPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuLabelPic" :list="data._value" :onlyImage="true" :limit="1"></v-upload>
             </div>
             <div slot="skuPkgMethodPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuPkgMethodPic" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuPkgMethodPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuInnerCartonPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuInnerCartonPic" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuInnerCartonPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuOuterCartonPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuOuterCartonPic" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuOuterCartonPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuAdditionalOne" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalOne" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalOne" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuAdditionalTwo" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalTwo" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalTwo" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuAdditionalThree" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalThree" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalThree" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuAdditionalFour" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalFour" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalFour" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
         </v-history-modify>
 
@@ -1594,6 +1597,20 @@
                             if(item.skuCategoryId.value){
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
+
+                            //图片处理
+                            let skuLabelPic=item.skuLabelPic.value,
+                                skuPkgMethodPic=item.skuPkgMethodPic.value,
+                                skuInnerCartonPic=item.skuInnerCartonPic.value,
+                                skuOuterCartonPic=item.skuOuterCartonPic.value;
+                            item.skuLabelPic._value=[skuLabelPic];
+                            item.skuLabelPic.value=[skuLabelPic];
+                            item.skuPkgMethodPic._value=[skuPkgMethodPic];
+                            item.skuPkgMethodPic.value=[skuPkgMethodPic];
+                            item.skuInnerCartonPic._value=[skuInnerCartonPic];
+                            item.skuInnerCartonPic.value=[skuInnerCartonPic];
+                            item.skuOuterCartonPic._value=[skuOuterCartonPic];
+                            item.skuOuterCartonPic.value=[skuOuterCartonPic];
                         }
                     });
                     this.productTableData=[];
@@ -1643,7 +1660,8 @@
             send(){
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
-                    if(params.supplierName===v.id){
+                    if(params.supplierCode===v.code){
+                        console.log(v,'vvvvvvvv')
                         params.supplierName=v.name;
                         params.supplierCode=v.code;
                         params.supplierId=v.id;
@@ -1656,9 +1674,13 @@
                         v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
                     }
                     v.skuSample=v.skuSample==='1'?true:false;
+                    if(v.skuInspectQuarantineCategory){
+                        console.log(v.skuInspectQuarantineCategory,'v.skuInspectQuarantineCategory')
+                        console.log(this.quarantineTypeOption,'this.quarantineTypeOption')
+                        v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{name:v.skuInspectQuarantineCategory}).code;
+                    }
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
-                console.log(params,'????')
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
                     this.isModify=false;
@@ -1757,6 +1779,30 @@
                             arr.push(v);
                         }
                     });
+                    if(this.$refs.uploadSkuLabelPic){
+                        this.$refs.uploadSkuLabelPic.reset();
+                    }
+                    if(this.$refs.uploadSkuPkgMethodPic){
+                        this.$refs.uploadSkuPkgMethodPic.reset();
+                    }
+                    if(this.$refs.uploadSkuInnerCartonPic){
+                        this.$refs.uploadSkuInnerCartonPic.reset();
+                    }
+                    if(this.$refs.uploadSkuOuterCartonPic){
+                        this.$refs.uploadSkuOuterCartonPic.reset();
+                    }
+                    if(this.$refs.uploadSkuAdditionalOne){
+                        this.$refs.uploadSkuAdditionalOne.reset();
+                    }
+                    if(this.$refs.uploadSkuAdditionalTwo){
+                        this.$refs.uploadSkuAdditionalTwo.reset();
+                    }
+                    if(this.$refs.uploadSkuAdditionalThree){
+                        this.$refs.uploadSkuAdditionalThree.reset();
+                    }
+                    if(this.$refs.uploadSkuAdditionalFour){
+                        this.$refs.uploadSkuAdditionalFour.reset();
+                    }
                     this.chooseProduct=this.$refs.HM.init(arr, []);
                 }else if(type==='detail'){
                     this.$windowOpen({
@@ -1882,10 +1928,27 @@
                 this.productTableDialogVisible=false;
             },
             saveNegotiate(e){
-                console.log(e,'e')
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
+                            if(!m._remark){
+                                m.skuLabelPic._value=this.$refs.uploadSkuLabelPic.getFiles(true).url;
+                                m.skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles();
+                                m.skuPkgMethodPic._value=this.$refs.uploadSkuPkgMethodPic.getFiles(true).url;
+                                m.skuPkgMethodPic.value=this.$refs.uploadSkuPkgMethodPic.getFiles();
+                                m.skuInnerCartonPic._value=this.$refs.uploadSkuInnerCartonPic.getFiles(true).url;
+                                m.skuInnerCartonPic.value=this.$refs.uploadSkuInnerCartonPic.getFiles();
+                                m.skuOuterCartonPic._value=this.$refs.uploadSkuOuterCartonPic.getFiles(true).url;
+                                m.skuOuterCartonPic.value=this.$refs.uploadSkuOuterCartonPic.getFiles();
+                                m.skuAdditionalOne._value=this.$refs.uploadSkuAdditionalOne.getFiles(true).url;
+                                m.skuAdditionalOne.value=this.$refs.uploadSkuAdditionalOne.getFiles();
+                                m.skuAdditionalTwo._value=this.$refs.uploadSkuAdditionalTwo.getFiles(true).url;
+                                m.skuAdditionalTwo.value=this.$refs.uploadSkuAdditionalTwo.getFiles();
+                                m.skuAdditionalThree._value=this.$refs.uploadSkuAdditionalThree.getFiles(true).url;
+                                m.skuAdditionalThree.value=this.$refs.uploadSkuAdditionalThree.getFiles();
+                                m.skuAdditionalFour._value=this.$refs.uploadSkuAdditionalFour.getFiles(true).url;
+                                m.skuAdditionalFour.value=this.$refs.uploadSkuAdditionalFour.getFiles();
+                            }
                             this.productTableData.splice(k,1,m)
                         }
                     })
@@ -1924,7 +1987,7 @@
                                     }else if(item[k].key==='skuStatus'){
                                         json[k]=_.findWhere(this.skuStatusTotalOption,{name:item[k]._value}).code;
                                     }else if(item[k].key==='skuSample'){
-                                        json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
+                                        json[k]=_.findWhere(this.isNeedSampleOption,{code:item[k].value}).code;
                                     }else{
                                         json[k] = item[k].value;
                                     }
@@ -2246,7 +2309,8 @@
                 }).then(() => {
                     this.disableClickRefuse=true;
                     this.$ajax.post(this.$apis.ORDER_CANCEL,{
-                        ids:[this.orderForm.id]
+                        ids:[this.orderForm.id],
+                        orderNo:this.orderForm.orderNo
                     }).then(res=>{
                         this.$message({
                             message: this.$i.order.handleSuccess,

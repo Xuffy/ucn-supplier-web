@@ -23,7 +23,6 @@ export default {
   update_supplier: ['/supplier/{id}', 'USUPPLY_URL'],
   get_productTradeHistory:['/sku/history','USUPPLY_URL'],
 
-
   //department setting
   get_departmentOverview: ['/department/overview', 'UUSER_URL'],
   get_department: ['/department', 'UUSER_URL'],
@@ -35,7 +34,6 @@ export default {
   invite_departmentUser:['/user/invite','UUSER_URL'],
   update_departmentRole:['/role','UUSER_URL'],
   add_departmentUser:['/user','UUSER_URL'],
-
 
   /**
    * seller product

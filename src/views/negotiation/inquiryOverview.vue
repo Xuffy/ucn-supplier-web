@@ -22,9 +22,9 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click="ajaxInqueryAction('accept')" v-authorize="'INQUIRY:OVERVIEW:ACCEPT'" :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='99'||params.status+''==='1'||params.status === null">{{ $i.common.accept }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="cancelInquiry" :disabled="!checkedData.length||params.status+''==='99'||params.status+''==='1'||params.status === null" v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'">{{ $i.common.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='21'||params.status === null" v-authorize="'INQUIRY:OVERVIEW:DELETE'">{{ $i.common.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="ajaxInqueryAction('accept')" v-authorize="'INQUIRY:OVERVIEW:ACCEPT'" :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='99'||params.status+''==='1'||params.status === null">{{ $i.common.accept }}<span>({{ checkedIds.length }})</span></el-button>
+                <el-button @click="cancelInquiry" :disabled="!checkedData.length||params.status+''==='99'||params.status+''==='1'||params.status === null" v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'">{{ $i.common.cancelTheInquiry }}<span>({{ checkedIds.length }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='21'||params.status === null" v-authorize="'INQUIRY:OVERVIEW:DELETE'">{{ $i.common.delete }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button :disabled="!tabData.length" v-authorize="'INQUIRY:OVERVIEW:DOWNLOAD'">{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
             </div>
             <div class="viewBy">
@@ -96,6 +96,11 @@ export default {
     'v-table': VTable,
     'v-pagination': VPagination
   },
+  computed: {
+    checkedIds() {
+      return Array.from(new Set(this.checkedData.map(i => i[i.inquiryId ? 'inquiryId' : 'id'].value)));
+    }
+  },
   created() {
     this.setRecycleBin({
       name: 'negotiationRecycleBin',
@@ -163,15 +168,13 @@ export default {
       });
     },
     ajaxInqueryAction(type) {
-      const argId = this.getChildrenId();
       this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
         action: type,
-        ids: argId
-      })
-        .then(res => {
-          this.gettabData();
-          this.checkedData = [];
-        });
+        ids: this.checkedIds
+      }).then(() => {
+        this.gettabData();
+        this.checkedData = [];
+      });
     },
     action(item, type) {
       switch (type) {
@@ -185,28 +188,6 @@ export default {
       this.$router.push({
         path: '/negotiation/inquiryDetail',
         query: {id}
-      });
-    },
-    getChildrenId(type) {
-      let arr = [];
-      _.map(this.checkedData, item => {
-        if (!_.isUndefined(item)) {
-          arr.push(_.findWhere(item, {'key': 'id'}).value);
-        }
-      });
-      if (typeof type === 'string') {
-        arr.join(',');
-      }
-      return arr;
-    },
-    toCompare() {
-      let argId = this.getChildrenId('str');
-      this.$windowOpen({
-        url: '/negotiation/compareDetail/{type}',
-        params: {
-          type: 'new',
-          ids: argId.join(',')
-        }
       });
     },
     pageSizeChange(no) {

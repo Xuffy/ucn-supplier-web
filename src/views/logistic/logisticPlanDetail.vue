@@ -66,7 +66,7 @@
       </div>
     </el-dialog>
     <el-dialog :title="$i.logistic.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeAddProduct(0)">
-      <add-product ref="addProducts" :basicInfoArr="basicInfoArr"/> 
+      <add-product ref="addProduct" :basicInfoArr="basicInfoArr"/> 
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
@@ -78,7 +78,6 @@
 </template>
 <script>
 import { VSimpleTable, containerInfo, selectSearch, VTable} from '@/components/index';
-import {mapActions, mapState} from 'vuex';
 import attachment from '@/components/common/upload/index';
 import messageBoard from '@/components/common/messageBoard/index';
 import formList from '@/views/logistic/children/formList'
@@ -145,7 +144,8 @@ export default {
         blType: 'BL_TYPE',
         logisticsStatus: 'LS_PLAN',
         transportationWay: 'MD_TN',
-        payment: 'PMT'
+        payment: 'PMT',
+        skuIncoterm: 'ITM'
       },
       configUrl: {
         placeLogisticPlan: {
@@ -237,7 +237,6 @@ export default {
     } 
   },
   mounted () {
-    this.setLog({query:{code:'planDetail'}});
     const arr = this.$route.fullPath.split('/')
     this.pageName =  arr[arr.length - 1].split('?')[0]
     this.registerRoutes()
@@ -266,7 +265,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
     //获取实时汇率
     getRate(){
       this.$ajax.post(`${this.$apis.get_plan_rate}`).then(res => {
@@ -289,7 +287,7 @@ export default {
     getSupplierIds(){
       this.showAddProductDialog = true;
       this.$nextTick(()=>{
-        this.$refs.addProducts.getSupplierIds();
+        this.$refs.addProduct.getSupplierIds();
       })
     }, 
     registerRoutes () {
@@ -653,7 +651,7 @@ export default {
     generateList(){
       this.$ajax.post(this.$apis.logistics_plan_postLoadingList,{id:this.planId}).then(res => {
         this.getDetails();
-        window.open(`${window.location.origin}#/logistic/loadingListDetail?id=${ this.planId }`);
+        window.open(`${window.location.origin}#/logistic/loadingListDetail?code=${ this.logisticsNo }`);
       })
     },
     conformPlan(){

@@ -96,7 +96,10 @@ export default {
     rules: [],
     width: '150px',
     type: 'Select',
-    transForm: 'ITM'
+    transForm: 'ITM',
+    _rules: {
+      required: true
+    }
   },
   currency: { // 币种 选择 ok
     rules: [],
@@ -132,7 +135,10 @@ export default {
     rules: [],
     width: '150px',
     type: 'manySelect',
-    _disabled: true
+    _disabled: true,
+    _rules: {
+      required: true
+    }
   },
   supplierType: { // 供应商类型 ok
     rules: [],
