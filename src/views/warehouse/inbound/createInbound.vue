@@ -430,7 +430,7 @@
                 console.log(this.productData,'this.productData')
 
                 let allow=true;
-                let mustKey=['inboundOutCartonTotalQty','skuOuterCartonVolume','skuOuterCartonRoughWeight','skuOuterCartonNetWeight','skuNetWeight','skuInnerCartonLength','skuInnerCartonWidth','skuInnerCartonHeight','skuInnerCartonWeightNet','skuInnerCartonRoughWeight'];
+                let mustKey=['inboundOutCartonTotalQty','skuOuterCartonVolume','skuOuterCartonRoughWeight','skuOuterCartonNetWeight','skuNetWeight','skuInnerCartonLength','skuInnerCartonWidth','skuInnerCartonHeight','skuInnerCartonWeightNet','skuInnerCartonRoughWeight','skuInnerCartonVolume'];
                 _.map(this.productData,v=>{
                     _.map(mustKey,k=>{
                         if(v[k]!==0 && v[k]!=='0' && !v[k]){
