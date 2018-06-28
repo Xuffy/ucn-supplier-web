@@ -66,7 +66,7 @@
       </div>
     </el-dialog>
     <el-dialog :title="$i.logistic.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeAddProduct(0)">
-      <add-product ref="addProduct" :basicInfoArr="basicInfoArr"/> 
+      <add-product ref="addProducts" :basicInfoArr="basicInfoArr"/> 
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
@@ -289,7 +289,7 @@ export default {
     getSupplierIds(){
       this.showAddProductDialog = true;
       this.$nextTick(()=>{
-        this.$refs.addProduct.getSupplierIds();
+        this.$refs.addProducts.getSupplierIds();
       })
     }, 
     registerRoutes () {
@@ -607,6 +607,9 @@ export default {
         case 'generateList':
             this.generateList();
           break; 
+        case 'cancel':
+            this.cancelLoadingList();
+          break; 
         case 'cancelLoadingList':
             this.cancelLoadingList();
           break; 
@@ -649,6 +652,7 @@ export default {
     },
     generateList(){
       this.$ajax.post(this.$apis.logistics_plan_postLoadingList,{id:this.planId}).then(res => {
+        this.getDetails();
         window.open(`${window.location.origin}#/logistic/loadingListDetail?id=${ this.planId }`);
       })
     },
