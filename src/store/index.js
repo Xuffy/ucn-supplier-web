@@ -5,7 +5,7 @@ import {sessionStore} from 'service/store';
 
 Vue.use(Vuex);
 
-const state = {
+const initialState = {
   quickLink: {
     draft: {
       show: false
@@ -17,13 +17,13 @@ const state = {
       show: false
     },
     show: false,
-    list: [],
+    list: []
   },
   layout: {
     hideMenu: false,
     paddingRight: 0
   },
-  dic: '',
+  dic: ''
 };
 
 const actions = {
@@ -36,8 +36,21 @@ const actions = {
   setLog({commit}, params) {
     commit(type.SETLOG, params);
   },
-  setDic({commit}, params) {
-    commit(type.DIC, params);
+  setDic({commit, state}, params) {
+    let dic = state.dic && Array.isArray(state.dic) ? state.dic : [];
+    if (Array.isArray(params)) {
+      let validCodes = params.filter(c => c.code && c.codes && Array.isArray(c.codes));
+      let toAddCodes = validCodes.map(c => c.code);
+      dic = dic.filter(c => !toAddCodes.includes(c.code)).concat(validCodes);
+    } else if (params.code && params.codes && Array.isArray(params.codes)) {
+      let existsItem = dic.filter(c => c.code === params.code)[0];
+      if (existsItem) {
+        existsItem.codes = params.codes;
+      } else {
+        dic.push(params);
+      }
+    }
+    commit(type.DIC, dic);
   }
 };
 
@@ -61,7 +74,7 @@ const mutations = {
 };
 
 export default new Vuex.Store({
-  state,
+  state: initialState,
   actions,
   mutations
 });

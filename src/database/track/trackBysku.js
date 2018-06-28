@@ -14,7 +14,7 @@ export default {
     key: 'supplierOrderNo'
   },
   customerItemNumber: {
-    key: 'sku_customer_sku_code'
+    key: 'skuCustomerSkuCode'
   },
   vendorSKUCode: {
     key: 'skuCode'
