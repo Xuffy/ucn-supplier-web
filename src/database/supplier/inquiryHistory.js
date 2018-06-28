@@ -19,12 +19,12 @@ export default {
     type: "textDate"
   },
   totalNetWeight: {
-    key: '',
+    key: '', //  产品总净重   春春说这几个值需要计算，需要延后
   },
   totalRoughWeight: {
-    key: '',
+    key: '',  //  产品总毛重
   },
   totalVolum: {
-    key: '',
+    key: '', //  产品总体积
   },
 }

@@ -366,9 +366,17 @@
                       receiveCountry = _.findWhere(this.country, {code: e.receiveCountry.value}) || {};
                       e.country._value = country.name || '';
                       e.receiveCountry._value = receiveCountry.name || '';
+                      const province = e.province.value || '';
+                      const city = e.city.value || '';
+                      const address = e.address.value || ''
+                      const receiveProvince = e.receiveProvince.value || '';
+                      const receiveCity = e.receiveCity.value || '';
+                      const receiveAddress = e.receiveAddress.value || '';
+                      e.companyAddress.value = e.country._value+' '+province+' '+city+' '+address;
+                      e.receiverAddress.value = e.receiveCountry._value+' '+receiveProvince+' '+receiveCity+' '+receiveAddress
                       return e;
                     });
-                    this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats , e => {
+                    this.concats = this.$getDB(this.$db.supplier.supplierConcats, res.concats , e => {
                       let gender;
                       gender = _.findWhere(this.sex, {code: e.gender.value+''}) || {};
                       e.gender._value = gender.name || '';
@@ -387,7 +395,7 @@
                 this.loading = true;
                 this.orderHistoryData.customerCompanyId = Number(this.$route.query.companyId);
                 this.$ajax.post(this.$apis.post_supply_supplier_orderHistory,this.orderHistoryData).then(res=>{
-                    this.tradeHistory = this.$getDB(this.$db.supplier.detailTable, res.datas, item =>{
+                    this.tradeHistory = this.$getDB(this.$db.supplier.orderHistory, res.datas, item =>{
                          _.mapObject(item, val => {
                             val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                             return val
