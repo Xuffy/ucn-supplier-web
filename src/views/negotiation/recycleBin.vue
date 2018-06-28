@@ -182,7 +182,7 @@
             switch(this.$route.params.type) {
                 case 'inquiry':
                     this.title = this.$i.common.inquiryRecycleBin;
-                    this.bodyData.recycleCustomer = 1;
+                    this.bodyData.recycleSupplier = 1;
                     break;
                 case 'compare':
                     this.title = this.$i.common.compareRecycleBin;
