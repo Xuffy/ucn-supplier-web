@@ -40,6 +40,7 @@
   "estArrivalDate": "Est. Arrival Date",
   "estReleaseDate": "Est. Release Date",
   "estDeliveryDate": "Est. Delivary Date",
+  "estDelivaryDate": "Est. Delivary Date",
   "logisticsStatus": "Logistics Status",
   "createDate": "Create Date",
   "declareDate": "Declare Date",

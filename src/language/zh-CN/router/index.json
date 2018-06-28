@@ -54,5 +54,10 @@
   "logs": "日志",
   "message": "消息",
   "messageManagement": "消息管理",
-  "logisticLoadingListOverview": "Loading List Overview"
+  "logisticLoadingListOverview": "Loading List Overview",
+  "draft": "Draft",
+  "recycle": "Recycle Bin",
+  "addNewProduct": "Add New Product",
+  "qcDetail": "Detail",
+  "customer": "Customer"
 }
