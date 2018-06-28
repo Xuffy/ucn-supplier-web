@@ -220,7 +220,7 @@
 <script>
 
     import {VTimeZone, VUpload, VTable} from '@/components/index'
-    // import Math from 'mathjs'
+    import Math from 'mathjs'
 
     export default {
         name: "createInbound",
