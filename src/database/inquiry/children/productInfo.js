@@ -131,7 +131,9 @@ export default {
   category: {
     key: 'skuCategoryId',
     type: 'Select',
-    state: 'category'
+    state: 'category',
+    transForm: 'SKU_CATEGORY',
+    _disabled: true
   },
   barcode: {
     key: 'skuBarcode',
