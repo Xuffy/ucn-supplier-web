@@ -1,8 +1,8 @@
 {
-  "inquiryID": "ID",
-  "descripition": "Description",
-  "time": "Time",
-  "submiter": "Submitter",
-  "actions": "Actions",
-  "bizNo": "Biz No"
+  "inquiryID": "询价单ID",
+  "description": "描述",
+  "time": "时间",
+  "submitter": "发送人",
+  "actions": "操作",
+  "bizNo": "业务单号"
 }

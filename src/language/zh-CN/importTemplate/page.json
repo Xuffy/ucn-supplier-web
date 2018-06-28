@@ -1,10 +1,10 @@
 {
-  "remark3":"Import the data into the template form into the system",
-  "remark2":"Input data in a template",
-  "remark1":"Download the import",
-  "remark":"Remark",
-  "template":"Template",
-  "import":"Import",
-  "upload":"Upload",
-  "selectFile":"Select the file"
+  "remark3": "使用模板导入数据到系统",
+  "remark2": "使用模板填写数据",
+  "remark1": "下载导入数据",
+  "remark": "备注",
+  "template": "模板",
+  "import": "导入",
+  "upload": "下载",
+  "selectFile": "选择文件"
 }

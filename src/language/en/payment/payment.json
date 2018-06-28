@@ -1,9 +1,8 @@
 {
-  "orderOverview": "Payment Overview",
-  "orderCreateDate": "order create date",
+  "orderOverview": "Order Overview",
+  "orderCreateDate": "Order Create Date",
   "view": "View",
-  "status":"Status",
+  "status": "Status",
   "overdue": "Overdue",
   "future": "Future"
 }
-  

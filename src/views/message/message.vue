@@ -182,12 +182,12 @@
         });
       },
       inputEnter(val) {
-        if (!val.keyType) return this.$message({
+        if (!val.id) return this.$message({
           message: 'please choose a type',
           type: 'warning'
         });
-        this.params.mark = val.keyType;
-        this.params.content = val.key;
+        this.params.mark = val.id;
+        this.params.content = val.value;
         this.searchLoad = true;
         this.getDataInfo();
       },
@@ -298,6 +298,7 @@
       }
     },
     created(){
+      this.message = '1';
       this.getDataInfo()
       this.getMessageQuery()
     }

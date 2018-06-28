@@ -1,12 +1,12 @@
 {
-  "outboundNo":"出库单号",
-  "shipmentInvoiceNo":"出运发票号码",
-  "outboundTypeDictCode":"出库类型",
-  "outboundDate":"出库日期",
-  "outboundOperator":"出库人员",
-  "outboundSkuTotalQty":"出库产品总数量",
-  "remark":"备注",
-  "updateName":"操作人",
-  "updateDt":"修改时间",
-  "entryDt":"创建时间"
+  "outboundNo": "Outbound No.",
+  "shipmentInvoiceNo": "Invoice NO.",
+  "outboundTypeDictCode": "Outbound Type",
+  "outboundDate": "Outbound Date",
+  "outboundOperator": "Outbound Operator",
+  "outboundSkuTotalQty": "Total quantity of outbound",
+  "remark": "Remark",
+  "updateName": "Updated Name",
+  "updateDt": "Updated Date",
+  "entryDt": "Create Date"
 }

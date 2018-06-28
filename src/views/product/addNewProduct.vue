@@ -733,20 +733,13 @@
                 <el-button :disabled="loadingTable" @click="searchCustomer" type="primary">{{$i.warehouse.search}}</el-button>
                 <el-button :disabled="loadingTable" @click="clearCustomerSearch">{{$i.warehouse.clear}}</el-button>
             </div>
-
             <v-table
                     :height="500"
                     :loading="loadingTable"
                     :data="tableDataList"
                     @change-checked="changeChecked"
                     @action="btnClick">
-                <!--<template slot="header">-->
-                <!--<div class="btns">-->
-                <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
-                <!--</div>-->
-                <!--</template>-->
             </v-table>
-
             <div slot="footer" class="dialog-footer">
                 <el-button :disabled="loadingTable" :loading="disableClickPost" type="primary" @click="postData">{{$i.product.sure}}</el-button>
                 <el-button :disabled="loadingTable" @click="addCustomerDialogVisible = false">{{$i.product.cancel}}</el-button>
@@ -1189,8 +1182,10 @@
                                 this.$set(e,'_disabled',true);
                                 this.$set(e,'_checked',true);
                             }
-                        })
+                        });
                     });
+                    console.log(this.tableDataList,'this.tableDataList')
+                    console.log(this.tableData,'this.tableData')
                 }).catch(err=>{
                     this.loadingTable=false;
                 });
@@ -1232,8 +1227,13 @@
                     if(!param.readilyAvailable){
                         param.availableQty=0;
                     }
-                    if(!param.visibility){
+                    if(param.visibility){
                         param.ids=[];
+                    }else{
+                        param.ids=[];
+                        this.tableData.forEach(v=>{
+                            param.ids.push(v.id);
+                        });
                     }
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
@@ -1326,7 +1326,25 @@
                             this.productForm[k]=this.productForm[k]?'1':'0';
                         }
                     });
-                    console.log(this.productForm,'this.productForm')
+
+                    this.$ajax.post(this.$apis.get_sellerCustomerList,{
+                        id:this.productForm.id,
+                        pn:1,
+                        ps:1000
+                    }).then(res=>{
+                        this.tableData=res.datas;
+                        // this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
+                        //     this.tableData.forEach(v=>{
+                        //         if(v.id===e.id.value){
+                        //             this.$set(e,'_disabled',true);
+                        //             this.$set(e,'_checked',true);
+                        //         }
+                        //     })
+                        // });
+
+                    }).catch(err=>{
+
+                    });
                     this.loadingData=false;
                 }).catch(err=>{
                     this.loadingData=false;
@@ -1378,7 +1396,7 @@
                     this.$ajax.post(this.$apis.get_sellerCustomerGroup,id).then(res=>{
                         res.forEach(v=>{
                             this.tableData.push(v);
-                        })
+                        });
                         this.addCustomerDialogVisible=false;
                         this.disableClickPost=false;
                     }).catch(err=>{

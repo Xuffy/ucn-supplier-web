@@ -1,14 +1,14 @@
 {
-  "paymentDunning": "The corresponding payer has been urged to pay",
-  "keyType": "Please Select the search type",
-  "keyValue": "Search content cannot be empty",
-  "configuration": "Configuration success",
-  "read": "The system has set the message to read",
-  "addSuccess": "Add Success",
-  "error": "Send failed",
-  "title": "Please enter title",
-  "content": "Please enter contents",
-  "release": "Release",
-  "passwordAuthentication": "The new password cannot be the same as the original password",
-  "modifySuccess": "Modify Success"
+  "paymentDunning": "已催促对应的付款人付款",
+  "keyType": "请选中搜索类型",
+  "keyValue": "搜索内容不能为空",
+  "configuration": "配置成功",
+  "read": "系统已将消息置为已读",
+  "addSuccess": "添加成功",
+  "error": "发送失败",
+  "title": "请输入标题",
+  "content": "请输入内容",
+  "release": "发布",
+  "passwordAuthentication": "新密码不能与原密码相同",
+  "modifySuccess": "编辑成功"
 }

@@ -1,6 +1,6 @@
 {
-    "description": "Description",
-    "operationDate": "Operation Date",
-    "operater": "Operator",
-    "operationType": "Operation Type"
+  "description": "描述",
+  "operationDate": "操作日期",
+  "operater": "操作人",
+  "operationType": "操作类型"
 }

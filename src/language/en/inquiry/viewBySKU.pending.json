@@ -1,14 +1,14 @@
 {
-    "inquiryNo": "Inquiry No.",
-    "quotationNo": "Quotation No.",
-    "status": "Status",
-    "supplierName": "Supplier name",
-    "skuCode": "Supplier SKU code",
-    "skuNameEN": "SKU name EN",
-    "price": "Price",
-    "currency": "Currency",
-    "incoterm": "Incoterm",
-    "departurePort": "Departure port",
-    "destinationPort": "Destination port",
-    "remark": "Inquiry remark"
+  "inquiryNo": "Inquiry No.",
+  "quotationNo": "Quotation No.",
+  "status": "Status",
+  "supplierName": "Supplier name",
+  "skuCode": "Supplier SKU code",
+  "skuNameEN": "SKU name EN",
+  "price": "Price",
+  "currency": "Currency",
+  "incoterm": "Incoterm",
+  "departurePort": "Departure port",
+  "destinationPort": "Destination port",
+  "remark": "Inquiry remark"
 }

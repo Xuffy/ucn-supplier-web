@@ -1,6 +1,6 @@
 {
-  "to":"to",
-  "startDate":"start date",
-  "endDate":"end date",
-  "selectionDate":"selection date"
+  "to": "To",
+  "startDate": "Start date",
+  "endDate": "End date",
+  "selectionDate": "Selection date"
 }

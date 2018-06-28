@@ -82,8 +82,10 @@
           type: 'warning'
         });
         if (val.id == '1') {
+          this.params.orderNoLike = ''
           this.params.skuCodeLike= val.value
         }else{
+          this.params.skuCodeLike = ''
           this.params.orderNoLike= val.value
         }
         this.getList()

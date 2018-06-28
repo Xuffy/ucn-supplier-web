@@ -1,6 +1,9 @@
 {
-    "inquiryTitle": "Inquiry Overview",
-    "inquiryDetailTitle": "Inquiry No.",
-    "inquiryNo": "Create Inquiry",
-    "basicInfo": "Basic Info"
+  "inquiryTitle": "询价总览",
+  "inquiryDetailTitle": "询价单号",
+  "inquiryNo": "创建询价单",
+  "basicInfo": "基本信息",
+  "supplierRequired": "Less one supplier required.",
+  "skuRequired": "Less one product required.",
+  "incotermRequired": "Incoterm is required."
 }

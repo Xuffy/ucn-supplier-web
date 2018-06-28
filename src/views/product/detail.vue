@@ -369,6 +369,7 @@
                         this.loadingTable=false;
                         this.loadingHistoryTable=false;
                     });
+
                     console.log(this.productForm,'this.productForm')
                 }).catch(err=>{
                     this.loadingTable=false;

@@ -38,10 +38,10 @@
                                 </el-input>
                             </div>
                             <div v-if="v.type==='function'">
-                                <v-upload 
-                                ref="uploadFile" 
+                                <v-upload
+                                ref="uploadFile"
                                 only-image
-                                oss-private 
+                                oss-private
                                 :list="companyInfo.logo"
                                 :readonly="summaryDisabled"/>
                             </div>
@@ -112,7 +112,7 @@
 
                 <el-tab-pane :label="$i.setting.attachment">
                   <div class="section-btn">
-                    <el-button @click="upload" type="primary" >{{$i.button.save}}</el-button>
+                    <el-button @click="upload" type="primary">{{$i.button.save}}</el-button>
                   </div>
                   <v-upload ref="uploadAttachment" :limit="20" oss-private  :list="companyInfo.attachments"/>
                 </el-tab-pane>
@@ -200,12 +200,13 @@
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                     <el-form-item  :label="$i.setting.currency+':'">
-                      <el-select  v-model="accountData.currency" placeholder="请选择"  style="width: 230px;">
+                      <el-select  v-model="accountData.currency" placeholder="请选择"  style="width: 100%">
                         <el-option
                           v-for="item in options.currency"
                           :key="item.code"
                           :label="item.name"
-                          :value="item.code">
+                          :value="item.code"
+                          style="width: 100%">
                         </el-option>
                       </el-select>
                     </el-form-item>
@@ -228,18 +229,26 @@
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
               <el-form-item :label="$i.setting.department+':'">
-                <el-input size="mini" v-model="contactData.deptId" placeholder="请输入内容"></el-input>
+                  <el-select  v-model="contactData.deptId" placeholder="请选择" style="width:100%" >
+                    <el-option
+                      v-for="item in department"
+                      :key="item.deptId"
+                      :label="item.deptName"
+                      :value="item.deptId"
+                      style="width:100%">
+                    </el-option>
+                  </el-select>
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <el-form-item  :label="$i.setting.gender+':'">
-                  <el-select v-model="contactData.gender" placeholder="please input" style="width: 230px">
+                  <el-select v-model="contactData.gender" placeholder="please input" style="width: 100%">
                     <el-option
-                      v-for="item in genderOptions"
-                      :key="item.key"
-                      :label="item.label"
-                      :value="item.key"
-                      style="width: 230px">
+                      v-for="item in sex"
+                      :key="item.code"
+                      :label="item.name"
+                      :value="item.code"
+                      style="width: 100%">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -385,18 +394,20 @@
                 type: 'PICTURE',
                 url: ''
               },
-                //btn loading状态
-                allowAddAddress:false,
-                allowAddAccount:false,
-                allowAddContact:false,
-                allowModifySummary:false,           //顶部保存按钮
-                //是否正在修改地址标识，因为新增和修改都是用的同一个按钮，所以为了区分增加一个标识
-                isModifyAddress:false,
-                isModifyAccount:false,
-                isModifyContact:false,
-                options:{},
-                department:[],
-                currencyList:[]
+              //btn loading状态
+              allowAddAddress:false,
+              allowAddAccount:false,
+              allowAddContact:false,
+              allowModifySummary:false,           //顶部保存按钮
+              //是否正在修改地址标识，因为新增和修改都是用的同一个按钮，所以为了区分增加一个标识
+              isModifyAddress:false,
+              isModifyAccount:false,
+              isModifyContact:false,
+              isSave:true,
+              options:{},
+              department:[],
+              currencyList:[],
+              sex:[]
             }
         },
         methods:{
@@ -412,8 +423,8 @@
                      });
                      this.contactDatas = this.$getDB(this.$db.setting.supplierContact, res.concats, e=>{
                         let gender;
-                        gender = _.findWhere(this.genderOptions, {code: e.gender.value}) || {};
-                        e.gender._value = gender.label || '';
+                        gender = _.findWhere(this.sex, {code: (e.gender.value).toString()}) || {};
+                        e.gender._value = gender.name || '';
                         return e;
                      });
                      this.addressDatas = this.$getDB(this.$db.setting.supplierAddress, res.address);
@@ -433,11 +444,12 @@
           },
           //获取字典
           getCodePart(){
-            this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS"]).then(res=>{
+            this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS","SEX"]).then(res=>{
               this.options.payment = _.findWhere(res, {'code': 'PMT'}).codes;
               this.options.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
               this.options.type = _.findWhere(res, {'code': 'CUSTOMER_TYPE'}).codes;
               this.options.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
+              this.sex = _.findWhere(res, {'code': 'SEX'}).codes;
             }).catch(err=>{
               console.log(err)
             });
@@ -768,13 +780,6 @@
 
                 });
             },
-             /**
-           * logo操作
-           * */
-          uploadLogo(){
-            
-
-          },
            /**
            * Attachment操作
            * */
@@ -845,7 +850,7 @@
                     this.isModifyContact=false;
                 }
             },
-        }
+        },
     }
 </script>
 
