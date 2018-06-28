@@ -138,7 +138,9 @@ export default {
     skuCommodityInspectionEn:{},
     skuDeclareElement:{},
     skuOrigin:{},
-    skuInspectQuarantineCategory:{},
+    skuInspectQuarantineCategory:{
+        _slot:'skuInspectQuarantineCategory'
+    },
     skuUnitWeight:{
         _slot:'skuUnitWeight',
     },
