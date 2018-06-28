@@ -698,16 +698,23 @@
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="name" :label="$i.product.customerType">
-                            <el-input
-                                    class="speInput"
-                                    :placeholder="$i.product.pleaseInput"
-                                    size="mini"
-                                    v-model="customerQuery.type"></el-input>
+                            <el-select class="speInput" v-model="customerQuery.type" clearable :placeholder="$i.product.pleaseChoose">
+                                <el-option
+                                        v-for="item in customerTypeOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code">
+                                </el-option>
+                            </el-select>
+                            <!--<el-input-->
+                                    <!--class="speInput"-->
+                                    <!--:placeholder="$i.product.pleaseInput"-->
+                                    <!--size="mini"-->
+                                    <!--v-model="customerQuery.type"></el-input>-->
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="name" :label="$i.product.customerCountry">
-
                             <el-select class="speInput" size="mini" v-model="customerQuery.country" filterable :placeholder="$i.product.pleaseChoose">
                                 <el-option
                                         v-for="item in countryOption"
@@ -779,6 +786,7 @@
                 readilyOption:[],       //是否现货
                 skuUnitOption:[],       //计量单位
                 quarantineTypeOption:[],//检疫类别单位
+                customerTypeOption:[],  //客户类型
 
                 loadingData:true,
                 labelPosition:'left',
@@ -819,7 +827,7 @@
                     country: '',
                     city: "",
                     pn: 1,
-                    ps: 50,
+                    ps: 1000,
                     // sorts: [
                     //     {
                     //         "nativeSql": true,
@@ -1428,12 +1436,12 @@
 
                 });
 
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // })
+                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                    console.log(res)
+                })
 
                 this.loadingData=true;
-                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT','QUARANTINE_TYPE'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT','QUARANTINE_TYPE','CUSTOMER_TYPE'],{cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
@@ -1457,6 +1465,8 @@
                             this.skuUnitOption=v.codes;
                         }else if(v.code==='QUARANTINE_TYPE'){
                             this.quarantineTypeOption=v.codes;
+                        }else if(v.code==='CUSTOMER_TYPE'){
+                            this.customerTypeOption=v.codes;
                         }
                     });
                     this.loadingData=false;
