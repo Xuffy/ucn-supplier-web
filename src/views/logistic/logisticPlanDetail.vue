@@ -42,7 +42,7 @@
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
       <div class="hd active">
-        <el-button type="primary" size="mini" :disabled="dunningDisabled" @click.stop="batchDunning">{{ $i.logistic.Dept }}</el-button>
+        <el-button type="primary" size="mini" :disabled="dunningDisabled" @click.stop="batchDunning">{{ batchDunningCutDown + $i.logistic.Dept }}</el-button>
       </div>
       <payment ref="payment" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView" :currencyCode="oldPlanObject.currency"/>
     </div>
@@ -78,6 +78,7 @@
 </template>
 <script>
 import { VSimpleTable, containerInfo, selectSearch, VTable} from '@/components/index';
+import {mapActions, mapState} from 'vuex';
 import attachment from '@/components/common/upload/index';
 import messageBoard from '@/components/common/messageBoard/index';
 import formList from '@/views/logistic/children/formList'
@@ -166,6 +167,8 @@ export default {
       pageName:'',
       prodFieldDisplay:{},
       inintData:{}, //存放初始数据的 便于取消还原数据 
+      batchDunningCutDown:'',
+      CutDown:null
     }
   },
   components: {
@@ -237,6 +240,7 @@ export default {
     } 
   },
   mounted () {
+    this.setLog({query:{code: this.pageTypeCurr&&this.pageTypeCurr=="loadingListDetail" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'}});
     const arr = this.$route.fullPath.split('/')
     this.pageName =  arr[arr.length - 1].split('?')[0]
     this.registerRoutes()
@@ -265,6 +269,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
     //获取实时汇率
     getRate(){
       this.$ajax.post(`${this.$apis.get_plan_rate}`).then(res => {
@@ -362,6 +367,18 @@ export default {
           argArr.push({'id':item.id,'version':item.version})
         }
       });
+      let seconds = 60;
+      this.dunningDisabled = true;
+      this.batchDunningCutDown = seconds +'s ';
+      this.CutDown = setInterval(()=>{
+        --seconds;
+        this.batchDunningCutDown = seconds +'s ';
+        if(seconds<=0){
+          this.batchDunningCutDown='';
+          this.dunningDisabled = false;
+          clearInterval(this.CutDown)
+        }
+      },1000)
       this.$ajax.post(`${this.$apis.logistics_payment_batchDunning}`,argArr).then(res => {
         this.$message({
           type: 'success',
@@ -762,6 +779,9 @@ export default {
     formListSelectChange(v){
       this.$set(this.oldPlanObject,'currency',v);
     }
+  },
+  destroyed(){
+    clearInterval(this.CutDown)
   }
 }
 </script>
