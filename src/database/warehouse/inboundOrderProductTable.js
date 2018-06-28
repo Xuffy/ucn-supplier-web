@@ -172,7 +172,8 @@ export default {
     skuInnerCartonVolume:{
         key:'skuInnerCartonVolume',
         belong:'skuList',
-        showType:'input'
+        showType:'input',
+        must:true
     },
     skuLabel:{
         key:'skuLabel',
