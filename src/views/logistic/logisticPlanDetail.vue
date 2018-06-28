@@ -650,7 +650,7 @@ export default {
     generateList(){
       this.$ajax.post(this.$apis.logistics_plan_postLoadingList,{id:this.planId}).then(res => {
         this.getDetails();
-        window.open(`${window.location.origin}#/logistic/loadingListDetail?id=${ this.planId }`);
+        window.open(`${window.location.origin}#/logistic/loadingListDetail?code=${ this.logisticsNo }`);
       })
     },
     conformPlan(){
