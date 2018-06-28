@@ -45,7 +45,7 @@
   "totalNetWeight": "Total N.W.",
   "totalGrossWeight": "Total G.W.",
   "totalVolume": "Total Volume",
-  "inquiryNumber": "Inquiry number",
+  "inquiryNumber": "Quotation No",
   "inquiryDate": "Inquiry Date",
   "departurePort": "Departure Port",
   "destinationPort": "Destination Port",
@@ -59,7 +59,6 @@
   "customerShortName": "customer short name",
   "customerType": "customer type",
   "customerCountry": "customer country",
-  "customer source": "customer source",
   "paymentItem": "payment item",
   "filingDate": "filing date",
   "TaxpayerQualification": "Taxpayer qualification",
@@ -109,5 +108,8 @@
   "beneficiaryAccount": "Beneficiary Account",
   "accountInfo": "Account Info",
   "tradeHistory": "Trade History",
-  "inquiryHistory": "Inquiry History"
+  "inquiryHistory": "Inquiry History",
+  "customerSource": "customer source",
+  "recentTransactionDate": "Recent transaction date",
+  "receiverAddress1": "receiver Address1"
 }

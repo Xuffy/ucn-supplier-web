@@ -1,35 +1,43 @@
 export default {
     country: {
         key: 'country',
-        belong: "address"
+        belong: "address",
+      _hide:true
       },
       province: {
         key: 'province',
-        belong: "address"
+        belong: "address",
+        _hide:true
       },
       city: {
         key: 'city',
-        belong: "address"
+        belong: "address",
+        _hide:true
       },
-      companyAddress: {
+     address: {
         key: 'address',
-        belong: "address"
+        belong: "address",
+        _hide:true
       },
       receiveCountry: {
         key: 'receiveCountry',
-        belong: "address"
+        belong: "address",
+        _hide:true
       },
       receiveProvince: {
         key: 'receiveProvince',
-        belong: "address"
+        belong: "address",
+        _hide:true
       },
       receiveCity: {
         key: 'receiveCity',
-        belong: "address"
+        belong: "address",
+        _hide:true
       },
-      receiverAddress: {
+      receiverAddress1: {
         key: 'receiveAddress',
-        belong: "address"
+        belong: "address",
+        _hide:true
       },
       notify: {
           key: "notify",
@@ -39,52 +47,16 @@ export default {
           _hide: true,
           key: "id",
       },
+      companyAddress:{
+        key: '',
+        _important:true,
+      },
+      receiverAddress:{
+        key: '',
+        _important:true,
+      },
 
-    //.............concats
-    contactName: {
-        key: 'name',
-        belong: "concats"
-    },
-    department: {
-        key: 'deptName',
-        belong: "concats"
-    },
-    gender: {
-        key: 'gender',
-        belong: "concats"
-    },
-    position: {
-        key: 'position',
-        belong: "concats"
-    },
-    mobileNo: {
-        key: 'cellphone',
-        belong: "concats"
-    },
-    tel: {
-        key: 'telphone',
-        belong: "concats"
-    },
-    faxNumber: {
-        key: 'fax',
-        belong: "concats"
-    },
-    email: {
-        key: 'email',
-        belong: "concats"
-    },
-    skype: {
-        key: 'skype',
-        belong: "concats"
-    },
-    qq: {
-        key: 'qq',
-        belong: "concats"
-    },
-    remark: {
-        key: 'remark',
-        belong: "concats"
-    },
+
     //       document
     documentRequired:{
         key:"document"
@@ -105,53 +77,6 @@ export default {
         key:"examiningReport"
     },
 
-    //order
-    orderNumber: {
-        key: 'orderNo',
-        belong: "order"
-    },
-    orderDate: {
-        key: 'entryDt',
-        belong: "order",
-        type: "textDate"
-    },
-    orderStatus: {
-        key: 'status',
-        belong: "order"
-    },
-    actDeliveryDate: {
-        key: 'deliveryDt',
-        belong: "order",
-        type: "textDate"
-    },
-    quantityOfSKU: {
-        key: 'skuQty',
-        belong: "order"
-    },
-    totalCartonOfSku: {
-        key: 'totalOuterCartonQty',
-        belong: "order"
-    },
-    totalSkuNetWeight: {
-        key: 'totalNetWeight',
-        belong: "order"
-    },
-    totalSkuRoughWeight: {
-        key: 'totalGrossWeight',
-        belong: "order"
-    },
-    totalSkuVolume: {
-        key: 'totalVolume',
-        belong: "order"
-    },
-    loadingDate: {
-        key: '',
-        belong: "order",
-        type: "textDate"
-    },
-    dateOfBL: {
-        key: '',
-        belong: "order"
-    },
+
 
 }
