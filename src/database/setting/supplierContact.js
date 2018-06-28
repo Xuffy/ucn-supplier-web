@@ -6,7 +6,7 @@ export default {
           }
     },
     department:{
-        key: 'deptName',
+        key: 'deptId',
     },
     gender: {
         key: 'gender',
