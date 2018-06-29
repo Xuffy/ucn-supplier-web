@@ -404,6 +404,8 @@
               isModifyAccount:false,
               isModifyContact:false,
               isSave:true,
+              //判断是否修改过
+              isModify:false,
               options:{},
               department:[],
               currencyList:[],
@@ -472,7 +474,13 @@
               console.log(err)
             });
           },
-
+          postUpdateIsSetting(){
+            this.$ajax.post(this.$apis.post_purchase_customer_updateIsSetting,{id:this.companyInfo.id}).then(res=>{
+              this.isModify = res;
+            }).catch(err=>{
+              console.log(err)
+            });
+          },
           //修改顶部简介信息
             modifySummary(){
                 this.summaryDisabled=false;
@@ -503,6 +511,9 @@
                 };
                 this.allowModifySummary=true;
                 this.$ajax.post(`${this.$apis.post_supplierWhile}/${this.companyInfo.id}`,params).then(res=>{
+                    if (!this.companyInfo.setting){
+                      this.postUpdateIsSetting();
+                    }
                     this.$message({
                         message: '修改成功',
                         type: 'success'
@@ -519,6 +530,9 @@
                 this.logoParmas.id = this.companyInfo.id;
                 this.logoParmas.url = this.$refs.uploadFile[0].getFiles()[0]
                 this.$ajax.post(this.$apis.post_oss_company_upload,this.logoParmas).then(res=>{
+                  if (!this.companyInfo.setting){
+                    this.postUpdateIsSetting();
+                  }
                     this.getWholeData();
                 })
             },
@@ -566,6 +580,9 @@
                 }else{
                     //表示是在新增地址
                     this.$ajax.post(this.$apis.post_supplier_address,this.addressData).then(res=>{
+                        if (!this.companyInfo.setting){
+                          this.postUpdateIsSetting();
+                        }
                         this.allowAddAddress=false;
                         this.$message({
                             message: '添加成功',
@@ -652,6 +669,9 @@
                 else{
                     //表示是在新增account
                     this.$ajax.post(this.$apis.post_supplier_account,this.accountData).then(res=>{
+                        if (!this.companyInfo.setting){
+                          this.postUpdateIsSetting();
+                        }
                         this.allowAddContact=false;
                         this.$message({
                             message: '添加成功',
@@ -737,6 +757,9 @@
                 else{
                     //表示是在新增account
                     this.$ajax.post(this.$apis.post_supplier_contact,this.contactData).then(res=>{
+                        if (!this.companyInfo.setting){
+                          this.postUpdateIsSetting();
+                        }
                         this.allowAddContact=false;
                         this.$message({
                             message: '添加成功',
@@ -800,6 +823,9 @@
            if (this.$refs.uploadAttachment.getFiles().length !== 0){
              if (this.$refs.uploadAttachment.getFiles().length === 1){
                this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
+                 if (!this.companyInfo.setting){
+                   this.postUpdateIsSetting();
+                 }
                  this.$message({
                    message: '上传成功',
                    type: 'success'
@@ -809,6 +835,9 @@
 
              }else{
                this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
+                 if (!this.companyInfo.setting){
+                   this.postUpdateIsSetting();
+                 }
                  this.$message({
                    message: '上传成功',
                    type: 'success'
