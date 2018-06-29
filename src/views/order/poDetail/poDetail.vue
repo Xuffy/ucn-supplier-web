@@ -468,6 +468,7 @@
             {{$i.order.productInfoBig}}
         </div>
         <v-table
+                code="uorder_sku_list"
                 :height="500"
                 :data.sync="productTableData"
                 :buttons="isModify?productInfoBtn:productNotModifyBtn"
@@ -1560,7 +1561,7 @@
                 this.loadingPage=true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
                     orderId:this.$route.query.orderId,
-                    orderNo:this.$route.query.orderNo
+                    orderNo:this.$route.query.orderNo || this.$route.query.code
                 }).then(res=>{
                     this.orderForm=res;
                     this.savedIncoterm=Object.assign({},res).incoterm;
