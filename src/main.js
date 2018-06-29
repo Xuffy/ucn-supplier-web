@@ -15,8 +15,6 @@ import database from './database/index';
 import locale from 'element-ui/lib/locale';
 import {localStore} from 'service/store';
 import 'element-ui/lib/theme-chalk/base.css';
-import VueHolder from 'vue-holderjs';
-
 
 ////////////////////////////////////////////////////////
 
@@ -26,7 +24,6 @@ const lang = localStore.get('language') || config.LANGUAGE;
 locale.use(require(`element-ui/lib/locale/lang/${lang}`).default);
 
 Vue.use(ElementUI, {size: 'mini'});
-Vue.use(VueHolder);
 
 Vue.config.productionTip = false;
 Vue.prototype.$ajax = new ajax();

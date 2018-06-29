@@ -1,15 +1,16 @@
 <template>
-  <div class="ucn-image" ref="image"
+  <div class="ucn-image" v-if="src"
        @click="val => {$emit('click', val)}"
        :style="{height:height, width:width}">
 
-    <img class="image" :src="src" ref="image" v-holder="{text:'UCN',img:'100px100p'}">
-
+    <img class="image" :src="src" ref="image">
+    <!--<img class="image" v-else src="holder.js/100px100p?text=%20&amp;outline=yes" ref="defaultImage">-->
     <!--onerror="this.src='holder.js/300x200?theme=red';this.onerror=null"-->
   </div>
 </template>
 
 <script>
+  // import Holder from 'holderjs';
 
   export default {
     name: 'VImage',
@@ -29,12 +30,21 @@
     },
     data() {
       return {
-        iconSize: 0,
-        errorImage: ''
       }
     },
-    watch: {},
+    watch: {
+    },
+    created() {
+    },
     mounted() {
+      /*console.log(this.$refs.image)
+      this.$refs.image.onerror = () => {
+        this.showImage = false;
+        this.$refs.image.onerror = null;
+      };
+      Holder.run({
+        images: this.$refs.defaultImage
+      });*/
     },
     methods: {}
   }

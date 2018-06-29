@@ -5,5 +5,7 @@
   "basicInfo": "基本信息",
   "supplierRequired": "Less one supplier required.",
   "skuRequired": "Less one product required.",
-  "incotermRequired": "Incoterm is required."
+  "incotermRequired": "Incoterm is required.",
+  "discountRateMustNumber": "Discount Rate must a number",
+  "noItemSelected": "No item selected!"
 }

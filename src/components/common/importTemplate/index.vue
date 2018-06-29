@@ -8,6 +8,11 @@
       width="50%">
 
       <el-form label-width="80px">
+
+        <el-form-item :label="$i.importTemplate.note" class="remark-box important">
+          <h5>{{$i.importTemplate.importPrompt}}</h5>
+        </el-form-item>
+
         <el-form-item :label="$i.importTemplate.upload">
           <el-upload
             :action="$apis.IMPORTFILE_IMPORTTASKE"
@@ -110,6 +115,12 @@
   .remark-box h5 a {
     color: #3a8ee6;
     text-decoration: underline;
+  }
+
+  .remark-box.important /deep/ .el-form-item__label,
+  .remark-box.important {
+    color: red;
+    margin-bottom: 5px;
   }
 </style>
 <style>

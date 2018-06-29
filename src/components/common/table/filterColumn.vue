@@ -70,7 +70,7 @@
     methods: {
       filterNode(value, data) {
         if (!value) return true;
-        return data._name.toLowerCase().indexOf(value.toLowerCase()) !== -1;
+        return data._name && data._name.toLowerCase().indexOf(value.toLowerCase()) !== -1;
       },
       getFilterData(data, checkList) {
         return _.map(data, val => {

@@ -127,7 +127,12 @@
             loading: false,
             search: {},
             type: 'PAYMENT',
-            url: '/logistic/planDetail'
+            url: {
+              PURCHASE_ORDER: '/order/detail',
+              QC_ORDER: '/warehouse/qcDetail',
+              LOGISTICS_PLAN: '/logistic/logisticPlanDetail',
+              LOGISTICS_LIST: '/logistic/loadingListDetail'
+            }
           }
         ],
         search: {type: 'bizNo', value: ''},
@@ -189,23 +194,24 @@
         }).finally(() => item.loading = false);
       },
       goDetail(item) {
-        let tab = this.dataList[this.tabIndex];
+        let tab = this.dataList[this.tabIndex]
+          , params = {code: item.bizNo.value}
+          , {url} = tab;
+
         switch (tab.type) {
           case 'LOGISTIC':
-            let param = {code: item.bizNo.value}
             if (item.bizCode === 'BIZ_LOGISTIC_ORDER') {
-              param.loadingList = 'loadingList';
+              params.loadingList = 'loadingList';
             }
-            return this.$router.push({path: tab.url, query:param});
+            break;
           case 'PAYMENT':
             this.$ajax.post(this.$apis.PAYMENT_GETORDERBYPAYMENTNOS, {paymentNos: item.bizNo.value})
               .then(res => {
-
+                url = url[res];
               });
             break;
-          default:
-            return this.$router.push({path: tab.url, query: {code: item.bizNo.value}});
         }
+        this.$windowOpen({url,params});
       }
     }
   }

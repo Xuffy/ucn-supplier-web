@@ -6,5 +6,6 @@
   "template": "模板",
   "import": "导入",
   "upload": "下载",
-  "selectFile": "选择文件"
+  "selectFile": "选择文件",
+  "importPrompt": "同一邮箱的历史数据将被覆盖"
 }
