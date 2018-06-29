@@ -2,14 +2,13 @@
     <div class="souringDetail">
         <div class="head">
             <div class="title">
-                <img :src='basicDate.logo'/>
                 <span>{{basicDate.name}}</span>
             </div>
             <div class="detail">
                  <el-form  label-width="190px">
                    <el-row>
                      <el-col :span="4">
-                       <v-image :src="basicDate.logo"/>
+                       <v-image :src="basicDate.logo" style="height: 230px"/>
                      </el-col>
                      <el-col :span="20">
                        <el-form>
@@ -78,7 +77,7 @@
                     <!-- <div class="section-btn" style="margin-bottom:10px;">
                       <el-button  @click="upload" type="primary">{{$i.button.upload}}</el-button>
                     </div> -->
-                    <v-upload ref="uploadAttachment" :limit="20"  readonly/>
+                    <v-upload ref="uploadAttachment" :limit="20"  :list="basicDate.attachments" readonly/>
                 </el-tab-pane>
 
                  <el-tab-pane :label="$i.supplier.remark" name="remark">
