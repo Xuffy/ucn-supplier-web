@@ -428,8 +428,6 @@
                     });
                 }
 
-                console.log(this.productData,'this.productData')
-
                 let allow=true;
                 let mustKey=['inboundOutCartonTotalQty','skuOuterCartonVolume','skuOuterCartonRoughWeight','skuOuterCartonNetWeight','skuNetWeight','skuInnerCartonLength','skuInnerCartonWidth','skuInnerCartonHeight','skuInnerCartonWeightNet','skuInnerCartonRoughWeight','skuInnerCartonVolume'];
                 _.map(this.productData,v=>{
@@ -475,7 +473,7 @@
                         inventorySkuVolume: 0,
                         orderId: v.orderId,
                         orderNo: v.orderNo,
-                        orderSkuQty: v.totalQty,
+                        orderSkuQty: v.skuQty,
                         outboundOutCartonTotalQty: 0,
                         outboundSkuTotalGrossWeight: 0,
                         outboundSkuTotalNetWeight: 0,
@@ -636,6 +634,7 @@
                         skuIds:this.productIds,
                         orderNos:orderNos
                     }).then(res=>{
+                        console.log(res,'res')
                         _.map(res,v=>{
                             _.map(v.skuList,e=>{
                                 e.customerOrderNo=v.customerOrderNo;
@@ -644,6 +643,7 @@
                                 e.supplierName=v.supplierName;
                                 e.supplierNo=v.supplierNo;
                                 e.supplierOrderNo=v.supplierOrderNo;
+                                e.skuQty=v.skuQty;
                                 this.productData.push(e);
                             })
                         });

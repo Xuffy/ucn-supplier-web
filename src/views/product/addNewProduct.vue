@@ -684,7 +684,7 @@
             <el-button @click="finish" :disabled="loadingData" :loading="disabledSubmit" type="primary">{{$i.product.finish}}</el-button>
         </div>
 
-        <el-dialog width="70%" :title="$i.product.addCustomer" :visible.sync="addCustomerDialogVisible">
+        <el-dialog width="70%" :title="$i.product.addCustomer" :visible.sync="addCustomerDialogVisible" custom-class="ucn-dialog-center">
             <el-form ref="customerQuery" :model="customerQuery" label-width="120px">
                 <el-row class="speZone">
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
@@ -1186,7 +1186,7 @@
                     this.loadingTable=false;
                     this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
                         this.tableData.forEach(v=>{
-                            if(v.id===e.id.value){
+                            if(v.customerId===e.id.value){
                                 this.$set(e,'_disabled',true);
                                 this.$set(e,'_checked',true);
                             }
@@ -1240,12 +1240,11 @@
                     }else{
                         param.ids=[];
                         this.tableData.forEach(v=>{
-                            param.ids.push(v.id);
+                            param.ids.push(v.customerId);
                         });
                     }
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
-                    console.log(param,'param')
                     this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
                         this.$message({
                             message: this.$i.product.modifySuccess,
@@ -1291,14 +1290,16 @@
                     }
                     if(param.visibility){
                         param.ids=[];
-                    }else{
+                    }
+                    else{
                         param.ids=[];
                         this.tableData.forEach(v=>{
-                            param.ids.push(v.id);
+                            param.ids.push(v.customerId);
                         });
                     }
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
+
                     this.$ajax.post(this.$apis.add_newSKU,param).then(res=>{
                         this.$message({
                             message: this.$i.product.successfullyAdd,
@@ -1371,7 +1372,7 @@
             },
             searchCustomer(){
                 this.loadingTable=true;
-                this.$ajax.post(this.$apis.get_sellerCustomer,this.customerQuery).then(res=>{
+                this.$ajax.post(this.$apis.get_sellerCustomerGroup,this.customerQuery).then(res=>{
                     this.loadingTable=false;
                     this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
                         this.tableData.forEach(v=>{
@@ -1404,6 +1405,7 @@
                     this.disableClickPost=true;
                     this.$ajax.post(this.$apis.get_sellerCustomerGroup,id).then(res=>{
                         res.forEach(v=>{
+                            v.customerId=v.id;
                             this.tableData.push(v);
                         });
                         this.addCustomerDialogVisible=false;
@@ -1436,9 +1438,9 @@
 
                 });
 
-                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                    console.log(res)
-                })
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // })
 
                 this.loadingData=true;
                 this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT','QUARANTINE_TYPE','CUSTOMER_TYPE'],{cache:true}).then(res=>{

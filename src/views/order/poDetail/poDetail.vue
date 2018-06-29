@@ -1548,6 +1548,7 @@
                             if(item.skuCategoryId.value){
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
+                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
                         }
                     });
                     _.map(data,v=>{
@@ -1601,7 +1602,7 @@
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
                             item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory?this.$change(this.quarantineTypeOption,'skuInspectQuarantineCategory',item,true).name:'';
-
+                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
 
                             //图片处理
                             let skuLabelPic=item.skuLabelPic.value,
@@ -1936,6 +1937,7 @@
                             if(item.skuCategoryId.value){
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
+                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
                         }
                     });
                     _.map(data,v=>{
@@ -2677,6 +2679,7 @@
                             if(item.skuCategoryId.value){
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
+                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
                         }
                     });
                     _.map(data,v=>{
