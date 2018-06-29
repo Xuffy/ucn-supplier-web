@@ -80,7 +80,7 @@ export default {
       tabData: [],
       viewByStatus: 0,
       params: {
-        status: 21,
+        status: null,
         ps: 50,
         pn: 1,
         tc: 0,
