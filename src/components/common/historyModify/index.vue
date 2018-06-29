@@ -138,6 +138,8 @@
         this.showDialog = true;
         this.isModify = isModify;
 
+        return this.dataList;
+
       },
       changeSelect(val, item) {
         let param = {}, obj;

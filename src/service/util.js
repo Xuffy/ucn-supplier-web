@@ -5,6 +5,7 @@ import $i from '../language/index';
 import router from 'service/router'
 import _config from "./config";
 import store from '@/store';
+import Qs from 'qs'
 import {Message, MessageBox} from 'element-ui';
 
 
@@ -25,19 +26,6 @@ const deleteObject = (list, fieldRemark, details) => {
     if (key === details) deleteArr(list[details], fieldRemark)
   });
 };
-
-
-const serialization = (params) => {
-  const result = []
-  for (const key in params) {
-    if (params.hasOwnProperty(key)) {
-      const element = params[key];
-      result.push(`${key}=${element}`)
-    }
-  }
-  return result.join('&')
-};
-
 
 export default {
   /**
@@ -169,7 +157,7 @@ export default {
 
       validate = item._rules;
 
-      if (validate.required && !/\S/.test(val)) {
+      if (validate.required && (_.isNull(val) || _.isNaN(val) || _.isUndefined(val) || val === '')) {
         Message.warning(`${$i.util.validateRequired} ${item.label}`);
         return key;
       }
@@ -307,11 +295,7 @@ export default {
    */
   $copyArr(arr) {
     return arr.map((e) => {
-      if (typeof e === 'object') {
-        return Object.assign({}, e)
-      } else {
-        return e
-      }
+      return typeof e === 'object' ? Object.assign({}, e) : e;
     })
   },
 
@@ -385,16 +369,8 @@ export default {
    */
 
   $windowOpen(config) {
-    let url = `//${window.location.host}/#${config.url}`, p = {};
-    if (!_.isEmpty(config.params) && !config.params.length) {
-      _.mapObject(config.params, (val, key) => {
-        if (url.indexOf(`{${key}}`) < 0) {
-          p[key] = val;
-        }
-      });
-    }
-    url = _.template(url)(config.params || {});
-    return window.open(`${url}?${serialization(p)}`, '_blank');
+    let {url, params} = config;
+    return window.open(`//${window.location.host}/#${config.url}?${Qs.stringify(params)}`, '_blank');
   },
 
   $mul() {
