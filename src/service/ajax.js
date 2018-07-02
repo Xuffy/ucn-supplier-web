@@ -66,11 +66,11 @@ const $ajax = (config) => {
   this.setUrl = (url, params) => {
     let p = {};
 
-    if (_.isEmpty(url)) {
+    if (_.isEmpty(url)){
       throw new Error('Request url exception');
     }
 
-    if (!_.isEmpty(params) && _.isObject(params)) {
+    if (!_.isEmpty(params) && _.isObject(params) && !_.isArray(params)) {
       _.mapObject(params, (val, key) => {
         if (url.indexOf(`{${key}}`) < 0) {
           p[key] = val;
