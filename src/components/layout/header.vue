@@ -119,7 +119,7 @@
     watch: {
       $route() {
         this.updateMenuActive();
-        this.getMessage();
+        // this.getMessage();
       },
       'message.show'(val) {
         val && this.getMessage();
@@ -178,7 +178,7 @@
       },
       getMessage() {
         this.message.loading = true;
-        this.$ajax.get(this.$apis.UNREADMESSAGE_QUERYUNREAD)
+        this.$ajax.post(this.$apis.UNREADMESSAGE_QUERY, {ps: 8, pn: 1})
           .then(data => {
             this.message.list = data || [];
           })

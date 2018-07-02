@@ -65,15 +65,26 @@
             <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && !cItem._hidden && cItem.key"
                 :style="cItem._style">
               <!-- 是否为图片显示 -->
-              <div v-if="!cItem._image" class="image-box"
-                   :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
-                   v-text="cItem._value || cItem.value"></div>
-
-              <v-image class="img" v-else
+              <v-image class="img" v-if="cItem._image"
                        :src="getImage(cItem._value || cItem.value)"
                        height="30px"
                        width="30px"
                        @click="$refs.tableViewPicture.show(cItem._value || cItem.value)"></v-image>
+
+              <el-popover
+                v-else-if="cItem._upload && !item._remark"
+                placement="bottom"
+                width="300"
+                trigger="click">
+                <v-upload readonly :limit="cItem._upload.limit || 5"
+                          :ref="cItem._upload.ref || 'upload'"
+                          :list="cItem._value || cItem.value"></v-upload>
+                <el-button slot="reference" type="text">查看附件</el-button>
+              </el-popover>
+
+              <div v-else
+                   :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
+                   v-text="cItem._value || cItem.value"></div>
             </td>
             <!--操作按钮显示-->
             <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
@@ -147,11 +158,12 @@
   import VFilterValue from './filterValue'
   import VFilterColumn from './filterColumn'
   import VViewPicture from '../viewPicture/index'
+  import VUpload from '../upload/index'
   import VImage from '../image/index'
 
   export default {
     name: 'VTable',
-    components: {VFilterValue, VViewPicture, VImage, VFilterColumn},
+    components: {VFilterValue, VViewPicture, VImage, VFilterColumn, VUpload},
     props: {
       data: {
         type: Array,
@@ -476,6 +488,7 @@
     text-align: center;
     width: 100%;
     line-height: 14px;
+    min-height: 14px;
   }
 
   .ucn-table thead td > div {
@@ -494,6 +507,7 @@
 
   .ucn-table tbody td {
     padding: 10px;
+    border-right: 1px solid #FFFFFF;
   }
 
   .ucn-table tbody td .img {
@@ -547,6 +561,7 @@
 
   .ucn-table .button.disabled {
     color: #dad8d8;
+    cursor: not-allowed;
   }
 
   .ucn-table .button:last-child {
