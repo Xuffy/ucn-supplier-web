@@ -189,13 +189,13 @@ export default {
         key:'customerNo'
     },
     customerName:{
-        key:'skuNameCustomer',
+        key:'customerName',
     },
     supplierName:{
         key:'supplierName',
     },
-    supplierNo:{
-        key:'supplierNo',
+    supplierCode:{
+        key:'supplierCode',
     },
     supplierOrderNo:{
         key:'supplierOrderNo',

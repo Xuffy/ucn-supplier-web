@@ -9,7 +9,6 @@
                         <v-upload :limit="20" :list="productForm.pictures" :onlyImage="true" ref="upload"></v-upload>
                     </el-form-item>
                 </el-col>
-
                 <el-col style="height: 51px;" v-if="v.belongTab==='basicInfo' && !v.isHide" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
@@ -1245,6 +1244,7 @@
                     }
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
+                    param.categoryId=param.categoryName;
                     this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
                         this.$message({
                             message: this.$i.product.modifySuccess,
@@ -1297,6 +1297,7 @@
                             param.ids.push(v.customerId);
                         });
                     }
+                    param.categoryId=param.categoryName;
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
 

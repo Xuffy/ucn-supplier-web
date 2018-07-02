@@ -1910,7 +1910,7 @@
                 this.productTableDialogVisible=false;
                 this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
                     _.map(res,v=>{
-                        v.skuStatus='2';
+                        v.skuStatus='TBC';
                     })
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
                         item._isNew=true;

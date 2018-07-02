@@ -640,9 +640,9 @@
                                 e.customerNo=v.customerNo;
                                 e.skuCustomsNameCn=v.skuCustomsNameCn;
                                 e.supplierName=v.supplierName;
-                                e.supplierNo=v.supplierNo;
+                                e.supplierCode=v.supplierCode;
                                 e.supplierOrderNo=v.supplierOrderNo;
-                                e.skuQty=v.skuQty;
+                                e.customerName=v.customerName;
                                 this.productData.push(e);
                             })
                         });
