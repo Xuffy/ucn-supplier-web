@@ -205,7 +205,7 @@
             }
             break;
           case 'PAYMENT':
-            this.$ajax.post(this.$apis.PAYMENT_GETORDERBYPAYMENTNOS, {paymentNos: item.bizNo.value})
+            this.$ajax.post(this.$apis.PAYMENT_GETORDERBYPAYMENTNOS, {paymentNos: [item.bizNo.value]})
               .then(res => {
                 url = url[res];
               });

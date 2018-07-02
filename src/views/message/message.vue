@@ -28,8 +28,8 @@
         <page
           :page-data="pageData"
           @change="handleSizeChange"
-          @size-change="pageSizeChange"
-          :page-sizes="[50,100,200]"></page>
+          :page-sizes="[50,100,200]"
+          @size-change="pageSizeChange"></page>
       </div>
 
       <div v-show="isShow" class="box">
@@ -51,7 +51,7 @@
               align="center">
               <template slot-scope="scope">
                 <!--<div @click="handleEdit(scope.$index, scope.row)" style="display: inline-block;">-->
-                  <el-checkbox @change="handleCheckedCitiesChange(scope.$index, scope.row)" v-model="scope.row.subscribeEmail">Email</el-checkbox>
+                <el-checkbox @change="handleCheckedCitiesChange(scope.$index, scope.row)" v-model="scope.row.subscribeEmail">Email</el-checkbox>
                 <!--</div>-->
                 <el-checkbox v-model="checked1" disabled>Platform</el-checkbox>
               </template>
@@ -62,18 +62,6 @@
         </el-tabs>
       </div>
     </div>
-
-    <!--<el-dialog-->
-        <!--title="提示"-->
-        <!--:visible.sync="centerDialogVisible"-->
-        <!--width="30%"-->
-        <!--center>-->
-          <!--<span>系统通过邮件来发送消息</span>-->
-          <!--<span slot="footer" class="dialog-footer">-->
-        <!--<el-button @click="centerDialogVisible = false">取 消</el-button>-->
-        <!--<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>-->
-      <!--</span>-->
-    <!--</el-dialog>-->
 
   </div>
 </template>
@@ -106,9 +94,9 @@
         multipleSelection:[],
         tableData:[],
         params: {
-          mark: 0,
+          title: '',
           content: '',
-          ps:10,
+          ps:50,
           pn:1
         },
         checked1:true,
@@ -127,22 +115,24 @@
     },
     methods:{
       handleClick(tab, event) {
+        console.log(1)
         console.log(tab, event);
+        // this.getMessageQuery()
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
       handleSizeChange(val) {
-          this.params.pn = val;
-          this.getDataInfo();
+        this.params.pn = val;
+        this.getDataInfo();
       },
       pageSizeChange(val) {
-          this.params.ps = val;
-          this.getDataInfo();
+        this.params.ps = val;
+        this.getDataInfo();
       },
       changeChecked(item) { //tab 勾选
-       if (item.length != 0){
-         this.isResd = false;
+        if (item.length != 0){
+          this.isResd = false;
         }else{
           this.isResd = true;
         }
@@ -156,23 +146,23 @@
         if (row.subscribeEmail){
           this.updatesetting.subscribeEmail = 1
           this.$ajax.post(url, this.updatesetting)
-          .then(res => {
-            this.$message({
-              message: '配置成功',
-              type: 'success',
-            });
-            this.getMessageQuery()
-          })
+            .then(res => {
+              this.$message({
+                message: '配置成功',
+                type: 'success',
+              });
+              this.getMessageQuery()
+            })
         }else{
           this.updatesetting.subscribeEmail = 0
           this.$ajax.post(url, this.updatesetting)
-          .then(res => {
-            this.$message({
-              message: '配置成功',
-              type: 'success',
-            });
-            this.getMessageQuery()
-          })
+            .then(res => {
+              this.$message({
+                message: '配置成功',
+                type: 'success',
+              });
+              this.getMessageQuery()
+            })
         }
       },
       //管理信息
@@ -195,24 +185,24 @@
         let url;
         this.tabLoad = true;
         if(this.viewByStatus + '' === '1') {
-          url = this.$apis.post_systemmessage_query;
+          url = this.$apis.post_usermessage_querySystem;
         } else {
-          url = this.$apis.post_companymessage_query;
+          url = this.$apis.post_usermessage_queryCompany;
         };
         this.$ajax.post(url, this.params)
           .then(res => {
-              this.tabData = this.$getDB(this.$db.message.table, res.datas, e => {
-                _.mapObject(e, val => {
-                  val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'))
-                  return val
-                })
-                if(e.read.value){
-                  e.read.value = '已读'
-                }else{
-                  e.read.value = '未读'
-                }
-
-              });
+            this.tabData = this.$getDB(this.$db.message.table, res.datas, e => {
+              _.mapObject(e, val => {
+                val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'));
+                return val
+              })
+              if(e.read.value){
+                e.read.value = '已读';
+              }else{
+                e.read.value = '未读'
+              }
+              return e
+            });
             this.pageData=res;
             this.tabLoad = false;
             this.searchLoad = false;
@@ -225,13 +215,14 @@
       postRead(){
         let url;
         if(this.viewByStatus + '' === '1'){
-          url = this.$apis.post_sys_updateread;
+          url = this.$apis.post_usermessage_readSystem;
         } else {
-          url = this.$apis.post_company_updateread;
+          url = this.$apis.post_usermessage_readCompany;
         };
         let arr = [];
         _.map(this.checkedData, item => {
-          if(!_.isUndefined(item)) arr.push(_.findWhere(item, {'key': 'subscribeId'}).value);
+          console.log(this.checkedData)
+          if(!_.isUndefined(item)) arr.push(_.findWhere(item, {'key': 'id'}).value);
         });
         this.$ajax.post(url, arr)
           .then(res => {
@@ -247,7 +238,7 @@
       },
       getMessageQuery(){
         let url = this.$apis.get_messagesetting_query
-        this.$ajax.get(`${url}?type=${1}`)
+        this.$ajax.get(`${url}?type=${2}`)
           .then(res => {
             res = _.map(res,val=>{
               switch (val.messageType)
@@ -276,7 +267,7 @@
               }else{
                 val.subscribeEmail = false;
               }
-                return val;
+              return val;
             });
             this.tableData = res
           })
@@ -299,9 +290,9 @@
     },
     created(){
       this.message = '1';
-      this.getDataInfo()
-      this.getMessageQuery()
-    }
+      this.getDataInfo();
+      this.getMessageQuery();
+    },
   }
 </script>
 
