@@ -96,7 +96,7 @@
         </div>
         <el-dialog :title="$i.supplier.addRemark" :visible.sync="addRemarkFormVisible" center width="600px">
             <el-form :model="addRemarkData">
-              <el-form-item :label="$i.supplier.remark" :label-width="formLabelWidth">
+              <el-form-item  :label-width="formLabelWidth">
                 <el-input
                   type="textarea"
                   :rows="4"

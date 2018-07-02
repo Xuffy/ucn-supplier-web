@@ -551,6 +551,7 @@ export const routerMap = [
       component: Layout,
       meta: {name: 'customer'},
       redirect: '/customer/overview',
+      noDropdown: true,
       hidden: false,
       meta: {
         name: '客户'
