@@ -122,9 +122,8 @@ export default {
     key:'totalContainerOuterCartonsQty',
     type: 'text'
   },
-  // "shipmentStatus":{
-  //   _hide: true,
-  //   type: 'text'
-  // },
+  "shipmentStatus":{
+    type: 'text'
+  }
 }
 
