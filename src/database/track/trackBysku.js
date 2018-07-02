@@ -41,7 +41,7 @@ export default {
     key: 'incoterm'
   },
   incotermArea: {
-    key: 'iincotermArea'
+    key: 'incotermArea'
   },
   currency: {
     key: 'currency'
@@ -109,9 +109,9 @@ export default {
   skuNetWeight: {
     key: 'skuNetWeight'
   },
-  skuGrossWeight: {
-    key: 'skuGrossWeight'
-  },
+  // skuGrossWeight: {
+  //   key: 'skuGrossWeight'
+  // },
   skuVolume: {
     key: 'skuVolume'
   },
@@ -128,7 +128,7 @@ export default {
     key: 'skuInnerPackLabel'
   },
   innerPackingLabel: {
-    key: ''
+    key: 'skuInnerPackBarCode'
   },
   shippingMarks: {
     key: 'skuShippingMarks'
@@ -187,7 +187,8 @@ export default {
     type: 'textDate'
   },
   estDepartureDate: {
-    key: 'estDeliveryDt'         //预计发运日期
+    key: 'estDeliveryDt' ,        //预计发运日期
+    type: 'textDate'
   },
   actDepartureDate: {
     key: 'actDepartureDt',
@@ -248,6 +249,9 @@ export default {
   country: {
     key: 'customerCountry'
   },
+  departurePort:{
+    key: 'departurePort'
+  },
   destinationPort: {
     key: 'destinationPort'
   },
@@ -290,9 +294,9 @@ export default {
   logisticsNo: {
     key: 'logisticsNo'
   },
-  category:{
-    key: '',
-    _important:true,
+  category: {
+    key: 'category',
+    // _important:true,
   },
   categoryLevel1: {
     key: 'skuCategoryOne',
