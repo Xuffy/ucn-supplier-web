@@ -634,7 +634,6 @@
                         skuIds:this.productIds,
                         orderNos:orderNos
                     }).then(res=>{
-                        console.log(res,'res')
                         _.map(res,v=>{
                             _.map(v.skuList,e=>{
                                 e.customerOrderNo=v.customerOrderNo;
