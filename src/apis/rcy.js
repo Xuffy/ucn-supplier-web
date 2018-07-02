@@ -14,6 +14,7 @@ export default {
     ORDER_SKUS: ['/order/skus', 'BASE_URL'],
     ORDER_MARK: ['/order/mark','BASE_URL'],
     ORDER_HISTORY:['/order/skuHistory','BASE_URL'],
+    ORDER_MESSAGE_TALK:['/order/messageToTask','BASE_URL'],
 
 
     //customer

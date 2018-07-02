@@ -9,6 +9,9 @@ export default {
     skuSysCode:{
         _hide:true
     },
+    id:{
+        _hide:true
+    },
     skuId:{
         _hide:true
     },

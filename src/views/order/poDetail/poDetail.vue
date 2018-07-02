@@ -288,7 +288,7 @@
         </div>
         <div class="payment-table">
             <el-button :loading="disableClickPayback" :disabled="!hasHandleOrder" @click="applyPayback" type="primary">{{$i.order.applyRefund}}</el-button>
-            <el-button :disabled="!hasHandleOrder">{{$i.order.remindCustomerPay}}</el-button>
+            <el-button :disabled="!hasHandleOrder" :loading="disableRemind" @click="remindPay">{{$i.order.remindCustomerPay}}</el-button>
             <el-table
                     v-loading="loadingPaymentTable"
                     class="payTable"
@@ -1106,7 +1106,7 @@
             </div>
         </v-history-modify>
 
-        <v-message-board :readonly="orderForm.status==='5'" module="order" code="detail" :id="$route.query.orderId"></v-message-board>
+        <v-message-board @send="afterSend" :readonly="orderForm.status==='5'" module="order" code="detail" :id="$route.query.orderId"></v-message-board>
     </div>
 </template>
 
@@ -1149,6 +1149,7 @@
                 countryOption:[],
                 quarantineTypeOption:[],
                 skuSaleStatusOption:[],
+                skuStatusTotalOption:[],
 
 
                 /**
@@ -1232,6 +1233,7 @@
                  * */
                 loadingPaymentTable:false,
                 disableClickPayback:false,
+                disableRemind:false,
                 paymentData:[],
                 copyList:[],
 
@@ -1447,28 +1449,28 @@
 
                 });
 
-                this.skuStatusTotalOption=[
-                    {
-                        code:'1',
-                        name:'TBCBYSUPPLIER'
-                    },
-                    {
-                        code:'2',
-                        name:'TBCBYCUSTOMER'
-                    },
-                    {
-                        code:'3',
-                        name:'PROCESS'
-                    },
-                    {
-                        code:'4',
-                        name:'FINISHED'
-                    },
-                    {
-                        code:'5',
-                        name:'CANCLED'
-                    },
-                ];
+                // this.skuStatusTotalOption=[
+                //     {
+                //         code:'1',
+                //         name:'TBCBYSUPPLIER'
+                //     },
+                //     {
+                //         code:'2',
+                //         name:'TBCBYCUSTOMER'
+                //     },
+                //     {
+                //         code:'3',
+                //         name:'PROCESS'
+                //     },
+                //     {
+                //         code:'4',
+                //         name:'FINISHED'
+                //     },
+                //     {
+                //         code:'5',
+                //         name:'CANCLED'
+                //     },
+                // ];
                 this.skuStatusOption=[
                     {
                         code:'3',
@@ -1480,7 +1482,8 @@
                     },
                 ];
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS','SKU_SALE_STATUS']).then(res=>{
+
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS','SKU_SALE_STATUS','SKU_STATUS']).then(res=>{
                     this.allowQuery++;
                     res.forEach(v=>{
                         if(v.code==='ITM'){
@@ -1507,6 +1510,8 @@
                             this.quarantineTypeOption=v.codes;
                         }else if(v.code==='SKU_SALE_STATUS'){
                             this.skuSaleStatusOption=v.codes;
+                        }else if(v.code==='SKU_STATUS'){
+                            this.skuStatusTotalOption=v.codes;
                         }
                     })
                 }).finally(err=>{
@@ -1542,7 +1547,7 @@
                             item.skuUnitWeight._value=item.skuUnitWeight?this.$change(this.weightOption,'skuUnitWeight',item,true).name:'';
                             item.skuUnitLength._value=item.skuUnitLength?this.$change(this.lengthOption,'skuUnitLength',item,true).name:'';
                             item.skuExpireUnit._value=item.skuExpireUnit?this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name:'';
-                            item.skuStatus._value=item.skuStatus?this.$change(this.skuStatusTotalOption,'skuStatus',item,true).name:'';
+                            item.skuStatus._value=item.skuStatus?_.findWhere(this.skuStatusTotalOption,{code:item.skuStatus.value}).name:'';
                             item.skuUnitVolume._value=item.skuUnitVolume?this.$change(this.volumeOption,'skuUnitVolume',item,true).name:'';
                             item.skuSaleStatus._value=item.skuSaleStatus?this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name:'';
                             if(item.skuCategoryId.value){
@@ -1595,7 +1600,7 @@
                             item.skuUnitWeight._value=item.skuUnitWeight?this.$change(this.weightOption,'skuUnitWeight',item,true).name:'';
                             item.skuUnitLength._value=item.skuUnitLength?this.$change(this.lengthOption,'skuUnitLength',item,true).name:'';
                             item.skuExpireUnit._value=item.skuExpireUnit?this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name:'';
-                            item.skuStatus._value=item.skuStatus?this.$change(this.skuStatusTotalOption,'skuStatus',item,true).name:'';
+                            item.skuStatus._value=item.skuStatus?_.findWhere(this.skuStatusTotalOption,{code:item.skuStatus.value}).name:'';
                             item.skuUnitVolume._value=item.skuUnitVolume?this.$change(this.volumeOption,'skuUnitVolume',item,true).name:'';
                             item.skuSaleStatus._value=item.skuSaleStatus?this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name:'';
                             if(item.skuCategoryId.value){
@@ -1672,7 +1677,6 @@
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
                     if(params.supplierCode===v.code){
-                        console.log(v,'vvvvvvvv')
                         params.supplierName=v.name;
                         params.supplierCode=v.code;
                         params.supplierId=v.id;
@@ -1680,6 +1684,7 @@
                     }
                 });
                 params.skuList=this.dataFilter(this.productTableData);
+
                 _.map(params.skuList,v=>{
                     if(_.isArray(v.skuLabelPic)){
                         v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
@@ -1931,7 +1936,7 @@
                             item.skuUnitWeight._value=item.skuUnitWeight?this.$change(this.weightOption,'skuUnitWeight',item,true).name:'';
                             item.skuUnitLength._value=item.skuUnitLength?this.$change(this.lengthOption,'skuUnitLength',item,true).name:'';
                             item.skuExpireUnit._value=item.skuExpireUnit?this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name:'';
-                            item.skuStatus._value=item.skuStatus?this.$change(this.skuStatusTotalOption,'skuStatus',item,true).name:'';
+                            item.skuStatus._value=item.skuStatus?_.findWhere(this.skuStatusTotalOption,{code:item.skuStatus.value}).name:'';
                             item.skuUnitVolume._value=item.skuUnitVolume?this.$change(this.volumeOption,'skuUnitVolume',item,true).name:'';
                             item.skuSaleStatus._value=item.skuSaleStatus?this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name:'';
                             if(item.skuCategoryId.value){
@@ -2035,31 +2040,31 @@
                 if(!this.orderForm.incoterm){return;}
                 let obj;
                 obj=item?item:this.chooseProduct[0];
-                if(this.savedIncoterm==='1'){
+                if(this.orderForm.incoterm==='1'){
                     //fob
                     if(obj.skuFobPrice.value && obj.skuQty.value){
-                        obj.skuPrice.value=obj.skuFobPrice.value*obj.skuQty.value;
+                        obj.skuPrice.value=Number((obj.skuFobPrice.value*obj.skuQty.value).toFixed(8));
                     }else{
                         obj.skuPrice.value=0;
                     }
-                }else if(this.savedIncoterm==='2'){
+                }else if(this.orderForm.incoterm==='2'){
                     //exw
                     if(obj.skuExwPrice.value && obj.skuQty.value){
-                        obj.skuPrice.value=obj.skuExwPrice.value*obj.skuQty.value;
+                        obj.skuPrice.value=Number((obj.skuExwPrice.value*obj.skuQty.value).toFixed(8));
                     }else{
                         obj.skuPrice.value=0;
                     }
-                }else if(this.savedIncoterm==='3'){
+                }else if(this.orderForm.incoterm==='3'){
                     //cif
                     if(obj.skuCifPrice.value && obj.skuQty.value){
-                        obj.skuPrice.value=obj.skuCifPrice.value*obj.skuQty.value;
+                        obj.skuPrice.value=Number((obj.skuCifPrice.value*obj.skuQty.value).toFixed(8));
                     }else{
                         obj.skuPrice.value=0;
                     }
-                }else if(this.savedIncoterm==='4'){
+                }else if(this.orderForm.incoterm==='4'){
                     //ddu
                     if(obj.skuDduPrice.value && obj.skuQty.value){
-                        obj.skuPrice.value=obj.skuDduPrice.value*obj.skuQty.value;
+                        obj.skuPrice.value=Number((obj.skuDduPrice.value*obj.skuQty.value).toFixed(8));
                     }else{
                         obj.skuPrice.value=0;
                     }
@@ -2128,6 +2133,34 @@
                 }).finally(()=>{
                     this.disableClickPayback=false;
                 })
+            },
+            remindPay(){
+                let params=[];
+                _.map(this.paymentData,v=>{
+                    if(v.status===40 && v.planPayDt && v.planPayAmount>v.actualPayAmount){
+                        params.push({
+                            id:v.id,
+                            version:v.version
+                        });
+                    }
+                });
+                if(params.length===0){
+                    return this.$message({
+                        message: this.$i.order.nothingToDun,
+                        type: 'warning'
+                    });
+                }
+                this.disableRemind=true;
+                this.$ajax.post(this.$apis.PAYMENT_DUNNING,params).then(res=>{
+                    this.getPaymentData();
+                    this.$message({
+                        message: this.$i.order.dunSuccess,
+                        type: 'success'
+                    });
+                }).finally(()=>{
+                    this.disableRemind=false;
+                })
+
             },
             saveNewPay(data){
                 console.log(this.orderForm)
@@ -2673,7 +2706,7 @@
                             item.skuUnitWeight._value=item.skuUnitWeight?this.$change(this.weightOption,'skuUnitWeight',item,true).name:'';
                             item.skuUnitLength._value=item.skuUnitLength?this.$change(this.lengthOption,'skuUnitLength',item,true).name:'';
                             item.skuExpireUnit._value=item.skuExpireUnit?this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name:'';
-                            item.skuStatus._value=item.skuStatus?this.$change(this.skuStatusTotalOption,'skuStatus',item,true).name:'';
+                            item.skuStatus._value=item.skuStatus?_.findWhere(this.skuStatusTotalOption,{code:item.skuStatus.value}).name:'';
                             item.skuUnitVolume._value=item.skuUnitVolume?this.$change(this.volumeOption,'skuUnitVolume',item,true).name:'';
                             item.skuSaleStatus._value=item.skuSaleStatus?this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name:'';
                             if(item.skuCategoryId.value){
@@ -2689,6 +2722,44 @@
                     this.loadingProductTable=false;
                 });
             },
+
+            /**
+             * message board事件
+             * */
+            afterSend(){
+                let params=Object.assign({},this.orderForm);
+                _.map(this.supplierOption,v=>{
+                    if(params.supplierName===v.id){
+                        params.supplierName=v.name;
+                        params.supplierCode=v.code;
+                        params.supplierId=v.id;
+                        params.supplierCompanyId=v.companyId;
+                    }
+                });
+                params.skuList=this.dataFilter(this.productTableData);
+                _.map(params.skuList,v=>{
+                    if(_.isArray(v.skuLabelPic)){
+                        v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
+                    }
+                    v.skuSample=v.skuSample==='1'?true:false;
+                    if(v.skuInspectQuarantineCategory){
+                        v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code;
+                    }
+                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    _.map(picKey,item=>{
+                        if(_.isArray(v[item])){
+                            v[item]=(v[item][0]?v[item][0]:null);
+                        }
+                    })
+                });
+                params.attachments=this.$refs.upload[0].getFiles();
+
+                this.$ajax.post(this.$apis.ORDER_MESSAGE_TALK,params).then(res=>{
+
+                })
+            },
+
+
 
             /**
              * 搜索框事件
