@@ -1245,6 +1245,7 @@
                     }
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
+                    param.categoryId=param.categoryName;
                     this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
                         this.$message({
                             message: this.$i.product.modifySuccess,
@@ -1297,6 +1298,7 @@
                             param.ids.push(v.customerId);
                         });
                     }
+                    param.categoryId=param.categoryName;
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
 
