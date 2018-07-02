@@ -9,7 +9,6 @@
                         <v-upload :limit="20" :list="productForm.pictures" :onlyImage="true" ref="upload"></v-upload>
                     </el-form-item>
                 </el-col>
-
                 <el-col style="height: 51px;" v-if="v.belongTab==='basicInfo' && !v.isHide" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
