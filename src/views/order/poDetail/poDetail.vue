@@ -1451,36 +1451,14 @@
 
                 });
 
-                // this.skuStatusTotalOption=[
-                //     {
-                //         code:'1',
-                //         name:'TBCBYSUPPLIER'
-                //     },
-                //     {
-                //         code:'2',
-                //         name:'TBCBYCUSTOMER'
-                //     },
-                //     {
-                //         code:'3',
-                //         name:'PROCESS'
-                //     },
-                //     {
-                //         code:'4',
-                //         name:'FINISHED'
-                //     },
-                //     {
-                //         code:'5',
-                //         name:'CANCLED'
-                //     },
-                // ];
                 this.skuStatusOption=[
                     {
-                        code:'3',
-                        name:'PROCESS'
+                        code:'PROCESS',
+                        name:'已确认'
                     },
                     {
-                        code:'5',
-                        name:'CANCLED'
+                        code:'CANCLED',
+                        name:'已取消'
                     },
                 ];
 
@@ -1514,6 +1492,7 @@
                             this.skuSaleStatusOption=v.codes;
                         }else if(v.code==='SKU_STATUS'){
                             this.skuStatusTotalOption=v.codes;
+                            console.log(this.skuStatusTotalOption,'this.skuStatusTotalOption')
                         }
                     })
                 }).finally(err=>{
