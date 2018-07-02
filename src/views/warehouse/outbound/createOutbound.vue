@@ -206,9 +206,17 @@
                 <el-button :disabled="disabledCancelSearch" @click="clearSearchData">{{$i.warehouse.clear}}</el-button>
             </div>
             <v-table
+                    code="uwarehouse_outbound_sku"
                     v-loading="loadingTable"
                     :data="tableDataList"
                     @change-checked="changeChecked"></v-table>
+
+            <page
+                    @size-change="changeSize"
+                    @change="changePage"
+                    :page-sizes="[50,100,200,500]"
+                    :page-data="pageData"></page>
+
             <div slot="footer" class="dialog-footer">
                 <el-button :disabled="disabledSearch" type="primary" @click="postData">{{$i.warehouse.sure}}</el-button>
                 <el-button :disabled="disabledCancelSearch" @click="addOrderDialogVisible = false">{{$i.warehouse.cancel}}</el-button>
@@ -219,7 +227,7 @@
 
 <script>
 
-    import {VTimeZone, VUpload, VTable} from '@/components/index'
+    import {VTimeZone, VUpload, VTable,VPagination} from '@/components/index'
     import Math from 'mathjs'
 
     export default {
@@ -228,12 +236,14 @@
             VTable,
             VTimeZone,
             VUpload,
+            page:VPagination,
         },
         data() {
             return {
                 /**
                  * 页面基础配置
                  * */
+                pageData:{},
                 labelPosition: 'right',
                 disableRemoveProduct: true,
                 disabledSubmit: false,
@@ -319,7 +329,11 @@
                 this.loadingTable = true;
                 this.disabledSearch = true;
                 this.disabledCancelSearch = true;
-                //请求弹出框数据
+                this.getProductData();
+            },
+
+            //请求弹出框数据
+            getProductData(){
                 this.$ajax.post(this.$apis.get_inboundSku, this.orderProduct).then(res => {
                     this.orderNoOption = [];
                     _.uniq(_.pluck(res.datas, 'orderNo')).forEach((v, k) => {
@@ -337,6 +351,7 @@
                             }
                         })
                     });
+                    this.pageData=res;
                     this.disabledSearch = false;
                     this.disabledCancelSearch = false;
                     this.loadingTable = false;
@@ -401,7 +416,6 @@
                     this.disabledSubmit = false;
                 });
             },
-
             cancel() {
                 window.close();
             },
@@ -470,7 +484,6 @@
                 }
                 this.addOrderDialogVisible = false;
             },
-
             getSummaries(param) {
                 const {columns, data} = param;
                 const sums = [];
@@ -500,7 +513,6 @@
                 return sums;
             },
 
-
             /**
              * 页面表格事件
              * */
@@ -529,7 +541,6 @@
                 }
             },
 
-
             /**
              * 获取字典
              * */
@@ -541,6 +552,18 @@
                 //     console.log(res)
                 // });
             },
+
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                this.orderProduct.pn=e;
+                this.getProductData();
+            },
+            changeSize(e){
+                this.orderProduct.ps=e;
+                this.getProductData();
+            }
 
         },
         created() {

@@ -1226,6 +1226,7 @@
                 chooseProduct:{},
                 savedIncoterm:'',           //用来存储incoterm
                 disableChangeSkuStatus:false,
+                initialData:{},
 
 
                 /**
@@ -1334,6 +1335,7 @@
                     incotermArea: "",
                     lcNo: "",
                     orderNo: "",
+                    orderSkuUpdateList:[],
                     payment: "",
                     paymentDays: 0,
                     productFlag:false,
@@ -1449,36 +1451,14 @@
 
                 });
 
-                // this.skuStatusTotalOption=[
-                //     {
-                //         code:'1',
-                //         name:'TBCBYSUPPLIER'
-                //     },
-                //     {
-                //         code:'2',
-                //         name:'TBCBYCUSTOMER'
-                //     },
-                //     {
-                //         code:'3',
-                //         name:'PROCESS'
-                //     },
-                //     {
-                //         code:'4',
-                //         name:'FINISHED'
-                //     },
-                //     {
-                //         code:'5',
-                //         name:'CANCLED'
-                //     },
-                // ];
                 this.skuStatusOption=[
                     {
-                        code:'3',
-                        name:'PROCESS'
+                        code:'PROCESS',
+                        name:'已确认'
                     },
                     {
-                        code:'5',
-                        name:'CANCLED'
+                        code:'CANCLED',
+                        name:'已取消'
                     },
                 ];
 
@@ -1512,6 +1492,7 @@
                             this.skuSaleStatusOption=v.codes;
                         }else if(v.code==='SKU_STATUS'){
                             this.skuStatusTotalOption=v.codes;
+                            console.log(this.skuStatusTotalOption,'this.skuStatusTotalOption')
                         }
                     })
                 }).finally(err=>{
@@ -1570,6 +1551,7 @@
                     orderNo:this.$route.query.orderNo || this.$route.query.code
                 }).then(res=>{
                     this.orderForm=res;
+                    this.initialData=this.$depthClone(this.orderForm)
                     this.savedIncoterm=Object.assign({},res).incoterm;
                     _.map(this.supplierOption,v=>{
                         if(v.code===res.supplierCode){
@@ -1957,6 +1939,56 @@
                 this.productTableDialogVisible=false;
             },
             saveNegotiate(e){
+
+                if(!this.orderForm.orderSkuUpdateList || this.orderForm.orderSkuUpdateList.length===0){
+                    this.orderForm.orderSkuUpdateList=[];
+                    let isChange=false;
+                    _.map(this.initialData.skuList,v=>{
+                        if(v.id===e[0].id.value){
+                            if(v.skuStatus!==e[0].skuStatus._value){
+                                isChange=true;
+                            }
+                        }
+                    });
+                    this.orderForm.orderSkuUpdateList.push({
+                        skuId: e[0].id.value,
+                        skuInfo: true,
+                        skuStatus: isChange
+                    });
+                }
+                else{
+                    let isIn=false;
+                    _.map(this.orderForm.orderSkuUpdateList,v=>{
+                        if(e[0].id.value===v.skuId){
+                            isIn=true;
+                            _.map(this.initialData.skuList,data=>{
+                                if(data.id===e[0].id.value){
+                                    if(data.skuStatus===e[0].skuStatus._value){
+                                        v.skuStatus=false;
+                                    }else{
+                                        v.skuStatus=true;
+                                    }
+                                }
+                            });
+                        }
+                    })
+                    if(!isIn){
+                        let isChange=false;
+                        _.map(this.initialData.skuList,v=>{
+                            if(v.id===e[0].id.value){
+                                if(v.skuStatus!==e[0].skuStatus._value){
+                                    isChange=true;
+                                }
+                            }
+                        });
+                        this.orderForm.orderSkuUpdateList.push({
+                            skuId: e[0].id.value,
+                            skuInfo: true,
+                            skuStatus: isChange
+                        });
+                    }
+                }
+
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
@@ -2070,7 +2102,6 @@
                     }
                 }
             },
-
 
             /**
              * payment事件
@@ -2312,7 +2343,6 @@
 
                 });
             },
-
 
             /**
              * 底部按钮事件

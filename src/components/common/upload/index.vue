@@ -1,13 +1,14 @@
 <template>
   <div class='ucn-upload small'>
-    <p class="upload-btn" v-if="!readonly">
+    <p class="upload-btn" :class="{'only-image':onlyImage}" v-if="!readonly">
       <i class="el-icon-plus"></i>
+      <i class="el-icon-upload"></i>
       <input class="upload-file" type="file" ref="upload"
              @change="uploadFile"
              v-bind="{multiple:limit !== 1}"
              :accept="onlyImage ? 'image/*' : ''"/>
     </p>
-    <ul class="upload-list">
+    <ul class="upload-images" v-if="onlyImage">
       <li v-for="item in fileList" :title="item.showName">
         <template v-if="!item.isImage">
           <label v-text="item.showType"></label>
@@ -28,6 +29,17 @@
           <i class="el-icon-view" @click="$refs.uploadViewPicture.show(item.url)"></i>
         </div>
 
+      </li>
+    </ul>
+
+    <ul class="upload-files" v-else>
+      <li v-for="item in fileList">
+        <i class="el-icon-success" v-if="item.progress === 1"></i>
+        <i class="el-icon-document"></i>
+        <span v-text="item.fileName" :title="item.fileName" @click="downloadFile(item)"></span>
+        <i v-if="!readonly" class="el-icon-delete" @click="deleteFile(item)"></i>
+        <el-progress :percentage="parseInt(item.progress * 100)"
+                     v-if="item.progress && item.progress !== 1"></el-progress>
       </li>
     </ul>
     <v-view-picture ref="uploadViewPicture"></v-view-picture>
@@ -90,6 +102,7 @@
     },
     mounted() {
       this.bucket = this.ossPrivate ? config.ENV.OSS_BUCKET_PRIVATE : config.ENV.OSS_BUCKET_PUBLIC;
+      this.setList(this.list);
     },
     watch: {
       fileList(val) {
@@ -194,17 +207,20 @@
 
         if (ns.length > 1) {
           let k = name.split('?')[0].match(/.com\/(\S*)/);
+          param.fileName = ns.join('.');
           param.showType = ns.pop().toLocaleUpperCase();
           param.showName = ns.shift();
           param.fileKey = k ? k[1] : '';
         } else {
           param.showName = ns[0];
           param.showType = 'File';
+          param.fileName = ns[0];
         }
 
         if (_.indexOf(imageType, param.showType) !== -1) {
           param.isImage = true;
         }
+
 
         return param;
       },
@@ -264,9 +280,25 @@
     display: inline-block;
   }
 
+  .upload-btn:not(.only-image) .el-icon-plus {
+    display: none;
+  }
+
+  .upload-btn.only-image .el-icon-upload {
+    display: none;
+  }
+
   .ucn-upload.small .upload-btn {
     width: 50px;
     height: 50px;
+  }
+
+  .upload-btn:not(.only-image) {
+    height: 30px !important;
+  }
+
+  .upload-btn:not(.only-image) .el-icon-upload {
+    font-size: 16px;
   }
 
   .upload-btn > i {
@@ -286,12 +318,12 @@
     cursor: pointer;
   }
 
-  .upload-list {
+  .upload-images {
     vertical-align: middle;
     display: inline-block;
   }
 
-  .upload-list > li {
+  .upload-images > li {
     width: 100px;
     height: 100px;
     display: inline-block;
@@ -305,7 +337,7 @@
     box-sizing: border-box;
   }
 
-  .ucn-upload.small .upload-list > li {
+  .ucn-upload.small .upload-images > li {
     width: 50px;
     height: 50px;
   }
@@ -393,7 +425,7 @@
     transition-delay: 1s;
   }
 
-  .upload-list > li label {
+  .upload-images > li label {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -404,13 +436,13 @@
     font-size: 20px;
   }
 
-  .ucn-upload.small .upload-list > li label {
+  .ucn-upload.small .upload-images > li label {
     font-size: 16px;
     top: 50%;
     margin-top: -8px;
   }
 
-  .upload-list > li span {
+  .upload-images > li span {
     display: block;
     height: 100%;
     width: 100%;
@@ -421,7 +453,7 @@
     opacity: .7;
   }
 
-  .ucn-upload.small .upload-list > li span {
+  .ucn-upload.small .upload-images > li span {
     display: none;
   }
 
@@ -432,5 +464,69 @@
     border-radius: 6px;
     background-size: cover;
     transition-delay: 1s;
+  }
+
+  .upload-files {
+    max-width: 400px;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+
+  .upload-files li {
+    line-height: 20px;
+    color: #606266;
+    position: relative;
+  }
+
+  .upload-files li:hover {
+    color: #409EFF;
+  }
+
+  .upload-files li span {
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: middle;
+    padding-right: 30px;
+    padding-left: 20px;
+    box-sizing: border-box;
+  }
+
+  .upload-files .el-icon-success,
+  .upload-files .el-icon-delete {
+    position: absolute;
+    right: 5px;
+    line-height: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: all .3s;
+    top: 0;
+  }
+
+  .upload-files .el-icon-success {
+    opacity: 1;
+  }
+
+  .upload-files .el-icon-document {
+    position: absolute;
+    left: 0;
+    line-height: 20px;
+    top: 0;
+  }
+
+  .upload-files li:hover .el-icon-success {
+    opacity: 0;
+  }
+
+  .upload-files li:hover .el-icon-delete {
+    opacity: 1;
+  }
+
+  .upload-files .el-icon-success {
+    color: #67c23a;
+    vertical-align: middle;
   }
 </style>

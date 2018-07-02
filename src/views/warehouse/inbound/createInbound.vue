@@ -251,6 +251,7 @@
             </div>
 
             <v-table
+                    code="uwarehouse_inbound_sku"
                     :height="500"
                     v-loading="loadingTable"
                     :data="tableDataList"

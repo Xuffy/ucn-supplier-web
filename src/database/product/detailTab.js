@@ -26,7 +26,10 @@ export default {
         type: 'Boolean',
         showType:'input',
         // disabledInput:true,             //是否禁止输入
-        belongTab:'basicInfo'
+        belongTab:'basicInfo',
+        _rules:{
+            required:true
+        }
     },
     nameCn:{
         key: 'nameCn',
