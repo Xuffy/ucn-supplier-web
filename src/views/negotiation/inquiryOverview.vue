@@ -80,7 +80,7 @@ export default {
       tabData: [],
       viewByStatus: 0,
       params: {
-        status: 21,
+        status: null,
         ps: 50,
         pn: 1,
         tc: 0,
@@ -110,6 +110,9 @@ export default {
       show: true
     });
     this.gettabData();
+  },
+  mounted() {
+    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
   },
   methods: {
     ...mapActions([
