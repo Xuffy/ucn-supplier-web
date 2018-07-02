@@ -440,14 +440,16 @@
             message: '催款成功!'
           })
           this.$ajax.post(`${this.$apis.get_payment_list}${this.logisticsNo}/30`).then(res => {
-            this.createdPaymentData(res)
+            this.createdPaymentData(res,'dunning')
           })
         })
       },
-      createdPaymentData(res = this.oldPaymentObject) {
+      createdPaymentData(res = this.oldPaymentObject,dunning) {
         this.oldPaymentObject = JSON.parse(JSON.stringify(res))
         this.paymentList = res.datas
-        this.dunningDisabled = !this.paymentList.some((item) => item.planPayAmount > item.actualPayAmount);
+        if(!dunning){
+          this.dunningDisabled = !this.paymentList.some((item) => item.planPayAmount > item.actualPayAmount);
+        }
         this.paymentSum = res.statisticsDatas[0]
       },
       getNewLogisticsNo() {
