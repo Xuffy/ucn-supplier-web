@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="btn-wraps" v-if="edit">
+    <!-- <div class="btn-wraps" v-if="edit">
       <el-button type="primary" size="mini" @click.stop="$emit('arrayAppend', 'containerInfo')">{{ $i.logistic.add }}</el-button>
       <el-button type="danger" size="mini" @click.stop="$emit('deleteContainer')">{{ $i.logistic.delete }}</el-button>
-    </div>
+    </div> -->
     <div class="tab-wrap">
       <el-table :data="tableData" ref="table" border style="width: 100%; margin-top: 20px" 
         show-summary 

@@ -1,7 +1,7 @@
 <template>
     <div class="add-product" v-loading="loadingData">
         <div class="title">{{$i.product.basicInformation}}</div>
-        <el-form :model="productForm" :rules="rules" ref="productForm1" class="speForm" label-width="230px" :label-position="labelPosition">
+        <el-form ref="productForm1" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <!--设置高度51px以免inputNumber错位-->
                 <el-col style="height: 51px;" class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -9,9 +9,8 @@
                         <v-upload :limit="20" :list="productForm.pictures" :onlyImage="true" ref="upload"></v-upload>
                     </el-form-item>
                 </el-col>
-
                 <el-col style="height: 51px;" v-if="v.belongTab==='basicInfo' && !v.isHide" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
-                    <el-form-item :prop="v.key" :label="v.label+':'">
+                    <el-form-item :required="v._rules?v._rules.required:false" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
                             <div v-if="v.isWeight">
                                 <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
@@ -1205,6 +1204,10 @@
 
             //完成新增
             finish(){
+                if(this.$validateForm(this.productForm,this.$db.product.detailTab)){
+                    return;
+                }
+
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 this.$set(this.productForm,'lengthWidthHeight',size);
                 this.disabledSubmit=true;
