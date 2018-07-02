@@ -64,7 +64,7 @@
     <!--<button @click="test">sadas</button>-->
     <!--<v-upload ref="upload"></v-upload>-->
     <!--<v-import-template ref="importFile" code="PRODUCT_SUPPLIER" biz-code="PRODUCT_SUPPLIER"></v-import-template>-->
-    <!--<v-message-board module="workbench" code="workbench" id="123"></v-message-board>-->
+    <!--<v-message-board module="workbench" code="workbench" id="123" readonly></v-message-board>-->
   </div>
 </template>
 
@@ -116,7 +116,7 @@
         this.settingStateLoading = true;
         this.$ajax.post(this.$apis.USER_CUSTOMER_ISSETUSERINFO, {type: config.CLIENT_TYPE})
           .then(res => {
-            if (!res.categoryInfo || !res.companyInfo || !res.departmentInfo || !res.personalInfo) {
+            if (!res.categoryInfo || !res.companyInfo || !res.departmentInfo) {
               this.settingStateShow = true;
               this.layout.paddingRight = '240px'
               this.settingState = res;

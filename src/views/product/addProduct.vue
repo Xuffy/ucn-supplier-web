@@ -69,6 +69,7 @@
         </div>
         <div class="footer">
             <v-table
+                    :height="500"
                     code="udata_supply_sku_overview"
                     :loading="loadingTable"
                     :data="tableDataList"
@@ -196,8 +197,8 @@
                     descEnLike: "",
                     descCnLike: "",
 
-                    // pn: 1,
-                    // ps: 50,
+                    pn: 1,
+                    ps: 50,
 
                     recycle: false,         //是否是在recycle bin里请求
                     //初始搜索的时候不传，当有筛选条件之后再传
@@ -233,13 +234,13 @@
                 dropData:[],
                 categoryList:[
                     {
-                        id:123,
-                        name:"系统分类",
+                        id:5121251255,
+                        name:"自己的分类",
                         children:[]
                     },
                     {
-                        id:5125,
-                        name:"自己的分类",
+                        id:125125125,
+                        name:"系统分类",
                         children:[]
                     },
                 ],
@@ -423,12 +424,12 @@
             //获取类别数据
             getCategoryId(){
                 this.$ajax.get(this.$apis.CATEGORY_SYSTEM,{}).then(res=>{
-                    this.categoryList[0].children=res;
+                    this.categoryList[1].children=res;
                 }).catch(err=>{
 
                 });
                 this.$ajax.get(this.$apis.CATEGORY_MINE,{}).then(res=>{
-                    this.categoryList[1].children=res;
+                    this.categoryList[0].children=res;
                 }).catch(err=>{
 
                 });
@@ -471,11 +472,7 @@
                     }
                     this.loadingTable=true;
 
-                    this.$ajax.post(url,{
-                        recycle:false,
-                        pn:e?e:1,
-                        ps:10
-                    }).then(res=>{
+                    this.$ajax.post(url,this.productForm).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.addProductTable, res.datas,(e)=>{
                             if(e.status.value===1){
                                 e.status.value='上架';

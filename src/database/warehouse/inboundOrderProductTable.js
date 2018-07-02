@@ -36,7 +36,7 @@ export default {
         showType:'input'
     },
     skuCustomsCode:{
-        key:'skuCustomsCode',
+        key:'skuCustomerSkuCode',
         belong:'skuList'
     },
     skuUnit:{
@@ -189,13 +189,13 @@ export default {
         key:'customerNo'
     },
     customerName:{
-        key:'skuCustomsNameCn',
+        key:'customerName',
     },
     supplierName:{
         key:'supplierName',
     },
-    supplierNo:{
-        key:'supplierNo',
+    supplierCode:{
+        key:'supplierCode',
     },
     supplierOrderNo:{
         key:'supplierOrderNo',

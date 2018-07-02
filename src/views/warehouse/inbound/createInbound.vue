@@ -251,6 +251,7 @@
             </div>
 
             <v-table
+                    code="uwarehouse_inbound_sku"
                     :height="500"
                     v-loading="loadingTable"
                     :data="tableDataList"
@@ -381,6 +382,7 @@
                         if(v.skuId.value===0){  //id为0的是脏数据，不能选
                             this.$set(v,'_disabled',true);
                         }else{
+
                             this.productData.forEach(m=>{
                                 if(v.skuId.value===m.skuId && m.orderNo===v.orderNo.value){
                                     this.$set(v,'_disabled',true);
@@ -427,8 +429,6 @@
                     });
                 }
 
-                console.log(this.productData,'this.productData')
-
                 let allow=true;
                 let mustKey=['inboundOutCartonTotalQty','skuOuterCartonVolume','skuOuterCartonRoughWeight','skuOuterCartonNetWeight','skuNetWeight','skuInnerCartonLength','skuInnerCartonWidth','skuInnerCartonHeight','skuInnerCartonWeightNet','skuInnerCartonRoughWeight','skuInnerCartonVolume'];
                 _.map(this.productData,v=>{
@@ -474,7 +474,7 @@
                         inventorySkuVolume: 0,
                         orderId: v.orderId,
                         orderNo: v.orderNo,
-                        orderSkuQty: v.totalQty,
+                        orderSkuQty: v.skuQty,
                         outboundOutCartonTotalQty: 0,
                         outboundSkuTotalGrossWeight: 0,
                         outboundSkuTotalNetWeight: 0,
@@ -637,7 +637,13 @@
                     }).then(res=>{
                         _.map(res,v=>{
                             _.map(v.skuList,e=>{
-                                // e.skuQty=res.totalQty;
+                                e.customerOrderNo=v.customerOrderNo;
+                                e.customerNo=v.customerNo;
+                                e.skuCustomsNameCn=v.skuCustomsNameCn;
+                                e.supplierName=v.supplierName;
+                                e.supplierCode=v.supplierCode;
+                                e.supplierOrderNo=v.supplierOrderNo;
+                                e.customerName=v.customerName;
                                 this.productData.push(e);
                             })
                         });

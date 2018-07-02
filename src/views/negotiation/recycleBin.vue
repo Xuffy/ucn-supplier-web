@@ -64,6 +64,9 @@
             'select-search':selectSearch,
             'v-table': VTable
         },
+        mounted() {
+            this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
+        },
         methods: {
             buttonsFn() {
                 if(this.$route.params.type === 'inquiry') return [{label: 'Detail', type: 'detail'}];

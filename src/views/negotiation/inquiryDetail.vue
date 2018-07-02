@@ -193,6 +193,9 @@ export default {
       this.newTabData = data;
     }
   },
+  mounted() {
+    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
+  },
   methods: {
     ...mapActions(['setDraft', 'setRecycleBin', 'setDic']),
     deleteInquiry() {
@@ -393,20 +396,16 @@ export default {
           if (idx === res.length - 1) {
             return;
           }
-          if (i.fieldDisplay) {
-            let fs = Object.keys(i.fieldDisplay);
-            if(fs.length === 0) return;
-            Object.keys(i).forEach(field => {
-              if (!excludeColumns.includes(field) && !fs.includes(field)) {
-                i[field] = null;
-              }
-            });
-          }
-          if (i.fieldRemarkDisplay) {
-            let fs = Object.keys(i.fieldRemarkDisplay);
-            if(fs.length === 0) return;
+          let showKeys = excludeColumns.concat(i.fieldDisplay ? Object.keys(i.fieldDisplay) : []);
+          Object.keys(i).forEach(field => {
+            if (!showKeys.includes(field)) {
+              i[field] = null;
+            }
+          });
+          let showRemarkKeys = excludeColumns.concat(i.fieldRemarkDisplay ? Object.keys(i.fieldRemarkDisplay) : []);
+          if (i.fieldRemark && showRemarkKeys) {
             Object.keys(i.fieldRemark).forEach(field => {
-              if (!excludeColumns.includes(field) && !fs.includes(field)) {
+              if (!showRemarkKeys.includes(field)) {
                 i.fieldRemark[field] = null;
               }
             });

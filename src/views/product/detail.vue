@@ -354,7 +354,7 @@
                         e.status._value=e.status.value===1?this.$i.warehouse.costPrice:this.$i.warehouse.basicQuotation;
                         return e;
                     });
-                    this.tradeHistory.skuCode=this.productForm.code;
+                    this.tradeHistory.skuCode=this.productForm.sysCode;
                     this.loadingHistoryTable=true;
                     this.$ajax.post(this.$apis.get_productTradeHistory,this.tradeHistory).then(res=>{
                         if(res){

@@ -77,5 +77,6 @@
   "skuInnerCartonWidth": "中包宽",
   "skuInnerCartonHeight": "中包高",
   "skuInnerCartonWeightNet": "中包净重",
-  "skuInnerCartonRoughWeight": "中包毛重"
+  "skuInnerCartonRoughWeight": "中包毛重",
+  "supplierCode":"供应商编号"
 }

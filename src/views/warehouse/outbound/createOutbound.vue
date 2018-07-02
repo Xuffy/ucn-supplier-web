@@ -206,6 +206,7 @@
                 <el-button :disabled="disabledCancelSearch" @click="clearSearchData">{{$i.warehouse.clear}}</el-button>
             </div>
             <v-table
+                    code="uwarehouse_outbound_sku"
                     v-loading="loadingTable"
                     :data="tableDataList"
                     @change-checked="changeChecked"></v-table>

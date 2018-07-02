@@ -1,3 +1,5 @@
+import Holder from 'holderjs';
+
 const json = ["WORKBENCH", "WORKBENCH:DATA_DASHBOARD", "PRODUCT", "PRODUCT:LOG", "PRODUCT:OVERVIEW", "PRODUCT:OVERVIEW:DOWNLOAD",
   "PRODUCT:OVERVIEW:CREATE_INQUIRY", "PRODUCT:OVERVIEW:CREATE_ORDER", "PRODUCT:OVERVIEW:COMPARE",
   "PRODUCT:OVERVIEW:ADD_BOOKMARK", "PRODUCT:DETAIL", "PRODUCT:DETAIL:CREATE_INQUIRY",
@@ -69,6 +71,37 @@ const authorize = {
   }
 }
 
+const holder = {
+  bind(el, binding) {
+    el.onerror = () => {
+      if (!binding.value) {
+        el.setAttribute('data-src', 'holder.js/100px100p?auto=yes');
+        Holder.run({images: el});
+      } else if (Object.prototype.toString.call(binding.value) === '[object Object]') {
+        let imageSize = '300x300',
+          holderOpts = binding.value;
+        if (holderOpts.hasOwnProperty('img')) {
+          imageSize = holderOpts.img;
+          delete holderOpts['img'];
+        }
+        let holderStr = '?' + Object.keys(holderOpts).map(function (prop) {
+          return [prop, holderOpts[prop]].map(encodeURIComponent).join('=');
+        }).join('&');
+        el.setAttribute('data-src', 'holder.js/' + imageSize + holderStr);
+        Holder.run({
+          images: el
+        });
+      } else if (Object.prototype.toString.call(binding.value) === '[object String]') {
+        el.setAttribute('data-src', 'holder.js/' + binding.value);
+        Holder.run({
+          images: el
+        });
+      }
+    }
+  }
+}
+
+
 const image = {
   bind(el, binding, value) {
     console.log(el, binding)
@@ -82,4 +115,4 @@ const image = {
 }
 
 
-export default {authorize, image};
+export default {authorize, image, holder};
