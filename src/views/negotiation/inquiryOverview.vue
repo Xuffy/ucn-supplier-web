@@ -111,7 +111,7 @@ export default {
       },
       show: true
     });
-    this.getDirCodes().then(this.gettabData);
+    this.getDirCodes().then(this.gettabData, this.gettabData);
   },
   mounted() {
     this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
