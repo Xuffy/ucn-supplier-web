@@ -18,5 +18,9 @@ export default {
   subscribeId: {
     key: 'subscribeId',
     _hide:true,
+  },
+  id:{
+    key:'id',
+    _hide:true,
   }
 }
