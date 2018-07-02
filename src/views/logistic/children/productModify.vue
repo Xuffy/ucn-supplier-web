@@ -25,18 +25,30 @@
           <span>{{ scope.row.toShipQty.value }}</span>
         </template>
       </el-table-column>
+
+      <el-table-column :label="$i.logistic.shipmentStatus" width="150" align="center" sortable>
+        <template slot-scope="scope">
+          <el-select v-if="scope.row.toShipCartonQty.edit&&pageType=='loadingListDetail'" v-model="scope.row.shipmentStatus.value" placeholder="请输入内容" @change="currentChange(scope.row.shipmentStatus.key,scope.row.shipmentStatus.value)">
+            <el-option v-for="item in shipmentStatus" :key="item.code" :label="item.name" :value="item.code"/>
+          </el-select>
+          <span v-else>{{ scope.row.shipmentStatus.value }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column :label="$i.logistic.containerNo" width="150" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.containerNo.value" @change="currentChange(scope.row.containerNo.key,scope.row.containerNo.value)" v-if="scope.row.toShipCartonQty.edit"></el-input>
+          <el-select v-if="scope.row.toShipCartonQty.edit" v-model="scope.row.containerNo.value" placeholder="请输入内容" @change="currentChange(scope.row.containerNo.key,scope.row.containerNo.value,scope)">
+            <el-option v-if="item.containerNo.length>0" v-for="item in containerInfo" :key="item.containerNo" :label="item.containerNo" :value="item.containerNo"/>
+          </el-select>
           <span v-else>{{ scope.row.containerNo.value }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.containerType" width="150" align="center" sortable>
         <template slot-scope="scope">
-          <el-select v-if="scope.row.toShipCartonQty.edit" v-model="scope.row.containerType.value" placeholder="请输入内容" @change="currentChange(scope.row.containerType.key,scope.row.containerType.value)">
+          <!-- <el-select v-if="scope.row.toShipCartonQty.edit" v-model="scope.row.containerType.value" placeholder="请输入内容" @change="currentChange(scope.row.containerType.key,scope.row.containerType.value)">
             <el-option v-for="item in containerType" :key="item.id" :label="item.name" :value="item.code"/>
-          </el-select>
-          <span v-else>{{ scope.row.containerType.value }}</span>
+          </el-select> -->
+          <span>{{  scope.row.containerType && scope.row.containerType.value }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.totalQuantityInContainer" width="200" align="center" sortable>
@@ -63,14 +75,7 @@
           <span v-else>{{ scope.row.totalContainerOuterCartonsQty.value }}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column :label="$i.logistic.shipmentStatus" width="200" align="center" sortable>
-        <template slot-scope="scope">
-          <el-select v-if="scope.row.toShipCartonQty.edit" v-model="scope.row.shipmentStatus.value" placeholder="请输入内容" @change="currentChange(scope.row.shipmentStatus.key,scope.row.shipmentStatus.value)">
-            <el-option v-for="item in containerType" :key="item.id" :label="item.name" :value="item.code"/>
-          </el-select>
-          <span v-else>{{ scope.row.shipmentStatus.value }}</span>
-        </template>
-      </el-table-column> -->
+
       <el-table-column :label="$i.logistic.skuCode" width="140" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.skuCode.value }}</span>
@@ -111,7 +116,7 @@
           <span>{{ scope.row.hsCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.reportElements" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.reportElement" width="160" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.reportElement.value }}</span>
         </template>
@@ -214,7 +219,8 @@
 
 export default {
   props: {
-    containerType:[Object,Array],
+    containerInfo:[Object,Array],
+    shipmentStatus:[Object,Array],
     productInfoModifyStatus: {
       type: Number,
       default: 0
@@ -233,6 +239,11 @@ export default {
   components: {
     // VTableFilter
   },
+  computed:{
+    pageType(){
+      return this.$route.name;
+    }
+  },
   data () {
     return {
       modify: true,
@@ -246,9 +257,12 @@ export default {
     }
   },
   methods: {
-    currentChange(key,v){
+    currentChange(key,v,scope){
       this.productModifyObj[key] = v;
       this.$emit('productModifyfun',this.productModifyObj);
+      if(key=="containerNo"&&scope){
+        this.matchContainerNo(scope);
+      }
     },
     createModifyData () {
       if (!this.tableData.length) return
@@ -263,6 +277,13 @@ export default {
         key === 'toShipQty' && (value.edit = flag)
         return value
       })
+    },
+    matchContainerNo(e){
+      let obj = this.containerInfo.find(el=> el.containerNo&&e.row.containerNo.value==el.containerNo); 
+      if(obj){
+        e.row.containerType.value = obj.containerType;
+        e.row.containerId.value = obj.id;
+      }
     }
   }
   // methods: {
