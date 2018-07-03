@@ -559,7 +559,6 @@
         <div class="title">{{$i.product.otherInfo}}</div>
         <el-form :model="productForm" ref="productForm6" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
-
                 <el-col style="height: 51px;" v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
@@ -1326,6 +1325,10 @@
             getGoodsData(){
                 this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
                     this.productForm=res;
+                    let lengthWidthHeight=this.productForm.lengthWidthHeight.split('*');
+                    this.boxSize.length=lengthWidthHeight[0];
+                    this.boxSize.width=lengthWidthHeight[1];
+                    this.boxSize.height=lengthWidthHeight[2];
                     _.mapObject(this.productForm,(e,k)=>{
                         if(k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight'){
                             this.productForm[k]=String(this.productForm[k]);
