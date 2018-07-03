@@ -54,7 +54,7 @@
                 <el-tab-pane :label="$i.product.basicInformation" name="Basic Info">
                     <el-form class="speForm" label-width="200px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                            <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailNewTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+' :'">
                                     <span v-if="v.key==='status'">
                                         {{productForm[v.key]===1?'上架':'下架'}}
@@ -70,7 +70,7 @@
                 <el-tab-pane :label="$i.product.customerInfo" name="Customer Info">
                     <el-form class="speForm" label-width="290px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                            <el-col v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailNewTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
                                     {{productForm[v.key]}}
                                 </el-form-item>
@@ -87,7 +87,7 @@
                 <el-tab-pane :label="$i.product.packingInfo" name="Packing Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                            <el-col v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailNewTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
                                     {{productForm[v.key]}}
                                 </el-form-item>
@@ -98,7 +98,7 @@
                 <el-tab-pane :label="$i.product.logisticInfo" name="Logistic">
                     <el-form class="speForm" label-width="260px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                            <el-col v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailNewTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
                                     {{productForm[v.key]}}
                                 </el-form-item>
@@ -109,7 +109,7 @@
                 <el-tab-pane :label="$i.product.otherInfo" name="Other Info">
                     <el-form class="speForm" label-width="250px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                            <el-col v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailNewTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
                                     {{productForm[v.key]}}
                                 </el-form-item>
