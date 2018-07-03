@@ -8,5 +8,7 @@
   "upload": "Upload",
   "selectFile": "Select the file",
   "note": "Note",
-  "importPrompt": "Data from the same email will be overwritten"
+  "importPrompt": "Data from the same email will be overwritten",
+  "fileTypePrompt":"Please upload the zip or XLS files",
+  "fileNumberPrompt":"The import file is beyond the limit, please try again later"
 }

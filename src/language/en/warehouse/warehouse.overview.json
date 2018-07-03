@@ -69,5 +69,6 @@
   "volumeOfInnerCarton": "Volume of inner carton",
   "brand": "Brand",
   "skuNameCN": "SKU Name(CN)",
-  "skuPic": "SKU Pic"
+  "skuPic": "SKU Pic",
+  "skuPics":"Sku picture"
 }

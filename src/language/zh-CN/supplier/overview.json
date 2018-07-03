@@ -35,5 +35,6 @@
   "compareItem": "Compare Item",
   "operater": "Operater",
   "attachment": "Attachment",
-  "customerNo": "Customer No"
+  "customerNo": "Customer No",
+  "recentTransactionDate": "Recent transaction date"
 }
