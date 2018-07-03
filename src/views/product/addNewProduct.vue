@@ -1323,6 +1323,7 @@
 
             //获取产品详情
             getGoodsData(){
+                this.loadingData=true;
                 this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
                     this.productForm=res;
                     let lengthWidthHeight=this.productForm.lengthWidthHeight.split('*');
@@ -1342,21 +1343,12 @@
                             this.productForm[k]=this.productForm[k]?'1':'0';
                         }
                     });
-
                     this.$ajax.post(this.$apis.get_sellerCustomerList,{
                         id:this.productForm.id,
                         pn:1,
                         ps:1000
                     }).then(res=>{
                         this.tableData=res.datas;
-                        // this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
-                        //     this.tableData.forEach(v=>{
-                        //         if(v.id===e.id.value){
-                        //             this.$set(e,'_disabled',true);
-                        //             this.$set(e,'_checked',true);
-                        //         }
-                        //     })
-                        // });
                     }).finally(err=>{
                         this.loadingData=false;
                     });
@@ -1468,7 +1460,7 @@
                     if(this.$route.query.isEdit){
                         this.getGoodsData();
                     }
-                }).catch(()=>{
+                }).finally(()=>{
                     this.loadingData=false;
                 });
 
