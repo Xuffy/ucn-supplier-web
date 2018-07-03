@@ -1454,7 +1454,7 @@
                 this.skuStatusOption=[
                     {
                         code:'PROCESS',
-                        name:'已确认'
+                        name:'已发运'
                     },
                     {
                         code:'CANCLED',
@@ -1595,7 +1595,11 @@
                             let skuLabelPic=item.skuLabelPic.value,
                                 skuPkgMethodPic=item.skuPkgMethodPic.value,
                                 skuInnerCartonPic=item.skuInnerCartonPic.value,
-                                skuOuterCartonPic=item.skuOuterCartonPic.value;
+                                skuOuterCartonPic=item.skuOuterCartonPic.value,
+                                skuAdditionalOne=item.skuAdditionalOne.value,
+                                skuAdditionalTwo=item.skuAdditionalTwo.value,
+                                skuAdditionalThree=item.skuAdditionalThree.value,
+                                skuAdditionalFour=item.skuAdditionalFour.value;
                             item.skuLabelPic._value=skuLabelPic?[skuLabelPic]:[];
                             item.skuLabelPic.value=skuLabelPic?[skuLabelPic]:[];
                             item.skuPkgMethodPic._value=skuPkgMethodPic?[skuPkgMethodPic]:[];
@@ -1604,6 +1608,14 @@
                             item.skuInnerCartonPic.value=skuInnerCartonPic?[skuInnerCartonPic]:[];
                             item.skuOuterCartonPic._value=skuOuterCartonPic?[skuOuterCartonPic]:[];
                             item.skuOuterCartonPic.value=skuOuterCartonPic?[skuOuterCartonPic]:[];
+                            item.skuAdditionalOne._value=skuAdditionalOne?[skuAdditionalOne]:[];
+                            item.skuAdditionalOne.value=skuAdditionalOne?[skuAdditionalOne]:[];
+                            item.skuAdditionalTwo._value=skuAdditionalTwo?[skuAdditionalTwo]:[];
+                            item.skuAdditionalTwo.value=skuAdditionalTwo?[skuAdditionalTwo]:[];
+                            item.skuAdditionalThree._value=skuAdditionalThree?[skuAdditionalThree]:[];
+                            item.skuAdditionalThree.value=skuAdditionalThree?[skuAdditionalThree]:[];
+                            item.skuAdditionalFour._value=skuAdditionalFour?[skuAdditionalFour]:[];
+                            item.skuAdditionalFour.value=skuAdditionalFour?[skuAdditionalFour]:[];
                         }
                     });
                     this.productTableData=[];
@@ -1666,7 +1678,7 @@
                     }
                 });
                 params.skuList=this.dataFilter(this.productTableData);
-
+                console.log(1)
                 _.map(params.skuList,v=>{
                     if(_.isArray(v.skuLabelPic)){
                         v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
@@ -1683,7 +1695,6 @@
                     })
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
-                console.log(params,'params')
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
                     this.isModify=false;
@@ -2018,6 +2029,7 @@
 
             },
             dataFilter(data) {
+                console.log(data,'data')
                 let arr = [],
                     jsons = {},
                     json = {};
@@ -2036,21 +2048,23 @@
                             } else {
                                 if(item[k]._value){
                                     if(item[k].key==='skuUnit'){
-                                        json[k]=_.findWhere(this.skuUnitOption,{name:item[k]._value}).code;
+                                        json[k]=item[k]._value?_.findWhere(this.skuUnitOption,{name:item[k]._value}).code:'';
                                     }else if(item[k].key==='skuUnitWeight'){
-                                        json[k]=_.findWhere(this.weightOption,{name:item[k]._value}).code;
+                                        json[k]=item[k]._value?_.findWhere(this.weightOption,{name:item[k]._value}).code:'';
                                     }else if(item[k].key==='skuUnitLength'){
-                                        json[k]=_.findWhere(this.lengthOption,{name:item[k]._value}).code;
+                                        json[k]=item[k]._value?_.findWhere(this.lengthOption,{name:item[k]._value}).code:'';
                                     }else if(item[k].key==='skuUnitVolume'){
-                                        json[k]=_.findWhere(this.volumeOption,{name:item[k]._value}).code;
+                                        json[k]=item[k]._value?_.findWhere(this.volumeOption,{name:item[k]._value}).code:'';
                                     }else if(item[k].key==='skuExpireUnit'){
-                                        json[k]=_.findWhere(this.expirationDateOption,{name:item[k]._value}).code;
+                                        json[k]=item[k]._value?_.findWhere(this.expirationDateOption,{name:item[k]._value}).code:'';
                                     }else if(item[k].key==='skuStatus'){
-                                        json[k]=_.findWhere(this.skuStatusTotalOption,{name:item[k]._value}).code;
+                                        console.log(this.skuStatusTotalOption,'this.skuStatusTotalOption')
+                                        console.log(item[k],'item[k]._value')
+                                        json[k]=item[k]._value?_.findWhere(this.skuStatusTotalOption,{name:item[k]._value}).code:'';
                                     }else if(item[k].key==='skuSample'){
-                                        json[k]=_.findWhere(this.isNeedSampleOption,{code:item[k].value}).code;
+                                        json[k]=item[k]._value?_.findWhere(this.isNeedSampleOption,{code:item[k].value}).code:'';
                                     }else if(item[k].key==='skuInspectQuarantineCategory'){
-                                        json[k]=_.findWhere(this.quarantineTypeOption,{name:item[k]._value}).code;
+                                        json[k]=item[k]._value?_.findWhere(this.quarantineTypeOption,{name:item[k]._value}).code:'';
                                     }else{
                                         json[k] = item[k].value;
                                     }
@@ -2374,6 +2388,7 @@
                 this.disableClickConfirm=true;
                 this.$ajax.post(this.$apis.ORDER_CONFIRM,{
                     ids: [this.orderForm.id],
+                    orderNos:[this.orderForm.orderNo]
                 }).then(res=>{
                     this.getDetail();
                 }).finally(err=>{
