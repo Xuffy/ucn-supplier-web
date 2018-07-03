@@ -77,5 +77,6 @@
   "skuInnerCartonWidth": "Width of inner carton",
   "skuInnerCartonHeight": "Width of inner carton",
   "skuInnerCartonWeightNet": "N.W. of innner carton",
-  "skuInnerCartonRoughWeight": "G.W. of innner carton"
+  "skuInnerCartonRoughWeight": "G.W. of innner carton",
+  "supplierCode":"Supplier Code"
 }

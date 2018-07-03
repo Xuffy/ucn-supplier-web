@@ -9,6 +9,7 @@ export default {
     ORDER_DETAIL: ['/order/detail', 'USUPPLY_URL'],
     ORDER_ACCEPT:['/order/accept','USUPPLY_URL'],
     ORDER_CANCEL:['/order/cancle','USUPPLY_URL'],
+    ORDER_REFUSE:['/order/refuse','USUPPLY_URL'],
     ORDER_CONFIRM:['/order/confirm','USUPPLY_URL'],
     ORDER_UPDATE:['/order/update','USUPPLY_URL'],
     ORDER_SKUS: ['/order/skus', 'BASE_URL'],
