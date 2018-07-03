@@ -74,6 +74,7 @@
           :hideBtn="true"
           :disabledLine="disabledLine"
           @handleOK="queryAndAddProduction"
+          @handleCancel="newSearchDialogVisible = false"
           :forceUpdateNumber="trig"
           :type="radio"
           :isInquiry="true">
@@ -319,6 +320,10 @@ export default {
       this.markFieldHighlight(this.newProductTabData);
     },
     queryAndAddProduction(ids) {
+      if (!Array.isArray(ids) || !ids.length) {
+        this.$message.warning(this.$i.inquiry.skuRequired);
+        return;
+      }
       this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SKUS, ids).then(res => {
         let arr = this.$getDB(
           this.$db.inquiry.productInfo,
