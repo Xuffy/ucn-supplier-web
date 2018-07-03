@@ -109,5 +109,8 @@
   "beneficiaryAccount": "Beneficiary Account",
   "accountInfo": "Account Info",
   "tradeHistory": "Trade History",
-  "inquiryHistory": "Inquiry History"
+  "inquiryHistory": "Inquiry History",
+  "customerSource": "customer source",
+  "recentTransactionDate": "Recent transaction date",
+  "receiverAddress1": "receiver Address1"
 }

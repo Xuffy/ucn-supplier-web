@@ -1,5 +1,7 @@
 {
   "typeLimit": "Cannot upload file type",
   "sizeLimit": "Upload file size cannot exceed",
-  "numberLimit": "Only upload the number of files"
+  "numberLimit": "Only upload the number of files",
+  "uploadingAttachments": "Uploading attachments",
+  "viewAttachment": "View the attachment"
 }
