@@ -1689,9 +1689,13 @@
                     _.map(picKey,item=>{
                         if(_.isArray(v[item])){
                             v[item]=(v[item][0]?v[item][0]:null);
+                        }else if(_.isString(v[item])){
+                            console.log(v[item],'v[item]')
                         }
+                        console.log(v['skuLabelPic'],'skuLabelPic')
                     })
                 });
+                return console.log(params,'params')
                 params.attachments=this.$refs.upload[0].getFiles();
                 _.map(params.orderSkuUpdateList,v=>{
                     let nowStatus,initialStatus;
@@ -2397,9 +2401,9 @@
                     type: 'warning'
                 }).then(() => {
                     this.disableClickRefuse=true;
-                    this.$ajax.post(this.$apis.ORDER_CANCEL,{
+                    this.$ajax.post(this.$apis.ORDER_REFUSE,{
                         ids:[this.orderForm.id],
-                        orderNo:this.orderForm.orderNo
+                        orderNos:[this.orderForm.orderNo],
                     }).then(res=>{
                         this.$message({
                             message: this.$i.order.handleSuccess,
