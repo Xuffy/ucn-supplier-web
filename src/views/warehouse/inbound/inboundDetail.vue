@@ -203,6 +203,10 @@
                  * */
                 loadProductTable:false,
                 productTable:[],
+
+
+                //字典
+                skuUnitOption:[],
             }
         },
         methods:{
@@ -224,7 +228,7 @@
                         // ],
                     }).then(res=>{
                         this.productTable = this.$getDB(this.$db.warehouse.inboundDetailProductTable, res.datas,(e)=>{
-
+                            e.skuUnitDictCode._value=e.skuUnitDictCode.value?_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}).name:'';
                         });
                         this.loadingTable=false;
                     }).catch(err=>{
@@ -261,8 +265,14 @@
              * 获取字典
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE'],{cache:true}).then(res=>{
-                    this.inboundTypeOption=res[0].codes;
+                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE','SKU_UNIT'],{cache:true}).then(res=>{
+                    res.forEach(v=>{
+                        if(v.code==='IBD_TYPE'){
+                            this.inboundTypeOption=v.codes;
+                        }else if(v.code==='SKU_UNIT'){
+                            this.skuUnitOption=v.codes;
+                        }
+                    });
                 });
                 // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{
                 //     console.log(res)

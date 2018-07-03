@@ -350,6 +350,10 @@
                     skuBarCode: "",
                     skuNameCn: "",
                 },
+
+
+                //字典
+                skuUnitOption:[],
             }
         },
         methods:{
@@ -446,6 +450,12 @@
                 }
 
                 this.productData.forEach(v=>{
+                    let skuUnit;
+                    _.map(this.skuUnitOption,data=>{
+                        if(v.skuUnit===data.name){
+                            skuUnit=data.code;
+                        }
+                    });
                     this.inboundData.inboundSkuBeanCreateParams.push({
                         customerName: v.customerName,
                         customerNo: v.customerNo,
@@ -501,7 +511,7 @@
                         skuNameCustomer: v.skuNameCustomer,
                         skuNameEn: v.skuNameEn,
                         skuNetWeight: v.skuNetWeight?v.skuNetWeight:0,
-                        skuUnitDictCode: v.skuUnit,
+                        skuUnitDictCode: skuUnit,
                         skuWidth: v.skuWidth?v.skuWidth:0,
                         supplierId: 0,
                         supplierName: v.supplierName,
@@ -647,6 +657,11 @@
                                 this.productData.push(e);
                             })
                         });
+                        console.log(this.productData,'this.productData')
+                        console.log(this.skuUnitOption,'this.skuUnitOption')
+                        _.map(this.productData,v=>{
+                            v.skuUnit=v.skuUnit?_.findWhere(this.skuUnitOption,{code:String(v.skuUnit)}).name:'';
+                        })
 
                         /**
                          * 计算底部summary
@@ -775,8 +790,14 @@
              * 获取字典
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE'],{cache:true}).then(res=>{
-                    this.inboundTypeOption=res[0].codes;
+                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE','SKU_UNIT'],{cache:true}).then(res=>{
+                    res.forEach(v=>{
+                        if(v.code==='IBD_TYPE'){
+                            this.inboundTypeOption=v.codes;
+                        }else if(v.code==='SKU_UNIT'){
+                            this.skuUnitOption=v.codes;
+                        }
+                    })
                 });
 
                 // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{

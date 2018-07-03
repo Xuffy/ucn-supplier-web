@@ -405,7 +405,7 @@
         this.selectProductArr.forEach(a => {
           this.productList.forEach((item, index) => {
             if (item.vId.value == a.vId.value) {
-              let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(item => item.code == e)
+              let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.code == e)
               this.$set(this.productList[index].shipmentStatus, 'value', ShipmentStatusItem ?
                 ShipmentStatusItem.name : '')
             }
@@ -541,12 +541,12 @@
         productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
             res.history.length ? (this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify,
                 res.history.map(el => {
-                  let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
+                  let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
                   el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
                   return el
                 }))]) :
               (this.productModifyList = [currentProduct].map(el => {
-                let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(item => item.name == el.shipmentStatus
+                let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.name == el.shipmentStatus
                   .value)
                 el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.code : '';
                 return el
@@ -677,7 +677,7 @@
           return;
         }
         this.showProductDialog = false;
-        let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(item => item.code == currrentProduct.shipmentStatus.value)
+        let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.code == currrentProduct.shipmentStatus.value)
         currrentProduct.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.name : '';
         this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
         this.productList.forEach(item => {
@@ -861,7 +861,7 @@
         this.oldPlanObject.product = this.productList.map((item, i) => {
           return _.mapObject(item, (v, k) => {
             if (v.type == 'text') {
-              let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(el => el.name == v.value)
+              let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(el => el.name == v.value)
               if (ShipmentStatusItem) {
                 return ShipmentStatusItem.code;
               } else {
