@@ -1214,6 +1214,7 @@
                 if(this.$route.query.id && this.$route.query.isEdit){
                     //代表是编辑
                     let param=Object.assign({},this.productForm);
+
                     _.mapObject(param,(e,k)=>{
                         if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox'){
                             param[k]=parseInt(param[k]);
@@ -1323,11 +1324,10 @@
 
             //获取产品详情
             getGoodsData(){
-                this.loadingData=true;
                 this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
                     this.productForm=res;
                     _.mapObject(this.productForm,(e,k)=>{
-                        if(k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox'){
+                        if(k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight'){
                             this.productForm[k]=String(this.productForm[k]);
                         }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
                             if(this.productForm[k]){
@@ -1335,7 +1335,7 @@
                             }else{
                                 this.productForm[k]=[];
                             }
-                        }else if(k==='adjustPackage'){
+                        }else if(k==='adjustPackage' || k==='oem' || k==='useDisplayBox'){
                             this.productForm[k]=this.productForm[k]?'1':'0';
                         }
                     });
@@ -1354,11 +1354,9 @@
                         //         }
                         //     })
                         // });
-
-                    }).catch(err=>{
-
+                    }).finally(err=>{
+                        this.loadingData=false;
                     });
-                    this.loadingData=false;
                 }).catch(err=>{
                     this.loadingData=false;
                 });
@@ -1428,26 +1426,16 @@
              * */
             getUnit(){
                 //币种单位
-                this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true}).then(res=>{
-                    this.currencyOption=res;
-                }).catch(err=>{
-
-                });
-
+                const currencyAjax=this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true});
                 //国家
-                this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
-                    this.countryOption=res;
-                }).catch(err=>{
-
-                });
-
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // })
-
+                const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
+                //数据字典
+                const codeAjax=this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT','QUARANTINE_TYPE','CUSTOMER_TYPE'],{cache:true});
                 this.loadingData=true;
-                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT','QUARANTINE_TYPE','CUSTOMER_TYPE'],{cache:true}).then(res=>{
-                    res.forEach(v=>{
+                this.$ajax.all([currencyAjax,countryAjax,codeAjax]).then(res=>{
+                    this.currencyOption=res[0];
+                    this.countryOption=res[1];
+                    res[2].forEach(v=>{
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
                         }else if(v.code==='WT_UNIT'){
@@ -1474,18 +1462,69 @@
                             this.customerTypeOption=v.codes;
                         }
                     });
-                    this.loadingData=false;
-                }).catch(err=>{
+                    if(this.$route.query.isEdit){
+                        this.getGoodsData();
+                    }
+                }).catch(()=>{
                     this.loadingData=false;
                 });
+
+                //
+                // this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true}).then(res=>{
+                //     this.currencyOption=res;
+                // }).catch(err=>{
+                //
+                // });
+                //
+                // //国家
+                // this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
+                //     this.countryOption=res;
+                // }).catch(err=>{
+                //
+                // });
+
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // })
+
+                // this.loadingData=true;
+                // this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT','QUARANTINE_TYPE','CUSTOMER_TYPE'],{cache:true}).then(res=>{
+                //     res.forEach(v=>{
+                //         if(v.code==='ED_UNIT'){
+                //             this.dateOption=v.codes;
+                //         }else if(v.code==='WT_UNIT'){
+                //             this.weightOption=v.codes;
+                //         }else if(v.code==='VE_UNIT'){
+                //             this.volumeOption=v.codes;
+                //         }else if(v.code==='LH_UNIT'){
+                //             this.lengthOption=v.codes;
+                //         }else if(v.code==='SKU_SALE_STATUS'){
+                //             this.saleStatusOption=v.codes;
+                //         }else if(v.code==='OEM_IS'){
+                //             this.oemOption=v.codes;
+                //         }else if(v.code==='UDB_IS'){
+                //             this.udbOption=v.codes;
+                //         }else if(v.code==='SKU_PG_IS'){
+                //             this.skuPkgOption=v.codes;
+                //         }else if(v.code==='RA_IS'){
+                //             this.readilyOption=v.codes;
+                //         }else if(v.code==='SKU_UNIT'){
+                //             this.skuUnitOption=v.codes;
+                //         }else if(v.code==='QUARANTINE_TYPE'){
+                //             this.quarantineTypeOption=v.codes;
+                //         }else if(v.code==='CUSTOMER_TYPE'){
+                //             this.customerTypeOption=v.codes;
+                //         }
+                //     });
+                //     this.loadingData=false;
+                // }).catch(err=>{
+                //     this.loadingData=false;
+                // });
             },
         },
         created(){
             this.getCategoryId();
             this.getUnit();
-            if(this.$route.query.isEdit){
-                this.getGoodsData();
-            }
         },
     }
 </script>

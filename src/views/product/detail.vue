@@ -327,6 +327,13 @@
                  * */
                 skuUnitOption:[],       //计量单位
                 expirationOption:[],    //保质期单位
+                quarantineTypeOption:[],//检疫类别
+                weightOption:[],
+                volumeOption:[],
+                lengthOption:[],
+                oemOption:[],
+                udbOption:[],
+                skuPkgOption:[],
             }
         },
         methods:{
@@ -345,14 +352,17 @@
                 this.loadingTable=true;
                 this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
                     this.productForm=res;
-                    console.log(this.productForm,'this.productForm')
                     //字典转换
                     this.productForm.unit=this.productForm.unit?_.findWhere(this.skuUnitOption,{code:String(this.productForm.unit)}).name:'';
                     this.productForm.expireUnit=this.productForm.expireUnit?_.findWhere(this.expirationOption,{code:String(this.productForm.expireUnit)}).name:'';
-
-
-
-
+                    this.productForm.inspectQuarantineCategory=this.productForm.inspectQuarantineCategory?_.findWhere(this.quarantineTypeOption,{code:this.productForm.inspectQuarantineCategory}).name:'';
+                    this.productForm.unitLength=this.productForm.unitLength?_.findWhere(this.lengthOption,{code:String(this.productForm.unitLength)}).name:'';
+                    this.productForm.unitVolume=this.productForm.unitVolume?_.findWhere(this.volumeOption,{code:String(this.productForm.unitVolume)}).name:'';
+                    this.productForm.unitWeight=this.productForm.unitWeight?_.findWhere(this.weightOption,{code:String(this.productForm.unitWeight)}).name:'';
+                    this.productForm.oem=_.findWhere(this.oemOption,{code:String(Number(this.productForm.oem))}).name;
+                    this.productForm.yearListed=this.$dateFormat(this.productForm.yearListed,'yyyy-mm');
+                    this.productForm.useDisplayBox=_.findWhere(this.udbOption,{code:String(Number(this.productForm.useDisplayBox))}).name;
+                    this.productForm.adjustPackage=_.findWhere(this.skuPkgOption,{code:String(Number(this.productForm.adjustPackage))}).name;
 
                     this.productForm.price.forEach(v=>{
                         if(v.status===2){
@@ -492,8 +502,7 @@
             //     console.log(res)
             // })
             this.loadingTable=true;
-            this.$ajax.post(this.$apis.get_partUnit,['ITM','SKU_UNIT','ED_UNIT','QUARANTINE_TYPE'],{cache:true}).then(res=>{
-                console.log(res,'单位')
+            this.$ajax.post(this.$apis.get_partUnit,['ITM','SKU_UNIT','ED_UNIT','QUARANTINE_TYPE','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS'],{cache:true}).then(res=>{
                 res.forEach(v => {
                     if(v.code === 'ITM'){
                         this.incotermOption = v.codes;
@@ -502,7 +511,19 @@
                     }else if (v.code === 'ED_UNIT') {
                         this.expirationOption = v.codes;
                     }else if(v.code==='QUARANTINE_TYPE'){
-
+                        this.quarantineTypeOption=v.codes;
+                    }else if(v.code==='WT_UNIT'){
+                        this.weightOption=v.codes;
+                    }else if(v.code==='VE_UNIT'){
+                        this.volumeOption=v.codes;
+                    }else if(v.code==='LH_UNIT'){
+                        this.lengthOption=v.codes;
+                    }else if(v.code==='OEM_IS'){
+                        this.oemOption=v.codes;
+                    }else if(v.code==='UDB_IS'){
+                        this.udbOption=v.codes;
+                    }else if(v.code==='SKU_PG_IS'){
+                        this.skuPkgOption=v.codes;
                     }
                 });
                 this.getGoodsData();
