@@ -5,7 +5,7 @@ export default {
     skuId:{
         _hide:true
     },
-    skuPic: {
+    skuPics: {
         _image:true
     },
     skuInventoryStatusDictCode:{},

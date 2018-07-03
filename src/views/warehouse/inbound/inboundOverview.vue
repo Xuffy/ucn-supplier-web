@@ -73,8 +73,8 @@
                     ps: 50,
                     // sorts: [
                     //     {
-                    //         orderBy: "",
-                    //         orderType: "",
+                    //         orderBy: "entryDt",
+                    //         orderType: "desc",
                     //     }
                     // ],
                     inboundTypeDictCode: ''

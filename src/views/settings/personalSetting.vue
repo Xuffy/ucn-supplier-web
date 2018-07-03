@@ -254,6 +254,7 @@
             });
             this.isModifyPass = false;
             this.summaryDisabled=true;
+            this.isModify = true;
             this.allowModifySummary=false;
           }).catch(err=>{
           this.allowModifySummary=false;
