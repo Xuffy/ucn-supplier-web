@@ -74,10 +74,12 @@
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.supplier.attachment" name="attchment">
-                    <!-- <div class="section-btn" style="margin-bottom:10px;">
-                      <el-button  @click="upload" type="primary">{{$i.button.upload}}</el-button>
-                    </div> -->
                     <v-upload ref="uploadAttachment" :limit="20"  :list="basicDate.attachments" readonly/>
+                    <div class="attachment" v-show="!basicDate.attachments" style="margin-top:40px;">
+                      <div>
+                        No Attachment
+                      </div>
+                    </div>
                 </el-tab-pane>
 
                  <el-tab-pane :label="$i.supplier.remark" name="remark">
@@ -564,6 +566,19 @@
 
     .speForm .el-row .list .el-input {
         width: 80%;
+    }
+    .attachment{
+      max-height: 300px;
+      max-width: 100%;
+      overflow-y: scroll;
+      overflow-x: auto;
+      border: 1px solid #ebeef5;
+    }
+    .attachment div{
+      text-align: center;
+      color: #999999;
+      height: 200px;
+      line-height: 200px;
     }
 
     /*
