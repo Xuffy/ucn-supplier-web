@@ -382,7 +382,7 @@
           return item;
         });
         this.productList = this.$getDB(this.$db.logistic.productInfo, res.product.map(el => {
-          let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
+          let ShipmentStatusItem = this.selectArr.ShipmentStatu&&this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
           el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
           return el;
         }))
