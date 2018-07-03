@@ -334,6 +334,7 @@
                 oemOption:[],
                 udbOption:[],
                 skuPkgOption:[],
+                countryOption:[],
             }
         },
         methods:{
@@ -352,6 +353,25 @@
                 this.loadingTable=true;
                 this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
                     this.productForm=res;
+
+                    //处理国家显示
+                    if(this.productForm.noneSellCountry){
+                        let noneSellCountry=this.productForm.noneSellCountry.split(',');
+                        this.productForm.noneSellCountry='';
+                        _.map(noneSellCountry,v=>{
+                            this.productForm.noneSellCountry+=(_.findWhere(this.countryOption,{code:v}).name+',');
+                        });
+                        this.productForm.noneSellCountry=this.productForm.noneSellCountry.slice(0,this.productForm.noneSellCountry.length-1);
+                    }
+                    if(this.productForm.mainSaleCountry){
+                        let mainSaleCountry=this.productForm.mainSaleCountry.split(',');
+                        this.productForm.mainSaleCountry='';
+                        _.map(mainSaleCountry,v=>{
+                            this.productForm.mainSaleCountry+=(_.findWhere(this.countryOption,{code:v}).name+',');
+                        });
+                        this.productForm.mainSaleCountry=this.productForm.mainSaleCountry.slice(0,this.productForm.mainSaleCountry.length-1);
+                    }
+
                     //字典转换
                     this.productForm.unit=this.productForm.unit?_.findWhere(this.skuUnitOption,{code:String(this.productForm.unit)}).name:'';
                     this.productForm.expireUnit=this.productForm.expireUnit?_.findWhere(this.expirationOption,{code:String(this.productForm.expireUnit)}).name:'';
@@ -501,6 +521,9 @@
             // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
             //     console.log(res)
             // })
+
+
+
             this.loadingTable=true;
             this.$ajax.post(this.$apis.get_partUnit,['ITM','SKU_UNIT','ED_UNIT','QUARANTINE_TYPE','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS'],{cache:true}).then(res=>{
                 res.forEach(v => {
@@ -526,7 +549,12 @@
                         this.skuPkgOption=v.codes;
                     }
                 });
-                this.getGoodsData();
+                this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
+                    this.countryOption=res;
+                    this.getGoodsData();
+                }).catch(()=>{
+                    this.loadingTable=false;
+                });
             }).finally(()=>{
                 this.loadingTable=false;
             });
