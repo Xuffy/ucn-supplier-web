@@ -318,6 +318,8 @@
                     //     }
                     // ],
                 },
+
+                skuUnitOption:[],
             }
         },
         methods: {
@@ -454,10 +456,8 @@
             },
             postData() {
                 let id = [];
-                this.tableDataList.forEach(v => {
-                    if (v._checked && !v._disabled) {
-                        id.push(v.id.value);
-                    }
+                _.map(this.selectList,v=>{
+                    id.push(v.id.value);
                 });
                 id = _.uniq(id);
                 if (id.length) {
@@ -473,9 +473,9 @@
                             v.outboundSkuTotalVolume=0;
                             this.productData.push(v);
                         });
-                        console.log(this.productData,'this.productData')
                         this.productData.forEach(v => {
-                            v.inboundVo.inboundDate = this.$dateFormat(v.inboundVo.inboundDate, 'yyyy-mm-dd')
+                            v.inboundVo.inboundDate = this.$dateFormat(v.inboundVo.inboundDate, 'yyyy-mm-dd');
+                            v.skuUnitDictCode=v.skuUnitDictCode?_.findWhere(this.skuUnitOption,{code:v.skuUnitDictCode}).name:'';
                         });
                         this.loadingProductTable = false;
                     }).catch(err => {
@@ -545,12 +545,15 @@
              * 获取字典
              * */
             getUnit() {
-                this.$ajax.post(this.$apis.get_partUnit, ['OBD_STATUS'], {cache: true}).then(res => {
-                    this.outboundTypeOption = res[0].codes;
+                this.$ajax.post(this.$apis.get_partUnit, ['OBD_STATUS','SKU_UNIT'], {cache: true}).then(res => {
+                    res.forEach(v=>{
+                        if(v.code==='SKU_UNIT'){
+                            this.skuUnitOption=v.codes;
+                        }else if(v.code==='OBD_STATUS'){
+                            this.outboundTypeOption=v.codes;
+                        }
+                    });
                 });
-                // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{
-                //     console.log(res)
-                // });
             },
 
             /**

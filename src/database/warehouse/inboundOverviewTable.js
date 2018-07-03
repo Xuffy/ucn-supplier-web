@@ -4,6 +4,7 @@ export default {
     },
     inboundNo:{},
     inboundDate:{},
+    entryDt:{},
     warehouseNo:{},
     warehouseName:{},
     inboundTypeDictCode:{},
@@ -16,6 +17,5 @@ export default {
     carrierPhone:{},
     remark:{},
     updateName:{},
-    entryDt:{},
     updateDt:{},
 }
