@@ -87,18 +87,18 @@
       },
       beforeAvatarUpload(file) {
         if (file.name.indexOf('.zip') < 0 && file.name.indexOf('.xls') < 0) {
-          this.$message.warning('请上传 zip 或 xls 文件');
+          this.$message.warning(this.$i.importTemplate.fileTypePrompt);
           return false;
         }
       },
       getTemplate() {
         this.$ajax.post(this.$apis.IMPORTTEMPLATE_DOWNLOADURL, [this.code], {cache: true})
           .then(res => {
-            this.downTemplate = res[0] ? res[0].filePath : '';
+            this.downTemplate = res[0] ? res[0].fileUrl : '';
           });
       },
       handleExceed(files, fileList) {
-        this.$message.warning('导入文件超出限制，请稍候再试');
+        this.$message.warning(this.$i.importTemplate.fileNumberPrompt);
       },
     }
   }

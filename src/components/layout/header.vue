@@ -178,9 +178,9 @@
       },
       getMessage() {
         this.message.loading = true;
-        this.$ajax.post(this.$apis.UNREADMESSAGE_QUERY, {ps: 8, pn: 1})
-          .then(data => {
-            this.message.list = data || [];
+        this.$ajax.get(this.$apis.USERMESSAGE_UNREADTOP, {top: 8})
+          .then(res => {
+            this.message.list = res.messages || [];
           })
           .finally(() => {
             this.message.loading = false;
@@ -190,15 +190,13 @@
         let list = [];
         if (_.isEmpty(this.message.list)) return false;
 
-
         this.message.loading = true;
-
 
         _.map(this.message.list, val => {
           let {id, type} = val;
           list.push({id, type});
         });
-        this.$ajax.post(this.$apis.UNREADMESSAGE_UPDATEUNREAD, list)
+        this.$ajax.post(this.$apis.USERMESSAGE_READ, list)
           .then(() => {
             this.getMessage();
           })

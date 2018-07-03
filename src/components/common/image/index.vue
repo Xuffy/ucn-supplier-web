@@ -1,5 +1,5 @@
 <template>
-  <div class="ucn-image" v-if="src"
+  <div class="ucn-image" v-if="src && src.indexOf('http') > -1"
        @click="val => {$emit('click', val)}"
        :style="{height:height, width:width}">
 
@@ -29,11 +29,9 @@
       },
     },
     data() {
-      return {
-      }
+      return {}
     },
-    watch: {
-    },
+    watch: {},
     created() {
     },
     mounted() {
