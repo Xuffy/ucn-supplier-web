@@ -174,7 +174,7 @@
                                     <el-option
                                             v-for="item in quarantineTypeOption"
                                             :key="item.id"
-                                            :label="item.code"
+                                            :label="item.name"
                                             :value="item.code">
                                     </el-option>
                                 </div>
@@ -1548,6 +1548,9 @@
     }
     .speInputNumber{
         width: 80%;
+    }
+    .speInputNumber >>> input{
+        text-align: left;
     }
     .speInput{
         width: 80%;

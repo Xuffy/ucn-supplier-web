@@ -1454,7 +1454,7 @@
                 this.skuStatusOption=[
                     {
                         code:'PROCESS',
-                        name:'已发运'
+                        name:'已确认'
                     },
                     {
                         code:'CANCLED',

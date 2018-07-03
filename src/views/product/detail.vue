@@ -320,6 +320,13 @@
 
                     ],
                 },
+
+
+                /**
+                 * 字典配置
+                 * */
+                skuUnitOption:[],       //计量单位
+                expirationOption:[],    //保质期单位
             }
         },
         methods:{
@@ -338,6 +345,15 @@
                 this.loadingTable=true;
                 this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
                     this.productForm=res;
+                    console.log(this.productForm,'this.productForm')
+                    //字典转换
+                    this.productForm.unit=this.productForm.unit?_.findWhere(this.skuUnitOption,{code:String(this.productForm.unit)}).name:'';
+                    this.productForm.expireUnit=this.productForm.expireUnit?_.findWhere(this.expirationOption,{code:String(this.productForm.expireUnit)}).name:'';
+
+
+
+
+
                     this.productForm.price.forEach(v=>{
                         if(v.status===2){
                             this.fobPort=v.fobPort;
@@ -369,8 +385,6 @@
                         this.loadingTable=false;
                         this.loadingHistoryTable=false;
                     });
-
-                    console.log(this.productForm,'this.productForm')
                 }).catch(err=>{
                     this.loadingTable=false;
                 });
@@ -474,9 +488,23 @@
             },
         },
         mounted(){
+            // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+            //     console.log(res)
+            // })
             this.loadingTable=true;
-            this.$ajax.post(this.$apis.get_partUnit,['ITM'],{cache:true}).then(res=>{
-                this.incotermOption=res[0].codes;
+            this.$ajax.post(this.$apis.get_partUnit,['ITM','SKU_UNIT','ED_UNIT','QUARANTINE_TYPE'],{cache:true}).then(res=>{
+                console.log(res,'单位')
+                res.forEach(v => {
+                    if(v.code === 'ITM'){
+                        this.incotermOption = v.codes;
+                    }else if (v.code === 'SKU_UNIT') {
+                        this.skuUnitOption = v.codes;
+                    }else if (v.code === 'ED_UNIT') {
+                        this.expirationOption = v.codes;
+                    }else if(v.code==='QUARANTINE_TYPE'){
+
+                    }
+                });
                 this.getGoodsData();
             }).finally(()=>{
                 this.loadingTable=false;
