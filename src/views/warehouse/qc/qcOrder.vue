@@ -360,7 +360,7 @@
         </el-dialog>
 
 
-        <v-message-board module="warehouse" code="qcOrderData" :id="$route.query.id"></v-message-board>
+        <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
 
         <v-view-picture ref="pics"></v-view-picture>
 
