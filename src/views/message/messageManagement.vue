@@ -85,11 +85,11 @@
         console.log(e)
       },
       handleSizeChange(val) {
-        this.params.pn = val;
+        this.pData.pn = val;
         this.getMessageList();
       },
       pageSizeChange(val) {
-        this.params.ps = val;
+        this.pData.ps = val;
         this.getMessageList();
       },
       //新增消息
