@@ -1678,7 +1678,6 @@
                     }
                 });
                 params.skuList=this.dataFilter(this.productTableData);
-                console.log(1)
                 _.map(params.skuList,v=>{
                     if(_.isArray(v.skuLabelPic)){
                         v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
@@ -1695,6 +1694,8 @@
                     })
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
+
+                return console.log(params,'params')
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
                     this.isModify=false;
@@ -1950,7 +1951,6 @@
                 this.productTableDialogVisible=false;
             },
             saveNegotiate(e){
-
                 if(!this.orderForm.orderSkuUpdateList || this.orderForm.orderSkuUpdateList.length===0){
                     this.orderForm.orderSkuUpdateList=[];
                     let isChange=false;
@@ -2058,8 +2058,6 @@
                                     }else if(item[k].key==='skuExpireUnit'){
                                         json[k]=item[k]._value?_.findWhere(this.expirationDateOption,{name:item[k]._value}).code:'';
                                     }else if(item[k].key==='skuStatus'){
-                                        console.log(this.skuStatusTotalOption,'this.skuStatusTotalOption')
-                                        console.log(item[k],'item[k]._value')
                                         json[k]=item[k]._value?_.findWhere(this.skuStatusTotalOption,{name:item[k]._value}).code:'';
                                     }else if(item[k].key==='skuSample'){
                                         json[k]=item[k]._value?_.findWhere(this.isNeedSampleOption,{code:item[k].value}).code:'';
