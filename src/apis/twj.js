@@ -16,6 +16,7 @@ export default {
   post_systemmessage_query: ['/systemmessage/query', 'UMESSAGE_URL', 'UMESSAGE_URL'],
   post_sys_addsystemmessage: ['/systemmessage/addsystemmessage', 'UMESSAGE_URL', 'UMESSAGE_URL'],
   post_sys_updateread: ['/systemmessagesubscribe/updateread', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+  post_messagesetting_updatesetting: ['/messagesetting/updatesetting', 'UMESSAGE_URL', 'UMESSAGE_URL'],
   //logs
   post_bizloQuery:['/bizlog/query','UBIZLOG_URL','UBIZLOG_URL'],
   //Personal Setting
