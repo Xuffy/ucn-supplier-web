@@ -1,7 +1,7 @@
 <template>
   <div class="ucn-history-modify">
     <el-dialog
-      :title="isModify ? 'Modify' : 'History'"
+      :title="isModify ? $i.common.modify : $i.common.history"
       width="80%"
       @close="closeDialog"
       :close-on-click-modal="false"
@@ -40,7 +40,7 @@
                             :readonly="!isModify"
                             :list="row[item.key]._value || row[item.key].value"></v-upload>
                   <el-button slot="reference" type="text">
-                    {{isModify ? '上传附件' : '查看附件'}}
+                    {{isModify ? $i.upload.uploadingAttachments : $i.upload.viewAttachment}}
                   </el-button>
                 </el-popover>
               </div>

@@ -1492,7 +1492,6 @@
                             this.skuSaleStatusOption=v.codes;
                         }else if(v.code==='SKU_STATUS'){
                             this.skuStatusTotalOption=v.codes;
-                            console.log(this.skuStatusTotalOption,'this.skuStatusTotalOption')
                         }
                     })
                 }).finally(err=>{
@@ -1678,7 +1677,6 @@
                     }
                 });
                 params.skuList=this.dataFilter(this.productTableData);
-                console.log(1)
                 _.map(params.skuList,v=>{
                     if(_.isArray(v.skuLabelPic)){
                         v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
@@ -1695,6 +1693,24 @@
                     })
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
+                _.map(params.orderSkuUpdateList,v=>{
+                    let nowStatus,initialStatus;
+                    _.map(params.skuList,e=>{
+                        if(e.skuId===v.skuId){
+                            nowStatus=e.skuStatus;
+                        }
+                    });
+                    _.map(this.initialData.skuList,e=>{
+                        if(e.skuId===v.skuId){
+                            initialStatus=e.skuStatus;
+                        }
+                    });
+                    if(nowStatus!==initialStatus){
+                        v.skuStatus=true;
+                    }else{
+                        v.skuStatus=false;
+                    }
+                });
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
                     this.isModify=false;
@@ -1822,7 +1838,6 @@
                     if(this.$refs.uploadSkuAdditionalFour){
                         this.$refs.uploadSkuAdditionalFour.reset();
                     }
-                    console.log(arr,'arr')
                     this.chooseProduct=this.$refs.HM.init(arr, []);
                 }else if(type==='detail'){
                     this.$windowOpen({
@@ -1950,52 +1965,25 @@
                 this.productTableDialogVisible=false;
             },
             saveNegotiate(e){
-
                 if(!this.orderForm.orderSkuUpdateList || this.orderForm.orderSkuUpdateList.length===0){
                     this.orderForm.orderSkuUpdateList=[];
-                    let isChange=false;
-                    _.map(this.initialData.skuList,v=>{
-                        if(v.id===e[0].id.value){
-                            if(v.skuStatus!==e[0].skuStatus._value){
-                                isChange=true;
-                            }
-                        }
-                    });
                     this.orderForm.orderSkuUpdateList.push({
-                        skuId: e[0].id.value,
+                        skuId: e[0].skuId.value,
                         skuInfo: true,
-                        skuStatus: isChange
+                        skuStatus: true
                     });
-                }
-                else{
+                }else{
                     let isIn=false;
                     _.map(this.orderForm.orderSkuUpdateList,v=>{
-                        if(e[0].id.value===v.skuId){
+                        if(v.skuId===e[0].skuId.value){
                             isIn=true;
-                            _.map(this.initialData.skuList,data=>{
-                                if(data.id===e[0].id.value){
-                                    if(data.skuStatus===e[0].skuStatus._value){
-                                        v.skuStatus=false;
-                                    }else{
-                                        v.skuStatus=true;
-                                    }
-                                }
-                            });
                         }
-                    })
+                    });
                     if(!isIn){
-                        let isChange=false;
-                        _.map(this.initialData.skuList,v=>{
-                            if(v.id===e[0].id.value){
-                                if(v.skuStatus!==e[0].skuStatus._value){
-                                    isChange=true;
-                                }
-                            }
-                        });
                         this.orderForm.orderSkuUpdateList.push({
-                            skuId: e[0].id.value,
+                            skuId: e[0].skuId.value,
                             skuInfo: true,
-                            skuStatus: isChange
+                            skuStatus: true
                         });
                     }
                 }
@@ -2029,7 +2017,6 @@
 
             },
             dataFilter(data) {
-                console.log(data,'data')
                 let arr = [],
                     jsons = {},
                     json = {};
@@ -2058,8 +2045,6 @@
                                     }else if(item[k].key==='skuExpireUnit'){
                                         json[k]=item[k]._value?_.findWhere(this.expirationDateOption,{name:item[k]._value}).code:'';
                                     }else if(item[k].key==='skuStatus'){
-                                        console.log(this.skuStatusTotalOption,'this.skuStatusTotalOption')
-                                        console.log(item[k],'item[k]._value')
                                         json[k]=item[k]._value?_.findWhere(this.skuStatusTotalOption,{name:item[k]._value}).code:'';
                                     }else if(item[k].key==='skuSample'){
                                         json[k]=item[k]._value?_.findWhere(this.isNeedSampleOption,{code:item[k].value}).code:'';

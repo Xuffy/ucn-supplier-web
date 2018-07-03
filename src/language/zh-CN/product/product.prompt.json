@@ -7,5 +7,6 @@
   "pleaseInputCompareName": "Please Input Compare Name",
   "cantAddCustomerProduct": "Can't add customer's product",
   "customerProductCanNotAddToOrder": "Customer Product can't create order",
-  "compareRecordMustLessThan100": "Compare record must less than 100"
+  "compareRecordMustLessThan100": "Compare record must less than 100",
+  "followingProductCantAddOrder":"Following product can't add to order"
 }
