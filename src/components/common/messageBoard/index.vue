@@ -85,7 +85,17 @@
         layout: state => state.layout
       }),
     },
-    watch: {},
+    watch: {
+      module() {
+        this.getMessage();
+      },
+      code() {
+        this.getMessage();
+      },
+      id() {
+        this.getMessage();
+      }
+    },
     created() {
       if (this.$userAction.get('messageBoard')) {
         this.layout.paddingRight = '367px'
@@ -119,6 +129,9 @@
         });
       },
       getMessage() {
+        if (!this.module || !this.code || !this.id) {
+          return false;
+        }
         this.contentLoading = true;
         this.$ajax.post(this.$apis.CHATMESSAGE_QUERY,
           {moduleCode: this.module, bizCode: this.code, bizNo: this.id, pn: 1, ps: 100})

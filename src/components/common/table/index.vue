@@ -29,7 +29,7 @@
         <table v-if="dataList.length">
           <thead ref="tableTitle">
           <tr>
-            <td ref="tableCheckbox" v-if="selection">
+            <td ref="tableCheckbox" v-if="selection" class="checkbox">
               <div style="visibility: hidden">
                 <input type="checkbox" :class="{visibility:selectionRadio}"/>
               </div>
@@ -501,7 +501,7 @@
     white-space: nowrap;
   }
 
-  .ucn-table thead tr td:first-child > div {
+  .ucn-table thead tr td.checkbox:first-child > div {
     width: 20px;
   }
 

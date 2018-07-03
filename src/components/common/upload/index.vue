@@ -10,13 +10,12 @@
     </p>
     <ul class="upload-images" v-if="onlyImage">
       <li v-for="item in fileList" :title="item.showName">
-        <template v-if="!item.isImage">
+        <!--<template v-if="!item.isImage">
           <label v-text="item.showType"></label>
           <span v-text="item.showName"></span>
-        </template>
+        </template>-->
 
-        <v-image class="img-box" v-else-if="item.url && item.url.indexOf('http') > -1"
-                 :src="item.url"></v-image>
+        <v-image class="img-box" :src="item.url"></v-image>
         <div :class="{close:!item.progress || item.progress === 1}" class="progress"
              :style="{width: (item.progress * 100) + '%'}">
         </div>
@@ -464,6 +463,10 @@
     border-radius: 6px;
     background-size: cover;
     transition-delay: 1s;
+  }
+
+  .ucn-upload /deep/ .ucn-image .image{
+    border-radius: 6px;
   }
 
   .upload-files {
