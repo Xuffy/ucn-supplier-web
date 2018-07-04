@@ -3,7 +3,7 @@
   "purchaseOrderNumber": "Customer Order No.",
   "salesOrderNumber": "Supplier Order No.",
   "customerItemNumber": "Customer SKU code",
-  "vendorSKUCode": "Supplier SKU code",
+  "vendorSKUCode": "SKU code",
   "supplier": "Supplier name",
   "skuNameCn": "SKU Name (CN)",
   "skuNameEn": "SKU Name (EN)",

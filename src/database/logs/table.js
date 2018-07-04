@@ -9,7 +9,4 @@ export default {
     operater: {
         key: 'operatorName'
     },
-    operationType: {
-        key: 'operationType'
-    }
 }

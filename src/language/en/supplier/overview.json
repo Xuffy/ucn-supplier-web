@@ -36,5 +36,6 @@
   "operater": "Operater",
   "attachment": "Attachment",
   "customerNo": "Customer No",
-  "recentTransactionDate": "Recent transaction date"
+  "recentTransactionDate": "Recent transaction date",
+  "noAttachment": "No Attachment"
 }

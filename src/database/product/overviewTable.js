@@ -111,9 +111,9 @@ export default {
     fobPrice:{
         
     },
-    refFobPrice:{
-
-    },
+    // refFobPrice:{
+    //
+    // },
     fobPort:{
         
     },
@@ -126,9 +126,9 @@ export default {
     cifPrice:{
 
     },
-    refCifPrice:{
-
-    },
+    // refCifPrice:{
+    //
+    // },
     cifCurrency:{
 
     },
@@ -138,9 +138,9 @@ export default {
     dduPrice:{
 
     },
-    refDduPrice:{
-
-    },
+    // refDduPrice:{
+    //
+    // },
     dduCurrency:{
 
     },

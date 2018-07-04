@@ -276,12 +276,30 @@
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_productList,this.productForm).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.overviewTable, res.datas,e=>{
+                        console.log(e,'e')
                         e.status.value = this.$change(this.statusOption, 'status', e, true).name;
                         e.expireUnit.value = this.$change(this.dateOption, 'expireUnit', e, true).name;
                         e.unit.value = this.$change(this.skuUnitOption, 'unit', e, true).name;
                         e.unitLength.value = this.$change(this.lengthOption, 'unitLength', e, true).name;
                         e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
                         e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
+
+                        if(e.noneSellCountry.value){
+                            let noneSellCountry=e.noneSellCountry.value.split(',');
+                            e.noneSellCountry._value='';
+                            _.map(noneSellCountry,v=>{
+                                e.noneSellCountry._value+=(_.findWhere(this.countryOption,{code:v}).name+',');
+                            });
+                            e.noneSellCountry._value=e.noneSellCountry._value.slice(0,e.noneSellCountry._value.length-1);
+                        }
+                        if(e.mainSaleCountry.value){
+                            let mainSaleCountry=e.mainSaleCountry.value.split(',');
+                            e.mainSaleCountry._value='';
+                            _.map(mainSaleCountry,v=>{
+                                e.mainSaleCountry._value+=(_.findWhere(this.countryOption,{code:v}).name+',');
+                            });
+                            e.mainSaleCountry._value=e.mainSaleCountry._value.slice(0,e.mainSaleCountry._value.length-1);
+                        }
 
                         e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                         return e;
@@ -477,6 +495,7 @@
                 //国家
                 this.$ajax.get(this.$apis.get_country, {}, {cache: true}).then(res => {
                     this.countryOption = res;
+                    console.log(this.countryOption,'countryOption')
                     this.getData();
                     this.getCategoryId();
                 }).catch(err => {

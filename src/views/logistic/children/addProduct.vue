@@ -233,7 +233,7 @@ export default {
       this.selectArrData = arr
     },
     productDetail(id){
-      window.open(`${window.location.origin}#/product/sourcingDetail?id=${id}`);
+      window.open(`${window.location.origin}#/product/detail?id=${id}`);
     }
   }
 }

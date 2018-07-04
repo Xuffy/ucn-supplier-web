@@ -433,11 +433,18 @@
                     });
                 }
 
-                let allow=true;
+                for (let i=0;i<this.productData.length;i++){
+                  if(this.$validateForm(this.productData[i], this.$db.warehouse.inboundProduct)){
+                    return;
+                  }
+                }
+                /*let allow=true;
                 let mustKey=['inboundOutCartonTotalQty','skuOuterCartonVolume','skuOuterCartonRoughWeight','skuOuterCartonNetWeight','skuNetWeight','skuInnerCartonLength','skuInnerCartonWidth','skuInnerCartonHeight','skuInnerCartonWeightNet','skuInnerCartonRoughWeight','skuInnerCartonVolume'];
+                console.log(this.productData)
                 _.map(this.productData,v=>{
                     _.map(mustKey,k=>{
                         if(v[k]!==0 && v[k]!=='0' && !v[k]){
+                          console.log(k)
                             allow=false;
                         }
                     })
@@ -448,7 +455,7 @@
                         type: 'warning'
                     });
                 }
-
+*/
                 this.productData.forEach(v=>{
                     let skuUnit;
                     _.map(this.skuUnitOption,data=>{
@@ -460,7 +467,7 @@
                         customerName: v.customerName,
                         customerNo: v.customerNo,
                         customerOrderNo: v.customerOrderNo,
-                        customerSkuCode: v.skuCustomsCode,
+                        customerSkuCode: v.skuCustomerSkuCode,
                         factorySkuCode: v.factorySkuCode?v.factorySkuCode:'',
                         inboundOutCartonTotalQty: v.inboundOutCartonTotalQty?v.inboundOutCartonTotalQty:0,
                         inboundSkuTotalGrossWeight: v.inboundSkuTotalGrossWeight?v.inboundSkuTotalGrossWeight:0,
@@ -868,7 +875,7 @@
         left: 0;
         bottom: 0;
         width: 100%;
-        z-index:1000;
+        z-index:5;
     }
     .dialog-footer{
         text-align: center;

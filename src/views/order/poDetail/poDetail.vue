@@ -2908,6 +2908,6 @@
         bottom: 0;
         width: 100%;
         text-align: left;
-        z-index:2000;
+        z-index:5;
     }
 </style>
