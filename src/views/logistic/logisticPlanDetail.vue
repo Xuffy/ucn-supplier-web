@@ -405,7 +405,7 @@
         this.selectProductArr.forEach(a => {
           this.productList.forEach((item, index) => {
             if (item.vId.value == a.vId.value) {
-              let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(item => item.code == e)
+              let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.code == e)
               this.$set(this.productList[index].shipmentStatus, 'value', ShipmentStatusItem ?
                 ShipmentStatusItem.name : '')
             }
@@ -535,24 +535,41 @@
         this.getProductHistory(e.id ? (e.argID ? e.argID.value : e.id.value) : null, status, i)
       },
       getProductHistory(productId, status, i) {
-        // 修改处
         const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
         let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
+
         productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
-            res.history.length ? (this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify,
-                res.history.map(el => {
-                  let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
-                  el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-                  return el
-                }))]) :
-              (this.productModifyList = [currentProduct].map(el => {
-                let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(item => item.name == el.shipmentStatus
-                  .value)
-                el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.code : '';
-                return el
-              }))
-          }) :
-          this.productModifyList = [currentProduct]
+          this.productModifyList =  res.history.length ? [this.$getDB(this.$db.logistic.productModify,
+            res.history.map(el => {
+              let ShipmentStatusItem = this.selectArr.ShipmentStatu && this.selectArr.ShipmentStatus.find(
+                item => item.code == el.shipmentStatus)
+              el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
+              return el;
+            }))[0]] : 
+            [currentProduct].map(el => {
+              let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.name == el.shipmentStatus
+                .value)
+              el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.code : '';
+              return el
+            });
+          }) : this.productModifyList = [currentProduct];
+
+
+        // productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
+        //     res.history.length ? (this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify,
+        //         res.history.map(el => {
+        //           let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
+        //           el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
+        //           return el
+        //         }))]) :
+        //       (this.productModifyList = [currentProduct].map(el => {
+        //         let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.name == el.shipmentStatus
+        //           .value)
+        //         el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.code : '';
+        //         return el
+        //       }))
+        //   }) :
+        //   this.productModifyList = [currentProduct]
       },
       addPayment() {
         const obj = this.basicInfoArr.find(a => a.key === 'exchangeCurrency')
@@ -677,7 +694,7 @@
           return;
         }
         this.showProductDialog = false;
-        let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(item => item.code == currrentProduct.shipmentStatus.value)
+        let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.code == currrentProduct.shipmentStatus.value)
         currrentProduct.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.name : '';
         this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
         this.productList.forEach(item => {
@@ -861,7 +878,7 @@
         this.oldPlanObject.product = this.productList.map((item, i) => {
           return _.mapObject(item, (v, k) => {
             if (v.type == 'text') {
-              let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(el => el.name == v.value)
+              let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(el => el.name == v.value)
               if (ShipmentStatusItem) {
                 return ShipmentStatusItem.code;
               } else {

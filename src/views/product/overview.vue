@@ -186,14 +186,14 @@
                 //Category下拉组件数据
                 categoryList:[
                     {
-                        id:123,
-                        name:"系统分类",
+                        id:5122355,
+                        name:"自己的分类",
                         children:[],
                         _disableClick:true,
                     },
                     {
-                        id:5125,
-                        name:"自己的分类",
+                        id:1231124,
+                        name:"系统分类",
                         children:[],
                         _disableClick:true,
                     },
@@ -276,11 +276,6 @@
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_productList,this.productForm).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.overviewTable, res.datas,e=>{
-                        // if(e.status.value===0){
-                        //     e.status.value='下架';
-                        // }else if(e.status.value===1){
-                        //     e.status.value='上架';
-                        // }
                         e.status.value = this.$change(this.statusOption, 'status', e, true).name;
                         e.expireUnit.value = this.$change(this.dateOption, 'expireUnit', e, true).name;
                         e.unit.value = this.$change(this.skuUnitOption, 'unit', e, true).name;
@@ -288,7 +283,7 @@
                         e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
                         e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
 
-                        e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm-dd');
+                        e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                         return e;
                     });
                     this.pageData=res;
@@ -302,12 +297,12 @@
             //获取类别数据
             getCategoryId(){
                 this.$ajax.get(this.$apis.CATEGORY_SYSTEM,{}).then(res=>{
-                    this.categoryList[0].children=res;
+                    this.categoryList[1].children=res;
                 }).catch(err=>{
 
                 });
                 this.$ajax.get(this.$apis.CATEGORY_MINE,{}).then(res=>{
-                    this.categoryList[1].children=res;
+                    this.categoryList[0].children=res;
                 }).catch(err=>{
 
                 });

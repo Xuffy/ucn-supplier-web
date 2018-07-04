@@ -54,7 +54,7 @@ export default {
     },
     currency:{
         key: 'currency',
-        type: 'select',
+        type: 'selectCurrency',
         belong:'summary'
     },
     paymentTerm:{
