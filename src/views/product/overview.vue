@@ -186,14 +186,14 @@
                 //Category下拉组件数据
                 categoryList:[
                     {
-                        id:123,
-                        name:"系统分类",
+                        id:5122355,
+                        name:"自己的分类",
                         children:[],
                         _disableClick:true,
                     },
                     {
-                        id:5125,
-                        name:"自己的分类",
+                        id:1231124,
+                        name:"系统分类",
                         children:[],
                         _disableClick:true,
                     },
@@ -297,12 +297,12 @@
             //获取类别数据
             getCategoryId(){
                 this.$ajax.get(this.$apis.CATEGORY_SYSTEM,{}).then(res=>{
-                    this.categoryList[0].children=res;
+                    this.categoryList[1].children=res;
                 }).catch(err=>{
 
                 });
                 this.$ajax.get(this.$apis.CATEGORY_MINE,{}).then(res=>{
-                    this.categoryList[1].children=res;
+                    this.categoryList[0].children=res;
                 }).catch(err=>{
 
                 });
