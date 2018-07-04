@@ -67,7 +67,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.customerInfo" name="Customer Info">
+                <el-tab-pane :label="$i.product.customersInfo" name="Customer Info">
                     <el-form class="speForm" label-width="290px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailNewTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
