@@ -27,6 +27,17 @@
                                     </el-option>
                                 </el-select>
                             </div>
+                            <div v-if="v.type==='selectCurrency'">
+                              <el-select :disabled="summaryDisabled" class="speWidth" v-model="companyInfo[v.key]" placeholder="请选择">
+                                <el-option
+                                  size="mini"
+                                  v-for="item in options[v.key]"
+                                  :key="item.code"
+                                  :label="item.code"
+                                  :value="item.code">
+                                </el-option>
+                              </el-select>
+                            </div>
                             <div v-if="v.type==='textarea'">
                                 <el-input
                                         :disabled="summaryDisabled"
@@ -204,7 +215,7 @@
                         <el-option
                           v-for="item in options.currency"
                           :key="item.code"
-                          :label="item.name"
+                          :label="item.code"
                           :value="item.code"
                           style="width: 100%">
                         </el-option>
@@ -219,7 +230,7 @@
             </div>
         </el-dialog>
 
-      <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="contactDialogVisible">
+      <el-dialog width="70%" :title="$i.setting.contactInfo" :visible.sync="contactDialogVisible">
         <el-form label-width="200px" :model="contactData">
           <el-row>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -417,12 +428,7 @@
             getWholeData(){
                 this.$ajax.get(this.$apis.get_supplierWhile).then(res=>{
                     // this.addressData contactData
-                     this.accountsData = this.$getDB(this.$db.setting.supplierAccount, res.accounts, e=>{
-                        let currency;
-                        currency = _.findWhere(this.options.currency, {code: e.currency.value}) || {};
-                        e.currency._value = currency.name || '';
-                        return e;
-                     });
+                     this.accountsData = this.$getDB(this.$db.setting.supplierAccount, res.accounts);
                      this.contactDatas = this.$getDB(this.$db.setting.supplierContact, res.concats, e=>{
                        let gender,deptId;
                        gender = _.findWhere(this.sex, {code: (e.gender.value)+''}) || {};
@@ -432,7 +438,7 @@
                        return e;
                      });
                      this.addressDatas = this.$getDB(this.$db.setting.supplierAddress, res.address);
-                     res.exportLicense ? res.exportLicense = 'YES' : res.exportLicense = 'NO'
+                     res.exportLicense ? res.exportLicense = '有' : res.exportLicense = '无'
                      this.companyInfo=res;
                 }).catch(err=>{
                     console.log(err)
@@ -448,10 +454,10 @@
           },
           //获取字典
           getCodePart(){
-            this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS","SEX"]).then(res=>{
+            this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","SUPPLIER_TYPE","EL_IS","SEX"]).then(res=>{
               this.options.payment = _.findWhere(res, {'code': 'PMT'}).codes;
               this.options.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
-              this.options.type = _.findWhere(res, {'code': 'CUSTOMER_TYPE'}).codes;
+              this.options.type = _.findWhere(res, {'code': 'SUPPLIER_TYPE'}).codes;
               this.options.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
               this.sex = _.findWhere(res, {'code': 'SEX'}).codes;
             }).catch(err=>{
@@ -487,9 +493,9 @@
                 this.cloneData=Object.assign({},this.companyInfo);
             },
             saveModifySummary(){
-               if( this.companyInfo.exportLicense ==='yes'){
+               if( this.companyInfo.exportLicense ==='有'){
                     this.companyInfo.exportLicense = true;
-               }else{
+               }else if (this.companyInfo.exportLicense ==='无'){
                     this.companyInfo.exportLicense = false;
                }
                if (this.$validateForm(this.companyInfo, this.$db.setting.companyInfo)) {
