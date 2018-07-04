@@ -1695,7 +1695,7 @@
                         console.log(v['skuLabelPic'],'skuLabelPic')
                     })
                 });
-                return console.log(params,'params')
+                // return console.log(params,'params')
                 params.attachments=this.$refs.upload[0].getFiles();
                 _.map(params.orderSkuUpdateList,v=>{
                     let nowStatus,initialStatus;
@@ -2908,6 +2908,6 @@
         bottom: 0;
         width: 100%;
         text-align: left;
-        z-index:2000;
+        z-index:5;
     }
 </style>

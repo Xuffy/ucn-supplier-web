@@ -90,5 +90,6 @@
   "addFromProduct": "Add from Product",
   "addFromBookmark": "Add from Bookmark",
   "skuSaleStatus": "SKU Sale Status",
-  "quotedPrice": "基础报价"
+  "quotedPrice": "基础报价",
+  "customersInfo":"海关信息"
 }

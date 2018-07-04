@@ -3,5 +3,7 @@
   "sizeLimit": "Upload file size cannot exceed",
   "numberLimit": "Only upload the number of files",
   "uploadingAttachments": "Uploading attachments",
-  "viewAttachment": "View the attachment"
+  "viewAttachment": "View the attachment",
+  "uploadPhotos": "Upload Photos",
+  "viewPicture": "View picture"
 }

@@ -7,7 +7,7 @@
   "import": "导入",
   "upload": "下载",
   "selectFile": "选择文件",
-  "importPrompt": "同一邮箱的历史数据将被覆盖",
+  "note": "Note",
   "importPrompt": "Data from the same email will be overwritten",
   "fileTypePrompt":"Please upload the zip or XLS files",
   "fileNumberPrompt":"The import file is beyond the limit, please try again later"

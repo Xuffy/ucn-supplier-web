@@ -27,12 +27,12 @@ input, button, select, textarea {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 2px;
-  background: rgba(128, 133, 144, .2)
+  background: #dddddd;
 }
 
 ::-webkit-scrollbar-track {
   border-radius: 2px;
-  background: rgba(128, 133, 144, .06)
+  background: rgba(221, 221, 221, .1)
 }
 
 body {
@@ -165,7 +165,7 @@ body {
   vertical-align: middle;
 }
 
-.el-dialog__wrapper .el-dialog:not(.ucn-dialog-center){
+.el-dialog__wrapper .el-dialog:not(.ucn-dialog-center) {
   vertical-align: top;
   display: inline-block;
   text-align: left;
@@ -176,6 +176,17 @@ body {
   display: inline-block;
   margin: 0 auto !important;
   text-align: left;
+}
+
+.el-badge__content.is-fixed {
+  z-index: 5;
+}
+
+th.ucn-table-required .cell:before {
+  content: '* ';
+  color: red;
+  display: inline;
+  vertical-align: middle;
 }
 
 //.el-select__tags {

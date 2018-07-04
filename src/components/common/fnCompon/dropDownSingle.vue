@@ -32,8 +32,7 @@
 			v-model="val[defaultProps.label]"
 			suffix-icon="el-icon-arrow-down"
 			:size="size"
-			readonly
-		>
+			readonly>
 		</el-input>
     </div>
 </template>

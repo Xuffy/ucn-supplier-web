@@ -77,20 +77,20 @@ export default {
         showType:'input',
         belongTab:'basicInfo',
     },
-    supplierName:{
-        key:'supplierName',
-        type: 'String',
-        showType:'input',
-        belongTab:'basicInfo',
-        isHide:true
-    },
-    supplierNo:{
-        key:'supplierCode',
-        type: 'String',
-        showType:'input',
-        belongTab:'basicInfo',
-        isHide:true
-    },
+    // supplierName:{
+    //     key:'supplierName',
+    //     type: 'String',
+    //     showType:'input',
+    //     belongTab:'basicInfo',
+    //     isHide:true
+    // },
+    // supplierNo:{
+    //     key:'supplierCode',
+    //     type: 'String',
+    //     showType:'input',
+    //     belongTab:'basicInfo',
+    //     isHide:true
+    // },
     unit:{
         key:'unit',
         type: 'String',
