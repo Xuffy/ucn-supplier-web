@@ -7,5 +7,6 @@
   "skuRequired": "至少选择一个产品",
   "incotermRequired": "Incoterm is required.",
   "discountRateMustNumber": "Discount Rate must a number",
-  "noItemSelected": "没有选择任何条目！"
+  "noItemSelected": "没有选择任何条目！",
+  "skuAvailableQtyMustGreatNotLessThanOne": "产品有现货时现货数量必须有值并且不小于1"
 }

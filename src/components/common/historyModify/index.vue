@@ -25,6 +25,10 @@
               <p v-if="row[item.key]._title" v-text="row[item.key]._title"></p>
             </div>
 
+            <div v-else-if="row[item.key]._image">
+              <v-image class="img" :src="getImage(item._value || item.value)" height="30px" width="30px"></v-image>
+            </div>
+
             <div v-else>
               <span v-if="(row[item.key]._disabled && !row._remark) || (!isModify && !row[item.key]._upload)"
                     v-text="row[item.key]._value || row[item.key].value"></span>
@@ -97,16 +101,18 @@
 
 <script>
   import VUpload from '../upload/index';
+  import VImage from '../image/index';
   // testData = testData.content.details;
 
   export default {
     name: 'VHistoryModify',
-    components: {VUpload},
+    components: {VUpload, VImage},
     props: {
       visible: {
         type: Boolean,
         default: false
       },
+      beforeSave: Function
     },
     data() {
       return {
@@ -144,8 +150,18 @@
           }
           return val;
         })
+        if (typeof this.beforeSave === 'function' && this.beforeSave(data) === false) {
+          return;
+        }
         this.$emit('save', data);
         this.showDialog = false;
+      },
+      getImage(value, split = ',') {
+        if (_.isEmpty(value)) return '';
+        if (_.isString(value)) {
+          value = value.split(split);
+        }
+        return value[0];
       },
       init(editData, history = [], isModify = true) {
         let ed = [];
