@@ -1,7 +1,7 @@
 <template>
     <div class="add-product" v-loading="loadingData">
         <div class="title">{{$i.product.basicInformation}}</div>
-        <el-form :model="productForm" :rules="rules" ref="productForm1" class="speForm" label-width="230px" :label-position="labelPosition">
+        <el-form ref="productForm1" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <!--设置高度51px以免inputNumber错位-->
                 <el-col style="height: 51px;" class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -9,9 +9,8 @@
                         <v-upload :limit="20" :list="productForm.pictures" :onlyImage="true" ref="upload"></v-upload>
                     </el-form-item>
                 </el-col>
-
                 <el-col style="height: 51px;" v-if="v.belongTab==='basicInfo' && !v.isHide" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
-                    <el-form-item :prop="v.key" :label="v.label+':'">
+                    <el-form-item :required="v._rules?v._rules.required:false" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
                             <div v-if="v.isWeight">
                                 <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
@@ -175,7 +174,7 @@
                                     <el-option
                                             v-for="item in quarantineTypeOption"
                                             :key="item.id"
-                                            :label="item.code"
+                                            :label="item.name"
                                             :value="item.code">
                                     </el-option>
                                 </div>
@@ -560,7 +559,6 @@
         <div class="title">{{$i.product.otherInfo}}</div>
         <el-form :model="productForm" ref="productForm6" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
-
                 <el-col style="height: 51px;" v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
@@ -684,7 +682,7 @@
             <el-button @click="finish" :disabled="loadingData" :loading="disabledSubmit" type="primary">{{$i.product.finish}}</el-button>
         </div>
 
-        <el-dialog width="70%" :title="$i.product.addCustomer" :visible.sync="addCustomerDialogVisible">
+        <el-dialog width="70%" :title="$i.product.addCustomer" :visible.sync="addCustomerDialogVisible" custom-class="ucn-dialog-center">
             <el-form ref="customerQuery" :model="customerQuery" label-width="120px">
                 <el-row class="speZone">
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
@@ -1186,7 +1184,7 @@
                     this.loadingTable=false;
                     this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
                         this.tableData.forEach(v=>{
-                            if(v.id===e.id.value){
+                            if(v.customerId===e.id.value){
                                 this.$set(e,'_disabled',true);
                                 this.$set(e,'_checked',true);
                             }
@@ -1205,12 +1203,17 @@
 
             //完成新增
             finish(){
+                if(this.$validateForm(this.productForm,this.$db.product.detailTab)){
+                    return;
+                }
+
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 this.$set(this.productForm,'lengthWidthHeight',size);
                 this.disabledSubmit=true;
                 if(this.$route.query.id && this.$route.query.isEdit){
                     //代表是编辑
                     let param=Object.assign({},this.productForm);
+
                     _.mapObject(param,(e,k)=>{
                         if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox'){
                             param[k]=parseInt(param[k]);
@@ -1240,12 +1243,11 @@
                     }else{
                         param.ids=[];
                         this.tableData.forEach(v=>{
-                            param.ids.push(v.id);
+                            param.ids.push(v.customerId);
                         });
                     }
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
-                    console.log(param,'param')
                     this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
                         this.$message({
                             message: this.$i.product.modifySuccess,
@@ -1291,14 +1293,16 @@
                     }
                     if(param.visibility){
                         param.ids=[];
-                    }else{
+                    }
+                    else{
                         param.ids=[];
                         this.tableData.forEach(v=>{
-                            param.ids.push(v.id);
+                            param.ids.push(v.customerId);
                         });
                     }
                     param.pictures=this.$refs.upload.getFiles();
                     param.attachments=this.$refs.uploadAttachment.getFiles();
+
                     this.$ajax.post(this.$apis.add_newSKU,param).then(res=>{
                         this.$message({
                             message: this.$i.product.successfullyAdd,
@@ -1322,8 +1326,12 @@
                 this.loadingData=true;
                 this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
                     this.productForm=res;
+                    let lengthWidthHeight=this.productForm.lengthWidthHeight.split('*');
+                    this.boxSize.length=lengthWidthHeight[0];
+                    this.boxSize.width=lengthWidthHeight[1];
+                    this.boxSize.height=lengthWidthHeight[2];
                     _.mapObject(this.productForm,(e,k)=>{
-                        if(k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox'){
+                        if(k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight'){
                             this.productForm[k]=String(this.productForm[k]);
                         }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
                             if(this.productForm[k]){
@@ -1331,30 +1339,19 @@
                             }else{
                                 this.productForm[k]=[];
                             }
-                        }else if(k==='adjustPackage'){
+                        }else if(k==='adjustPackage' || k==='oem' || k==='useDisplayBox'){
                             this.productForm[k]=this.productForm[k]?'1':'0';
                         }
                     });
-
                     this.$ajax.post(this.$apis.get_sellerCustomerList,{
                         id:this.productForm.id,
                         pn:1,
                         ps:1000
                     }).then(res=>{
                         this.tableData=res.datas;
-                        // this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
-                        //     this.tableData.forEach(v=>{
-                        //         if(v.id===e.id.value){
-                        //             this.$set(e,'_disabled',true);
-                        //             this.$set(e,'_checked',true);
-                        //         }
-                        //     })
-                        // });
-
-                    }).catch(err=>{
-
+                    }).finally(err=>{
+                        this.loadingData=false;
                     });
-                    this.loadingData=false;
                 }).catch(err=>{
                     this.loadingData=false;
                 });
@@ -1371,7 +1368,7 @@
             },
             searchCustomer(){
                 this.loadingTable=true;
-                this.$ajax.post(this.$apis.get_sellerCustomer,this.customerQuery).then(res=>{
+                this.$ajax.post(this.$apis.get_sellerCustomerGroup,this.customerQuery).then(res=>{
                     this.loadingTable=false;
                     this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
                         this.tableData.forEach(v=>{
@@ -1404,6 +1401,7 @@
                     this.disableClickPost=true;
                     this.$ajax.post(this.$apis.get_sellerCustomerGroup,id).then(res=>{
                         res.forEach(v=>{
+                            v.customerId=v.id;
                             this.tableData.push(v);
                         });
                         this.addCustomerDialogVisible=false;
@@ -1423,26 +1421,16 @@
              * */
             getUnit(){
                 //币种单位
-                this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true}).then(res=>{
-                    this.currencyOption=res;
-                }).catch(err=>{
-
-                });
-
+                const currencyAjax=this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true});
                 //国家
-                this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
-                    this.countryOption=res;
-                }).catch(err=>{
-
-                });
-
-                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                    console.log(res)
-                })
-
+                const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
+                //数据字典
+                const codeAjax=this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT','QUARANTINE_TYPE','CUSTOMER_TYPE'],{cache:true});
                 this.loadingData=true;
-                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT','QUARANTINE_TYPE','CUSTOMER_TYPE'],{cache:true}).then(res=>{
-                    res.forEach(v=>{
+                this.$ajax.all([currencyAjax,countryAjax,codeAjax]).then(res=>{
+                    this.currencyOption=res[0];
+                    this.countryOption=res[1];
+                    res[2].forEach(v=>{
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
                         }else if(v.code==='WT_UNIT'){
@@ -1469,18 +1457,69 @@
                             this.customerTypeOption=v.codes;
                         }
                     });
-                    this.loadingData=false;
-                }).catch(err=>{
+                    if(this.$route.query.isEdit){
+                        this.getGoodsData();
+                    }
+                }).finally(()=>{
                     this.loadingData=false;
                 });
+
+                //
+                // this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true}).then(res=>{
+                //     this.currencyOption=res;
+                // }).catch(err=>{
+                //
+                // });
+                //
+                // //国家
+                // this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
+                //     this.countryOption=res;
+                // }).catch(err=>{
+                //
+                // });
+
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // })
+
+                // this.loadingData=true;
+                // this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT','QUARANTINE_TYPE','CUSTOMER_TYPE'],{cache:true}).then(res=>{
+                //     res.forEach(v=>{
+                //         if(v.code==='ED_UNIT'){
+                //             this.dateOption=v.codes;
+                //         }else if(v.code==='WT_UNIT'){
+                //             this.weightOption=v.codes;
+                //         }else if(v.code==='VE_UNIT'){
+                //             this.volumeOption=v.codes;
+                //         }else if(v.code==='LH_UNIT'){
+                //             this.lengthOption=v.codes;
+                //         }else if(v.code==='SKU_SALE_STATUS'){
+                //             this.saleStatusOption=v.codes;
+                //         }else if(v.code==='OEM_IS'){
+                //             this.oemOption=v.codes;
+                //         }else if(v.code==='UDB_IS'){
+                //             this.udbOption=v.codes;
+                //         }else if(v.code==='SKU_PG_IS'){
+                //             this.skuPkgOption=v.codes;
+                //         }else if(v.code==='RA_IS'){
+                //             this.readilyOption=v.codes;
+                //         }else if(v.code==='SKU_UNIT'){
+                //             this.skuUnitOption=v.codes;
+                //         }else if(v.code==='QUARANTINE_TYPE'){
+                //             this.quarantineTypeOption=v.codes;
+                //         }else if(v.code==='CUSTOMER_TYPE'){
+                //             this.customerTypeOption=v.codes;
+                //         }
+                //     });
+                //     this.loadingData=false;
+                // }).catch(err=>{
+                //     this.loadingData=false;
+                // });
             },
         },
         created(){
             this.getCategoryId();
             this.getUnit();
-            if(this.$route.query.isEdit){
-                this.getGoodsData();
-            }
         },
     }
 </script>
@@ -1544,6 +1583,9 @@
     .speInputNumber{
         width: 80%;
     }
+    .speInputNumber >>> input{
+        text-align: left;
+    }
     .speInput{
         width: 80%;
     }
@@ -1574,7 +1616,7 @@
         bottom: 0;
         width: 100%;
         text-align: left;
-        z-index: 1000;
+        z-index: 5;
     }
     .dialog-footer{
         text-align: center;

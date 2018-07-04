@@ -82,7 +82,7 @@
                     ],
                     orderNo: "",
                     pn: 1,
-                    ps: 10,
+                    ps: 50,
                     skuCode: "",
                     skuInventoryStatusDictCode: null,
                     sorts: [
@@ -92,9 +92,7 @@
                     //     }
                     ],
                 },
-
                 searchId:1,
-
                 searchOptions:[
                     {
                         label:'订单号',
@@ -108,7 +106,11 @@
                         label:'入库单号',
                         id:3
                     },
-                ]
+                ],
+
+
+                //字典配置
+                skuUnitOption:[],
             }
         },
         methods:{
@@ -129,6 +131,7 @@
                 this.$ajax.post(this.$apis.get_warehouseOverviewData,this.warehouseConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.warehouse.warehouseOverview, res.datas,(e)=>{
                         e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
+                        e.skuUnitDictCode._value=e.skuUnitDictCode.value?_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}).name:'';
                         return e;
                     });
                     this.pageData=res;
@@ -187,10 +190,26 @@
             changeSize(e){
                 this.warehouseConfig.ps=e;
                 this.getWarehouseData();
-            }
+            },
+
+
+
+            getUnit(){
+                this.loadingTable=true;
+                this.$ajax.post(this.$apis.get_partUnit,['SKU_UNIT'],{cache:true}).then(res=>{
+                    res.forEach(v=>{
+                        if(v.code==='SKU_UNIT'){
+                            this.skuUnitOption=v.codes;
+                        }
+                    });
+                    this.getWarehouseData();
+                }).catch(err=>{
+                    this.loadingTable=false;
+                });
+            },
         },
         created(){
-            this.getWarehouseData();
+            this.getUnit();
         },
         mounted(){
             this.setLog({query: {code: 'WAREHOUSE'}});

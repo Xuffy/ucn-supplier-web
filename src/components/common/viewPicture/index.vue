@@ -4,12 +4,11 @@
       :visible.sync="visible"
       :show-close="false"
       custom-class="ucn-view-picture">
+      <i class="el-icon-error" @click="visible = false"></i>
       <el-carousel :autoplay="false" height="60vh" class="banner"
                    :indicator-position="data.length > 1 ? 'outside' : 'none'"
                    :arrow="data.length > 1 ? 'always' : 'never'">
         <el-carousel-item v-for="item in data" :key="item">
-          <!--<img :src="item" style="width: 100%" alt="">-->
-
           <v-image class="img" :src="item"></v-image>
         </el-carousel-item>
       </el-carousel>
@@ -60,6 +59,20 @@
   .banner .img {
     width: 100%;
     height: 100%;
+  }
+
+  .el-icon-error {
+    font-size: 50px;
+    position: fixed;
+    right: 15px;
+    top: 15px;
+    color: #dddddd;
+    cursor: pointer;
+    transition: color .5s;
+  }
+
+  .el-icon-error:hover {
+    color: #FFFFFF;
   }
 </style>
 <style>

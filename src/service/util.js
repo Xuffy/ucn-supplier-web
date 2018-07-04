@@ -241,15 +241,19 @@ export default {
         , i = 0;
       keyData = _.mapObject(keyData, (val) => {
         // let z = 200 - ((255 / len) * i);
-        // val = `rgba(${z},255,255,1)`;
+        // val = `rgba(${z},81,10,1)`;
+        // val =  '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).substr(-6);
         val = `#f3510a`;
         // i++;
-        return val;
+        return val
       });
+
       return _.map(data, value => {
         return _.mapObject(value, (val, key) => {
-          if (_.isObject(val)) {
-            val._color = keyData[key] || '';
+          if (_.isObject(val) && keyData[key]) {
+            val._style = val._style || {};
+            val._style.backgroundColor = keyData[key];
+            val._style.color = '#ffffff';
           }
           return val;
         });

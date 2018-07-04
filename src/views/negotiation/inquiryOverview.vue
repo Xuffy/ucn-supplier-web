@@ -56,6 +56,8 @@
 */
 import { selectSearch, VTable, VPagination } from '@/components/index';
 import { mapActions } from 'vuex';
+import codeUtils from '@/lib/code-utils';
+
 export default {
   name: '',
   data() {
@@ -80,7 +82,7 @@ export default {
       tabData: [],
       viewByStatus: 0,
       params: {
-        status: 21,
+        status: null,
         ps: 50,
         pn: 1,
         tc: 0,
@@ -109,7 +111,10 @@ export default {
       },
       show: true
     });
-    this.gettabData();
+    this.getDirCodes().then(this.gettabData, this.gettabData);
+  },
+  mounted() {
+    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
   },
   methods: {
     ...mapActions([
@@ -121,6 +126,12 @@ export default {
       this.gettabData();
       this.searchLoad = true;
     },
+    getDirCodes() {
+      return this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], {cache: true}).then(data => {
+        this.setDic(codeUtils.convertDicValueType(data));
+        return data;
+      });
+    },
     gettabData() {
       let url, column;
       this.tabLoad = true;
@@ -131,24 +142,16 @@ export default {
         url = this.$apis.BUYER_POST_INQIIRY_LIST_SKU;
         column = this.$db.inquiry.viewBySKU;
       }
-      this.$ajax.post(url, this.params)
-        .then(res => {
-          this.params.tc = res.tc;
-          this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], {cache: true})
-            .then(data => {
-              this.setDic(data);
-              this.tabData = this.$getDB(column, res.datas, (item) => {
-                this.$filterDic(item);
-              });
-              this.tabLoad = false;
-              this.searchLoad = false;
-              this.checkedData = [];
-            });
-        })
-        ['catch'](() => {
-          this.searchLoad = false;
-          this.tabLoad = false;
-        });
+      this.$ajax.post(url, this.params).then(res => {
+        this.params.tc = res.tc;
+        this.tabData = this.$getDB(column, res.datas, item => this.$filterDic(item));
+        this.tabLoad = false;
+        this.searchLoad = false;
+        this.checkedData = [];
+      }, () => {
+        this.searchLoad = false;
+        this.tabLoad = false;
+      });
     },
     cancelInquiry() { // 取消询价单
       this.ajaxInqueryAction('cancel');

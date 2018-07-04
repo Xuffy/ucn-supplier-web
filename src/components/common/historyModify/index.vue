@@ -1,7 +1,7 @@
 <template>
   <div class="ucn-history-modify">
     <el-dialog
-      :title="isModify ? 'Modify' : 'History'"
+      :title="isModify ? $i.common.modify : $i.common.history"
       width="80%"
       @close="closeDialog"
       :close-on-click-modal="false"
@@ -25,10 +25,31 @@
               <p v-if="row[item.key]._title" v-text="row[item.key]._title"></p>
             </div>
 
+            <div v-else-if="row[item.key]._image">
+              <v-image class="img" :src="getImage(item._value || item.value)" height="30px" width="30px"></v-image>
+            </div>
+
             <div v-else>
-              <span v-if="(row[item.key]._disabled && !row._remark) || !isModify"
+              <span v-if="(row[item.key]._disabled && !row._remark) || (!isModify && !row[item.key]._upload)"
                     v-text="row[item.key]._value || row[item.key].value"></span>
 
+              <!--附件上传-->
+              <div v-else-if="row[item.key]._upload && !row._remark">
+                <el-popover
+                  placement="bottom"
+                  width="300"
+                  trigger="click">
+                  <v-upload :limit="row[item.key]._upload.limit || 5"
+                            :ref="row[item.key]._upload.ref || 'upload'"
+                            :readonly="!isModify"
+                            :list="row[item.key]._value || row[item.key].value"></v-upload>
+                  <el-button slot="reference" type="text">
+                    {{isModify ? $i.upload.uploadingAttachments : $i.upload.viewAttachment}}
+                  </el-button>
+                </el-popover>
+              </div>
+
+              <!--自定义插槽-->
               <div v-else-if="row[item.key]._slot && !row._remark">
                 <slot :name="item._slot" :data="row[item.key]"></slot>
               </div>
@@ -79,18 +100,19 @@
 </template>
 
 <script>
-
+  import VUpload from '../upload/index';
+  import VImage from '../image/index';
   // testData = testData.content.details;
 
   export default {
     name: 'VHistoryModify',
-    components: {},
+    components: {VUpload, VImage},
     props: {
       visible: {
         type: Boolean,
         default: false
       },
-
+      beforeSave: Function
     },
     data() {
       return {
@@ -113,16 +135,43 @@
     },
     methods: {
       submit() {
+        let data = [this.dataList[0], this.dataList[1]]
+          , uploadVm = null;
         this.modified = true;
-        this.$emit('save', [this.dataList[0], this.dataList[1]]);
+
+        data[0] = _.mapObject(data[0], (val, key) => {
+          let files;
+          if (val._upload && _.isObject(val._upload)) {
+            uploadVm = this.$refs[val._upload.ref];
+            uploadVm = _.isArray(uploadVm) ? uploadVm[0] : uploadVm;
+            files = uploadVm.getFiles(true);
+            val.value = files.key;
+            val._value = files.url;
+          }
+          return val;
+        })
+        if (typeof this.beforeSave === 'function' && this.beforeSave(data) === false) {
+          return;
+        }
+        this.$emit('save', data);
         this.showDialog = false;
+      },
+      getImage(value, split = ',') {
+        if (_.isEmpty(value)) return '';
+        if (_.isString(value)) {
+          value = value.split(split);
+        }
+        return value[0];
       },
       init(editData, history = [], isModify = true) {
         let ed = [];
         if (_.isEmpty(editData) || !_.isArray(editData)) return false;
+        this.dataList = [];
+        this.defaultData = [];
+        this.dataColumn = [];
         // 初始化可编辑行
-        ed = _.map(editData, value => {
-          return _.mapObject(value, (val, index) => {
+        ed = _.map(editData, (value, index) => {
+          return _.mapObject(value, val => {
             if (!_.isObject(val)) return val;
             val._edit = true;
             val.type = index === 1 ? 'String' : val.type;
@@ -191,4 +240,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .ucn-history-modify /deep/ .el-table .cell {
+    min-height: 23px;
+  }
 </style>

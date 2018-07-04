@@ -3,9 +3,10 @@
   "inquiryDetailTitle": "询价单号",
   "inquiryNo": "创建询价单",
   "basicInfo": "基本信息",
-  "supplierRequired": "Less one supplier required.",
-  "skuRequired": "Less one product required.",
+  "supplierRequired": "至少需要选择一个供应商",
+  "skuRequired": "至少选择一个产品",
   "incotermRequired": "Incoterm is required.",
   "discountRateMustNumber": "Discount Rate must a number",
-  "noItemSelected": "No item selected!"
+  "noItemSelected": "没有选择任何条目！",
+  "skuAvailableQtyMustGreatNotLessThanOne": "产品有现货时现货数量必须有值并且不小于1"
 }

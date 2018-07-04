@@ -1,6 +1,4 @@
 export default {
-  UNREADMESSAGE_QUERYUNREAD: ['/companymessage/queryunread', 'UMESSAGE_URL'], // 查询未读消息
-  UNREADMESSAGE_UPDATEUNREAD: ['/companymessage/updateunread', 'UMESSAGE_URL'], // 标记消息已读
   USER_PRIVILEGE: ['/user/privilege', 'UUSER_URL'],
   UTASK_PAGELIST: ['/utask/pageList', 'UWORKBENCH_URL'],
   UTASK_TYPELIST: ['/utask/typeList', 'UWORKBENCH_URL'],
@@ -17,13 +15,13 @@ export default {
   IMPORTFILE_IMPORTTASKE: ['/importfile/importtaske', 'UIE_URL'],
   GRIDFAVORITE_LIST: ['/gridfieldsetting/list', 'UMETA_URL'],
   IMPORTFILE_GETIMPORTTASK: ['/importfile/getimporttask', 'UIE_URL'],
-  IMPORTTEMPLATE_DOWNLOADURL: ['/importtemplate/downloadurl', 'UIE_URL'],
+  IMPORTTEMPLATE_DOWNLOADURL: ['/importtemplate/loadByCodes', 'UIE_URL'],
   USER_CUSTOMER_ISSETUSERINFO: ['/user/customer/isSetUserInfo?type={type}', 'UWORKBENCH_URL'],
   USER_DISABLE: ['/user/disable/{userId}', 'UUSER_URL'],
   USER_ENABLE: ['/user/enable/{userId}', 'UUSER_URL'],
   PRIVILEGE_DATA_BIZDOMAIN: ['/privilege/data/biz-domain', 'UUSER_URL'],
   PRIVILEGE_RESOURCE: ['/privilege/resource', 'UUSER_URL'],
   ROLE_PRIVILEGE: ['/role/privilege', 'UUSER_URL'],
-  PAYMENT_GETORDERBYPAYMENTNOS: ['/payment/getOrderByPaymentNos', 'UWORKBENCH_URL'],
-  // IMPORTTEMPLATE_DOWNLOADURL: ['/customer/isSetCompanyInfo', 'UIE_URL']
+  USERMESSAGE_READ: ['/usermessage/read', 'UMESSAGE_URL'],
+  USERMESSAGE_UNREADTOP: ['/usermessage/unreadTop', 'UMESSAGE_URL']
 }

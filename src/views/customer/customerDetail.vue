@@ -2,14 +2,13 @@
     <div class="souringDetail">
         <div class="head">
             <div class="title">
-                <img :src='basicDate.logo'/>
                 <span>{{basicDate.name}}</span>
             </div>
             <div class="detail">
                  <el-form  label-width="190px">
                    <el-row>
                      <el-col :span="4">
-                       <v-image :src="basicDate.logo"/>
+                       <v-image :src="basicDate.logo" style="height: 230px"/>
                      </el-col>
                      <el-col :span="20">
                        <el-form>
@@ -75,10 +74,12 @@
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.supplier.attachment" name="attchment">
-                    <!-- <div class="section-btn" style="margin-bottom:10px;">
-                      <el-button  @click="upload" type="primary">{{$i.button.upload}}</el-button>
-                    </div> -->
-                    <v-upload ref="uploadAttachment" :limit="20"  readonly/>
+                    <v-upload ref="uploadAttachment" :limit="20"  :list="basicDate.attachments" readonly/>
+                    <div class="attachment" v-show="!basicDate.attachments" style="margin-top:40px;">
+                      <div>
+                        No Attachment
+                      </div>
+                    </div>
                 </el-tab-pane>
 
                  <el-tab-pane :label="$i.supplier.remark" name="remark">
@@ -97,7 +98,7 @@
         </div>
         <el-dialog :title="$i.supplier.addRemark" :visible.sync="addRemarkFormVisible" center width="600px">
             <el-form :model="addRemarkData">
-              <el-form-item :label="$i.supplier.remark" :label-width="formLabelWidth">
+              <el-form-item  :label-width="formLabelWidth">
                 <el-input
                   type="textarea"
                   :rows="4"
@@ -565,6 +566,19 @@
 
     .speForm .el-row .list .el-input {
         width: 80%;
+    }
+    .attachment{
+      max-height: 300px;
+      max-width: 100%;
+      overflow-y: scroll;
+      overflow-x: auto;
+      border: 1px solid #ebeef5;
+    }
+    .attachment div{
+      text-align: center;
+      color: #999999;
+      height: 200px;
+      line-height: 200px;
     }
 
     /*

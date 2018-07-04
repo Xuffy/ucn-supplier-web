@@ -49,12 +49,12 @@ export default {
         showType:'text',
         fullLine:false,
     },
-    supplierName:{
-        key:'supplierName',
-        type: 'String',
-        showType:'text',
-        fullLine:false,
-    },
+    // supplierName:{
+    //     key:'supplierName',
+    //     type: 'String',
+    //     showType:'text',
+    //     fullLine:false,
+    // },
     descCn:{
         key:'descCn',
         type: 'String',

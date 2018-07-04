@@ -13,6 +13,7 @@
   "user": "用户",
   "home": "首页",
   "goSignIn": "正在跳转登录",
-  "cleanCache": "Clean up the data cache"
+  "cleanCache": "Clean up the data cache",
+  "signIn": "Sign in"
 }
 

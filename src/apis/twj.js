@@ -5,16 +5,18 @@ export default {
   post_payment_accept:['/payment/accept/{id}','USUPPLY_URL','USUPPLY_URL'],
   post_payment_dunning:['/payment/dunning','USUPPLY_URL','USUPPLY_URL'],
   //message
-  post_companymessage_query:['/companymessage/query','UMESSAGE_URL','UMESSAGE_URL'],
-  post_systemmessage_query:['/systemmessage/query','UMESSAGE_URL','UMESSAGE_URL'],
-  post_sys_queryownlist:['/systemmessage/queryownlist','UMESSAGE_URL','UMESSAGE_URL'],
-  post_sys_addsystemmessage:['/systemmessage/addsystemmessage','UMESSAGE_URL','UMESSAGE_URL'],
-  post_sys_updateread:['/systemmessagesubscribe/updateread','UMESSAGE_URL','UMESSAGE_URL'],
-  post_company_queryownlist:['/companymessage/queryownlist','UMESSAGE_URL','UMESSAGE_URL'],
-  post_company_addcompanymessage:['/companymessage/addcompanymessage','UMESSAGE_URL','UMESSAGE_URL'],
-  post_company_updateread:['/companymessagesubscribe/updateread','UMESSAGE_URL','UMESSAGE_URL'],
-  get_messagesetting_query:['/messagesetting/query','UMESSAGE_URL','UMESSAGE_URL'],
-  post_messagesetting_updatesetting:['/messagesetting/updatesetting','UMESSAGE_URL','UMESSAGE_URL'],
+  post_usermessage_queryCompany: ['/usermessage/queryCompany', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+  post_usermessage_querySystem: ['/usermessage/querySystem', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+  post_usermessage_read: ['/usermessage/read', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+  post_usermessage_readCompany: ['/usermessage/readCompany', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+  post_usermessage_readSystem: ['/usermessage/readSystem', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+  get_messagesetting_query: ['/messagesetting/query','UMESSAGE_URL', 'UMESSAGE_URL'],
+  post_companymessage_query: ['/companymessage/query', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+  post_company_addcompanymessage: ['/companymessage/addcompanymessage', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+  post_systemmessage_query: ['/systemmessage/query', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+  post_sys_addsystemmessage: ['/systemmessage/addsystemmessage', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+  post_sys_updateread: ['/systemmessagesubscribe/updateread', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+  post_messagesetting_updatesetting: ['/messagesetting/updatesetting', 'UMESSAGE_URL', 'UMESSAGE_URL'],
   //logs
   post_bizloQuery:['/bizlog/query','UBIZLOG_URL','UBIZLOG_URL'],
   //Personal Setting
@@ -55,6 +57,7 @@ export default {
   post_supplier_delContact:['/supplier/delContact/{id}','BASE_CS','USUPPLY_URL'],
   post_oss_company_batchUpload: ['/supplier/purchase/oss/company/batchUpload','BASE_CS','USUPPLY_URL'],
   post_oss_company_upload: ['/supplier/purchase/oss/company/upload','BASE_CS','USUPPLY_URL'],
+  post_purchase_customer_updateIsSetting:['/supplier/updateIsSetting/{id}', 'USUPPLY_URL'],
 
   //track
   get_track_getTrackInfoByPage: ['/track/getTrackInfoByPage','UWORKBENCH_URL'],

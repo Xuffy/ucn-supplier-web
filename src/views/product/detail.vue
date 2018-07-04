@@ -54,7 +54,7 @@
                 <el-tab-pane :label="$i.product.basicInformation" name="Basic Info">
                     <el-form class="speForm" label-width="200px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                            <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailNewTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+' :'">
                                     <span v-if="v.key==='status'">
                                         {{productForm[v.key]===1?'上架':'下架'}}
@@ -67,10 +67,10 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.customerInfo" name="Customer Info">
+                <el-tab-pane :label="$i.product.customersInfo" name="Customer Info">
                     <el-form class="speForm" label-width="290px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                            <el-col v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailNewTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
                                     {{productForm[v.key]}}
                                 </el-form-item>
@@ -87,7 +87,7 @@
                 <el-tab-pane :label="$i.product.packingInfo" name="Packing Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                            <el-col v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailNewTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
                                     {{productForm[v.key]}}
                                 </el-form-item>
@@ -98,7 +98,7 @@
                 <el-tab-pane :label="$i.product.logisticInfo" name="Logistic">
                     <el-form class="speForm" label-width="260px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                            <el-col v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailNewTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
                                     {{productForm[v.key]}}
                                 </el-form-item>
@@ -109,7 +109,7 @@
                 <el-tab-pane :label="$i.product.otherInfo" name="Other Info">
                     <el-form class="speForm" label-width="250px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                            <el-col v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailNewTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
                                     {{productForm[v.key]}}
                                 </el-form-item>
@@ -320,6 +320,21 @@
 
                     ],
                 },
+
+
+                /**
+                 * 字典配置
+                 * */
+                skuUnitOption:[],       //计量单位
+                expirationOption:[],    //保质期单位
+                quarantineTypeOption:[],//检疫类别
+                weightOption:[],
+                volumeOption:[],
+                lengthOption:[],
+                oemOption:[],
+                udbOption:[],
+                skuPkgOption:[],
+                countryOption:[],
             }
         },
         methods:{
@@ -338,6 +353,37 @@
                 this.loadingTable=true;
                 this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
                     this.productForm=res;
+
+                    //处理国家显示
+                    if(this.productForm.noneSellCountry){
+                        let noneSellCountry=this.productForm.noneSellCountry.split(',');
+                        this.productForm.noneSellCountry='';
+                        _.map(noneSellCountry,v=>{
+                            this.productForm.noneSellCountry+=(_.findWhere(this.countryOption,{code:v}).name+',');
+                        });
+                        this.productForm.noneSellCountry=this.productForm.noneSellCountry.slice(0,this.productForm.noneSellCountry.length-1);
+                    }
+                    if(this.productForm.mainSaleCountry){
+                        let mainSaleCountry=this.productForm.mainSaleCountry.split(',');
+                        this.productForm.mainSaleCountry='';
+                        _.map(mainSaleCountry,v=>{
+                            this.productForm.mainSaleCountry+=(_.findWhere(this.countryOption,{code:v}).name+',');
+                        });
+                        this.productForm.mainSaleCountry=this.productForm.mainSaleCountry.slice(0,this.productForm.mainSaleCountry.length-1);
+                    }
+
+                    //字典转换
+                    this.productForm.unit=this.productForm.unit?_.findWhere(this.skuUnitOption,{code:String(this.productForm.unit)}).name:'';
+                    this.productForm.expireUnit=this.productForm.expireUnit?_.findWhere(this.expirationOption,{code:String(this.productForm.expireUnit)}).name:'';
+                    this.productForm.inspectQuarantineCategory=this.productForm.inspectQuarantineCategory?_.findWhere(this.quarantineTypeOption,{code:this.productForm.inspectQuarantineCategory}).name:'';
+                    this.productForm.unitLength=this.productForm.unitLength?_.findWhere(this.lengthOption,{code:String(this.productForm.unitLength)}).name:'';
+                    this.productForm.unitVolume=this.productForm.unitVolume?_.findWhere(this.volumeOption,{code:String(this.productForm.unitVolume)}).name:'';
+                    this.productForm.unitWeight=this.productForm.unitWeight?_.findWhere(this.weightOption,{code:String(this.productForm.unitWeight)}).name:'';
+                    this.productForm.oem=_.findWhere(this.oemOption,{code:String(Number(this.productForm.oem))}).name;
+                    this.productForm.yearListed=this.$dateFormat(this.productForm.yearListed,'yyyy-mm');
+                    this.productForm.useDisplayBox=_.findWhere(this.udbOption,{code:String(Number(this.productForm.useDisplayBox))}).name;
+                    this.productForm.adjustPackage=_.findWhere(this.skuPkgOption,{code:String(Number(this.productForm.adjustPackage))}).name;
+
                     this.productForm.price.forEach(v=>{
                         if(v.status===2){
                             this.fobPort=v.fobPort;
@@ -354,7 +400,7 @@
                         e.status._value=e.status.value===1?this.$i.warehouse.costPrice:this.$i.warehouse.basicQuotation;
                         return e;
                     });
-                    this.tradeHistory.skuCode=this.productForm.code;
+                    this.tradeHistory.skuCode=this.productForm.sysCode;
                     this.loadingHistoryTable=true;
                     this.$ajax.post(this.$apis.get_productTradeHistory,this.tradeHistory).then(res=>{
                         if(res){
@@ -369,8 +415,6 @@
                         this.loadingTable=false;
                         this.loadingHistoryTable=false;
                     });
-
-                    console.log(this.productForm,'this.productForm')
                 }).catch(err=>{
                     this.loadingTable=false;
                 });
@@ -474,10 +518,43 @@
             },
         },
         mounted(){
+            // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+            //     console.log(res)
+            // })
+
+
+
             this.loadingTable=true;
-            this.$ajax.post(this.$apis.get_partUnit,['ITM'],{cache:true}).then(res=>{
-                this.incotermOption=res[0].codes;
-                this.getGoodsData();
+            this.$ajax.post(this.$apis.get_partUnit,['ITM','SKU_UNIT','ED_UNIT','QUARANTINE_TYPE','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS'],{cache:true}).then(res=>{
+                res.forEach(v => {
+                    if(v.code === 'ITM'){
+                        this.incotermOption = v.codes;
+                    }else if (v.code === 'SKU_UNIT') {
+                        this.skuUnitOption = v.codes;
+                    }else if (v.code === 'ED_UNIT') {
+                        this.expirationOption = v.codes;
+                    }else if(v.code==='QUARANTINE_TYPE'){
+                        this.quarantineTypeOption=v.codes;
+                    }else if(v.code==='WT_UNIT'){
+                        this.weightOption=v.codes;
+                    }else if(v.code==='VE_UNIT'){
+                        this.volumeOption=v.codes;
+                    }else if(v.code==='LH_UNIT'){
+                        this.lengthOption=v.codes;
+                    }else if(v.code==='OEM_IS'){
+                        this.oemOption=v.codes;
+                    }else if(v.code==='UDB_IS'){
+                        this.udbOption=v.codes;
+                    }else if(v.code==='SKU_PG_IS'){
+                        this.skuPkgOption=v.codes;
+                    }
+                });
+                this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
+                    this.countryOption=res;
+                    this.getGoodsData();
+                }).catch(()=>{
+                    this.loadingTable=false;
+                });
             }).finally(()=>{
                 this.loadingTable=false;
             });

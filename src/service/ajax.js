@@ -70,7 +70,7 @@ const $ajax = (config) => {
       throw new Error('Request url exception');
     }
 
-    if (!_.isEmpty(params) && !params.length) {
+    if (!_.isEmpty(params) && _.isObject(params) && !_.isArray(params)) {
       _.mapObject(params, (val, key) => {
         if (url.indexOf(`{${key}}`) < 0) {
           p[key] = val;

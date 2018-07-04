@@ -97,6 +97,10 @@ export default {
   "containerType":{
     type: 'text'
   },
+  "containerId":{
+    type: 'text',
+    _hide: true
+  },
   "totalQuantityInContainer":{
     key:'totalContainerQty',
     _filed:'totalContainerQty',
@@ -120,10 +124,6 @@ export default {
     _filed:'totalContainerOuterCartonsQty',
     type: 'text',
     _important:true
-  },
-  "shipmentStatus":{
-    _hide: true,
-    type: 'text'
   },
   "skuOuterCartonQty": {
     type: 'text'
@@ -156,9 +156,14 @@ export default {
     type: 'text'
   },
   "skuSupplierCompanyId": {
-    type: 'text'
+    type: 'text',
+    _hide:true
   },
   "skuSupplierTenantId": {
+    type: 'text',
+    _hide:true
+  },
+  "shipmentStatus":{
     type: 'text'
   }
 }

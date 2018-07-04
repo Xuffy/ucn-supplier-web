@@ -69,5 +69,6 @@
   "volumeOfInnerCarton": "中包体积",
   "brand": "品牌",
   "skuNameCN": "中文品名",
-  "skuPic": "图片"
+  "skuPic": "图片",
+  "skuPics":"Sku picture"
 }

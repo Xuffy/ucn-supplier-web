@@ -37,8 +37,8 @@ export default {
     _disabled: true
   },
   pic: {
-    key: 'skuPic',
-    type: 'attachment',
+    key: 'skuPictures',
+    _image: true,
     _disabled: true
   },
   skuSaleStatus: {

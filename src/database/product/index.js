@@ -13,6 +13,7 @@ import overview from './overview';
 import overviewTable from './overviewTable';
 import addProductCustomer from './addProductCustomer';
 import addProductTable from './addProductTable';
+import detailNewTab from './detailNewTab';
 
 
 
@@ -32,4 +33,5 @@ export default {
     detailTop,
     addProductCustomer,
     addProductTable,
+    detailNewTab
 }

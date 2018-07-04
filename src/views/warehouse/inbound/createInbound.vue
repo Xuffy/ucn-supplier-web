@@ -251,6 +251,7 @@
             </div>
 
             <v-table
+                    code="uwarehouse_inbound_sku"
                     :height="500"
                     v-loading="loadingTable"
                     :data="tableDataList"
@@ -349,6 +350,10 @@
                     skuBarCode: "",
                     skuNameCn: "",
                 },
+
+
+                //字典
+                skuUnitOption:[],
             }
         },
         methods:{
@@ -381,6 +386,7 @@
                         if(v.skuId.value===0){  //id为0的是脏数据，不能选
                             this.$set(v,'_disabled',true);
                         }else{
+
                             this.productData.forEach(m=>{
                                 if(v.skuId.value===m.skuId && m.orderNo===v.orderNo.value){
                                     this.$set(v,'_disabled',true);
@@ -427,13 +433,18 @@
                     });
                 }
 
-                console.log(this.productData,'this.productData')
-
-                let allow=true;
+                for (let i=0;i<this.productData.length;i++){
+                  if(this.$validateForm(this.productData[i], this.$db.warehouse.inboundProduct)){
+                    return;
+                  }
+                }
+                /*let allow=true;
                 let mustKey=['inboundOutCartonTotalQty','skuOuterCartonVolume','skuOuterCartonRoughWeight','skuOuterCartonNetWeight','skuNetWeight','skuInnerCartonLength','skuInnerCartonWidth','skuInnerCartonHeight','skuInnerCartonWeightNet','skuInnerCartonRoughWeight','skuInnerCartonVolume'];
+                console.log(this.productData)
                 _.map(this.productData,v=>{
                     _.map(mustKey,k=>{
                         if(v[k]!==0 && v[k]!=='0' && !v[k]){
+                          console.log(k)
                             allow=false;
                         }
                     })
@@ -444,13 +455,19 @@
                         type: 'warning'
                     });
                 }
-
+*/
                 this.productData.forEach(v=>{
+                    let skuUnit;
+                    _.map(this.skuUnitOption,data=>{
+                        if(v.skuUnit===data.name){
+                            skuUnit=data.code;
+                        }
+                    });
                     this.inboundData.inboundSkuBeanCreateParams.push({
                         customerName: v.customerName,
                         customerNo: v.customerNo,
                         customerOrderNo: v.customerOrderNo,
-                        customerSkuCode: v.skuCustomsCode,
+                        customerSkuCode: v.skuCustomerSkuCode,
                         factorySkuCode: v.factorySkuCode?v.factorySkuCode:'',
                         inboundOutCartonTotalQty: v.inboundOutCartonTotalQty?v.inboundOutCartonTotalQty:0,
                         inboundSkuTotalGrossWeight: v.inboundSkuTotalGrossWeight?v.inboundSkuTotalGrossWeight:0,
@@ -474,7 +491,7 @@
                         inventorySkuVolume: 0,
                         orderId: v.orderId,
                         orderNo: v.orderNo,
-                        orderSkuQty: v.totalQty,
+                        orderSkuQty: v.skuQty,
                         outboundOutCartonTotalQty: 0,
                         outboundSkuTotalGrossWeight: 0,
                         outboundSkuTotalNetWeight: 0,
@@ -501,7 +518,7 @@
                         skuNameCustomer: v.skuNameCustomer,
                         skuNameEn: v.skuNameEn,
                         skuNetWeight: v.skuNetWeight?v.skuNetWeight:0,
-                        skuUnitDictCode: v.skuUnit,
+                        skuUnitDictCode: skuUnit,
                         skuWidth: v.skuWidth?v.skuWidth:0,
                         supplierId: 0,
                         supplierName: v.supplierName,
@@ -637,10 +654,21 @@
                     }).then(res=>{
                         _.map(res,v=>{
                             _.map(v.skuList,e=>{
-                                // e.skuQty=res.totalQty;
+                                e.customerOrderNo=v.customerOrderNo;
+                                e.customerNo=v.customerNo;
+                                e.skuCustomsNameCn=v.skuCustomsNameCn;
+                                e.supplierName=v.supplierName;
+                                e.supplierCode=v.supplierCode;
+                                e.supplierOrderNo=v.supplierOrderNo;
+                                e.customerName=v.customerName;
                                 this.productData.push(e);
                             })
                         });
+                        console.log(this.productData,'this.productData')
+                        console.log(this.skuUnitOption,'this.skuUnitOption')
+                        _.map(this.productData,v=>{
+                            v.skuUnit=v.skuUnit?_.findWhere(this.skuUnitOption,{code:String(v.skuUnit)}).name:'';
+                        })
 
                         /**
                          * 计算底部summary
@@ -769,8 +797,14 @@
              * 获取字典
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE'],{cache:true}).then(res=>{
-                    this.inboundTypeOption=res[0].codes;
+                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE','SKU_UNIT'],{cache:true}).then(res=>{
+                    res.forEach(v=>{
+                        if(v.code==='IBD_TYPE'){
+                            this.inboundTypeOption=v.codes;
+                        }else if(v.code==='SKU_UNIT'){
+                            this.skuUnitOption=v.codes;
+                        }
+                    })
                 });
 
                 // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{
@@ -841,7 +875,7 @@
         left: 0;
         bottom: 0;
         width: 100%;
-        z-index:1000;
+        z-index:5;
     }
     .dialog-footer{
         text-align: center;

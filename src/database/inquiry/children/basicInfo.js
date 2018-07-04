@@ -178,13 +178,17 @@ export default {
     lg: 24
   },
   attachment: { // 上传附件
+    key: 'attachments',
     rules: [],
     width: '150px',
     type: 'attachment',
     xs: 24,
     sm: 24,
     md: 24,
-    lg: 24
+    lg: 24,
+    _upload: {
+      ref: 'attachment'
+    }
   },
   fieldDisplay: {
     _hide: true
