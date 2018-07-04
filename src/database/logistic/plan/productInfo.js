@@ -156,10 +156,12 @@ export default {
     type: 'text'
   },
   "skuSupplierCompanyId": {
-    type: 'text'
+    type: 'text',
+    _hide:true
   },
   "skuSupplierTenantId": {
-    type: 'text'
+    type: 'text',
+    _hide:true
   },
   "shipmentStatus":{
     type: 'text'
