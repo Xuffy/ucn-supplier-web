@@ -239,7 +239,19 @@
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='attachment'">
-                            <v-upload :limit="20" :onlyImage="true" :ref="'pictureUpload'+scope.$index"></v-upload>
+                          <el-popover
+                            placement="bottom"
+                            width="300"
+                            trigger="click">
+                            <v-upload :limit="20"
+                                      only-image
+                                      :list="scope.row[v.key]"
+                                      :ref="'pictureUpload'+scope.$index"></v-upload>
+                            <el-button slot="reference" type="text">
+                              {{$i.upload.uploadPhotos}}
+                            </el-button>
+                          </el-popover>
+                            <!--<v-upload :limit="20" :onlyImage="true"></v-upload>-->
                         </div>
                         <div v-else>
                             {{scope.row[v.key]}}

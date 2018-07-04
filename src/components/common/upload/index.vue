@@ -10,10 +10,6 @@
     </p>
     <ul class="upload-images" v-if="onlyImage">
       <li v-for="item in fileList" :title="item.showName">
-        <!--<template v-if="!item.isImage">
-          <label v-text="item.showType"></label>
-          <span v-text="item.showName"></span>
-        </template>-->
 
         <v-image class="img-box" :src="item.url"></v-image>
         <div :class="{close:!item.progress || item.progress === 1}" class="progress"
@@ -290,6 +286,8 @@
   .ucn-upload.small .upload-btn {
     width: 50px;
     height: 50px;
+    margin-right: 10px;
+    margin-bottom: 10px;
   }
 
   .upload-btn:not(.only-image) {
@@ -330,7 +328,8 @@
     word-wrap: break-word;
     border: 1px solid #c0ccda;
     border-radius: 6px;
-    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
     position: relative;
     vertical-align: middle;
     box-sizing: border-box;
