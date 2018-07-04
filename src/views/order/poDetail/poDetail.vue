@@ -743,6 +743,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    :disabled="true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in weightOption"
@@ -756,6 +757,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    :disabled="true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in lengthOption"
@@ -769,6 +771,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    :disabled="true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in volumeOption"
@@ -876,7 +879,7 @@
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
-                    :max="100"
+                    :max="1"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuRateValueAddedTax"
@@ -884,7 +887,7 @@
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
-                    :max="100"
+                    :max="1"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuTaxRefundRate"
