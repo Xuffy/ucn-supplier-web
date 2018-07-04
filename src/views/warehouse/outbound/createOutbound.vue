@@ -120,6 +120,7 @@
         align="center"
         width="180">
         <template slot-scope="scope">
+          {{v.key}}
           <div v-if="v.showType==='number'">
             <el-input-number
               @blur="handleBlur(v,scope.row[v.key],scope.$index)"
@@ -622,7 +623,7 @@
     margin-top: 10px;
   }
 
-  .product-table > > > .el-checkbox {
+  .product-table /deep/ .el-checkbox {
     margin: 0;
   }
 
@@ -643,7 +644,7 @@
     left: 0;
     bottom: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 5;
   }
 
   .dialog-footer {
@@ -654,7 +655,7 @@
     max-width: 1000px !important;
   }
 
-  .speInput > > > .el-select {
+  .speInput /deep/ .el-select {
     display: block;
   }
 

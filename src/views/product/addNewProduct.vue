@@ -1616,7 +1616,7 @@
         bottom: 0;
         width: 100%;
         text-align: left;
-        z-index: 1000;
+        z-index: 5;
     }
     .dialog-footer{
         text-align: center;
