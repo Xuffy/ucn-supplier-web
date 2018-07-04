@@ -7,17 +7,51 @@ export default {
     type: 'text',
     _hide: true
   },
-  "entryDt": {
-    type: 'text'
+  "fieldDisplay": {
+    type: 'text',
+    _hide: true
   },
+  // "entryDt": {
+  //   type: 'text'
+  // },
   "orderNo": {
     type: 'text'
   },
+  "orderId": {
+    type: 'text',
+    _hide: true
+  },
+  "skuId": {
+    type: 'text',
+    _hide: true
+  },
+  "skuSupplierCompanyId": {
+    type: 'text',
+    _hide: true
+  },
+  "skuSupplierName": {
+    type: 'text',
+    _hide: true
+  },
+  "skuSupplierTenantId": {
+    type: 'text',
+    _hide: true
+  },
+  "skuUnit": {
+    type: 'text',
+    _hide: true
+  },
+  "skuSupplierId": {
+    type: 'text',
+    _hide: true
+  },
   "toShipCartonQty": {
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "toShipQty": {
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "skuCode": {
     type: 'text'
@@ -62,10 +96,12 @@ export default {
     type: 'text'
   },
   "unitExportPrice": {
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "totalExportPrice": {
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "currency": {
     type: 'text'
@@ -108,19 +144,23 @@ export default {
   },
   "totalQuantityInContainer":{
     key:'totalContainerQty',
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "totalVolumeInContainer":{
     key:'totalContainerVolume',
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "totalNetWeightInContainer":{
     key:'totalContainerNetWeight',
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "totalQuantityOfOuterCartonsInContainer":{ 
     key:'totalContainerOuterCartonsQty',
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "shipmentStatus":{
     type: 'text'

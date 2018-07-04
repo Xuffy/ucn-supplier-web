@@ -535,24 +535,41 @@
         this.getProductHistory(e.id ? (e.argID ? e.argID.value : e.id.value) : null, status, i)
       },
       getProductHistory(productId, status, i) {
-        // 修改处
         const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
         let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
+
         productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
-            res.history.length ? (this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify,
-                res.history.map(el => {
-                  let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
-                  el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-                  return el
-                }))]) :
-              (this.productModifyList = [currentProduct].map(el => {
-                let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.name == el.shipmentStatus
-                  .value)
-                el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.code : '';
-                return el
-              }))
-          }) :
-          this.productModifyList = [currentProduct]
+          this.productModifyList =  res.history.length ? [this.$getDB(this.$db.logistic.productModify,
+            res.history.map(el => {
+              let ShipmentStatusItem = this.selectArr.ShipmentStatu && this.selectArr.ShipmentStatus.find(
+                item => item.code == el.shipmentStatus)
+              el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
+              return el;
+            }))[0]] : 
+            [currentProduct].map(el => {
+              let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.name == el.shipmentStatus
+                .value)
+              el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.code : '';
+              return el
+            });
+          }) : this.productModifyList = [currentProduct];
+
+
+        // productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
+        //     res.history.length ? (this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify,
+        //         res.history.map(el => {
+        //           let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
+        //           el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
+        //           return el
+        //         }))]) :
+        //       (this.productModifyList = [currentProduct].map(el => {
+        //         let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.name == el.shipmentStatus
+        //           .value)
+        //         el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.code : '';
+        //         return el
+        //       }))
+        //   }) :
+        //   this.productModifyList = [currentProduct]
       },
       addPayment() {
         const obj = this.basicInfoArr.find(a => a.key === 'exchangeCurrency')

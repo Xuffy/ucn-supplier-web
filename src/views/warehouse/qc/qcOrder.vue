@@ -145,7 +145,7 @@
                             :prop="v.key"
                             width="160">
                         <template slot-scope="scope">
-                            <div v-if="v.key==='qcPics'">
+                          <div v-if="v.key==='qcPics' && scope.row[v.key]">
                                 <v-image :src="scope.row[v.key][0]" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key])"></v-image>
                             </div>
                             <div v-else>
@@ -186,7 +186,7 @@
                             :prop="v.key"
                             width="160">
                         <template slot-scope="scope">
-                            <div v-if="v.key==='qcPics'">
+                            <div v-if="v.key==='qcPics' && scope.row[v.key]">
                                 <v-image :src="scope.row[v.key][0]" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key])"></v-image>
                             </div>
                             <div v-else>
@@ -360,7 +360,7 @@
         </el-dialog>
 
 
-        <v-message-board module="warehouse" code="qcOrderData" :id="$route.query.id"></v-message-board>
+        <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
 
         <v-view-picture ref="pics"></v-view-picture>
 
@@ -499,6 +499,7 @@
                             this.$ajax.post(this.$apis.get_qcOrderProductData,this.tableConfig).then(res=>{
                                 this.productTable2=res.datas;
                                 _.map(this.productTable2,v=>{
+                                    console.log('====',v)
                                     v.deliveryDate=this.$dateFormat(v.deliveryDate,'yyyy-mm-dd');
                                     v.skuUnitDictCode=_.findWhere(this.skuUnitOption,{code:v.skuUnitDictCode}).name;
                                     v.volumeUnitDictCode=_.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name;
