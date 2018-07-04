@@ -91,7 +91,7 @@
     </el-dialog>
     <messageBoard v-if="!isParams" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus"
-      @sendData="sendData" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData" />
+      @sendData="sendData"/>
   </div>
 </template>
 <script>
@@ -194,7 +194,6 @@
         },
         pageName: '',
         prodFieldDisplay: {},
-        inintData: {}, //存放初始数据的 便于取消还原数据 
         batchDunningCutDown: '',
         CutDown: null
       }
@@ -285,22 +284,25 @@
       this.transportInfoArr = _.map(this.$db.logistic.transportInfoObj, (value, key) => {
         return value;
       })
-      if (this.pageTypeCurr.slice(-6) == 'Detail') {
-        this.getDetails();
-      } else {
-        this.edit = true
-        this.basicInfoArr.forEach((item) => {
-          this.$set(item, 'value', item.defaultVal);
-        })
-        this.transportInfoArr.forEach((item) => {
-          this.$set(item, 'value', item.defaultVal);
-        })
-        this.getRate();
-        this.getNewLogisticsNo()
-      }
     },
     methods: {
       ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      //初始页面数据
+      pageInit(){
+        if (this.pageTypeCurr.slice(-6) == 'Detail') {
+          this.getDetails();
+        } else {
+          this.edit = true
+          this.basicInfoArr.forEach((item) => {
+            this.$set(item, 'value', item.defaultVal);
+          })
+          this.transportInfoArr.forEach((item) => {
+            this.$set(item, 'value', item.defaultVal);
+          })
+          this.getRate();
+          this.getNewLogisticsNo()
+        }
+      },
       //获取实时汇率
       getRate() {
         this.$ajax.post(`${this.$apis.get_plan_rate}`).then(res => {
@@ -318,7 +320,6 @@
             }
           })
         })
-        this.$set(this.inintData, 'ExchangeRateInfoArr', this.$depthClone(this.ExchangeRateInfoArr));
       },
       getSupplierIds() {
         this.showAddProductDialog = true;
@@ -366,23 +367,20 @@
         this.basicInfoArr.forEach(a => {
           a.value = stringArray.includes(a.key) ? res[a.key] : res[a.key];
         })
-        this.$set(this.inintData, 'basicInfoArr', this.$depthClone(this.basicInfoArr))
         this.transportInfoArr.forEach(a => {
           a.value = res[a.key]
         })
         this.logisticsNo = res.logisticsNo
-        this.$set(this.inintData, 'transportInfoArr', this.$depthClone(this.transportInfoArr))
         this.exchangeRateList = res.currencyExchangeRate || []
         this.remark = res.remark
         this.containerInfo = res.containerDetail || [];
-        this.$set(this.inintData, 'containerInfo', this.$depthClone(res.containerDetail) || [])
         this.feeList = res.fee && [res.fee];
         res.product = res.product.map((item, i) => {
           item.vId = i;
           return item;
         });
         this.productList = this.$getDB(this.$db.logistic.productInfo, res.product.map(el => {
-          let ShipmentStatusItem = this.selectArr.ShipmentStatu&&this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
+          let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
           el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
           return el;
         }))
@@ -488,6 +486,9 @@
               })
             }
           })
+          this.pageInit();
+        }).catch(()=>{
+          this.pageInit();
         })
       },
       handleSelectionContainer(selectArray) {
@@ -539,17 +540,17 @@
         let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
 
         productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
-          this.productModifyList =  res.history.length ? [this.$getDB(this.$db.logistic.productModify,
+          this.productModifyList =  res.history.length ? status==1 ? [currentProduct] : this.$getDB(this.$db.logistic.productModify,
             res.history.map(el => {
               let ShipmentStatusItem = this.selectArr.ShipmentStatu && this.selectArr.ShipmentStatus.find(
                 item => item.code == el.shipmentStatus)
               el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
               return el;
-            }))[0]] : 
+            })) : 
             [currentProduct].map(el => {
               let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.name == el.shipmentStatus
                 .value)
-              el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.code : '';
+              el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.name : '';
               return el
             });
           }) : this.productModifyList = [currentProduct];
@@ -727,10 +728,7 @@
             break;
           case 'cancelModify':
             this.edit = false;
-            this.basicInfoArr = this.inintData.basicInfoArr;
-            this.ExchangeRateInfoArr = this.inintData.ExchangeRateInfoArr;
-            this.transportInfoArr = this.inintData.transportInfoArr;
-            this.containerInfo = this.inintData.containerInfo;
+            this.createdPlanData();
             break;
           case 'confirm':
             this.conformPlan();
@@ -900,11 +898,14 @@
         }
         this.$ajax.post(url, this.oldPlanObject).then(res => {
           this.$message({
-            message: '发送成功，正在跳转...',
+            message: '操作成功！',
             type: 'success',
             duration: 3000,
             onClose: () => {
-              this.$router.push('/logistic/' + (this.pageTypeCurr == "loadingListDetail" ? 'loadingList' : ''));
+              this.edit = false;
+              this.DeliveredEdit = false;
+              this.getDetails();
+              // this.$router.push('/logistic/' + (this.pageTypeCurr == "loadingListDetail" ? 'loadingList' : ''));
             }
           })
         })
