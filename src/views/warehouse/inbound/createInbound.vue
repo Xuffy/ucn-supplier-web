@@ -433,11 +433,18 @@
                     });
                 }
 
-                let allow=true;
+                for (let i=0;i<this.productData.length;i++){
+                  if(this.$validateForm(this.productData[i], this.$db.warehouse.inboundProduct)){
+                    return;
+                  }
+                }
+                /*let allow=true;
                 let mustKey=['inboundOutCartonTotalQty','skuOuterCartonVolume','skuOuterCartonRoughWeight','skuOuterCartonNetWeight','skuNetWeight','skuInnerCartonLength','skuInnerCartonWidth','skuInnerCartonHeight','skuInnerCartonWeightNet','skuInnerCartonRoughWeight','skuInnerCartonVolume'];
+                console.log(this.productData)
                 _.map(this.productData,v=>{
                     _.map(mustKey,k=>{
                         if(v[k]!==0 && v[k]!=='0' && !v[k]){
+                          console.log(k)
                             allow=false;
                         }
                     })
@@ -448,7 +455,7 @@
                         type: 'warning'
                     });
                 }
-
+*/
                 this.productData.forEach(v=>{
                     let skuUnit;
                     _.map(this.skuUnitOption,data=>{

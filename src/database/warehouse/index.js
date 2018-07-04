@@ -14,6 +14,7 @@ import outboundOverviewTable from './outboundOverviewTable';
 import createQcProductTable from './createQcProductTable';
 import payment from './payment';
 import qcDetailProductInfo from './qcDetailProductInfo';
+import inboundProduct from './inboundProduct';
 
 
 
@@ -56,5 +57,6 @@ export default {
     inboundOverviewTable,
     warehouseOverview,
     outboundDetailProductData,
-    qcOrderDetailBasicInfo
+    qcOrderDetailBasicInfo,
+  inboundProduct
 }
