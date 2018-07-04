@@ -460,7 +460,7 @@
                         customerName: v.customerName,
                         customerNo: v.customerNo,
                         customerOrderNo: v.customerOrderNo,
-                        customerSkuCode: v.skuCustomsCode,
+                        customerSkuCode: v.skuCustomerSkuCode,
                         factorySkuCode: v.factorySkuCode?v.factorySkuCode:'',
                         inboundOutCartonTotalQty: v.inboundOutCartonTotalQty?v.inboundOutCartonTotalQty:0,
                         inboundSkuTotalGrossWeight: v.inboundSkuTotalGrossWeight?v.inboundSkuTotalGrossWeight:0,
