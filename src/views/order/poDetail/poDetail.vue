@@ -1080,12 +1080,12 @@
             <!--:picker-options="pickerOptions1">-->
             <!--</el-date-picker>-->
 
-            <div slot="skuPictures" slot-scope="{data}">
-                <v-upload ref="uploadSkuPictures" readonly :list="data.value" :onlyImage="true" :limit="20"></v-upload>
-            </div>
-            <div slot="skuLabelPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuLabelPic" :list="data._value" :onlyImage="true" :limit="1"></v-upload>
-            </div>
+            <!--<div slot="skuPictures" slot-scope="{data}">-->
+                <!--<v-upload ref="uploadSkuPictures" readonly :list="data.value" :onlyImage="true" :limit="20"></v-upload>-->
+            <!--</div>-->
+            <!--<div slot="skuLabelPic" slot-scope="{data}">-->
+                <!--<v-upload ref="uploadSkuLabelPic" :list="data._value" :onlyImage="true" :limit="1"></v-upload>-->
+            <!--</div>-->
             <div slot="skuPkgMethodPic" slot-scope="{data}">
                 <v-upload ref="uploadSkuPkgMethodPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
@@ -1592,32 +1592,6 @@
                             }
                             item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory?this.$change(this.quarantineTypeOption,'skuInspectQuarantineCategory',item,true).name:'';
                             item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
-
-                            //图片处理
-                            let skuLabelPic=item.skuLabelPic.value,
-                                skuPkgMethodPic=item.skuPkgMethodPic.value,
-                                skuInnerCartonPic=item.skuInnerCartonPic.value,
-                                skuOuterCartonPic=item.skuOuterCartonPic.value,
-                                skuAdditionalOne=item.skuAdditionalOne.value,
-                                skuAdditionalTwo=item.skuAdditionalTwo.value,
-                                skuAdditionalThree=item.skuAdditionalThree.value,
-                                skuAdditionalFour=item.skuAdditionalFour.value;
-                            item.skuLabelPic._value=skuLabelPic?[skuLabelPic]:[];
-                            item.skuLabelPic.value=skuLabelPic?[skuLabelPic]:[];
-                            item.skuPkgMethodPic._value=skuPkgMethodPic?[skuPkgMethodPic]:[];
-                            item.skuPkgMethodPic.value=skuPkgMethodPic?[skuPkgMethodPic]:[];
-                            item.skuInnerCartonPic._value=skuInnerCartonPic?[skuInnerCartonPic]:[];
-                            item.skuInnerCartonPic.value=skuInnerCartonPic?[skuInnerCartonPic]:[];
-                            item.skuOuterCartonPic._value=skuOuterCartonPic?[skuOuterCartonPic]:[];
-                            item.skuOuterCartonPic.value=skuOuterCartonPic?[skuOuterCartonPic]:[];
-                            item.skuAdditionalOne._value=skuAdditionalOne?[skuAdditionalOne]:[];
-                            item.skuAdditionalOne.value=skuAdditionalOne?[skuAdditionalOne]:[];
-                            item.skuAdditionalTwo._value=skuAdditionalTwo?[skuAdditionalTwo]:[];
-                            item.skuAdditionalTwo.value=skuAdditionalTwo?[skuAdditionalTwo]:[];
-                            item.skuAdditionalThree._value=skuAdditionalThree?[skuAdditionalThree]:[];
-                            item.skuAdditionalThree.value=skuAdditionalThree?[skuAdditionalThree]:[];
-                            item.skuAdditionalFour._value=skuAdditionalFour?[skuAdditionalFour]:[];
-                            item.skuAdditionalFour.value=skuAdditionalFour?[skuAdditionalFour]:[];
                         }
                     });
                     this.productTableData=[];
@@ -1688,17 +1662,17 @@
                     if(v.skuInspectQuarantineCategory){
                         v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code;
                     }
-                    let picKey=['skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
-                    _.map(picKey,item=>{
-                        if(_.isArray(v[item])){
-                            v[item]=(v[item][0]?v[item][0]:null);
+                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    _.map(picKey, item => {
+                        if (_.isArray(v[item])) {
+                            v[item] = (v[item][0] ? v[item][0] : null);
                         }else if(_.isString(v[item])){
-                            console.log(v[item],'v[item]')
+                            let key=this.$getOssKey(v[item],true);
+                            v[item]=key[0];
                         }
-                        console.log(v['skuLabelPic'],'skuLabelPic')
-                    })
+                    });
                 });
-                // return console.log(params,'params')
+                // return console.log(params.skuList,'params')
                 params.attachments=this.$refs.upload[0].getFiles();
                 _.map(params.orderSkuUpdateList,v=>{
                     let nowStatus,initialStatus;
@@ -1979,7 +1953,8 @@
                         skuInfo: true,
                         skuStatus: true
                     });
-                }else{
+                }
+                else{
                     let isIn=false;
                     _.map(this.orderForm.orderSkuUpdateList,v=>{
                         if(v.skuId===e[0].skuId.value){
@@ -1998,30 +1973,10 @@
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
-                            if(!m._remark){
-                                m.skuLabelPic._value=this.$refs.uploadSkuLabelPic.getFiles(true).url;
-                                m.skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles();
-                                m.skuPkgMethodPic._value=this.$refs.uploadSkuPkgMethodPic.getFiles(true).url;
-                                m.skuPkgMethodPic.value=this.$refs.uploadSkuPkgMethodPic.getFiles();
-                                m.skuInnerCartonPic._value=this.$refs.uploadSkuInnerCartonPic.getFiles(true).url;
-                                m.skuInnerCartonPic.value=this.$refs.uploadSkuInnerCartonPic.getFiles();
-                                m.skuOuterCartonPic._value=this.$refs.uploadSkuOuterCartonPic.getFiles(true).url;
-                                m.skuOuterCartonPic.value=this.$refs.uploadSkuOuterCartonPic.getFiles();
-                                m.skuAdditionalOne._value=this.$refs.uploadSkuAdditionalOne.getFiles(true).url;
-                                m.skuAdditionalOne.value=this.$refs.uploadSkuAdditionalOne.getFiles();
-                                m.skuAdditionalTwo._value=this.$refs.uploadSkuAdditionalTwo.getFiles(true).url;
-                                m.skuAdditionalTwo.value=this.$refs.uploadSkuAdditionalTwo.getFiles();
-                                m.skuAdditionalThree._value=this.$refs.uploadSkuAdditionalThree.getFiles(true).url;
-                                m.skuAdditionalThree.value=this.$refs.uploadSkuAdditionalThree.getFiles();
-                                m.skuAdditionalFour._value=this.$refs.uploadSkuAdditionalFour.getFiles(true).url;
-                                m.skuAdditionalFour.value=this.$refs.uploadSkuAdditionalFour.getFiles();
-                            }
                             this.productTableData.splice(k,1,m)
                         }
                     })
                 });
-                this.productTableData[0].skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles();
-
             },
             dataFilter(data) {
                 let arr = [],
