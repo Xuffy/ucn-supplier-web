@@ -9,7 +9,7 @@
     <el-table-column :label="$i.logistic.fclTransportChargeCurrency" align="center" width="220">
       <template slot-scope="scope">
         <el-select v-model="scope.row.fclTransportChargeCurrency" placeholder="请输入内容" v-if="edit">
-          <el-option :label="item.code" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
+          <el-option :label="item.name" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
         </el-select>
         <div class="table-cell" v-else>{{ scope.row.fclTransportChargeCurrency }}</div>
       </template>
@@ -23,7 +23,7 @@
     <el-table-column :label="$i.logistic.handlingChargesCurrency" align="center" width="220">
       <template slot-scope="scope">
         <el-select v-model="scope.row.handlingChargesCurrency" placeholder="请输入内容" v-if="edit">
-          <el-option :label="item.code" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
+          <el-option :label="item.name" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
         </el-select>
         <div class="table-cell" v-else>{{ scope.row.handlingChargesCurrency }}</div>
       </template>
@@ -37,7 +37,7 @@
     <el-table-column :label="$i.logistic.otherPortChargesCurrency" align="center" width="240">
       <template slot-scope="scope">
         <el-select v-model="scope.row.otherPortChargeCurrency" placeholder="请输入内容" v-if="edit">
-          <el-option :label="item.code" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
+          <el-option :label="item.name" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
         </el-select>
         <div class="table-cell" v-else>{{ scope.row.otherPortChargeCurrency }}</div>
       </template>
@@ -51,7 +51,7 @@
     <el-table-column :label="$i.logistic.oceanFreightCurrency" align="center" width="180">
       <template slot-scope="scope">
         <el-select v-model="scope.row.oceanFreightCurrency" placeholder="请输入内容" v-if="edit">
-          <el-option :label="item.code" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
+          <el-option :label="item.name" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
         </el-select>
         <div class="table-cell" v-else>{{ scope.row.oceanFreightCurrency }}</div>
       </template>
@@ -65,7 +65,7 @@
     <el-table-column :label="$i.logistic.insuranceChargesCurrency" align="center" width="240">
       <template slot-scope="scope">
         <el-select v-model="scope.row.insuranceChargeCurrency" placeholder="请输入内容" v-if="edit">
-          <el-option :label="item.code" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
+          <el-option :label="item.name" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
         </el-select>
         <div class="table-cell" v-else>{{ scope.row.insuranceChargeCurrency }}</div>
       </template>
@@ -79,7 +79,7 @@
     <el-table-column :label="$i.logistic.otherChargesCurrency1" align="center" width="180">
       <template slot-scope="scope">
         <el-select v-model="scope.row.otherChargesCurrency1" placeholder="请输入内容" v-if="edit">
-          <el-option :label="item.code" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
+          <el-option :label="item.name" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
         </el-select>
         <div class="table-cell" v-else>{{ scope.row.otherChargesCurrency1 }}</div>
       </template>
@@ -99,7 +99,7 @@
     <el-table-column :label="$i.logistic.otherChargesCurrency2" align="center" width="180">
       <template slot-scope="scope">
         <el-select v-model="scope.row.otherChargesCurrency2" placeholder="请输入内容" v-if="edit">
-          <el-option :label="item.code" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
+          <el-option :label="item.name" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
         </el-select>
         <div class="table-cell" v-else>{{ scope.row.otherChargesCurrency2 }}</div>
       </template>

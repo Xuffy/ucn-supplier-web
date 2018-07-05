@@ -40,6 +40,7 @@
   "estArrivalDate": "预计到港日期",
   "estReleaseDate": "预计放单日期",
   "estDeliveryDate": "预计交货日期",
+  "estDelivaryDate": "预计交货日期",
   "logisticsStatus": "物流状态",
   "createDate": "创建日期",
   "declareDate": "报关日期",
@@ -213,5 +214,7 @@
   "toShipQty": "To ShipQty",
   "loadingList": "loading List",
   "shipmentStatus": "Shipment Status",
-  "logisticNo": "logistic No."
+  "logisticNo": "发运编号",
+  "entryName": "修改人",
+  "entryDt": "修改时间"
 }

@@ -15,6 +15,14 @@ export default {
     type: 'text',
     _hide: true
   },
+  "entryDt": {
+    type: 'text',
+    _hide: true
+  },
+  "entryName":{
+    type: 'text',
+    _hide: true
+  },
   "orderNo": {
     type: 'text'
   },

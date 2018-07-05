@@ -214,5 +214,7 @@
   "toShipQty": "To ShipQty",
   "loadingList": "loading List",
   "shipmentStatus": "Shipment Status",
-  "logisticNo": "logistic No."
+  "logisticNo": "logistic No.",
+  "entryName": "Operator Name",
+  "entryDt": "Modify Time"
 }
