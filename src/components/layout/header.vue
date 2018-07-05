@@ -55,7 +55,7 @@
             <div v-loading="message.loading">
               <h3 class="ucn-content-title">{{$i.common.systemMessage}}（{{message.count}} {{$i.common.new}} ）</h3>
               <ul class="list" v-if="message.count">
-                <li class="unread" v-for="item in message.list">
+                <li class="unread" v-for="item in message.list" @click="goMessage(item)">
                   <p v-text="item.title"></p>
                   <span v-text="$dateFormat(item.sendTime,'yyyy-mm-dd HH:MM:ss')"></span>
                 </li>
@@ -150,9 +150,11 @@
           this.$localStore.clearAll();
           this.$localStore.clearAll();
           this.$router.push('/login');
-        });
+        }).catch(e => e);
       },
-      goMessage() {
+      goMessage({id, type}) {
+        id && type && this.$ajax.post(this.$apis.USERMESSAGE_READ, [{id, type}])
+          .then(() => this.getMessage());
         this.message.show = false;
         this.$router.push('/message/index');
       },
@@ -194,17 +196,11 @@
 
         this.message.loading = true;
 
-        _.map(this.message.list, val => {
-          let {id, type} = val;
-          list.push({id, type});
-        });
+        list = _.map(this.message.list, ({id, type}) => ({id, type}));
+
         this.$ajax.post(this.$apis.USERMESSAGE_READ, list)
-          .then(() => {
-            this.getMessage();
-          })
-          .finally(() => {
-            this.message.loading = false;
-          });
+          .then(() => this.getMessage())
+          .finally(() => this.message.loading = false);
       },
       clearData() {
         this.$sessionStore.remove('request_cache');
