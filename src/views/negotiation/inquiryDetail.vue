@@ -395,16 +395,18 @@ export default {
       }
     },
     fnBasicInfoHistoty(item, type, config) {
+      let inquiries = !item.id.value || config.type === 'modify' ? this.newTabData : this.tabData;
+      let inquiryDetails = !item.id.value || config.type === 'modify' ? this.newProductTabData : this.productTabData;
       // 查看历史记录
       let arr;
       if (!item.id.value) {
         if (config.type === 'modify') {
-          arr = this.newProductTabData.filter(i => i.skuId.value === config.data);
+          arr = inquiryDetails.filter(i => i.skuId.value === config.data);
           this.$refs.HM.init(arr, [], true);
         }
         return;
       }
-      let historyApi = item.skuId ? this.$apis.BUYER_GET_INQUIRY_DETAIL_HISTORY : this.$apis.BUYER_GET_INQUIRY_HISTORY;
+      let historyApi = item.skuId ? this.$apis.GET_INQUIRY_DETAIL_HISTORY : this.$apis.GET_INQUIRY_HISTORY;
       // 历史中始终要显示的列
       let excludeColumns = ['id', 'skuId', 'fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay', 'updateDt', 'updateId', 'updateName', 'status', '_remark'];
       this.$ajax.get(historyApi, {id: item.id.value}).then(res => {
@@ -429,13 +431,11 @@ export default {
           }
         });
         if (type === 'basicInfo') {
-          arr = this.newTabData.filter(i => i.id.value.toString() === config.data.toString());
-          this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res), i => this.$filterDic(i)), config.type === 'modify');
+          this.$refs.HM.init(inquiries, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res), i => this.$filterDic(i)), config.type === 'modify');
         } else {
-          arr = this.newProductTabData.filter(i => i.skuId.value.toString() === config.data.toString());
+          arr = inquiryDetails.filter(i => i.skuId.value.toString() === config.data.toString());
           this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId'), i => this.$filterDic(i)), config.type === 'modify');
         }
-        this.fromArg = arr[0];
       });
     },
     // basic info 按钮操作
