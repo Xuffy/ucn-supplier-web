@@ -914,6 +914,20 @@
         this.$set(this.oldPlanObject, 'currency', v);
       }
     },
+    watch:{
+      containerInfo:{
+        handler: function (val) {
+          val.forEach(el=>{
+            this.productList.forEach(item=>{
+              if(el.id==item.containerId.value){
+                item.containerNo.value = el.containerNo;
+              }
+            })
+          })
+        },
+        deep: true
+      }
+    },
     destroyed() {
       clearInterval(this.CutDown)
     }
