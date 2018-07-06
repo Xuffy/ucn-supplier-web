@@ -140,7 +140,7 @@
       }
     },
     mounted() {
-      if (this.type === 2){
+      if (this.type === 2) {
         this.dataList[0] = null;
         this.dataList[3] = null;
         this.dataList = _.compact(this.dataList);
@@ -207,7 +207,25 @@
           case 'PAYMENT':
             return this.$ajax.post(this.$apis.PAYMENT_GETORDERBYPAYMENTNOS, [item.bizNo.value])
               .then(res => {
-                url = url[res];
+                res = res[0] || {};
+                let type = res.orderType;
+                params.code = res.orderNo;
+                switch (type) {
+                  case 10:
+                    url = url.PURCHASE_ORDER;
+                    break;
+                  case 20:
+                    url = url.QC_ORDER;
+                    break;
+                  case 30:
+                    url = url.LOGISTICS_PLAN;
+                    break;
+                  case 37:
+                    url = url.LOGISTICS_LIST;
+                    break;
+                  default:
+                    return false;
+                }
                 this.$windowOpen({url, params});
               });
         }

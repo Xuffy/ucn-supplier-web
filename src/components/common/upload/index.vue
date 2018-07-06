@@ -10,13 +10,12 @@
     </p>
     <ul class="upload-images" v-if="onlyImage">
       <li v-for="item in fileList" :title="item.showName">
-
         <v-image class="img-box" :src="item.url"></v-image>
         <div :class="{close:!item.progress || item.progress === 1}" class="progress"
              :style="{width: (item.progress * 100) + '%'}">
         </div>
 
-        <div class="operation-box" :class="{readonly:readonly,image:readonly && item.isImage}"
+        <div class="operation-box" :class="{readonly:readonly,image:readonly}"
              v-show="item.progress === 1 || item.url">
 
           <i class="el-icon-download" @click="downloadFile(item)"></i>
@@ -138,7 +137,7 @@
           return this.$message.warning(`${this.$i.upload.numberLimit}: ${this.limit}`);
         }
 
-        params = _.extend(this.filterType(files.name), {
+        params = _.extend(this.$getOssKey(files.name)[0], {
           fileKey,
           fileName: files.name,
           progress: 0,
@@ -160,6 +159,7 @@
             }
           }).then(result => {
             _this.$set(_this.fileList[uid], 'url', client.signatureUrl(result.name));
+            _this.$emit('change', _.values(_this.fileList));
           });
         }).catch(() => {
           this.deleteFile(params);
@@ -178,6 +178,7 @@
           }
         });
         this.fileList = list;
+        this.$emit('change', _.values(list));
       },
       downloadFile(item) {
         item.url && window.open(item.url);
@@ -216,7 +217,6 @@
           param.isImage = true;
         }
 
-
         return param;
       },
       setList(list) {
@@ -230,24 +230,22 @@
         }
 
         _.map(list, value => {
-          let urls, param;
+          let param;
           if (!_.isString(value)) {
             return;
           }
-          urls = value.split('?');
-          param = this.filterType(`${decodeURIComponent(urls[0])}${urls[1] ? ('?' + urls[1]) : ''}`);
+          param = this.$getOssKey(value)[0];
 
           if (_.isEmpty(this.fileList[param.id])) {
             this.$set(this.fileList, param.id, param);
           }
         });
 
+        this.$emit('change', _.values(this.fileList));
       },
       getFiles(type) {
         let files = _.pluck(_.values(this.fileList), 'fileKey')
-          , key = _.map(files, val => {
-          return `${this.bucket}:${val}`;
-        });
+          , key = _.map(files, val => `${this.bucket}:${val}`);
 
         return type ? {key, url: _.pluck(_.values(this.fileList), 'url')} : key;
       },
@@ -286,8 +284,6 @@
   .ucn-upload.small .upload-btn {
     width: 50px;
     height: 50px;
-    margin-right: 10px;
-    margin-bottom: 10px;
   }
 
   .upload-btn:not(.only-image) {
@@ -328,8 +324,7 @@
     word-wrap: break-word;
     border: 1px solid #c0ccda;
     border-radius: 6px;
-    margin-right: 10px;
-    margin-bottom: 10px;
+    margin-left: 10px;
     position: relative;
     vertical-align: middle;
     box-sizing: border-box;
@@ -464,7 +459,7 @@
     transition-delay: 1s;
   }
 
-  .ucn-upload /deep/ .ucn-image .image{
+  .ucn-upload /deep/ .ucn-image .image {
     border-radius: 6px;
   }
 

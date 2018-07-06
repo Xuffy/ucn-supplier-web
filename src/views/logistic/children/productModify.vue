@@ -2,11 +2,16 @@
   <el-row>
     <!--<v-table-filter :hideFilterValue="true" class="filter"/>-->
     <el-table ref="aa" :data="tableData" style="width: 100%" class="table" max-height="400">
-      <!-- <el-table-column :label="$i.logistic.negotiate" width="120" align="center">
+      <el-table-column v-if="productInfoModifyStatus==2" :label="$i.logistic.entryDt" width="150" align="center" sortable>
         <template slot-scope="scope">
-          <span>{{ scope.row.entryDt ? $dateFormat(scope.row.entryDt.value, 'yyyy-mm-dd') : null }}</span>
+           <span>{{ scope.row.entryDt ? $dateFormat(scope.row.entryDt.value, 'yyyy-mm-dd hh:mm') : null }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
+      <el-table-column v-if="productInfoModifyStatus==2" :label="$i.logistic.entryName" width="120" align="center" sortable>
+        <template slot-scope="scope">
+          <span>{{ scope.row.entryName.value }}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$i.logistic.orderNo" width="100" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.orderNo.value }}</span>

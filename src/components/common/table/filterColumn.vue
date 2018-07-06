@@ -88,27 +88,28 @@
           this.columns = data[0];
         }
 
-        return this.$ajax.post(this.$apis.GRIDFAVORITE_LIST, {bizCode: this.code},
-          {contentType: 'F', cache: true, updateCache: isUpdate})
-          .then(res => {
-            let list = _.pluck(_.where(res, {isChecked: 1}), 'property')
-              , dataList = [];
+        return this.$ajax.get(this.$apis.GRIDFAVORITE_PARTWITHSETTING, {bizCode: this.code}, {
+          cache: true,
+          updateCache: isUpdate
+        }).then(res => {
+          let list = _.pluck(_.where(res, {isChecked: 1}), 'property')
+            , dataList = [];
 
-            _.map(this.columns, (val, key) => {
-              let item = _.findWhere(res, {property: val._filed || key})
-              if (!val._hide && item) {
-                item._name = val.label;
-                dataList.push(item);
-              }
-            });
-
-            this.dataList[0].children = dataList;
-
-            this.$nextTick(() => {
-              this.$refs.columnTree.setCheckedKeys(list);
-            });
-            return list;
+          _.map(this.columns, (val, key) => {
+            let item = _.findWhere(res, {property: val._filed || key})
+            if (!val._hide && item) {
+              item._name = val.label;
+              dataList.push(item);
+            }
           });
+
+          this.dataList[0].children = dataList;
+
+          this.$nextTick(() => {
+            this.$refs.columnTree.setCheckedKeys(list);
+          });
+          return list;
+        });
       },
       submitFilter() {
         let selected = this.$refs.columnTree.getCheckedNodes()

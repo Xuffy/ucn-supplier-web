@@ -25,8 +25,12 @@ export default {
         _slot:'skuPictures',
         type:'pic',
         _image:true,
-        key:'skuPictures'
-        // disabled:true
+        key:'skuPictures',
+        _upload:{
+            ref:'uploadSkuPictures',
+            limit:1,
+            readonly:true
+        }
     },
     skuNameEn:{
         _disabled:true
@@ -251,7 +255,11 @@ export default {
     skuOuterCartonCode:{},
     skuLabelPic:{
         _slot:'skuLabelPic',
-        _image:true
+        _image:true,
+        _upload:{
+            ref:'uploadSkuLabelPic',
+            limit:1
+        }
         // _image:true,
         // type:'pic'
     },

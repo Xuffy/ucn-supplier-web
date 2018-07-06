@@ -37,8 +37,14 @@
             <td v-if="rowspan < 2">
               <div>#</div>
             </td>
-            <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && item.key">
-              <div v-text="item.label">
+            <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && item.key"
+                :class="{'sort-wrapper':item._sort}">
+              <div>
+                {{item.label}}
+                <div class="sort-box">
+                  <i class="el-icon-caret-top"></i>
+                  <i class="el-icon-caret-bottom"></i>
+                </div>
               </div>
             </td>
             <td v-if="buttons" ref="tableAction">
@@ -77,7 +83,7 @@
                 width="300"
                 trigger="click">
                 <v-upload readonly :limit="cItem._upload.limit || 5"
-                          :ref="cItem._upload.ref || 'upload'"
+                          :ref="cItem.key+'Upload'"
                           :list="cItem._value || cItem.value"></v-upload>
                 <el-button slot="reference" type="text">查看附件</el-button>
               </el-popover>
@@ -342,6 +348,11 @@
       changeFilterColumn(data) {
         this.dataList = this.$refs.filterColumn.getFilterData(this.dataList, data);
       },
+      resetFile() {
+        _.map(_.values(this.dataList), val => {
+          console.log(val)
+        });
+      },
       changeCheckedAll() {
         this.setDataList(_.map(this.dataList, val => {
           if (!val._disabled && !val._disabledCheckbox) {
@@ -449,6 +460,7 @@
   .ucn-table tfoot td {
     word-break: keep-all;
     padding: 0 10px;
+    position: relative;
   }
 
   .ucn-table tfoot td {
@@ -603,5 +615,40 @@
 
   .ucn-table /deep/ .ucn-image {
     margin: 0 auto;
+  }
+
+  .sort-wrapper {
+    padding: 0 10px 0 34px !important;
+    cursor: pointer;
+  }
+
+  thead td:not(.sort-wrapper) .sort-box {
+    display: none;
+    cursor: initial;
+  }
+
+  .sort-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    overflow: initial;
+    position: relative;
+    transition: all .3s;
+    opacity: 0;
+  }
+
+  .sort-wrapper:hover .sort-box {
+    opacity: 1;
+  }
+
+  .sort-box i {
+    height: 10px;
+  }
+
+  .sort-box i:hover {
+    color: #409EFF;
   }
 </style>
