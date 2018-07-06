@@ -39,7 +39,9 @@ export default {
   pic: {
     key: 'skuPictures',
     _image: true,
-    _disabled: true
+    _upload: {
+      readonly: true
+    }
   },
   skuSaleStatus: {
     key: 'skuStatus',
