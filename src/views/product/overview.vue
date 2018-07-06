@@ -276,7 +276,6 @@
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_productList,this.productForm).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.overviewTable, res.datas,e=>{
-                        console.log(e,'e')
                         e.status.value = this.$change(this.statusOption, 'status', e, true).name;
                         e.expireUnit.value = this.$change(this.dateOption, 'expireUnit', e, true).name;
                         e.unit.value = this.$change(this.skuUnitOption, 'unit', e, true).name;
@@ -495,7 +494,6 @@
                 //国家
                 this.$ajax.get(this.$apis.get_country, {}, {cache: true}).then(res => {
                     this.countryOption = res;
-                    console.log(this.countryOption,'countryOption')
                     this.getData();
                     this.getCategoryId();
                 }).catch(err => {

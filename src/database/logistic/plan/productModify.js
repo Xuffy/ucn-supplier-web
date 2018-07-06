@@ -12,12 +12,10 @@ export default {
     _hide: true
   },
   "entryDt": {
-    type: 'text',
-    _hide: true
+    type: 'text'
   },
   "entryName":{
-    type: 'text',
-    _hide: true
+    type: 'text'
   },
   "orderNo": {
     type: 'text'

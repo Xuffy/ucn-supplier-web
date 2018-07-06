@@ -157,11 +157,10 @@
             val._value = files.url;
           }
           return val;
-        })
+        });
         if (typeof this.beforeSave === 'function' && this.beforeSave(data) === false) {
           return;
         }
-        console.log(data)
         this.$emit('save', data);
         this.showDialog = false;
       },
@@ -174,7 +173,9 @@
       },
       init(editData, history = [], isModify = true) {
         let ed = [];
-        if (_.isEmpty(editData) || !_.isArray(editData)) return false;
+        if (isModify && (_.isEmpty(editData) || !_.isArray(editData))) {
+          return false
+        }
         this.dataList = [];
         this.defaultData = [];
         this.dataColumn = [];
