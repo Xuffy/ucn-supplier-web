@@ -207,7 +207,9 @@
           case 'PAYMENT':
             return this.$ajax.post(this.$apis.PAYMENT_GETORDERBYPAYMENTNOS, [item.bizNo.value])
               .then(res => {
-                let type = res[0] ? res[0].orderType : null;
+                res = res[0] || {};
+                let type = res.orderType;
+                params.code = res.orderNo;
                 switch (type) {
                   case 10:
                     url = url.PURCHASE_ORDER;
