@@ -181,7 +181,8 @@
         this.$emit('change', _.values(list));
       },
       downloadFile(item) {
-        item.url && window.open(item.url);
+
+        // item && Downloadjs(item.url);
       },
       signature(params) {
         return new OSS.Wrapper({
@@ -217,6 +218,7 @@
           param.isImage = true;
         }
 
+
         return param;
       },
       setList(list) {
@@ -250,7 +252,7 @@
         return type ? {key, url: _.pluck(_.values(this.fileList), 'url')} : key;
       },
       reset() {
-        this.setList({});
+        this.$emit('update:list', []);
       }
     },
   }

@@ -6,6 +6,7 @@ import router from 'service/router'
 import _config from "./config";
 import store from '@/store';
 import Qs from 'qs'
+import Downloadjs from 'downloadjs';
 import {Message, MessageBox} from 'element-ui';
 
 
@@ -129,6 +130,10 @@ export default {
     });
 
     return pass;
+  },
+
+  $download() {
+    // Downloadjs
   },
 
   /**
