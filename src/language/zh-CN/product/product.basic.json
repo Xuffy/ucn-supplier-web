@@ -91,5 +91,6 @@
   "addFromBookmark": "Add from Bookmark",
   "skuSaleStatus": "SKU Sale Status",
   "quotedPrice": "基础报价",
-  "customersInfo":"海关信息"
+  "customersInfo":"海关信息",
+  "total":"总计"
 }

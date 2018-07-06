@@ -20,6 +20,9 @@ export default {
   "orderNo": {
     type: 'text'
   },
+  "skuPictures":{
+    type: 'text'
+  },
   "orderId": {
     type: 'text',
     _hide: true
