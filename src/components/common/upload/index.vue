@@ -10,11 +10,6 @@
     </p>
     <ul class="upload-images" v-if="onlyImage">
       <li v-for="item in fileList" :title="item.showName">
-        <!--<template v-if="!item.isImage">
-          <label v-text="item.showType"></label>
-          <span v-text="item.showName"></span>
-        </template>-->
-
         <v-image class="img-box" :src="item.url"></v-image>
         <div :class="{close:!item.progress || item.progress === 1}" class="progress"
              :style="{width: (item.progress * 100) + '%'}">
@@ -164,6 +159,7 @@
             }
           }).then(result => {
             _this.$set(_this.fileList[uid], 'url', client.signatureUrl(result.name));
+            _this.$emit('change', _.values(_this.fileList));
           });
         }).catch(() => {
           this.deleteFile(params);
@@ -182,6 +178,7 @@
           }
         });
         this.fileList = list;
+        this.$emit('change', _.values(list));
       },
       downloadFile(item) {
         item.url && window.open(item.url);
@@ -220,7 +217,6 @@
           param.isImage = true;
         }
 
-
         return param;
       },
       setList(list) {
@@ -245,6 +241,7 @@
           }
         });
 
+        this.$emit('change', _.values(this.fileList));
       },
       getFiles(type) {
         let files = _.pluck(_.values(this.fileList), 'fileKey')
@@ -462,7 +459,7 @@
     transition-delay: 1s;
   }
 
-  .ucn-upload /deep/ .ucn-image .image{
+  .ucn-upload /deep/ .ucn-image .image {
     border-radius: 6px;
   }
 

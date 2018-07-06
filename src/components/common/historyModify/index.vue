@@ -25,9 +25,9 @@
               <p v-if="row[item.key]._title" v-text="row[item.key]._title"></p>
             </div>
 
-            <div v-else-if="row[item.key]._image">
+            <!--<div v-else-if="row[item.key]._image">
               <v-image class="img" :src="getImage(item._value || item.value)" height="30px" width="30px"></v-image>
-            </div>
+            </div>-->
 
             <div v-else>
               <span v-if="(row[item.key]._disabled && !row._remark) || (!isModify && !row[item.key]._upload)"
@@ -39,12 +39,20 @@
                   placement="bottom"
                   width="300"
                   trigger="click">
-                  <v-upload :limit="row[item.key]._upload.limit || 5"
-                            :ref="row[item.key]._upload.ref || 'upload'"
-                            :readonly="!isModify"
+                  <v-upload @change="val => $set(row[item.key]._upload,'list',val)"
+                            :limit="row[item.key]._upload.limit || 5"
+                            :ref="item.key + 'Upload'"
+                            :only-image="row[item.key]._image"
+                            :readonly="!isModify || row[item.key]._upload.readonly"
                             :list="row[item.key]._value || row[item.key].value"></v-upload>
                   <el-button slot="reference" type="text">
-                    {{isModify ? $i.upload.uploadingAttachments : $i.upload.viewAttachment}}
+                    <span v-if="!row[item.key]._image">
+                      {{isModify && !row[item.key]._upload.readonly ? $i.upload.uploadingAttachments : $i.upload.viewAttachment}}
+                    </span>
+                    <span v-else>
+                      {{isModify && !row[item.key]._upload.readonly ? $i.upload.uploadImage : $i.upload.viewImage}}
+                    </span>
+                    ({{row[item.key]._upload.list ? row[item.key]._upload.list.length : 0}})
                   </el-button>
                 </el-popover>
               </div>
@@ -142,14 +150,14 @@
         data[0] = _.mapObject(data[0], (val, key) => {
           let files;
           if (val._upload && _.isObject(val._upload)) {
-            uploadVm = this.$refs[val._upload.ref];
+            uploadVm = this.$refs[key + 'Upload'];
             uploadVm = _.isArray(uploadVm) ? uploadVm[0] : uploadVm;
             files = uploadVm.getFiles(true);
             val.value = files.key;
             val._value = files.url;
           }
           return val;
-        })
+        });
         if (typeof this.beforeSave === 'function' && this.beforeSave(data) === false) {
           return;
         }
@@ -165,7 +173,9 @@
       },
       init(editData, history = [], isModify = true) {
         let ed = [];
-        if (_.isEmpty(editData) || !_.isArray(editData)) return false;
+        if (isModify && (_.isEmpty(editData) || !_.isArray(editData))) {
+          return false
+        }
         this.dataList = [];
         this.defaultData = [];
         this.dataColumn = [];

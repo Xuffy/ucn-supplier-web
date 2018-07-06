@@ -26,5 +26,6 @@ export default {
   USERMESSAGE_UNREADTOP: ['/usermessage/unreadTop', 'UMESSAGE_URL'],
   PAYMENT_GETORDERBYPAYMENTNOS: ['/payment/getOrderByPaymentNos', 'UWORKBENCH_URL'],
   GRIDFAVORITE_PART: ['/gridfavorite/part', 'UMETA_URL'],
-  GRIDFAVORITE_PARTWITHSETTING: ['/gridfavorite/partWithSetting', 'UMETA_URL']
+  GRIDFAVORITE_PARTWITHSETTING: ['/gridfavorite/partWithSetting', 'UMETA_URL'],
+  PRIVILEGE_PRIVILEGE_SELECT: ['/privilege/privilege/select', 'UUSER_URL']
 }
