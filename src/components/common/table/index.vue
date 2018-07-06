@@ -83,7 +83,7 @@
                 width="300"
                 trigger="click">
                 <v-upload readonly :limit="cItem._upload.limit || 5"
-                          :ref="cItem._upload.ref || 'upload'"
+                          :ref="cItem.key+'Upload'"
                           :list="cItem._value || cItem.value"></v-upload>
                 <el-button slot="reference" type="text">查看附件</el-button>
               </el-popover>
@@ -347,6 +347,11 @@
       },
       changeFilterColumn(data) {
         this.dataList = this.$refs.filterColumn.getFilterData(this.dataList, data);
+      },
+      resetFile() {
+        _.map(_.values(this.dataList), val => {
+          console.log(val)
+        });
       },
       changeCheckedAll() {
         this.setDataList(_.map(this.dataList, val => {
