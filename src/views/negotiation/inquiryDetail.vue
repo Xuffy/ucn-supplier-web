@@ -15,7 +15,6 @@
           </div>
           <div class="tab-msg-wrap">
             <v-table
-                code="inquiry_list"
                 hide-filter-value
                 :height="450"
                 :data.sync="newTabData"
