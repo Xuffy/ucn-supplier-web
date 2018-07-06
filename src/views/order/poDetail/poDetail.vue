@@ -1709,9 +1709,6 @@
                     }
                 });
                 params.orderSkuUpdateList=orderSkuUpdateList;
-
-                return console.log(orderSkuUpdateList,'orderSkuUpdateList')
-
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
                     this.isModify=false;
