@@ -294,10 +294,12 @@
                     class="payTable"
                     :data="paymentData"
                     border
+                    :summary-method="getSummaries"
+                    show-summary
                     :row-class-name="tableRowClassName"
                     style="width: 100%">
                 <el-table-column
-                        prop="date"
+                        fixed="left"
                         label="#"
                         align="center"
                         width="55">
@@ -332,6 +334,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
+                        prop="planPayAmount"
                         :label="$i.order.planPayAmount"
                         width="160">
                     <template slot-scope="scope">
@@ -346,6 +349,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
+                        prop="actualPayAmount"
                         :label="$i.order.actualPayAmount"
                         width="160">
                     <template slot-scope="scope">
@@ -531,56 +535,6 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
-                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order.totalGrossWeight">-->
-                    <!--<el-input-->
-                    <!--class="summaryInput"-->
-                    <!--size="mini"-->
-                    <!--v-model="orderForm.totalGrossWeight"-->
-                    <!--:disabled="true">-->
-                    <!--</el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order.totalNetWeight">-->
-                    <!--<el-input-->
-                    <!--class="summaryInput"-->
-                    <!--size="mini"-->
-                    <!--v-model="orderForm.totalNetWeight"-->
-                    <!--:disabled="true">-->
-                    <!--</el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order.totalVolume">-->
-                    <!--<el-input-->
-                    <!--class="summaryInput"-->
-                    <!--size="mini"-->
-                    <!--v-model="orderForm.totalVolume"-->
-                    <!--:disabled="true">-->
-                    <!--</el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order.paidAmount">-->
-                    <!--<el-input-->
-                    <!--class="summaryInput"-->
-                    <!--size="mini"-->
-                    <!--v-model="orderForm.paidAmount"-->
-                    <!--:disabled="true">-->
-                    <!--</el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order.unpaidAmount">-->
-                    <!--<el-input-->
-                    <!--class="summaryInput"-->
-                    <!--size="mini"-->
-                    <!--v-model="orderForm.unpaidAmount"-->
-                    <!--:disabled="true">-->
-                    <!--</el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
                 </el-row>
             </el-form>
         </div>
@@ -2089,6 +2043,36 @@
                     return 'warning-row';
                 }
                 return '';
+            },
+            getSummaries(param){
+                const { columns, data } = param;
+                const sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = this.$i.product.total;
+                        return;
+                    }else if(index===4 || index===6 || index===8 || index===10){
+                        if(_.uniq(_.pluck(this.paymentData,'currencyCode')).length>1){
+                            sums[index] = '-';
+                        }
+                        else{
+                            const values = data.map(item => Number(item[column.property]));
+                            if (!values.every(value => isNaN(value))) {
+                                sums[index] = values.reduce((prev, curr) => {
+                                    const value = Number(curr);
+                                    if (!isNaN(value)) {
+                                        return prev + curr;
+                                    } else {
+                                        return prev;
+                                    }
+                                }, 0);
+                            } else {
+
+                            }
+                        }
+                    }
+                });
+                return sums;
             },
             getPaymentData(){
                 this.loadingPaymentTable=true;
