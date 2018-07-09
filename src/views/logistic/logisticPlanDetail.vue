@@ -12,8 +12,8 @@
         <el-input @change="hightLightModifyFun({remark:remark},'remark')" :class="[{definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('remark')},'el-input']"
           type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容" v-model="remark" v-if="edit"></el-input>
         <p v-else :style="fieldDisplay&&fieldDisplay.hasOwnProperty('remark') ? {
-            'color': '#f56c6c',
-            'text-shadow': '2px 1px 2px'
+            'background': 'yellow',
+            'padding':'5px'
           } : ''">{{ remark }}</p>
       </div>
       <!-- </el-col> -->
@@ -64,34 +64,27 @@
           <el-button v-if="edit" type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
           <el-button v-if="edit" type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
           <label v-if="(edit||DeliveredEdit)&&pageTypeCurr=='loadingListDetail'">{{ $i.logistic.shipmentStatus}} :</label>
-          <el-select v-if="(edit||DeliveredEdit)&&pageTypeCurr=='loadingListDetail'" v-model="ShipmentStatusCode" placeholder="请选择" @change="ShipmentStatusChange">
+          <el-select v-if="(edit||DeliveredEdit)&&pageTypeCurr=='loadingListDetail'" v-model="ShipmentStatusCode" placeholder="请选择"
+            @change="ShipmentStatusChange">
             <el-option v-for="item in selectArr.ShipmentStatus" :key="item.code" :label="item.name" :value="item.code">
             </el-option>
           </el-select>
         </div>
       </v-table>
     </div>
-    <el-dialog :title="$i.logistic.negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false"
-      @close="closeModify(0)">
-      <product-modify ref="productModifyComponents" :containerInfo="containerInfo" :shipmentStatus="selectArr.ShipmentStatus"
-        @productModifyfun="productModifyfun" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"
-      />
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="closeModify(0)">{{ $i.logistic.cancel }}</el-button>
-        <el-button type="primary" @click="closeModify(1)">{{ $i.logistic.confirm }}</el-button>
-      </div>
-    </el-dialog>
     <el-dialog :title="$i.logistic.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false"
       @close="closeAddProduct(0)">
-      <add-product ref="addProduct" :basicInfoArr="basicInfoArr" />
+      <product title="addProduct" type="product" :hideBtn="true" :dataResource="addProductFun"></product>
+      <!-- <add-product ref="addProduct" :basicInfoArr="basicInfoArr" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
-      </div>
+      </div> -->
     </el-dialog>
     <messageBoard v-if="!isParams" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus"
-      @sendData="sendData"/>
+      @sendData="sendData" />
+    <v-history-modify ref="HM" disabled-remark :close-before="closeModify"></v-history-modify>
   </div>
 </template>
 <script>
@@ -99,13 +92,15 @@
     VSimpleTable,
     containerInfo,
     selectSearch,
-    VTable
+    VTable,
+    VHistoryModify
   } from '@/components/index';
   import {
     mapActions,
     mapState
   } from 'vuex';
   import attachment from '@/components/common/upload/index';
+  import product from '@/views/product/addProduct';
   import messageBoard from '@/components/common/messageBoard/index';
   import formList from '@/views/logistic/children/formList'
   import oneLine from '@/views/logistic/children/oneLine'
@@ -209,7 +204,9 @@
       btns,
       productModify,
       addProduct,
-      messageBoard
+      messageBoard,
+      VHistoryModify,
+      product
     },
     computed: {
       productListTotal() {
@@ -288,7 +285,7 @@
     methods: {
       ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
       //初始页面数据
-      pageInit(){
+      pageInit() {
         if (this.pageTypeCurr.slice(-6) == 'Detail') {
           this.getDetails();
         } else {
@@ -321,11 +318,21 @@
           })
         })
       },
-      getSupplierIds() {
-        this.showAddProductDialog = true;
-        this.$nextTick(() => {
-          this.$refs.addProduct.getSupplierIds();
+      addProductFun() {
+        this.getSupplierIds();
+      },
+      async getSupplierIds() {
+        let url = this.$route.name == 'loadingListDetail' ? 'logistics_order_getSupplierIds' :
+          'logistics_plan_getSupplierIds';
+        let pageParams = {};
+        await this.$ajax.get(this.$apis[url], {
+          logisticsNo: this.basicInfoArr[0].value
+        }).then(res => {
+          pageParams.skuSupplierIds = res.supplierIds;
+          pageParams.customerId = res.customerId;
+          return pageParams
         })
+        return this.$ajax.post(this.$apis.get_order_list_with_page, pageParams);
       },
       registerRoutes() {
         this.$store.commit('SETRECYCLEBIN', {
@@ -380,14 +387,17 @@
           return item;
         });
         this.productList = this.$getDB(this.$db.logistic.productInfo, res.product.map(el => {
-          let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
+          let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item =>
+            item.code == el.shipmentStatus)
           el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
           return el;
         }))
         this.productList.forEach((item) => {
           if (item.fieldDisplay.value) {
             _.mapObject(item.fieldDisplay.value, (v, k) => {
-              this.$set(item[k], '_color', 'red')
+              this.$set(item[k], '_style', {
+                background: 'yellow'
+              })
             })
           }
         })
@@ -403,7 +413,8 @@
         this.selectProductArr.forEach(a => {
           this.productList.forEach((item, index) => {
             if (item.vId.value == a.vId.value) {
-              let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.code == e)
+              let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item =>
+                item.code == e)
               this.$set(this.productList[index].shipmentStatus, 'value', ShipmentStatusItem ?
                 ShipmentStatusItem.name : '')
             }
@@ -438,14 +449,14 @@
             message: '催款成功!'
           })
           this.$ajax.post(`${this.$apis.get_payment_list}${this.logisticsNo}/30`).then(res => {
-            this.createdPaymentData(res,'dunning')
+            this.createdPaymentData(res, 'dunning')
           })
         })
       },
-      createdPaymentData(res = this.oldPaymentObject,dunning) {
+      createdPaymentData(res = this.oldPaymentObject, dunning) {
         this.oldPaymentObject = JSON.parse(JSON.stringify(res))
         this.paymentList = res.datas
-        if(!dunning){
+        if (!dunning) {
           this.dunningDisabled = !this.paymentList.some((item) => item.planPayAmount > item.actualPayAmount);
         }
         this.paymentSum = res.statisticsDatas[0]
@@ -487,7 +498,7 @@
             }
           })
           this.pageInit();
-        }).catch(()=>{
+        }).catch(() => {
           this.pageInit();
         })
       },
@@ -538,39 +549,25 @@
       getProductHistory(productId, status, i) {
         const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
         let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
-
-        productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
-          this.productModifyList =  res.history.length ? status==1 ? [currentProduct] : this.$getDB(this.$db.logistic.productModify,
-            res.history.map(el => {
-              let ShipmentStatusItem = this.selectArr.ShipmentStatu && this.selectArr.ShipmentStatus.find(
-                item => item.code == el.shipmentStatus)
-              el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-              return el;
-            })) : 
-            [currentProduct].map(el => {
-              let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.name == el.shipmentStatus
-                .value)
+        if (productId) {
+          this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
+            this.productModifyList = res.history.length ? status == 1 ? [currentProduct] : this.$getDB(this.$db.logistic.productModify,
+              res.history.map(el => {
+                let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
+                el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
+                el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm') 
+                return el;
+              })) : status == 1 ? [currentProduct].map(el => {
+              let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item =>item.name == el.shipmentStatus.value)
               el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.name : '';
               return el
-            });
-          }) : this.productModifyList = [currentProduct];
-
-
-        // productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
-        //     res.history.length ? (this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify,
-        //         res.history.map(el => {
-        //           let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
-        //           el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-        //           return el
-        //         }))]) :
-        //       (this.productModifyList = [currentProduct].map(el => {
-        //         let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.name == el.shipmentStatus
-        //           .value)
-        //         el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.code : '';
-        //         return el
-        //       }))
-        //   }) :
-        //   this.productModifyList = [currentProduct]
+            }) : [];
+            status==1 ? this.$refs.HM.init(this.productModifyList,[]) : this.$refs.HM.init([], this.productModifyList,false);
+          })
+        } else {
+          this.productModifyList = [currentProduct];
+          this.$refs.HM.init(this.productModifyList, []);
+        }
       },
       addPayment() {
         const obj = this.basicInfoArr.find(a => a.key === 'exchangeCurrency')
@@ -683,19 +680,21 @@
           this.prodFieldDisplay = obj;
         }
       },
-      closeModify(status) {
-        if (!status) {
+      closeModify(data,fun) {
+        if (!data.length) {
           this.productModifyList = [];
           this.showProductDialog = false;
           return
         };
-        const currrentProduct = this.productModifyList[0]
+        const currrentProduct = data[0]
         let obj = _.mapObject(currrentProduct, v => Number(v.value) || v.value)
         if (this.$validateForm(obj, this.$db.logistic.dbProductInfo)) {
           return;
         }
+        fun();
         this.showProductDialog = false;
-        let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(item => item.code == currrentProduct.shipmentStatus.value)
+        let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code ==
+          currrentProduct.shipmentStatus.value)
         currrentProduct.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.name : '';
         this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
         this.productList.forEach(item => {
@@ -876,7 +875,8 @@
         this.oldPlanObject.product = this.productList.map((item, i) => {
           return _.mapObject(item, (v, k) => {
             if (v.type == 'text') {
-              let ShipmentStatusItem = this.selectArr.ShipmentStatus&&this.selectArr.ShipmentStatus.find(el => el.name == v.value)
+              let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(el =>
+                el.name == v.value)
               if (ShipmentStatusItem) {
                 return ShipmentStatusItem.code;
               } else {
@@ -914,12 +914,12 @@
         this.$set(this.oldPlanObject, 'currency', v);
       }
     },
-    watch:{
-      containerInfo:{
+    watch: {
+      containerInfo: {
         handler: function (val) {
-          val.forEach(el=>{
-            this.productList.forEach(item=>{
-              if(el.id==item.containerId.value){
+          val.forEach(el => {
+            this.productList.forEach(item => {
+              if (el.id == item.containerId.value) {
                 item.containerNo.value = el.containerNo;
               }
             })
@@ -976,8 +976,7 @@
       margin-bottom: 20px;
     }
     /deep/.definedStyleClass textarea {
-      background: #f56c6c;
-      color: #fff;
+      background: yellow;
     }
   }
 

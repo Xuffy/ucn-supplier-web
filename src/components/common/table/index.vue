@@ -83,9 +83,9 @@
                 width="300"
                 trigger="click">
                 <v-upload readonly :limit="cItem._upload.limit || 5"
-                          :ref="cItem.key+'Upload'"
+                          :ref="cItem.key + 'Upload'"
                           :list="cItem._value || cItem.value"></v-upload>
-                <el-button slot="reference" type="text">查看附件</el-button>
+                <el-button slot="reference" type="text">{{$i.upload.viewAttachment}}</el-button>
               </el-popover>
 
               <div v-else
@@ -325,6 +325,7 @@
           this.$refs.tableBox.scrollLeft = 0;
         }
 
+        this.resetFile();
         if (!this.hideFilterColumn && this.$refs.filterColumn && this.code && !_.isEmpty(val)) {
           this.$refs.filterColumn.getConfig(false, val).then(res => {
             let to = setTimeout(() => {
@@ -345,13 +346,17 @@
           }, 50);
         }
       },
+      resetFile() {
+        _.mapObject(this.dataList, value => {
+          _.map(value, val => {
+            if (val._upload && this.$refs[val.key + 'Upload']) {
+              this.$refs[val.key + 'Upload'][0].reset();
+            }
+          });
+        });
+      },
       changeFilterColumn(data) {
         this.dataList = this.$refs.filterColumn.getFilterData(this.dataList, data);
-      },
-      resetFile() {
-        _.map(_.values(this.dataList), val => {
-          console.log(val)
-        });
       },
       changeCheckedAll() {
         this.setDataList(_.map(this.dataList, val => {
@@ -388,7 +393,7 @@
   .ucn-table.fixed-left-box .fixed-left,
   .ucn-table.fixed-right-box .fixed-right {
     position: absolute;
-    z-index: 9;
+    z-index: 4;
     top: 0;
     height: 40px;
     width: 20px;

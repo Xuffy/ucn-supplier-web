@@ -216,5 +216,8 @@
   "shipmentStatus": "Shipment Status",
   "logisticNo": "logistic No.",
   "entryName": "Operator Name",
-  "entryDt": "Modify Time"
+  "entryDt": "Modify Time",
+  "archive":"Archive",
+  "viewBy":"viewBy:",
+  "skuPictures":"Sku Pictures"
 }

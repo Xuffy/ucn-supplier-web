@@ -40,6 +40,16 @@
       </div>
 
       <div class="header-right" style="color: #999999!important;">
+        <el-dropdown trigger="click" placement="bottom">
+          <span class="icon-menu"><i class="iconfont icon-duoyuyan"></i></span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="item in languageOption" :key="item.type">
+              <span @click="changeLanguage(item)" v-text="item.label"></span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+
+
         <div class="message-box" v-popover:messageBox>
           <el-badge :value="message.count || ''">
             <i class="el-icon-bell"></i>
@@ -66,7 +76,7 @@
               <el-row>
                 <el-col :span="12" style="text-align: left;padding: 5px 10px">
                   <el-button type="text" size="mini" @click="readMessage" v-if="message.count">
-                    {{$i.common.markAsReaded}}
+                    {{$i.common.markAsRead}}
                   </el-button>
                 </el-col>
                 <el-col :span="12" style="text-align: right;padding: 5px 10px">
@@ -78,7 +88,7 @@
         </div>
 
         <div style="display: inline-block">
-          <el-dropdown trigger="click">
+          <el-dropdown trigger="click" placement="bottom">
             <a href="javascript:void(0)" class="el-dropdown-link" style="cursor: pointer">
               {{userInfo.userType === 0 ? $i.common.admin : $i.common.user}}&nbsp;&nbsp;|&nbsp;&nbsp;
             </a>
@@ -109,6 +119,10 @@
         routerList: [],
         activeName: null,
         activeOpen: [],
+        languageOption: [
+          {type: 'zh-CN', label: '简体中文'},
+          {type: 'en', label: 'English'},
+        ],
         message: {
           count: 0,
           show: false,
@@ -208,6 +222,10 @@
       },
       menuAuth(item) {
         return !(item.meta && item.meta.auth && !this.$auth(item.meta.auth));
+      },
+      changeLanguage({type}) {
+        this.$localStore.set('language', type);
+        window.history.go(0);
       }
     },
   }
@@ -304,7 +322,7 @@
 
   .el-submenu,
   .el-menu-item {
-    padding: 0 0 0 2.7vw;
+    padding: 0 0 0 2.2vw;
     border: none !important;
   }
 
@@ -386,6 +404,17 @@
     width: 100%;
     text-align: right;
     color: #CDCDCD;
+  }
+
+  .icon-menu {
+    vertical-align: middle;
+    display: inline-block;
+  }
+  .icon-menu i {
+    font-size: 20px;
+    color: #eeeeee;
+    margin-right: 10px;
+    cursor: pointer;
   }
 </style>
 <style>

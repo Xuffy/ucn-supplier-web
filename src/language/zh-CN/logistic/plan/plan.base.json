@@ -216,5 +216,8 @@
   "shipmentStatus": "Shipment Status",
   "logisticNo": "发运编号",
   "entryName": "修改人",
-  "entryDt": "修改时间"
+  "entryDt": "修改时间",
+  "archive":"Archive",
+  "viewBy":"viewBy:",
+  "skuPictures":"图片"
 }
