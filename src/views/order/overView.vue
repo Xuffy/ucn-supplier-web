@@ -37,6 +37,7 @@
             <template slot="header">
                 <div class="fn">
                     <div class="btn-wrap">
+                        <el-button v-authorize="'ORDER:DRAFT_OVERVIEW:DOWNLOAD'" @click="downloadOrder">{{$i.order.download}}</el-button>
                     </div>
                     <div class="viewBy">
                         <span>{{$i.order.viewBy}}</span>
@@ -172,7 +173,7 @@
                     this.getData()
                 }
             },
-            download() {
+            downloadOrder() {
                 this.$ajax.post(this.$apis.download_order, {
                     ids: this.selectedNumber
                 })
