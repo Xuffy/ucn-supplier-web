@@ -32,7 +32,8 @@
             <div v-else>
               <span
                 v-if="(row[item.key]._disabled && !row._remark) || (!isModify && !row[item.key]._upload) || (!isModify && row._remark)"
-                v-text="row[item.key]._value || row[item.key].value"></span>
+                v-text="row[item.key]._value || row[item.key].value">
+              </span>
 
               <!--附件上传-->
               <div v-else-if="row[item.key]._upload && !row._remark">
@@ -86,7 +87,7 @@
                   v-else-if="row[item.key].type === 'Select' && row[item.key]._option"
                   clearable
                   v-model="row[item.key].value"
-                  @change="val => {changeSelect(val,row[item.key])}"
+                  @change="val => {changeSelect(val,row[item.key],row)}"
                   :placeholder="$i.order.pleaseChoose">
                   <el-option
                     v-for="(optionItem,index) in row[item.key]._option"
@@ -127,8 +128,7 @@
         type: Boolean,
         default: false
       },
-      beforeSave: Function,
-      closeBefore: Function
+      beforeSave: Function
     },
     data() {
       return {
@@ -165,17 +165,15 @@
             val._value = files.url;
           }
           return val;
-        })
+        });
+
         if (typeof this.beforeSave === 'function' && this.beforeSave(data) === false) {
-          return;
+          return false;
         }
 
-        if (this.closeBefore) {
-          this.closeBefore(data, () => this.showDialog = false)
-        } else {
-          this.$emit('save', data);
-          this.showDialog = false
-        }
+        this.disabledRemark && data.pop();
+        this.$emit('save', data);
+        this.showDialog = false
       },
       getImage(value, split = ',') {
         if (_.isEmpty(value)) return '';
@@ -214,12 +212,13 @@
         return this.dataList;
 
       },
-      changeSelect(val, item) {
+      changeSelect(val, item, row) {
         let param = {}, obj;
         param[item._optionValue || 'code'] = val;
         obj = _.findWhere(item._option, param);
         item._value = obj ? obj[item._optionLabel || 'name'] : '';
         item._isModified = true;
+        this.$emit('select-change', item, row);
       },
       getFilterData(data, k = 'id') {
         let list = [];
