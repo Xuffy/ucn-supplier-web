@@ -472,6 +472,7 @@
             {{$i.order.productInfoBig}}
         </div>
         <v-table
+                :totalRow="totalRow"
                 code="uorder_sku_list"
                 :height="500"
                 :data.sync="productTableData"
@@ -548,6 +549,14 @@
                 <div v-else>
                     <el-button :disabled="loadingPage || disableModify || hasCancelOrder || hasFinishOrder" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
                     <el-button :disabled="loadingPage || disableConfirm || hasCancelOrder" @click="confirmOrder" :loading="disableClickConfirm" type="primary">{{$i.order.confirm}}</el-button>
+                    <el-button
+                            v-authorize="'ORDER:DRAFT_OVERVIEW:DOWNLOAD'"
+                            :disabled="loadingPage || disableConfirm || hasCancelOrder"
+                            @click="downloadOrder"
+                            :loading="disableClickConfirm"
+                            type="primary">
+                        {{$i.order.download}}
+                    </el-button>
                     <el-button :disabled="loadingPage || hasCancelOrder || hasFinishOrder" @click="refuseOrder" type="danger">{{$i.order.cancelOrder}}</el-button>
                     <el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
                 </div>
@@ -1372,6 +1381,60 @@
                 },
             }
         },
+        computed:{
+            totalRow(){
+                let obj={};
+                let arr=[];
+                _.map(this.productTableData,v=>{
+                    if(!v._remark){
+                        arr.push(v);
+                    }
+                });
+                let sameCurrency=true;
+                if(this.orderForm.incoterm==='1'){
+                    let size=new Set(arr.map(e => e.skuFobCurrency).map(e => e.value));
+                    if([...size].length>1) sameCurrency=false;
+                }else if(this.orderForm.incoterm==='2'){
+                    let size=new Set(arr.map(e => e.skuExwCurrency).map(e => e.value));
+                    if([...size].length>1) sameCurrency=false;
+                }else if(this.orderForm.incoterm==='3'){
+                    let size=new Set(arr.map(e => e.skuCifCurrency).map(e => e.value));
+                    if([...size].length>1) sameCurrency=false;
+                }else if(this.orderForm.incoterm==='4'){
+                    let size=new Set(arr.map(e => e.skuDduCurrency).map(e => e.value));
+                    if([...size].length>1) sameCurrency=false;
+                }
+                if(this.productTableData.length<=0){
+                    return;
+                }
+                _.map(this.productTableData,v=>  {
+                    _.mapObject(v,(item,key)=>{
+                        if(item._calculate){
+                            if(key==='skuPrice'){
+                                if(sameCurrency){
+                                    obj[key]={
+                                        value: Number(item.value)  + (Number(obj[key] ? obj[key].value : 0) || 0),
+                                    };
+                                }else{
+                                    obj[key] = {
+                                        value: '-'
+                                    };
+                                }
+                            }else{
+                                obj[key]={
+                                    value: Number(item.value)  + (Number(obj[key] ? obj[key].value : 0) || 0),
+                                };
+                            }
+                        }else{
+                            obj[key] = {
+                                value: ''
+                            };
+                        }
+                    })
+                });
+                return [obj];
+            },
+        },
         methods:{
             ...mapActions([
                 'setLog'
@@ -2040,9 +2103,11 @@
              * */
             tableRowClassName({row, rowIndex}) {
                 if (row.status === -1) {
-                    return 'warning-row';
+                    return "warning-row";
+                }else if(row.status===10 || row.status===20 || row.status===30){
+                    return "waiting-row"
                 }
-                return '';
+                return "";
             },
             getSummaries(param){
                 const { columns, data } = param;
@@ -2343,6 +2408,8 @@
                     this.disableClickConfirm=false;
                 });
             },
+            downloadOrder(){},
+
             acceptOrder(){
                 this.disableClickAccept=true;
                 this.$ajax.post(this.$apis.ORDER_ACCEPT,{
@@ -2855,6 +2922,9 @@
     }
     .el-table >>> .warning-row {
         background: #f5f7fa;
+    }
+    .el-table >>> .waiting-row {
+        background: yellow;
     }
 
     .footBtn{

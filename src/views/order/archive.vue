@@ -1,19 +1,19 @@
 <template>
     <div class="orderOverview">
-        <h3 class="hd">{{$i.order.orderOverview}}</h3>
+        <h3 class="hd">{{$i.order.archiveOverview}}</h3>
         <div class="status">
-            <div class="btn-wrap">
-                <span>{{$i.order.status}}</span>
-                <el-radio-group style="margin-left: 10px" v-model="params.status" size="mini" @change='changeStatus'>
-                    <el-radio-button label="">{{($i.order.all)}}</el-radio-button>
-                    <el-radio-button
-                            v-for="v in orderStatusOption"
-                            :key="v.id"
-                            :label="v.code">
-                        {{v.name}}
-                    </el-radio-button>
-                </el-radio-group>
-            </div>
+            <!--<div class="btn-wrap">-->
+                <!--<span>{{$i.order.status}}</span>-->
+                <!--<el-radio-group style="margin-left: 10px" v-model="params.status" size="mini" @change='changeStatus'>-->
+                    <!--<el-radio-button label="">{{($i.order.all)}}</el-radio-button>-->
+                    <!--<el-radio-button-->
+                            <!--v-for="v in orderStatusOption"-->
+                            <!--:key="v.id"-->
+                            <!--:label="v.code">-->
+                        <!--{{v.name}}-->
+                    <!--</el-radio-button>-->
+                <!--</el-radio-group>-->
+            <!--</div>-->
             <div class="select-wrap">
                 <selectSearch
                         :options=options
@@ -27,7 +27,6 @@
                 :code="tableCode"
                 ref='vtable'
                 :data="tabData"
-                :buttons="[{label: $i.order.detail, type: 1}]"
                 @action="onAction"
                 :loading='loading'
                 :pageTotal='pageTotal'
@@ -37,8 +36,8 @@
             <template slot="header">
                 <div class="fn">
                     <div class="btn-wrap">
-                        <el-button v-authorize="'ORDER:DRAFT_OVERVIEW:DOWNLOAD'" @click="downloadOrder">{{$i.order.download}}</el-button>
-                        <el-button type='danger' :loading="disableClickDelete" :disabled='disableDelete' @click='deleteOrder'>{{($i.order.archive)}}</el-button>
+                        <el-button :loading="disableClickRecover" :disabled="selectedList.length===0" @click="recover">{{$i.order.restore}}</el-button>
+                        <!--<el-button type='danger' :loading="disableClickDelete" :disabled='disableDelete' @click='deleteOrder'>{{($i.order.archive)}}</el-button>-->
                     </div>
                     <div class="viewBy">
                         <span>{{$i.order.viewBy}}</span>
@@ -116,14 +115,14 @@
                     // view: '1', //view by的按钮组
                     ps: 50,
                     pn: 1,
-                    recycleSupplier:false,
-
+                    recycleSupplier:true
                 },
                 selectedList: [],
                 selectedNumber: [],
                 tableCode:'uorder_list',
                 disableDelete:true,
                 disableClickDelete:false,
+                disableClickRecover:false,
 
                 /**
                  * 字典
@@ -176,51 +175,41 @@
                     this.getData()
                 }
             },
-            downloadOrder() {
-                this.$ajax.post(this.$apis.download_order, {
+            recover() {
+                let ids=[];
+                _.map(this.selectedList,v=>{
+                    ids.push(v.id.value);
+                });
+                this.disableClickRecover=true;
+                this.$ajax.post(this.$apis.ORDER_RECOVER,{
+                    ids:ids
+                }).then(res=>{
+                    this.selectedList=[];
+                    this.getData();
+                }).finally(()=>{
+                    this.disableClickRecover=false;
+                })
+            },
+            deleteOrder() {
+                this.$ajax.post(this.$apis.delete_order, {
                     ids: this.selectedNumber
                 })
                     .then((res) => {
-                        console.log(res)
+                        if (this.view === '1') {
+                            this.getdata(this.$db.order.overviewByOrder)
+                        } else {
+                            this.getdata(this.$db.order.overviewBysku)
+                        }
                     })
                     .catch((res) => {
                         console.log(res)
                     });
             },
-            deleteOrder() {
-                this.$confirm(this.$i.order.sureDelete, this.$i.order.prompt, {
-                    confirmButtonText: this.$i.order.sure,
-                    cancelButtonText: this.$i.order.cancel,
-                    type: 'warning'
-                }).then(() => {
-                    let ids=[];
-                    _.map(this.selectedList,v=>{
-                        ids.push(v.id.value);
-                    });
-                    this.disableClickDelete=true;
-                    this.$ajax.post(this.$apis.ORDER_DELETE,{
-                        ids:ids,
-                        recycleSupplier:true
-                    }).then(res=>{
-                        this.selectedList=[];
-                        this.getData();
-                    }).finally(()=>{
-                        this.disableClickDelete=false;
-                    });
-
-                    this.$message({
-                        type: 'success',
-                        message: this.$i.order.deleteSuccess
-                    });
-                }).catch(() => {
-
-                });
-            },
             //get_orderlist数据
             getData() {
                 this.loading = true;
                 let url='',query='';
-                url=(this.view==='1'?this.$apis.OVERVIEW_ORDERPAGE:this.$apis.OVERVIEW_SKUPAGE);
+                url=(this.view==='1'?this.$apis.ORDER_RECYCLE_ORDER_PAGE:this.$apis.ORDER_RECYCLE_SKU_PAGE);
                 query=(this.view==='1'?this.$db.order.overviewByOrder:this.$db.order.overviewBysku);
                 this.$ajax.post(url, this.params)
                     .then((res) => {
@@ -326,18 +315,6 @@
         },
         watch: {
             selectedList(n){
-                let disableArchive=false;
-                if(n.length===0){
-                    disableArchive=true;
-                }else{
-                    _.map(n,v=>{
-                        if(v.status.value!=='已取消'){
-                            disableArchive=true;
-                        }
-                    });
-                }
-                this.disableDelete=disableArchive;
-
                 if(this.params.view==='1'){
                     if(n.length>0){
                         console.log(n)
@@ -370,50 +347,20 @@
         .hd {
             height: 50px;
             line-height: 50px;
-            color: #666;
             border-bottom: 1px solid #ccc;
             font-size: 18px;
             color: #666666;
         }
         .status {
-            display: flex;
-            height: 60px;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 15px;
-            box-sizing: border-box;
-            .btn-wrap {
-                display: flex;
-                align-items: center;
-                span {
-                    font-size: 14px;
-                }
-                button {
-                    padding: 2px 5px;
-                    cursor: pointer;
-                    border: 1px solid #108ee9;
-                    background-color: #fff;
-                    margin-left: 10px;
-                    border-radius: 5px;
-                    transition: all .5s ease;
-                    &:hover,
-                    &.active {
-                        background-color: #108ee9;
-                        color: #fff;
-                    }
-                }
+            margin-top: 15px;
+            .select-wrap{
+                float: right;
             }
-            .select-wrap {
-                display: flex;
-                align-items: center;
-                .select {
-                    width: 110px;
-                    margin-right: 5px;
-                    input {
-                    }
-                }
-            }
-
+        }
+        .status:after{
+            content: '';
+            display: table;
+            clear: both;
         }
         .fn {
             display: flex;
@@ -423,7 +370,7 @@
             .viewBy {
                 display: flex;
                 align-items: center;
-                margin-right: 70px;
+                margin-right: 40px;
                 span {
                     font-size: 14px;
                     color: #666;
