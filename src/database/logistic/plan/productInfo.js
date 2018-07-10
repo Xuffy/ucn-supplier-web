@@ -67,8 +67,9 @@ export default {
     _hide: true
   },
   "toShipCartonQty": {
-    type: 'Number',
+    type: 'String',
     typeSlef: 'text',
+    _disabled: true,
     _important: true
   },
   "fieldDisplay": {
@@ -78,7 +79,8 @@ export default {
     _hide: true
   },
   "toShipQty": {
-    type: 'Number',
+    type: 'String',
+    _disabled: true,
     typeSlef: 'text',
     _important: true
   },
@@ -170,8 +172,10 @@ export default {
     typeSlef: 'text'
   },
   "containerNo": {
-    type: 'String',
-    _disabled: true,
+    type: 'Select',
+    _optionLabel:'containerNo',
+    _optionValue:'containerNo',
+    _option:[],
     typeSlef: 'text'
   },
   "containerType": {
@@ -183,7 +187,6 @@ export default {
     key: 'totalContainerQty',
     _filed: 'totalContainerQty',
     type: 'String',
-    _disabled: true,
     typeSlef: 'text',
     _important: true
   },
@@ -191,7 +194,6 @@ export default {
     key: 'totalContainerVolume',
     _filed: 'totalContainerVolume',
     type: 'String',
-    _disabled: true,
     typeSlef: 'text',
     _important: true
   },
@@ -199,7 +201,6 @@ export default {
     key: 'totalContainerNetWeight',
     _filed: 'totalContainerNetWeight',
     type: 'String',
-    _disabled: true,
     typeSlef: 'text',
     _important: true
   },
@@ -207,7 +208,6 @@ export default {
     key: 'totalContainerOuterCartonsQty',
     _filed: 'totalContainerOuterCartonsQty',
     type: 'String',
-    _disabled: true,
     typeSlef: 'text',
     _important: true
   },
@@ -274,8 +274,9 @@ export default {
     _hide: true
   },
   "shipmentStatus": {
-    type: 'String',
-    typeSlef: 'text',
-    _disabled: true
+    type: 'Select',
+    _option:[],
+    _disabled: true,
+    typeSlef: 'text'
   }
 }
