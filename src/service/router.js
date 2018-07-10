@@ -166,15 +166,15 @@ export const routerMap = [
           },
           component: () => import('../views/order/draftOverview.vue')
         }, {
-          path: 'recycleBin',
-          name: 'orderRecycleBin',
+          path: 'archive',
+          name: 'orderArchive',
           meta: {
             draft: true,
             recycleBin: true,
             log: true,
             name: $i.router.orderRecycleBin
           },
-          component: () => import('../views/order/recycleBin.vue')
+          component: () => import('../views/order/archive.vue')
         }
       ]
     },

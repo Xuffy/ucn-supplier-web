@@ -17,17 +17,18 @@
     "blueimp-md5": "^2.10.0",
     "co": "^4.6.0",
     "dateformat": "^3.0.3",
+    "downloadjs": "^1.4.7",
     "element-ui": "^2.2.2",
     "js-base64": "^2.4.3",
+    "mathjs": "^5.0.0",
     "mockjs": "^1.0.1-beta3",
     "nprogress": "^0.2.0",
     "storess": "^2.0.12",
     "ucn-tool": "^1.0.0",
     "underscoress": "^1.8.3",
     "vue": "^2.5.2",
-    "vue-router": "^2.7.0",
     "vue-holderjs": "^1.0.2",
-    "mathjs": "^5.0.0"
+    "vue-router": "^2.7.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

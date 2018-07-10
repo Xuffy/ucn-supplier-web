@@ -16,6 +16,10 @@ export default {
     ORDER_MARK: ['/order/mark','BASE_URL'],
     ORDER_HISTORY:['/order/skuHistory','BASE_URL'],
     ORDER_MESSAGE_TALK:['/order/messageToTask','BASE_URL'],
+    ORDER_RECYCLE_ORDER_PAGE:['/order/recycle/orderPage','BASE_URL'],
+    ORDER_RECYCLE_SKU_PAGE:['/order/recycle/skuPage','BASE_URL'],
+    ORDER_DELETE:['/order/delete','BASE_URL'],
+    ORDER_RECOVER:['/order/recover','BASE_URL'],
 
 
     //customer
