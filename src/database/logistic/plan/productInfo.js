@@ -173,6 +173,7 @@ export default {
   },
   "containerNo": {
     type: 'Select',
+    correlationKey:"containerType",
     _optionLabel:'containerNo',
     _optionValue:'containerNo',
     _option:[],
