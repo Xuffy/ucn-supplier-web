@@ -84,7 +84,7 @@
     <messageBoard v-if="!isParams" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus"
       @sendData="sendData" />
-    <v-history-modify ref="HM" disabled-remark :beforeSave="closeModify" @save="closeModifyNext"></v-history-modify>
+    <v-history-modify ref="HM" disabled-remark :beforeSave="closeModify" @save="closeModifyNext" @select-change="historymodify"></v-history-modify>
   </div>
 </template>
 <script>
@@ -399,6 +399,7 @@
                 background: 'yellow'
               })
             })
+            item.fieldDisplay.value = null;
           }
         })
       },
@@ -552,6 +553,13 @@
         this.modefiyProductIndex = i
         this.modefiyProductIndexArr.push(i);
         this.getProductHistory(e.id ? (e.argID ? e.argID.value : e.id.value) : null, status, i)
+      },
+      historymodify(currData,row){
+        if('correlationKey' in currData){
+          let obj = currData._option.find(el=> el.containerNo ==currData.value);
+          row.containerId.value = obj ? obj.id : ''; 
+          row[currData.correlationKey].value = obj ? obj[currData.correlationKey] : '';
+        }
       },
       getProductHistory(productId, status, i) {
         let currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
@@ -958,10 +966,12 @@
       containerInfo: {
         handler: function (val) {
           val.forEach(el => {
-            this.productList.forEach(item => {
+            this.productList = this.productList.map((item,i) => {
               if (el.id == item.containerId.value) {
+                item.containerNo._value = el.containerNo;
                 item.containerNo.value = el.containerNo;
               }
+              return item;
             })
           })
         },

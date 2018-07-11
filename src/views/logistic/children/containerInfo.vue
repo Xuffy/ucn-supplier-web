@@ -14,7 +14,7 @@
         <el-table-column type="index" width="50" align="center"/>
         <el-table-column :label="$i.logistic.containerNo" width="140" align="center">
           <template slot-scope="scope">
-            <el-input placeholder="请输入内容" v-model="scope.row.containerNo" v-if="edit"></el-input>
+            <el-input placeholder="请输入内容" v-model="scope.row.containerNo" v-if="edit" @change="vfyContainerNo(scope)"></el-input>
             <span v-else>{{ scope.row.containerNo }}</span>
           </template>
         </el-table-column>
@@ -104,6 +104,19 @@ export default {
     }
   },
   methods: {
+    vfyContainerNo(scope){
+      this.tableData.forEach((el,index)=>{
+        if(scope.$index !=index){
+          if(el.containerNo == scope.row.containerNo&&scope.row.containerNo!=''){
+            scope.row.containerNo='';
+            this.$message({
+              message: '集装箱号已经存在！',
+              type: 'error'
+            })
+          };
+        }
+      })
+    },
     handleSelectionChange (val) {
       this.$emit('handleSelectionChange', val.map(a => a))
     },
