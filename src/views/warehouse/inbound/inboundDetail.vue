@@ -81,6 +81,7 @@
                 v-loading="loadProductTable"
                 class="speTable"
                 :data="productTable"
+                :totalRow="totalRow"
                 :buttons="[{label:$i.warehouse.detail,type:1}]"
                 @action="btnClick"
                 @change-checked="changeChecked">
@@ -209,6 +210,29 @@
                 skuUnitOption:[],
             }
         },
+        computed:{
+            totalRow(){
+                let obj={};
+                if(this.productTable.length<=0){
+                    return;
+                }
+                _.map(this.productTable,v=>{
+                    _.mapObject(v,(item,key)=>{
+                        if(item._calculate){
+                            obj[key]={
+                                value: Number(item.value)  + (Number(obj[key] ? obj[key].value : 0) || 0),
+                            };
+                        }else{
+                            obj[key] = {
+                                value: ''
+                            };
+                        }
+                    })
+                });
+                return [obj];
+
+            }
+        },
         methods:{
             ...mapActions(['setLog']),
             getData(){
@@ -220,12 +244,6 @@
                         inboundId: this.$route.query.id,
                         pn: 1,
                         ps: 50,
-                        // sorts: [
-                        //     {
-                        //         orderBy: "",
-                        //         orderType: "",
-                        //     }
-                        // ],
                     }).then(res=>{
                         this.productTable = this.$getDB(this.$db.warehouse.inboundDetailProductTable, res.datas,(e)=>{
                             e.skuUnitDictCode._value=e.skuUnitDictCode.value?_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}).name:'';
