@@ -434,13 +434,11 @@
                         e.weightUnitDictCode._value=_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}).name;
                         e.lengthUnitDictCode._value=_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}).name;
                     });
-
                     let diffData=[];
                     _.map(this.productInfoData,v=>{
                         diffData.push(v.skuId.value+v.orderNo.value);
                     });
                     this.summaryData.skuQuantity=_.uniq(diffData).length;
-
                     if(res.datas.length>0){
                         let obj=Object.assign({},res.datas[0]);
                         _.map(obj,(v,key)=>{
@@ -463,8 +461,6 @@
 
                         });
                     }
-
-
                     this.loadingProductInfoTable=false;
                 }).catch(err=>{
                     this.loadingProductInfoTable=false;

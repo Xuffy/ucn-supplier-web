@@ -21,6 +21,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
+import codeUtils from '@/lib/code-utils';
 import { VTable, selectSearch } from '@/components/index';
 export default {
   name: 'recycleBin',
@@ -68,11 +69,8 @@ export default {
     'select-search': selectSearch,
     'v-table': VTable
   },
-  created() {
-    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
-  },
   methods: {
-    ...mapActions(['setMenuLink']),
+    ...mapActions(['setMenuLink', 'setDic']),
     buttonsFn() {
       return [{ label: 'Detail', type: 'detail' }];
     },
@@ -82,7 +80,7 @@ export default {
         .post(this.$apis.BUYER_POST_INQIIRY_LIST, this.bodyData)
         .then(res => {
           this.pageTotal = res.tc;
-          this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas);
+          this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas, item => this.$filterDic(item));
           this.tabLoad = false;
           this.searchLoad = false;
         })
@@ -95,6 +93,7 @@ export default {
       // 搜索框
       this.bodyData.key = item.key;
       this.bodyData.keyType = item.keyType;
+      this.getInquiryList();
     },
     action(item, type) {
       // 操作表单 action
@@ -128,16 +127,6 @@ export default {
       });
       this.checkedArg = arr;
     },
-    getList() {
-      switch (this.$route.params.type) {
-        case 'inquiry':
-          this.getInquiryList();
-          break;
-        case 'compare':
-          this.getCompare();
-          break;
-      }
-    },
     actionInquiry(type) {
       this.$ajax
         .post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
@@ -169,9 +158,6 @@ export default {
         case 'inquiry':
           this.actionInquiry('restore');
           break;
-        case 'compare':
-          this.actionCompare('restore');
-          break;
       }
     },
     ajaxInqueryAction(type) {
@@ -187,27 +173,18 @@ export default {
         });
     }
   },
-  watch: {
-    bodyData: {
-      handler(val) {
-        this.getList();
-      },
-      deep: true
-    }
-  },
   created() {
     switch (this.$route.params.type) {
       case 'inquiry':
-        this.title = this.$i.common.inquiryRecycleBin;
+        this.title = this.$i.common.archive;
         this.bodyData.recycleSupplier = 1;
         break;
-      case 'compare':
-        this.title = this.$i.common.compareRecycleBin;
-        this.bodyData.recycle = 1;
-        // recycleSupplier
-        break;
     }
-    this.getList();
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+
+    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
+      .then(data => this.setDic(codeUtils.convertDicValueType(data)))
+      .then(this.getInquiryList);
   }
 };
 </script>
