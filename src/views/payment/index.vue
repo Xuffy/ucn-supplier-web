@@ -173,14 +173,6 @@
         this.params.ps = val;
         this.getList();
       },
-      //获取币种
-      getCurrency(){
-        this.$ajax.get(this.$apis.get_currency_all).then(res=>{
-          this.currency = res
-        }).catch(err=>{
-          console.log(err)
-        });
-      },
       getList(){
         this.tabLoad = true;
         this.$ajax.post(this.$apis.post_ledgerPage, this.params)
@@ -189,24 +181,24 @@
             this.searchLoad = false;
             this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
               const statusType = {
-                10: 'Purchase order',
-                20: 'QC order',
-                30: 'Logisttic order',
+                10: this.$i.payment.purchaseOrder,
+                20: this.$i.payment.qcOrder,
+                30: this.$i.payment.logistticOrder,
               }
               const statusGroupA = {
-                1: '待供应商确认',
-                2: '待客户确认',
-                3: '进行中',
-                4: '已完成',
-                5: '已取消',
+                1: this.$i.payment.TBCBYSUPPLIER,
+                2: this.$i.payment.TBCBYCUSTOMER,
+                3: this.$i.payment.PROCESS,
+                4: this.$i.payment.FINISHED,
+                5: this.$i.payment.CANCLED,
               }
               const statusGroupB = {
-                0: 'LS_DRAFT',
-                1: 'LS_PLAN',
-                2: 'LS_PLAN',
-                3: 'LS_PLAN',
-                4: 'LS_PLAN',
-                5: 'LS_PLAN',
+                0: this.$i.payment.draft,
+                1: this.$i.payment.lsPlan,
+                2: this.$i.payment.lsPlan,
+                3: this.$i.payment.lsPlan,
+                4: this.$i.payment.lsPlan,
+                5: this.$i.payment.lsPlan,
               }
 
               if(Number(item.orderType.value) === 10){
@@ -222,10 +214,10 @@
               if(Number(item.orderType.value) === 20){
                 switch(item.orderStatus.value) {
                   case 'WAITING_QC':
-                    item.orderStatus._value = '未验货';
+                    item.orderStatus._value = this.$i.payment.waitingQc;
                     break;
                   case 'COMPLETED_QC':
-                    item.orderStatus._value = '已验货';
+                    item.orderStatus._value = this.$i.payment.completedQc;
                     break;
                 }
               }
@@ -234,10 +226,6 @@
               }
               item.waitPayment.value = Number((Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8));
               item.waitReceipt.value = Number((Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8));
-              let currency;
-              currency = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
-              item.currencyCode._value = currency.name || '';
-
               _.mapObject(item, val => {
                 val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                 return val
@@ -249,10 +237,6 @@
             this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
               item.waitPayment.value = Number((Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8));
               item.waitReceipt.value = Number((Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8));
-              let currencyCode;
-              currencyCode = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
-              item.currencyCode._value = currencyCode.name || '';
-              return item;
             });
             this.pageData=res;
           })
@@ -313,8 +297,8 @@
       },
       setButtons(item){
         // disabled:true/false   10 付款 20 退款
-        if(_.findWhere(item, {'key': 'type'}).value === 10 && _.findWhere(item, {'key': 'planReceiveAmount'}).value !== _.findWhere(item, {'key': 'actualReceiveAmount'}).value) return [{label: 'Urging Payment', type: '1'},{label: 'Detail', type: '2'}];
-        return [{label: 'Detail', type: '2'}];
+        if(_.findWhere(item, {'key': 'type'}).value === 10 && _.findWhere(item, {'key': 'planReceiveAmount'}).value !== _.findWhere(item, {'key': 'actualReceiveAmount'}).value) return [{label: this.$i.payment.urgingPayment, type: '1'},{label: this.$i.payment.detail, type: '2'}];
+        return [{label: this.$i.payment.detail, type: '2'}];
       },
       handleSizeChange(val) {
         this.params.ps = val;
@@ -323,7 +307,6 @@
     created(){
       this.viewByStatus = '1';
       this.getList();
-      this.getCurrency();
     },
   }
 </script>

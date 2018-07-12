@@ -294,10 +294,12 @@
                     class="payTable"
                     :data="paymentData"
                     border
+                    :summary-method="getSummaries"
+                    show-summary
                     :row-class-name="tableRowClassName"
                     style="width: 100%">
                 <el-table-column
-                        prop="date"
+                        fixed="left"
                         label="#"
                         align="center"
                         width="55">
@@ -332,6 +334,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
+                        prop="planPayAmount"
                         :label="$i.order.planPayAmount"
                         width="160">
                     <template slot-scope="scope">
@@ -346,6 +349,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
+                        prop="actualPayAmount"
                         :label="$i.order.actualPayAmount"
                         width="160">
                     <template slot-scope="scope">
@@ -531,56 +535,6 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
-                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order.totalGrossWeight">-->
-                    <!--<el-input-->
-                    <!--class="summaryInput"-->
-                    <!--size="mini"-->
-                    <!--v-model="orderForm.totalGrossWeight"-->
-                    <!--:disabled="true">-->
-                    <!--</el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order.totalNetWeight">-->
-                    <!--<el-input-->
-                    <!--class="summaryInput"-->
-                    <!--size="mini"-->
-                    <!--v-model="orderForm.totalNetWeight"-->
-                    <!--:disabled="true">-->
-                    <!--</el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order.totalVolume">-->
-                    <!--<el-input-->
-                    <!--class="summaryInput"-->
-                    <!--size="mini"-->
-                    <!--v-model="orderForm.totalVolume"-->
-                    <!--:disabled="true">-->
-                    <!--</el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order.paidAmount">-->
-                    <!--<el-input-->
-                    <!--class="summaryInput"-->
-                    <!--size="mini"-->
-                    <!--v-model="orderForm.paidAmount"-->
-                    <!--:disabled="true">-->
-                    <!--</el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order.unpaidAmount">-->
-                    <!--<el-input-->
-                    <!--class="summaryInput"-->
-                    <!--size="mini"-->
-                    <!--v-model="orderForm.unpaidAmount"-->
-                    <!--:disabled="true">-->
-                    <!--</el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
                 </el-row>
             </el-form>
         </div>
@@ -673,11 +627,15 @@
         <v-history-modify
                 @save="saveNegotiate"
                 ref="HM">
+            <!--<div slot="skuPic" slot-scope="{data}">-->
+            <!--<v-upload :limit="20" readonly></v-upload>-->
+            <!--</div>-->
             <el-select
                     slot="skuFobCurrency"
                     v-model="data.value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in currencyOption"
@@ -691,6 +649,7 @@
                     v-model="data.value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in currencyOption"
@@ -704,6 +663,7 @@
                     v-model="data.value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in currencyOption"
@@ -717,6 +677,7 @@
                     v-model="data.value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in currencyOption"
@@ -730,6 +691,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in skuUnitOption"
@@ -743,6 +705,8 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
+                    :disabled="true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in weightOption"
@@ -756,6 +720,8 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified = true"
+                    :disabled="true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in lengthOption"
@@ -769,6 +735,8 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
+                    :disabled="true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in volumeOption"
@@ -782,6 +750,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in expirationDateOption"
@@ -795,6 +764,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in isNeedSampleOption"
@@ -808,6 +778,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in quarantineTypeOption"
@@ -822,6 +793,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val=>data._isModifyStatus=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in skuStatusOption"
@@ -831,12 +803,12 @@
                 </el-option>
             </el-select>
 
-
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuFobPrice"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
@@ -844,6 +816,7 @@
                     :controls="false"
                     slot="skuExwPrice"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
@@ -851,6 +824,7 @@
                     :controls="false"
                     slot="skuCifPrice"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
@@ -858,6 +832,7 @@
                     :controls="false"
                     slot="skuDduPrice"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
@@ -865,30 +840,33 @@
                     :controls="false"
                     slot="skuQty"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     @blur="handlePriceBlur(data)"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuPrice"
-                    :disabled="true"
                     slot-scope="{data}"
+                    :disabled="true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
-                    :max="100"
+                    :max="1"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuRateValueAddedTax"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
-                    :max="100"
+                    :max="1"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuTaxRefundRate"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -896,6 +874,7 @@
                     :controls="false"
                     slot="skuLength"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -903,6 +882,7 @@
                     :controls="false"
                     slot="skuWidth"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -910,6 +890,7 @@
                     :controls="false"
                     slot="skuHeight"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -917,6 +898,7 @@
                     :controls="false"
                     slot="skuNetWeight"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -924,6 +906,7 @@
                     :controls="false"
                     slot="skuVolume"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -931,11 +914,13 @@
                     :controls="false"
                     slot="skuInnerCartonQty"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuInnerCartonLength"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -943,6 +928,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuInnerCartonWidth"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -950,6 +936,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuInnerCartonHeight"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -957,6 +944,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuInnerCartonWeightNet"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -964,6 +952,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuInnerCartonRoughWeight"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -973,6 +962,7 @@
                     :controls="false"
                     slot="skuInnerCartonVolume"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -980,6 +970,7 @@
                     :controls="false"
                     slot="skuInnerCartonOuterNum"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -987,11 +978,13 @@
                     :controls="false"
                     slot="skuOuterCartonQty"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuOuterCartonLength"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -999,6 +992,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuOuterCartonWidth"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1006,6 +1000,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuOuterCartonHeight"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1013,6 +1008,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuOuterCartonNetWeight"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1020,6 +1016,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuOuterCartonRoughWeight"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1027,6 +1024,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuOuterCartonVolume"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1034,6 +1032,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuApplicableAge"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1041,6 +1040,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuExpireDates"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1048,6 +1048,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuSampleQty"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1055,6 +1056,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuSamplePrice"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1062,48 +1064,10 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuDeliveryDates"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
-
-            <!--<el-date-picker-->
-            <!--class="spx"-->
-            <!--slot="skuDeliveryDates"-->
-            <!--slot-scope="{data}"-->
-            <!--v-model="data.value"-->
-            <!--align="right"-->
-            <!--type="date"-->
-            <!--:placeholder="$i.order.pleaseChoose"-->
-            <!--:picker-options="pickerOptions1">-->
-            <!--</el-date-picker>-->
-
-            <div slot="skuPictures" slot-scope="{data}">
-                <v-upload ref="uploadSkuPictures" readonly :list="data.value" :onlyImage="true" :limit="20"></v-upload>
-            </div>
-            <div slot="skuLabelPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuLabelPic" :list="data._value" :onlyImage="true" :limit="1"></v-upload>
-            </div>
-            <div slot="skuPkgMethodPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuPkgMethodPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
-            </div>
-            <div slot="skuInnerCartonPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuInnerCartonPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
-            </div>
-            <div slot="skuOuterCartonPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuOuterCartonPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
-            </div>
-            <div slot="skuAdditionalOne" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalOne" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
-            </div>
-            <div slot="skuAdditionalTwo" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalTwo" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
-            </div>
-            <div slot="skuAdditionalThree" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalThree" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
-            </div>
-            <div slot="skuAdditionalFour" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalFour" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
-            </div>
         </v-history-modify>
 
         <v-message-board @send="afterSend" :readonly="orderForm.status==='5'" module="order" code="detail" :id="$route.query.orderId"></v-message-board>
@@ -1589,32 +1553,6 @@
                             }
                             item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory?this.$change(this.quarantineTypeOption,'skuInspectQuarantineCategory',item,true).name:'';
                             item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
-
-                            //图片处理
-                            let skuLabelPic=item.skuLabelPic.value,
-                                skuPkgMethodPic=item.skuPkgMethodPic.value,
-                                skuInnerCartonPic=item.skuInnerCartonPic.value,
-                                skuOuterCartonPic=item.skuOuterCartonPic.value,
-                                skuAdditionalOne=item.skuAdditionalOne.value,
-                                skuAdditionalTwo=item.skuAdditionalTwo.value,
-                                skuAdditionalThree=item.skuAdditionalThree.value,
-                                skuAdditionalFour=item.skuAdditionalFour.value;
-                            item.skuLabelPic._value=skuLabelPic?[skuLabelPic]:[];
-                            item.skuLabelPic.value=skuLabelPic?[skuLabelPic]:[];
-                            item.skuPkgMethodPic._value=skuPkgMethodPic?[skuPkgMethodPic]:[];
-                            item.skuPkgMethodPic.value=skuPkgMethodPic?[skuPkgMethodPic]:[];
-                            item.skuInnerCartonPic._value=skuInnerCartonPic?[skuInnerCartonPic]:[];
-                            item.skuInnerCartonPic.value=skuInnerCartonPic?[skuInnerCartonPic]:[];
-                            item.skuOuterCartonPic._value=skuOuterCartonPic?[skuOuterCartonPic]:[];
-                            item.skuOuterCartonPic.value=skuOuterCartonPic?[skuOuterCartonPic]:[];
-                            item.skuAdditionalOne._value=skuAdditionalOne?[skuAdditionalOne]:[];
-                            item.skuAdditionalOne.value=skuAdditionalOne?[skuAdditionalOne]:[];
-                            item.skuAdditionalTwo._value=skuAdditionalTwo?[skuAdditionalTwo]:[];
-                            item.skuAdditionalTwo.value=skuAdditionalTwo?[skuAdditionalTwo]:[];
-                            item.skuAdditionalThree._value=skuAdditionalThree?[skuAdditionalThree]:[];
-                            item.skuAdditionalThree.value=skuAdditionalThree?[skuAdditionalThree]:[];
-                            item.skuAdditionalFour._value=skuAdditionalFour?[skuAdditionalFour]:[];
-                            item.skuAdditionalFour.value=skuAdditionalFour?[skuAdditionalFour]:[];
                         }
                     });
                     this.productTableData=[];
@@ -1678,43 +1616,53 @@
                 });
                 params.skuList=this.dataFilter(this.productTableData);
                 _.map(params.skuList,v=>{
-                    if(_.isArray(v.skuLabelPic)){
-                        v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
-                    }
                     v.skuSample=v.skuSample==='1'?true:false;
                     if(v.skuInspectQuarantineCategory){
                         v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code;
                     }
-                    let picKey=['skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
-                    _.map(picKey,item=>{
-                        if(_.isArray(v[item])){
-                            v[item]=(v[item][0]?v[item][0]:null);
+                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    _.map(picKey, item => {
+                        if (_.isArray(v[item])) {
+                            v[item] = (v[item][0] ? v[item][0] : null);
                         }else if(_.isString(v[item])){
-                            console.log(v[item],'v[item]')
+                            let key=this.$getOssKey(v[item],true);
+                            v[item]=key[0];
                         }
-                        console.log(v['skuLabelPic'],'skuLabelPic')
-                    })
+                    });
                 });
-                // return console.log(params,'params')
                 params.attachments=this.$refs.upload[0].getFiles();
-                _.map(params.orderSkuUpdateList,v=>{
-                    let nowStatus,initialStatus;
-                    _.map(params.skuList,e=>{
-                        if(e.skuId===v.skuId){
-                            nowStatus=e.skuStatus;
+
+                let orderSkuUpdateList=[];
+                _.map(this.productTableData,item=>{
+                    let isModify=false,isModifyStatus=false;
+                    _.map(item,(val,index)=>{
+                        if(val._isModified){
+                            isModify=true;
                         }
-                    });
-                    _.map(this.initialData.skuList,e=>{
-                        if(e.skuId===v.skuId){
-                            initialStatus=e.skuStatus;
+                        if(val._isModifyStatus){
+                            isModifyStatus=true;
                         }
+
                     });
-                    if(nowStatus!==initialStatus){
-                        v.skuStatus=true;
-                    }else{
-                        v.skuStatus=false;
+                    if(isModify || isModifyStatus){
+                        let isIn=false;
+                        _.map(orderSkuUpdateList,data=>{
+                            if(data.skuId===item.skuId.value){
+                                data.skuInfo=isModify;
+                                data.skuStatus=isModifyStatus;
+                                isIn=true;
+                            }
+                        });
+                        if(!isIn){
+                            orderSkuUpdateList.push({
+                                skuId:item.skuId.value,
+                                skuInfo:isModify,
+                                skuStatus:isModifyStatus
+                            });
+                        }
                     }
                 });
+                params.orderSkuUpdateList=orderSkuUpdateList;
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
                     this.isModify=false;
@@ -1976,7 +1924,8 @@
                         skuInfo: true,
                         skuStatus: true
                     });
-                }else{
+                }
+                else{
                     let isIn=false;
                     _.map(this.orderForm.orderSkuUpdateList,v=>{
                         if(v.skuId===e[0].skuId.value){
@@ -1995,30 +1944,10 @@
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
-                            if(!m._remark){
-                                m.skuLabelPic._value=this.$refs.uploadSkuLabelPic.getFiles(true).url;
-                                m.skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles();
-                                m.skuPkgMethodPic._value=this.$refs.uploadSkuPkgMethodPic.getFiles(true).url;
-                                m.skuPkgMethodPic.value=this.$refs.uploadSkuPkgMethodPic.getFiles();
-                                m.skuInnerCartonPic._value=this.$refs.uploadSkuInnerCartonPic.getFiles(true).url;
-                                m.skuInnerCartonPic.value=this.$refs.uploadSkuInnerCartonPic.getFiles();
-                                m.skuOuterCartonPic._value=this.$refs.uploadSkuOuterCartonPic.getFiles(true).url;
-                                m.skuOuterCartonPic.value=this.$refs.uploadSkuOuterCartonPic.getFiles();
-                                m.skuAdditionalOne._value=this.$refs.uploadSkuAdditionalOne.getFiles(true).url;
-                                m.skuAdditionalOne.value=this.$refs.uploadSkuAdditionalOne.getFiles();
-                                m.skuAdditionalTwo._value=this.$refs.uploadSkuAdditionalTwo.getFiles(true).url;
-                                m.skuAdditionalTwo.value=this.$refs.uploadSkuAdditionalTwo.getFiles();
-                                m.skuAdditionalThree._value=this.$refs.uploadSkuAdditionalThree.getFiles(true).url;
-                                m.skuAdditionalThree.value=this.$refs.uploadSkuAdditionalThree.getFiles();
-                                m.skuAdditionalFour._value=this.$refs.uploadSkuAdditionalFour.getFiles(true).url;
-                                m.skuAdditionalFour.value=this.$refs.uploadSkuAdditionalFour.getFiles();
-                            }
                             this.productTableData.splice(k,1,m)
                         }
                     })
                 });
-                this.productTableData[0].skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles();
-
             },
             dataFilter(data) {
                 let arr = [],
@@ -2114,6 +2043,36 @@
                     return 'warning-row';
                 }
                 return '';
+            },
+            getSummaries(param){
+                const { columns, data } = param;
+                const sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = this.$i.product.total;
+                        return;
+                    }else if(index===4 || index===6 || index===8 || index===10){
+                        if(_.uniq(_.pluck(this.paymentData,'currencyCode')).length>1){
+                            sums[index] = '-';
+                        }
+                        else{
+                            const values = data.map(item => Number(item[column.property]));
+                            if (!values.every(value => isNaN(value))) {
+                                sums[index] = values.reduce((prev, curr) => {
+                                    const value = Number(curr);
+                                    if (!isNaN(value)) {
+                                        return prev + curr;
+                                    } else {
+                                        return prev;
+                                    }
+                                }, 0);
+                            } else {
+
+                            }
+                        }
+                    }
+                });
+                return sums;
             },
             getPaymentData(){
                 this.loadingPaymentTable=true;

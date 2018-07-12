@@ -217,7 +217,6 @@
           param.isImage = true;
         }
 
-
         return param;
       },
       setList(list) {

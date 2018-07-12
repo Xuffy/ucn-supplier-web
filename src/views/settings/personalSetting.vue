@@ -37,7 +37,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item prop="lang" :label="$i.setting.language+':'"  v-if="isVisible" required>
+          <el-form-item  :label="$i.setting.language+':'"  v-if="isVisible" required>
             <el-select v-model="form.lang" placeholder="请选择" style="width: 200px" :disabled="isModify">
               <el-option
                 v-for="item in language"
@@ -87,7 +87,7 @@
       :before-close="handleClose">
       <el-form>
         <el-form-item :label="$i.setting.oldPassword +':'"  :label-width="formLabelWidth" required>
-          <el-input type="password"  v-model="modifyPass.password"></el-input>
+          <el-input type="password"  v-model="modifyPass.oldPassword"></el-input>
         </el-form-item>
         <el-form-item :label="$i.setting.newPassword+':'"  :label-width="formLabelWidth" required>
           <el-input  type="password" v-model="modifyPass.newPassword"></el-input>
@@ -143,7 +143,7 @@
           roleId:''
         },
         modifyPass:{
-          password:'',
+          oldPassword:'',
           newPassword:'',
           comfirmNewPassword:''
         },
@@ -253,8 +253,8 @@
               message: '修改成功!'
             });
             this.isModifyPass = false;
-            this.summaryDisabled=true;
             this.isModify = true;
+            this.summaryDisabled=true;
             this.allowModifySummary=false;
           }).catch(err=>{
           this.allowModifySummary=false;
@@ -272,7 +272,12 @@
           return false;
         }
 
-        this.$ajax.put(this.$apis.put_user_profile_password,this.modifyPass)
+        const params = {
+          password:this.modifyPass.oldPassword,
+          newPassword:this.modifyPass.newPassword,
+          comfirmNewPassword:this.modifyPass.comfirmNewPassword,
+        }
+        this.$ajax.put(this.$apis.put_user_profile_password,params)
           .then(res => {
             this.dialogVisibleO = false;
             this.$message({type: 'success', message: '修改成功!'});

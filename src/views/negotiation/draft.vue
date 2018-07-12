@@ -8,8 +8,8 @@
             </div>
             <select-search :options="options" @inputChange="searchEnter" />
         </div>
-        <v-table 
-            :data="tabData" 
+        <v-table
+            :data="tabData"
             :loading="tabLoad"
             :buttons="[{label: 'Detail', type: 'detail'}]" 
             @action="action"
