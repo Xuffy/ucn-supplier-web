@@ -1,11 +1,11 @@
 <template>
   <el-row class="btns" :style="{ width: '100%', paddingLeft: hideMune ? '65px' : '195px' }">
     <div v-if="!edit">
-      <div v-if="logisticsStatus.supplierRecived==0">
+      <div v-if="logisticsStatus.supplierRecived==0&&(logisticsStatus.status!=4||logisticsStatus.status!=5)">
         <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','receive')">{{ $i.logistic.receive }}</el-button>
         <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','refuse')">{{ $i.logistic.refuse }}</el-button>
       </div>
-      <div v-else>
+      <div v-if="logisticsStatus.supplierRecived!=0">
         <el-button size="mini" type="primary" v-if="pageType!='loadingListDetail'&&(logisticsStatus.status==1||logisticsStatus.status==3)&&logisticsStatus.recived!=0"
           @click.stop="$emit('switchEdit', 'modify')">{{ $i.logistic.modify }}</el-button>
         <el-button size="mini" type="primary" v-if="pageType=='loadingListDetail'&&(logisticsStatus.status==1||logisticsStatus.status==3)"
