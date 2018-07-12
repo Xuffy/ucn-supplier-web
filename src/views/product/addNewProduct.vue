@@ -918,9 +918,9 @@
                     inventory: 0,
                     safeInventory: 0,
                     minInventory: 0,
-                    unitWeight: null,                      //重量单位
-                    unitLength: null,                      //长度单位,暂时传1
-                    unitVolume: null,                      //提及单位，暂时传1
+                    unitWeight: '7',                      //重量单位
+                    unitLength: '5',                      //长度单位
+                    unitVolume: '3',                      //提及单位
                     length: 0,
                     width: 0,
                     height: 0,
