@@ -42,7 +42,7 @@ export default {
   birthday: {
     key: 'birthday',
   },
-  password:{
+  oldPassword:{
     _rules:{
       required:true,
       // minLength:6,

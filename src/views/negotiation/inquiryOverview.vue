@@ -36,6 +36,7 @@
             </div>
         </div>
         <v-table
+            code='inquiry_list'
             :data="tabData"
             :buttons="[{label: 'detail', type: 'detail'}]"
             :height="450"
@@ -104,21 +105,13 @@ export default {
     }
   },
   created() {
-    this.setRecycleBin({
-      name: 'negotiationRecycleBin',
-      params: {
-        type: 'inquiry'
-      },
-      show: true
-    });
+    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.recycleBin});
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
     this.getDirCodes().then(this.gettabData, this.gettabData);
-  },
-  mounted() {
-    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
   },
   methods: {
     ...mapActions([
-      'setRecycleBin',
+      'setMenuLink',
       'setDic'
     ]),
     inputEnter(val, operatorFilters) {
