@@ -205,26 +205,38 @@
       }
     },
     mounted() {
-      this.setLog({query:{code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'}});
+      let menuList = [{
+        path: '',
+        query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
+        type: 100,
+        label: this.$i.common.log
+      },{
+        path: '/logistic/draft',
+        label: this.$i.common.draft
+      },{
+        path: '/logistic/archivePlan',
+        label: this.$i.logistic.archivePlan
+      },{
+        path: '/logistic/archiveDraft',
+        label: this.$i.logistic.archiveDraft
+      },
+      {
+        path: '/logistic/archiveLoadingList',
+        label: this.$i.logistic.archiveLoadingList
+      }];
+      this.setMenuLink(menuList);
       this.fetchData()
-      this.registerRoutes()
     },
     methods: {
-      ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      ...mapActions(['setMenuLink']),
       changeSort(arr){
-        console.log(arr)
+       
       },
       initPage(){
         this.pageParams = {
           pn: 1,
           ps: 10
         };
-      },
-      registerRoutes() {
-        this.$store.commit('SETRECYCLEBIN', {
-          name: 'overviewArchive',
-          show: true
-        })
       },
       fetchData() {
         if (this.pageType === 'plan') {

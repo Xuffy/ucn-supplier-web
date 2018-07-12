@@ -165,8 +165,8 @@ export default {
     }
   },
   created() {
-    this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
-    this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
+    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
 
     if (this.$localStore.get('$in_quiryCompare')) {
       this.compareConfig = this.$localStore.get('$in_quiryCompare');
@@ -180,24 +180,21 @@ export default {
     }).then(this.getInquiryDetail, this.getInquiryDetail);
   },
   watch: {
-    ChildrenCheckList(val, oldVal) {
+    ChildrenCheckList(val) {
       let data = this.tabData;
       val.forEach(item => {
-        if (item + '' === '0') {
+        if (item === 0) {
           data = this.$table.setHideSame(this.tabData);
         }
-        if (item + '' === '1') {
+        if (item === 1) {
           data = this.$table.setHighlight(this.tabData);
         }
       });
       this.newTabData = data;
     }
   },
-  mounted() {
-    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
-  },
   methods: {
-    ...mapActions(['setDraft', 'setRecycleBin', 'setDic']),
+    ...mapActions(['setMenuLink', 'setDic']),
     deleteInquiry() {
       this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
         confirmButtonText: this.$i.common.confirm,
