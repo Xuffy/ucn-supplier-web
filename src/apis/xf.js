@@ -27,5 +27,9 @@ export default {
   PAYMENT_GETORDERBYPAYMENTNOS: ['/payment/getOrderByPaymentNos', 'UWORKBENCH_URL'],
   GRIDFAVORITE_PART: ['/gridfavorite/part', 'UMETA_URL'],
   GRIDFAVORITE_PARTWITHSETTING: ['/gridfavorite/partWithSetting', 'UMETA_URL'],
-  PRIVILEGE_PRIVILEGE_SELECT: ['/privilege/privilege/select', 'UUSER_URL']
+  PRIVILEGE_PRIVILEGE_SELECT: ['/privilege/privilege/select', 'UUSER_URL'],
+  EXPORTFILE_EXPORTTASKE: ['/exportFile/exportTaske', 'UIE_URL'],
+  EXPORTFILE_GETEXPORTTASKE: ['/exportFile/getExportTaske', 'UIE_URL'],
+  CODE_PART: ['/code/part', 'UMETA_URL'],
+  EXPORTFILE_EXECUTE: ['/exportFile/execute', 'UIE_URL']
 }

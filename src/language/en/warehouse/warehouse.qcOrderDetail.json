@@ -19,7 +19,7 @@
   "lengthUnitDictCode": "长度单位",
   "volumeUnitDictCode": "体积单位",
   "weightUnitDictCode": "重量单位",
-  "expectQcQty": "预计验货数量",
+  "expectQcQty": "Estimated QC QTY",
   "samplingRate": "抽检比例",
   "unqualifiedProcessingMode": "不合格处理方式",
   "outerCartonTotalQty": "外箱数合计",

@@ -1,6 +1,6 @@
 {
   "systemMessage": "系统消息",
-  "markAsReaded": "标记为已读",
+  "markAsRead": "标记为已读",
   "more": "更多",
   "signOut": "退出",
   "new": "新的",
@@ -14,7 +14,6 @@
   "home": "首页",
   "goSignIn": "正在跳转登录",
   "cleanCache": "Clean up the data cache",
-  "signIn": "Sign in",
-  "archive": "归档"
+  "signIn": "Sign in"
 }
 

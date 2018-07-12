@@ -10,17 +10,17 @@
                         @change="val => {$emit('filter-value',val)}"></v-filter-value>-->
 
         <v-filter-column v-if="!hideFilterColumn && code" ref="filterColumn" :code="code"
-                         @change="changeFilterColumn"></v-filter-column>
+                         @change="val => {dataList = $refs.filterColumn.getFilterData(dataList, val)}"></v-filter-column>
       </div>
     </div>
 
     <div class="table-container" ref="tableContainer">
-      <div class="fixed-left" v-if="selection"
+      <div class="fixed-left" v-if="dataList.length && selection"
            ref="fixedLeft" :class="{show:dataColumn.length}">
         <input type="checkbox" v-model="checkedAll" :class="{visibility:selectionRadio}" ref="checkboxAll"
                @change="changeCheckedAll"/>
       </div>
-      <div class="fixed-right" v-if="buttons"
+      <div class="fixed-right" v-if="dataList.length && buttons"
            ref="fixedRight" :class="{show:dataColumn.length}">
         {{$i.table.action}}
       </div>
@@ -38,12 +38,17 @@
               <div>#</div>
             </td>
             <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && item.key"
-                :class="{'sort-wrapper':item._sort}">
+                :class="{'sort-wrapper':item._sort,active:currentSort.orderBy === item.key}"
+                @click="changeSort(item.key)">
               <div>
                 {{item.label}}
-                <div class="sort-box">
-                  <i class="el-icon-caret-top"></i>
-                  <i class="el-icon-caret-bottom"></i>
+                <div class="sort-box" v-if="!disabledSort || !item._sort">
+                  <i class="el-icon-caret-top"
+                     :class="{active:currentSort.orderType === 'asc' && currentSort.orderBy === item.key}"
+                     @click.stop="changeSort(item.key,'asc')"></i>
+                  <i class="el-icon-caret-bottom"
+                     :class="{active:currentSort.orderType === 'desc' && currentSort.orderBy === item.key}"
+                     @click.stop="changeSort(item.key,'desc')"></i>
                 </div>
               </div>
             </td>
@@ -212,6 +217,10 @@
         type: Boolean,
         default: false,
       },
+      disabledSort: {
+        type: Boolean,
+        default: false,
+      },
       totalRow: {
         type: [Boolean, Array],
         default: false,
@@ -228,6 +237,7 @@
         checkedAll: false,
         interval: null,
         tableAttr: {st: 0, sl: 0},
+        currentSort: {orderBy: '', orderType: ''}
       }
     },
     watch: {
@@ -242,9 +252,25 @@
     mounted() {
       this.setDataList(this.data, true);
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
-      this.interval = setInterval(this.updateTable, 400);
+      this.interval = setInterval(this.updateTable, 300);
     },
     methods: {
+      changeSort(key, type) {
+        if (key !== this.currentSort.orderBy) {
+          this.currentSort = this.$options.data().currentSort;
+        }
+
+        this.currentSort.orderBy = key;
+
+        if (type) {
+          this.currentSort.orderType = type;
+        } else if (this.currentSort.orderType === 'desc') {
+          this.currentSort = this.$options.data().currentSort;
+        } else {
+          this.currentSort.orderType = this.currentSort.orderType === 'asc' ? 'desc' : 'asc';
+        }
+        this.$emit('change-sort', {sorts: this.currentSort.orderType ? [this.currentSort] : []});
+      },
       onFilterColumn(checked) {
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
       },
@@ -327,23 +353,21 @@
 
         this.resetFile();
         if (!this.hideFilterColumn && this.$refs.filterColumn && this.code && !_.isEmpty(val)) {
-          this.$refs.filterColumn.getConfig(false, val).then(res => {
-            let to = setTimeout(() => {
-              clearTimeout(to);
-              this.dataList = this.$refs.filterColumn.getFilterData(val, res);
-              type && this.filterColumn();
-
-              // this.updateTable()
-            }, 50);
-          })
-        } else {
-          let to = setTimeout(() => {
-            clearTimeout(to);
-            this.dataList = val;
+          this.$refs.filterColumn.update(false, val).then(res => {
+            // let to = setTimeout(() => {
+            //   clearTimeout(to);
+            this.dataList = this.$refs.filterColumn.getFilterData(val, res);
             type && this.filterColumn();
 
-            // this.updateTable()
-          }, 50);
+            // }, 50);
+          })
+        } else {
+          // let to = setTimeout(() => {
+          //   clearTimeout(to);
+          this.dataList = val;
+          type && this.filterColumn();
+
+          // }, 50);
         }
       },
       resetFile() {
@@ -366,6 +390,11 @@
           return val;
         }));
         this.changeCheck(this.dataList, this.checkedAll);
+      },
+      update() {
+        this.$refs.filterColumn.update().then(res => {
+          this.dataList = this.$refs.filterColumn.getFilterData(this.dataList, res);
+        });
       }
     },
     beforeDestroy() {
@@ -627,10 +656,10 @@
     cursor: pointer;
   }
 
-  thead td:not(.sort-wrapper) .sort-box {
+  /*thead td:not(.sort-wrapper) .sort-box {
     display: none;
     cursor: initial;
-  }
+  }*/
 
   .sort-box {
     display: inline-flex;
@@ -645,6 +674,7 @@
     opacity: 0;
   }
 
+  .sort-wrapper.active .sort-box,
   .sort-wrapper:hover .sort-box {
     opacity: 1;
   }
@@ -653,6 +683,7 @@
     height: 10px;
   }
 
+  .sort-box i.active,
   .sort-box i:hover {
     color: #409EFF;
   }

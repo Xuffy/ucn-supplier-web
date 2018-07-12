@@ -4,5 +4,22 @@
   "view": "View",
   "status": "Status",
   "overdue": "Overdue",
-  "future": "Future"
+  "future": "Future",
+  "detail": "Detail",
+  "urgingPayment": "Urging Payment",
+  "purchaseOrder": "Purchase order",
+  "qcOrder": "QC order",
+  "logistticOrder": "Logisttic order",
+  "TBCBYSUPPLIER": "待供应商确认",
+  "TBCBYCUSTOMER": "待客户确认",
+  "PROCESS": "进行中",
+  "FINISHED": "已完成",
+  "CANCLED": "已取消",
+  "waitingQc": "未验货",
+  "completedQc": "已验货",
+  "draft": "LS_DRAFT",
+  "lsPlan": "LS_PLAN",
+  "urgedSuccess": "催促成功"
+
+
 }

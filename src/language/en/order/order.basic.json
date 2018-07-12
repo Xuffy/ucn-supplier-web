@@ -59,5 +59,10 @@
   "summary": "Summary",
   "baseSupplierName": "Base Supplier Name",
   "importantSupplier": "Important Supplier",
-  "skuQuantity": "SKU Quantity"
+  "skuQuantity": "SKU Quantity",
+  "exit":"Exit",
+  "recover":"Recover",
+  "archiveOrder":"Archive Order",
+  "archiveDraft":"Archive Draft",
+  "detail":"Detail"
 }

@@ -5,7 +5,7 @@
   "remark": "备注",
   "template": "模板",
   "import": "导入",
-  "upload": "下载",
+  "upload": "上传",
   "selectFile": "选择文件",
   "note": "Note",
   "importPrompt": "Data from the same email will be overwritten",

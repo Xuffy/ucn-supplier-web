@@ -8,9 +8,9 @@
 
 
           <template v-for="(item,index) in routerList">
-
-            <el-menu-item v-if="item.children.length && item.noDropdown && !item.hidden && menuAuth(item)"
-                          :index="index + ''">
+            <el-menu-item
+              v-if="item.children.length && item.noDropdown && !item.hidden && menuAuth(item)"
+              :index="index + ''">
               <router-link class="link"
                            :to="item.path+'/'+item.children[0].path">
                 {{item.meta ? item.meta.name : ''}}
@@ -40,7 +40,7 @@
       </div>
 
       <div class="header-right" style="color: #999999!important;">
-        <el-dropdown trigger="click" placement="bottom">
+        <el-dropdown placement="bottom">
           <span class="icon-menu"><i class="iconfont icon-duoyuyan"></i></span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item v-for="item in languageOption" :key="item.type">
@@ -87,13 +87,14 @@
           </el-popover>
         </div>
 
-        <div style="display: inline-block">
-          <el-dropdown trigger="click" placement="bottom">
-            <a href="javascript:void(0)" class="el-dropdown-link" style="cursor: pointer">
-              {{userInfo.userType === 0 ? $i.common.admin : $i.common.user}}&nbsp;&nbsp;|&nbsp;&nbsp;
-            </a>
+        <div class="user-box">
+          <el-dropdown placement="bottom">
+            <a href="javascript:void(0)" class="" style="cursor: pointer">
+              {{userInfo.userName || 'User Name'}}
+            </a>&nbsp;&nbsp;|&nbsp;&nbsp;
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item><span @click="clearData">{{$i.common.cleanCache}}</span></el-dropdown-item>
+              <el-dropdown-item disabled>Signed in as {{userInfo.userName || 'User Name'}}</el-dropdown-item>
+              <el-dropdown-item divided><span @click="clearData">{{$i.common.cleanCache}}</span></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <a href="javascript:void(0)" @click="logout">
@@ -221,11 +222,16 @@
         history.go(0);
       },
       menuAuth(item) {
-        return !(item.meta && item.meta.auth && !this.$auth(item.meta.auth));
+        if (item.meta && item.meta.auth) {
+          return this.$auth(item.meta.auth);
+        }
+        return true;
       },
       changeLanguage({type}) {
-        this.$localStore.set('language', type);
-        window.history.go(0);
+        if (this.$localStore.get('language') !== type) {
+          this.$localStore.set('language', type);
+          window.history.go(0);
+        }
       }
     },
   }
@@ -306,10 +312,21 @@
 
   .user-box {
     vertical-align: middle;
+    display: inline-block;
   }
 
-  .user-box .ivu-icon-person {
-    font-size: 20px;
+  .user-box a {
+    transition: all .5s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 80px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .user-box a:hover {
+    color: #eeeeee;
   }
 
   .el-menu--horizontal {
@@ -322,7 +339,7 @@
 
   .el-submenu,
   .el-menu-item {
-    padding: 0 0 0 2.2vw;
+    padding: 0 0 0 2vw;
     border: none !important;
   }
 
@@ -410,6 +427,7 @@
     vertical-align: middle;
     display: inline-block;
   }
+
   .icon-menu i {
     font-size: 20px;
     color: #eeeeee;

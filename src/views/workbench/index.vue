@@ -102,7 +102,7 @@
     },
     mounted() {
       this.userInfo.userType === 0 && this.getBasicInfo();
-     /* // µÚÒ»ÖÖ µ¥¸öÉèÖÃ
+     /* // ç¬¬ä¸€ç§ å•ä¸ªè®¾ç½®
       this.setMenuLink({
         path: '',
         query: {code: ''},
@@ -110,7 +110,7 @@
         label: this.$i.common.archive
       });
 
-      // ¶à¸öÉèÖÃ
+      // å¤šä¸ªè®¾ç½®
       this.setMenuLink([{
         path: '',
         query: {code: ''},
@@ -119,7 +119,7 @@
       }, {
         path: '',
         query: {code: ''},
-        type: 100, // type = 100  Îªlog
+        type: 100, // type = 100  ä¸ºlog
         label: this.$i.common.archive
       }]);*/
 

@@ -68,11 +68,11 @@
           <span v-text="$i.common.log"></span>
         </el-menu-item>
         <el-menu-item index="2-4" v-if="$route.meta && $route.meta.importTask !== false">
-          <router-link to="/logs/import">
-            <el-tooltip :disabled="!layout.hideMenu" effect="dark" :content="$i.logs.importTitle" placement="right">
+          <router-link to="/logs/task">
+            <el-tooltip :disabled="!layout.hideMenu" effect="dark" :content="$i.logs.taskList" placement="right">
               <i class="el-icon-time"></i>
             </el-tooltip>
-            <span v-text="$i.logs.importTitle"></span>
+            <span v-text="$i.logs.taskList"></span>
           </router-link>
         </el-menu-item>
       </el-menu-item-group>

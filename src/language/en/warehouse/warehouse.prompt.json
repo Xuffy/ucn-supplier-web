@@ -24,5 +24,6 @@
   "removeSuccess": "Remove Success!",
   "keywordMustInput": "还有必填字段未填写",
   "pleaseChooseAType": "Please choose a type",
-  "pleaseChooseService": "Please choose service"
+  "pleaseChooseService": "Please choose service",
+  "deleteSuccess":"Delete Success!"
 }
