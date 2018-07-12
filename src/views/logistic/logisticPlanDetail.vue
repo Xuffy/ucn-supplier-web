@@ -876,7 +876,6 @@
         this.oldPlanObject.fieldDisplay = obj;
       },
       feeInfoLight(data,index){
-        console.log(data)
         this.isfeeInfoLight = true;
         this.oldPlanObject.fee = this.feeList && this.feeList.length > 0 ? this.feeList[0] : null;
         [this.oldPlanObject.fee][index].fieldDisplay=this.$depthClone(data);
@@ -949,7 +948,7 @@
         }
         //判断 Container Info 是否修改过高亮 以便不传后台返回的修改值
         if(!this.isfeeInfoLight){
-          [this.oldPlanObject.fee].forEach(el =>{
+          this.oldPlanObject.fee&&[this.oldPlanObject.fee].forEach(el =>{
             el.fieldDisplay = null;
           })
         }

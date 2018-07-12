@@ -221,5 +221,8 @@
   "viewBy":"viewBy:",
   "skuPictures":"图片",
   "pleaseChoose":"请选择",
-  "reportElement": "Declare elements"
+  "reportElement": "Declare elements",
+  "archivePlan": "归档 Plan",
+  "archiveDraft": "归档 Draft",
+  "archiveLoadingList": "归档 LoadingList"
 }
