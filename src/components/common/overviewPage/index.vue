@@ -251,8 +251,8 @@
                                     },
                                 ];
                                 this.getCategory().then(res=>{
-                                    list[0].children=res[0];
-                                    list[1].children=res[1];
+                                    list[0].children=res[1];
+                                    list[1].children=res[0];
                                     v._list=list;
                                 });
                             }
