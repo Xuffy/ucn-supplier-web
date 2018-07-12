@@ -60,5 +60,9 @@
   "baseSupplierName": "Base Supplier Name",
   "importantSupplier": "Important Supplier",
   "skuQuantity": "SKU Quantity",
-  "detail":"详情"
+  "exit":"Exit",
+  "recover":"Recover",
+  "archiveOrder":"Archive Order",
+  "archiveDraft":"Archive Draft",
+  "detail":"Detail"
 }

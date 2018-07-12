@@ -1,6 +1,6 @@
 {
   "systemMessage": "System Message",
-  "markAsReaded": "Mark as Read",
+  "markAsRead": "Mark as Read",
   "more": "More",
   "signOut": "Sign out",
   "new": "New",
@@ -14,6 +14,7 @@
   "home": "Home",
   "goSignIn": "正在跳转登录",
   "cleanCache": "Clean up the data cache",
-  "signIn": "Sign in"
+  "signIn": "Sign in",
+  "archive": "Archive"
 }
 

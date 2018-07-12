@@ -220,5 +220,13 @@
   "archive":"Archive",
   "viewBy":"viewBy:",
   "skuPictures":"Sku Pictures",
-  "pleaseChoose":"please Choose"
+  "pleaseChoose":"please Choose",
+  "archivePlan": "Archive Plan",
+  "archiveDraft": "Archive Draft",
+  "archiveLoadingList": "Archive LoadingList",
+  "tips" : "tips",
+  "isConfirmPeration" : "是否执行该操作？",
+  "operationSuccess" : "操作成功！",
+  "operationFailed" : "操作失败！",
+  "jumping" : "正在跳转..."
 }

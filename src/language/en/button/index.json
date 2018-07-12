@@ -7,5 +7,8 @@
   "upload": "Upload",
   "delete": "Delete",
   "submit": "submit",
-  "save": "Save"
+  "save": "Save",
+  "download":"Download",
+  "remove": "Remove",
+  "recover": "Recover"
 }

@@ -59,5 +59,6 @@
   "recycle": "Recycle Bin",
   "addNewProduct": "Add New Product",
   "qcDetail": "Detail",
-  "customer": "Customer"
+  "customer": "Customer",
+  "archive":"Archive"
 }

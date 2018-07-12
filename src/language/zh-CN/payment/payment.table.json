@@ -15,5 +15,5 @@
   "actualDateOfReceipt": "实收日期",
   "type": "type",
   "currency": "Currency",
-  "total": "Total"
+  "_totalRow": "Total"
 }

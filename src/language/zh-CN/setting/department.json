@@ -18,5 +18,8 @@
   "roleExisted": "The role name has already existed",
   "addUser": "Add New User",
   "editUse": "Edit Use",
-  "successfulOperation": "Successful operation"
+  "successfulOperation": "Successful operation",
+  "invitationSuccess":"Invitation success",
+  "disabledUser":"Whether to confirm the disabled user ?",
+  "enabledUser":"Whether to confirm the user is enabled ?"
 }

@@ -18,7 +18,8 @@
   "waitingQc": "未验货",
   "completedQc": "已验货",
   "draft": "LS_DRAFT",
-  "lsPlan": "LS_PLAN"
+  "lsPlan": "LS_PLAN",
+  "urgedSuccess": "催促成功"
 
 
 }

@@ -56,7 +56,7 @@
   "productStatus": "产品状态",
   "incoterm": "价格条款",
   "incotermarea": "价格条款区域",
-  "archiveOrder":"Archive Order",
-  "archiveDraft":"Archive Draft",
-  "archiveOverview":"订单归档"
+  "archiveOrderOverview":"Archive Order Overview",
+  "archiveDraftOverview":"Archive Draft Overview",
+  "archiveOverview":"Archive Overview"
 }
