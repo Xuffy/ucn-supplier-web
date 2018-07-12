@@ -72,7 +72,7 @@
                           v-model="row[item.key].value" size="mini"></el-input>
 
                 <!--数字输入-->
-                <el-input-number
+                <v-input-number
                   v-else-if="row[item.key].type === 'Number'"
                   v-model="row[item.key].value"
                   @change="() => row[item.key]._isModified = true"
@@ -81,7 +81,7 @@
                   controls-position="right"
                   size="mini"
                   :controls="false"
-                  style="width:100%;"></el-input-number>
+                  style="width:100%;"></v-input-number>
 
                 <!--下拉选项-->
                 <el-select
@@ -115,11 +115,12 @@
 <script>
   import VUpload from '../upload/index';
   import VImage from '../image/index';
-  import VFilterColumn from '../table/filterColumn'
+  import VFilterColumn from '../table/filterColumn';
+  import VInputNumber from '../inputNumber/index';
 
   export default {
     name: 'VHistoryModify',
-    components: {VUpload, VImage, VFilterColumn},
+    components: {VUpload, VImage, VFilterColumn, VInputNumber},
     props: {
       visible: {
         type: Boolean,

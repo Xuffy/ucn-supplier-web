@@ -22,6 +22,7 @@ import paymentTable from '@/views/warehouse/paymentTable';
 import VHistory from '@/views/negotiation/children/history';
 import addNewInqury from '@/views/negotiation/children/addNewInqury';
 import overviewPage from './common/overviewPage/index';
+import VInputNumber from './common/inputNumber/index';
 
 export {
   VImage,
@@ -45,5 +46,6 @@ export {
   paymentTable,
   VHistory,
   addNewInqury,
-  overviewPage
-}
+  overviewPage,
+  VInputNumber
+};
