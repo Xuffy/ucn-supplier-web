@@ -57,10 +57,12 @@
       <v-table
         :data="logslist"
         :loading="tabLoad"
+        :selection="false"
         :height="500"></v-table>
       <page
         :page-data="pageData"
         @change="handleSizeChange"
+        :page-sizes="[50,100,200]"
         @size-change="pageSizeChange"></page>
     </div>
   </div>
