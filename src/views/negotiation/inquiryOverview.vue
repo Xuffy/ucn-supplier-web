@@ -105,7 +105,7 @@ export default {
     }
   },
   created() {
-    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.recycleBin});
+    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
     this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
     this.getDirCodes().then(this.gettabData, this.gettabData);
   },
