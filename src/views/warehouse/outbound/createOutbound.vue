@@ -488,7 +488,6 @@
                     if (index === 0) {
                         sums[index] = this.$i.warehouse.totalMoney;
                     } else {
-                        console.log(column,'column')
                         if (index === 9) {
                             const values = data.map(item => Number(item[column.property]));
                             if (!values.every(value => isNaN(value))) {
