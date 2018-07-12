@@ -89,7 +89,6 @@
 </template>
 <script>
   import {
-    VSimpleTable,
     containerInfo,
     selectSearch,
     VTable,
@@ -100,7 +99,6 @@
     mapState
   } from 'vuex';
   import attachment from '@/components/common/upload/index';
-  import product from '@/views/product/addProduct';
   import messageBoard from '@/components/common/messageBoard/index';
   import formList from '@/views/logistic/children/formList'
   import oneLine from '@/views/logistic/children/oneLine'
@@ -205,8 +203,7 @@
       productModify,
       addProduct,
       messageBoard,
-      VHistoryModify,
-      product
+      VHistoryModify
     },
     computed: {
       productListTotal() {
