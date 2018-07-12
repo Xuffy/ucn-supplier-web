@@ -41,7 +41,7 @@
     <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.feeInfoTitle }}</div>
-      <fee-info :edit="edit" :tableData.sync="feeList" :selectArr="selectArr"></fee-info>
+      <fee-info :edit="edit" :tableData.sync="feeList" :selectArr="selectArr" @feeInfoLight="feeInfoLight"></fee-info>
     </div>
 
     <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
@@ -188,7 +188,8 @@
         pageName: '',
         prodFieldDisplay: {},
         batchDunningCutDown: '',
-        CutDown: null
+        CutDown: null,
+        isfeeInfoLight:false
       }
     },
     components: {
@@ -874,6 +875,12 @@
         })
         this.oldPlanObject.fieldDisplay = obj;
       },
+      feeInfoLight(data,index){
+        console.log(data)
+        this.isfeeInfoLight = true;
+        this.oldPlanObject.fee = this.feeList && this.feeList.length > 0 ? this.feeList[0] : null;
+        [this.oldPlanObject.fee][index].fieldDisplay=this.$depthClone(data);
+      },
       sendData(keyString) {
         let url = this.pageTypeCurr == "loadingListDetail" ? this.$apis.update_logistic_order : this.configUrl[this.pageName]
           [keyString];
@@ -900,7 +907,6 @@
         })
         this.oldPlanObject.attachment = this.$refs.attachment.getFiles();
         this.oldPlanObject.containerDetail = this.containerInfo
-        this.oldPlanObject.fee = this.feeList && this.feeList.length > 0 ? this.feeList[0] : null;
         this.oldPlanObject.product = this.modifyProductArray;
         this.oldPlanObject.currencyExchangeRate = _.map(this.$depthClone(this.ExchangeRateInfoArr), (item) => {
           item['price'] = item['value'];
@@ -940,6 +946,12 @@
         }
         if (this.$validateForm(this.oldPlanObject, this.$db.logistic.transportInfoObj)) {
           return;
+        }
+        //判断 Container Info 是否修改过高亮 以便不传后台返回的修改值
+        if(!this.isfeeInfoLight){
+          [this.oldPlanObject.fee].forEach(el =>{
+            el.fieldDisplay = null;
+          })
         }
         this.$ajax.post(url, this.oldPlanObject).then(res => {
           this.$message({
