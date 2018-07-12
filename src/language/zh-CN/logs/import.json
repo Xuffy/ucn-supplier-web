@@ -1,6 +1,6 @@
 {
   "importTitle":"导入任务",
-  "lookImportTitle":"查看导入任务",
+  "taskList": "Task list",
   "lookImportTitle": "View Import Title",
   "statusCancel":"已取消",
   "statusExecution":"执行完成",
