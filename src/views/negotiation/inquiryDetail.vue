@@ -270,7 +270,7 @@ export default {
         if (fieldDisplay && typeof fieldDisplay === 'object') {
           Object.keys(fieldDisplay).forEach(k => {
             if (fieldDisplay[k] === '1' && line[k]) {
-              line[k]._style = 'background-color: ' + c;
+              line[k]._style = {backgroundColor: c};
             }
           });
         }
@@ -281,7 +281,7 @@ export default {
         if (fieldRemarkDisplay && typeof fieldRemarkDisplay === 'object') {
           Object.keys(fieldRemarkDisplay).forEach(k => {
             if (remark && fieldRemarkDisplay[k] === '1' && remark[k]) {
-              remark[k]._style = 'background-color: ' + c;
+              remark[k]._style = {backgroundColor: c};
             }
           });
         }
