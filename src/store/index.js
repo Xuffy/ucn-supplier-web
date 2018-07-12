@@ -36,20 +36,16 @@ const actions = {
    * @param params  数据：{path:'',query:'',label:'',type:1}
    */
   setMenuLink({commit}, params) {
-    console.log(params)
     commit(type.SETMENULINK, params);
   },
   setDraft({commit}, params) {
     console.error('setDraft 函数已更改为：setMenuLink');
-    // commit(type.SETDRAFT, params);
   },
   setRecycleBin({commit}, params) {
     console.error('setRecycleBin 函数已更改为：setMenuLink');
-    // commit(type.SETRECYCLEBIN, params);
   },
   setLog({commit}, params) {
     console.error('setLog 函数已更改为：setMenuLink');
-    // commit(type.SETLOG, params);
   },
   setDic({commit, state}, params) {
     let dic = state.dic && Array.isArray(state.dic) ? state.dic : [];
@@ -71,7 +67,7 @@ const actions = {
 
 const mutations = {
   [type.SETMENULINK](state, params) {
-    params = _.isObject(params) ? [params] : params;
+    params = !_.isArray(params) ? [params] : params;
     state.menuLink.list = _.sortBy(state.menuLink.list.concat(params), val => {
       if (val.type === 100) {// log 设置
         val.path = val.path || '/logs/index';
@@ -79,19 +75,6 @@ const mutations = {
       return val.type
     });
   },
-  /*[type.SETRECYCLEBIN](state, params) {
-    params.show = true;
-    state.quickLink.recycleBin = params;
-  },*/
-  /*[type.SETDRAFT](state, params) {
-    params.show = true;
-    state.quickLink.draft = params;
-  },
-  [type.SETLOG](state, params) {
-    params.show = true;
-    params.path = params.path || '/logs/index';
-    state.quickLink.log = params;
-  },*/
   [type.DIC](state, params) {
     state.dic = params;
   }

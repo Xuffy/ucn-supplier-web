@@ -18,7 +18,7 @@
         <div class="operation-box" :class="{readonly:readonly,image:readonly}"
              v-show="item.progress === 1 || item.url">
 
-          <i class="el-icon-download" @click="downloadFile(item)"></i>
+          <i class="el-icon-download" @click="$download(item.url)"></i>
           <i class="el-icon-delete" @click="deleteFile(item)"></i>
           <i class="el-icon-view" @click="$refs.uploadViewPicture.show(item.url)"></i>
         </div>
@@ -30,7 +30,7 @@
       <li v-for="item in fileList">
         <i class="el-icon-success" v-if="item.progress === 1"></i>
         <i class="el-icon-document"></i>
-        <span v-text="item.fileName" :title="item.fileName" @click="downloadFile(item)"></span>
+        <span v-text="item.fileName" :title="item.fileName" @click="$download(item.url)"></span>
         <i v-if="!readonly" class="el-icon-delete" @click="deleteFile(item)"></i>
         <el-progress :percentage="parseInt(item.progress * 100)"
                      v-if="item.progress && item.progress !== 1"></el-progress>
@@ -179,10 +179,6 @@
         });
         this.fileList = list;
         this.$emit('change', _.values(list));
-      },
-      downloadFile(item) {
-
-        // item && Downloadjs(item.url);
       },
       signature(params) {
         return new OSS.Wrapper({

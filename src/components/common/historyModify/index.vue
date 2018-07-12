@@ -7,6 +7,11 @@
       :close-on-click-modal="false"
       :visible.sync="showDialog">
 
+      <div style="width: 100%;text-align: right">
+        <v-filter-column v-if="code" ref="filterColumn" :code="code"
+                         @change="val => {dataList = $refs.filterColumn.getFilterData(dataList, val)}"></v-filter-column>
+      </div>
+
       <el-table
         :data="dataList"
         max-height="400px"
@@ -14,7 +19,7 @@
         :span-method="objectSpanMethod"
         border>
         <el-table-column v-for="item in dataColumn" :key="item.id"
-                         v-if="!item._hide"
+                         v-if="(!item._hide && !item._hidden) || item._title"
                          min-width="200px"
                          :prop="item.key"
                          :label="item.label">
@@ -24,10 +29,6 @@
               {{row[item.key]._value || row[item.key].value}}
               <p v-if="row[item.key]._title" v-text="row[item.key]._title"></p>
             </div>
-
-            <!--<div v-else-if="row[item.key]._image">
-              <v-image class="img" :src="getImage(item._value || item.value)" height="30px" width="30px"></v-image>
-            </div>-->
 
             <div v-else>
               <span
@@ -114,11 +115,11 @@
 <script>
   import VUpload from '../upload/index';
   import VImage from '../image/index';
-  // testData = testData.content.details;
+  import VFilterColumn from '../table/filterColumn'
 
   export default {
     name: 'VHistoryModify',
-    components: {VUpload, VImage},
+    components: {VUpload, VImage, VFilterColumn},
     props: {
       visible: {
         type: Boolean,
@@ -128,7 +129,11 @@
         type: Boolean,
         default: false
       },
-      beforeSave: Function
+      beforeSave: Function,
+      code: {
+        type: String,
+        default: '',
+      }
     },
     data() {
       return {
@@ -156,9 +161,9 @@
         this.modified = true;
 
         data[0] = _.mapObject(data[0], (val, key) => {
-          let files;
-          if (val._upload && _.isObject(val._upload)) {
+          let files,
             uploadVm = this.$refs[key + 'Upload'];
+          if (val._upload && _.isObject(val._upload) && !_.isEmpty(uploadVm)) {
             uploadVm = _.isArray(uploadVm) ? uploadVm[0] : uploadVm;
             files = uploadVm.getFiles(true);
             val.value = files.key;
@@ -183,6 +188,8 @@
         return value[0];
       },
       init(editData, history = [], isModify = true) {
+        let dataList = [];
+
         if (isModify && (_.isEmpty(editData) || !_.isArray(editData))) {
           return false
         }
@@ -191,7 +198,7 @@
         this.dataColumn = [];
         // 初始化可编辑行
         _.map(this.$depthClone(editData), (value, index) => {
-          this.$set(this.dataList, index, _.mapObject(value, (val, key) => {
+          dataList.push(_.mapObject(value, (val, key) => {
             if (!_.isObject(val)) {
               return val;
             }
@@ -202,14 +209,19 @@
             return val;
           }));
         });
-        this.dataList = this.dataList.concat(history);
+        dataList = dataList.concat(history);
 
-        this.defaultData = this.$depthClone(this.dataList);
-        this.dataColumn = this.dataList[0];
+        this.defaultData = this.$depthClone(dataList);
+        this.dataColumn = dataList[0];
         this.showDialog = true;
         this.isModify = isModify;
 
-        return this.dataList;
+        this.$nextTick(() => {
+          this.$refs.filterColumn.update(false, dataList).then(res => {
+            this.dataList = this.$refs.filterColumn.getFilterData(dataList, res);
+          });
+        })
+        return dataList;
 
       },
       changeSelect(val, item, row) {
@@ -220,7 +232,7 @@
         item._isModified = true;
         this.$emit('select-change', item, row);
       },
-      getFilterData(data, k = 'id') {
+      getFilterData(data = [], k = 'id') {
         let list = [];
         _.map(data, value => {
           list.push(value);
@@ -245,12 +257,13 @@
         }
         _.map(this.dataList, value => {
           _.map(value, val => {
-            if (_.isObject(val) && val._upload && this.$refs[val.key + 'Upload']) {
+            if (_.isObject(val) && val._upload && !_.isEmpty(this.$refs[val.key + 'Upload'])) {
               this.$refs[val.key + 'Upload'][0].reset();
             }
           });
         });
         this.modified = false;
+        this.$emit('closed', null);
         this.$emit('update:visible', false);
       },
       objectSpanMethod({row, column, rowIndex, columnIndex}) {

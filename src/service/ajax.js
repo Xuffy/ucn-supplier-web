@@ -117,7 +117,7 @@ const $ajax = (config) => {
       , resData = false
       , _options = _.extend(...this.sethHeader(options, config));
 
-    if (!config.updateCache && config.cache) {
+    if (config.cache) {
       if (!_.isEmpty(resCache) && _.isArray(resCache)) {
         let res = _.findWhere(resCache, {id: md5(url + _options.data)});
         if (res) {
@@ -260,7 +260,7 @@ axios.interceptors.response.use(
     // 缓存设置
     resCache = sessionStore.get('request_cache') || [];
 
-    if (config.updateCache || config.cache) {
+    if (!_.isUndefined(config.cache)) {
       let rcList = [], id = md5(config.url + config.data);
 
       rcList = _.filter(resCache, val => {
