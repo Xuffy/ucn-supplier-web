@@ -84,12 +84,11 @@
     <messageBoard v-if="!isParams" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus"
       @sendData="sendData" />
-    <v-history-modify ref="HM" disabled-remark :close-before="closeModify"></v-history-modify>
+    <v-history-modify ref="HM" disabled-remark :beforeSave="closeModify" @save="closeModifyNext" @select-change="historymodify"></v-history-modify>
   </div>
 </template>
 <script>
   import {
-    VSimpleTable,
     containerInfo,
     selectSearch,
     VTable,
@@ -100,7 +99,6 @@
     mapState
   } from 'vuex';
   import attachment from '@/components/common/upload/index';
-  import product from '@/views/product/addProduct';
   import messageBoard from '@/components/common/messageBoard/index';
   import formList from '@/views/logistic/children/formList'
   import oneLine from '@/views/logistic/children/oneLine'
@@ -205,8 +203,7 @@
       productModify,
       addProduct,
       messageBoard,
-      VHistoryModify,
-      product
+      VHistoryModify
     },
     computed: {
       productListTotal() {
@@ -399,6 +396,7 @@
                 background: 'yellow'
               })
             })
+            item.fieldDisplay.value = null;
           }
         })
       },
@@ -537,6 +535,13 @@
         } else if (status == 4) {
           let newAddArr = this.$depthClone(this.productList[i]);
           newAddArr.id.value = null;
+          newAddArr.fieldDisplay.value=null;
+          newAddArr = _.mapObject(newAddArr,(v,k)=>{
+            if(v._style){
+              delete v._style
+            }
+            return v;
+          })
           this.productList.splice(i + 1, 0, newAddArr);
           return;
         }
@@ -546,24 +551,53 @@
         this.modefiyProductIndexArr.push(i);
         this.getProductHistory(e.id ? (e.argID ? e.argID.value : e.id.value) : null, status, i)
       },
+      historymodify(currData,row){
+        if('correlationKey' in currData){
+          let obj = currData._option.find(el=> el.containerNo ==currData.value);
+          row.containerId.value = obj ? obj.id : ''; 
+          row[currData.correlationKey].value = obj ? obj[currData.correlationKey] : '';
+        }
+      },
       getProductHistory(productId, status, i) {
-        const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
+        let currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
+        currentProduct = _.mapObject(currentProduct,(v,k)=>{
+          if('_option' in v){
+            switch(k){
+              case 'shipmentStatus' :
+                v._option = this.selectArr.ShipmentStatus;
+                if(this.pageTypeCurr=='loadingListDetail'){
+                  delete v._disabled;
+                }
+                break;
+              case 'containerNo' :
+                v._option = this.containerInfo;
+                break;
+              default:
+                break;
+            }           
+          }
+          return v;
+        });
         let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
         if (productId) {
-          this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
-            this.productModifyList = res.history.length ? status == 1 ? [currentProduct] : this.$getDB(this.$db.logistic.productModify,
-              res.history.map(el => {
+          if(status==1){
+            this.productModifyList = [currentProduct].map(el => {
+              let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item =>item.name == el.shipmentStatus.value)
+              el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.name : '';
+              return el;
+            });
+            this.$refs.HM.init(this.productModifyList,[]);
+          }else{
+            this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
+              this.productModifyList = this.$getDB(this.$db.logistic.productModify,res.history.map(el => {
                 let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
                 el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
                 el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm') 
                 return el;
-              })) : status == 1 ? [currentProduct].map(el => {
-              let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item =>item.name == el.shipmentStatus.value)
-              el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-              return el
-            }) : [];
-            status==1 ? this.$refs.HM.init(this.productModifyList,[]) : this.$refs.HM.init([], this.productModifyList,false);
-          })
+              }));
+              this.$refs.HM.init(this.productModifyList,[],false);
+            })
+          }
         } else {
           this.productModifyList = [currentProduct];
           this.$refs.HM.init(this.productModifyList, []);
@@ -680,7 +714,7 @@
           this.prodFieldDisplay = obj;
         }
       },
-      closeModify(data,fun) {
+      closeModify(data) {
         if (!data.length) {
           this.productModifyList = [];
           this.showProductDialog = false;
@@ -689,10 +723,16 @@
         const currrentProduct = data[0]
         let obj = _.mapObject(currrentProduct, v => Number(v.value) || v.value)
         if (this.$validateForm(obj, this.$db.logistic.dbProductInfo)) {
-          return;
+          return false;
         }
-        fun();
-        this.showProductDialog = false;
+      },
+      closeModifyNext(data) {
+        if (!data.length) {
+          this.productModifyList = [];
+          this.showProductDialog = false;
+          return 
+        };
+        const currrentProduct = data[0]
         let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code ==
           currrentProduct.shipmentStatus.value)
         currrentProduct.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.name : '';
@@ -701,11 +741,16 @@
           this.$set(item.fieldDisplay, 'value', null);
         })
         this.modefiyProductIndexArr.forEach((item) => {
-          this.$set(this.productList[item].fieldDisplay, 'value', this.prodFieldDisplay)
+          let fieldDisplayObj = {};
+          _.mapObject(data[0],(v,k)=>{
+            if(v._isModified&&v.key!='skuPictures'){
+              fieldDisplayObj[v.key] = v.value;
+            }
+          })
+          this.$set(this.productList[item].fieldDisplay, 'value',fieldDisplayObj);
         })
         const id = currrentProduct.id.value
-        // const vId = currrentProduct.vId.value
-        const vId = +new Date()
+        const vId = +new Date();
         const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
         index === -1 ? this.modifyProductArray.push(this.restoreObj(currrentProduct)) : (this.modifyProductArray[index] =
           this.restoreObj(currrentProduct))
@@ -874,7 +919,7 @@
         // this.oldPlanObject.product = this.restoreArr(this.removeProductList)
         this.oldPlanObject.product = this.productList.map((item, i) => {
           return _.mapObject(item, (v, k) => {
-            if (v.type == 'text') {
+            if (v.typeSlef == 'text') {
               let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(el =>
                 el.name == v.value)
               if (ShipmentStatusItem) {
@@ -918,10 +963,12 @@
       containerInfo: {
         handler: function (val) {
           val.forEach(el => {
-            this.productList.forEach(item => {
+            this.productList = this.productList.map((item,i) => {
               if (el.id == item.containerId.value) {
+                item.containerNo._value = el.containerNo;
                 item.containerNo.value = el.containerNo;
               }
+              return item;
             })
           })
         },

@@ -256,14 +256,6 @@ export default {
 
 <style scoped lang="less">
   .payment/deep/.el-table .warning-row {
-    background: #f56c6c;
-    td,th{
-      color:#fff;
-    }
-    &:hover{
-      td,th{
-        color:#1d1007;
-      }
-    }
+    background: yellow;
   }
 </style>

@@ -34,21 +34,27 @@ export default {
     },
     orderSkuQty:{
         key:'orderSkuQty',
+        _calculate:true
     },
     inboundSkuTotalQty:{
         key:'inboundSkuTotalQty',
+        _calculate:true
     },
     inboundOutCartonTotalQty:{
-        key:'inboundOutCartonTotalQty'
+        key:'inboundOutCartonTotalQty',
+        _calculate:true
     },
     inboundSkuTotalVolume:{
-        key:'inboundSkuTotalVolume'
+        key:'inboundSkuTotalVolume',
+        _calculate:true
     },
     inboundSkuTotalNetWeight:{
         key:'inboundSkuTotalNetWeight',
+        _calculate:true
     },
     inboundSkuTotalGrossWeight:{
-        key:'inboundSkuTotalGrossWeight'
+        key:'inboundSkuTotalGrossWeight',
+        _calculate:true
     },
     outerCartonSkuQty:{
         key:'outerCartonSkuQty'

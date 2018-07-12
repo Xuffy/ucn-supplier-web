@@ -51,6 +51,7 @@
       :loading="tableLoading"
       :height="height"
       ref="tab"
+      @change-sort="changeSort"
     />
     <v-pagination :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange"/>
   </div>
@@ -210,6 +211,9 @@
     },
     methods: {
       ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      changeSort(arr){
+        console.log(arr)
+      },
       initPage(){
         this.pageParams = {
           pn: 1,

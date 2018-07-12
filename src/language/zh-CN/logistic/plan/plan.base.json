@@ -213,11 +213,13 @@
   "toShipCartonQty": "To ShipCartonQty",
   "toShipQty": "To ShipQty",
   "loadingList": "loading List",
-  "shipmentStatus": "Shipment Status",
+  "shipmentStatus": "发运状态",
   "logisticNo": "发运编号",
   "entryName": "修改人",
   "entryDt": "修改时间",
   "archive":"Archive",
   "viewBy":"viewBy:",
-  "skuPictures":"图片"
+  "skuPictures":"图片",
+  "pleaseChoose":"请选择",
+  "reportElement": "Declare elements"
 }
