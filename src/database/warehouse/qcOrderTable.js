@@ -21,7 +21,6 @@ export default {
     expectQcQty:{},
     samplingRate:{},
     unqualifiedProcessingMode:{},
-    outerCartonTotalQty:{},
     skuLength:{},
     skuWidth:{},
     skuHeight:{},

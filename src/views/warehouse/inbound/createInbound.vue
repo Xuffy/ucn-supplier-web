@@ -552,9 +552,9 @@
                 const sums = [];
                 columns.forEach((column, index) => {
                     if (index === 0) {
-                        sums[index] = '总价';
+                        sums[index] = this.$i.warehouse.total;
                     }else{
-                        if(index===11 || index===12 || index===13 || index===14 || index===15 || index===16 || index===17){
+                        if(index===11 || index===12 || index===13 || index===14 || index===15 || index===16){
                             const values = data.map(item => Number(item[column.property]));
                             if (!values.every(value => isNaN(value))) {
                                 sums[index] = values.reduce((prev, curr) => {

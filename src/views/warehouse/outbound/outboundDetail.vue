@@ -83,6 +83,7 @@
                 :data="productTable"
                 :buttons="[{label:'Detail',type:1}]"
                 @action="btnClick"
+                :totalRow="totalRow"
                 @change-checked="changeChecked"></v-table>
 
         <div class="footBtn">
@@ -133,7 +134,29 @@
                  * */
                 loadProductTable:false,
                 productTable:[],
-                totalRow:[],
+            }
+        },
+        computed:{
+            totalRow(){
+                let obj={};
+                if(this.productTable.length<=0){
+                    return;
+                }
+                _.map(this.productTable,v=>{
+                    _.mapObject(v,(item,key)=>{
+                        if(item._calculate){
+                            obj[key]={
+                                value: Number(item.value)  + (Number(obj[key] ? obj[key].value : 0) || 0),
+                            };
+                        }else{
+                            obj[key] = {
+                                value: ''
+                            };
+                        }
+                    })
+                });
+                return [obj];
+
             }
         },
         methods:{
@@ -157,7 +180,6 @@
                             })
                         })
 
-                        this.totalRow=this.$getDB(this.$db.warehouse.outboundDetailProductData, res.datas);
                         this.loadingTable=false;
                     }).catch(err=>{
                         this.loadingTable=false;

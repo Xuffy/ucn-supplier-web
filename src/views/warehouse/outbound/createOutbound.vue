@@ -488,7 +488,7 @@
                     if (index === 0) {
                         sums[index] = this.$i.warehouse.totalMoney;
                     } else {
-                        if (index === 9) {
+                        if (index === 9 || index===10 || index===11 || index===12 || index===13) {
                             const values = data.map(item => Number(item[column.property]));
                             if (!values.every(value => isNaN(value))) {
                                 sums[index] = values.reduce((prev, curr) => {
