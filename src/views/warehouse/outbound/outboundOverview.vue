@@ -25,12 +25,13 @@
                         :loading="loadingTable"
                         :data="tableDataList"
                         :buttons="[{label: $i.warehouse.detail, type: 1}]"
+                        @change-sort="val=>{getOutboundData(val)}"
                         @change-checked="changeChecked"
                         @action="btnClick">
                     <template slot="header">
                         <div class="btns">
-                            <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
                             <el-button @click="createOutbound">{{$i.warehouse.create}}</el-button>
+                            <el-button @click="download">{{$i.warehouse.download}}({{selectList.length?selectList.length:$i.warehouse.all}})</el-button>
                         </div>
                     </template>
                 </v-table>
@@ -72,12 +73,6 @@
                     outboundNo: "",
                     pn: 1,
                     ps: 50,
-                    // sorts: [
-                    //     {
-                    //         orderBy: "",
-                    //         orderType: "",
-                    //     }
-                    // ],
                     outboundTypeDictCode: ''
                 },
                 searchId:1,
@@ -90,15 +85,17 @@
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             changeStatus(){
                 this.outboundConfig.pn=1;
                 this.getOutboundData();
             },
 
             //获取表格数据
-            getOutboundData(){
+            getOutboundData(e){
                 this.loadingTable=true;
+                this.selectList=[];
+                Object.assign(this.outboundConfig,e);
                 this.$ajax.post(this.$apis.get_outboundData,this.outboundConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.warehouse.outboundOverviewTable, res.datas,(e)=>{
                         e.outboundTypeDictCode.value=this.$change(this.outboundType,'outboundTypeDictCode',e).name;
@@ -113,14 +110,18 @@
                     this.loadingTable=false;
                 });
             },
-
+            download(){
+                let outboundNos=_.pluck(_.pluck(this.selectList,'outboundNo'),'value');
+                let params=this.$depthClone(this.outboundConfig);
+                params.outboundNos=outboundNos;
+                this.$fetch.export_task('OUTBOUND',params);
+            },
             //新建入库单
             createOutbound(){
                 this.$windowOpen({
                     url:'/warehouse/createOutbound'
                 });
             },
-
             searchInbound(e){
                 if(!e.id){
                     this.$message({
@@ -132,7 +133,6 @@
                 this.outboundConfig.outboundNo=e.value;
                 this.getOutboundData();
             },
-
             btnClick(e){
                 this.$windowOpen({
                     url:'/warehouse/outboundDetail',
@@ -141,11 +141,9 @@
                     }
                 })
             },
-
             changeChecked(e){
                 this.selectList=e;
             },
-
 
             /**
              * 获取字典
@@ -153,25 +151,8 @@
             getUnit(){
                 this.$ajax.post(this.$apis.get_partUnit,['OBD_STATUS']).then(res=>{
                     this.outboundType=res[0].codes;
-                    console.log(this.outboundType)
-                    // this.outboundType.forEach(v=>{
-                    //     if(v.value==='1'){
-                    //         v.label=this.$i.warehouse.sellingOutOfTheTreasury;
-                    //     }else if(v.value==='2'){
-                    //         v.label=this.$i.warehouse.collectionOfMaterialsFromTheWarehouse;
-                    //     }else if(v.value==='3'){
-                    //         v.label=this.$i.warehouse.stockTransfer;
-                    //     }else if(v.value==='4'){
-                    //         v.label=this.$i.warehouse.returnToSupplier;
-                    //     }
-                    // });
-
                     this.getOutboundData();
-
                 });
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res,'???')
-                // });
             },
 
 
@@ -191,7 +172,12 @@
             this.getUnit();
         },
         mounted(){
-            this.setLog({query: {code: 'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                label: this.$i.common.log
+            });
         },
         watch:{
             selectList(n){

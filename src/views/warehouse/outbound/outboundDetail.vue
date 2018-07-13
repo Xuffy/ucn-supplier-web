@@ -86,6 +86,7 @@
                 @change-checked="changeChecked"></v-table>
 
         <div class="footBtn">
+            <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
             <el-button @click="closeWindow" type="primary">{{$i.warehouse.close}}</el-button>
         </div>
 
@@ -136,7 +137,7 @@
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             getData(){
                 this.loadingTable=true;
                 this.$ajax.get(`${this.$apis.get_outBoundDetail}?id=${this.$route.query.id}`).then(res=>{
@@ -145,13 +146,6 @@
                         outboundId: this.$route.query.id,
                         pn: 1,
                         ps: 50,
-
-                        // sorts: [
-                        //     {
-                        //         orderBy: "",
-                        //         orderType: "",
-                        //     }
-                        // ],
                     }).then(res=>{
                         this.productTable = this.$getDB(this.$db.warehouse.outboundDetailProductData, res.datas);
                         _.map(res.datas,v=>{
@@ -187,7 +181,9 @@
             changeChecked(e){
 
             },
-
+            download(){
+                this.$fetch.export_task('OUTBOUND',{outboundNos:[this.outboundData.outboundNo]});
+            },
             //关闭窗口
             closeWindow(){
                 window.close();
@@ -196,7 +192,6 @@
             getUnit(){
                 this.$ajax.post(this.$apis.get_partUnit,['OBD_STATUS'],{cache:true}).then(res=>{
                     this.outboundOption=res[0].codes;
-                    console.log(this.outboundOption,'this.outboundOption')
                     this.getData();
                 }).catch(err=>{
 
@@ -208,7 +203,12 @@
             this.getUnit();
         },
         mounted(){
-            this.setLog({query: {code: 'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                label: this.$i.common.log
+            });
         },
     }
 </script>

@@ -32,6 +32,7 @@
                 :loading='loading'
                 :pageTotal='pageTotal'
                 @change-checked='checked'
+                @change-sort="val=>{getData(val)}"
                 :height="500"
                 style='marginTop:10px'>
             <template slot="header">
@@ -209,12 +210,12 @@
 
                 });
             },
-            //get_orderlist数据
-            getData() {
+            getData(e) {
                 this.loading = true;
                 let url='',query='';
                 url=(this.view==='1'?this.$apis.OVERVIEW_ORDERPAGE:this.$apis.OVERVIEW_SKUPAGE);
                 query=(this.view==='1'?this.$db.order.overviewByOrder:this.$db.order.overviewBysku);
+                Object.assign(this.params,e);
                 this.$ajax.post(url, this.params)
                     .then((res) => {
                         this.loading = false;
@@ -284,7 +285,7 @@
                             this.paymentOption=v.codes;
                         }
                     });
-                    this.getData(this.$db.order.overviewByOrder);
+                    this.getData();
                 })
             },
 

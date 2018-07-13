@@ -31,6 +31,7 @@
                 :loading='loading'
                 :pageTotal='pageTotal'
                 @change-checked='checked'
+                @change-sort="val=>{getData(val)}"
                 :height="500"
                 style='marginTop:10px'>
             <template slot="header">
@@ -196,9 +197,9 @@
                 })
                     .then((res) => {
                         if (this.view === '1') {
-                            this.getdata(this.$db.order.overviewByOrder)
+                            this.getdata()
                         } else {
-                            this.getdata(this.$db.order.overviewBysku)
+                            this.getdata()
                         }
                     })
                     .catch((res) => {
@@ -206,11 +207,12 @@
                     });
             },
             //get_orderlist数据
-            getData() {
+            getData(e) {
                 this.loading = true;
                 let url='',query='';
                 url=(this.view==='1'?this.$apis.ORDER_RECYCLE_ORDER_PAGE:this.$apis.ORDER_RECYCLE_SKU_PAGE);
                 query=(this.view==='1'?this.$db.order.overviewByOrder:this.$db.order.overviewBysku);
+                Object.assign(this.params,e);
                 this.$ajax.post(url, this.params)
                     .then((res) => {
                         this.loading = false;
@@ -280,7 +282,7 @@
                             this.paymentOption=v.codes;
                         }
                     });
-                    this.getData(this.$db.order.overviewByOrder);
+                    this.getData();
                 })
             },
 
@@ -306,11 +308,6 @@
                 query: {code: 'ORDER'},
                 type: 10,
                 label: this.$i.common.log
-            });
-            this.setMenuLink({
-                path: '/order/archive',
-                type: 20,
-                label: this.$i.order.archive
             });
         },
         watch: {

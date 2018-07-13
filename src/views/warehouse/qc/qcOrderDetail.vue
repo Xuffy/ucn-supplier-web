@@ -332,8 +332,9 @@
 
         <div class="footBtn">
             <el-button @click="edit" v-if="qcDetail.qcStatusDictCode==='WAITING_QC'" type="primary">{{$i.warehouse.edit}}</el-button>
-            <el-button @click="cancel"  v-if="qcDetail.qcStatusDictCode==='WAITING_QC'" >{{$i.warehouse.cancel}}</el-button>
-            <el-button @click="cancel"  v-if="qcDetail.qcStatusDictCode!=='WAITING_QC'" >{{$i.warehouse.exit}}</el-button>
+            <el-button type="danger" @click="cancel"  v-if="qcDetail.qcStatusDictCode==='WAITING_QC'" >{{$i.warehouse.exit}}</el-button>
+            <el-button type="danger" @click="cancel"  v-if="qcDetail.qcStatusDictCode!=='WAITING_QC'" >{{$i.warehouse.exit}}</el-button>
+            <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
         </div>
         <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
     </div>
@@ -412,7 +413,7 @@
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             getQcOrderDetail(){
                 this.loadingData=true;
                 this.$ajax.get(`${this.$apis.get_serviceOrderDetail}?id=${this.$route.query.id}`)
@@ -670,6 +671,9 @@
             cancel(){
                 window.close();
             },
+            download(){
+                this.$fetch.export_task('QC_ORDER',{qcOrderNos:[this.qcDetail.qcOrderNo]});
+            },
         },
         created(){
             this.getQcOrderDetail();
@@ -678,7 +682,12 @@
             this.getUnit();
         },
         mounted(){
-            this.setLog({query: {code: 'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                label: this.$i.common.log
+            });
         },
     }
 </script>

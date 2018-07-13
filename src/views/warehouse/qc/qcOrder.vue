@@ -207,7 +207,6 @@
             </el-tab-pane>
         </el-tabs>
 
-
         <div class="summary">
             <div class="second-title">
                 {{$i.warehouse.summary}}
@@ -328,12 +327,10 @@
             </el-form>
         </div>
 
-
         <div class="footBtn">
+            <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
             <el-button :disabled="loadingTable" type="danger" @click="cancel">{{$i.warehouse.exit}}</el-button>
         </div>
-
-
 
         <el-dialog width="40%" title="将QC数据更新到产品库" :visible.sync="dialogFormVisible">
             <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAll">全选</el-checkbox>
@@ -358,7 +355,6 @@
                 <el-button @click="dialogFormVisible = false">关闭</el-button>
             </div>
         </el-dialog>
-
 
         <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
 
@@ -459,7 +455,7 @@
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             getData(){
                 this.$ajax.get(`${this.$apis.get_qcOrderDetail}?id=${this.$route.query.id}`).then(res=>{
                     this.qcOrderData=res;
@@ -534,6 +530,9 @@
                 }else{
                     return 1;
                 }
+            },
+            download(){
+                this.$fetch.export_task('QC_ORDER',{qcOrderNos:[this.qcOrderData.qcOrderNo]});
             },
             cancel(){
                 window.close();
@@ -710,7 +709,12 @@
             });
         },
         mounted(){
-            this.setLog({query: {code: 'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                label: this.$i.common.log
+            });
         },
         watch:{
             dialogFormVisible(n){
