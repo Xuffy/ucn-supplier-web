@@ -373,7 +373,7 @@ export default {
           if (['fieldDisplay', 'fieldRemarkDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
             return;
           }
-          if (o.value !== o.originValue) {
+          if (o._isModified === true) {
             changedFields[field] = '1';
           }
         });
