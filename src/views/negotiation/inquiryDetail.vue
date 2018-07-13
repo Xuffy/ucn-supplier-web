@@ -43,6 +43,7 @@
               :loading="tableLoad"
               :height="450"
               :disabledSort="true"
+              :totalRow="productTotalRow"
               @action="producInfoAction"
               @change-checked="changeChecked"
               :rowspan="2"
@@ -164,6 +165,30 @@ export default {
         }
       });
       return json;
+    },
+    productTotalRow() {
+      let obj = {};
+      if (this.newProductTabData.length <= 0) {
+        return false;
+      }
+
+      _.map(this.newProductTabData, v => {
+        if(v._remark) return;
+        _.mapObject(v, (item, key) => {
+          if (item._hide) return;
+          if (item._totalRow && !isNaN(item.value)) {
+            obj[key] = {
+              value: Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0)
+            };
+          } else {
+            obj[key] = {
+              value: ''
+            };
+          }
+        });
+      });
+
+      return [obj];
     }
   },
   created() {
