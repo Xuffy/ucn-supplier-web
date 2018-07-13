@@ -22,6 +22,7 @@
                 :buttons="basicInfoBtn"
                 :loading="tableLoad"
                 :rowspan="2"
+                :disabledSort="true"
                 @action="basicInfoAction"
                 :hideFilterColumn="statusModify"/>
           </div>
@@ -41,6 +42,7 @@
               :buttons="productInfoBtn"
               :loading="tableLoad"
               :height="450"
+              :disabledSort="true"
               @action="producInfoAction"
               @change-checked="changeChecked"
               :rowspan="2"

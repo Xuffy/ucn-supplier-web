@@ -13,6 +13,7 @@
             :loading="tabLoad"
             :buttons="buttonsFn"
             @action="action"
+            @change-sort="onListSortChange"
             @change-checked="changeChecked"
             :height="350"
             :page-total="pageTotal"
@@ -88,6 +89,10 @@ export default {
           this.searchLoad = false;
           this.tabLoad = false;
         });
+    },
+    onListSortChange(args) {
+      this.bodyData.sorts = args.sorts;
+      this.getInquiryList();
     },
     searchEnter(item) {
       // 搜索框
