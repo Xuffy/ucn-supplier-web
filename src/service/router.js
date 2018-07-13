@@ -181,7 +181,10 @@ export const routerMap = [
     {
       path: '/logistic',
       name: 'logistic',
-      meta: {name: $i.router.logistic},
+      meta: {
+        name: $i.router.logistic,
+        auth: ['LOGISTICS']
+      },
       component: Layout,
       redirect: '/logistic/plan',
       children: [
@@ -191,7 +194,9 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-            name: $i.router.logisticPlanOverview
+            importTask: true,
+            name: $i.router.logisticPlanOverview,
+            auth: ['LOGISTICS:PLAN_OVERVIEW']
           },
           component: () => import('../views/logistic/overviewWrapper')
         },
@@ -201,7 +206,9 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-            name: $i.router.logisticLoadingListOverview
+            importTask: true,
+            name: $i.router.logisticLoadingListOverview,
+            auth: ['LOADING_LIST:OVERVIEW']
           },
           component: () => import('../views/logistic/overviewWrapper')
         },
@@ -223,9 +230,49 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-            name: $i.router.logisticLoadingArchive
+            name: $i.router.logisticLoadingArchive,
+            auth: ['LOGISTICS:PLAN_DRAFT_OVERVIEW']
           },
           component: () => import('../views/logistic/overviewWrapper')
+        },
+        {
+          path: 'archivePlan',
+          name: 'archivePlan',
+          hidden: true,
+          meta: {
+            draft: '/logistic/draft',
+            recycleBin: false,
+            log: true,
+            importTask: false,
+            name: $i.router.archive
+          },
+          component: () => import('../views/logistic/archivePlan')
+        },
+        {
+          path: 'archiveDraft',
+          name: 'archiveDraft',
+          hidden: true,
+          meta: {
+            draft: '/logistic/draft',
+            recycleBin: false,
+            log: true,
+            importTask: false,
+            name: $i.router.archive
+          },
+          component: () => import('../views/logistic/archiveDraft')
+        },
+        {
+          path: 'archiveLoadingList',
+          name: 'archiveLoadingList',
+          hidden: true,
+          meta: {
+            draft: '/logistic/draft',
+            recycleBin: false,
+            log: true,
+            importTask: false,
+            name: $i.router.archive
+          },
+          component: () => import('../views/logistic/archiveLoadingList')
         },
         {
           path: 'placeLogisticPlan',
@@ -245,9 +292,9 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-
-            name: $i.router.logisticPlaceDetail
-
+            importTask: true,
+            name: $i.router.logisticPlaceDetail,
+            auth: ['LOGISTICS:PLAN_DETAIL']
           },
           component: () => import('../views/logistic/logisticPlanDetail')
         },
@@ -259,7 +306,9 @@ export const routerMap = [
             draft: '/logistic/draft',
             recycleBin: false,
             log: true,
-            name: $i.router.logisticLoadingList
+            importTask: true,
+            name: $i.router.logisticLoadingList,
+            auth: ['LOADING_LIST:DETAIL']
           },
           component: () => import('../views/logistic/logisticPlanDetail')
         },

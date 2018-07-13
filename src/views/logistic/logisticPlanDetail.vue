@@ -72,14 +72,18 @@
         </div>
       </v-table>
     </div>
-    <el-dialog :title="$i.logistic.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false"
-      @close="closeAddProduct(0)">
-      <product title="addProduct" type="product" :hideBtn="true" :dataResource="addProductFun"></product>
-      <!-- <add-product ref="addProduct" :basicInfoArr="basicInfoArr" />
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
-        <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
-      </div> -->
+    <el-dialog :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false">
+      <overviewPage
+        :title="$i.logistic.addProductFromOrder"
+        :tableData="ProductFromOrder"
+        :form-column="$db.logistic.addProductFromOrderFilter"
+        :tableButtons="[{label: 'Detail', type: 1}]"
+        @change-checked="changeChecked"
+        @tableBtnClick="ProductFromOrderDetail"
+        @search="getSupplierIds"
+        tableCode="ulogistics_PlanDetail"
+      >
+      </overviewPage>
     </el-dialog>
     <messageBoard v-if="!isParams" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus"
@@ -92,7 +96,8 @@
     containerInfo,
     selectSearch,
     VTable,
-    VHistoryModify
+    VHistoryModify,
+    overviewPage
   } from '@/components/index';
   import {
     mapActions,
@@ -101,14 +106,9 @@
   import attachment from '@/components/common/upload/index';
   import messageBoard from '@/components/common/messageBoard/index';
   import formList from '@/views/logistic/children/formList'
-  import oneLine from '@/views/logistic/children/oneLine'
   import feeInfo from '@/views/logistic/children/feeInfo'
   import payment from '@/views/logistic/children/payment'
   import btns from '@/views/logistic/children/btns'
-  import productModify from '@/views/logistic/children/productModify'
-  import addProduct from '@/views/logistic/children/addProduct'
-
-  // import {basicInfoInput, basicInfoSelector, basicInfoDate, basicInfoObj, transportInfoObj } from '@/database/logistic/plan/staticData'
 
   export default {
     name: 'logisticPlanDetail',
@@ -189,22 +189,22 @@
         prodFieldDisplay: {},
         batchDunningCutDown: '',
         CutDown: null,
-        isfeeInfoLight:false
+        isfeeInfoLight:false,
+        ProductFromOrder:[],
+        ProductFromOrderRes:[],
       }
     },
     components: {
       formList,
       containerInfo,
       attachment,
-      oneLine,
       VTable,
       feeInfo,
       payment,
       btns,
-      productModify,
-      addProduct,
       messageBoard,
-      VHistoryModify
+      VHistoryModify,
+      overviewPage
     },
     computed: {
       productListTotal() {
@@ -261,14 +261,28 @@
       }
     },
     mounted() {
-      this.setLog({
-        query: {
-          code: this.pageTypeCurr && this.pageTypeCurr == "loadingListDetail" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'
-        }
-      });
+      let menuList = [{
+        path: '',
+        query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
+        type: 100,
+        label: this.$i.common.log
+      },{
+        path: '/logistic/draft',
+        label: this.$i.common.draft
+      },{
+        path: '/logistic/archivePlan',
+        label: this.$i.logistic.archivePlan
+      },{
+        path: '/logistic/archiveDraft',
+        label: this.$i.logistic.archiveDraft
+      },
+      {
+        path: '/logistic/archiveLoadingList',
+        label: this.$i.logistic.archiveLoadingList
+      }];
+      this.setMenuLink(menuList);
       const arr = this.$route.fullPath.split('/')
       this.pageName = arr[arr.length - 1].split('?')[0]
-      this.registerRoutes()
       this.getDictionary()
       this.basicInfoArr = _.map(this.$db.logistic.basicInfoObj, (value, key) => {
         return value;
@@ -281,7 +295,7 @@
       })
     },
     methods: {
-      ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      ...mapActions(['setMenuLink']),
       //初始页面数据
       pageInit() {
         if (this.pageTypeCurr.slice(-6) == 'Detail') {
@@ -316,26 +330,31 @@
           })
         })
       },
-      addProductFun() {
-        this.getSupplierIds();
-      },
-      async getSupplierIds() {
-        let url = this.$route.name == 'loadingListDetail' ? 'logistics_order_getSupplierIds' :
-          'logistics_plan_getSupplierIds';
-        let pageParams = {};
-        await this.$ajax.get(this.$apis[url], {
-          logisticsNo: this.basicInfoArr[0].value
-        }).then(res => {
+      getSupplierIds(arg) {
+        let pageParams = {
+          pn: 1,
+          ps: 10,
+          skuSupplierIds:[]
+        }
+        if(arg!=0){
+          const {pn, ps} = pageParams
+          pageParams = {pn, ps, ...arg}
+        }
+        let url = this.$route.name == 'loadingListDetail' ? 'logistics_order_getSupplierIds' : 'logistics_plan_getSupplierIds';
+        this.$ajax.get(this.$apis[url],{logisticsNo:this.basicInfoArr[0].value}).then(res => {
           pageParams.skuSupplierIds = res.supplierIds;
           pageParams.customerId = res.customerId;
-          return pageParams
+          this.addProductFromOrder(pageParams);
         })
-        return this.$ajax.post(this.$apis.get_order_list_with_page, pageParams);
       },
-      registerRoutes() {
-        this.$store.commit('SETRECYCLEBIN', {
-          name: 'overviewArchive',
-          show: true
+      ProductFromOrderDetail(e){
+        this.$windowOpen({url:'/product/sourcingDetail',params:{id:e.skuId.value}})
+      },
+      addProductFromOrder(pageParams){
+        this.$ajax.post(this.$apis.get_order_list_with_page, pageParams).then(res=>{
+          this.showAddProductDialog = true;
+          this.ProductFromOrderRes = res.datas;
+          this.ProductFromOrder = this.$getDB(this.$db.logistic.dbBasicInfoObj,res.datas);
         })
       },
       getDetails() {
@@ -532,7 +551,7 @@
       },
       action(e, status, i) {
         if (status == 3) {
-          return window.open(`${window.location.origin}#/product/detail?id=${ e.skuId.value }`);
+          return this.$windowOpen({url:'/product/detail',params:{id:e.skuId.value}})
         } else if (status == 4) {
           let newAddArr = this.$depthClone(this.productList[i]);
           newAddArr.id.value = null;
@@ -657,9 +676,18 @@
         }
         this.$set(this.paymentList, i, obj)
       },
-      closeAddProduct(status) {
+      changeChecked(arr){
+        this.ProductFromOrderChecked = arr;
+      },
+      closeAddProduct() {
+        let CheckedIdArr =  this.ProductFromOrderChecked.map(el => {
+          return el.id.value;
+        })
+        let arr = CheckedIdArr.map(el=>{
+          return _.findWhere(this.ProductFromOrderRes,{id:el})
+        });
         this.showAddProductDialog = false
-        const selectArrData = this.$depthClone(this.$refs.addProduct.selectArrData);
+        const selectArrData = this.$depthClone(arr);
 
         if (!status || !selectArrData.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
         selectArrData.forEach(a => {
@@ -836,7 +864,7 @@
           id: this.planId
         }).then(res => {
           this.getDetails();
-          window.open(`${window.location.origin}#/logistic/loadingListDetail?code=${ this.logisticsNo }`);
+          this.$windowOpen({url:'/logistic/loadingListDetail',params:{code:this.logisticsNo}});
         })
       },
       conformPlan() {
@@ -893,11 +921,6 @@
         })
 
         this.basicInfoObj.remark = this.remark
-        if (!this.basicInfoObj.payment) return this.$message({
-          type: 'error',
-          message: '付款方式为必填!'
-        })
-
         _.mapObject(this.basicInfoObj, (value, key) => {
           this.oldPlanObject[key] = value
         })

@@ -233,7 +233,7 @@ export default {
       this.selectArrData = arr
     },
     productDetail(id){
-      window.open(`${window.location.origin}#/product/detail?id=${id}`);
+      this.$windowOpen({url:'/product/detail',params:{id:id}})
     }
   }
 }
