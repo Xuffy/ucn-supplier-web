@@ -313,11 +313,9 @@
               return val
             })
           })
-          this.pageParams = {
-            pn: res.pn,
-            ps: res.ps,
-            tc: res.tc
-          }
+          this.$set(this.pageParams,'pn',res.pn);
+          this.$set(this.pageParams,'ps',res.ps);
+          this.$set(this.pageParams,'tc',res.tc);
           this.tableLoading = false
         })
       },
