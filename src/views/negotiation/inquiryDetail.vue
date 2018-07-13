@@ -22,6 +22,7 @@
                 :buttons="basicInfoBtn"
                 :loading="tableLoad"
                 :rowspan="2"
+                :disabledSort="true"
                 @action="basicInfoAction"
                 :hideFilterColumn="statusModify"/>
           </div>
@@ -41,6 +42,8 @@
               :buttons="productInfoBtn"
               :loading="tableLoad"
               :height="450"
+              :disabledSort="true"
+              :totalRow="productTotalRow"
               @action="producInfoAction"
               @change-checked="changeChecked"
               :rowspan="2"
@@ -79,7 +82,7 @@
           :isInquiry="true">
       </v-product>
     </el-dialog>
-    <v-history-modify @save="save" :beforeSave="beforeSave" ref="HM"></v-history-modify>
+    <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @save="save" :beforeSave="beforeSave" ref="HM"></v-history-modify>
     <v-message-board module="inquiry" code="inquiryDetail" :id="$route.query.id+''"></v-message-board>
   </div>
 </template>
@@ -162,6 +165,30 @@ export default {
         }
       });
       return json;
+    },
+    productTotalRow() {
+      let obj = {};
+      if (this.newProductTabData.length <= 0) {
+        return false;
+      }
+
+      _.map(this.newProductTabData, v => {
+        if(v._remark) return;
+        _.mapObject(v, (item, key) => {
+          if (item._hide) return;
+          if (item._totalRow && !isNaN(item.value)) {
+            obj[key] = {
+              value: Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0)
+            };
+          } else {
+            obj[key] = {
+              value: ''
+            };
+          }
+        });
+      });
+
+      return [obj];
     }
   },
   created() {
@@ -373,7 +400,7 @@ export default {
           if (['fieldDisplay', 'fieldRemarkDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
             return;
           }
-          if (o.value !== o.originValue) {
+          if (o._isModified === true) {
             changedFields[field] = '1';
           }
         });

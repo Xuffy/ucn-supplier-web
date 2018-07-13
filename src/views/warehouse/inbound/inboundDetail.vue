@@ -147,6 +147,7 @@
 
 
         <div class="footBtn">
+            <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
             <el-button @click="closeWindow" type="primary">{{$i.warehouse.close}}</el-button>
         </div>
 
@@ -234,12 +235,11 @@
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             getData(){
                 this.loadingTable=true;
                 this.$ajax.get(`${this.$apis.get_inboundDetail}?id=${this.$route.query.id}`).then(res=>{
                     this.inboundData=res;
-                    console.log(this.inboundData,'???')
                     this.$ajax.post(this.$apis.get_inboundSku,{
                         inboundId: this.$route.query.id,
                         pn: 1,
@@ -274,7 +274,9 @@
             changeChecked(e){
 
             },
-
+            download(){
+                this.$fetch.export_task('INBOUND',{inboundNos:[this.inboundData.inboundNo]});
+            },
             //关闭窗口
             closeWindow(){
                 window.close();
@@ -302,7 +304,12 @@
             this.getUnit();
         },
         mounted(){
-            this.setLog({query: {code: 'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                label: this.$i.common.log
+            });
         },
     }
 </script>

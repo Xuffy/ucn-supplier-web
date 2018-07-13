@@ -155,17 +155,7 @@ export const routerMap = [
             name: $i.router.orderDetail
           },
           component: () => import('../views/order/poDetail/poDetail.vue')
-        }, {
-          path: 'draftOverview',
-          name: 'orderDraft',
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: $i.router.orderDraft
-          },
-          component: () => import('../views/order/draftOverview.vue')
-        }, {
+        },  {
           path: 'archive',
           name: 'orderArchive',
           meta: {

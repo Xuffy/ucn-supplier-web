@@ -551,7 +551,7 @@
                     <el-button :disabled="loadingPage || disableConfirm || hasCancelOrder" @click="confirmOrder" :loading="disableClickConfirm" type="primary">{{$i.order.confirm}}</el-button>
                     <el-button
                             v-authorize="'ORDER:DRAFT_OVERVIEW:DOWNLOAD'"
-                            :disabled="loadingPage || disableConfirm || hasCancelOrder"
+                            :disabled="loadingPage"
                             @click="downloadOrder"
                             :loading="disableClickConfirm"
                             type="primary">
@@ -1436,9 +1436,7 @@
             },
         },
         methods:{
-            ...mapActions([
-                'setLog'
-            ]),
+            ...mapActions(['setMenuLink']),
             /**
              * 获取页面数据
              * */
@@ -2408,7 +2406,9 @@
                     this.disableClickConfirm=false;
                 });
             },
-            downloadOrder(){},
+            downloadOrder(){
+                this.$fetch.export_task('EXPORT_ORDER',{ids:[this.orderForm.id]});
+            },
 
             acceptOrder(){
                 this.disableClickAccept=true;
@@ -2442,9 +2442,6 @@
                 }).catch(() => {
 
                 });
-
-
-
             },
 
             /**
@@ -2866,7 +2863,12 @@
             });
         },
         mounted(){
-            this.setLog({query: {code: 'ORDER'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'ORDER'},
+                type: 10,
+                label: this.$i.common.log
+            });
         },
         watch:{
             allowQuery(n){
