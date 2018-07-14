@@ -20,7 +20,7 @@
 
           <i class="el-icon-download" @click="$download(item.url)"></i>
           <i class="el-icon-delete" @click="deleteFile(item)"></i>
-          <i class="el-icon-view" @click="$refs.uploadViewPicture.show(item.url)"></i>
+          <i class="el-icon-view" @click="setViewPicture(item.url)"></i>
         </div>
 
       </li>
@@ -36,16 +36,15 @@
                      v-if="item.progress && item.progress !== 1"></el-progress>
       </li>
     </ul>
-    <v-view-picture ref="uploadViewPicture"></v-view-picture>
   </div>
 </template>
 
 <script>
   import OSS from 'ali-oss';
   import co from 'co';
-  import VViewPicture from '../viewPicture/index'
   import VImage from '../image/index'
   import config from '../../../service/config';
+  import {mapActions, mapState} from 'vuex';
 
   const imageType = ['JPG', 'PNG'];
   const prohibitType = ['EXE'];
@@ -82,7 +81,7 @@
         default: 'normal' // normal 、small
       }
     },
-    components: {VViewPicture, VImage},
+    components: {VImage},
     data() {
       return {
         tenantId: '',
@@ -106,6 +105,7 @@
       }
     },
     methods: {
+      ...mapActions(['setViewPicture']),
       uploadFile() {
         this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
           let client = this.signature(data)
@@ -248,6 +248,7 @@
         return type ? {key, url: _.pluck(_.values(this.fileList), 'url')} : key;
       },
       reset() {
+        this.setList();
         this.$emit('update:list', []);
       }
     },
@@ -264,6 +265,7 @@
     background-color: #fbfdff;
     border: 1px dashed #c0ccda;
     border-radius: 6px;
+    margin-bottom: 5px;
     box-sizing: border-box;
     line-height: 146px;
     position: relative;
@@ -322,7 +324,8 @@
     word-wrap: break-word;
     border: 1px solid #c0ccda;
     border-radius: 6px;
-    margin-left: 10px;
+    margin-right: 5px;
+    margin-bottom: 5px;
     position: relative;
     vertical-align: middle;
     box-sizing: border-box;

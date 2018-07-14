@@ -423,7 +423,6 @@
       this.getUnit();
     },
     mounted() {
-      this.setLog({query: {code: 'departmentSetting'}});
     },
     watch: {
       searchDepartment(val) {
@@ -437,7 +436,6 @@
       },
     },
     methods: {
-      ...mapActions(['setLog']),
       pageSizeChange(val) {
         this.userListPage.ps = val;
         this.getDepartmentUser();
@@ -735,7 +733,7 @@
 
       },
       disabledUser(userId, type = true) {
-        this.$confirm(`是否确认${type ? 'disable' : 'enable'}用户`, '提示', {
+        this.$confirm(type ? this.$i.setting.disabledUser : this.$i.setting.enabledUser, this.$i.hintMessage.systemHints, {
           confirmButtonText: this.$i.button.confirm,
           cancelButtonText: this.$i.button.ccancel,
           type: 'warning'
@@ -762,16 +760,12 @@
             callback: `${config.ENV.LOGIN_URL}/#/activation?activeToken=%s&email=%s&redirect=${Base64.encode(window.location.origin + '/#/login')}`
           })
           .then(res => {
-            this.$message.success('邀请成功');
-          }).finally(err => {
-          this.inviteUserLoading = false;
-        });
+            this.$message.success(this.$i.setting.invitationSuccess);
+          }).finally(() => this.inviteUserLoading = false);
       },
       getUnit() {
         this.$ajax.post(this.$apis.get_partUnit, ['LANGUAGE'], {cache: true})
-          .then(res => {
-            this.languageOption = res[0].codes;
-          });
+          .then(res => this.languageOption = res[0].codes);
       },
       savePrivilege() {
         let nodes = [], dataNodes

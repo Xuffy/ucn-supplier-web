@@ -39,7 +39,7 @@
         </el-menu>
       </div>
 
-      <div class="header-right" style="color: #999999!important;">
+      <div class="header-right" style="color: #999999!important;line-height: 57px">
         <el-dropdown placement="bottom">
           <span class="icon-menu"><i class="iconfont icon-duoyuyan"></i></span>
           <el-dropdown-menu slot="dropdown">
@@ -259,7 +259,6 @@
 
   .header {
     height: 100%;
-    line-height: 60px;
     background-color: @header-back;
   }
 

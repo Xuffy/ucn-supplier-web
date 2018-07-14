@@ -16,6 +16,7 @@
         :data="dataList"
         max-height="400px"
         style="display:flex;flex-direction:column;"
+        :cell-style="setCellStyle"
         :span-method="objectSpanMethod"
         border>
         <el-table-column v-for="item in dataColumn" :key="item.id"
@@ -23,7 +24,6 @@
                          min-width="200px"
                          :prop="item.key"
                          :label="item.label">
-
           <template slot-scope="{ row }" v-if="row[item.key] && !row[item.key]._hide">
             <div v-if="!row[item.key]._edit || row[item.key]._title">
               {{row[item.key]._value || row[item.key].value}}
@@ -217,15 +217,11 @@
         this.showDialog = true;
         this.isModify = isModify;
 
-        if (this.$refs.filterColumn) {
-          this.$nextTick(() => {
-            this.$refs.filterColumn.update(false, dataList).then(res => {
-              this.dataList = this.$refs.filterColumn.getFilterData(dataList, res);
-            });
-          })
-        } else {
-          this.dataList = dataList;
-        }
+        this.$nextTick(() => {
+          this.$refs.filterColumn.update(false, dataList).then(res => {
+            this.dataList = this.$refs.filterColumn.getFilterData(dataList, res);
+          });
+        })
         return dataList;
 
       },
@@ -284,6 +280,12 @@
               colspan: 0
             };
           }
+        }
+      },
+      setCellStyle({column, row}) {
+        let item = row[column.property];
+        if (!_.isEmpty(item) && !_.isEmpty(item._style)) {
+          return item._style;
         }
       }
     },

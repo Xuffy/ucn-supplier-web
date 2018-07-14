@@ -5,7 +5,8 @@
       :show-close="false"
       custom-class="ucn-view-picture">
       <i class="el-icon-error" @click="visible = false"></i>
-      <el-carousel :autoplay="false" height="60vh" class="banner"
+      <el-carousel v-if="visible" :autoplay="false" height="60vh" class="banner"
+                   :initial-index="initialIndex"
                    :indicator-position="data.length > 1 ? 'outside' : 'none'"
                    :arrow="data.length > 1 ? 'always' : 'never'">
         <el-carousel-item v-for="item in data" :key="item">
@@ -27,15 +28,22 @@
       return {
         visible: false,
         data: [],
-        // dialogVisible: false,
+        initialIndex: 0,
       }
     },
     methods: {
       show(pictures, split = ',') {
-        if (_.isEmpty(pictures)) return false;
+        if (_.isEmpty(pictures)) {
+          return false
+        }
 
         if (_.isString(pictures)) {
           pictures = pictures.split(split);
+        }
+
+        if (!_.isArray(pictures) && _.isObject(pictures)) {
+          this.initialIndex = _.indexOf(pictures.list, pictures.url);
+          pictures = pictures.list;
         }
 
         this.visible = true;
