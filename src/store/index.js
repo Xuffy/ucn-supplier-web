@@ -7,12 +7,6 @@ Vue.use(Vuex);
 
 const initialState = {
   quickLink: {
-    draft: {
-      show: false
-    },
-    recycleBin: {
-      show: false
-    },
     log: {
       show: false
     },
@@ -26,6 +20,7 @@ const initialState = {
   menuLink: {
     list: []
   },
+  viewPicture: {vm: null},
   dic: ''
 };
 
@@ -36,7 +31,10 @@ const actions = {
    * @param params  数据：{path:'',query:'',label:'',type:1}
    */
   setMenuLink({commit}, params) {
-    commit(type.SETMENULINK, params);
+    commit(type.SET_MENU_LINK, params);
+  },
+  setViewPicture({commit}, params) {
+    commit(type.VIEW_PICTURE, params);
   },
   setDraft({commit}, params) {
     console.error('setDraft 函数已更改为：setMenuLink');
@@ -66,7 +64,7 @@ const actions = {
 };
 
 const mutations = {
-  [type.SETMENULINK](state, params) {
+  [type.SET_MENU_LINK](state, params) {
     params = !_.isArray(params) ? [params] : params;
     state.menuLink.list = _.sortBy(state.menuLink.list.concat(params), val => {
       if (val.type === 100) {// log 设置
@@ -74,6 +72,9 @@ const mutations = {
       }
       return val.type
     });
+  },
+  [type.VIEW_PICTURE](state, params) {
+    state.viewPicture.vm.show(params);
   },
   [type.DIC](state, params) {
     state.dic = params;

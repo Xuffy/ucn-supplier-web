@@ -24,15 +24,17 @@
       let params = Qs.stringify({
         type: config.CLIENT_TYPE,
         language: config.LANGUAGE,
-        redirect: Base64.encode(`${window.location.origin}/static/authorize/index.html`)
+        redirect: Base64.encodeURI(`${window.location.origin}/static/authorize/index.html`)
       });
-      let redirectUrl = `/#/?${params}`;
+      let redirectUrl = `?${params}`;
       this.$message.closeAll();
-      this.loginUrl = `${config.ENV.LOGIN_URL}${redirectUrl}`;
+      this.loginUrl = config.ENV.LOGIN_URL + redirectUrl;
       this.$localStore.clearAll();
       this.$sessionStore.clearAll();
 
       window.__authorize = this.getUserInfo;
+
+      document.title = `UCN-${this.$i.common.signIn}`;
     },
     mounted() {
       let iframe = this.$refs.login;

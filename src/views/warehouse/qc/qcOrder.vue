@@ -131,6 +131,8 @@
                         :data="productTable1"
                         style="width: 100%;margin-top: 10px"
                         border
+                        :summary-method="getSummaries"
+                        show-summary
                         @selection-change="handleSecondTable">
                     <el-table-column
                             align="center"
@@ -171,6 +173,8 @@
                         class="speTable"
                         :data="productTable2"
                         style="width: 100%;margin-top: 10px"
+                        :summary-method="getSummaries"
+                        show-summary
                         border
                         @selection-change="handleThirdTable">
                     <el-table-column
@@ -622,7 +626,7 @@
                     if (index === 0) {
                         sums[index] = this.$i.warehouse.totalMoney;
                         return;
-                    }else if(index===17 || index===18 || index===21 || index===44 || index===45 || index===46 || index===47 || index===48 || index===49 || index===50 || index===51 || index===52 || index===53 || index===54 || index===67){
+                    }else if(index===17 || index===18 || index===43 || index===44 || index===45 || index===46 || index===47 || index===48 || index===49 || index===50 || index===51 || index===52 || index===53 || index===66){
                         const values = data.map(item => Number(item[column.property]));
                         if (!values.every(value => isNaN(value))) {
                             sums[index] = values.reduce((prev, curr) => {

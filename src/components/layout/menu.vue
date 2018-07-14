@@ -29,6 +29,7 @@
 
       <el-menu-item-group>
         <el-menu-item v-for="(item,index) in menuLink.list" :key="index" :index="'2-' + index"
+                      v-if="!item.auth || $auth(item.auth)"
                       @click="$router.push({path:item.path,query:item.query})">
           <el-tooltip :disabled="!layout.hideMenu" effect="dark"
                       :content="item.label" placement="right">
@@ -37,36 +38,6 @@
           <span v-text="item.label"></span>
         </el-menu-item>
 
-
-
-
-        <!--<el-menu-item index="2-0" v-show="quickLink.draft.show"
-                      @click="$router.push(quickLink.draft)">
-          <el-tooltip :disabled="!layout.hideMenu" effect="dark"
-                      :content="$i.common.draft" placement="right">
-            <i class="el-icon-edit-outline"></i>
-          </el-tooltip>
-          <span v-text="$i.common.draft"></span>
-        </el-menu-item>
-
-
-
-        <el-menu-item index="2-1" v-show="quickLink.recycleBin.show"
-                      @click="$router.push(quickLink.recycleBin)">
-          <el-tooltip :disabled="!layout.hideMenu" effect="dark"
-                      :content="$i.common.recycleBin" placement="right">
-            <i class="el-icon-delete"></i>
-          </el-tooltip>
-          <span v-text="$i.common.recycleBin"></span>
-        </el-menu-item>-->
-        <el-menu-item index="2-3" v-show="quickLink.log.show"
-                      @click="$router.push(quickLink.log)">
-          <el-tooltip :disabled="!layout.hideMenu" effect="dark"
-                      :content="$i.common.log" placement="right">
-            <i class="el-icon-tickets"></i>
-          </el-tooltip>
-          <span v-text="$i.common.log"></span>
-        </el-menu-item>
         <el-menu-item index="2-4" v-if="$route.meta && $route.meta.importTask !== false">
           <router-link to="/logs/task">
             <el-tooltip :disabled="!layout.hideMenu" effect="dark" :content="$i.logs.taskList" placement="right">
@@ -78,10 +49,6 @@
       </el-menu-item-group>
     </el-menu>
 
-    <!--<el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
-      <el-radio-button :label="false">展开</el-radio-button>
-      <el-radio-button :label="true">收起</el-radio-button>
-    </el-radio-group>-->
   </div>
 </template>
 

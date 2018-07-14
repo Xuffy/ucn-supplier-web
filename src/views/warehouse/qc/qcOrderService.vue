@@ -496,7 +496,7 @@
                     if (index === 0) {
                         sums[index] = this.$i.warehouse.totalMoney;
                         return;
-                    } else if (index === 17 || index === 18 || index === 21 || index === 44 || index === 45 || index === 46 || index === 47 || index === 48 || index === 49 || index === 50 || index === 51 || index === 52 || index === 53 || index === 54 || index === 68) {
+                    } else if (index === 17 || index === 18 || index === 43 || index === 44 || index === 45 || index === 46 || index === 47 || index === 48 || index === 49 || index === 50 || index === 51 || index === 52 || index === 53 || index === 54 || index === 67) {
                         const values = data.map(item => Number(item[column.property]));
                         if (!values.every(value => isNaN(value))) {
                             sums[index] = values.reduce((prev, curr) => {

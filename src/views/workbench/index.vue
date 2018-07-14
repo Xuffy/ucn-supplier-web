@@ -102,26 +102,27 @@
     },
     mounted() {
       this.userInfo.userType === 0 && this.getBasicInfo();
-     /* // 第一种 单个设置
+      /*// 第一种 单个设置
       this.setMenuLink({
         path: '',
         query: {code: ''},
         type: 10,
+        auth: 'ADASDAS',
         label: this.$i.common.archive
       });
 
-      // 多个设置
-      this.setMenuLink([{
-        path: '',
-        query: {code: ''},
-        type: 10,
-        label: this.$i.common.archive
-      }, {
-        path: '',
-        query: {code: ''},
-        type: 100, // type = 100  为log
-        label: this.$i.common.archive
-      }]);*/
+       // 多个设置
+       this.setMenuLink([{
+         path: '',
+         query: {code: ''},
+         type: 10,
+         label: this.$i.common.archive
+       }, {
+         path: '',
+         query: {code: ''},
+         type: 100, // type = 100  为log
+         label: this.$i.common.archive
+       }]);*/
 
     },
     computed: {

@@ -1,6 +1,6 @@
 <template>
   <div class="ucn-image" v-if="src && src.indexOf('http') > -1"
-       @click="val => {$emit('click', val)}"
+       @click="clickImage"
        :style="{height:height, width:width}">
 
     <img class="image" :src="src" ref="image">
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  // import Holder from 'holderjs';
+  import {mapActions, mapState} from 'vuex';
 
   export default {
     name: 'VImage',
@@ -27,6 +27,10 @@
         type: String,
         default: '100%',
       },
+      viewPicture: {
+        type: Boolean,
+        default: false,
+      }
     },
     data() {
       return {}
@@ -35,16 +39,14 @@
     created() {
     },
     mounted() {
-      /*console.log(this.$refs.image)
-      this.$refs.image.onerror = () => {
-        this.showImage = false;
-        this.$refs.image.onerror = null;
-      };
-      Holder.run({
-        images: this.$refs.defaultImage
-      });*/
     },
-    methods: {}
+    methods: {
+      ...mapActions(['setViewPicture']),
+      clickImage(e) {
+        this.viewPicture && this.setViewPicture(this.src);
+        this.$emit('click', e);
+      }
+    }
   }
 </script>
 

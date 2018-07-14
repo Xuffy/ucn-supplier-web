@@ -93,10 +93,10 @@ export default {
     key: 'unqualifiedProcessingMode',
     type: 'String'
   },
-  outerCartonTotalQty: {
-    key: 'outerCartonTotalQty',
-    type: 'Number'
-  },
+  // outerCartonTotalQty: {
+  //   key: 'outerCartonTotalQty',
+  //   type: 'Number'
+  // },
   skuLength: {
     key: 'skuLength',
     type: 'Number'

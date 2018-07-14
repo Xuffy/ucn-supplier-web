@@ -5,7 +5,7 @@
         </div>
         <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col :class="{speCol:v.type!=='textarea' && v.type!=='attachment'}" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && v.type!=='supplierNo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col :class="{speCol:v.type!=='textarea' && v.type!=='attachment',isModify:v._isModified}" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && v.type!=='supplierNo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.type==='input'">
                             <div v-if="v.key==='lcNo'">
@@ -1575,6 +1575,15 @@
                     orderNo:this.$route.query.orderNo || this.$route.query.code
                 }).then(res=>{
                     this.orderForm=res;
+
+                    /**
+                     * 高亮处理
+                     * */
+                    _.map(this.orderForm.fieldUpdate,(v,k)=>{
+                        this.$db.order.orderDetail[k]._isModified=true;
+                    });
+                    this.orderForm.fieldUpdate={};
+
                     this.initialData=this.$depthClone(this.orderForm)
                     this.savedIncoterm=Object.assign({},res).incoterm;
                     _.map(this.supplierOption,v=>{
@@ -1756,12 +1765,10 @@
                     this.disableClickSaveDraft=false;
                 });
             },
-
             //获取订单号(先手动生成一个)
             getOrderNo(){
                 this.getSupplier();
             },
-
             //获取供应商
             getSupplier(){
                 this.loadingPage=true;
@@ -2896,6 +2903,12 @@
         line-height: 32px;
         color:#666666;
         margin-top: 10px;
+    }
+    .isModify >>> input{
+        background-color: yellow !important;
+    }
+    .high-light >>> input{
+        background-color: yellow !important;
     }
     .speCol{
         height: 47px;

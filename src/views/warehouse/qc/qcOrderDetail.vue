@@ -207,7 +207,6 @@
             </v-table>
         </div>
 
-
         <div class="summary">
             <div class="second-title">
                 {{$i.warehouse.summary}}
@@ -328,8 +327,6 @@
             </el-form>
         </div>
 
-
-
         <div class="footBtn">
             <el-button @click="edit" v-if="qcDetail.qcStatusDictCode==='WAITING_QC'" type="primary">{{$i.warehouse.edit}}</el-button>
             <el-button type="danger" @click="cancel"  v-if="qcDetail.qcStatusDictCode==='WAITING_QC'" >{{$i.warehouse.exit}}</el-button>
@@ -435,6 +432,7 @@
                         e.weightUnitDictCode._value=_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}).name;
                         e.lengthUnitDictCode._value=_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}).name;
                     });
+                    console.log(this.productInfoData,'this.productInfoData')
                     let diffData=[];
                     _.map(this.productInfoData,v=>{
                         diffData.push(v.skuId.value+v.orderNo.value);
@@ -622,8 +620,10 @@
              * 获取字典
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_QC_RS','PB_CODE','QC_STATUS','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT'],{cache:true}).then(res=>{
-                    res.forEach(v=>{
+                const unitAjax=this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_QC_RS','PB_CODE','QC_STATUS','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT'],{cache:true});
+                const currencyAjax=this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true});
+                this.$ajax.all([unitAjax,currencyAjax]).then(res=>{
+                    res[0].forEach(v=>{
                         if(v.code==='QC_TYPE'){
                             this.qcTypeOption=v.codes;
                         }else if(v.code==='QC_MD'){
@@ -647,25 +647,16 @@
                             this.weightOption=v.codes;
                         }
                     })
+                    this.currencyOptions=res[1];
+                    this.getProductInfo();
                 });
 
-                this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true}).then(res=>{
-                    this.currencyOptions=res;
-
-                }).catch(err=>{
-
-                });
 
                 //获取验货员
                 // this.$ajax.get(this.$apis.get_serviceQcSurveyor).then(res=>{
                 //     console.log(res,'???????xxxx')
                 // }).catch(err=>{
                 //
-                // });
-
-
-                // this.$ajax.post(this.$apis.get_partUnit,[]).then(res=>{
-                //     console.log(res)
                 // });
             },
             cancel(){
@@ -677,7 +668,6 @@
         },
         created(){
             this.getQcOrderDetail();
-            this.getProductInfo();
             this.getService();
             this.getUnit();
         },
