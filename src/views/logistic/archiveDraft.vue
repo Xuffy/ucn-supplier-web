@@ -3,7 +3,7 @@
     <div class="hd-top">{{ $i.logistic.archive }}/{{ $i.logistic.draftOverview }}</div>
     <div class="btn-wrap">
       <div class="fn btn">
-        <el-button v-authorize="'LOGISTICS:PLAN_DRAFT_OVERVIEW_ARCHIVE:RECOVER'" :disabled="selectCount.length<=0">{{ $i.logistic.recover }}</el-button>
+        <el-button @click="sendRecover" v-authorize="'LOGISTICS:PLAN_DRAFT_OVERVIEW_ARCHIVE:RECOVER'" :disabled="selectCount.length<=0">{{ $i.logistic.recover }}</el-button>
       </div>
       <div class="view-by-btn">
         <span>{{ $i.logistic.viewBy }}&nbsp;</span>
@@ -17,8 +17,10 @@
         </div>
       </div>
     </div>
-    <v-table :code="urlObj[pageType][viewBy].setTheField" :data="tabData" @change-checked="changeChecked" :loading="tableLoading"
-      :height="height" ref="tab" />
+    <v-table :code="urlObj[pageType][viewBy].setTheField" 
+      :data="tabData" @change-checked="changeChecked" :loading="tableLoading"
+      :height="height" ref="tab"
+      @change-sort="changeSort"/>
     <v-pagination :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange" />
   </div>
 </template>
@@ -92,7 +94,8 @@
               db: this.$db.logistic.sku
             }
           }
-        }
+        },
+        downloadIds:[]
       }
     },
     components: {
@@ -121,15 +124,10 @@
         query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
         type: 100,
         label: this.$i.common.log
-      },{
-        path: '/logistic/draft',
-        label: this.$i.common.draft
-      },{
+      },
+      {
         path: '/logistic/archivePlan',
         label: this.$i.logistic.archivePlan
-      },{
-        path: '/logistic/archiveDraft',
-        label: this.$i.logistic.archiveDraft
       },
       {
         path: '/logistic/archiveLoadingList',
@@ -146,6 +144,10 @@
           pn: 1,
           ps: 10
         };
+      },
+      changeSort(arr){
+        this.pageParams.sorts = arr.sorts;
+        this.fetchDataList();
       },
       fetchData() {
         this.initPage();
@@ -171,7 +173,10 @@
         })
       },
       changeChecked(arr) {
-        this.selectCount = arr
+        this.selectCount = arr;
+        this.downloadIds = arr.map(el => {
+          return el.id.value
+        })
       },
       searchFn(obj) {
         const {
@@ -192,6 +197,11 @@
       pageChange(e) {
         this.pageParams.pn = e
         this.fetchDataList()
+      },
+      sendRecover(){
+        this.$ajax.post(this.$apis.logistics_plan_recover,{ids:this.downloadIds}).then(res => {
+          this.fetchDataList();
+        })
       },
       fetchDataList(arg) {
         if (arg) {

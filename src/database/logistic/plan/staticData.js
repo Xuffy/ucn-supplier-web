@@ -585,3 +585,23 @@ export const dbProductInfo = {
   //   }
   // },
 }
+
+export const dbcontainerInfo = {
+  containerType: {
+    _rules:{
+      required:true
+    }
+  }
+}
+
+export const addProductFromOrderFilter = {
+  "orderNo": {
+    _isDefaultShow:true
+  },
+  "skuCode": {
+    _isDefaultShow:true
+  },
+  "skuNameEn": {
+    _isDefaultShow:true
+  }
+}
