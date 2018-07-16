@@ -50,8 +50,10 @@
         </div>
 <!--        表格-->
           <div style="margin-top: 20px;">
-              <el-button @click="deleteCustomer" type="primary">{{$i.button.delete}}</el-button>
-              <el-button @click="downloadCustomer" type="primary">{{$i.button.download}}</el-button>
+              <el-button @click="deleteCustomer" type="danger" :disabled='!selectNumber.length>0'>
+                {{$i.button.delete}}({{selectNumber.length}})</el-button>
+              <el-button @click="downloadCustomer" type="primary">{{$i.button.download}}
+                ({{selectNumber.length===0?$i.common.all:selectNumber.length}})</el-button>
           </div>
              <v-table
                     :height=360
@@ -103,6 +105,7 @@
                 value: 1,
                 hideBody: true, //是否显示body
                 btnInfo: 'Show the Advance',
+                disableClickDeleteBtn: false,
                 loading: false,
                 pageData: {},
                 endpn: '',
@@ -132,7 +135,7 @@
         },
         methods: {
                ...mapActions([
-                 'setLog'
+                 'setMenuLink'
             ]),
             handleSizeChange(val) {
               this.params.pn = val;
@@ -182,6 +185,7 @@
                 this.$windowOpen({
                     url: '/customer/detail',
                     params: {
+                        type: 'read',
                         id: item.id.value,
                         companyId: item.companyId.value
                     }
@@ -189,17 +193,24 @@
                 });
             },
             deleteCustomer(){
-                 this.$ajax.post(this.$apis.post_supply_batchDelete, this.selectNumber)
-                    .then(res => {
-                        this.$message({
-                          message: '删除成功',
-                          type: 'success'
-                        });
-                        this.getData()
-                    })
-                    .catch((res) => {
-                        console.log(res)
-                    });
+              this.$confirm(this.$i.common.sureDelete, this.$i.common.prompt, {
+                confirmButtonText: this.$i.common.sure,
+                cancelButtonText: this.$i.common.cancel,
+                type: 'warning'
+              }).then(() => {
+                this.disableClickDeleteBtn = true;
+                this.$ajax.post(this.$apis.post_supply_batchDelete, this.selectNumber).then(res => {
+                  this.disableClickDeleteBtn = false;
+                  this.selectNumber =[];
+                  this.getData();
+                  this.$message({
+                    type: 'success',
+                    message: this.$i.common.deleteTheSuccess
+                  });
+                }).finally(() => {
+                  this.disableClickDeleteBtn = false;
+                });
+              })
             },
             //.........checked
             checked(item) {
@@ -269,7 +280,18 @@
             this.getCountryAll();
         },
         mounted(){
-          this.setLog({query:{code:'SUPPLIER_CUSTOMER_REMARK'}});
+          this.setMenuLink([{
+            path: '',
+            query: {code: 'SUPPLIER_CUSTOMER_REMARK'},
+            type: 100,
+            label: this.$i.common.log
+          },
+          {
+            path: 'customerArchive',
+            type: 10,
+            label: this.$i.common.archive
+          },
+          ]);
         },
         watch: {}
     }

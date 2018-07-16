@@ -28,6 +28,12 @@
                    </el-row>
                   </el-form>
                 <div class="btns" v-if="noEdit">
+                  <el-button @click="deleteCustomer" type="danger" v-show="$route.query.type==='read'">
+                    {{$i.button.delete}}
+                  </el-button>
+                  <el-button @click="downloadCustomer" type="primary" >
+                    {{$i.button.download}}
+                  </el-button>
                 </div>
             </div>
         </div>
@@ -184,6 +190,7 @@
                 lookRemarkFormVisible:false,
                 isModifyAddress:false,
                 formLabelWidth:'80px',
+                disableClickDeleteBtn: false,
             }
         },
         methods: {
@@ -460,6 +467,33 @@
                 });
               })
             }
+          },
+          //删除
+          deleteCustomer(){
+            this.$confirm(this.$i.common.sureDelete, this.$i.common.prompt, {
+              confirmButtonText: this.$i.common.sure,
+              cancelButtonText: this.$i.common.cancel,
+              type: 'warning'
+            }).then(() => {
+              this.disableClickDeleteBtn = true;
+              const params = []
+              params.push(this.basicDate.id)
+              this.$ajax.post(this.$apis.post_supply_batchDelete, this.selectNumber).then(res => {
+                this.disableClickDeleteBtn = false;
+                this.getData();
+                this.$message({
+                  type: 'success',
+                  message: this.$i.common.deleteTheSuccess
+                });
+              }).finally(() => {
+                this.disableClickDeleteBtn = false;
+              });
+            })
+          },
+          //下载
+          downloadCustomer(){
+            this.$fetch.export_task('UDATA_SUPPLIER_EXPORT_CUSTOMER_IDS',{ids:this.basicDate.id});
+
           },
         },
         created() {

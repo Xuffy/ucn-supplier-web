@@ -50,7 +50,10 @@
     </div>
     <!--        表格-->
     <div style="margin-top: 20px;">
-      <el-button @click="deleteCustomer" type="primary">{{$i.button.delete}}</el-button>
+      <el-button @click="postBatchRecover" type="primary" :disabled='!selectNumber.length>0'>
+        {{$i.button.recover}}
+        ({{selectNumber.length}})
+      </el-button>
     </div>
     <v-table
       :height=360
@@ -131,7 +134,7 @@
     },
     methods: {
       ...mapActions([
-        'setLog'
+        'setMenuLink'
       ]),
       handleSizeChange(val) {
         this.params.pn = val;
@@ -181,24 +184,12 @@
         this.$windowOpen({
           url: '/customer/detail',
           params: {
+            type: 'archive',
             id: item.id.value,
             companyId: item.companyId.value
           }
 
         });
-      },
-      deleteCustomer(){
-        this.$ajax.post(this.$apis.post_supply_batchDelete, this.selectNumber)
-          .then(res => {
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            });
-            this.getData()
-          })
-          .catch((res) => {
-            console.log(res)
-          });
       },
       //.........checked
       checked(item) {
@@ -252,6 +243,23 @@
           console.log(err)
         });
       },
+      postBatchRecover(){
+        this.$confirm('确定恢复?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$ajax.post(this.$apis.post_batchRecover, this.selectNumber)
+            .then(res => {
+              this.selectNumber = [];
+              this.$message({
+                type: 'success',
+                message: '恢复成功!'
+              });
+              this.getData();
+            })
+        })
+      }
     },
     created() {
       this.getData();
@@ -259,7 +267,18 @@
       this.getCountryAll();
     },
     mounted(){
-      this.setLog({query:{code:'SUPPLIER_CUSTOMER_REMARK'}});
+      this.setMenuLink([{
+          path: '',
+          query: {code: 'SUPPLIER_CUSTOMER_REMARK'},
+          type: 100,
+          label: this.$i.common.log
+        },
+        {
+          path: 'customerArchive',
+          type: 10,
+          label: this.$i.common.archive
+        },
+      ]);
     },
     watch: {}
   }

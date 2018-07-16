@@ -33,6 +33,7 @@ export default {
     post_supply_batchDelete: ['/supply/batchDelete', 'BASE_CS', 'USUPPLY_URL'],
     post_supply_supplier_getInquiryHistory: ['/supply/supplier/getInquiryHistory', 'BASE_CS', 'USUPPLY_URL'],
     post_supply_supplier_orderHistory: ['/supply/supplier/orderHistory', 'BASE_CS', 'USUPPLY_URL'],
+    post_batchRecover: ['/supply/batchRecover', 'BASE_CS', 'USUPPLY_URL'],
 
 
     //payment

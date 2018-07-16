@@ -617,6 +617,17 @@ export const routerMap = [
             log: false,
           },
           component: () => import('../views/customer/customerDetail.vue')
+        },
+        {
+          path: 'customerArchive',
+          name: 'customerArchive',
+          hidden: true,
+          meta: {
+            draft: false,
+            recycleBin: false,
+            log: false,
+          },
+          component: () => import('../views/customer/archive.vue')
         }
       ]
     },
