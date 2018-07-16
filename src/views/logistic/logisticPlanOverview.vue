@@ -20,19 +20,10 @@
       <div class="fn btn">
         <div v-if="pageType === 'plan' || pageType === 'loadingList'">
           <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <!-- <el-button @click.stop="addNew" v-if="pageType != 'loadingList'">{{ $i.logistic.placeLogisticPlan }}</el-button> -->
-          <!-- <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button> -->
         </div>
         <div v-if="pageType === 'draft'">
           <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
           <el-button>{{ $i.logistic.send }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <!-- <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
-          <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button> -->
-        </div>
-        <div v-if="pageType === 'archive'">
-          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <el-button>{{ $i.logistic.recover }}({{ selectCount.length || $i.logistic.all }})</el-button>
         </div>
       </div>
       <div class="view-by-btn">
@@ -211,14 +202,8 @@
         type: 100,
         label: this.$i.common.log
       },{
-        path: '/logistic/draft',
-        label: this.$i.common.draft
-      },{
         path: '/logistic/archivePlan',
         label: this.$i.logistic.archivePlan
-      },{
-        path: '/logistic/archiveDraft',
-        label: this.$i.logistic.archiveDraft
       },
       {
         path: '/logistic/archiveLoadingList',
@@ -230,7 +215,8 @@
     methods: {
       ...mapActions(['setMenuLink']),
       changeSort(arr){
-       
+        this.pageParams.sorts = arr.sorts;
+        this.fetchDataList();
       },
       initPage(){
         this.pageParams = {

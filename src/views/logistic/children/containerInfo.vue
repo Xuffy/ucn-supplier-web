@@ -10,7 +10,7 @@
         :summary-method="summaryMethod"
         @selection-change="handleSelectionChange" 
         :row-class-name="tableRowClassName">
-        <el-table-column type="selection" width="100" align="center" class-name="checkbox-no-margin" v-if="edit"/>
+        <!-- <el-table-column type="selection" width="100" align="center" class-name="checkbox-no-margin" v-if="edit"/> -->
         <el-table-column type="index" width="50" align="center"/>
         <el-table-column :label="$i.logistic.containerNo" width="140" align="center">
           <template slot-scope="scope">

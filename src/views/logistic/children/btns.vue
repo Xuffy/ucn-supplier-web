@@ -1,7 +1,7 @@
 <template>
   <el-row class="btns" :style="{ width: '100%', paddingLeft: hideMune ? '65px' : '195px' }">
     <div v-if="!edit">
-      <div v-if="logisticsStatus.supplierRecived==0&&(logisticsStatus.status!=4||logisticsStatus.status!=5)">
+      <div v-if="logisticsStatus.supplierRecived==0&&(logisticsStatus.status!=4&&logisticsStatus.status!=5)">
         <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','receive')">{{ $i.logistic.receive }}</el-button>
         <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','refuse')">{{ $i.logistic.refuse }}</el-button>
       </div>

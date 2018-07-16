@@ -58,7 +58,7 @@
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <!-- <v-table :data.sync="productList" @action="action" :buttons="edit ? productbButtons : null" @change-checked="selectProduct"> -->
-      <v-table code="ulogistics_PlanDetail" :totalRow="productListTotal" :data="productList" @action="action" :buttons="productbButtons"
+      <v-table ref="productInfo" code="ulogistics_PlanDetail" :totalRow="productListTotal" :data="productList" @action="action" :buttons="productbButtons"
         @change-checked="selectProduct">
         <div slot="header" class="product-header">
           <el-button v-if="edit" type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
@@ -72,7 +72,7 @@
         </div>
       </v-table>
     </div>
-    <el-dialog :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false">
+    <el-dialog  width="70%" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false">
       <overviewPage
         :title="$i.logistic.addProductFromOrder"
         :tableData="ProductFromOrder"
@@ -82,13 +82,24 @@
         @tableBtnClick="ProductFromOrderDetail"
         @search="getSupplierIds"
         tableCode="ulogistics_PlanDetail"
-      >
+        @change-sort="changeSort">
+        <v-pagination slot="pagination" :page-data="pageParams"/>
+        <div slot=footerBtn>
+          <el-button @click="showAddProductDialog = false">{{ $i.logistic.cancel }}</el-button>
+          <el-button type="primary" @click="closeAddProduct">{{ $i.logistic.confirm }}</el-button>
+        </div>
       </overviewPage>
     </el-dialog>
     <messageBoard v-if="!isParams" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus"
       @sendData="sendData" />
-    <v-history-modify ref="HM" disabled-remark :beforeSave="closeModify" @save="closeModifyNext" @select-change="historymodify"></v-history-modify>
+    <v-history-modify code="ulogistics_PlanDetail" 
+    ref="HM" disabled-remark 
+    :beforeSave="closeModify" 
+    @save="closeModifyNext" 
+    @select-change="historymodify"
+    @closed="$refs.productInfo.update()"
+    ></v-history-modify>
   </div>
 </template>
 <script>
@@ -97,7 +108,8 @@
     selectSearch,
     VTable,
     VHistoryModify,
-    overviewPage
+    overviewPage,
+    VPagination
   } from '@/components/index';
   import {
     mapActions,
@@ -116,6 +128,10 @@
       return {
         planId: '',
         ShipmentStatusCode: '',
+        pageParams: {
+          pn: 1,
+          ps: 10
+        },
         DeliveredEdit: false,
         dunningDisabled: false,
         modefiyProductIndex: 0,
@@ -204,7 +220,8 @@
       btns,
       messageBoard,
       VHistoryModify,
-      overviewPage
+      overviewPage,
+      VPagination
     },
     computed: {
       productListTotal() {
@@ -267,14 +284,8 @@
         type: 100,
         label: this.$i.common.log
       },{
-        path: '/logistic/draft',
-        label: this.$i.common.draft
-      },{
         path: '/logistic/archivePlan',
         label: this.$i.logistic.archivePlan
-      },{
-        path: '/logistic/archiveDraft',
-        label: this.$i.logistic.archiveDraft
       },
       {
         path: '/logistic/archiveLoadingList',
@@ -330,31 +341,32 @@
           })
         })
       },
+      changeSort(arr){
+        this.$set(this.pageParams,'sorts',arr.sorts);
+        this.getSupplierIds();
+      },
       getSupplierIds(arg) {
-        let pageParams = {
-          pn: 1,
-          ps: 10,
-          skuSupplierIds:[]
-        }
-        if(arg!=0){
-          const {pn, ps} = pageParams
-          pageParams = {pn, ps, ...arg}
-        }
+        this.pageParams = {...this.pageParams, ...arg}
         let url = this.$route.name == 'loadingListDetail' ? 'logistics_order_getSupplierIds' : 'logistics_plan_getSupplierIds';
         this.$ajax.get(this.$apis[url],{logisticsNo:this.basicInfoArr[0].value}).then(res => {
-          pageParams.skuSupplierIds = res.supplierIds;
-          pageParams.customerId = res.customerId;
-          this.addProductFromOrder(pageParams);
+          this.pageParams.skuSupplierIds = res.supplierIds;
+          this.pageParams.customerId = res.customerId;
+          this.addProductFromOrder();
         })
       },
       ProductFromOrderDetail(e){
-        this.$windowOpen({url:'/product/sourcingDetail',params:{id:e.skuId.value}})
+        this.$windowOpen({url:'/product/detail',params:{id:e.skuId.value}})
       },
-      addProductFromOrder(pageParams){
-        this.$ajax.post(this.$apis.get_order_list_with_page, pageParams).then(res=>{
+      addProductFromOrder(){
+        this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res=>{
           this.showAddProductDialog = true;
           this.ProductFromOrderRes = res.datas;
           this.ProductFromOrder = this.$getDB(this.$db.logistic.dbBasicInfoObj,res.datas);
+          this.$nextTick(()=>{
+            this.$set(this.pageParams,'pn',res.pn);
+            this.$set(this.pageParams,'ps',res.ps);
+            this.$set(this.pageParams,'tc',res.tc);
+          })
         })
       },
       getDetails() {
@@ -688,8 +700,7 @@
         });
         this.showAddProductDialog = false
         const selectArrData = this.$depthClone(arr);
-
-        if (!status || !selectArrData.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
+        if (!arr.length || !selectArrData.length) return
         selectArrData.forEach(a => {
           let sliceStr = this.selectArr.skuIncoterm.find(item => item.code == a.skuIncoterm).name;
           sliceStr = sliceStr.slice(0, 1) + sliceStr.slice(1 - sliceStr.length).toLowerCase();
@@ -707,6 +718,8 @@
           a.currency = a['sku' + sliceStr + 'Currency'];
           a.containerNo = '';
           a.containerType = '';
+          a.containerId = '';
+          a.fieldDisplay = '';
           a.totalContainerQty = '';
           a.totalContainerVolume = '';
           a.totalContainerNetWeight = '';
