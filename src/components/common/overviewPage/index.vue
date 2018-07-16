@@ -218,14 +218,20 @@
             init(){
                 //处理初始化数据
                 let queryCode=[];
+                let allDefault=true;
                 _.map(this.formColumn,v=>{
                     if(v.selectCode){
                         queryCode.push(v.selectCode);
                     }
-                    if(v._isDefaultShow){
-                        this.showAdvancedBtn=true;
+                    if(!v._isDefaultShow){
+                        allDefault=false;
                     }
                 });
+                if(allDefault){
+                    this.showAdvancedBtn=false;
+                }else{
+                    this.showAdvancedBtn=true;
+                }
                 this.getUnit(queryCode).then(res=>{
                     res[0].push({
                         id:19124124018,
