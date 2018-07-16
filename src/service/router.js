@@ -625,6 +625,7 @@ export const routerMap = [
 
 
 let router = new Router({
+  mode: 'history',
   routes: routerMap
 });
 
