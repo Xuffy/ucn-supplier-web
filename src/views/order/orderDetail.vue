@@ -578,17 +578,29 @@
                     <el-button :loading="disableClickCancelModify" @click="cancelModify" type="danger">{{$i.order.cancel}}</el-button>
                 </div>
                 <div v-else>
-                    <el-button :disabled="loadingPage || disableModify || hasCancelOrder || hasFinishOrder" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
-                    <el-button :disabled="loadingPage || disableConfirm || hasCancelOrder" @click="confirmOrder" :loading="disableClickConfirm" type="primary">{{$i.order.confirm}}</el-button>
                     <el-button
-                            v-authorize="'ORDER:DRAFT_OVERVIEW:DOWNLOAD'"
+                            v-authorize="'ORDER:DETAIL:MODIFY'"
+                            :disabled="loadingPage || disableModify || hasCancelOrder || hasFinishOrder"
+                            @click="modifyOrder"
+                            type="primary">{{$i.order.modify}}</el-button>
+                    <el-button
+                            v-authorize="'ORDER:DETAIL:CONFIRM'"
+                            :disabled="loadingPage || disableConfirm || hasCancelOrder"
+                            @click="confirmOrder"
+                            :loading="disableClickConfirm" type="primary">{{$i.order.confirm}}</el-button>
+                    <el-button
+                            v-authorize="'ORDER:DETAIL:DOWNLOAD'"
                             :disabled="loadingPage"
                             @click="downloadOrder"
                             :loading="disableClickConfirm"
                             type="primary">
                         {{$i.order.download}}
                     </el-button>
-                    <el-button :disabled="loadingPage || hasCancelOrder || hasFinishOrder" @click="refuseOrder" type="danger">{{$i.order.cancelOrder}}</el-button>
+                    <el-button
+                            v-authorize="'ORDER:DETAIL:DOWNLOAD'"
+                            :disabled="loadingPage || hasCancelOrder || hasFinishOrder"
+                            @click="refuseOrder"
+                            type="danger">{{$i.order.cancelOrder}}</el-button>
                     <el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
                 </div>
             </div>
@@ -1765,7 +1777,7 @@
                         }
                     });
                 });
-                return console.log(this.$depthClone(params.skuList),'params.skuList')
+                // return console.log(this.$depthClone(params.skuList),'params.skuList')
                 params.attachments=this.$refs.upload[0].getFiles();
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{

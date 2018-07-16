@@ -38,8 +38,16 @@
             <template slot="header">
                 <div class="fn">
                     <div class="btn-wrap">
-                        <el-button v-authorize="'ORDER:DRAFT_OVERVIEW:DOWNLOAD'" @click="downloadOrder">{{$i.order.download}}({{selectedList.length===0?$i.order.all:selectedList.length}})</el-button>
-                        <el-button type='danger' :loading="disableClickDelete" :disabled='disableDelete' @click='deleteOrder'>{{($i.order.archive)}}</el-button>
+                        <el-button
+                                v-authorize="'ORDER:OVERVIEW:DOWNLOAD'"
+                                @click="downloadOrder">
+                            {{$i.order.download}}({{selectedList.length===0?$i.order.all:selectedList.length}})</el-button>
+                        <el-button
+                                v-authorize="'ORDER:OVERVIEW:ARCHIVE'"
+                                type='danger'
+                                :loading="disableClickDelete"
+                                :disabled='disableDelete'
+                                @click='deleteOrder'>{{($i.order.archive)}}</el-button>
                     </div>
                     <div class="viewBy">
                         <span>{{$i.order.viewBy}}</span>
