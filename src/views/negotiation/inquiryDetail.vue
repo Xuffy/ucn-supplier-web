@@ -42,12 +42,11 @@
               :buttons="productInfoBtn"
               :loading="tableLoad"
               :height="450"
-              :disabledSort="true"
               :totalRow="productTotalRow"
               @action="producInfoAction"
               @change-checked="changeChecked"
+              @change-sort="onListSortChange"
               :rowspan="2"
-              :selection="statusModify"
               :hideFilterColumn="statusModify"/>
           <div class="bom-btn-wrap" v-show="!statusModify" v-if="tabData[0]">
             <el-button type="primary" @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.originValue !== 21" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
@@ -332,15 +331,25 @@ export default {
         this.$refs.HM.getFilterData([res]),
         item => this.$filterDic(item)
       );
-      // SKU_UNIT
-      // Product Info
+      this.markFieldHighlight(this.newTabData);
+      this.showDetails(res.details);
+    },
+    showDetails(details) {
       this.productTabData = this.newProductTabData = this.$getDB(
         this.$db.inquiry.productInfo,
-        this.$refs.HM.getFilterData(res.details, 'skuId'),
+        this.$refs.HM.getFilterData(details, 'skuId'),
         item => this.$filterDic(item)
       );
-      this.markFieldHighlight(this.newTabData);
       this.markFieldHighlight(this.newProductTabData);
+    },
+    getInquiryDetailList() {
+      if(!this.id) return;
+      let url = this.$apis.parse(this.$apis.BUYER_GET_INQIIRY_DETAIL_LIST, {id: this.id});
+      this.$ajax.post(url, this.params).then(this.showDetails);
+    },
+    onListSortChange(args) {
+      this.params.sorts = args.sorts;
+      this.getInquiryDetailList();
     },
     queryAndAddProduction(ids) {
       if (!Array.isArray(ids) || !ids.length) {

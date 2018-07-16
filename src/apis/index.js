@@ -26,4 +26,12 @@ let list = _.mapObject(apis, val => {
   return b + val[0];
 });
 
+list.parse = (url, params) => {
+  let tmp = url;
+  Object.keys(params).forEach(key => {
+    tmp = tmp.replace(new RegExp(`{${key}}`, 'gm'), params[key]);
+  });
+  return tmp;
+};
+
 export default list;
