@@ -404,6 +404,7 @@ export const routerMap = [
         }
       ]
     },
+
     {
       path: '/message',
       component: Layout,
@@ -423,8 +424,7 @@ export const routerMap = [
             name: $i.router.messageManagement
           },
           component: () => import('../views/message/messageManagement.vue'),
-        },
-
+        }
       ],
     },
     // todo 供应商路由
