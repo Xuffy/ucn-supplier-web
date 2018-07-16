@@ -592,9 +592,6 @@ export const routerMap = [
     redirect: '/customer/overview',
     noDropdown: true,
     hidden: false,
-    meta: {
-      name: '客户'
-    },
     children: [
       {
         path: 'overview',
