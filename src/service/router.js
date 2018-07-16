@@ -154,7 +154,7 @@ export const routerMap = [
             log: true,
             name: $i.router.orderDetail
           },
-          component: () => import('../views/order/poDetail/poDetail.vue')
+          component: () => import('../views/order/orderDetail.vue')
         },  {
           path: 'archive',
           name: 'orderArchive',
@@ -625,6 +625,7 @@ export const routerMap = [
 
 
 let router = new Router({
+  mode: 'history',
   routes: routerMap
 });
 
