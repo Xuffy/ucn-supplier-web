@@ -50,7 +50,8 @@
         </div>
 <!--        表格-->
           <div style="margin-top: 20px;">
-              <!-- <el-button @click="deleteCustomer" type="primary">{{$i.button.delete}}</el-button> -->
+              <el-button @click="deleteCustomer" type="primary">{{$i.button.delete}}</el-button>
+              <el-button @click="downloadCustomer" type="primary">{{$i.button.download}}</el-button>
           </div>
              <v-table
                     :height=360
@@ -114,7 +115,7 @@
                     payment: null,
                     pn: 1,
                     ps: 50,
-                    // recycle: false,
+                    recycle: false,
                     type: null
                 },
                 tabData: [],
@@ -252,14 +253,15 @@
                     console.log(err)
                 });
             },
-            handleSizeChange(val) {
-                this.params.pn = val;
-                this.getData()
-            },
-            pageSizeChange(val) {
-                this.params.ps = val;
-                this.getData()
-            },
+          downloadCustomer(){
+            let ids=_.pluck(_.pluck(this.selectedData,"id"),'value');
+            if(ids.length>0){
+              this.$fetch.export_task('UDATA_SUPPLIER_EXPORT_CUSTOMER_IDS',{ids:ids});
+            }else{
+              let params=this.$depthClone(this.params);
+              this.$fetch.export_task('UDATA_SUPPLIER_EXPORT_CUSTOMER_PARAMS',params);
+            }
+          },
         },
         created() {
             this.getData();

@@ -21,7 +21,7 @@ export default {
       UWORKBENCH_URL: '//192.168.51.208:11010',
       UIE_URL: '//192.168.51.208:13003',
       TEST_CS:'//192.168.51.33:11002',
-      BASE_CS:'//192.168.51.33:11002',
+      // BASE_CS:'//192.168.51.33:11002',
 
       OSS_BUCKET_PUBLIC: 'dev-public-ucn-oss',
       OSS_BUCKET_PRIVATE: 'dev-private-ucn-oss'
