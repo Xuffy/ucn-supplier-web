@@ -36,7 +36,12 @@ export default {
   logistics_plan_receive: ['/logistics/plan/receive', 'a_localtion','USUPPLY_URL'],
   logistics_plan_postLoadingList: ['/logistics/plan/postLoadingList','a_localtion', 'USUPPLY_URL'],
   logistics_plan_getSupplierIds: ['/logistics/plan/getSupplierIds','a_localtion', 'BASE_URL'],
-  logistics_order_getSupplierIds: ['/logistics/order/getSupplierIds','LJ', 'BASE_URL'],
+  logistics_order_getSupplierIds: ['/logistics/order/getSupplierIds','a_localtion', 'BASE_URL'],
   logistics_accept_payment: ['/payment/accept','a_localtion', 'BASE_URL'],
-  logistics_payment_batchDunning: ['/payment/batchDunning','a_localtion', 'BASE_URL']
+  logistics_payment_batchDunning: ['/payment/batchDunning','a_localtion', 'BASE_URL'],
+  logistics_plan_batchSendDraft: ['/logistics/plan/batchSendDraft','a_localtion', 'BASE_URL'],
+  logistics_plan_archive: ['/logistics/plan/archive','a_localtion', 'BASE_URL'],
+  logistics_order_archive: ['/logistics/order/archive','a_localtion', 'BASE_URL'],
+  logistics_plan_recover: ['/logistics/plan/recover','a_localtion', 'BASE_URL'],
+  logistics_order_recover: ['/logistics/order/recover','a_localtion', 'BASE_URL'],
 }

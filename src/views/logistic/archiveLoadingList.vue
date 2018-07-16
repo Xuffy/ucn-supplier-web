@@ -1,26 +1,30 @@
 <template>
   <div class="logistic-plan-overview">
     <div class="hd-top">{{ $i.logistic.archive }}/{{ $i.logistic.loadingListOverview }}</div>
-    <div class="btn-wrap">
-      <div class="fn btn">
-        <el-button @click="sendRecover" v-authorize="'LOADING_LIST:OVERVIEW:ARCHIVE:RECOVER'" :disabled="selectCount.length<=0">{{ $i.logistic.recover }}</el-button>
-      </div>
-      <div class="view-by-btn">
-        <span>{{ $i.logistic.viewBy }}&nbsp;</span>
-        <el-radio-group v-model="viewBy" size="mini">
-          <el-radio-button v-for="a in urlObj[pageType]" :key="a.key" :label="a.label">{{ a.text }}</el-radio-button>
-        </el-radio-group>
-        <div class="status">
-          <div class="select-search-wrap">
-            <select-search :options="options" @inputEnter="searchFn" v-model="selectSearch" />
-          </div>
-        </div>
+    <div class="status">
+      <div class="btn-wrap"></div>
+      <div class="select-search-wrap">
+        <select-search :options="options" @inputEnter="searchFn" v-model="selectSearch" />
       </div>
     </div>
     <v-table :code="urlObj[pageType][viewBy].setTheField" 
     :data="tabData" @change-checked="changeChecked" 
     :loading="tableLoading" :height="height" ref="tab" 
-    @change-sort="changeSort"/>
+    @change-sort="changeSort">
+      <div slot="header">
+        <div class="btn-wrap">
+          <div class="fn btn">
+            <el-button @click="sendRecover" v-authorize="'LOADING_LIST:OVERVIEW:ARCHIVE:RECOVER'" :disabled="selectCount.length<=0">{{ $i.logistic.recover }}</el-button>
+          </div>
+          <div class="view-by-btn">
+            <span>{{ $i.logistic.viewBy }}&nbsp;</span>
+            <el-radio-group v-model="viewBy" size="mini">
+              <el-radio-button v-for="a in urlObj[pageType]" :key="a.key" :label="a.label">{{ a.text }}</el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
+      </div>
+    </v-table>
     <v-pagination :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange" />
   </div>
 </template>
@@ -227,6 +231,7 @@
               return val
             })
           })
+          this.selectCount=[];
           this.pageParams = {
             pn: res.pn,
             ps: res.ps,
@@ -257,7 +262,7 @@
     }
 
     .btn-wrap {
-      padding: 10px;
+      padding: 0 25px 5px 0;
       display: flex;
       justify-content: space-between;
       align-items: center;

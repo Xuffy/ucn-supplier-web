@@ -5,32 +5,32 @@
       <el-button type="danger" size="mini" @click.stop="$emit('deleteContainer')">{{ $i.logistic.delete }}</el-button>
     </div> -->
     <div class="tab-wrap">
-      <el-table :data="tableData" ref="table" border style="width: 100%; margin-top: 20px" 
+      <el-table :cell-class-name="lightHight" :data="tableData" ref="table" border style="width: 100%; margin-top: 20px" 
         show-summary 
         :summary-method="summaryMethod"
         @selection-change="handleSelectionChange" 
         :row-class-name="tableRowClassName">
         <!-- <el-table-column type="selection" width="100" align="center" class-name="checkbox-no-margin" v-if="edit"/> -->
         <el-table-column type="index" width="50" align="center"/>
-        <el-table-column :label="$i.logistic.containerNo" width="140" align="center">
+        <el-table-column :label="$i.logistic.containerNo" width="140" align="center" prop="containerNo">
           <template slot-scope="scope">
-            <el-input placeholder="请输入内容" v-model="scope.row.containerNo" v-if="edit" @change="vfyContainerNo(scope)"></el-input>
+            <el-input placeholder="请输入内容" v-model="scope.row.containerNo" v-if="edit" @change="ContainerInfoLight('containerNo',scope.row.containerNo,scope.$index,scope)"></el-input>
             <span v-else>{{ scope.row.containerNo }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.sealNo" width="120" align="center">
+        <el-table-column :label="$i.logistic.sealNo" width="120" align="center" prop="sealNo">
           <template slot-scope="scope">
-            <el-input placeholder="请输入内容" v-model="scope.row.sealNo" v-if="edit"></el-input>
+            <el-input placeholder="请输入内容" v-model="scope.row.sealNo" v-if="edit" @change="ContainerInfoLight('sealNo',scope.row.sealNo,scope.$index,scope)"></el-input>
             <span v-else>{{ scope.row.sealNo }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.containerWeight" width="140" prop="containerWeight" align="center">
           <template slot-scope="scope">
-            <el-input placeholder="请输入内容" v-model="scope.row.containerWeight" v-if="edit"></el-input>
+            <el-input placeholder="请输入内容" v-model="scope.row.containerWeight" v-if="edit" @change="ContainerInfoLight('containerWeight',scope.row.containerWeight,scope.$index,scope)"></el-input>
             <span v-else>{{ scope.row.containerWeight }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.containerType" width="140" align="center">
+        <el-table-column :label="$i.logistic.containerType" width="140" align="center" prop="containerType">
           <template slot-scope="scope">
             <span>{{ scope.row.containerType }}</span>
           </template>
@@ -80,7 +80,9 @@ export default {
   data () {
     return {
       containerNo: '',
-      containerSelect: ''
+      containerSelect: '',
+      ContainerInfoLightArr:[],
+      ContainerInfoLightObj:{}
     }
   },
   props: {
@@ -104,18 +106,32 @@ export default {
     }
   },
   methods: {
-    vfyContainerNo(scope){
-      this.tableData.forEach((el,index)=>{
-        if(scope.$index !=index){
-          if(el.containerNo == scope.row.containerNo&&scope.row.containerNo!=''){
-            scope.row.containerNo='';
-            this.$message({
-              message: '集装箱号已经存在！',
-              type: 'error'
-            })
-          };
+    //高亮
+    ContainerInfoLight(key,v,index,scope){
+      if(key=='containerNo'){
+        this.tableData.forEach((el,index)=>{
+          if(scope.$index !=index){
+            if(el.containerNo == scope.row.containerNo&&scope.row.containerNo!=''){
+              scope.row.containerNo='';
+              this.$message({
+                message: '集装箱号已经存在！',
+                type: 'error'
+              })
+            };
+          }
+        })
+      }
+      this.ContainerInfoLightObj[key] = v;
+      this.ContainerInfoLightArr[index] =  this.ContainerInfoLightObj;
+      console.log(this.ContainerInfoLightArr)
+      this.$emit('ContainerInfoLight',this.ContainerInfoLightArr,index);
+    },
+    lightHight({row, column, rowIndex, columnIndex}){
+      if(column.property&&row.fieldDisplay){
+        if(column.property in row.fieldDisplay){
+          return 'lightHight'
         }
-      })
+      }
     },
     handleSelectionChange (val) {
       this.$emit('handleSelectionChange', val.map(a => a))
@@ -204,5 +220,10 @@ export default {
 <style lang="less" scoped>
 .btn-wraps {
   padding:10px 0;
+}
+.tab-wrap{
+  /deep/.lightHight{
+    background: yellow;
+  }
 }
 </style>

@@ -34,7 +34,8 @@
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
       <container-info :tableData.sync="containerInfo" :currencyCode="oldPlanObject.currency" :ExchangeRateInfoArr="ExchangeRateInfoArr"
         @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit"
-        :containerType="selectArr.containerType" />
+        :containerType="selectArr.containerType" 
+        @ContainerInfoLight="ContainerInfoLight"/>
     </div>
 
     <!-- <div v-if="planId && feeList"> -->
@@ -59,7 +60,9 @@
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <!-- <v-table :data.sync="productList" @action="action" :buttons="edit ? productbButtons : null" @change-checked="selectProduct"> -->
       <v-table ref="productInfo" code="ulogistics_PlanDetail" :totalRow="productListTotal" :data="productList" @action="action" :buttons="productbButtons"
-        @change-checked="selectProduct">
+        @change-checked="selectProduct"
+        native-sort="orderNo"
+        @change-sort="$refs.productInfo.setSort(productList)">
         <div slot="header" class="product-header">
           <el-button v-if="edit" type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
           <el-button v-if="edit" type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
@@ -206,6 +209,7 @@
         batchDunningCutDown: '',
         CutDown: null,
         isfeeInfoLight:false,
+        isContainerInfoLight:false,
         ProductFromOrder:[],
         ProductFromOrderRes:[],
       }
@@ -706,25 +710,25 @@
           sliceStr = sliceStr.slice(0, 1) + sliceStr.slice(1 - sliceStr.length).toLowerCase();
           a.id = null
           a.vId = +new Date()
-          a.blSkuName = ''
-          a.hsCode = ''
-          a.currency = ''
-          a.toShipCartonQty = ''
-          a.toShipQty = ''
-          a.reportElement = ''
-          a.factorySkuCode = ''
+          a.blSkuName = null
+          a.hsCode = null
+          a.currency = null
+          a.toShipCartonQty = null
+          a.toShipQty = null
+          a.reportElement = null
+          a.factorySkuCode = null
           a.unitExportPrice = a['sku' + sliceStr + 'Price']
           a.totalExportPrice = a.skuPrice || 0;
           a.currency = a['sku' + sliceStr + 'Currency'];
-          a.containerNo = '';
-          a.containerType = '';
-          a.containerId = '';
-          a.fieldDisplay = '';
-          a.totalContainerQty = '';
-          a.totalContainerVolume = '';
-          a.totalContainerNetWeight = '';
-          a.totalContainerOuterCartonsQty = '';
-          a.shipmentStatus = '';
+          a.containerNo = null;
+          a.containerType = null;
+          a.containerId = null;
+          a.fieldDisplay = null;
+          a.totalContainerQty = null;
+          a.totalContainerVolume = null;
+          a.totalContainerNetWeight = null;
+          a.totalContainerOuterCartonsQty = null;
+          a.shipmentStatus = null;
           !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
         })
         this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList]
@@ -822,11 +826,18 @@
           case 'generateList':
             this.generateList();
             break;
-          case 'cancel':
-            this.cancelLoadingList();
+          case 'download':
+            this.download();
             break;
+          case 'cancel':
           case 'cancelLoadingList':
-            this.cancelLoadingList();
+            this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
+              confirmButtonText: this.$i.logistic.confirm,
+              cancelButtonText: this.$i.logistic.cancel,
+              type: 'warning'
+            }).then(() => {
+              this.cancelLoadingList();
+            })
             break;
           case 'refuse':
             this.refuse();
@@ -834,6 +845,15 @@
           default:
             break;
         }
+      },
+      download(){
+        let code;
+        if(this.pageTypeCurr=="loadingListDetail"){
+          code = 'LOGISTICS_ORDER';         
+        }else{
+          code = 'LOGISTICS_PLAN';
+        }
+        this.$fetch.export_task(code,{ids:[this.planId],planStatus:this.planStatus})
       },
       refuse() {
         this.$ajax.post(this.$apis.logistics_plan_cancelByIds, {
@@ -921,6 +941,12 @@
         this.oldPlanObject.fee = this.feeList && this.feeList.length > 0 ? this.feeList[0] : null;
         [this.oldPlanObject.fee][index].fieldDisplay=this.$depthClone(data);
       },
+      ContainerInfoLight(data,index){
+         console.log(data[index],'data')
+        this.isContainerInfoLight = true;
+        this.containerInfo[index].fieldDisplay=this.$depthClone(data)[index];
+        this.oldPlanObject.containerDetail =  this.containerInfo;
+      },
       sendData(keyString) {
         let url = this.pageTypeCurr == "loadingListDetail" ? this.$apis.update_logistic_order : this.configUrl[this.pageName]
           [keyString];
@@ -941,7 +967,6 @@
           this.oldPlanObject[key] = value
         })
         this.oldPlanObject.attachment = this.$refs.attachment.getFiles();
-        this.oldPlanObject.containerDetail = this.containerInfo
         this.oldPlanObject.product = this.modifyProductArray;
         this.oldPlanObject.currencyExchangeRate = _.map(this.$depthClone(this.ExchangeRateInfoArr), (item) => {
           item['price'] = item['value'];
