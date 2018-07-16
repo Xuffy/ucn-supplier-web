@@ -42,12 +42,11 @@
               :buttons="productInfoBtn"
               :loading="tableLoad"
               :height="450"
-              :disabledSort="true"
               :totalRow="productTotalRow"
               @action="producInfoAction"
               @change-checked="changeChecked"
+              @change-sort="onListSortChange"
               :rowspan="2"
-              :selection="statusModify"
               :hideFilterColumn="statusModify"/>
           <div class="bom-btn-wrap" v-show="!statusModify" v-if="tabData[0]">
             <el-button type="primary" @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.originValue !== 21" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
@@ -83,7 +82,7 @@
       </v-product>
     </el-dialog>
     <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @save="save" :beforeSave="beforeSave" ref="HM"></v-history-modify>
-    <v-message-board module="inquiry" code="inquiryDetail" :id="$route.query.id+''"></v-message-board>
+    <v-message-board v-if="chatParams" module="inquiry" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
   </div>
 </template>
 <script>
@@ -142,7 +141,14 @@ export default {
       list: [],
       tableColumn: '',
       deleteDetailIds: [],
-      idType: ''
+      idType: '',
+      params: {
+        ps: 200,
+        pn: 1,
+        operatorFilters: [],
+        sorts: []
+      },
+      chatParams: null
     };
   },
   components: {
@@ -325,6 +331,16 @@ export default {
       });
     },
     showData(res) {
+      this.chatParams = {
+        bizNo: res.quotationNo,
+        dataAuthCode: 'BIZ_INQUIRY',
+        funcAuthCode: '',
+        purchasers: [{
+          userId: res.ownerId,
+          companyId: res.companyId,
+          tenantId: res.tenantId
+        }]
+      };
       this.tableLoad = false;
       // Basic Info
       this.tabData = this.newTabData = this.$getDB(
@@ -332,15 +348,25 @@ export default {
         this.$refs.HM.getFilterData([res]),
         item => this.$filterDic(item)
       );
-      // SKU_UNIT
-      // Product Info
+      this.markFieldHighlight(this.newTabData);
+      this.showDetails(res.details);
+    },
+    showDetails(details) {
       this.productTabData = this.newProductTabData = this.$getDB(
         this.$db.inquiry.productInfo,
-        this.$refs.HM.getFilterData(res.details, 'skuId'),
+        this.$refs.HM.getFilterData(details, 'skuId'),
         item => this.$filterDic(item)
       );
-      this.markFieldHighlight(this.newTabData);
       this.markFieldHighlight(this.newProductTabData);
+    },
+    getInquiryDetailList() {
+      if(!this.id) return;
+      let url = this.$apis.parse(this.$apis.BUYER_GET_INQIIRY_DETAIL_LIST, {id: this.id});
+      this.$ajax.post(url, this.params).then(this.showDetails);
+    },
+    onListSortChange(args) {
+      this.params.sorts = args.sorts;
+      this.getInquiryDetailList();
     },
     queryAndAddProduction(ids) {
       if (!Array.isArray(ids) || !ids.length) {

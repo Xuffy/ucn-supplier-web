@@ -21,6 +21,9 @@ export default {
     entryDt:{
         _hide:true
     },
+    fieldUpdate:{
+        _hide:true
+    },
     skuPic:{
         _slot:'skuPictures',
         type:'pic',
