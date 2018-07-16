@@ -154,7 +154,7 @@ export const routerMap = [
             log: true,
             name: $i.router.orderDetail
           },
-          component: () => import('../views/order/poDetail/poDetail.vue')
+          // component: () => import('../views/order/poDetail/poDetail.vue')
         },  {
           path: 'archive',
           name: 'orderArchive',
@@ -210,18 +210,6 @@ export const routerMap = [
             draft: '/logistic/draft',
             recycleBin: true,
             name: $i.router.logisticLoadingDraft,
-            auth: ['LOGISTICS:PLAN_DRAFT_OVERVIEW']
-          },
-          component: () => import('../views/logistic/overviewWrapper')
-        },
-        {
-          path: 'archive',
-          name: 'overviewArchive',
-          hidden: true,
-          meta: {
-            draft: '/logistic/draft',
-            recycleBin: true,
-            name: $i.router.logisticLoadingArchive,
             auth: ['LOGISTICS:PLAN_DRAFT_OVERVIEW']
           },
           component: () => import('../views/logistic/overviewWrapper')
@@ -391,6 +379,7 @@ export const routerMap = [
           component: () => import('../views/logs/task.vue')
         }
       ]
+    },
   {
     path: '/',
     component: Layout,
@@ -583,29 +572,6 @@ export const routerMap = [
         component: () => import('../views/logistic/overviewWrapper')
       },
       {
-        path: 'draft',
-        name: 'overviewDraft',
-        hidden: true,
-        meta: {
-          draft: '/logistic/draft',
-          recycleBin: true,
-          name: $i.router.logisticLoadingDraft
-        },
-        component: () => import('../views/logistic/overviewWrapper')
-      },
-      {
-        path: 'archive',
-        name: 'overviewArchive',
-        hidden: true,
-        meta: {
-          draft: '/logistic/draft',
-          recycleBin: true,
-          name: $i.router.logisticLoadingArchive,
-          auth: ['LOGISTICS:PLAN_DRAFT_OVERVIEW']
-        },
-        component: () => import('../views/logistic/overviewWrapper')
-      },
-      {
         path: 'archivePlan',
         name: 'archivePlan',
         hidden: true,
@@ -617,19 +583,6 @@ export const routerMap = [
           name: $i.router.archive
         },
         component: () => import('../views/logistic/archivePlan')
-      },
-      {
-        path: 'archiveDraft',
-        name: 'archiveDraft',
-        hidden: true,
-        meta: {
-          draft: '/logistic/draft',
-          recycleBin: false,
-          log: true,
-          importTask: false,
-          name: $i.router.archive
-        },
-        component: () => import('../views/logistic/archiveDraft')
       },
       {
         path: 'archiveLoadingList',
