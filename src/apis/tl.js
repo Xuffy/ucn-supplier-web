@@ -45,6 +45,7 @@ export default {
     BUYER_POST_INQUIRY_SAVE: ['/inquiry/save', 'USUPPLY_URL', 'USUPPLY_URL'], // 提交
     BUYER_GET_INQIIRY_DETAIL: ['/inquiry', 'USUPPLY_URL', 'USUPPLY_URL'], // 获取inquiry 详情
     BUYER_GET_INQIIRY_DETAIL_BY_CODE: ['/inquiry/detail', 'USUPPLY_URL', 'USUPPLY_URL'], // 获取inquiry 详情
+    BUYER_GET_INQIIRY_DETAIL_LIST: ['/inquiry/{id}/details', 'USUPPLY_URL'], // 获取inquiry详情列表
     BUYER_GET_INQUIRY_HISTORY: ['/inquiry/{id}/history', 'USUPPLY_URL', 'USUPPLY_URL'], // 获取inquiry 历史
     BUYER_POST_INQUIRY_SKUS: ['/inquiry/skus', 'USUPPLY_URL', 'USUPPLY_URL'], // sku 转换接口
     BUYER_POST_INQUIRY_ACTION: ['/inquiry/action', 'USUPPLY_URL', 'USUPPLY_URL'], // 操作
