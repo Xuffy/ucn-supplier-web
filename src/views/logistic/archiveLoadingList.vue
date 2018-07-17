@@ -123,21 +123,21 @@
       }
     },
     mounted() {
-      let menuList = [{
-        path: '',
-        query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
-        type: 100,
-        label: this.$i.common.log
-      },
-      {
-        path: '/logistic/archivePlan',
-        label: this.$i.logistic.archivePlan
-      },
-      {
-        path: '/logistic/archiveLoadingList',
-        label: this.$i.logistic.archiveLoadingList
-      }];
-      this.setMenuLink(menuList);
+      // let menuList = [{
+      //   path: '',
+      //   query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
+      //   type: 100,
+      //   label: this.$i.common.log
+      // },
+      // {
+      //   path: '/logistic/archivePlan',
+      //   label: this.$i.logistic.archivePlan
+      // },
+      // {
+      //   path: '/logistic/archiveLoadingList',
+      //   label: this.$i.logistic.archiveLoadingList
+      // }];
+      // this.setMenuLink(menuList);
       this.fetchData()
       // this.getContainerType() 接手注释
     },

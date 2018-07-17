@@ -223,7 +223,8 @@ export const routerMap = [
             recycleBin: false,
             log: true,
             importTask: false,
-            name: $i.router.archive
+            name: $i.router.archive,
+            auth: ['LOGISTICS:ARCHIVE']
           },
           component: () => import('../views/logistic/archivePlan')
         },

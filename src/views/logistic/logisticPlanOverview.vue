@@ -31,12 +31,12 @@
         <div class="btn-wrap">
           <div class="fn btn">
             <div v-if="pageType === 'plan'">
-              <el-button v-authorize="'LOGISTICS:PLAN_OVERVIEW:DOWNLOAD'" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-              <el-button v-authorize="'LOGISTICS:PLAN_OVERVIEW:ARCHIVE'" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==5)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
+              <el-button v-authorize="auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==5)">{{ $i.logistic.archive }}</el-button>
             </div>
             <div v-if="pageType === 'loadingList'">
-              <el-button v-authorize="'LOADING_LIST:OVERVIEW:DOWNLOAD'" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-              <el-button v-authorize="'LOADING_LIST:OVERVIEW:ARCHIVE'" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==4)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
+              <el-button v-authorize="auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==4)">{{ $i.logistic.archive }}</el-button>
             </div>
           </div>
           <div class="view-by-btn">
@@ -84,6 +84,16 @@
             label: this.$i.logistic.orderNo
           }
         ],
+        auth:{
+          plan: {
+            DOWNLOAD :'LOGISTICS:PLAN_OVERVIEW:DOWNLOAD',
+            ARCHIVE  : 'LOGISTICS:PLAN_OVERVIEW:ARCHIVE'
+          },
+          loadingList: {
+            DOWNLOAD:'LOADING_LIST:OVERVIEW:DOWNLOAD',
+            ARCHIVE:'LOADING_LIST:OVERVIEW:ARCHIVE'
+          }
+        },
         headerText: {
           plan: this.$i.logistic.logisticsPlanOverview,
           loadingList: this.$i.logistic.loadingListOverview,
@@ -205,15 +215,34 @@
         path: '',
         query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
         type: 100,
+        auth: (()=>{ 
+          let code = null;
+          if(this.pageType=="plan"){
+            code = 'LOGISTICS:LOG';
+          }else if(this.pageType=="loadingList"){
+            code = 'LOADING_LIST:LOG';
+          }
+          return code
+        })(),
         label: this.$i.common.log
-      },{
-        path: '/logistic/archivePlan',
-        label: this.$i.logistic.archivePlan
-      },
-      {
-        path: '/logistic/archiveLoadingList',
-        label: this.$i.logistic.archiveLoadingList
       }];
+      if(this.pageType=="plan"){
+        menuList.push(
+          {
+            path: '/logistic/archivePlan',
+            auth: 'LOGISTICS:PLAN_DETAIL:ARCHIVE',
+            label: this.$i.logistic.archivePlan
+          }
+        )
+      }else if(this.pageType=="loadingList"){
+        menuList.push(
+          {
+            path: '/logistic/archiveLoadingList',
+            auth: 'LOADING_LIST:DETAIL:ARCHIVE',
+            label: this.$i.logistic.archiveLoadingList
+          }
+        )
+      }
       this.setMenuLink(menuList);
       this.fetchData()
     },

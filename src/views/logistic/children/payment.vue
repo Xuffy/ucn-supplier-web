@@ -71,7 +71,7 @@
       <el-table-column :label="$i.logistic.operation" align="center" width="200" fixed="right">
         <template slot-scope="scope">
           <div>
-            <el-button :disabled="scope.row.status==40||scope.row.status==-1" size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.logistics_accept_payment,$i.logistic.confirm)">{{ $i.logistic.confirm }}</el-button>
+            <el-button v-authorize="auth[pageTypeCurr].CONFIRM_PAYMENT||''" :disabled="scope.row.status==40||scope.row.status==-1" size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.logistics_accept_payment,$i.logistic.confirm)">{{ $i.logistic.confirm }}</el-button>
           </div>
         </template>
       </el-table-column>
@@ -155,11 +155,22 @@ export default {
           }
         }]
       },
+      auth:{
+        logisticPlanDetail: {
+          CONFIRM_PAYMENT:'LOGISTICS:PLAN_DETAIL:CONFIRM_PAYMENT'
+        },
+        loadingListDetail: {
+
+        }
+      }
     }
   },
   computed:{
     restaurants(){
       return this.selectArr.supplier;
+    },
+    pageTypeCurr() {
+      return this.$route.name;
     }
   },
   methods: {
