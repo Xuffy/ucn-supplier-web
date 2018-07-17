@@ -3,17 +3,17 @@
     <ul>
       <li>
         <i class="el-icon-info"></i>
-        Set Department and User
+        {{$i.workbench.setDepartment}}
         <el-button type="text">Go set</el-button>
       </li>
       <li>
         <i class="el-icon-info"></i>
-        Set Company Info
+        {{$i.workbench.setCompany}}
         <el-button type="text">Go set</el-button>
       </li>
       <li>
         <i class="el-icon-info"></i>
-        Set Category
+        {{$i.workbench.setCategory}}
         <el-button type="text">Go set</el-button>
       </li>
     </ul>

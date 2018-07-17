@@ -130,7 +130,7 @@ export default {
       , auths = (user.userResourceCodes || []).concat(user.userType)
       , pass = false;
 
-    if (user.userType === 0) {
+    if (user.userType === 0 || !value === '') {
       return true;
     }
 
