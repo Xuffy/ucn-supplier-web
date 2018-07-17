@@ -32,7 +32,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
-      <container-info :tableData.sync="containerInfo" :currencyCode="oldPlanObject.currency" :ExchangeRateInfoArr="ExchangeRateInfoArr"
+      <container-info :matchData="containerinfoMatch" :tableData.sync="containerInfo" :currencyCode="oldPlanObject.currency" :ExchangeRateInfoArr="ExchangeRateInfoArr"
         @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit"
         :containerType="selectArr.containerType" 
         @ContainerInfoLight="ContainerInfoLight"/>
@@ -166,6 +166,7 @@
         productModifyList: [],
         paymentList: [],
         containerInfo: [],
+        containerinfoMatch: [],
         paymentSum: {},
         selectArr: {
           containerType: [],
@@ -444,6 +445,7 @@
         this.exchangeRateList = res.currencyExchangeRate || []
         this.remark = res.remark
         this.containerInfo = res.containerDetail || [];
+        this.containerinfoMatch = this.$depthClone(res.containerDetail || []);
         this.feeList = res.fee && [res.fee];
         res.product = res.product.map((item, i) => {
           item.vId = i;
@@ -580,6 +582,7 @@
             return item.id;
           })
           this.containerInfo = _.difference(this.containerInfo, this.selectionContainer);
+          this.containerinfoMatch = this.$depthClone(_.difference(this.containerInfo, this.selectionContainer));
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -972,9 +975,9 @@
         [this.oldPlanObject.fee][index].fieldDisplay=this.$depthClone(data);
       },
       ContainerInfoLight(data,index){
-         console.log(data[index],'data')
         this.isContainerInfoLight = true;
-        this.containerInfo[index].fieldDisplay=this.$depthClone(data)[index];
+        this.containerInfo[index].fieldDisplay = this.$depthClone(data)[index];
+        // this.containerInfo[index].fieldDisplay = {...this.$depthClone(data)[index],...this.containerinfoMatch[index].fieldDisplay};
         this.oldPlanObject.containerDetail =  this.containerInfo;
       },
       sendData(keyString) {

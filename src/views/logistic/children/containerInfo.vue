@@ -81,8 +81,7 @@ export default {
     return {
       containerNo: '',
       containerSelect: '',
-      ContainerInfoLightArr:[],
-      ContainerInfoLightObj:{}
+      ContainerInfoLightArr:[]
     }
   },
   props: {
@@ -93,6 +92,12 @@ export default {
       default: false
     },
     tableData: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    matchData: {
       type: Array,
       default () {
         return []
@@ -121,9 +126,13 @@ export default {
           }
         })
       }
-      this.ContainerInfoLightObj[key] = v;
-      this.ContainerInfoLightArr[index] =  this.ContainerInfoLightObj;
-      console.log(this.ContainerInfoLightArr)
+      this.ContainerInfoLightArr[index] = new Object(this.ContainerInfoLightArr[index]);
+      this.ContainerInfoLightArr[index][key] = v;
+      this.matchData.forEach(el=>{
+        if(el[key]==v){
+          delete this.ContainerInfoLightArr[index][key];
+        }
+      })
       this.$emit('ContainerInfoLight',this.ContainerInfoLightArr,index);
     },
     lightHight({row, column, rowIndex, columnIndex}){
