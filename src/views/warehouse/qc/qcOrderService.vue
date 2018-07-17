@@ -335,11 +335,22 @@
 
 
         <div class="footBtn">
-            <el-button :disabled="loadingData" :loading="disableClickSubmit" @click="submit" type="primary">
+            <el-button
+                    v-authorize="'QC:ORDER_DETAIL:PRODUCT_RETURN'"
+                    :disabled="loadingData"
+                    :loading="disableClickSubmit"
+                    @click="submit" type="primary">
                 {{$i.warehouse.submit}}
             </el-button>
-            <el-button :disabled="loadingData" @click="cancel">{{$i.warehouse.cancel}}</el-button>
-            <el-button :disabled="loadingData" @click="download" type="primary">{{$i.warehouse.download}}</el-button>
+            <el-button
+                    :disabled="loadingData"
+                    type="danger"
+                    @click="cancel">{{$i.warehouse.cancel}}</el-button>
+            <el-button
+
+                    :disabled="loadingData"
+                    @click="download"
+                    type="primary">{{$i.warehouse.download}}</el-button>
         </div>
 
         <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
@@ -699,6 +710,7 @@
                 path: '/logs/index',
                 query: {code: 'WAREHOUSE'},
                 type: 10,
+                auth:'QC:LOG',
                 label: this.$i.common.log
             });
         }
