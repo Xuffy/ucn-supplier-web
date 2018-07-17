@@ -37,7 +37,11 @@
             <template slot="header">
                 <div class="fn">
                     <div class="btn-wrap">
-                        <el-button :loading="disableClickRecover" :disabled="selectedList.length===0" @click="recover">{{$i.order.restore}}</el-button>
+                        <el-button
+                                v-authorize="'ORDER:ARCHIVE:RECOVER'"
+                                :loading="disableClickRecover"
+                                :disabled="selectedList.length===0"
+                                @click="recover">{{$i.order.restore}}</el-button>
                         <!--<el-button type='danger' :loading="disableClickDelete" :disabled='disableDelete' @click='deleteOrder'>{{($i.order.archive)}}</el-button>-->
                     </div>
                     <div class="viewBy">

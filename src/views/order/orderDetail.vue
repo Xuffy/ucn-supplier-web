@@ -5,11 +5,20 @@
         </div>
         <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col :class="{speCol:v.type!=='textarea' && v.type!=='attachment',isModify:v._isModified}" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && v.type!=='supplierNo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col :class="{speCol:v.type!=='textarea' && v.type!=='attachment',isModify:v._isModified}"
+                        v-for="v in $db.order.orderDetail"
+                        v-if="v.belong==='basicInfo' && v.type!=='supplierNo'"
+                        :key="v.key"
+                        :xs="24"
+                        :sm="v.fullLine?24:12"
+                        :md="v.fullLine?24:12"
+                        :lg="v.fullLine?24:8"
+                        :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.type==='input'">
                             <div v-if="v.key==='lcNo'">
                                 <el-input
+                                        @change="handleChange(v.key)"
                                         :placeholder="v.isQuotationNo?(isModify?$i.order.pleaseCreate:''):(isModify?$i.order.pleaseInput:'')"
                                         class="speInput"
                                         :disabled="v.disabled || disabledLcNo || !isModify"
@@ -17,6 +26,7 @@
                             </div>
                             <div v-else>
                                 <el-input
+                                        @change="handleChange(v.key)"
                                         :placeholder="v.isQuotationNo?(isModify?$i.order.pleaseCreate:''):(isModify?$i.order.pleaseInput:'')"
                                         class="speInput"
                                         :disabled="v.disabled || v.disableDetail || !isModify"
@@ -25,6 +35,7 @@
                         </div>
                         <div v-else-if="v.type==='date'">
                             <el-date-picker
+                                    @change="handleChange(v.key)"
                                     :disabled="v.disabled || v.disableDetail || !isModify"
                                     v-model="orderForm[v.key]"
                                     :editable="false"
@@ -37,6 +48,7 @@
                         <div v-else-if="v.type==='select'">
                             <div v-if="v.isSupplier">
                                 <el-select
+                                        @change="handleChange(v.key)"
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
@@ -52,6 +64,7 @@
                             </div>
                             <div v-else-if="v.isIncoterm">
                                 <el-select
+                                        @change="handleChange(v.key)"
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
@@ -67,6 +80,7 @@
                             </div>
                             <div v-else-if="v.isCurrency">
                                 <el-select
+                                        @change="handleChange(v.key)"
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
@@ -83,7 +97,7 @@
                             <div v-else-if="v.isPayment">
                                 <el-select
                                         class="speInput"
-                                        @change="changePayment"
+                                        @change="changePayment(orderForm[v.key],v.key)"
                                         v-model="orderForm[v.key]"
                                         filterable
                                         :disabled="!isModify"
@@ -98,6 +112,7 @@
                             </div>
                             <div v-else-if="v.isCountry">
                                 <el-select
+                                        @change="handleChange(v.key)"
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
@@ -113,6 +128,7 @@
                             </div>
                             <div v-else-if="v.isTransport">
                                 <el-select
+                                        @change="handleChange(v.key)"
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
@@ -128,6 +144,7 @@
                             </div>
                             <div v-else-if="v.isStatus">
                                 <el-select
+                                        @change="handleChange(v.key)"
                                         class="speInput"
                                         :disabled="v.disableDetail || !isModify"
                                         v-model="orderForm[v.key]"
@@ -142,6 +159,7 @@
                             </div>
                             <div v-else>
                                 <el-select
+                                        @change="handleChange(v.key)"
                                         :placeholder="isModify?$i.order.pleaseChoose:''"
                                         :disabled="v.disabled || !isModify"
                                         class="speInput"
@@ -157,6 +175,7 @@
                         </div>
                         <div v-else-if="v.type==='number'">
                             <el-input-number
+                                    @change="handleChange(v.key)"
                                     :placeholder="isModify?$i.order.pleaseInput:''"
                                     :disabled="v.disabled || !isModify"
                                     class="speInput speNumber"
@@ -167,6 +186,7 @@
                         </div>
                         <div v-else-if="v.type==='textarea'">
                             <el-input
+                                    @change="handleChange(v.key)"
                                     :disabled="v.disabled || !isModify"
                                     class="speInput"
                                     type="textarea"
@@ -230,6 +250,8 @@
                     label="Me">
                 <template slot-scope="scope">
                     <el-date-picker
+                            :class="{'high-light':scope.row && scope.row.fieldUpdates.customer===''}"
+                            @change="handleResponsibilityChange(scope.row,'customer')"
                             v-model="scope.row.customer"
                             :editable="false"
                             align="right"
@@ -244,6 +266,8 @@
                     label="Supplier">
                 <template slot-scope="scope">
                     <el-date-picker
+                            :class="{'high-light':scope.row && scope.row.fieldUpdates.supplier===''}"
+                            @change="handleResponsibilityChange(scope.row,'supplier')"
                             v-model="scope.row.supplier"
                             align="right"
                             :editable="false"
@@ -259,6 +283,8 @@
                     label="Remark">
                 <template slot-scope="scope">
                     <el-input
+                            :class="{'high-light':scope.row && scope.row.fieldUpdates.remark===''}"
+                            @change="handleResponsibilityChange(scope.row,'remark')"
                             :disabled="scope.row.type!==1 && scope.row.type!==3 && scope.row.type!==5 || !isModify"
                             :placeholder="(scope.row.type===1 || scope.row.type===3 || scope.row.type===5) && isModify?$i.order.pleaseInput:''"
                             v-model="scope.row.remark"
@@ -272,6 +298,8 @@
                     label="Actual Date">
                 <template slot-scope="scope">
                     <el-date-picker
+                            :class="{'high-light':scope.row && scope.row.fieldUpdates.actualDt===''}"
+                            @change="handleResponsibilityChange(scope.row,'actualDt')"
                             v-model="scope.row.actualDt"
                             align="right"
                             type="date"
@@ -475,11 +503,14 @@
                 :totalRow="totalRow"
                 code="uorder_sku_list"
                 :height="500"
+                ref="table"
                 :data.sync="productTableData"
                 :buttons="isModify?productInfoBtn:productNotModifyBtn"
                 @action="productInfoAction"
                 :loading='loadingProductTable'
                 @change-checked="changeProductChecked"
+                native-sort="skuSysCode"
+                @change-sort="$refs.table.setSort(productTableData)"
                 :rowspan="2"
                 :total-row="tableTotal">
             <template slot="header">
@@ -547,17 +578,29 @@
                     <el-button :loading="disableClickCancelModify" @click="cancelModify" type="danger">{{$i.order.cancel}}</el-button>
                 </div>
                 <div v-else>
-                    <el-button :disabled="loadingPage || disableModify || hasCancelOrder || hasFinishOrder" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
-                    <el-button :disabled="loadingPage || disableConfirm || hasCancelOrder" @click="confirmOrder" :loading="disableClickConfirm" type="primary">{{$i.order.confirm}}</el-button>
                     <el-button
-                            v-authorize="'ORDER:DRAFT_OVERVIEW:DOWNLOAD'"
+                            v-authorize="'ORDER:DETAIL:MODIFY'"
+                            :disabled="loadingPage || disableModify || hasCancelOrder || hasFinishOrder"
+                            @click="modifyOrder"
+                            type="primary">{{$i.order.modify}}</el-button>
+                    <el-button
+                            v-authorize="'ORDER:DETAIL:CONFIRM'"
+                            :disabled="loadingPage || disableConfirm || hasCancelOrder"
+                            @click="confirmOrder"
+                            :loading="disableClickConfirm" type="primary">{{$i.order.confirm}}</el-button>
+                    <el-button
+                            v-authorize="'ORDER:DETAIL:DOWNLOAD'"
                             :disabled="loadingPage"
                             @click="downloadOrder"
                             :loading="disableClickConfirm"
                             type="primary">
                         {{$i.order.download}}
                     </el-button>
-                    <el-button :disabled="loadingPage || hasCancelOrder || hasFinishOrder" @click="refuseOrder" type="danger">{{$i.order.cancelOrder}}</el-button>
+                    <el-button
+                            v-authorize="'ORDER:DETAIL:DOWNLOAD'"
+                            :disabled="loadingPage || hasCancelOrder || hasFinishOrder"
+                            @click="refuseOrder"
+                            type="danger">{{$i.order.cancelOrder}}</el-button>
                     <el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
                 </div>
             </div>
@@ -608,32 +651,10 @@
                     :type="type1"
                     @handleCancel="handleCancel"
                     @handleOK="handleProductOk"></v-product>
-
-
-            <!--<el-tabs v-model="activeTab" type="card" @tab-click="handleClick">-->
-                <!--<el-tab-pane :label="$i.order.fromNewSearch" name="product">-->
-                    <!--<v-product-->
-                            <!--:disabledLine="disabledProductLine"-->
-                            <!--:forceUpdateNumber="updateProduct"-->
-                            <!--:hideBtn="true"-->
-                            <!--:isInModify="true"-->
-                            <!--:type="type1"-->
-                            <!--@handleOK="handleProductOk"></v-product>-->
-                <!--</el-tab-pane>-->
-                <!--<el-tab-pane :label="$i.order.fromBookmark" name="bookmark">-->
-                    <!--<v-product-->
-                            <!--:disablePostCustomerCreate="true"-->
-                            <!--:disabledLine="disabledProductLine"-->
-                            <!--:forceUpdateNumber="updateBookmark"-->
-                            <!--:hideBtn="true"-->
-                            <!--:isInModify="true"-->
-                            <!--@handleOK="handleProductOk"-->
-                            <!--:type="type2"></v-product>-->
-                <!--</el-tab-pane>-->
-            <!--</el-tabs>-->
         </el-dialog>
 
         <v-history-modify
+                code="uorder_sku_list"
                 @save="saveNegotiate"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
@@ -1575,14 +1596,20 @@
                     orderNo:this.$route.query.orderNo || this.$route.query.code
                 }).then(res=>{
                     this.orderForm=res;
-
                     /**
                      * 高亮处理
                      * */
+                    _.map(this.$db.order.orderDetail,v=>{
+                        v._isModified=false;
+                    });
                     _.map(this.orderForm.fieldUpdate,(v,k)=>{
                         this.$db.order.orderDetail[k]._isModified=true;
                     });
                     this.orderForm.fieldUpdate={};
+                    _.map(this.orderForm.responsibilityList,v=>{
+                        v.fieldUpdates=v.fieldUpdate;
+                        v.fieldUpdate={};
+                    });
 
                     this.initialData=this.$depthClone(this.orderForm)
                     this.savedIncoterm=Object.assign({},res).incoterm;
@@ -1629,6 +1656,16 @@
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     });
+                    _.map(this.productTableData,v=>{
+                        if(v.fieldUpdate.value){
+                            _.map(v.fieldUpdate.value,(value,key)=>{
+                                if(key!=='skuPictures'){
+                                    v[key]._style={'backgroundColor':'yellow'};
+                                }
+                            })
+                            v.fieldUpdate.value={};
+                        }
+                    });
                     this.markImportant=this.orderForm.importantSupplier;
 
                     //判断底部按钮能不能点
@@ -1672,8 +1709,6 @@
                     }
                 });
             },
-
-            //就是保存
             send(){
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
@@ -1684,24 +1719,6 @@
                         params.supplierCompanyId=v.companyId;
                     }
                 });
-                params.skuList=this.dataFilter(this.productTableData);
-                _.map(params.skuList,v=>{
-                    v.skuSample=v.skuSample==='1'?true:false;
-                    if(v.skuInspectQuarantineCategory){
-                        v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code;
-                    }
-                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
-                    _.map(picKey, item => {
-                        if (_.isArray(v[item])) {
-                            v[item] = (v[item][0] ? v[item][0] : null);
-                        }else if(_.isString(v[item])){
-                            let key=this.$getOssKey(v[item],true);
-                            v[item]=key[0];
-                        }
-                    });
-                });
-                params.attachments=this.$refs.upload[0].getFiles();
-
                 let orderSkuUpdateList=[];
                 _.map(this.productTableData,item=>{
                     let isModify=false,isModifyStatus=false;
@@ -1731,8 +1748,37 @@
                             });
                         }
                     }
+                    if(!item._remark){
+                        _.map(item,(v,k)=>{
+                            if(v._isModified){
+                                if(!item.fieldUpdate.value){
+                                    item.fieldUpdate.value={};
+                                }
+                                item.fieldUpdate.value[k]='';
+                            }
+                        })
+                    }
                 });
                 params.orderSkuUpdateList=orderSkuUpdateList;
+                params.skuList=this.dataFilter(this.productTableData);
+
+                _.map(params.skuList,v=>{
+                    v.skuSample=v.skuSample==='1'?true:false;
+                    if(v.skuInspectQuarantineCategory){
+                        v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code;
+                    }
+                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    _.map(picKey, item => {
+                        if (_.isArray(v[item])) {
+                            v[item] = (v[item][0] ? v[item][0] : null);
+                        }else if(_.isString(v[item])){
+                            let key=this.$getOssKey(v[item],true);
+                            v[item]=key[0];
+                        }
+                    });
+                });
+                // return console.log(this.$depthClone(params.skuList),'params.skuList')
+                params.attachments=this.$refs.upload[0].getFiles();
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
                     this.isModify=false;
@@ -1765,11 +1811,9 @@
                     this.disableClickSaveDraft=false;
                 });
             },
-            //获取订单号(先手动生成一个)
             getOrderNo(){
                 this.getSupplier();
             },
-            //获取供应商
             getSupplier(){
                 this.loadingPage=true;
                 this.$ajax.get(this.$apis.PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME,{
@@ -1801,7 +1845,7 @@
                     this.loadingTable=false;
                 });
             },
-            changePayment(e){
+            changePayment(e,key){
                 if(!e){
                     return;
                 }
@@ -1812,6 +1856,32 @@
                 }else{
                     this.disabledLcNo=false;
                 }
+                if(key){
+                    if (!this.orderForm.fieldUpdate) {
+                        this.orderForm.fieldUpdate = {};
+                    }
+                    this.orderForm.fieldUpdate[key] = "";
+                }
+            },
+
+            /**
+             * basic info事件
+             * */
+            handleChange(key) {
+                if (!this.orderForm.fieldUpdate) {
+                    this.orderForm.fieldUpdate = {};
+                }
+                this.orderForm.fieldUpdate[key] = "";
+            },
+
+            /**
+             * responsibility事件
+             * */
+            handleResponsibilityChange(data,key){
+                if(!data.fieldUpdate){
+                    data.fieldUpdate={};
+                }
+                data.fieldUpdate[key]='';
             },
 
             /**

@@ -209,18 +209,7 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-            name: $i.router.logisticLoadingDraft
-          },
-          component: () => import('../views/logistic/overviewWrapper')
-        },
-        {
-          path: 'archive',
-          name: 'overviewArchive',
-          hidden: true,
-          meta: {
-            draft: '/logistic/draft',
-            recycleBin: true,
-            name: $i.router.logisticLoadingArchive,
+            name: $i.router.logisticLoadingDraft,
             auth: ['LOGISTICS:PLAN_DRAFT_OVERVIEW']
           },
           component: () => import('../views/logistic/overviewWrapper')
@@ -237,19 +226,6 @@ export const routerMap = [
             name: $i.router.archive
           },
           component: () => import('../views/logistic/archivePlan')
-        },
-        {
-          path: 'archiveDraft',
-          name: 'archiveDraft',
-          hidden: true,
-          meta: {
-            draft: '/logistic/draft',
-            recycleBin: false,
-            log: true,
-            importTask: false,
-            name: $i.router.archive
-          },
-          component: () => import('../views/logistic/archiveDraft')
         },
         {
           path: 'archiveLoadingList',
@@ -404,224 +380,220 @@ export const routerMap = [
         }
       ]
     },
-    {
-      path: '/message',
-      component: Layout,
-      redirect: '/message/index',
-      meta: {name: $i.router.message},
-      hidden: true,
-      children: [
-        {
-          path: 'index',
-          name: 'message',
-          component: () => import('../views/message/message.vue'),
-        },
-        {
-          name: 'Management',
-          path: 'messageManagement',
-          meta: {
-            name: $i.router.messageManagement
-          },
-          component: () => import('../views/message/messageManagement.vue'),
-        },
-
-      ],
-    },
-    // todo 供应商路由
-
-    //draft  草稿箱路由
-    {
-      path: '/draft',
-      component: Layout,
-      meta: {name: 'Draft'},
-      redirect: '/draft/index',
-      noDropdown: true,
-      hidden: true,
-      children: [
-        {
-          path: 'index',
-          name: 'draft',
-          meta: {
-            draft: false,
-            recycleBin: false,
-            log: false,
-          },
-          component: () => import('../views/draft/index.vue')
-        }
-      ]
-    },
-    //recycleBin  回收站路由
-    {
-      path: '/recycle',
-      component: Layout,
-      meta: {name: 'Recycle Bin'},
-      redirect: '/recycle/index',
-      noDropdown: true,
-      hidden: true,
-      children: [
-        {
-          path: 'index',
-          name: 'recycleBin',
-          meta: {
-            draft: false,
-            recycleBin: false,
-            log: false,
-          },
-          component: () => import('../views/recycleBin/index.vue')
-        }
-      ]
-    },
-    {
-      path: '/warehouse',
-      component: Layout,
-      redirect: '/warehouse/overview',
-      name: 'warehouse',
-      meta: {
-        name: '仓库'
+  {
+    path: '/message',
+    component: Layout,
+    redirect: '/message/index',
+    meta: {name: $i.router.message},
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        name: 'message',
+        component: () => import('../views/message/message.vue'),
       },
-      noDropdown: false,
-      children: [
-        {
-          path: 'overview',
-          name: 'Warehouse Overview',
-          meta: {
-            name: '仓库总览'
-          },
-          component: () => import('../views/warehouse/warehouseOverview.vue'),
+      {
+        name: 'Management',
+        path: 'messageManagement',
+        meta: {
+          name: $i.router.messageManagement
         },
-        {
-          path: 'inbound',
-          name: 'Inbound Overview',
-          meta: {
-            name: '入库总览'
-          },
-          component: () => import('../views/warehouse/inbound/inboundOverview.vue'),
-        },
-        {
-          path: 'createInbound',
-          name: 'create Inbound',
-          hidden: true,
-          meta: {
-            name: '创建入库单'
-          },
-          component: () => import('../views/warehouse/inbound/createInbound'),
-        },
-        {
-          path: 'inboundDetail',
-          name: 'inbound Detail',
-          hidden: true,
-          meta: {
-            name: '入库详情',
-          },
-          component: () => import('../views/warehouse/inbound/inboundDetail'),
-        },
-        {
-          path: 'outbound',
-          name: 'Outbound Overview',
-          meta: {
-            name: '出库总览'
-          },
-          component: () => import('../views/warehouse/outbound/outboundOverview'),
-        },
-        {
-          path: 'createOutbound',
-          name: 'create Outbound',
-          hidden: true,
-          meta: {
-            name: '创建出库单'
-          },
-          component: () => import('../views/warehouse/outbound/createOutbound'),
-        },
-        {
-          path: 'outboundDetail',
-          name: 'outbound Detail',
-          hidden: true,
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: '出库单详情',
-          },
-          component: () => import('../views/warehouse/outbound/outboundDetail'),
-        },
-        {
-          path: 'qcOverview',
-          name: 'qc Overview',
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: '货单预览',
-          },
-          component: () => import('../views/warehouse/qc/qcOverview'),
-        },
-        {
-          path: 'qcOrder',
-          name: 'qc Order',
-          hidden: true,
-          meta: {
-            name: 'qc Order'
-          },
-          component: () => import('../views/warehouse/qc/qcOrder')
-        },
-        {
-          path: 'qcOrderService',
-          name: 'qc Order Service',
-          hidden: true,
-          meta: {
-            name: 'qc Order Service'
-          },
-          component: () => import('../views/warehouse/qc/qcOrderService')
-        },
-        {
-          path: 'qcOrderDetail',
-          name: 'qc Order Detail',
-          hidden: true,
-          meta: {
-            name: 'qc Order Detail'
-          },
-          component: () => import('../views/warehouse/qc/qcOrderDetail')
-        }
-      ]
-    },
-    {
-
-      path: '/customer',
-      component: Layout,
-      meta: {name: 'customer'},
-      redirect: '/customer/overview',
-      noDropdown: true,
-      hidden: false,
-      meta: {
-        name: '客户'
+        component: () => import('../views/message/messageManagement.vue'),
       },
-      children: [
-        {
-          path: 'overview',
-          name: 'customerRecycleBin',
-          meta: {
-            draft: false,
-            recycleBin: false,
-            log: false,
-            name: '客户总览'
-          },
-          component: () => import('../views/customer/overview.vue')
+
+    ],
+  },
+  // todo 供应商路由
+
+  //draft  草稿箱路由
+  {
+    path: '/draft',
+    component: Layout,
+    meta: {name: 'Draft'},
+    redirect: '/draft/index',
+    noDropdown: true,
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        name: 'draft',
+        meta: {
+          draft: false,
+          recycleBin: false,
+          log: false,
         },
-        {
-          path: 'detail',
-          name: 'customerDetail',
-          hidden: true,
-          meta: {
-            draft: false,
-            recycleBin: false,
-            log: false,
-          },
-          component: () => import('../views/customer/customerDetail.vue')
-        }
-      ]
+        component: () => import('../views/draft/index.vue')
+      }
+    ]
+  },
+  //recycleBin  回收站路由
+  {
+    path: '/recycle',
+    component: Layout,
+    meta: {name: 'Recycle Bin'},
+    redirect: '/recycle/index',
+    noDropdown: true,
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        name: 'recycleBin',
+        meta: {
+          draft: false,
+          recycleBin: false,
+          log: false,
+        },
+        component: () => import('../views/recycleBin/index.vue')
+      }
+    ]
+  },
+  {
+    path: '/warehouse',
+    component: Layout,
+    redirect: '/warehouse/overview',
+    name: 'warehouse',
+    meta: {
+      name: '仓库'
     },
-  ]
-;
+    noDropdown: false,
+    children: [
+      {
+        path: 'overview',
+        name: 'Warehouse Overview',
+        meta: {
+          name: '仓库总览'
+        },
+        component: () => import('../views/warehouse/warehouseOverview.vue'),
+      },
+      {
+        path: 'inbound',
+        name: 'Inbound Overview',
+        meta: {
+          name: '入库总览'
+        },
+        component: () => import('../views/warehouse/inbound/inboundOverview.vue'),
+      },
+      {
+        path: 'createInbound',
+        name: 'create Inbound',
+        hidden: true,
+        meta: {
+          name: '创建入库单'
+        },
+        component: () => import('../views/warehouse/inbound/createInbound'),
+      },
+      {
+        path: 'inboundDetail',
+        name: 'inbound Detail',
+        hidden: true,
+        meta: {
+          name: '入库详情',
+        },
+        component: () => import('../views/warehouse/inbound/inboundDetail'),
+      },
+      {
+        path: 'outbound',
+        name: 'Outbound Overview',
+        meta: {
+          name: '出库总览'
+        },
+        component: () => import('../views/warehouse/outbound/outboundOverview'),
+      },
+      {
+        path: 'createOutbound',
+        name: 'create Outbound',
+        hidden: true,
+        meta: {
+          name: '创建出库单'
+        },
+        component: () => import('../views/warehouse/outbound/createOutbound'),
+      },
+      {
+        path: 'outboundDetail',
+        name: 'outbound Detail',
+        hidden: true,
+        meta: {
+          draft: true,
+          recycleBin: true,
+          log: true,
+          name: '出库单详情',
+        },
+        component: () => import('../views/warehouse/outbound/outboundDetail'),
+      },
+      {
+        path: 'qcOverview',
+        name: 'qc Overview',
+        meta: {
+          draft: true,
+          recycleBin: true,
+          log: true,
+          name: '货单预览',
+        },
+        component: () => import('../views/warehouse/qc/qcOverview'),
+      },
+      {
+        path: 'qcOrder',
+        name: 'qc Order',
+        hidden: true,
+        meta: {
+          name: 'qc Order'
+        },
+        component: () => import('../views/warehouse/qc/qcOrder')
+      },
+      {
+        path: 'qcOrderService',
+        name: 'qc Order Service',
+        hidden: true,
+        meta: {
+          name: 'qc Order Service'
+        },
+        component: () => import('../views/warehouse/qc/qcOrderService')
+      },
+      {
+        path: 'qcOrderDetail',
+        name: 'qc Order Detail',
+        hidden: true,
+        meta: {
+          name: 'qc Order Detail'
+        },
+        component: () => import('../views/warehouse/qc/qcOrderDetail')
+      }
+    ]
+  },
+  {
+
+    path: '/customer',
+    component: Layout,
+    meta: {name: 'customer'},
+    redirect: '/customer/overview',
+    noDropdown: true,
+    hidden: false,
+    children: [
+      {
+        path: 'overview',
+        name: 'customerRecycleBin',
+        meta: {
+          draft: false,
+          recycleBin: false,
+          log: false,
+          name: '客户总览'
+        },
+        component: () => import('../views/customer/overview.vue')
+      },
+      {
+        path: 'detail',
+        name: 'customerDetail',
+        hidden: true,
+        meta: {
+          draft: false,
+          recycleBin: false,
+          log: false,
+        },
+        component: () => import('../views/customer/customerDetail.vue')
+      }
+    ]
+  },
+]
 
 
 let router = new Router({
@@ -641,44 +613,10 @@ router.beforeResolve((to, from, next) => {
   }
 
   if (to.path !== '/login' || from.path === '/login') {
-    /*version = localStore.get('version');
-
-    if (version !== Config.VERSION) { // 版本控制
-      return next({path: '/login'});
-    }*/
     if (_.isEmpty(ts)) { // 登录验证
       return next({path: '/login'});
     }
   }
-
-  // 判断路由是否必须带入参数 todo 跳转之前页面地址没有带上参数
-  /*if (to.meta.needParam) {
-    if (_.isEmpty(to.params) && _.isEmpty(to.query)) {
-      if (!_.isEmpty(cp)) {
-        _.map(cp.query, (val, key) => {
-          to.query[key] = val;
-        });
-
-        _.map(cp.params, (val, key) => {
-          to.params[key] = val;
-        });
-      } else {
-        return to.matched.length ?
-          next({path: to.matched[1] ? to.matched[1].redirect : to.matched[0].redirect}) : next({path: '/'});
-      }
-    }
-    if (!_.isEmpty(cp)) {
-      cacheParam = _.filter(cacheParam, val => {
-        return val.path !== to.path;
-      });
-    }
-
-    cacheParam.push(_.pick(to, 'path', 'params', 'query'));
-    sessionStore.set('cache_router_param', cacheParam);
-
-  }*/
-
-  // Notification.closeAll();
 
   next();
 });

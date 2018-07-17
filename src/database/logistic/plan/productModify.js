@@ -21,7 +21,11 @@ export default {
     type: 'text'
   },
   "skuPictures":{
-    type: 'text'
+    type: 'text',
+    _image:true,
+    _upload:{
+      readonly:true
+    }
   },
   "orderId": {
     type: 'text',
