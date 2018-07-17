@@ -105,7 +105,7 @@
                 options: [
                     {
                         id: 1,
-                        label: '订单号'
+                        label: this.$i.order.orderNo
                     },
                     {
                         id: 2,

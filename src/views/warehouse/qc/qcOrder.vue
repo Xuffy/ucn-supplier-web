@@ -364,8 +364,6 @@
 
         <v-view-picture ref="pics"></v-view-picture>
 
-
-
     </div>
 </template>
 
