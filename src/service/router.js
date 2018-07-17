@@ -238,19 +238,19 @@ export const routerMap = [
           },
           component: () => import('../views/logistic/archivePlan')
         },
-        {
-          path: 'archiveDraft',
-          name: 'archiveDraft',
-          hidden: true,
-          meta: {
-            draft: '/logistic/draft',
-            recycleBin: false,
-            log: true,
-            importTask: false,
-            name: $i.router.archive
-          },
-          component: () => import('../views/logistic/archiveDraft')
-        },
+        // {
+        //   path: 'archiveDraft',
+        //   name: 'archiveDraft',
+        //   hidden: true,
+        //   meta: {
+        //     draft: '/logistic/draft',
+        //     recycleBin: false,
+        //     log: true,
+        //     importTask: false,
+        //     name: $i.router.archive
+        //   },
+        //   component: () => import('../views/logistic/archiveDraft')
+        // },
         {
           path: 'archiveLoadingList',
           name: 'archiveLoadingList',

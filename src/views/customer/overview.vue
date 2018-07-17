@@ -49,24 +49,30 @@
               </div>
         </div>
 <!--        表格-->
-          <div style="margin-top: 20px;">
-              <el-button @click="deleteCustomer" type="danger" :disabled='!selectNumber.length>0'>
-                {{$i.button.delete}}({{selectNumber.length}})</el-button>
-              <el-button @click="downloadCustomer" type="primary">{{$i.button.download}}
-                ({{selectNumber.length===0?$i.common.all:selectNumber.length}})</el-button>
-          </div>
-             <v-table
-                    :height=360
-                    :loading='loading'
-                    :data="tabData"
-                    :buttons="[{label: 'Detail', type: 1}]"
-                    @action="detail"
-                    @change-checked='checked'
-                    style='marginTop:10px'/>
-              <page
-                :page-data="pageData"
-                @change="handleSizeChange"
-                @size-change="pageSizeChange"></page>
+       <v-table
+              code="udata_supply_supplier_customer_overview"
+              @change-sort="sort"
+              :height=500
+              :loading='loading'
+              :data="tabData"
+              :buttons="[{label: 'Detail', type: 1}]"
+              @action="detail"
+              @change-checked='checked'
+              style='marginTop:10px'>
+            <template slot="header">
+              <div style="margin-top: 20px;">
+                <el-button @click="deleteCustomer" type="danger" :disabled='!selectNumber.length>0'
+                v-authorize="'CUSTOMER:OVERVIEW:ARCHIVE'">
+                  {{$i.button.remove}}({{selectNumber.length}})</el-button>
+                <el-button @click="downloadCustomer" type="primary" v-authorize="'CUSTOMER:OVERVIEW:DOWNLOAD'">{{$i.button.download}}
+                  ({{selectNumber.length===0?$i.common.all:selectNumber.length}})</el-button>
+              </div>
+            </template>
+       </v-table>
+        <page
+          :page-data="pageData"
+          @change="handleSizeChange"
+          @size-change="pageSizeChange"></page>
 
 
       <div v-show='!isButton'  style='display:flex; justify-content: center'>
@@ -119,7 +125,8 @@
                     pn: 1,
                     ps: 50,
                     recycle: false,
-                    type: null
+                    type: null,
+                    sorts:[]
                 },
                 tabData: [],
                 selectedData: [],
@@ -273,6 +280,10 @@
               this.$fetch.export_task('UDATA_SUPPLIER_EXPORT_CUSTOMER_PARAMS',params);
             }
           },
+          sort(item){
+            this.params.sorts = item.sorts;
+            this.getData();
+          },
         },
         created() {
             this.getData();
@@ -289,7 +300,8 @@
           {
             path: 'customerArchive',
             type: 10,
-            label: this.$i.common.archive
+            label: this.$i.common.archive,
+            auth:'CUSTOMER:ARCHIVE'
           },
           ]);
         },
@@ -356,12 +368,6 @@
     .btnline {
         margin-top: 20px;
         width: 100%;
-        border-top: 1px solid black;
-    }
-
-    .btnline .el-button {
-        margin-right: 8px;
-        margin-top: 20px;
     }
 
     .el-select {

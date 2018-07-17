@@ -49,20 +49,28 @@
       </div>
     </div>
     <!--        表格-->
-    <div style="margin-top: 20px;">
-      <el-button @click="postBatchRecover" type="primary" :disabled='!selectNumber.length>0'>
-        {{$i.button.recover}}
-        ({{selectNumber.length}})
-      </el-button>
-    </div>
     <v-table
-      :height=360
+      code="udata_supply_supplier_customer_overview"
+      @change-sort="sort"
+      :height=500
       :loading='loading'
       :data="tabData"
       :buttons="[{label: 'Detail', type: 1}]"
       @action="detail"
       @change-checked='checked'
-      style='marginTop:10px'/>
+      style='marginTop:10px'>
+      <template slot="header">
+        <div style="margin-top: 20px;">
+          <el-button @click="postBatchRecover" type="primary" :disabled='!selectNumber.length>0'
+          v-authorize="'CUSTOMER:ARCHIVE:RECOVER'">
+            {{$i.button.recover}}
+            ({{selectNumber.length}})
+          </el-button>
+          <el-button @click="downloadCustomer" type="primary" v-authorize="'CUSTOMER:ARCHIVE:DOWNLOAD'">{{$i.button.download}}
+            ({{selectNumber.length===0?$i.common.all:selectNumber.length}})</el-button>
+        </div>
+      </template>
+    </v-table>
     <page
       :page-data="pageData"
       @change="handleSizeChange"
@@ -118,7 +126,8 @@
           pn: 1,
           ps: 50,
           recycle: true,
-          type: null
+          type: null,
+          sorts:[]
         },
         tabData: [],
         selectedData: [],
@@ -259,7 +268,20 @@
               this.getData();
             })
         })
-      }
+      },
+      sort(item){
+        this.params.sorts = item.sorts;
+        this.getData();
+      },
+      downloadCustomer(){
+        let ids=_.pluck(_.pluck(this.selectedData,"id"),'value');
+        if(ids.length>0){
+          this.$fetch.export_task('UDATA_SUPPLIER_EXPORT_CUSTOMER_IDS',{ids:ids});
+        }else{
+          let params=this.$depthClone(this.params);
+          this.$fetch.export_task('UDATA_SUPPLIER_EXPORT_CUSTOMER_PARAMS',params);
+        }
+      },
     },
     created() {
       this.getData();
@@ -343,14 +365,7 @@
   .btnline {
     margin-top: 20px;
     width: 100%;
-    border-top: 1px solid black;
   }
-
-  .btnline .el-button {
-    margin-right: 8px;
-    margin-top: 20px;
-  }
-
   .el-select {
     max-width: 200px
   }
