@@ -95,7 +95,8 @@
                                 @click="()=>$refs.importCategory.show()">{{$i.button.upload}}</el-button>
                         <el-button @click="download">{{$i.product.downloadSelected}}({{selectList.length?selectList.length:'All'}})</el-button>
                         <!--<el-button @click="upload">{{$i.product.uploadProduct}}</el-button>-->
-                        <!--<el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger">{{$i.product.delete}}</el-button>-->
+                        <el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger"
+                        v-authorize="'PRODUCT:OVERVIEW:ARCHIVE'">{{$i.common.remove}}</el-button>
                     </div>
                 </template>
             </v-table>
@@ -399,7 +400,13 @@
                 });
             },
             download(){
-                console.log(111)
+              let ids=_.pluck(_.pluck(this.selectList,"id"),'value');
+              if(ids.length>0){
+                this.$fetch.export_task('SKU_SUPPLIER_EXPORT_IDS',{ids:ids});
+              }else{
+                let params=this.$depthClone(this.productForm);
+                this.$fetch.export_task('SKU_SUPPLIER_EXPORT_PARAMS',params);
+              }
             },
 
             //上传产品
@@ -409,26 +416,35 @@
 
             //删除商品
             deleteGood(){
-                this.$confirm('确定删除选中商品?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
+                this.$confirm(this.$i.common.deleteProduct,this.$i.common.prompt, {
+                  confirmButtonText: this.$i.common.confirm,
+                  cancelButtonText: this.$i.common.cancel,
+                  type: 'warning'
                 }).then(() => {
-                    let hasUp=false;            //是否有上架商品，默认为false
-                    this.selectList.forEach(v=>{
-                        if(v.status.value==='上架'){
-                            hasUp=true;
-                        }
+                    // let hasUp=false;            //是否有上架商品，默认为false
+                    // this.selectList.forEach(v=>{
+                    //     if(v.status.value==='上架'){
+                    //         hasUp=true;
+                    //     }
+                    // })
+                    // if(hasUp){
+                    //     this.partDialogVisible=true;
+                    // }else{
+                    //     //直接把选中的产品删除
+                    //
+                    // }
+                  let id=[];
+                  this.selectList.forEach(v=>{
+                    id.push(v.id.value);
+                  });
+                  this.$ajax.post(this.$apis.post_sku_deleteAll,id)
+                    .then(res => {
+                      this.$message({
+                        type: 'success',
+                        message: this.$i.common.deleteTheSuccess
+                      });
+                      this.getData();
                     })
-                    if(hasUp){
-                        this.partDialogVisible=true;
-                    }else{
-                        //直接把选中的产品删除
-                        this.$message({
-                            message: '删除成功，被删除的产品可在回收站中找回',
-                            type: 'success'
-                        });
-                    }
                 }).catch(() => {
 
                 });
@@ -517,13 +533,20 @@
             });
         },
         mounted(){
-            this.setMenuLink({
+            this.setMenuLink([{
                 path: '/logs/index',
                 query: {code: 'PRODUCT'},
                 type: 10,
                 auth:'PRODUCT:LOG',
                 label: this.$i.common.log
-            });
+              },
+              {
+                path: 'archive',
+                type: 20,
+                auth:'PRODUCT:ARCHIVE',
+                label: this.$i.common.archive
+              },
+            ]);
         },
         watch:{
             hideBody(n){

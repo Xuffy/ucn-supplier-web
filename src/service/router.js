@@ -108,6 +108,15 @@ export const routerMap = [
           },
           component: () => import('../views/product/detail')
         },
+        {
+          path: 'archive',
+          name: 'Archive',
+          hidden: true,
+          meta: {
+            name: $i.router.productSourcingDetail
+          },
+          component: () => import('../views/product/archive')
+        },
       ]
     },
     {

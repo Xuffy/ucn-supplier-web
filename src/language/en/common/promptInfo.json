@@ -33,5 +33,8 @@
   "cannotPassword": "新密码不能与旧密码相同",
   "sureDelete": "确认删除",
   "noLength": "不能超过100条",
-  "sureDeleteToCompare": "确认删除该compare"
+  "sureDeleteToCompare": "确认删除该compare",
+  "sureRecover": "确定恢复",
+  "recoverSuccess": "恢复成功",
+  "deleteProduct": "确定删除选中商品"
 }
