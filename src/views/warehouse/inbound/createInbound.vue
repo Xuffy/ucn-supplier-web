@@ -354,6 +354,9 @@
 
                 //字典
                 skuUnitOption:[],
+              lengthUnitOption:[],
+              volumeUnitOption:[],
+              weightUnitOption:[],
             }
         },
         methods:{
@@ -457,12 +460,27 @@
                 }
 */
                 this.productData.forEach(v=>{
-                    let skuUnit;
-                    _.map(this.skuUnitOption,data=>{
-                        if(v.skuUnit===data.name){
-                            skuUnit=data.code;
-                        }
-                    });
+                  let productUnit={};
+                  _.map(this.skuUnitOption, data => {
+                    if (v.skuUnit === data.name) {
+                      productUnit.skuUnit = data.code;
+                    }
+                  });
+                  _.map(this.lengthUnitOption, data => {
+                    if (v.skuUnitLength === data.name) {
+                      productUnit.lengthUnitDictCode = data.code;
+                    }
+                  });
+                  _.map(this.volumeUnitOption, data => {
+                    if (v.skuUnitVolume === data.name) {
+                      productUnit.volumeUnitDictCode = data.code;
+                    }
+                  });
+                  _.map(this.weightUnitOption, data => {
+                    if (v.skuUnitWeight === data.name) {
+                      productUnit.weightUnitDictCode = data.code;
+                    }
+                  });
                     this.inboundData.inboundSkuBeanCreateParams.push({
                         customerName: v.customerName,
                         customerNo: v.customerNo,
@@ -518,7 +536,10 @@
                         skuNameCustomer: v.skuNameCustomer,
                         skuNameEn: v.skuNameEn,
                         skuNetWeight: v.skuNetWeight?v.skuNetWeight:0,
-                        skuUnitDictCode: skuUnit,
+                        skuUnitDictCode: productUnit.skuUnit,
+                        lengthUnitDictCode: productUnit.lengthUnitDictCode,
+                        volumeUnitDictCode: productUnit.volumeUnitDictCode,
+                        weightUnitDictCode: productUnit.weightUnitDictCode,
                         skuWidth: v.skuWidth?v.skuWidth:0,
                         supplierId: 0,
                         supplierName: v.supplierName,
@@ -666,8 +687,14 @@
                         });
                         console.log(this.productData,'this.productData')
                         console.log(this.skuUnitOption,'this.skuUnitOption')
+                        console.log(this.lengthUnitOption,'this.lengthUnitOption')
+                        console.log(this.volumeUnitOption,'this.volumeUnitOption')
+                        console.log(this.weightUnitOption,'this.weightUnitOption')
                         _.map(this.productData,v=>{
                             v.skuUnit=v.skuUnit?_.findWhere(this.skuUnitOption,{code:String(v.skuUnit)}).name:'';
+                            v.skuUnitLength=v.skuUnitLength?_.findWhere(this.lengthUnitOption,{code:String(v.skuUnitLength)}).name:'';
+                            v.skuUnitVolume=v.skuUnitVolume?_.findWhere(this.volumeUnitOption,{code:String(v.skuUnitVolume)}).name:'';
+                            v.skuUnitWeight=v.skuUnitWeight?_.findWhere(this.weightUnitOption,{code:String(v.skuUnitWeight)}).name:'';
                         })
 
                         /**
@@ -797,12 +824,18 @@
              * 获取字典
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE','SKU_UNIT'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE','SKU_UNIT','WT_UNIT','LH_UNIT','VE_UNIT'],{cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='IBD_TYPE'){
                             this.inboundTypeOption=v.codes;
                         }else if(v.code==='SKU_UNIT'){
                             this.skuUnitOption=v.codes;
+                        }else if(v.code==='WT_UNIT'){
+                          this.weightUnitOption=v.codes;
+                        }else if(v.code==='LH_UNIT'){
+                          this.lengthUnitOption=v.codes;
+                        }else if(v.code==='VE_UNIT'){
+                          this.volumeUnitOption=v.codes;
                         }
                     })
                 });
