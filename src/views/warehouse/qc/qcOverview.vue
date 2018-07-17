@@ -30,7 +30,9 @@
                         @action="btnClick">
                     <template slot="header">
                         <div class="btns">
-                            <el-button @click="download">{{$i.warehouse.download}}({{selectList.length?selectList.length:$i.warehouse.all}})</el-button>
+                            <el-button
+                                    v-authorize="'QC:ORDER_OVERVIEW:DOWNLOAD'"
+                                    @click="download">{{$i.warehouse.download}}({{selectList.length?selectList.length:$i.warehouse.all}})</el-button>
                         </div>
                     </template>
                 </v-table>
@@ -78,7 +80,7 @@
                 searchId:1,
                 searchOptions:[
                     {
-                        label:'验货单号',
+                        label:this.$i.warehouse.qcOrderNo,
                         id:1
                     },
                 ]
@@ -198,6 +200,7 @@
                 path: '/logs/index',
                 query: {code: 'WAREHOUSE'},
                 type: 10,
+                auth:'QC:LOG',
                 label: this.$i.common.log
             });
         },

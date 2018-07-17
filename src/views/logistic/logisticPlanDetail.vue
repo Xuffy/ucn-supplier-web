@@ -49,9 +49,9 @@
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
       <div class="hd active">
-        <el-button type="primary" size="mini" :disabled="dunningDisabled" @click.stop="batchDunning">{{ batchDunningCutDown + $i.logistic.Dept }}</el-button>
+        <el-button v-authorize="auth[pageTypeCurr].PRESS_FOR_PAYMENT||''" type="primary" size="mini" :disabled="dunningDisabled" @click.stop="batchDunning">{{ batchDunningCutDown + $i.logistic.Dept }}</el-button>
       </div>
-      <payment ref="payment" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum"
+      <payment ref="payment" v-authorize="auth[pageTypeCurr].payment||''" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum"
         @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView"
         :currencyCode="oldPlanObject.currency" />
     </div>
@@ -65,7 +65,7 @@
         @change-sort="$refs.productInfo.setSort(productList)">
         <div slot="header" class="product-header">
           <el-button v-if="edit" type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
-          <el-button v-if="edit" type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
+          <el-button v-if="edit" v-authorize="auth[pageTypeCurr].PRODUCT_INFO_DELETE||''" type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
           <label v-if="(edit||DeliveredEdit)&&pageTypeCurr=='loadingListDetail'">{{ $i.logistic.shipmentStatus}} :</label>
           <el-select v-if="(edit||DeliveredEdit)&&pageTypeCurr=='loadingListDetail'" v-model="ShipmentStatusCode" placeholder="请选择"
             @change="ShipmentStatusChange">
@@ -179,6 +179,17 @@
             }
           ]
         },
+        auth:{
+          logisticPlanDetail: {
+            payment:'LOGISTICS:PLAN_DETAIL:PAYMENT',
+            PRESS_FOR_PAYMENT:'LOGISTICS:PLAN_DETAIL:PRESS_FOR_PAYMENT',
+            PRODUCT_INFO_DELETE:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_DELETE'
+          },
+          loadingListDetail: {
+            PRESS_FOR_PAYMENT:'LLOADING_LIST:DETAIL:PRESS_FOR_PAYMENT',
+            payment:'LOADING_LIST:DETAIL:PAYMENT'
+          }
+        },
         dictionaryPart: {
           avl: 'AVL',
           blType: 'BL_TYPE',
@@ -284,17 +295,36 @@
     mounted() {
       let menuList = [{
         path: '',
-        query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
+        query: {code: this.pageTypeCurr&&this.pageTypeCurr=="loadingListDetail" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
         type: 100,
+        auth: (()=>{ 
+          let code = null;
+          if(this.pageTypeCurr=="logisticPlanDetail"){
+            code = 'LOGISTICS:LOG';
+          }else if(this.pageTypeCurr=="loadingListDetail"){
+            code = 'LOADING_LIST:LOG';
+          }
+          return code
+        })(),
         label: this.$i.common.log
-      },{
-        path: '/logistic/archivePlan',
-        label: this.$i.logistic.archivePlan
-      },
-      {
-        path: '/logistic/archiveLoadingList',
-        label: this.$i.logistic.archiveLoadingList
       }];
+      if(this.pageTypeCurr=="logisticPlanDetail"){
+        menuList.push(
+          {
+            path: '/logistic/archivePlan',
+            auth: 'LOGISTICS:PLAN_DETAIL:ARCHIVE',
+            label: this.$i.logistic.archivePlan
+          }
+        )
+      }else if(this.pageTypeCurr=="loadingListDetail"){
+        menuList.push(
+          {
+            path: '/logistic/archiveLoadingList',
+            auth: 'LOADING_LIST:DETAIL:ARCHIVE',
+            label: this.$i.logistic.archiveLoadingList
+          }
+        )
+      }
       this.setMenuLink(menuList);
       const arr = this.$route.fullPath.split('/')
       this.pageName = arr[arr.length - 1].split('?')[0]

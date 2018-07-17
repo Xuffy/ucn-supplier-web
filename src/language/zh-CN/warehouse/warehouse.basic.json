@@ -74,5 +74,6 @@
   "skuQty": "合同数量",
   "costPrice": "成本价",
   "basicQuotation": "基础报价",
-  "total":"Total"
+  "total":"Total",
+  "updateQcDataToProductLibrary":"Update QC Data To Product Library"
 }

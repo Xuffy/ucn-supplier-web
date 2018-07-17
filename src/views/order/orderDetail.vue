@@ -597,7 +597,7 @@
                         {{$i.order.download}}
                     </el-button>
                     <el-button
-                            v-authorize="'ORDER:DETAIL:DOWNLOAD'"
+                            v-authorize="'ORDER:DETAIL:CANCEL'"
                             :disabled="loadingPage || hasCancelOrder || hasFinishOrder"
                             @click="refuseOrder"
                             type="danger">{{$i.order.cancelOrder}}</el-button>
@@ -2944,7 +2944,14 @@
                 path: '/logs/index',
                 query: {code: 'ORDER'},
                 type: 10,
+                auth:'ORDER:LOG',
                 label: this.$i.common.log
+            });
+            this.setMenuLink({
+                path: '/order/archive',
+                type: 20,
+                auth:'ORDER:DETAIL:ARCHIVE',
+                label: this.$i.order.archive
             });
         },
         watch:{

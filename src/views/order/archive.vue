@@ -105,7 +105,7 @@
                 options: [
                     {
                         id: 1,
-                        label: '订单号'
+                        label: this.$i.order.orderNo
                     },
                     {
                         id: 2,
@@ -311,6 +311,7 @@
                 path: '/logs/index',
                 query: {code: 'ORDER'},
                 type: 10,
+                auth:'ORDER:LOG',
                 label: this.$i.common.log
             });
         },

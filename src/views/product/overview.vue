@@ -77,11 +77,23 @@
                     @action="btnClick">
                 <template slot="header">
                     <div class="btns">
-                        <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
-                        <el-button :disabled="disabledDeleteGoods" :loading="disableClickSetUp" @click="setUp">{{$i.product.setUp}}</el-button>
-                        <el-button :disabled="disabledDeleteGoods" :loading="disableClickSetDown" @click="setDown">{{$i.product.setDown}}</el-button>
-                        <el-button @click="()=>$refs.importCategory.show()">{{$i.button.upload}}</el-button>
-                        <!--<el-button>{{$i.product.downloadSelected}}({{selectList.length?selectList.length:'All'}})</el-button>-->
+                        <el-button
+                                v-authorize="'PRODUCT:OVERVIEW:ADD_PRODUCT'"
+                                @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
+                        <el-button
+                                v-authorize="'PRODUCT:OVERVIEW:SET_SALE'"
+                                :disabled="disabledDeleteGoods"
+                                :loading="disableClickSetUp"
+                                @click="setUp">{{$i.product.setUp}}</el-button>
+                        <el-button
+                                v-authorize="'PRODUCT:OVERVIEW:SET_NOT_SALE'"
+                                :disabled="disabledDeleteGoods"
+                                :loading="disableClickSetDown"
+                                @click="setDown">{{$i.product.setDown}}</el-button>
+                        <el-button
+                                v-authorize="'PRODUCT:OVERVIEW:UPLOAD_PRODUCT'"
+                                @click="()=>$refs.importCategory.show()">{{$i.button.upload}}</el-button>
+                        <el-button @click="download">{{$i.product.downloadSelected}}({{selectList.length?selectList.length:'All'}})</el-button>
                         <!--<el-button @click="upload">{{$i.product.uploadProduct}}</el-button>-->
                         <!--<el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger">{{$i.product.delete}}</el-button>-->
                     </div>
@@ -207,7 +219,6 @@
                 dataColumn:[],
                 pageData:{},
 
-
                 /**
                  * 字典
                  * */
@@ -218,11 +229,10 @@
                 lengthOption:[],
                 skuUnitOption:[],
                 countryOption:[],
-
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             //切换body的收缩展开状态
             switchDisplay(){
                 this.hideBody=!this.hideBody;
@@ -388,6 +398,9 @@
 
                 });
             },
+            download(){
+                console.log(111)
+            },
 
             //上传产品
             upload(){
@@ -504,9 +517,14 @@
             });
         },
         mounted(){
-            this.setLog({query: {code: 'PRODUCT'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'PRODUCT'},
+                type: 10,
+                auth:'PRODUCT:LOG',
+                label: this.$i.common.log
+            });
         },
-
         watch:{
             hideBody(n){
                 if(n){
