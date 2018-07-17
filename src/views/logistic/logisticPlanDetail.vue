@@ -186,6 +186,7 @@
             PRODUCT_INFO_DELETE:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_DELETE'
           },
           loadingListDetail: {
+            PRESS_FOR_PAYMENT:'LLOADING_LIST:DETAIL:PRESS_FOR_PAYMENT',
             payment:'LOADING_LIST:DETAIL:PAYMENT'
           }
         },

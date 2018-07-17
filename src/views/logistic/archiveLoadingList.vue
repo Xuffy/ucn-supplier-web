@@ -14,7 +14,7 @@
       <div slot="header">
         <div class="btn-wrap">
           <div class="fn btn">
-            <el-button @click="sendRecover" v-authorize="'LOADING_LIST:OVERVIEW:ARCHIVE:RECOVER'" :disabled="selectCount.length<=0">{{ $i.logistic.recover }}</el-button>
+            <el-button @click="sendRecover" v-authorize="'LOADING_LIST:ARCHIVE:RECOVER'" :disabled="selectCount.length<=0">{{ $i.logistic.recover }}</el-button>
           </div>
           <div class="view-by-btn">
             <span>{{ $i.logistic.viewBy }}&nbsp;</span>

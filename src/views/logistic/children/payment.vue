@@ -160,7 +160,7 @@ export default {
           CONFIRM_PAYMENT:'LOGISTICS:PLAN_DETAIL:CONFIRM_PAYMENT'
         },
         loadingListDetail: {
-
+          CONFIRM_PAYMENT:'LOADING_LIST:DETAIL:CONFIRM_PAYMENT'
         }
       }
     }
