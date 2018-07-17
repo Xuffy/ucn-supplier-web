@@ -28,7 +28,9 @@
                         @action="btnClick">
                     <template slot="header">
                         <div class="btns">
-                            <el-button @click="download">{{$i.warehouse.download}}({{selectList.length?selectList.length:$i.warehouse.all}})</el-button>
+                            <el-button
+                                    v-authorize="'WAREHOUSE:DOWNLOAD'"
+                                    @click="download">{{$i.warehouse.download}}({{selectList.length?selectList.length:$i.warehouse.all}})</el-button>
                         </div>
                     </template>
                 </v-table>
@@ -201,6 +203,7 @@
                 path: '/logs/index',
                 query: {code: 'WAREHOUSE'},
                 type: 10,
+                auth:'WAREHOUSE:LOG',
                 label: this.$i.common.log
             });
         },

@@ -64,5 +64,6 @@
   "recover":"Recover",
   "archiveOrder":"Archive Order",
   "archiveDraft":"Archive Draft",
-  "detail":"Detail"
+  "detail":"Detail",
+  "skuNo":"SKU货号"
 }

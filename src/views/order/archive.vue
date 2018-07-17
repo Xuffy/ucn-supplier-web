@@ -311,6 +311,7 @@
                 path: '/logs/index',
                 query: {code: 'ORDER'},
                 type: 10,
+                auth:'ORDER:LOG',
                 label: this.$i.common.log
             });
         },

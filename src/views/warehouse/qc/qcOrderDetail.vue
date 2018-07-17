@@ -9,7 +9,8 @@
         <div>
             <el-form label-width="190px">
                 <el-row class="speZone">
-                    <el-col v-for="v in $db.warehouse.qcOrderDetailBasicInfo" :key="v.key" class="speCol" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                    <el-col v-for="v in $db.warehouse.qcOrderDetailBasicInfo" :key="v.key" class="speCol" :xs="24"
+                            :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                         <el-form-item :label="$i.warehouse[v.key]">
                             <div v-if="v.type==='input'">
                                 <el-input
@@ -114,7 +115,14 @@
             {{$i.warehouse.payment}}
         </div>
         <div class="payment-table">
-            <el-button class="payment-btn" @click="dunningPay" :disabled="loadingPaymentTable" :loading="disableDunning" type="primary">{{$i.warehouse.pressMoney}}</el-button>
+            <el-button
+                    v-authorize="'QC:DETAIL:PRESS_FOR_PAYMENT'"
+                    class="payment-btn"
+                    @click="dunningPay"
+                    :disabled="loadingPaymentTable"
+                    :loading="disableDunning"
+                    type="primary">{{$i.warehouse.pressMoney}}
+            </el-button>
             <el-table
                     :data="paymentData"
                     border
@@ -145,7 +153,7 @@
                         prop="planPayDt"
                         :label="$i.warehouse.estPayDate">
                     <template slot-scope="scope">
-                        {{$dateFormat(scope.row.planPayDt,'yyyy-mm-dd')}}
+                        {{$dateFormat(scope.row.planPayDt,"yyyy-mm-dd")}}
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -156,7 +164,7 @@
                         prop="actualPayDt"
                         :label="$i.warehouse.actPayDate">
                     <template slot-scope="scope">
-                        {{$dateFormat(scope.row.actualPayDt,'yyyy-mm-dd')}}
+                        {{$dateFormat(scope.row.actualPayDt,"yyyy-mm-dd")}}
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -184,7 +192,13 @@
                         align="center"
                         width="100">
                     <template slot-scope="scope">
-                        <el-button v-if="scope.row.status!==40 && scope.row.status!==-1" @click="confirmPay(scope.row)" type="text" size="small">{{$i.warehouse.confirm}}</el-button>
+                        <el-button
+                                v-authorize="'QC:ORDER_DETAIL:CONFIRM_PAYMENT'"
+                                v-if="scope.row.status!==40 && scope.row.status!==-1"
+                                @click="confirmPay(scope.row)"
+                                type="text"
+                                size="small">{{$i.warehouse.confirm}}
+                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -328,58 +342,64 @@
         </div>
 
         <div class="footBtn">
-            <el-button @click="edit" v-if="qcDetail.qcStatusDictCode==='WAITING_QC'" type="primary">{{$i.warehouse.edit}}</el-button>
-            <el-button type="danger" @click="cancel"  v-if="qcDetail.qcStatusDictCode==='WAITING_QC'" >{{$i.warehouse.exit}}</el-button>
-            <el-button type="danger" @click="cancel"  v-if="qcDetail.qcStatusDictCode!=='WAITING_QC'" >{{$i.warehouse.exit}}</el-button>
+            <el-button @click="edit" v-if="qcDetail.qcStatusDictCode==='WAITING_QC'" type="primary">
+                {{$i.warehouse.edit}}
+            </el-button>
+            <el-button type="danger" @click="cancel" v-if="qcDetail.qcStatusDictCode==='WAITING_QC'">
+                {{$i.warehouse.exit}}
+            </el-button>
+            <el-button type="danger" @click="cancel" v-if="qcDetail.qcStatusDictCode!=='WAITING_QC'">
+                {{$i.warehouse.exit}}
+            </el-button>
             <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
         </div>
         <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
     </div>
 </template>
 <script>
-    import {VTable,VMessageBoard,VUpload } from '@/components/index';
-    import {mapActions} from 'vuex'
+    import { VTable, VMessageBoard, VUpload } from "@/components/index";
+    import { mapActions } from "vuex";
 
     export default {
-        name:'qc-detail',
-        components:{
+        name: "qc-detail",
+        components: {
             VTable,
             VMessageBoard,
             VUpload
         },
-        data(){
-            return{
-                qcDetail:{},
-                loadingData:false,
-                loadingPaymentTable:false,
+        data() {
+            return {
+                qcDetail: {},
+                loadingData: false,
+                loadingPaymentTable: false,
                 pickerOptions1: {
                     disabledDate(time) {
-                        return time.getTime()+3600 * 1000 * 24  < Date.now();
-                    },
+                        return time.getTime() + 3600 * 1000 * 24 < Date.now();
+                    }
                 },
-                disableDunning:false,
+                disableDunning: false,
                 /**
                  * 字典数据
                  * */
-                serviceList:[],
-                qcTypeOption:[],
-                qcMethodOption:[],
-                surveyorOption:[],
-                qcResultOption:[],
-                barCodeResult:[],
-                qcStatusOption:[],
-                currencyOptions:[],
-                skuUnitOption:[],       //计量单位
-                lengthOption:[],
-                volumeOption:[],
-                weightOption:[],
+                serviceList: [],
+                qcTypeOption: [],
+                qcMethodOption: [],
+                surveyorOption: [],
+                qcResultOption: [],
+                barCodeResult: [],
+                qcStatusOption: [],
+                currencyOptions: [],
+                skuUnitOption: [],       //计量单位
+                lengthOption: [],
+                volumeOption: [],
+                weightOption: [],
 
 
                 /**
                  * summary Data
                  * */
-                summaryData:{
-                    skuQuantity:0
+                summaryData: {
+                    skuQuantity: 0
                 },
 
 
@@ -391,12 +411,12 @@
                 /**
                  * product info data
                  * */
-                totalRow:[],
-                loadingProductInfoTable:false,
-                productInfoConfig:{
+                totalRow: [],
+                loadingProductInfoTable: false,
+                productInfoConfig: {
                     pn: 1,
                     ps: 200,
-                    qcOrderId: this.$route.query.id,
+                    qcOrderId: this.$route.query.id
 
                     // sorts: [
                     //     {
@@ -405,98 +425,98 @@
                     //     }
                     // ],
                 },
-                productInfoData:[],
-                selectList:[],
-            }
+                productInfoData: [],
+                selectList: []
+            };
         },
-        methods:{
-            ...mapActions(['setMenuLink']),
-            getQcOrderDetail(){
-                this.loadingData=true;
+        methods: {
+            ...mapActions(["setMenuLink"]),
+            getQcOrderDetail() {
+                this.loadingData = true;
                 this.$ajax.get(`${this.$apis.get_serviceOrderDetail}?id=${this.$route.query.id}`)
-                    .then(res=>{
-                        this.qcDetail=res;
+                    .then(res => {
+                        this.qcDetail = res;
                         this.getPaymentInfo();
-                    }).finally(err=>{
-                        this.loadingData=false;
+                    }).finally(err => {
+                        this.loadingData = false;
                     }
                 );
             },
-            getProductInfo(){
-                this.loadingProductInfoTable=true;
-                this.$ajax.post(this.$apis.get_serviceQcOrderProduct,this.productInfoConfig).then(res=>{
-                    this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas,e=>{
-                        e.deliveryDate._value=this.$dateFormat(e.deliveryDate.value,'yyyy-mm-dd');
-                        e.skuUnitDictCode._value=_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}).name;
-                        e.volumeUnitDictCode._value=_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}).name;
-                        e.weightUnitDictCode._value=_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}).name;
-                        e.lengthUnitDictCode._value=_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}).name;
+            getProductInfo() {
+                this.loadingProductInfoTable = true;
+                this.$ajax.post(this.$apis.get_serviceQcOrderProduct, this.productInfoConfig).then(res => {
+                    this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas, e => {
+                        e.deliveryDate._value = this.$dateFormat(e.deliveryDate.value, "yyyy-mm-dd");
+                        e.skuUnitDictCode._value = _.findWhere(this.skuUnitOption, { code: e.skuUnitDictCode.value }).name;
+                        e.volumeUnitDictCode._value = _.findWhere(this.volumeOption, { code: e.volumeUnitDictCode.value }).name;
+                        e.weightUnitDictCode._value = _.findWhere(this.weightOption, { code: e.weightUnitDictCode.value }).name;
+                        e.lengthUnitDictCode._value = _.findWhere(this.lengthOption, { code: e.lengthUnitDictCode.value }).name;
                     });
-                    console.log(this.productInfoData,'this.productInfoData')
-                    let diffData=[];
-                    _.map(this.productInfoData,v=>{
-                        diffData.push(v.skuId.value+v.orderNo.value);
+                    console.log(this.productInfoData, "this.productInfoData");
+                    let diffData = [];
+                    _.map(this.productInfoData, v => {
+                        diffData.push(v.skuId.value + v.orderNo.value);
                     });
-                    this.summaryData.skuQuantity=_.uniq(diffData).length;
-                    if(res.datas.length>0){
-                        let obj=Object.assign({},res.datas[0]);
-                        _.map(obj,(v,key)=>{
-                            if(key==='orderSkuQty' || key==='expectQcQty' || key==='outerCartonTotalQty' || key==='actSkuCartonTotalQty' || key==='qualifiedSkuCartonTotalQty' || key==='unqualifiedSkuCartonTotalQty' || key==='actSkuQty' || key==='qualifiedSkuQty' || key==='unqualifiedSkuQty' || key==='qualifiedSkuNetWeight' || key==='unqualifiedSkuNetWeight' || key==='qualifiedSkuVolume' || key==='unqualifiedSkuVolume' || key==='qualifiedSkuGrossWeight' || key==='unqualifiedSkuGrossWeight' || key==='checkOuterCartonQty'){
-                                obj[key]=0;
-                            }else{
-                                obj[key]=null;
+                    this.summaryData.skuQuantity = _.uniq(diffData).length;
+                    if (res.datas.length > 0) {
+                        let obj = Object.assign({}, res.datas[0]);
+                        _.map(obj, (v, key) => {
+                            if (key === "orderSkuQty" || key === "expectQcQty" || key === "outerCartonTotalQty" || key === "actSkuCartonTotalQty" || key === "qualifiedSkuCartonTotalQty" || key === "unqualifiedSkuCartonTotalQty" || key === "actSkuQty" || key === "qualifiedSkuQty" || key === "unqualifiedSkuQty" || key === "qualifiedSkuNetWeight" || key === "unqualifiedSkuNetWeight" || key === "qualifiedSkuVolume" || key === "unqualifiedSkuVolume" || key === "qualifiedSkuGrossWeight" || key === "unqualifiedSkuGrossWeight" || key === "checkOuterCartonQty") {
+                                obj[key] = 0;
+                            } else {
+                                obj[key] = null;
                             }
-                        })
+                        });
 
-                        _.map(res.datas,data=>{
-                            _.map(data,(v,key)=>{
-                                if(key==='orderSkuQty' || key==='expectQcQty' || key==='outerCartonTotalQty' || key==='actSkuCartonTotalQty' || key==='qualifiedSkuCartonTotalQty' || key==='unqualifiedSkuCartonTotalQty' || key==='actSkuQty' || key==='qualifiedSkuQty' || key==='unqualifiedSkuQty' || key==='qualifiedSkuNetWeight' || key==='unqualifiedSkuNetWeight' || key==='qualifiedSkuVolume' || key==='unqualifiedSkuVolume' || key==='qualifiedSkuGrossWeight' || key==='unqualifiedSkuGrossWeight' || key==='checkOuterCartonQty'){
-                                    obj[key]+=Number(data[key]);
+                        _.map(res.datas, data => {
+                            _.map(data, (v, key) => {
+                                if (key === "orderSkuQty" || key === "expectQcQty" || key === "outerCartonTotalQty" || key === "actSkuCartonTotalQty" || key === "qualifiedSkuCartonTotalQty" || key === "unqualifiedSkuCartonTotalQty" || key === "actSkuQty" || key === "qualifiedSkuQty" || key === "unqualifiedSkuQty" || key === "qualifiedSkuNetWeight" || key === "unqualifiedSkuNetWeight" || key === "qualifiedSkuVolume" || key === "unqualifiedSkuVolume" || key === "qualifiedSkuGrossWeight" || key === "unqualifiedSkuGrossWeight" || key === "checkOuterCartonQty") {
+                                    obj[key] += Number(data[key]);
                                 }
 
-                            })
-                        })
-                        this.totalRow = this.$getDB(this.$db.warehouse.qcDetailProductInfo, [obj],item=>{
+                            });
+                        });
+                        this.totalRow = this.$getDB(this.$db.warehouse.qcDetailProductInfo, [obj], item => {
 
                         });
                     }
-                    this.loadingProductInfoTable=false;
-                }).catch(err=>{
-                    this.loadingProductInfoTable=false;
+                    this.loadingProductInfoTable = false;
+                }).catch(err => {
+                    this.loadingProductInfoTable = false;
                 });
             },
-            getPaymentInfo(){
-                this.loadingPaymentTable=true;
-                this.$ajax.post(this.$apis.PAYMENT_LIST,{
-                    orderNo:this.qcDetail.qcOrderNo,
-                    orderType:20
-                }).then(res=>{
-                    this.paymentData=res.datas;
-                }).finally(()=>{
-                    this.loadingPaymentTable=false;
-                })
+            getPaymentInfo() {
+                this.loadingPaymentTable = true;
+                this.$ajax.post(this.$apis.PAYMENT_LIST, {
+                    orderNo: this.qcDetail.qcOrderNo,
+                    orderType: 20
+                }).then(res => {
+                    this.paymentData = res.datas;
+                }).finally(() => {
+                    this.loadingPaymentTable = false;
+                });
             },
 
             /**
              * product info表格事件
              * */
-            btnClick(e){
+            btnClick(e) {
                 this.$windowOpen({
-                    url:'/product/detail',
-                    params:{
-                        id:e.skuId.value
+                    url: "/product/detail",
+                    params: {
+                        id: e.skuId.value
                     }
                 });
 
             },
-            changeChecked(e){
-                this.selectList=e;
+            changeChecked(e) {
+                this.selectList = e;
             },
-            edit(){
+            edit() {
                 this.$router.push({
-                    path:'/warehouse/editQc',
-                    query:{
-                        id:this.$route.query.id
+                    path: "/warehouse/editQc",
+                    query: {
+                        id: this.$route.query.id
                     }
                 });
             },
@@ -504,55 +524,55 @@
             /**
              * payment事件
              * */
-            tableRowClassName({row}) {
-                if(row.status===-1){
-                    return 'warning-row';
+            tableRowClassName({ row }) {
+                if (row.status === -1) {
+                    return "warning-row";
                 }
-                return '';
+                return "";
             },
-            dunningPay(){
-                let params=[];
-                _.map(this.paymentData,v=>{
-                    if(v.status===40 && v.planPayAmount>v.actualPayAmount){
+            dunningPay() {
+                let params = [];
+                _.map(this.paymentData, v => {
+                    if (v.status === 40 && v.planPayAmount > v.actualPayAmount) {
                         params.push({
-                            id:v.id
-                        })
+                            id: v.id
+                        });
                     }
                 });
 
-                if(params.length===0){
+                if (params.length === 0) {
                     return this.$message({
                         message: this.$i.warehouse.nothingDunning,
-                        type: 'warning'
+                        type: "warning"
                     });
                 }
 
-                this.disableDunning=true;
-                this.$ajax.post(this.$apis.PAYMENT_DUNNING,params).then(res=>{
+                this.disableDunning = true;
+                this.$ajax.post(this.$apis.PAYMENT_DUNNING, params).then(res => {
                     this.$message({
                         message: this.$i.warehouse.dunningSuccess,
-                        type: 'success'
+                        type: "success"
                     });
-                }).finally(()=>{
-                    this.disableDunning=false;
-                })
+                }).finally(() => {
+                    this.disableDunning = false;
+                });
             },
-            confirmPay(data){
+            confirmPay(data) {
                 this.$confirm(this.$i.warehouse.sureConfirm, this.$i.warehouse.prompt, {
                     confirmButtonText: this.$i.warehouse.sure,
                     cancelButtonText: this.$i.warehouse.cancel,
-                    type: 'warning'
+                    type: "warning"
                 }).then(() => {
-                    this.$ajax.post(this.$apis.PAYMENT_ACCEPT,{
-                        id:data.id,
-                        version:data.version
-                    }).then(res=>{
+                    this.$ajax.post(this.$apis.PAYMENT_ACCEPT, {
+                        id: data.id,
+                        version: data.version
+                    }).then(res => {
                         this.$message({
                             message: this.$i.warehouse.confirmSuccess,
-                            type: 'success'
+                            type: "success"
                         });
                         this.getPaymentInfo();
-                    }).finally(()=>{
+                    }).finally(() => {
 
                     });
                 }).catch(() => {
@@ -566,10 +586,10 @@
                     if (index === 0) {
                         sums[index] = this.$i.warehouse.totalMoney;
                         return;
-                    }else if(index===4 || index===6){
+                    } else if (index === 4 || index === 6) {
                         const values = data.map(item => {
-                            if(item.status===40){
-                                return Number(item[column.property])
+                            if (item.status === 40) {
+                                return Number(item[column.property]);
                             }
                         });
 
@@ -582,8 +602,8 @@
                                     return prev;
                                 }
                             }, 0);
-                        }else{
-                            sums[index]=0;
+                        } else {
+                            sums[index] = 0;
                         }
                     }
                 });
@@ -594,24 +614,24 @@
             /**
              * 选择服务商的方法
              * */
-            getService(name){
-                this.serviceList=[];
-                if(!name){
-                    name='';
+            getService(name) {
+                this.serviceList = [];
+                if (!name) {
+                    name = "";
                 }
-                this.$ajax.get(`${this.$apis.get_supplyProviders}?name=${name}`).then(res=>{
-                    res.forEach(v=>{
+                this.$ajax.get(`${this.$apis.get_supplyProviders}?name=${name}`).then(res => {
+                    res.forEach(v => {
                         this.serviceList.push(v);
                     });
-                    this.$ajax.get(`${this.$apis.get_serviceProviders}?name=${name}`).then(res=>{
-                        res.forEach(v=>{
+                    this.$ajax.get(`${this.$apis.get_serviceProviders}?name=${name}`).then(res => {
+                        res.forEach(v => {
                             this.serviceList.push(v);
                         });
-                    }).catch(err=>{
+                    }).catch(err => {
 
                     });
 
-                }).catch(err=>{
+                }).catch(err => {
 
                 });
             },
@@ -619,38 +639,37 @@
             /**
              * 获取字典
              * */
-            getUnit(){
-                const unitAjax=this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_QC_RS','PB_CODE','QC_STATUS','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT'],{cache:true});
-                const currencyAjax=this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true});
-                this.$ajax.all([unitAjax,currencyAjax]).then(res=>{
-                    res[0].forEach(v=>{
-                        if(v.code==='QC_TYPE'){
-                            this.qcTypeOption=v.codes;
-                        }else if(v.code==='QC_MD'){
-                            this.qcMethodOption=v.codes;
-                        }else if(v.code==='SKU_QC_RS'){
-                            v.codes=_.filter(v.codes, e=>{
-                                return e.code!=='WAIT_FOR_QC' && e.code!=='CONFIRMED';
+            getUnit() {
+                const unitAjax = this.$ajax.post(this.$apis.get_partUnit, ["QC_TYPE", "QC_MD", "SKU_QC_RS", "PB_CODE", "QC_STATUS", "SKU_UNIT", "LH_UNIT", "VE_UNIT", "WT_UNIT"], { cache: true });
+                const currencyAjax = this.$ajax.get(this.$apis.get_currencyUnit, {}, { cache: true });
+                this.$ajax.all([unitAjax, currencyAjax]).then(res => {
+                    res[0].forEach(v => {
+                        if (v.code === "QC_TYPE") {
+                            this.qcTypeOption = v.codes;
+                        } else if (v.code === "QC_MD") {
+                            this.qcMethodOption = v.codes;
+                        } else if (v.code === "SKU_QC_RS") {
+                            v.codes = _.filter(v.codes, e => {
+                                return e.code !== "WAIT_FOR_QC" && e.code !== "CONFIRMED";
                             });
-                            this.qcResultOption=v.codes;
-                        }else if(v.code==='PB_CODE'){
-                            this.barCodeResult=v.codes;
-                        }else if(v.code==='QC_STATUS'){
-                            this.qcStatusOption=v.codes;
-                        }else if(v.code==='SKU_UNIT'){
-                            this.skuUnitOption=v.codes;
-                        }else if(v.code==='LH_UNIT'){
-                            this.lengthOption=v.codes;
-                        }else if(v.code==='VE_UNIT'){
-                            this.volumeOption=v.codes;
-                        }else if(v.code==='WT_UNIT'){
-                            this.weightOption=v.codes;
+                            this.qcResultOption = v.codes;
+                        } else if (v.code === "PB_CODE") {
+                            this.barCodeResult = v.codes;
+                        } else if (v.code === "QC_STATUS") {
+                            this.qcStatusOption = v.codes;
+                        } else if (v.code === "SKU_UNIT") {
+                            this.skuUnitOption = v.codes;
+                        } else if (v.code === "LH_UNIT") {
+                            this.lengthOption = v.codes;
+                        } else if (v.code === "VE_UNIT") {
+                            this.volumeOption = v.codes;
+                        } else if (v.code === "WT_UNIT") {
+                            this.weightOption = v.codes;
                         }
-                    })
-                    this.currencyOptions=res[1];
+                    });
+                    this.currencyOptions = res[1];
                     this.getProductInfo();
                 });
-
 
                 //获取验货员
                 // this.$ajax.get(this.$apis.get_serviceQcSurveyor).then(res=>{
@@ -659,58 +678,65 @@
                 //
                 // });
             },
-            cancel(){
+            cancel() {
                 window.close();
             },
-            download(){
-                this.$fetch.export_task('QC_ORDER',{qcOrderNos:[this.qcDetail.qcOrderNo]});
-            },
+            download() {
+                this.$fetch.export_task("QC_ORDER", { qcOrderNos: [this.qcDetail.qcOrderNo] });
+            }
         },
-        created(){
+        created() {
             this.getQcOrderDetail();
             this.getService();
             this.getUnit();
         },
-        mounted(){
+        mounted() {
             this.setMenuLink({
-                path: '/logs/index',
-                query: {code: 'WAREHOUSE'},
+                path: "/logs/index",
+                query: { code: "WAREHOUSE" },
                 type: 10,
+                auth: "QC:LOG",
                 label: this.$i.common.log
             });
-        },
-    }
+        }
+    };
 </script>
 <style scoped>
     .el-table >>> .warning-row {
         background: #f5f7fa;
     }
-    .title{
+
+    .title {
         font-weight: bold;
         font-size: 18px;
         height: 32px;
         line-height: 32px;
-        color:#666666;
+        color: #666666;
     }
-    .second-title{
+
+    .second-title {
         font-size: 16px;
         color: #999999;
         padding: 10px 0;
     }
-    .payment-btn{
+
+    .payment-btn {
         margin: 5px 0 10px 0;
     }
-    .product-info{
+
+    .product-info {
         margin-top: 10px;
     }
-    .speInput{
+
+    .speInput {
         width: 100%;
     }
-    .speNumber >>> input{
+
+    .speNumber >>> input {
         text-align: left;
     }
 
-    .footBtn{
+    .footBtn {
         border-top: 1px solid #e0e0e0;
         height: 40px;
         line-height: 40px;
@@ -719,6 +745,6 @@
         left: 0;
         bottom: 0;
         width: 100%;
-        z-index:5;
+        z-index: 5;
     }
 </style>
