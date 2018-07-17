@@ -1,7 +1,7 @@
 import Util from 'service/util';
 
 /**
- * 权限验证
+ * 鏉冮檺楠岃瘉
  * @type {{bind(*, *): void}}
  */
 const authorize = {

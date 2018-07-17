@@ -81,12 +81,16 @@ export const routerMap = [
       component: Layout,
       redirect: '/product/overview',
       name: 'product',
-      meta: {name: $i.router.product},
+      meta: {
+          auth:'PRODUCT',
+          name: $i.router.product
+      },
       children: [
         {
           path: 'overview',
           name: 'overview',
           meta: {
+              auth:'PRODUCT:OVERVIEW',
             name: $i.router.productSourcingOverview
           },
           component: () => import('../views/product/overview')
@@ -95,6 +99,7 @@ export const routerMap = [
           path: 'addNewProduct',
           name: 'addNewProduct',
           meta: {
+              auth:'PRODUCT:OVERVIEW:ADD_PRODUCT',
             name: $i.router.addNewProduct
           },
           component: () => import('../views/product/addNewProduct')
@@ -104,6 +109,7 @@ export const routerMap = [
           name: 'Detail',
           hidden: true,
           meta: {
+              auth:'PRODUCT:DETAIL',
             name: $i.router.productSourcingDetail
           },
           component: () => import('../views/product/detail')
@@ -145,7 +151,10 @@ export const routerMap = [
       path: '/order',
       component: Layout,
       redirect: '/order/overview',
-      meta: {name: $i.router.order},
+      meta: {
+          name: $i.router.order,
+          auth:'ORDER'
+      },
       noDropdown: true,
       children: [
         {
@@ -153,7 +162,8 @@ export const routerMap = [
           name: 'order',
           meta: {
             log: true,
-            name: $i.router.orderOverview
+            name: $i.router.orderOverview,
+              auth:'ORDER:OVERVIEW'
           },
           component: () => import('../views/order/overView.vue')
         },
@@ -161,9 +171,7 @@ export const routerMap = [
           path: 'detail',
           name: 'orderDetail',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
+              auth:'ORDER:DETAIL',
             name: $i.router.orderDetail
           },
           component: () => import('../views/order/orderDetail.vue')
@@ -171,9 +179,7 @@ export const routerMap = [
           path: 'archive',
           name: 'orderArchive',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
+            auth:'ORDER:ARCHIVE',
             name: $i.router.orderRecycleBin
           },
           component: () => import('../views/order/archive.vue')
@@ -450,6 +456,167 @@ export const routerMap = [
     },
     // todo 供应商路由
 
+  //draft  草稿箱路由
+  {
+    path: '/draft',
+    component: Layout,
+    meta: {name: 'Draft'},
+    redirect: '/draft/index',
+    noDropdown: true,
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        name: 'draft',
+        meta: {
+          draft: false,
+          recycleBin: false,
+          log: false,
+        },
+        component: () => import('../views/draft/index.vue')
+      }
+    ]
+  },
+  //recycleBin  回收站路由
+  {
+    path: '/recycle',
+    component: Layout,
+    meta: {name: 'Recycle Bin'},
+    redirect: '/recycle/index',
+    noDropdown: true,
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        name: 'recycleBin',
+        meta: {
+          draft: false,
+          recycleBin: false,
+          log: false,
+        },
+        component: () => import('../views/recycleBin/index.vue')
+      }
+    ]
+  },
+  {
+    path: '/warehouse',
+    component: Layout,
+    redirect: '/warehouse/overview',
+    name: 'warehouse',
+    meta: {
+      name: '仓库',
+        auth:'WAREHOUSE',
+    },
+    noDropdown: false,
+    children: [
+      {
+        path: 'overview',
+        name: 'Warehouse Overview',
+        meta: {
+          name: '仓库总览',
+            auth:'WAREHOUSE:OVERVIEW',
+        },
+        component: () => import('../views/warehouse/warehouseOverview.vue'),
+      },
+      {
+        path: 'inbound',
+        name: 'Inbound Overview',
+        meta: {
+          name: '入库总览',
+            auth:'',
+        },
+        component: () => import('../views/warehouse/inbound/inboundOverview.vue'),
+      },
+      {
+        path: 'createInbound',
+        name: 'create Inbound',
+        hidden: true,
+        meta: {
+            auth:'',
+          name: '创建入库单'
+        },
+        component: () => import('../views/warehouse/inbound/createInbound'),
+      },
+      {
+        path: 'inboundDetail',
+        name: 'inbound Detail',
+        hidden: true,
+        meta: {
+            auth:'',
+          name: '入库详情',
+        },
+        component: () => import('../views/warehouse/inbound/inboundDetail'),
+      },
+      {
+        path: 'outbound',
+        name: 'Outbound Overview',
+        meta: {
+            auth:'',
+          name: '出库总览'
+        },
+        component: () => import('../views/warehouse/outbound/outboundOverview'),
+      },
+      {
+        path: 'createOutbound',
+        name: 'create Outbound',
+        hidden: true,
+        meta: {
+            auth:'',
+          name: '创建出库单'
+        },
+        component: () => import('../views/warehouse/outbound/createOutbound'),
+      },
+      {
+        path: 'outboundDetail',
+        name: 'outbound Detail',
+        hidden: true,
+        meta: {
+            auth:'',
+          name: '出库单详情',
+        },
+        component: () => import('../views/warehouse/outbound/outboundDetail'),
+      },
+      {
+        path: 'qcOverview',
+        name: 'qc Overview',
+        meta: {
+            auth:'QC:ORDER_OVERVIEW',
+          name: '货单预览',
+        },
+        component: () => import('../views/warehouse/qc/qcOverview'),
+      },
+      {
+        path: 'qcOrder',
+        name: 'qc Order',
+        hidden: true,
+        meta: {
+          name: 'qc Order',
+            auth:'QC:ORDER_DETAIL',
+        },
+        component: () => import('../views/warehouse/qc/qcOrder')
+      },
+      {
+        path: 'qcOrderService',
+        name: 'qc Order Service',
+        hidden: true,
+        meta: {
+            auth:'QC:ORDER_DETAIL',
+          name: 'qc Order Service'
+        },
+        component: () => import('../views/warehouse/qc/qcOrderService')
+      },
+      {
+        path: 'qcOrderDetail',
+        name: 'qc Order Detail',
+        hidden: true,
+        meta: {
+            auth:'QC:ORDER_DETAIL',
+          name: 'qc Order Detail'
+        },
+        component: () => import('../views/warehouse/qc/qcOrderDetail')
+      }
+    ]
+  },
     //draft  草稿箱路由
     {
       path: '/draft',
@@ -606,7 +773,6 @@ export const routerMap = [
       ]
     },
     {
-
       path: '/customer',
       component: Layout,
       meta: {
@@ -616,9 +782,6 @@ export const routerMap = [
       redirect: '/customer/overview',
       noDropdown: true,
       hidden: false,
-      meta: {
-        name: '客户'
-      },
       children: [
         {
           path: 'overview',

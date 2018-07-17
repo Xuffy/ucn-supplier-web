@@ -209,6 +209,9 @@
 
                 //字典
                 skuUnitOption:[],
+              lengthUnitOption:[],
+              volumeUnitOption:[],
+              weightUnitOption:[],
             }
         },
         computed:{
@@ -247,6 +250,9 @@
                     }).then(res=>{
                         this.productTable = this.$getDB(this.$db.warehouse.inboundDetailProductTable, res.datas,(e)=>{
                             e.skuUnitDictCode._value=e.skuUnitDictCode.value?_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}).name:'';
+                            e.lengthUnitDictCode._value=e.lengthUnitDictCode.value?_.findWhere(this.lengthUnitOption,{code:e.lengthUnitDictCode.value}).name:'';
+                            e.volumeUnitDictCode._value=e.volumeUnitDictCode.value?_.findWhere(this.volumeUnitOption,{code:e.volumeUnitDictCode.value}).name:'';
+                            e.weightUnitDictCode._value=e.weightUnitDictCode.value?_.findWhere(this.weightUnitOption,{code:e.weightUnitDictCode.value}).name:'';
                         });
                         this.loadingTable=false;
                     }).catch(err=>{
@@ -285,12 +291,18 @@
              * 获取字典
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE','SKU_UNIT'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE','SKU_UNIT','WT_UNIT','LH_UNIT','VE_UNIT'],{cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='IBD_TYPE'){
                             this.inboundTypeOption=v.codes;
                         }else if(v.code==='SKU_UNIT'){
                             this.skuUnitOption=v.codes;
+                        }else if(v.code==='WT_UNIT'){
+                            this.weightUnitOption=v.codes;
+                        }else if(v.code==='LH_UNIT'){
+                            this.lengthUnitOption=v.codes;
+                        }else if(v.code==='VE_UNIT'){
+                            this.volumeUnitOption=v.codes;
                         }
                     });
                 });

@@ -32,6 +32,15 @@ export default {
     skuUnitDictCode:{
         key:'skuUnitDictCode',
     },
+  lengthUnitDictCode:{
+        key:'lengthUnitDictCode',
+    },
+  volumeUnitDictCode:{
+        key:'volumeUnitDictCode',
+    },
+  weightUnitDictCode:{
+        key:'weightUnitDictCode',
+    },
     orderSkuQty:{
         key:'orderSkuQty',
         _calculate:true

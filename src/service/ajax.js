@@ -19,7 +19,7 @@ const axios = Axios.create({
   timeout: _config.TIMEOUT,
   headers: {
     'Content-Type': 'application/json;charset=utf-8',
-    'Accept-Language': _config.LANGUAGE,
+    'Accept-Language': localStore.get('language') || _config.LANGUAGE,
   },
   transformRequest: [function (data) {
     return data;
@@ -66,7 +66,7 @@ const $ajax = (config) => {
   this.setUrl = (url, params) => {
     let p = {};
 
-    if (_.isEmpty(url)){
+    if (_.isEmpty(url)) {
       throw new Error('Request url exception');
     }
 

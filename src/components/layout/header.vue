@@ -135,7 +135,6 @@
     watch: {
       $route() {
         this.updateMenuActive();
-        // this.getMessage();
       },
       'message.show'(val) {
         val && this.getMessage();
@@ -230,7 +229,7 @@
       changeLanguage({type}) {
         if (this.$localStore.get('language') !== type) {
           this.$localStore.set('language', type);
-          window.history.go(0);
+          this.clearData();
         }
       }
     },

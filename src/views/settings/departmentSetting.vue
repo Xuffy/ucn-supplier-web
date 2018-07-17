@@ -771,7 +771,7 @@
         let nodes = [], dataNodes
           , params = {resourceCodes: [], domainCodes: []};
 
-        nodes = this.$refs.privilegeTree.getCheckedNodes(true);
+        nodes = this.$refs.privilegeTree.getHalfCheckedNodes().concat(this.$refs.privilegeTree.getCheckedNodes(true));
         dataNodes = this.$refs.privilegeTree.getNode('dataAll');
         this.loadingPrivilege = true;
 
@@ -847,7 +847,6 @@
             return {name: val.bizDomainName, code: val.bizDomainCode, children: users};
           });
 
-          console.log(list)
           this.privilegeData[1].children = list;
         });
       }

@@ -3,9 +3,11 @@
     <el-dialog
       :visible.sync="visible"
       :show-close="false"
+      top="0vh"
+      :close-on-click-modal="false"
       custom-class="ucn-view-picture">
       <i class="el-icon-error" @click="visible = false"></i>
-      <el-carousel v-if="visible" :autoplay="false" height="60vh" class="banner"
+      <el-carousel v-if="visible" :autoplay="false" height="80vh" class="banner"
                    :initial-index="initialIndex"
                    :indicator-position="data.length > 1 ? 'outside' : 'none'"
                    :arrow="data.length > 1 ? 'always' : 'never'">
@@ -91,6 +93,8 @@
   .ucn-view-picture {
     background-color: rgba(0, 0, 0, 0) !important;
     box-shadow: inherit !important;
+    margin: 0;
+    width: 80%;
   }
 
   .ucn-view-picture .el-dialog__header {
@@ -122,4 +126,9 @@
   .ucn-view-picture .el-dialog__body {
     padding: 0;
   }
+
+  .ucn-view-picture.el-dialog:not(.ucn-dialog-center) {
+    vertical-align: middle;
+  }
+
 </style>
