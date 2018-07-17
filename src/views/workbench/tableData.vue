@@ -54,6 +54,7 @@
 <script>
   import {VTable, VViewPicture, VPagination} from '@/components/index';
   import $i from '../../language/index';
+  import config from 'service/config'
 
   export default {
     name: 'VTableData',
@@ -204,6 +205,19 @@
               params.loadingList = 'loadingList';
             }
             break;
+          case 'WAREHOUSE':
+            if (config.CLIENT_TYPE === 2) {
+              return this.$ajax.post(this.$apis.get_qcOrderData, {qcOrderNo: item.bizNo.value})
+                .then(res => {
+                  let data = res.datas[0];
+                  delete  params.code;
+                  url = data.serviceProviderIsLoginUser ? (data.qcStatusDictCode === 'COMPLETED_QC'
+                    ? '/warehouse/qcOrderDetail'
+                    : '/warehouse/qcOrderService') : '/warehouse/qcOrder';
+                  params.id = data.id
+                  this.$windowOpen({url, params});
+                });
+            }
           case 'PAYMENT':
             return this.$ajax.post(this.$apis.PAYMENT_GETORDERBYPAYMENTNOS, [item.bizNo.value])
               .then(res => {
