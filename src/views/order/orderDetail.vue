@@ -2950,7 +2950,7 @@
             this.setMenuLink({
                 path: '/order/archive',
                 type: 20,
-                auth:'ORDER:DETAIL:ARCHIVE',
+                auth:'ORDER:ARCHIVE',
                 label: this.$i.order.archive
             });
         },
