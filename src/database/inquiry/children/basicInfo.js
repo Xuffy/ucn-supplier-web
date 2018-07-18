@@ -159,13 +159,6 @@ export default {
     _inquiryHide: true,
     _hide: true
   },
-  relatedOrderNO: { // 关联订单号
-    rules: [],
-    width: '150px',
-    type: 'String',
-    _disabled: true,
-    _inquiryHide: true
-  },
   inquiryRemark: { // 询价备注
     key: 'remark',
     rules: [],
@@ -176,6 +169,13 @@ export default {
     sm: 24,
     md: 24,
     lg: 24
+  },
+  relatedOrderNO: { // 关联订单号
+    key: 'orderNo',
+    width: '150px',
+    type: 'String',
+    _inquiryHide: true,
+    _disabled: true
   },
   attachment: { // 上传附件
     key: 'attachments',
