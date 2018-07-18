@@ -218,14 +218,7 @@
                 <el-row>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="orderNo" :label="$i.warehouse.orderNo">
-                            <el-select clearable size="mini" class="speInput" v-model="orderProduct.orderNo" filterable :placeholder="$i.warehouse.pleaseChoose">
-                                <el-option
-                                        v-for="item in orderNoOption"
-                                        :key="item.id"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput" v-model="orderProduct.orderNo"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">

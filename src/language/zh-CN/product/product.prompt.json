@@ -8,5 +8,9 @@
   "cantAddCustomerProduct": "不能添加客户自行创建产品",
   "customerProductCanNotAddToOrder": "客户自行创建产品无法创建订单!请通知供应商上架相应产品!",
   "compareRecordMustLessThan100": "对比项不得大于100个",
-  "followingProductCantAddOrder":"以下产品无法被创建订单"
+  "followingProductCantAddOrder":"以下产品无法被创建订单",
+  "sureRecover":"确认恢复?",
+  "recoverSuccess":"Recover Success!",
+  "sureSetDown":"Sure Set Down?",
+  "setDownSuccess":"Set Down Success"
 }
