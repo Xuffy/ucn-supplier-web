@@ -22,8 +22,6 @@
         <attachment accept="all" ref="attachment" :readonly="attachmentReadonly" :list="attachmentList" :title="$i.logistic.attachment"
           :limit="20" :edit="edit" />
       </div>
-
-      <!-- <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/> -->
     </el-row>
     <form-list :DeliveredEdit="DeliveredEdit" :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"
     />
@@ -38,11 +36,10 @@
         @ContainerInfoLight="ContainerInfoLight"/>
     </div>
 
-    <!-- <div v-if="planId && feeList"> -->
     <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.feeInfoTitle }}</div>
-      <fee-info :edit="edit" :tableData.sync="feeList" :selectArr="selectArr" @feeInfoLight="feeInfoLight"></fee-info>
+      <fee-info :edit="edit" :matchData="feeListMatch" :tableData.sync="feeList" :selectArr="selectArr" @feeInfoLight="feeInfoLight"></fee-info>
     </div>
 
     <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
@@ -58,7 +55,6 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
-      <!-- <v-table :data.sync="productList" @action="action" :buttons="edit ? productbButtons : null" @change-checked="selectProduct"> -->
       <v-table ref="productInfo" code="ulogistics_PlanDetail" :totalRow="productListTotal" :data="productList" @action="action" :buttons="productbButtons"
         @change-checked="selectProduct"
         native-sort="orderNo"
@@ -161,6 +157,7 @@
         modifyProductArray: [],
         exchangeRateList: [],
         feeList: [],
+        feeListMatch: [],
         productList: [],
         removeProductList: [],
         productModifyList: [],
@@ -220,7 +217,6 @@
         prodFieldDisplay: {},
         batchDunningCutDown: '',
         CutDown: null,
-        isfeeInfoLight:false,
         ProductFromOrder:[],
         ProductFromOrderRes:[],
       }
@@ -445,7 +441,8 @@
         this.remark = res.remark
         this.containerInfo = (res.containerDetail || []).map(el=>{el.isModify=false;return el});
         this.containerinfoMatch = this.$depthClone(res.containerDetail || []).map(el=>{el.isModify=false;return el});
-        this.feeList = res.fee && [res.fee];
+        this.feeList = (res.fee && [res.fee]).map(el=>{el.isModify=false;return el});
+        this.feeListMatch = this.$depthClone(res.fee && [res.fee]).map(el=>{el.isModify=false;return el});
         res.product = res.product.map((item, i) => {
           item.vId = i;
           return item;
@@ -968,10 +965,13 @@
         })
         this.oldPlanObject.fieldDisplay = obj;
       },
-      feeInfoLight(data,index){
-        this.isfeeInfoLight = true;
-        this.oldPlanObject.fee = this.feeList && this.feeList.length > 0 ? this.feeList[0] : null;
-        [this.oldPlanObject.fee][index].fieldDisplay=this.$depthClone(data);
+      feeInfoLight(data){
+        this.oldPlanObject.fee =  this.$depthClone(data).map(el=>{
+          if(!el.isModify&&'fieldDisplay' in el){
+            el.fieldDisplay = {};
+          }
+          return el;
+        })[0];
       },
       ContainerInfoLight(data){
         this.oldPlanObject.containerDetail =  this.$depthClone(data).map(el=>{
@@ -991,13 +991,21 @@
         this.transportInfoArr.forEach(a => {
           this.$set(this.transportInfoObj, a.key, a.value)
         })
-
+         //判断 ContainerInfo 是否修改过高亮 以便不传后台返回的修改值
         this.oldPlanObject.containerDetail =  this.$depthClone(this.oldPlanObject.containerDetail).map(el=>{
           if(!el.isModify&&'fieldDisplay' in el){
             el.fieldDisplay = {};
           }
           return el;
         });
+
+        //判断 feeInfo 是否修改过高亮 以便不传后台返回的修改值
+        this.oldPlanObject.fee =  this.$depthClone([this.oldPlanObject.fee]).map(el=>{
+          if(!el.isModify&&'fieldDisplay' in el){
+            el.fieldDisplay = {};
+          }
+          return el;
+        })[0];
 
         this.basicInfoObj.remark = this.remark
         _.mapObject(this.basicInfoObj, (value, key) => {
@@ -1046,12 +1054,6 @@
         }
         if (this.$validateForm(this.oldPlanObject, this.$db.logistic.transportInfoObj)) {
           return;
-        }
-        //判断 Container Info 是否修改过高亮 以便不传后台返回的修改值
-        if(!this.isfeeInfoLight){
-          this.oldPlanObject.fee&&[this.oldPlanObject.fee].forEach(el =>{
-            el.fieldDisplay = null;
-          })
         }
         this.$ajax.post(url, this.oldPlanObject).then(res => {
           this.$message({
