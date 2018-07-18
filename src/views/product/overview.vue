@@ -83,6 +83,7 @@
                     :data="tableDataList"
                     :buttons="[{label: $i.product.detail, type: 1}]"
                     @change-checked="changeChecked"
+                    @change-sort="val=>{getData(val)}"
                     @action="btnClick">
                 <template slot="header">
                     <div class="btns">
@@ -244,17 +245,12 @@
         },
         methods: {
             ...mapActions(["setMenuLink"]),
-            //切换body的收缩展开状态
             switchDisplay() {
                 this.hideBody = !this.hideBody;
             },
-
-            //表格check状态变更时触发事件
             changeChecked(e) {
                 this.selectList = e;
             },
-
-            //清除填写的表格数据
             clear() {
                 this.$refs.dropDown[0].selectedList = [];
                 this.$refs["productFormTop"].resetFields();
@@ -264,8 +260,6 @@
                 this.$set(this.productForm, "minFobPrice", "");
                 this.$set(this.productForm, "maxFobPrice", "");
             },
-
-            //搜索
             search() {
                 this.disabledSearch = true;
                 this.loadingTable = true;
@@ -286,13 +280,13 @@
                     this.loadingTable = false;
                 });
             },
-
             handleChange(value) {
                 console.log(value);
             },
-
-            //获取table数据
-            getData() {
+            getData(e) {
+                if(e){
+                    Object.assign(this.productForm,e);
+                }
                 this.loadingTable = true;
                 this.$ajax.post(this.$apis.get_productList, this.productForm).then(res => {
                     this.tableDataList = this.$getDB(this.$db.product.overviewTable, res.datas, e => {
@@ -330,8 +324,6 @@
                     this.loadingTable = false;
                 });
             },
-
-            //获取类别数据
             getCategoryId() {
                 this.$ajax.get(this.$apis.CATEGORY_SYSTEM, {}).then(res => {
                     this.categoryList[1].children = res;
@@ -344,8 +336,6 @@
 
                 });
             },
-
-            //表格按钮点击
             btnClick(item) {
                 this.$windowOpen({
                     url: "/product/detail",
@@ -354,8 +344,6 @@
                     }
                 });
             },
-
-            //设为上架
             setUp() {
                 let id = [];
                 this.selectList.forEach(v => {
@@ -376,8 +364,6 @@
                 //
                 // });
             },
-
-            //设为下架
             setDown() {
                 this.$confirm(this.$i.product.sureSetDown, this.$i.product.prompt, {
                     confirmButtonText: this.$i.product.sure,
@@ -412,13 +398,6 @@
                     this.$fetch.export_task("SKU_SUPPLIER_EXPORT_PARAMS", params);
                 }
             },
-
-            //上传产品
-            upload() {
-
-            },
-
-            //删除商品
             deleteGood() {
                 this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
                     confirmButtonText: this.$i.product.sure,
@@ -439,8 +418,6 @@
                     });
                 });
             },
-
-            //删除商品(跳过上架产品,只删除选中的列表中已经下架的商品)
             putdownExcept() {
                 let id = [];
                 this.selectList.forEach(v => {
@@ -465,21 +442,11 @@
                 }
             },
 
-            //表格check状态改变
-            handleCheckChange(e) {
-                console.log(e);
-            },
-
-            check(e) {
-                console.log(e);
-            },
-
             addNewProduct() {
                 this.$windowOpen({
                     url: "/product/addNewProduct"
                 });
             },
-
 
             /**
              * 分页操作
@@ -494,8 +461,10 @@
             }
         },
         created() {
-            this.$ajax.post(this.$apis.get_partUnit, ["SKU_SALE_STATUS", "WT_UNIT", "ED_UNIT", "VE_UNIT", "LH_UNIT", "SKU_UNIT"], { cache: true }).then(res => {
-                res.forEach(v => {
+            const partUnit=this.$ajax.post(this.$apis.get_partUnit, ["SKU_SALE_STATUS", "WT_UNIT", "ED_UNIT", "VE_UNIT", "LH_UNIT", "SKU_UNIT"], { cache: true });
+            const countryAjax=this.$ajax.get(this.$apis.get_country, {}, { cache: true });
+            this.$ajax.all([partUnit,countryAjax]).then(res=>{
+                res[0].forEach(v => {
                     if (v.code === "SKU_SALE_STATUS") {
                         this.statusOption = v.codes;
                     } else if (v.code === "WT_UNIT") {
@@ -510,16 +479,9 @@
                         this.skuUnitOption = v.codes;
                     }
                 });
-                //国家
-                this.$ajax.get(this.$apis.get_country, {}, { cache: true }).then(res => {
-                    this.countryOption = res;
-                    this.getData();
-                    this.getCategoryId();
-                }).catch(err => {
-
-                });
-            }).catch(err => {
-
+                this.countryOption = res[1];
+                this.getData();
+                this.getCategoryId();
             });
         },
         mounted() {

@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="tableData" :cell-class-name="lightHight" border style="width: 100%; margin-top: 20px" tooltip-effect="dark" class="fee-info">
+  <el-table :data="matchData" :cell-class-name="lightHight" border style="width: 100%; margin-top: 20px" tooltip-effect="dark" class="fee-info">
     <el-table-column :label="$i.logistic.fclTransportCharge" align="center" width="180" prop="fclTransportCharge">
       <template slot-scope="scope">
         <el-input placeholder="请输入内容" v-model="scope.row.fclTransportCharge" v-if="edit" @change="feeInfoLight('fclTransportCharge',scope.row.fclTransportCharge,scope.$index)"></el-input>
@@ -122,11 +122,17 @@
 export default {
   data(){
     return {
-      feeInfoLightObj:{}
+     
     }
   },
   props: {
     tableData: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    matchData: {
       type: Array,
       default () {
         return []
@@ -138,11 +144,30 @@ export default {
     },
     selectArr:[Array,Object]
   },
+  computed:{
+    returnData(){
+      let arr = this.$depthClone(this.tableData).map(el=> {el.fieldDisplay={}; return el } );
+      return arr;
+    }
+  },
   methods:{
     //高亮
     feeInfoLight(key,v,index){
-      this.feeInfoLightObj[key] = v;
-      this.$emit('feeInfoLight',this.feeInfoLightObj,index);
+      this.returnData[index].fieldDisplay[key] = v;
+      this.returnData[index][key] = v;
+      if(this.tableData[index][key]==v){
+        delete this.returnData[index].fieldDisplay[key];
+      }
+      let cloneReturnData = this.$depthClone(this.returnData[index]);
+      let cloneTableData = this.$depthClone(this.tableData[index]);
+      delete cloneReturnData.isModify
+      delete cloneTableData.isModify
+      if(_.isEqual(cloneReturnData, cloneTableData)){
+        this.returnData[index].isModify = false;
+      }else{
+        this.returnData[index].isModify = true;
+      }
+      this.$emit('feeInfoLight',this.returnData);
     },
     lightHight({row, column, rowIndex, columnIndex}){
       if(column.property&&row.fieldDisplay){
@@ -153,7 +178,7 @@ export default {
     },
     //币种 code name 转换
     Currency(code){
-      return this.selectArr.exchangeCurrency.find(el=> el.code == code )&&this.selectArr.exchangeCurrency.find(el=> el.code == code ).name;
+      return this.selectArr.exchangeCurrency&&this.selectArr.exchangeCurrency.find(el=> el.code == code )&&this.selectArr.exchangeCurrency.find(el=> el.code == code ).name;
     }
   }
 }

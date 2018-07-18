@@ -246,7 +246,6 @@
     position: fixed;
     width: 100%;
     z-index: 999;
-    min-width: 1366px;
     overflow: hidden;
   }
 
@@ -262,12 +261,14 @@
   }
 
   .logo {
-    /*width: 90px;*/
-    /*margin-left: 20px;*/
     margin-left: 20px;
-    margin-right: 20px;
+    margin-right: 40px;
     cursor: pointer;
     vertical-align: middle;
+  }
+
+  .logo-icon {
+    margin-right: 15px;
   }
 
   .title {
@@ -337,7 +338,7 @@
 
   .el-submenu,
   .el-menu-item {
-    padding: 0 0 0 2vw;
+    padding: 0 34px 0 0;
     border: none !important;
   }
 
@@ -463,6 +464,8 @@
     font-size: 12px;
     padding: 0;
     padding-right: 5px;
+    border: none;
+    line-height: 58px;
   }
 
   .ucn-header-menu .el-menu--horizontal > .el-menu-item a {
