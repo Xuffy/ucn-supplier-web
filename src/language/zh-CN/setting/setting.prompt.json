@@ -1,11 +1,11 @@
 {
-  "pleaseInput": "ÇëÊäÈë",
-  "canNotRepeatDepartmentName": "²¿ÃÅ²»ÄÜÖØ¸´",
-  "canNotRepeatRole": "½ÇÉ«²»ÄÜÖØ¸´",
-  "createSuccess": "´´½¨³É¹¦£¡",
-  "pleaseRemoveRoleUser": "ÇëÏÈ½«ÓÃ»§ÒÆÖÁÆäËû²¿ÃÅÏÂ",
-  "sureDelete": "È·ÈÏÉ¾³ı?",
-  "deleteSuccess": "É¾³ı³É¹¦!",
-  "modifySuccess": "±à¼­³É¹¦!",
-  "pleaseInputRole": "ÇëÊäÈë½ÇÉ«"
+  "pleaseInput": "è¯·è¾“å…¥",
+  "canNotRepeatDepartmentName": "éƒ¨é—¨ä¸èƒ½é‡å¤",
+  "canNotRepeatRole": "è§’è‰²ä¸èƒ½é‡å¤",
+  "createSuccess": "åˆ›å»ºæˆåŠŸï¼",
+  "pleaseRemoveRoleUser": "è¯·å…ˆå°†ç”¨æˆ·ç§»è‡³å…¶ä»–éƒ¨é—¨ä¸‹",
+  "sureDelete": "ç¡®è®¤åˆ é™¤?",
+  "deleteSuccess": "åˆ é™¤æˆåŠŸ!",
+  "modifySuccess": "ç¼–è¾‘æˆåŠŸ!",
+  "pleaseInputRole": "è¯·è¾“å…¥è§’è‰²"
 }
