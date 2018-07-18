@@ -293,12 +293,20 @@
       urgingPayment(item) {
         // ① 催款，此操作会给对应付款人发一条提示付款的信息，在对方的workbench显示；
         // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
+        if(item.timestamp.value === ''){
+          item.timestamp.value = new Date().getTime();
+        }else if (((new Date().getTime()-item.timestamp.value)/1000)<=60){
+          this.$message({
+            type: 'warning',
+            message: '间隔一分钟才能再次催款'
+          });
+          return false
+        }
         this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}`)
           .then(res => {
-            // console.log(res)
             this.$message({
               type: 'success',
-              message: '催促成功!'
+              message: this.$i.payment.urgedSuccess
             });
           }).catch((res) => {
 
@@ -306,7 +314,7 @@
       },
       setButtons(item){
         // disabled:true/false   10 付款 20 退款
-        if(_.findWhere(item, {'key': 'type'}).value === 10 && _.findWhere(item, {'key': 'planReceiveAmount'}).value !== _.findWhere(item, {'key': 'actualReceiveAmount'}).value) return [{label: this.$i.payment.urgingPayment, type: '1'},{label: this.$i.payment.detail, type: '2'}];
+        if(_.findWhere(item, {'key': 'type'}).value === 10 && _.findWhere(item, {'key': 'planReceiveAmount'}).value !== _.findWhere(item, {'key': 'actualReceiveAmount'}).value) return [{label: this.$i.payment.urgingPayment, type: '1',auth:'PAYMENT:URGING'},{label: this.$i.payment.detail, type: '2'}];
         return [{label: this.$i.payment.detail, type: '2'}];
       },
       //...............sort
