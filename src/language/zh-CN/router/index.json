@@ -60,5 +60,15 @@
   "addNewProduct": "Add New Product",
   "qcDetail": "Detail",
   "customer": "Customer",
-  "archive":"Archive"
+  "archive":"Archive",
+
+
+  "inboundOverview":"入库总览",
+  "createInbound":"创建入库单",
+  "inboundDetail":"入库详情",
+  "outboundOverview":"出库总览",
+  "createOutbound":"创建出库单",
+  "outboundDetail":"出库单详情",
+  "qcOverview":"货单预览",
+  "qcOrderDetail":"货单详情"
 }
