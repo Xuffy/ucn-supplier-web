@@ -153,7 +153,7 @@ export default {
     },
     //币种 code name 转换
     Currency(code){
-      return this.selectArr.exchangeCurrency.find(el=> el.code == code )&&this.selectArr.exchangeCurrency.find(el=> el.code == code ).name;
+      return this.selectArr.exchangeCurrency&&this.selectArr.exchangeCurrency.find(el=> el.code == code )&&this.selectArr.exchangeCurrency.find(el=> el.code == code ).name;
     }
   }
 }

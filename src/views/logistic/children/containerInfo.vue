@@ -1,11 +1,7 @@
 <template>
   <div>
-    <!-- <div class="btn-wraps" v-if="edit">
-      <el-button type="primary" size="mini" @click.stop="$emit('arrayAppend', 'containerInfo')">{{ $i.logistic.add }}</el-button>
-      <el-button type="danger" size="mini" @click.stop="$emit('deleteContainer')">{{ $i.logistic.delete }}</el-button>
-    </div> -->
     <div class="tab-wrap">
-      <el-table :cell-class-name="lightHight" :data="tableData" ref="table" border style="width: 100%; margin-top: 20px" 
+      <el-table :cell-class-name="lightHight" :data="matchData" ref="table" border style="width: 100%; margin-top: 20px" 
         show-summary 
         :summary-method="summaryMethod"
         @selection-change="handleSelectionChange" 
@@ -110,12 +106,17 @@ export default {
       }
     }
   },
+  computed:{
+    returnData(){
+      return this.$depthClone(this.tableData);
+    }
+  },
   methods: {
     //高亮
     ContainerInfoLight(key,v,index,scope){
       if(key=='containerNo'){
         this.tableData.forEach((el,index)=>{
-          if(scope.$index !=index){
+          if(scope.$index != index){ 
             if(el.containerNo == scope.row.containerNo&&scope.row.containerNo!=''){
               scope.row.containerNo='';
               this.$message({
@@ -128,12 +129,14 @@ export default {
       }
       this.ContainerInfoLightArr[index] = new Object(this.ContainerInfoLightArr[index]);
       this.ContainerInfoLightArr[index][key] = v;
-      this.matchData.forEach(el=>{
-        if(el[key]==v){
-          delete this.ContainerInfoLightArr[index][key];
-        }
-      })
-      this.$emit('ContainerInfoLight',this.ContainerInfoLightArr,index);
+      this.returnData[index].fieldDisplay = this.ContainerInfoLightArr[index];
+      this.returnData[index][key] = v;
+      this.returnData[index]['isModify'] = true;
+      if(this.tableData[index][key]==v){
+        delete this.returnData[index]['fieldDisplay'][key];
+        this.returnData[index]['isModify'] = false;
+      }
+      this.$emit('ContainerInfoLight',this.returnData);
     },
     lightHight({row, column, rowIndex, columnIndex}){
       if(column.property&&row.fieldDisplay){
@@ -147,6 +150,7 @@ export default {
     },
     tableRowClassName({row, rowIndex}) {
       row.index = rowIndex;
+      
     },
     summaryMethod (param) {
       const {columns,data} = param;
@@ -198,32 +202,7 @@ export default {
 
         return sums;
     },
-    // tailBtn(str) {
-    //   if(str === 'ok') {
-    //     if(!this.containerSelect) return this.$message({
-    //       message: '请选择货柜类型',
-    //       type: 'warning'
-    //     });
-    //     if(!this.containerNo) return this.$message({
-    //       message: '请填写货柜数量',
-    //       type: 'warning'
-    //     });
-    //     this.$emit('tailBtnOk', {
-    //       Product: this.containerSelect,
-    //       containerAmount: this.containerNo
-    //     });
-    //     this.containerSelect = '';
-    //     this.containerNo = '';
-    //   } else {
-    //     this.$emit('tailBtnCancel');
-    //   }
-    //   return this.isActive = false
-    // },
-    // tabSplite(index) {
-    //   if(this.tableData.length <= 1) this.tabAppend();
-    //   this.$emit('tabSplite', index)
-    // }
-  },
+  }
 }
 </script>
 <style lang="less" scoped>

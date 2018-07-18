@@ -221,7 +221,6 @@
         batchDunningCutDown: '',
         CutDown: null,
         isfeeInfoLight:false,
-        isContainerInfoLight:false,
         ProductFromOrder:[],
         ProductFromOrderRes:[],
       }
@@ -444,8 +443,8 @@
         this.logisticsNo = res.logisticsNo
         this.exchangeRateList = res.currencyExchangeRate || []
         this.remark = res.remark
-        this.containerInfo = res.containerDetail || [];
-        this.containerinfoMatch = this.$depthClone(res.containerDetail || []);
+        this.containerInfo = (res.containerDetail || []).map(el=>{el.isModify=false;return el});
+        this.containerinfoMatch = this.$depthClone(res.containerDetail || []).map(el=>{el.isModify=false;return el});
         this.feeList = res.fee && [res.fee];
         res.product = res.product.map((item, i) => {
           item.vId = i;
@@ -974,23 +973,31 @@
         this.oldPlanObject.fee = this.feeList && this.feeList.length > 0 ? this.feeList[0] : null;
         [this.oldPlanObject.fee][index].fieldDisplay=this.$depthClone(data);
       },
-      ContainerInfoLight(data,index){
-        this.isContainerInfoLight = true;
-        this.containerInfo[index].fieldDisplay = this.$depthClone(data)[index];
-        // this.containerInfo[index].fieldDisplay = {...this.$depthClone(data)[index],...this.containerinfoMatch[index].fieldDisplay};
-        this.oldPlanObject.containerDetail =  this.containerInfo;
+      ContainerInfoLight(data){
+        this.oldPlanObject.containerDetail =  this.$depthClone(data).map(el=>{
+          if(!el.isModify&&'fieldDisplay' in el){
+            el.fieldDisplay = {};
+          }
+          return el;
+        });
       },
       sendData(keyString) {
         let url = this.pageTypeCurr == "loadingListDetail" ? this.$apis.update_logistic_order : this.configUrl[this.pageName]
           [keyString];
         this.basicInfoArr.forEach(a => {
-          // this.$set(this.basicInfoObj, a.key, a.type=='date' ? a.value : a.value)
           this.$set(this.basicInfoObj, a.key, a.value)
         })
 
         this.transportInfoArr.forEach(a => {
           this.$set(this.transportInfoObj, a.key, a.value)
         })
+
+        this.oldPlanObject.containerDetail =  this.$depthClone(this.oldPlanObject.containerDetail).map(el=>{
+          if(!el.isModify&&'fieldDisplay' in el){
+            el.fieldDisplay = {};
+          }
+          return el;
+        });
 
         this.basicInfoObj.remark = this.remark
         _.mapObject(this.basicInfoObj, (value, key) => {
