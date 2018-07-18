@@ -14,10 +14,10 @@
   "logistic": "发运",
   "warehouse": "仓库",
   "content": "目录",
-  "settingState": "Welcome! Please set your basic info",
-  "settingDepartment": "Department setting",
-  "settingCompany": "Company setting",
-  "settingCategory": "Category setting",
-  "settingPersonal": "Personal setting",
-  "goSet": "Go set"
+  "settingState": "欢迎您!请先设置您的基本信息",
+  "settingDepartment": "部门和用户设置",
+  "settingCompany": "公司信息设置",
+  "settingCategory": "分类设置",
+  "settingPersonal": "个人信息设置",
+  "goSet": "去设置"
 }

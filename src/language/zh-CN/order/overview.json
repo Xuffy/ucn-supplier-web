@@ -3,7 +3,7 @@
   "important": "是否标记为重要",
   "attachment": "是否有附件",
   "responsibility": "是否有提醒",
-  "Recycle": "Recycle",
+  "Recycle": "归档",
   "orderNo": "订单号",
   "orderDate": "订单日期",
   "status": "订单状态",
@@ -35,7 +35,7 @@
   "totalOuterCartonQty": "外箱数合计",
   "totalNetWeight": "外箱净重合计",
   "totalVolume": "外箱体积合计",
-  "skuQty": "SKU款式数量",
+  "skuQty": "SKU款式数",
   "customerSKUCode": "客户货号",
   "SKUBarCode": "产品条码",
   "SKUcode": "供应商货号",
@@ -56,7 +56,7 @@
   "productStatus": "产品状态",
   "incoterm": "价格条款",
   "incotermarea": "价格条款区域",
-  "archiveOrderOverview":"Archive Order Overview",
-  "archiveDraftOverview":"Archive Draft Overview",
-  "archiveOverview":"Archive Overview"
+  "archiveOrderOverview":"归档（订单总览）",
+  "archiveDraftOverview":"归档（订单草稿总览）",
+  "archiveOverview":"归档（订单总览）"
 }

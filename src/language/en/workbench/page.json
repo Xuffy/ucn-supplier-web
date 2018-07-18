@@ -19,5 +19,8 @@
   "settingCompany": "Company setting",
   "settingCategory": "Category setting",
   "settingPersonal": "Personal setting",
-  "goSet": "Go set"
+  "goSet": "Go set",
+  "setDepartment": "Set Department and User",
+  "setCompany": "Set Company Info",
+  "setCategory": "Set Category"
 }

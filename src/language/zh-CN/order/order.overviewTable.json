@@ -1,7 +1,7 @@
 {
   "importantCustomer": "重要",
   "attachment": "附件",
-  "remind": "Responsibility",
+  "remind": "约定责任",
   "archive": "归档",
   "orderNo": "订单号",
   "entryDt": "订单创建日期",
@@ -13,8 +13,8 @@
   "incoterm": "价格条款",
   "incotermArea": "价格条款区域",
   "lcNo": "信用证号",
-  "payment": "Payment",
-  "currency": "Exchange Currency",
+  "payment": "付款",
+  "currency": "交易币种",
   "deliveryDt": "交货日期",
   "departureCountry": "发运国",
   "destCountry": "目的国",
@@ -28,10 +28,10 @@
   "deliveredQty": "已发货数量",
   "updateDt": "修改日期",
   "quotationNo": "报价单号",
-  "totalQty": "总数量",
-  "totalOuterCartonQty": "总箱数",
+  "totalQty": "订单产品数",
+  "totalOuterCartonQty": "外箱数合计",
   "totalGrossWeight": "总毛重",
   "totalNetWeight": "总净重",
   "totalVolume": "总体积",
-  "skuQty": "SKU 款式数量"
+  "skuQty": "SKU 款式数"
 }

@@ -5,16 +5,16 @@
   "warehouseName": "Warehouse Name",
   "purchaser": "Purchaser",
   "storageType": "Inbound Type",
-  "skuTotalQty": "Total Inbound Qty",
+  "skuTotalQty": "Total Inbound QTY",
   "remark": "Remark",
   "operator": "Operator",
-  "updateDt": "Modified date",
+  "updateDt": "Modify Date",
   "createDt": "Create Date",
   "carrier": "Carrier",
   "carrierPhone": "Carrier Phone",
   "skuTotalVolume": "Total volume of Inbound",
   "skuTotalNetWeight": "Total N.W. of Inbound",
   "skuTotalGrossWeight": "Total G.W. of Inbound",
-  "updateName": "操作人",
-  "entryDt": "创建时间"
+  "updateName": "Operator",
+  "entryDt": "Create Time"
 }

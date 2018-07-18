@@ -1,17 +1,17 @@
 {
   "categoryId": "category ID",
   "nameCnLike": "SKU name (CN)",
-  "readilyAvailable": "readily available",
-  "customerSkuCodeLike": "customer SKU code",
+  "readilyAvailable": "Readily available",
+  "customerSkuCodeLike": "Customer SKU code",
   "exwPrice": "EXW price",
-  "codeLike": "supplier SKU code",
+  "codeLike": "Supplier SKU code",
   "nameEnLike": "SKU name(EN)",
   "fobPrice": "FOB price",
   "materialEnLike": "SKU material (EN)",
-  "supplierNameLike": "supplier name",
-  "outerCartonMethodEnLike": "outer packaging method(EN)",
+  "supplierNameLike": "Supplier name",
+  "outerCartonMethodEnLike": "Outer packaging method(EN)",
   "methodPkgEnLike": "SKU packaging method(EN)",
-  "deliveryDates": "delivery date",
-  "descEnLike": "description (EN)",
-  "descCnLike": "description (CN)"
+  "deliveryDates": "Delivery date",
+  "descEnLike": "Description (EN)",
+  "descCnLike": "Description (CN)"
 }
