@@ -102,6 +102,7 @@
               <div style="white-space: nowrap;">
                 <span class="button"
                       v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
+                      v-authorize="aItem.auth"
                       :class="{disabled:aItem.disabled || item._disabled}"
                       @click="(!aItem.disabled && !item._disabled) && $emit('action',item,aItem.type, index)">
                   {{aItem.label || aItem}}</span>
@@ -291,7 +292,6 @@
         }
 
         key = _.isString(this.nativeSort) ? this.nativeSort : 'id';
-
 
         _.map(this.dataList, val => {
           if (_.isEmpty(val._remark)) {
@@ -525,11 +525,6 @@
 
   }
 
-  .ucn-table thead tr td {
-    /*position: absolute;*/
-    /*z-index: 9999;*/
-  }
-
   .ucn-table thead td {
     background-color: #ECEFF1;
     color: #999999;
@@ -543,11 +538,8 @@
   }
 
   .ucn-table tfoot td {
-    /*border-top: 1px solid #ebeef5;*/
-    /*border-right: 1px solid #ebeef5;*/
     box-sizing: border-box;
     position: relative;
-    /*background-color: #f6f8f9;*/
     color: #999999;
   }
 
@@ -601,8 +593,11 @@
     border-right: 1px solid #FFFFFF;
   }
 
-  .ucn-table tbody tr:hover {
-    background-color: #fbfbfb;
+  .ucn-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  .ucn-table tbody tr:nth-child(even) td{
+    border-right: 1px solid #f9f9f9;
   }
 
   .ucn-table tbody td .img {
@@ -610,18 +605,8 @@
     cursor: pointer;
   }
 
-  .ucn-table thead tr:nth-child(even) td,
-  .ucn-table tbody tr:nth-child(even) td {
-    /*background-color: #fafafa;*/
-  }
-
   .ucn-table tbody tr.disabled td {
     color: #dad8d8;
-  }
-
-  .ucn-table tbody tr td:hover,
-  .ucn-table tbody tr:hover td {
-    /*background-color: #ebeff1 !important;*/
   }
 
   .ucn-table.fixed-left-box tbody tr:not(.rowspan) td:first-child,

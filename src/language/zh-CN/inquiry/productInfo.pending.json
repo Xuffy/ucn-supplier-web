@@ -116,6 +116,6 @@
   "otherPackingInformationCn": "其他包装信息CN",
   "otherPackingInformationEn": "其他包装信息EN",
   "adjustSkuAndPackageOrNot": "产品或包装可否调整",
-  "updateDt": "time",
-  "cifCurrency": "CIF Currency"
+  "updateDt": "更新时间",
+  "cifCurrency": "CIF 币种"
 }

@@ -317,7 +317,10 @@
                     skuNameCn: ""
                 },
 
-                skuUnitOption: []
+                skuUnitOption: [],
+              lengthUnitOption:[],
+              volumeUnitOption:[],
+              weightUnitOption:[],
             };
         },
         methods: {
@@ -473,6 +476,9 @@
                         this.productData.forEach(v => {
                             v.inboundVo.inboundDate = this.$dateFormat(v.inboundVo.inboundDate, "yyyy-mm-dd");
                             v.skuUnitDictCode = v.skuUnitDictCode ? _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }).name : "";
+                            v.lengthUnitDictCode=v.lengthUnitDictCode?_.findWhere(this.lengthUnitOption,{code:String(v.lengthUnitDictCode)}).name:'';
+                            v.volumeUnitDictCode=v.volumeUnitDictCode?_.findWhere(this.volumeUnitOption,{code:String(v.volumeUnitDictCode)}).name:'';
+                            v.weightUnitDictCode=v.weightUnitDictCode?_.findWhere(this.weightUnitOption,{code:String(v.weightUnitDictCode)}).name:'';
                         });
                         this.loadingProductTable = false;
                     }).catch(err => {
@@ -539,15 +545,21 @@
              * 获取字典
              * */
             getUnit() {
-                this.$ajax.post(this.$apis.get_partUnit, ["OBD_STATUS", "SKU_UNIT"], { cache: true }).then(res => {
-                    res.forEach(v => {
-                        if (v.code === "SKU_UNIT") {
-                            this.skuUnitOption = v.codes;
-                        } else if (v.code === "OBD_STATUS") {
-                            this.outboundTypeOption = v.codes;
-                        }
-                    });
-                });
+              this.$ajax.post(this.$apis.get_partUnit,['OBD_STATUS','SKU_UNIT','WT_UNIT','LH_UNIT','VE_UNIT'],{cache:true}).then(res=>{
+                res.forEach(v=>{
+                  if(v.code==='OBD_STATUS'){
+                    this.outboundTypeOption=v.codes;
+                  }else if(v.code==='SKU_UNIT'){
+                    this.skuUnitOption=v.codes;
+                  }else if(v.code==='WT_UNIT'){
+                    this.weightUnitOption=v.codes;
+                  }else if(v.code==='LH_UNIT'){
+                    this.lengthUnitOption=v.codes;
+                  }else if(v.code==='VE_UNIT'){
+                    this.volumeUnitOption=v.codes;
+                  }
+                })
+              });
             },
 
             /**

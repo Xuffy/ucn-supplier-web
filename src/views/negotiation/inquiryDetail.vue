@@ -198,8 +198,7 @@ export default {
     }
   },
   created() {
-    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
-    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+    this.setMenuLink([{path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive},{path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log}]);
 
     if (this.$localStore.get('$in_quiryCompare')) {
       this.compareConfig = this.$localStore.get('$in_quiryCompare');

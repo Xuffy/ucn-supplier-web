@@ -12,6 +12,11 @@ export default {
     factorySkuCode:{},
     customerSkuCode:{},
     skuUnitDictCode:{},
+  lengthUnitDictCode:{
+    key:'lengthUnitDictCode',
+  },
+  volumeUnitDictCode:{},
+  weightUnitDictCode:{},
     outboundSkuTotalQty:{
         _calculate:true
     },

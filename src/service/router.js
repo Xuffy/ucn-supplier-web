@@ -114,6 +114,15 @@ export const routerMap = [
           },
           component: () => import('../views/product/detail')
         },
+        {
+          path: 'archive',
+          name: 'Archive',
+          hidden: true,
+          meta: {
+            name: $i.router.productSourcingDetail
+          },
+          component: () => import('../views/product/archive')
+        },
       ]
     },
     {
@@ -419,7 +428,6 @@ export const routerMap = [
         }
       ]
     },
-
     {
       path: '/message',
       component: Layout,
@@ -445,170 +453,6 @@ export const routerMap = [
         }
       ],
     },
-    // todo 供应商路由
-
-  //draft  草稿箱路由
-  {
-    path: '/draft',
-    component: Layout,
-    meta: {name: 'Draft'},
-    redirect: '/draft/index',
-    noDropdown: true,
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        name: 'draft',
-        meta: {
-          draft: false,
-          recycleBin: false,
-          log: false,
-        },
-        component: () => import('../views/draft/index.vue')
-      }
-    ]
-  },
-  //recycleBin  回收站路由
-  {
-    path: '/recycle',
-    component: Layout,
-    meta: {name: 'Recycle Bin'},
-    redirect: '/recycle/index',
-    noDropdown: true,
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        name: 'recycleBin',
-        meta: {
-          draft: false,
-          recycleBin: false,
-          log: false,
-        },
-        component: () => import('../views/recycleBin/index.vue')
-      }
-    ]
-  },
-  {
-    path: '/warehouse',
-    component: Layout,
-    redirect: '/warehouse/overview',
-    name: 'warehouse',
-    meta: {
-      name: '仓库',
-        auth:'WAREHOUSE',
-    },
-    noDropdown: false,
-    children: [
-      {
-        path: 'overview',
-        name: 'Warehouse Overview',
-        meta: {
-          name: '仓库总览',
-            auth:'WAREHOUSE:OVERVIEW',
-        },
-        component: () => import('../views/warehouse/warehouseOverview.vue'),
-      },
-      {
-        path: 'inbound',
-        name: 'Inbound Overview',
-        meta: {
-          name: '入库总览',
-            auth:'',
-        },
-        component: () => import('../views/warehouse/inbound/inboundOverview.vue'),
-      },
-      {
-        path: 'createInbound',
-        name: 'create Inbound',
-        hidden: true,
-        meta: {
-            auth:'',
-          name: '创建入库单'
-        },
-        component: () => import('../views/warehouse/inbound/createInbound'),
-      },
-      {
-        path: 'inboundDetail',
-        name: 'inbound Detail',
-        hidden: true,
-        meta: {
-            auth:'',
-          name: '入库详情',
-        },
-        component: () => import('../views/warehouse/inbound/inboundDetail'),
-      },
-      {
-        path: 'outbound',
-        name: 'Outbound Overview',
-        meta: {
-            auth:'',
-          name: '出库总览'
-        },
-        component: () => import('../views/warehouse/outbound/outboundOverview'),
-      },
-      {
-        path: 'createOutbound',
-        name: 'create Outbound',
-        hidden: true,
-        meta: {
-            auth:'',
-          name: '创建出库单'
-        },
-        component: () => import('../views/warehouse/outbound/createOutbound'),
-      },
-      {
-        path: 'outboundDetail',
-        name: 'outbound Detail',
-        hidden: true,
-        meta: {
-            auth:'',
-          name: '出库单详情',
-        },
-        component: () => import('../views/warehouse/outbound/outboundDetail'),
-      },
-      {
-        path: 'qcOverview',
-        name: 'qc Overview',
-        meta: {
-            auth:'QC:ORDER_OVERVIEW',
-          name: '货单预览',
-        },
-        component: () => import('../views/warehouse/qc/qcOverview'),
-      },
-      {
-        path: 'qcOrder',
-        name: 'qc Order',
-        hidden: true,
-        meta: {
-          name: 'qc Order',
-            auth:'QC:ORDER_DETAIL',
-        },
-        component: () => import('../views/warehouse/qc/qcOrder')
-      },
-      {
-        path: 'qcOrderService',
-        name: 'qc Order Service',
-        hidden: true,
-        meta: {
-            auth:'QC:ORDER_DETAIL',
-          name: 'qc Order Service'
-        },
-        component: () => import('../views/warehouse/qc/qcOrderService')
-      },
-      {
-        path: 'qcOrderDetail',
-        name: 'qc Order Detail',
-        hidden: true,
-        meta: {
-            auth:'QC:ORDER_DETAIL',
-          name: 'qc Order Detail'
-        },
-        component: () => import('../views/warehouse/qc/qcOrderDetail')
-      }
-    ]
-  },
-    //draft  草稿箱路由
     {
       path: '/draft',
       component: Layout,
@@ -629,7 +473,6 @@ export const routerMap = [
         }
       ]
     },
-    //recycleBin  回收站路由
     {
       path: '/recycle',
       component: Layout,
@@ -656,108 +499,105 @@ export const routerMap = [
       redirect: '/warehouse/overview',
       name: 'warehouse',
       meta: {
-        name: '仓库'
+        name: $i.router.warehouse
       },
       noDropdown: false,
       children: [
         {
           path: 'overview',
-          name: 'Warehouse Overview',
+          name: 'WarehouseOverview',
           meta: {
-            name: '仓库总览'
+            name: $i.router.warehouseOverview
           },
           component: () => import('../views/warehouse/warehouseOverview.vue'),
         },
         {
           path: 'inbound',
-          name: 'Inbound Overview',
+          name: 'InboundOverview',
           meta: {
-            name: '入库总览'
+            name: $i.router.inboundOverview
           },
           component: () => import('../views/warehouse/inbound/inboundOverview.vue'),
         },
         {
           path: 'createInbound',
-          name: 'create Inbound',
+          name: 'createInbound',
           hidden: true,
           meta: {
-            name: '创建入库单'
+            name: $i.router.createInbound
           },
           component: () => import('../views/warehouse/inbound/createInbound'),
         },
         {
           path: 'inboundDetail',
-          name: 'inbound Detail',
+          name: 'inboundDetail',
           hidden: true,
           meta: {
-            name: '入库详情',
+            name: $i.router.inboundDetail
           },
           component: () => import('../views/warehouse/inbound/inboundDetail'),
         },
         {
           path: 'outbound',
-          name: 'Outbound Overview',
+          name: 'OutboundOverview',
           meta: {
-            name: '出库总览'
+            name: $i.router.outboundOverview
           },
           component: () => import('../views/warehouse/outbound/outboundOverview'),
         },
         {
           path: 'createOutbound',
-          name: 'create Outbound',
+          name: 'createOutbound',
           hidden: true,
           meta: {
-            name: '创建出库单'
+            name: $i.router.createOutbound
           },
           component: () => import('../views/warehouse/outbound/createOutbound'),
         },
         {
           path: 'outboundDetail',
-          name: 'outbound Detail',
+          name: 'outboundDetail',
           hidden: true,
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: '出库单详情',
+            name: $i.router.outboundDetail
           },
           component: () => import('../views/warehouse/outbound/outboundDetail'),
         },
         {
           path: 'qcOverview',
-          name: 'qc Overview',
+          name: 'qcOverview',
           meta: {
             draft: true,
             recycleBin: true,
             log: true,
-            name: '货单预览',
+            name: $i.router.qcOverview
           },
           component: () => import('../views/warehouse/qc/qcOverview'),
         },
         {
           path: 'qcOrder',
-          name: 'qc Order',
+          name: 'qcOrder',
           hidden: true,
           meta: {
-            name: 'qc Order'
+            name: $i.router.qcOrderDetail
           },
           component: () => import('../views/warehouse/qc/qcOrder')
         },
         {
           path: 'qcOrderService',
-          name: 'qc Order Service',
+          name: 'qcOrderService',
           hidden: true,
           meta: {
-            name: 'qc Order Service'
+            name: $i.router.qcOrderDetail
           },
           component: () => import('../views/warehouse/qc/qcOrderService')
         },
         {
           path: 'qcOrderDetail',
-          name: 'qc Order Detail',
+          name: 'qcOrderDetail',
           hidden: true,
           meta: {
-            name: 'qc Order Detail'
+            name: $i.router.qcOrderDetail
           },
           component: () => import('../views/warehouse/qc/qcOrderDetail')
         }

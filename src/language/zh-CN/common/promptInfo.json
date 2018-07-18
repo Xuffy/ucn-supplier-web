@@ -22,8 +22,8 @@
   "confirm": "确定",
   "cancel": "取消",
   "deleteTheSuccess": "删除成功",
-  "archiveSupplier": "Archive Supplier",
-  "sureToDeleteContact": "确定删除改联系人",
+  "archiveSupplier": "归档供应商",
+  "sureToDeleteContact": "确定删除该联系人",
   "uploadSuccess": "上传成功",
   "uploadFile": "请选择上传文件",
   "enterPassword": "请输入密码",
@@ -31,8 +31,8 @@
   "theTwoPasswordsDoNotMatch": "两次输入密码不一致",
   "pleaseKeepTheSamePasswordYouEnteredTwice": "两次输入的密码请保持一致",
   "cannotPassword": "新密码不能与旧密码相同",
-  "sureDelete": "确认删除",
+  "sureDelete": "确认删除？",
   "noLength": "不能超过100条",
-  "sureDeleteToCompare": "确认删除该compare"
+  "sureDeleteToCompare": "确认删除该对比项？"
 
 }

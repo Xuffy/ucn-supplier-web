@@ -2,10 +2,10 @@
   "name": "Customer name",
   "shortName": "Customer abbreviation",
   "type": "Customer type",
-  "country": "customr country",
-  "city": "customer city",
-  "payment": "payment term",
-  "currency": "currency",
-  "shipAgent": "ship agent",
-  "incoterm": "incoterm"
+  "country": "Customr country",
+  "city": "Customer city",
+  "payment": "Payment term",
+  "currency": "Currency",
+  "shipAgent": "Ship agent",
+  "incoterm": "Incoterm"
 }

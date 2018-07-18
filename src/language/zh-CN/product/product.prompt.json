@@ -3,10 +3,10 @@
   "pleaseChoose": "请选择",
   "deleteSuccess": "已删除!",
   "modifySuccess": "已修改!",
-  "notAddDifferentSupplierProduct": "Can't Add Different Supplier Product!",
-  "pleaseInputCompareName": "Please Input Compare Name",
-  "cantAddCustomerProduct": "Can't add customer's product",
-  "customerProductCanNotAddToOrder": "Customer Product can't create order",
-  "compareRecordMustLessThan100": "Compare record must less than 100",
-  "followingProductCantAddOrder":"Following product can't add to order"
+  "notAddDifferentSupplierProduct": "添加的产品不能归属不同供应商!",
+  "pleaseInputCompareName": "请输入对比名称",
+  "cantAddCustomerProduct": "不能添加客户自行创建产品",
+  "customerProductCanNotAddToOrder": "客户自行创建产品无法创建订单!请通知供应商上架相应产品!",
+  "compareRecordMustLessThan100": "对比项不得大于100个",
+  "followingProductCantAddOrder":"以下产品无法被创建订单"
 }

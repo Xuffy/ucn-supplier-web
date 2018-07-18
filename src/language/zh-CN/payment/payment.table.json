@@ -13,7 +13,7 @@
   "waitReceipt": "待收金额",
   "planDateOfReceipt": "应收日期",
   "actualDateOfReceipt": "实收日期",
-  "type": "type",
-  "currency": "Currency",
-  "_totalRow": "Total"
+  "type": "类型",
+  "currency": "币种",
+  "_totalRow": "总计"
 }
