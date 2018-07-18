@@ -134,6 +134,7 @@
                  * */
                 loadProductTable:false,
                 productTable:[],
+               dataDicts:{}
             }
         },
         computed:{
@@ -170,7 +171,12 @@
                         pn: 1,
                         ps: 50,
                     }).then(res=>{
-                        this.productTable = this.$getDB(this.$db.warehouse.outboundDetailProductData, res.datas);
+                        this.productTable = this.$getDB(this.$db.warehouse.outboundDetailProductData, res.datas,e=>{
+                          e.skuUnitDictCode._value=e.skuUnitDictCode.value?_.findWhere(this.getDict('SKU_UNIT'),{code:e.skuUnitDictCode.value}).name:'';
+                          e.lengthUnitDictCode._value=e.lengthUnitDictCode.value?_.findWhere(this.getDict('LH_UNIT'),{code:e.lengthUnitDictCode.value}).name:'';
+                          e.volumeUnitDictCode._value=e.volumeUnitDictCode.value?_.findWhere(this.getDict('VE_UNIT'),{code:e.volumeUnitDictCode.value}).name:'';
+                          e.weightUnitDictCode._value=e.weightUnitDictCode.value?_.findWhere(this.getDict('WT_UNIT'),{code:e.weightUnitDictCode.value}).name:'';
+                        });
                         _.map(res.datas,v=>{
                             _.map(v,(val,key)=>{
                                 if(key==='outboundSkuTotalQty' || key==='outboundOutCartonTotalQty' || key==='outboundSkuTotalVolume' || key==='outboundSkuTotalNetWeight' || key==='outboundSkuTotalGrossWeight'){
@@ -178,8 +184,8 @@
                                     v[key]=null;
                                 }
                             })
-                        })
 
+                        })
                         this.loadingTable=false;
                     }).catch(err=>{
                         this.loadingTable=false;
@@ -211,18 +217,37 @@
                 window.close();
             },
 
-            getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['OBD_STATUS'],{cache:true}).then(res=>{
-                    this.outboundOption=res[0].codes;
+            getDataDicts(){
+                this.$ajax.post(this.$apis.get_partUnit,['OBD_STATUS','SKU_UNIT','WT_UNIT','LH_UNIT','VE_UNIT'],{cache:true}).then(res=>{
+                  console.log(res,"getDataDicts");
+                  this.dataDicts={};
+                  res.forEach(v => {
+                    this.dataDicts[v.code]=v.codes;
+                  });
+                  this.outboundOption=this.dataDicts['OBD_STATUS'];
                     this.getData();
                 }).catch(err=>{
 
                 })
-
             },
+          getDict(type,code){
+              if(!code){
+                return this.dataDicts[type];
+              }
+              let v;
+              this.dataDicts[type].forEach(o=>{
+                if(o.code==code){
+                  v=o;
+                }
+              })
+              if(!v){
+                console.log('未找到数据字典：'+type+'='+code);
+              }
+              return v;
+          }
         },
         created(){
-            this.getUnit();
+            this.getDataDicts();
         },
         mounted(){
             this.setMenuLink({

@@ -34,6 +34,15 @@ export default {
             }
         ]
     },
+  lengthUnitDictCode:{
+        key:'lengthUnitDictCode',
+    },
+  volumeUnitDictCode:{
+        key:'lengthUnitDictCode',
+    },
+  weightUnitDictCode:{
+        key:'lengthUnitDictCode',
+    },
     outboundSkuTotalQty:{   //出库产品总数量
         key:'outboundSkuTotalQty',
         showType:'number',
