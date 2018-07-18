@@ -298,7 +298,7 @@
         }else if (((new Date().getTime()-item.timestamp.value)/1000)<=60){
           this.$message({
             type: 'warning',
-            message: '间隔一分钟才能再次催款'
+            message:  this.$i.payment.urgingPaymentTime
           });
           return false
         }
