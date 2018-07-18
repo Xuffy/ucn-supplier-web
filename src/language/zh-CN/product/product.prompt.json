@@ -8,5 +8,7 @@
   "cantAddCustomerProduct": "Can't add customer's product",
   "customerProductCanNotAddToOrder": "Customer Product can't create order",
   "compareRecordMustLessThan100": "Compare record must less than 100",
-  "followingProductCantAddOrder":"Following product can't add to order"
+  "followingProductCantAddOrder":"Following product can't add to order",
+  "sureSetDown":"Sure Set Down?",
+  "setDownSuccess":"Set Down Success"
 }

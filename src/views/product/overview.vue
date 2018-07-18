@@ -106,11 +106,14 @@
                                 v-authorize="'PRODUCT:OVERVIEW:UPLOAD_PRODUCT'"
                                 @click="()=>$refs.importCategory.show()">{{$i.button.upload}}
                         </el-button>
-                        <el-button @click="download">
+                        <el-button
+                                v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'"
+                                @click="download">
                             {{$i.product.downloadSelected}}({{selectList.length?selectList.length:"All"}})
                         </el-button>
-                        <!--<el-button @click="upload">{{$i.product.uploadProduct}}</el-button>-->
-                        <el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger"
+                        <el-button @click="deleteGood"
+                                   :loading="loadingDeleteGoods"
+                                   :disabled="disabledDeleteGoods" type="danger"
                                    v-authorize="'PRODUCT:OVERVIEW:ARCHIVE'">{{$i.common.remove}}
                         </el-button>
                     </div>
@@ -164,6 +167,7 @@
                 btnInfo: this.$i.product.advanced,     //按钮默认文字显示
                 disabledSearch: false,                 //是否禁止搜索，默认false
                 disabledDeleteGoods: true,             //默认没有选中商品的时候是不能点击删除的
+                loadingDeleteGoods:false,
                 disableClickSetUp: false,
                 disableClickSetDown: false,
                 //表格字段绑定
@@ -353,11 +357,6 @@
 
             //设为上架
             setUp() {
-                // this.$confirm('确认上架选中产品?', '提示', {
-                //     confirmButtonText: '确定',
-                //     cancelButtonText: '取消',
-                //     type: 'warning'
-                // }).then(() => {
                 let id = [];
                 this.selectList.forEach(v => {
                     id.push(v.id.value);
@@ -380,9 +379,9 @@
 
             //设为下架
             setDown() {
-                this.$confirm("确定下架选中产品?", "提示", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
+                this.$confirm(this.$i.product.sureSetDown, this.$i.product.prompt, {
+                    confirmButtonText: this.$i.product.sure,
+                    cancelButtonText: this.$i.product.cancel,
                     type: "warning"
                 }).then(() => {
                     let id = [];
@@ -393,7 +392,7 @@
                     this.$ajax.post(this.$apis.set_sellerProductPutDown, id).then(res => {
                         this.getData();
                         this.$message({
-                            message: "下架成功",
+                            message: this.$i.product.setDownSuccess,
                             type: "success"
                         });
                         this.disableClickSetDown = false;
@@ -426,7 +425,8 @@
                     cancelButtonText: this.$i.product.cancel,
                     type: "warning"
                 }).then(() => {
-                    let id = _.pluck(_.pluck(this.selectList, "id"), "vaue");
+                    let id = _.pluck(_.pluck(this.selectList, "id"), "value");
+                    this.loadingDeleteGoods=true;
                     this.$ajax.post(this.$apis.post_sku_deleteAll, id)
                         .then(res => {
                             this.$message({
@@ -434,9 +434,9 @@
                                 message: this.$i.common.deleteTheSuccess
                             });
                             this.getData();
-                        });
-                }).catch(() => {
-
+                        }).finally(()=>{
+                        this.loadingDeleteGoods=false;
+                    });
                 });
             },
 
