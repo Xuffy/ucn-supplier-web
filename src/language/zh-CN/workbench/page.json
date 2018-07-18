@@ -19,5 +19,8 @@
   "settingCompany": "公司信息设置",
   "settingCategory": "分类设置",
   "settingPersonal": "个人信息设置",
-  "goSet": "去设置"
+  "goSet": "Go set",
+  "setDepartment": "Set Department and User",
+  "setCompany": "Set Company Info",
+  "setCategory": "Set Category"
 }

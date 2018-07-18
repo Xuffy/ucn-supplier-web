@@ -94,5 +94,10 @@
   "total":"总计",
   "myCategory":"我的分类",
   "sysCategory":"系统分类",
-  "bookmark":"收藏夹"
+  "bookmark":"收藏夹",
+  "all":"All",
+  "detailBig":"Detail",
+  "bookmarkArchive":"Bookmark Archive",
+  "compareArchive":"Compare Archive",
+  "save":"Save"
 }

@@ -15,5 +15,6 @@
   "actualDateOfReceipt": "实收日期",
   "type": "类型",
   "currency": "币种",
+  "timestamp": "timestamp",
   "_totalRow": "总计"
 }
