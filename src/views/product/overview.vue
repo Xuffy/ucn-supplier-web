@@ -262,23 +262,7 @@
             },
             search() {
                 this.disabledSearch = true;
-                this.loadingTable = true;
-                this.$ajax.post(this.$apis.get_productList, this.productForm).then(res => {
-                    // res.datas.forEach(v=>{
-                    //     if(v.status===0){
-                    //         v.status='下架';
-                    //     }else if(v.status===1){
-                    //         v.status='上架';
-                    //     }
-                    // });
-                    this.tableDataList = this.$getDB(this.$db.product.overviewTable, res.datas);
-                    this.pageData = res;
-                    this.disabledSearch = false;
-                    this.loadingTable = false;
-                }).catch(err => {
-                    this.disabledSearch = false;
-                    this.loadingTable = false;
-                });
+                this.getData();
             },
             handleChange(value) {
                 console.log(value);
@@ -319,8 +303,8 @@
                     });
                     this.pageData = res;
                     this.selectList = [];
-                    this.loadingTable = false;
-                }).catch(err => {
+                }).finally(() => {
+                    this.disabledSearch = false;
                     this.loadingTable = false;
                 });
             },
