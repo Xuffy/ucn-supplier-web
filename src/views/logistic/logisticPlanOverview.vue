@@ -31,12 +31,12 @@
         <div class="btn-wrap">
           <div class="fn btn">
             <div v-if="pageType === 'plan'">
-              <el-button v-authorize="auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-              <el-button v-authorize="auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==5)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==5)">{{ $i.logistic.archive }}</el-button>
             </div>
             <div v-if="pageType === 'loadingList'">
-              <el-button v-authorize="auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-              <el-button v-authorize="auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==4)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==4)">{{ $i.logistic.archive }}</el-button>
             </div>
           </div>
           <div class="view-by-btn">
@@ -48,7 +48,7 @@
         </div>
       </div>
     </v-table>
-    <v-pagination :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange"/>
+    <v-pagination :pageSizes="[50,100,200]" :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange"/>
   </div>
 </template>
 <script>
@@ -287,9 +287,9 @@
         this.fetchDataList()
       },
       deleteData() {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
+          confirmButtonText: this.$i.logistic.confirm,
+          cancelButtonText: this.$i.logistic.cancel,
           type: 'warning'
         }).then(() => {
           this.$ajax.post(this.$apis.delete_by_ids, {ids: this.selectCount.map(a => a.id.value)}).then(res => {
@@ -298,7 +298,7 @@
             this.selectCount = []
             this.$message({
               type: 'success',
-              message: '删除成功!'
+              message: this.$i.logistic.operationSuccess
             })
           })
         })
@@ -313,7 +313,7 @@
         if(this.pageType == 'loadingList'){
           this.$router.push({path: `/logistic/loadingListDetail`, query: {id: e.id.value}})
         }else{
-          this.$router.push({path: `/logistic/${this.jumpPage[this.pageType]}`, query: {id: e.id.value}})
+          this.$windowOpen({url:`/logistic/${this.jumpPage[this.pageType]}`,params:{id: e.id.value}});
         }
       },
       searchFn(obj) {

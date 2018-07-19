@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="tab-wrap">
-      <el-table :cell-class-name="lightHight" :data="matchData" ref="table" border style="width: 100%; margin-top: 20px" 
+      <el-table :cell-class-name="lightHight" :data="tableData" ref="table" border style="width: 100%; margin-top: 20px" 
         show-summary 
         :summary-method="summaryMethod"
         @selection-change="handleSelectionChange" 
@@ -10,19 +10,19 @@
         <el-table-column type="index" width="50" align="center"/>
         <el-table-column :label="$i.logistic.containerNo" width="140" align="center" prop="containerNo">
           <template slot-scope="scope">
-            <el-input placeholder="请输入内容" v-model="scope.row.containerNo" v-if="edit" @change="ContainerInfoLight('containerNo',scope.row.containerNo,scope.$index,scope)"></el-input>
+            <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.containerNo" v-if="edit" @change="ContainerInfoLight('containerNo',scope.row.containerNo,scope.$index,scope)"></el-input>
             <span v-else>{{ scope.row.containerNo }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.sealNo" width="120" align="center" prop="sealNo">
           <template slot-scope="scope">
-            <el-input placeholder="请输入内容" v-model="scope.row.sealNo" v-if="edit" @change="ContainerInfoLight('sealNo',scope.row.sealNo,scope.$index,scope)"></el-input>
+            <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.sealNo" v-if="edit" @change="ContainerInfoLight('sealNo',scope.row.sealNo,scope.$index,scope)"></el-input>
             <span v-else>{{ scope.row.sealNo }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.containerWeight" width="140" prop="containerWeight" align="center">
           <template slot-scope="scope">
-            <el-input placeholder="请输入内容" v-model="scope.row.containerWeight" v-if="edit" @change="ContainerInfoLight('containerWeight',scope.row.containerWeight,scope.$index,scope)"></el-input>
+            <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.containerWeight" v-if="edit" @change="ContainerInfoLight('containerWeight',scope.row.containerWeight,scope.$index,scope)"></el-input>
             <span v-else>{{ scope.row.containerWeight }}</span>
           </template>
         </el-table-column>
@@ -58,7 +58,7 @@
         </el-table-column>
         <el-table-column :label="$i.logistic.totalSkuPriceInContainer" width="200" prop="totalContainerSkuPrice" align="center">
           <template slot-scope="scope">
-            <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input>
+            <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input>
             <span v-else>{{ scope.row.totalContainerSkuPrice }}</span>
           </template>
         </el-table-column>
@@ -76,8 +76,7 @@ export default {
   data () {
     return {
       containerNo: '',
-      containerSelect: '',
-      ContainerInfoLightArr:[]
+      containerSelect: ''
     }
   },
   props: {
@@ -108,33 +107,41 @@ export default {
   },
   computed:{
     returnData(){
-      return this.$depthClone(this.tableData);
+      let arr = this.$depthClone(this.matchData).map(el=> {el.fieldDisplay={}; return el } );
+      return arr;
     }
   },
   methods: {
     //高亮
     ContainerInfoLight(key,v,index,scope){
       if(key=='containerNo'){
-        this.tableData.forEach((el,index)=>{
+        this.matchData.forEach((el,index)=>{
           if(scope.$index != index){ 
             if(el.containerNo == scope.row.containerNo&&scope.row.containerNo!=''){
               scope.row.containerNo='';
               this.$message({
-                message: '集装箱号已经存在！',
+                message: this.$i.logistic.dataIsExist,
                 type: 'error'
               })
             };
           }
         })
       }
-      this.ContainerInfoLightArr[index] = new Object(this.ContainerInfoLightArr[index]);
-      this.ContainerInfoLightArr[index][key] = v;
-      this.returnData[index].fieldDisplay = this.ContainerInfoLightArr[index];
+      this.returnData[index].fieldDisplay[key] = v;
       this.returnData[index][key] = v;
-      this.returnData[index]['isModify'] = true;
-      if(this.tableData[index][key]==v){
-        delete this.returnData[index]['fieldDisplay'][key];
-        this.returnData[index]['isModify'] = false;
+      if(this.matchData[index][key]==v){
+        delete this.returnData[index].fieldDisplay[key];
+      }
+      let cloneReturnData = this.$depthClone(this.returnData[index]);
+      let cloneTableData = this.$depthClone(this.matchData[index]);
+      //特殊处理 containerWeight字段 后台是数字类型 强行先转一次字符串    
+      cloneTableData.containerWeight = cloneReturnData.containerWeight.toString();
+      delete cloneReturnData.isModify
+      delete cloneTableData.isModify
+      if(_.isEqual(cloneReturnData, cloneTableData)){
+        this.returnData[index].isModify = false;
+      }else{
+        this.returnData[index].isModify = true;
       }
       this.$emit('ContainerInfoLight',this.returnData);
     },
