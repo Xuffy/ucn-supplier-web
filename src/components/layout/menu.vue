@@ -28,7 +28,19 @@
       </el-menu-item-group>
 
       <el-menu-item-group>
-        <el-menu-item index="2-0" v-show="quickLink.draft.show"
+        <el-menu-item v-for="(item,index) in menuLink.list" :key="index" :index="'2-' + index"
+                      @click="$router.push({path:item.path,query:item.query})">
+          <el-tooltip :disabled="!layout.hideMenu" effect="dark"
+                      :content="item.label" placement="right">
+            <i class="el-icon-edit-outline"></i>
+          </el-tooltip>
+          <span v-text="item.label"></span>
+        </el-menu-item>
+
+
+
+
+        <!--<el-menu-item index="2-0" v-show="quickLink.draft.show"
                       @click="$router.push(quickLink.draft)">
           <el-tooltip :disabled="!layout.hideMenu" effect="dark"
                       :content="$i.common.draft" placement="right">
@@ -36,6 +48,9 @@
           </el-tooltip>
           <span v-text="$i.common.draft"></span>
         </el-menu-item>
+
+
+
         <el-menu-item index="2-1" v-show="quickLink.recycleBin.show"
                       @click="$router.push(quickLink.recycleBin)">
           <el-tooltip :disabled="!layout.hideMenu" effect="dark"
@@ -43,7 +58,7 @@
             <i class="el-icon-delete"></i>
           </el-tooltip>
           <span v-text="$i.common.recycleBin"></span>
-        </el-menu-item>
+        </el-menu-item>-->
         <el-menu-item index="2-3" v-show="quickLink.log.show"
                       @click="$router.push(quickLink.log)">
           <el-tooltip :disabled="!layout.hideMenu" effect="dark"
@@ -86,7 +101,8 @@
     computed: {
       ...mapState({
         quickLink: state => state.quickLink,
-        layout: state => state.layout
+        layout: state => state.layout,
+        menuLink: state => state.menuLink
       }),
     },
     mounted() {

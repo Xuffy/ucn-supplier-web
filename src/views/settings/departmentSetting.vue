@@ -681,9 +681,7 @@
       btnClick(item, type) {
         if (type === 1) {
           this.roleOption = this.$copyArr(this.roleData[0].children);
-          this.addUser = _.mapObject(item, val => {
-            return val.value;
-          })
+          this.addUser = _.mapObject(item, val => val.value);
           this.editUserdialog.type = 1;
           this.editUserdialog.show = true;
         } else {
@@ -721,6 +719,11 @@
 
         this.$ajax.post(this.$apis.add_departmentUser, params)
           .then(res => {
+            this.getDepartmentData().then(depRes => {
+              let roles = _.findWhere(depRes, {deptId: this.userData.deptId});
+
+              this.roleData[0].children = roles ? roles.deptRoles : [];
+            });
             this.getDepartmentUser();
             this.editUserdialog.show = false;
             this.addUser = this.$options.data().addUser;
@@ -768,10 +771,7 @@
         this.$ajax.post(this.$apis.get_partUnit, ['LANGUAGE'], {cache: true})
           .then(res => {
             this.languageOption = res[0].codes;
-          }).finally(err => {
-
-          }
-        );
+          });
       },
       savePrivilege() {
         let nodes = [], dataNodes
@@ -781,18 +781,14 @@
         dataNodes = this.$refs.privilegeTree.getNode('dataAll');
         this.loadingPrivilege = true;
 
-        _.map(nodes, val => {
-          val.parentCode && params.resourceCodes.push(val.code);
-        });
+        _.map(nodes, val => !_.isUndefined(val.type) && params.resourceCodes.push(val.code))
 
         _.map(dataNodes.childNodes, value => {
           let checked = _.where(value.childNodes, {checked: true})
             , userIds = [];
 
           if (!_.isEmpty(checked)) {
-            userIds = _.map(checked, val => {
-              return val.data.code;
-            });
+            userIds = _.map(checked, val => val.data.userId);
             params.domainCodes.push({bizDomainCode: value.data.code, userIds});
           }
         });
@@ -803,6 +799,7 @@
         this.$ajax.post(this.$apis.ROLE_PRIVILEGE, {datas: [params]})
           .then(res => {
             this.$message.success(this.$i.setting.privilegeSetSuccess);
+            this.getPrivilege();
           })
           .finally(() => this.loadingPrivilege = false);
       },
@@ -811,30 +808,52 @@
           this.privilegeData = this.$options.data().privilegeData;
           return false;
         }
-        this.getPrivilegeResource();
-        this.getPrivilegeData();
-      },
-      getPrivilegeResource() {
-        this.$ajax.get(this.$apis.PRIVILEGE_RESOURCE, {}, {cache: true})
-          .then(res => {
-            this.privilegeData[0].children = res;
-          });
-      },
-      getPrivilegeData() {
-        this.$ajax.all([
-          this.$ajax.get(this.$apis.PRIVILEGE_DATA_BIZDOMAIN, {}, {cache: true}),
-          this.$ajax.get(this.$apis.get_departmentUser)
-        ]).then(res => {
-          let list = [], users = [];
 
-          users = _.map(res[1], val => {
-            return {name: val.userName, code: val.userId};
+        this.$ajax.post(this.$apis.PRIVILEGE_PRIVILEGE_SELECT, {
+          deptId: this.userData.deptId,
+          roleId: this.checkedRole[0]
+        }).then(res => {
+          this.$ajax.all([
+            this.getPrivilegeResource(),
+            this.getPrivilegeData()
+          ]).then(() => {
+            let checked = [];
+            if (!_.isEmpty(res.selectedDomainUserIds)) {
+              let users = [];
+              _.mapObject(res.selectedDomainUserIds, (val, key) => {
+                _.map(val, v => users.push(`${key}_${v}`));
+              })
+              checked = checked.concat(users);
+            }
+
+            if (!_.isEmpty(res.selectedResourceCodes)) {
+              checked = checked.concat(res.selectedResourceCodes);
+            }
+            this.$refs.privilegeTree.setCheckedKeys(checked)
           });
+        });
+      },
+      getPrivilegeResource(data) {
+        return this.$ajax.get(this.$apis.PRIVILEGE_RESOURCE, {}, {cache: true})
+          .then(res => this.privilegeData[0].children = res);
+      },
+      getPrivilegeData(data) {
+        return this.$ajax.all([
+          this.$ajax.get(this.$apis.PRIVILEGE_DATA_BIZDOMAIN, {}, {cache: true}),
+          this.$ajax.get(this.$apis.get_departmentUser, {}, {cache: true})
+        ]).then(res => {
+          let list = [];
 
           list = _.map(res[0], val => {
+            let users = _.map(res[1], ({userName, userId}) => ({
+              name: userName,
+              code: `${val.bizDomainCode}_${userId}`,
+              userId
+            }));
             return {name: val.bizDomainName, code: val.bizDomainCode, children: users};
           });
 
+          console.log(list)
           this.privilegeData[1].children = list;
         });
       }
