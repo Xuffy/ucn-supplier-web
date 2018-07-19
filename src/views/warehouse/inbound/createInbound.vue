@@ -99,8 +99,9 @@
             </el-table-column>
             <el-table-column
                     v-for="v in $db.warehouse.inboundOrderProductTable"
+                    :class-name="v.must ? 'ucn-table-required' : ''"
                     :key="v.key"
-                    :label="(v.must?'*':'')+$i.warehouse[v.key]"
+                    :label="$i.warehouse[v.key]"
                     :prop="v.key"
                     align="center"
                     width="180">
@@ -655,17 +656,14 @@
                     if(v._checked && !v._disabled && v.skuId.value!==0){
                         v._checked=false;
                         v._disabled=false;
-                        this.productIds.push(v.skuId.value);
+                        this.productIds.push(v.id.value);
                         orderNos.push(v.orderNo.value);
                     }
                 });
                 if(this.productIds.length!==0){
                     //表示有新增产品
                     this.loadingProductTable=true;
-                    this.$ajax.post(this.$apis.get_orderSku,{
-                        skuIds:this.productIds,
-                        orderNos:orderNos
-                    }).then(res=>{
+                    this.$ajax.post(this.$apis.get_orderSku,{ids:this.productIds}).then(res=>{
                         _.map(res,v=>{
                             _.map(v.skuList,e=>{
                                 e.customerOrderNo=v.customerOrderNo;
