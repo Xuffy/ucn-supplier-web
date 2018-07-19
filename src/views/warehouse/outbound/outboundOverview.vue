@@ -73,7 +73,8 @@
                     outboundNo: "",
                     pn: 1,
                     ps: 50,
-                    outboundTypeDictCode: ''
+                    outboundTypeDictCode: '',
+                    sorts:[{orderBy:"entryDt",orderType:"desc"}]
                 },
                 searchId:1,
                 searchOptions:[

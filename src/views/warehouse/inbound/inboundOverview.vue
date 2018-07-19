@@ -76,7 +76,8 @@
                     inboundNo: "",
                     pn: 1,
                     ps: 50,
-                    inboundTypeDictCode: ''
+                    inboundTypeDictCode: '',
+                    sorts:[{orderBy:"entryDt",orderType:"desc"}]
                 },
 
                 searchId:1,
