@@ -124,7 +124,7 @@
   "customsDeclarationNameCn": "报关中文品名",
   "customsDeclarationNameEn": "报关英文品名",
   "hsCode": "海关编码",
-  "reportElements": "申报要素",
+  "reportElement": "申报要素",
   "supplierName": "供应商名称",
   "supplierNo": "供应商编号",
   "customerSkuCode": "客户货号",
@@ -229,5 +229,5 @@
   "operationSuccess" : "操作成功！",
   "operationFailed" : "操作失败！",
   "jumping" : "正在跳转...",
-  "reportElement" : "Declare elements"
+  "dataIsExist" : "该条数据已存在！"
 }

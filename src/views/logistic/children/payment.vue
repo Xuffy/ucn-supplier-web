@@ -10,7 +10,7 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.paymentItem" align="center" width="140">
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.name" v-if="scope.row.edit"></el-input>
+          <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.name" v-if="scope.row.edit"></el-input>
           <span v-else>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
@@ -32,33 +32,33 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.estPayDate" align="center" width="260">
         <template slot-scope="scope">
-          <!-- <el-input placeholder="请输入内容" v-model="scope.row.planPayDt" v-if="edit"></el-input> -->
-          <el-date-picker v-if="scope.row.edit" v-model="scope.row.planPayDt" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
+          <!-- <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.planPayDt" v-if="edit"></el-input> -->
+          <el-date-picker v-if="scope.row.edit" v-model="scope.row.planPayDt" align="right" type="date" :placeholder="$i.logistic.pleaseChoose" :picker-options="pickerOptions"/>
           <span v-else>{{ scope.row.planPayDt ? $dateFormat(scope.row.planPayDt, 'yyyy-mm-dd') : null }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.estAmount" prop="planPayAmount" align="center" width="180">
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.planPayAmount" v-if="scope.row.edit"></el-input>
+          <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.planPayAmount" v-if="scope.row.edit"></el-input>
           <span v-else>{{ scope.row.planPayAmount }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.actPayDate" align="center" width="260">
         <template slot-scope="scope">
-          <el-date-picker v-if="scope.row.edit" v-model="scope.row.actualPayDt" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
-          <!-- <el-input placeholder="请输入内容" v-model="scope.row.actPayDate" v-if="edit"></el-input> -->
+          <el-date-picker v-if="scope.row.edit" v-model="scope.row.actualPayDt" align="right" type="date" :placeholder="$i.logistic.pleaseChoose" :picker-options="pickerOptions"/>
+          <!-- <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.actPayDate" v-if="edit"></el-input> -->
           <span v-else>{{ scope.row.actualPayDt ? $dateFormat(scope.row.actualPayDt, 'yyyy-mm-dd') : null }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.actAmount" prop="actualPayAmount" align="center" width="180">
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.actualPayAmount" v-if="scope.row.edit"></el-input>
+          <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.actualPayAmount" v-if="scope.row.edit"></el-input>
           <span v-else>{{ scope.row.actualPayAmount }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.currency" align="center" width="180">
         <template slot-scope="scope">
-          <!-- <el-input placeholder="请输入内容" v-model="scope.row.currencyCode" v-if="scope.row.edit"></el-input> -->
+          <!-- <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.currencyCode" v-if="scope.row.edit"></el-input> -->
           <!-- <span v-else>{{ scope.row.currencyCode }}</span> -->
           <span>{{ computedCurrency('exchangeCurrency', 'code', 'name', scope.row.currencyCode)}}</span>
         </template>
@@ -71,7 +71,7 @@
       <el-table-column :label="$i.logistic.operation" align="center" width="200" fixed="right">
         <template slot-scope="scope">
           <div>
-            <el-button v-authorize="auth[pageTypeCurr].CONFIRM_PAYMENT||''" :disabled="scope.row.status==40||scope.row.status==-1" size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.logistics_accept_payment,$i.logistic.confirm)">{{ $i.logistic.confirm }}</el-button>
+            <el-button v-authorize="auth[pageTypeCurr]&&auth[pageTypeCurr].CONFIRM_PAYMENT||''" :disabled="scope.row.status==40||scope.row.status==-1" size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.logistics_accept_payment,$i.logistic.confirm)">{{ $i.logistic.confirm }}</el-button>
           </div>
         </template>
       </el-table-column>
@@ -251,9 +251,9 @@ export default {
       this.$emit('updatePaymentWithView', { i, edit: false })
     },
     switchStatus (i, url,title) {
-      this.$confirm('此操作将'+title+'该数据, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
+        confirmButtonText: this.$i.logistic.confirm,
+        cancelButtonText: this.$i.logistic.cancel,
         type: 'warning'
       }).then(() => {
         this.$ajax.post(`${url}/${this.tableData[i].id}?version=${this.tableData[i].version}`).then(({ status }) => {

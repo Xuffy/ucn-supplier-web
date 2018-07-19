@@ -23,7 +23,7 @@
         </div>
       </div>
     </v-table>
-    <v-pagination :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange" />
+    <v-pagination :pageSizes="[50,100,200]" :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange" />
   </div>
 </template>
 <script>

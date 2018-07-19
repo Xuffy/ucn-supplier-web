@@ -25,5 +25,6 @@
   "keywordMustInput": "Please fill in required field",
   "pleaseChooseAType": "Please choose a type",
   "pleaseChooseService": "Please choose service",
-  "deleteSuccess":"Delete Success!"
+  "deleteSuccess":"Delete Success!",
+  "pleaseChooseQcMethod":"Please Choose QC Method"
 }
