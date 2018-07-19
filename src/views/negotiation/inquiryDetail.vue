@@ -52,7 +52,7 @@
             <el-button type="primary" @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.originValue !== 21" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
             <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.originValue + ''!=='99'||tabData[0].status.originValue+''!=='1'" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.archive }}</el-button> -->
             <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue !== 21" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
-            <el-button>{{ $i.common.download }}</el-button>
+            <el-button @click="exportDatas">{{ $i.common.download }}</el-button>
             <el-button type="warning" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="![21, 22].includes(tabData[0].status.originValue)">{{ $i.common.cancel }}</el-button>
             <el-button type="danger" @click="ajaxInqueryAction('delete')" :disabled="tabData[0].status.originValue !== 1">{{ $i.common.archive }}</el-button>
           </div>
@@ -117,7 +117,7 @@ export default {
       disabledLine: [],
       trig: 0,
       disabledTabData: [],
-      id: '',
+      id: null,
       compareLists: false,
       tabData: [],
       productTabData: [],
@@ -198,7 +198,7 @@ export default {
     }
   },
   created() {
-    this.setMenuLink([{path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive},{path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log}]);
+    this.setMenuLink([{path: '/negotiation/recycleBin/inquiry', label: this.$i.common.recycleBin}, {path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log}]);
 
     if (this.$localStore.get('$in_quiryCompare')) {
       this.compareConfig = this.$localStore.get('$in_quiryCompare');
@@ -235,7 +235,7 @@ export default {
       }).then(() => {
         this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
           action: 'delete',
-          ids: [this.$route.query.id]
+          ids: [this.id]
         }).then(() => {
           this.$router.push('/negotiation/inquiry');
         });
@@ -330,6 +330,7 @@ export default {
       });
     },
     showData(res) {
+      this.id = res.id;
       this.chatParams = {
         bizNo: res.quotationNo,
         dataAuthCode: 'BIZ_INQUIRY',
@@ -362,6 +363,11 @@ export default {
       if(!this.id) return;
       let url = this.$apis.parse(this.$apis.BUYER_GET_INQIIRY_DETAIL_LIST, {id: this.id});
       this.$ajax.post(url, this.params).then(this.showDetails);
+    },
+    exportDatas() {
+      if (this.id) {
+        this.$fetch.export_task('INQUIRY_ORDER', {'draft': 0, 'recycleSupplier': false, 'id': this.id});
+      }
     },
     onListSortChange(args) {
       this.params.sorts = args.sorts;
@@ -516,9 +522,11 @@ export default {
     },
     // 接受单
     ajaxInqueryAction(type) {
-      this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {action: type, ids: [this.$route.query.id]}).then(() => {
-        this.$router.push('/negotiation/inquiry');
-      });
+      if (this.id) {
+        this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {action: type, ids: [this.id]}).then(() => {
+          this.$router.push('/negotiation/inquiry');
+        });
+      }
     },
     // 删除product 某个单
     removeProduct() {

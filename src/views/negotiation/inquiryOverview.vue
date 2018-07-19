@@ -33,7 +33,7 @@
                    :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='21'||params.status === null"
                    v-authorize="'INQUIRY:OVERVIEW:DELETE'">{{ $i.common.archive }}<span>({{ checkedIds.length }})</span>
         </el-button>
-        <el-button :disabled="!tabData.length" v-authorize="'INQUIRY:OVERVIEW:DOWNLOAD'">{{
+        <el-button @click="exportDatas" :disabled="!tabData.length" v-authorize="'INQUIRY:OVERVIEW:DOWNLOAD'">{{
           `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}
         </el-button>
       </div>
@@ -167,6 +167,15 @@
       viewByChange() {
         this.params.sorts = null;
         this.gettabData();
+      },
+      exportDatas() {
+        let params = this.$depthClone(this.params);
+        if (this.checkedIds.length) {
+          params.ids = this.checkedIds;
+        } else {
+          delete params.ids;
+        }
+        this.$fetch.export_task('INQUIRY_ORDER', params);
       },
       cancelInquiry() { // 取消询价单
         this.ajaxInqueryAction('cancel');

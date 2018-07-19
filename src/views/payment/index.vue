@@ -294,11 +294,12 @@
         // ① 催款，此操作会给对应付款人发一条提示付款的信息，在对方的workbench显示；
         // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
         if(item.timestamp.value === ''){
+          item.paymentNumber.value = true;
           item.timestamp.value = new Date().getTime();
-        }else if (((new Date().getTime()-item.timestamp.value)/1000)<=60){
+        }else if (((new Date().getTime()-item.timestamp.value)/1000)<=60 && item.paymentNumber.value){
           this.$message({
             type: 'warning',
-            message:  this.$i.payment.urgingPaymentTime
+            message: this.$i.payment.urgingPaymentTime
           });
           return false
         }
@@ -309,7 +310,7 @@
               message: this.$i.payment.urgedSuccess
             });
           }).catch((res) => {
-
+          item.paymentNumber.value = false;
         });
       },
       setButtons(item){

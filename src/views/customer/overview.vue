@@ -14,13 +14,13 @@
                               <div v-if="v.type==='input'">
                                 <el-input
                                   size="mini"
-                                  placeholder="请输入内容"
+                                  :placeholder="$i.common.inputkeyWordToSearch"
                                   v-model="params[v.key]">
                                 </el-input>
                               </div>
                               <div v-if="v.type==='select'">
                                 {{params[v.country]}}
-                                <el-select class="speWidth" v-model="params[v.key]" placeholder="请选择">
+                                <el-select class="speWidth" v-model="params[v.key]" :placeholder="$i.common.inputSearch">
                                   <el-option
                                     size="mini"
                                     v-for="item in options[v.key]"

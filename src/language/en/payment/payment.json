@@ -19,7 +19,8 @@
   "completedQc": "Inspected",
   "draft": "logistic plan draft",
   "lsPlan": "logistic plan",
-  "urgedSuccess": "Operate successfully"
+  "urgedSuccess": "Operate successfully",
+  "urgingPaymentTime": "间隔一分钟才能再次催款"
 
 
 }

@@ -33,6 +33,10 @@
   "cannotPassword": "The new password cannot be the same as the old one",
   "sureDelete": "Sure to delete?",
   "noLength": "Cannot exceed 100",
-  "sureDeleteToCompare": "Are you sure to delete this compare?"
+  "sureDeleteToCompare": "Are you sure to delete this compare?",
+  "sureRecover": "确定恢复",
+  "recoverSuccess": "恢复成功",
+  "deleteProduct": "确定删除选中商品"
+
 
 }

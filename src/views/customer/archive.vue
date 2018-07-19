@@ -14,13 +14,13 @@
               <div v-if="v.type==='input'">
                 <el-input
                   size="mini"
-                  placeholder="请输入内容"
+                  :placeholder="$i.common.inputkeyWordToSearch"
                   v-model="params[v.key]">
                 </el-input>
               </div>
               <div v-if="v.type==='select'">
                 {{params[v.country]}}
-                <el-select class="speWidth" v-model="params[v.key]" placeholder="请选择">
+                <el-select class="speWidth" v-model="params[v.key]" :placeholder="$i.common.inputSearch">
                   <el-option
                     size="mini"
                     v-for="item in options[v.key]"
@@ -253,9 +253,9 @@
         });
       },
       postBatchRecover(){
-        this.$confirm('确定恢复?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$confirm(this.$i.common.sureRecover, this.$i.common.prompt, {
+          confirmButtonText: this.$i.common.confirm,
+          cancelButtonText: this.$i.common.cancel,
           type: 'warning'
         }).then(() => {
           this.$ajax.post(this.$apis.post_batchRecover, this.selectNumber)
@@ -263,7 +263,7 @@
               this.selectNumber = [];
               this.$message({
                 type: 'success',
-                message: '恢复成功!'
+                message: this.$i.common.recoverSuccess
               });
               this.getData();
             })
@@ -293,12 +293,14 @@
           path: '',
           query: {code: 'SUPPLIER_CUSTOMER_REMARK'},
           type: 100,
-          label: this.$i.common.log
+          label: this.$i.common.log,
+          auth: 'CUSTOMER:LOG'
         },
         {
           path: 'customerArchive',
           type: 10,
-          label: this.$i.common.archive
+          label: this.$i.common.archive,
+          auth:'CUSTOMER:ARCHIVE'
         },
       ]);
     },

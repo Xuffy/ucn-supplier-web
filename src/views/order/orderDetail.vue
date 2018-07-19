@@ -505,7 +505,7 @@
                 :height="500"
                 ref="table"
                 :data.sync="productTableData"
-                :buttons="isModify?productInfoBtn:productNotModifyBtn"
+                :buttons="handleShowBtn"
                 @action="productInfoAction"
                 :loading='loadingProductTable'
                 @change-checked="changeProductChecked"
@@ -1887,6 +1887,19 @@
             /**
              * product info事件
              * */
+            handleShowBtn(item) {
+                let config;
+                if (this.isModify) {
+                    if (item.skuStatus.value === "SHIPPED") {
+                        config = this.productNotModifyBtn;
+                    } else {
+                        config = this.productInfoBtn;
+                    }
+                } else {
+                    config = this.productNotModifyBtn;
+                }
+                return config;
+            },
             productInfoAction(e,type){
                 if(type==='negotiate'){
                     if(e._isNew){
