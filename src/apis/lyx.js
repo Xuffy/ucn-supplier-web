@@ -13,7 +13,7 @@ export default {
   get_payment_list: ['/payment/list/', 'a_localtion','USUPPLY_URL'],
   get_product_history: ['/logistics/plan/getProductHistory','a_localtion', 'USUPPLY_URL'],
   get_product_order_history: ['/logistics/order/getProductHistory','a_localtion', 'USUPPLY_URL'],
-  get_order_list_with_page: ['/order/skuAllPage', 'a_localtion','USUPPLY_URL'],
+  get_order_list_with_page: ['/order/skuListPage', 'a_localtion','USUPPLY_URL'],
   get_loading_list_plan: ['/logistics/order/pageByPlanNo','a_localtion', 'USUPPLY_URL'],
   get_loading_list_unit: ['/logistics/order/pageByUnit', 'a_localtion','USUPPLY_URL'],
   get_loading_list_sku: ['/logistics/order/pageBySkuCode','a_localtion', 'USUPPLY_URL'],

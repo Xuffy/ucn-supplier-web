@@ -10,7 +10,7 @@
       <div class="input-item">
         <span>{{ $i.logistic.remark }}:</span>
         <el-input @change="hightLightModifyFun({remark:remark},'remark')" :class="[{definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('remark')},'el-input']"
-          type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容" v-model="remark" v-if="edit"></el-input>
+          type="textarea" resize="none" :autosize="{ minRows: 3 }" :placeholder="$i.logistic.pleaseChoose" v-model="remark" v-if="edit"></el-input>
         <p v-else :style="fieldDisplay&&fieldDisplay.hasOwnProperty('remark') ? {
             'background': 'yellow',
             'padding':'5px'
@@ -46,9 +46,9 @@
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
       <div class="hd active">
-        <el-button v-authorize="auth[pageTypeCurr].PRESS_FOR_PAYMENT||''" type="primary" size="mini" :disabled="dunningDisabled" @click.stop="batchDunning">{{ batchDunningCutDown + $i.logistic.Dept }}</el-button>
+        <el-button v-authorize="auth[pageTypeCurr]&&auth[pageTypeCurr].PRESS_FOR_PAYMENT||''" type="primary" size="mini" :disabled="dunningDisabled" @click.stop="batchDunning">{{ batchDunningCutDown + $i.logistic.Dept }}</el-button>
       </div>
-      <payment ref="payment" v-authorize="auth[pageTypeCurr].payment||''" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum"
+      <payment ref="payment" v-authorize="auth[pageTypeCurr]&&auth[pageTypeCurr].payment||''" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum"
         @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView"
         :currencyCode="oldPlanObject.currency" />
     </div>
@@ -61,7 +61,7 @@
         @change-sort="$refs.productInfo.setSort(productList)">
         <div slot="header" class="product-header">
           <el-button v-if="edit" type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
-          <el-button v-if="edit" v-authorize="auth[pageTypeCurr].PRODUCT_INFO_DELETE||''" type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
+          <el-button v-if="edit" v-authorize="auth[pageTypeCurr]&&auth[pageTypeCurr].PRODUCT_INFO_DELETE||''" type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
           <label v-if="(edit||DeliveredEdit)&&pageTypeCurr=='loadingListDetail'">{{ $i.logistic.shipmentStatus}} :</label>
           <el-select v-if="(edit||DeliveredEdit)&&pageTypeCurr=='loadingListDetail'" v-model="ShipmentStatusCode" placeholder="请选择"
             @change="ShipmentStatusChange">
@@ -219,6 +219,7 @@
         CutDown: null,
         ProductFromOrder:[],
         ProductFromOrderRes:[],
+        initData:null
       }
     },
     components: {
@@ -404,6 +405,7 @@
         this.$ajax.get(`${url}?id=${this.$route.query.id || ''}&logisticsNo=${this.$route.query.code || '' }`).then(res => {
           this.planId = res.id;
           this.createdPlanData(res);
+          this.initData = res; //用来初始化数据
           this.logisticsStatus = {
             recived: res.recived,
             supplierRecived: res.supplierRecived,
@@ -423,7 +425,7 @@
           this.selectArr.supplier = res;
         })
       },
-      createdPlanData(res = this.oldPlanObject, qrg) {
+      createdPlanData(res = this.initData, qrg) {
         this.oldPlanObject = this.$depthClone(res);
         const stringArray = [
           'payment',
@@ -508,7 +510,7 @@
         this.$ajax.post(`${this.$apis.logistics_payment_batchDunning}`, argArr).then(res => {
           this.$message({
             type: 'success',
-            message: '催款成功!'
+            message: this.$i.logistic.operationSuccess
           })
           this.$ajax.post(`${this.$apis.get_payment_list}${this.logisticsNo}/30`).then(res => {
             this.createdPaymentData(res, 'dunning')
@@ -569,9 +571,9 @@
       },
       deleteContainer() {
         if (!this.selectionContainer.length) return
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
+          confirmButtonText: this.$i.logistic.confirm,
+          cancelButtonText: this.$i.logistic.cancel,
           type: 'warning'
         }).then(() => {
           this.oldPlanObject.rmContainerDetail = this.selectionContainer.map((item) => {
@@ -581,7 +583,7 @@
           this.containerinfoMatch = this.$depthClone(_.difference(this.containerInfo, this.selectionContainer));
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: this.$i.logistic.operationSuccess
           })
         })
       },
@@ -889,7 +891,7 @@
           ids: [this.planId]
         }).then(res => {
           this.$message({
-            message: '操作成功，正在跳转...',
+            message: this.$i.logistic.jumping,
             type: 'success',
             duration: 3000,
             onClose: () => {
@@ -905,7 +907,7 @@
           ids: [this.planId]
         }).then(res => {
           this.$message({
-            message: '取消成功，正在跳转...',
+            message: this.$i.logistic.jumping,
             type: 'success',
             duration: 3000,
             onClose: () => {
@@ -966,20 +968,10 @@
         this.oldPlanObject.fieldDisplay = obj;
       },
       feeInfoLight(data){
-        this.oldPlanObject.fee =  this.$depthClone(data).map(el=>{
-          if(!el.isModify&&'fieldDisplay' in el){
-            el.fieldDisplay = {};
-          }
-          return el;
-        })[0];
+        this.oldPlanObject.fee  = data[0];
       },
       ContainerInfoLight(data){
-        this.oldPlanObject.containerDetail =  this.$depthClone(data).map(el=>{
-          if(!el.isModify&&'fieldDisplay' in el){
-            el.fieldDisplay = {};
-          }
-          return el;
-        });
+        this.oldPlanObject.containerDetail = data;
       },
       sendData(keyString) {
         let url = this.pageTypeCurr == "loadingListDetail" ? this.$apis.update_logistic_order : this.configUrl[this.pageName]
@@ -1057,7 +1049,7 @@
         }
         this.$ajax.post(url, this.oldPlanObject).then(res => {
           this.$message({
-            message: '操作成功！',
+            message: this.$i.logistic.operationSuccess,
             type: 'success',
             duration: 3000,
             onClose: () => {
@@ -1074,7 +1066,7 @@
       }
     },
     watch: {
-      containerInfo: {
+      containerinfoMatch: {
         handler: function (val) {
           val.forEach(el => {
             this.productList = this.productList.map((item,i) => {

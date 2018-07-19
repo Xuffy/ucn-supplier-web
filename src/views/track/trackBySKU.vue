@@ -32,6 +32,7 @@
       :data="dataList"
       :height="500"
       :selection="false"
+      @change-sort="sort"
       :loading='loading' />
     <page
       :page-data="pageData"
@@ -59,11 +60,12 @@
         searchId:'',
         pageData:{},
         params:{
-          "pn": 1,
-          "ps": 50,
-          "skuCodeLike":'',
-          "orderNoLike":'',
-          "status": ''
+          pn: 1,
+          ps: 50,
+          skuCodeLike:'',
+          orderNoLike:'',
+          status: '',
+          sorts:[]
         },
         options: [{
           id: '1',
@@ -117,16 +119,20 @@
         this.$ajax.post(this.$apis.get_track_getTrackInfoByPage,this.params).then(res=>{
           this.loading = false;
           this.dataList = this.$getDB(this.$db.track.track, res.datas,item=>{
-            let country;
-            _.mapObject(item, val => {
-              val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
-              return val
-            })
+            // _.mapObject(item, val => {
+            //   val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+            //   return val
+            // })
           });
           this.pageData=res;
         }).catch(err=>{
           this.loading = false;
         });
+      },
+      //...............sort
+      sort(item){
+        this.params.sorts =  item.sorts;
+        this.getList();
       },
     },
     created(){

@@ -16,5 +16,6 @@
   "type": "type",
   "currency": "Currency",
   "timestamp": "timestamp",
-  "_totalRow": "Total"
+  "_totalRow": "Total",
+  "paymentNumber": "paymentNumber"
 }

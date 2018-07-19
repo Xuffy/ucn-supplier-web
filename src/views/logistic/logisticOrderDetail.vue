@@ -6,19 +6,19 @@
             <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.invoiceNumber')}}</span>
-                    <el-input placeholder="请输入内容"></el-input>
+                    <el-input :placeholder="$i.logistic.pleaseChoose"></el-input>
                 </div>
             </el-col>
             <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.logisticsID')}}</span>
-                    <el-input placeholder="请输入内容"></el-input>
+                    <el-input :placeholder="$i.logistic.pleaseChoose"></el-input>
                 </div>
             </el-col>
             <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.shipmentStatus') }}</span>
-                    <el-input placeholder="请输入内容"></el-input>
+                    <el-input :placeholder="$i.logistic.pleaseChoose"></el-input>
                 </div>
             </el-col>
             <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
@@ -28,7 +28,7 @@
                         v-model="DateOfArrival"
                         align="right"
                         type="date"
-                        placeholder="选择日期"
+                        :placeholder="$i.logistic.pleaseChoose"
                         :picker-options="CarrierOptions" 
                     />
                 </div>
@@ -52,7 +52,7 @@
                         v-model="DateOfArrival"
                         align="right"
                         type="date"
-                        placeholder="选择日期"
+                        :placeholder="$i.logistic.pleaseChoose"
                         :picker-options="CarrierOptions" 
                     />
                 </div>
@@ -64,7 +64,7 @@
                         v-model="DateOfArrival"
                         align="right"
                         type="date"
-                        placeholder="选择日期"
+                        :placeholder="$i.logistic.pleaseChoose"
                         :picker-options="CarrierOptions" 
                     />
                 </div>
@@ -76,7 +76,7 @@
                         v-model="DateOfArrival"
                         align="right"
                         type="date"
-                        placeholder="选择日期"
+                        :placeholder="$i.logistic.pleaseChoose"
                         :picker-options="CarrierOptions" 
                     />
                 </div>
@@ -88,7 +88,7 @@
                         v-model="DateOfArrival"
                         align="right"
                         type="date"
-                        placeholder="选择日期"
+                        :placeholder="$i.logistic.pleaseChoose"
                         :picker-options="CarrierOptions" 
                     />
                 </div>
@@ -100,7 +100,7 @@
                         v-model="DateOfArrival"
                         align="right"
                         type="date"
-                        placeholder="选择日期"
+                        :placeholder="$i.logistic.pleaseChoose"
                         :picker-options="CarrierOptions" 
                     />
                 </div>
@@ -112,7 +112,7 @@
                         v-model="DateOfArrival"
                         align="right"
                         type="date"
-                        placeholder="选择日期"
+                        :placeholder="$i.logistic.pleaseChoose"
                         :picker-options="CarrierOptions" 
                     />
                 </div>
@@ -124,7 +124,7 @@
                         v-model="DateOfArrival"
                         align="right"
                         type="date"
-                        placeholder="选择日期"
+                        :placeholder="$i.logistic.pleaseChoose"
                         :picker-options="CarrierOptions" 
                     />
                 </div>
@@ -156,7 +156,7 @@
              <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.receiptCompany') }}</span>
-                    <el-input placeholder="请输入内容"></el-input>
+                    <el-input :placeholder="$i.logistic.pleaseChoose"></el-input>
                 </div>
             </el-col>  
              <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
@@ -210,7 +210,7 @@
              <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.paymentTerm') }}</span>
-                    <el-input placeholder="请输入内容"></el-input>
+                    <el-input :placeholder="$i.logistic.pleaseChoose"></el-input>
                 </div>
             </el-col>
              <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
@@ -401,7 +401,7 @@
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>运输公司</span>
-                    <el-input placeholder="请输入内容"></el-input>
+                    <el-input :placeholder="$i.logistic.pleaseChoose"></el-input>
                 </div>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
