@@ -77,5 +77,9 @@ export default {
   timestamp: {
     _important:true,
     _hide:true
+  },
+  paymentNumber:{
+    _important:true,
+    _hide:true
   }
 }
