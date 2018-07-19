@@ -24,12 +24,12 @@
             <div class="btn-wrap">
                 <el-button @click="ajaxInqueryAction('accept')" v-authorize="'INQUIRY:OVERVIEW:ACCEPT'" :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='99'||params.status+''==='1'||params.status === null">{{ $i.common.accept }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button @click="cancelInquiry" :disabled="!checkedData.length||params.status+''==='99'||params.status+''==='1'||params.status === null" v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'">{{ $i.common.cancelTheInquiry }}<span>({{ checkedIds.length }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='21'||params.status === null" v-authorize="'INQUIRY:OVERVIEW:DELETE'">{{ $i.common.delete }}<span>({{ checkedIds.length }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='21'||params.status === null" v-authorize="'INQUIRY:OVERVIEW:DELETE'">{{ $i.common.archive }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button :disabled="!tabData.length" v-authorize="'INQUIRY:OVERVIEW:DOWNLOAD'">{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
-                <el-radio-group v-model="viewByStatus" @change="gettabData" size="mini">
+                <el-radio-group v-model="viewByStatus" @change="viewByChange" size="mini">
                     <el-radio-button :label="0">{{$i.common.inquiry}}</el-radio-button>
                     <el-radio-button :label="1" >{{$i.common.SKU}}</el-radio-button>
                 </el-radio-group>
@@ -41,6 +41,7 @@
             :buttons="[{label: 'detail', type: 'detail'}]"
             :height="450"
             @action="action"
+            @change-sort="onListSortChange"
             @change-checked="changeChecked"
             :loading="tabLoad"
             ref="tab"/>
@@ -105,17 +106,8 @@ export default {
     }
   },
   created() {
-    this.setRecycleBin({
-      name: 'negotiationRecycleBin',
-      params: {
-        type: 'inquiry'
-      },
-      show: true
-    });
+    this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
     this.getDirCodes().then(this.gettabData, this.gettabData);
-  },
-  mounted() {
-    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
   },
   methods: {
     ...mapActions([
@@ -153,6 +145,14 @@ export default {
         this.searchLoad = false;
         this.tabLoad = false;
       });
+    },
+    onListSortChange(args) {
+      this.params.sorts = args.sorts;
+      this.gettabData();
+    },
+    viewByChange() {
+      this.params.sorts = null;
+      this.gettabData();
     },
     cancelInquiry() { // 取消询价单
       this.ajaxInqueryAction('cancel');
