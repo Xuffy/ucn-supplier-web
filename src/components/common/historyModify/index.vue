@@ -19,9 +19,10 @@
         :cell-style="setCellStyle"
         :span-method="objectSpanMethod"
         border>
-        <el-table-column v-for="item in dataColumn" :key="item.id"
+        <el-table-column v-for="(item,columnIndex) in dataColumn" :key="item.id"
                          v-if="(!item._hide && !item._hidden) || item._title"
                          min-width="200px"
+                         :fixed="!!item._title"
                          :prop="item.key"
                          :label="item.label">
           <template slot-scope="{ row }" v-if="row[item.key] && !row[item.key]._hide">
@@ -42,7 +43,7 @@
                   placement="bottom"
                   width="300"
                   trigger="click">
-                  <v-upload @change="val => {changeUploadFile(val,row[item.key])}"
+                  <v-upload @change="(val,type) => {changeUploadFile(val,row[item.key],type)}"
                             :limit="row[item.key]._upload.limit || 5"
                             :ref="item.key + 'Upload'"
                             :only-image="row[item.key]._image"
@@ -217,11 +218,11 @@
         this.showDialog = true;
         this.isModify = isModify;
 
-          this.$nextTick(() => {
-            this.$refs.filterColumn.update(false, dataList).then(res => {
-              this.dataList = this.$refs.filterColumn.getFilterData(dataList, res);
-            });
-          })
+        this.$nextTick(() => {
+          this.$refs.filterColumn.update(false, dataList).then(res => {
+            this.dataList = this.$refs.filterColumn.getFilterData(dataList, res);
+          });
+        })
         return dataList;
 
       },
@@ -248,9 +249,9 @@
         });
         return list;
       },
-      changeUploadFile(val, item) {
+      changeUploadFile(val, item, type) {
         this.$set(item._upload, 'list', val);
-        this.$set(item, '_isModified', true);
+        !type && this.$set(item, '_isModified', true);
       },
       closeDialog() {
         if (this.modified) {

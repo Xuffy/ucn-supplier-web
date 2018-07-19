@@ -42,7 +42,7 @@
                 @click="changeSort(item.key)">
               <div>
                 {{item.label}}
-                <div class="sort-box" v-if="!disabledSort || !item._sort">
+                <div class="sort-box" v-if="!disabledSort || item._sort">
                   <i class="el-icon-caret-top"
                      :class="{active:currentSort.orderType === 'asc' && currentSort.orderBy === item.key}"
                      @click.stop="changeSort(item.key,'asc')"></i>
@@ -94,7 +94,7 @@
               </el-popover>
 
               <div v-else
-                   :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
+                   :style="{color:cItem._color || '','min-width': cItem._width || setWidth(cItem)}"
                    v-text="cItem._value || cItem.value || '--'"></div>
             </td>
             <!--操作按钮显示-->
@@ -115,7 +115,7 @@
           <tfoot ref="tableFoot" v-if="totalRow">
           <tr v-for="totalItem in totalRow">
             <td>
-              <div v-text="totalItem._totalRow ? totalItem._totalRow.label : '总计'"></div>
+              <div v-text="totalItem._totalRow ? totalItem._totalRow.label : $i.product.total"></div>
             </td>
             <td v-if="rowspan < 2">
             </td>
@@ -440,6 +440,10 @@
         this.$refs.filterColumn.update().then(res => {
           this.dataList = this.$refs.filterColumn.getFilterData(this.dataList, res);
         });
+      },
+      setWidth(item) {
+        let val = item._value || item.value;
+        return _.isString(val) && val.length > 50 ? `${val.length * 2}px` : '80px';
       }
     },
     beforeDestroy() {
