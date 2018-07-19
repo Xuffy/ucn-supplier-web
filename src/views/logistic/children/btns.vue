@@ -6,21 +6,21 @@
         <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','refuse')">{{ $i.logistic.refuse }}</el-button>
       </div>
       <div v-if="logisticsStatus.supplierRecived!=0">
-        <el-button size="mini" v-authorize="auth[pageType].MODIFY||''" type="primary" v-if="pageType!='loadingListDetail'&&(logisticsStatus.status==1||logisticsStatus.status==3)&&logisticsStatus.recived!=0"
+        <el-button size="mini" v-authorize="auth[pageType]&&auth[pageType].MODIFY||''" type="primary" v-if="pageType!='loadingListDetail'&&(logisticsStatus.status==1||logisticsStatus.status==3)&&logisticsStatus.recived!=0"
           @click.stop="$emit('switchEdit', 'modify')">{{ $i.logistic.modify }}</el-button>
-        <el-button size="mini" v-authorize="auth[pageType].MODIFY||''" type="primary" v-if="pageType=='loadingListDetail'&&(logisticsStatus.status==1||logisticsStatus.status==3)"
+        <el-button size="mini" v-authorize="auth[pageType]&&auth[pageType].MODIFY||''" type="primary" v-if="pageType=='loadingListDetail'&&(logisticsStatus.status==1||logisticsStatus.status==3)"
           @click.stop="$emit('switchEdit', 'modify')">{{ $i.logistic.modify }}</el-button>
-        <el-button size="mini" v-authorize="auth[pageType].MODIFY||''" type="primary" v-if="pageType=='loadingListDetail'&&logisticsStatus.status==2&&!DeliveredEdit" @click.stop="$emit('switchEdit','DeliveredEdit')">{{ $i.logistic.modify }}</el-button>
-        <el-button size="mini" v-authorize="auth[pageType].Confirm||''" type="primary" v-if="pageType!='loadingListDetail'&&logisticsStatus.status==1&&logisticsStatus.recived!=0" @click.stop="$emit('switchEdit','confirm')">{{ $i.logistic.confirm }}</el-button>
+        <el-button size="mini" v-authorize="auth[pageType]&&auth[pageType].MODIFY||''" type="primary" v-if="pageType=='loadingListDetail'&&logisticsStatus.status==2&&!DeliveredEdit" @click.stop="$emit('switchEdit','DeliveredEdit')">{{ $i.logistic.modify }}</el-button>
+        <el-button size="mini" v-authorize="auth[pageType]&&auth[pageType].Confirm||''" type="primary" v-if="pageType!='loadingListDetail'&&logisticsStatus.status==1&&logisticsStatus.recived!=0" @click.stop="$emit('switchEdit','confirm')">{{ $i.logistic.confirm }}</el-button>
         <el-button size="mini" type="primary" v-if="!DeliveredEdit && logisticsStatus.status==3&&pageType!='loadingListDetail'&&logisticsStatus.recived!=0" :disabled="logisticsStatus.recived==0"
           @click.stop="$emit('switchEdit','generateList')">{{ $i.logistic.generateList }}</el-button>
 
         <el-button size="mini" type="danger" v-if="logisticsStatus.status==2&&DeliveredEdit" @click.stop="$emit('switchEdit','DeliveredEditExit')">{{ $i.logistic.cancelModify }}</el-button>
         <el-button size="mini" type="danger" v-if="logisticsStatus.status==2&&DeliveredEdit" @click.stop="$emit('sendData', 'send')">{{ $i.logistic.confirmModify }}</el-button>
 
-        <el-button size="mini" v-authorize="auth[pageType].DOWNLOAD||''" type="primary" v-if="!edit&&!DeliveredEdit" @click.stop="$emit('switchEdit','download')">{{ $i.logistic.download }}</el-button>
-        <el-button size="mini" v-authorize="auth[pageType].CANCEL||''" type="primary" v-if="pageType!='loadingListDetail'&&!DeliveredEdit &&logisticsStatus.status!=5" @click.stop="$emit('switchEdit','cancel')">{{ $i.logistic.cancel }}</el-button>
-        <el-button size="mini" v-authorize="auth[pageType].CANCEL_LOADINGLIST||''" type="primary" v-if="pageType=='loadingListDetail'&&!DeliveredEdit &&logisticsStatus.status!=4" @click.stop="$emit('switchEdit','cancelLoadingList')">{{ $i.logistic.cancelLoadingList }}</el-button>
+        <el-button size="mini" v-authorize="auth[pageType]&&auth[pageType].DOWNLOAD||''" type="primary" v-if="!edit&&!DeliveredEdit" @click.stop="$emit('switchEdit','download')">{{ $i.logistic.download }}</el-button>
+        <el-button size="mini" v-authorize="auth[pageType]&&auth[pageType].CANCEL||''" type="primary" v-if="pageType!='loadingListDetail'&&!DeliveredEdit &&logisticsStatus.status!=5" @click.stop="$emit('switchEdit','cancel')">{{ $i.logistic.cancel }}</el-button>
+        <el-button size="mini" v-authorize="auth[pageType]&&auth[pageType].CANCEL_LOADINGLIST||''" type="primary" v-if="pageType=='loadingListDetail'&&!DeliveredEdit &&logisticsStatus.status!=4" @click.stop="$emit('switchEdit','cancelLoadingList')">{{ $i.logistic.cancelLoadingList }}</el-button>
       </div>
     </div>
     <div v-else>

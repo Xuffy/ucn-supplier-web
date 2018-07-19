@@ -6,7 +6,7 @@
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>logistics plan No</span>
-                    <el-input placeholder="请输入内容"></el-input>
+                    <el-input :placeholder="$i.logistic.pleaseChoose"></el-input>
                 </div>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -28,7 +28,7 @@
                     v-model="date"
                     align="right"
                     type="date"
-                    placeholder="选择日期"
+                    :placeholder="$i.logistic.pleaseChoose"
                     :picker-options="pickerOptions" />
                 </div>
             </el-col>
@@ -47,7 +47,7 @@
              <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>Shipping method</span>
-                    <el-input placeholder="请输入内容"></el-input>
+                    <el-input :placeholder="$i.logistic.pleaseChoose"></el-input>
                 </div>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -69,14 +69,14 @@
                     v-model="DateOfArrival"
                     align="right"
                     type="date"
-                    placeholder="选择日期"
+                    :placeholder="$i.logistic.pleaseChoose"
                     :picker-options="CarrierOptions" />
                 </div>
             </el-col>
              <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>集装箱数量</span>
-                    <el-input placeholder="请输入内容"></el-input>
+                    <el-input :placeholder="$i.logistic.pleaseChoose"></el-input>
                 </div>
             </el-col>    
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -134,7 +134,7 @@
                     v-model="CommoditInspectioy"
                     align="right"
                     type="date"
-                    placeholder="选择日期"
+                    :placeholder="$i.logistic.pleaseChoose"
                     :picker-options="CarrierOptions" />
                 </div>
             </el-col>
@@ -153,13 +153,13 @@
              <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>集装箱数量1</span>
-                    <el-input placeholder="请输入内容"></el-input>
+                    <el-input :placeholder="$i.logistic.pleaseChoose"></el-input>
                 </div>
             </el-col>  
              <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>集装箱数量3</span>
-                    <el-input placeholder="请输入内容"></el-input>
+                    <el-input :placeholder="$i.logistic.pleaseChoose"></el-input>
                 </div>
             </el-col>  
         </el-row>
@@ -220,7 +220,7 @@
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>运输公司</span>
-                    <el-input placeholder="请输入内容"></el-input>
+                    <el-input :placeholder="$i.logistic.pleaseChoose"></el-input>
                 </div>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
