@@ -4,7 +4,6 @@ export default {
         belong:'basicInfo',
         showType:'input',
         disabled:true,
-        sysCreate:true,
     },
     shipmentInvoiceNo:{
         key:'shipmentInvoiceNo',

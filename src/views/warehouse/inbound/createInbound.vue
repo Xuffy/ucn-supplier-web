@@ -1,5 +1,5 @@
 <template>
-    <div class="create-inbound">
+    <div class="create-inbound" v-loading="loadingPage">
         <div class="title">
             {{$i.warehouse.basicInfo}}
         </div>
@@ -268,6 +268,7 @@
                 loadingProductTable: false,
                 inboundTypeOption: [],
                 pageData: {},
+                loadingPage:false,
 
                 /**
                  * 外部展示数据
@@ -326,6 +327,18 @@
             };
         },
         methods: {
+
+            getInboudNo(){
+                this.loadingPage=true;
+                this.$ajax.post(this.$apis.GET_WAREHOUSE_NO,{
+                    type:'inbound_no'
+                }).then(res=>{
+                    this.getUnit();
+                    this.inboundData.inboundNo=res.content;
+                }).catch(err=>{
+                    this.loadingPage=false;
+                })
+            },
             addProduct() {
                 //先把在外部的数据的id取出来，拿到内部去对比
                 this.selectList = [];
@@ -728,15 +741,13 @@
                             this.volumeUnitOption = v.codes;
                         }
                     });
+                }).finally(()=>{
+                    this.loadingPage=false;
                 });
-
-                // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{
-                //     console.log(res)
-                // });
             }
         },
         created() {
-            this.getUnit();
+            this.getInboudNo();
         },
         watch: {}
     };

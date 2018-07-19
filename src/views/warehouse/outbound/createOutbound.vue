@@ -1,5 +1,5 @@
 <template>
-    <div class="create-inbound">
+    <div class="create-inbound" v-loading="loadingPage">
         <div class="title">
             {{$i.warehouse.basicInfo}}
         </div>
@@ -261,6 +261,8 @@
                 selectProductList: [],
                 loadingProductTable: false,
                 outboundTypeOption: [],
+                loadingPage:false,
+
                 /**
                  * 外部展示数据
                  * */
@@ -324,7 +326,18 @@
             };
         },
         methods: {
-            //新增产品
+
+            getOutboundNo(){
+                this.loadingPage=true;
+                this.$ajax.post(this.$apis.GET_WAREHOUSE_NO,{
+                    type:'outbound_no'
+                }).then(res=>{
+                    this.getUnit();
+                    this.outboundData.outboundNo=res.content;
+                }).catch(err=>{
+                    this.loadingPage=false;
+                })
+            },
             addProduct() {
                 //先把在外部的数据的id取出来，拿到内部去对比
                 this.selectList = [];
@@ -334,7 +347,6 @@
                 this.disabledCancelSearch = true;
                 this.getProductData();
             },
-            //请求弹出框数据
             getProductData() {
                 this.$ajax.post(this.$apis.get_inboundSku, this.orderProduct).then(res => {
                     this.orderNoOption = [];
@@ -363,7 +375,6 @@
                     this.loadingTable = false;
                 });
             },
-            //移除产品
             removeProduct() {
                 this.$confirm("确定移除产品?", "提示", {
                     confirmButtonText: "确定",
@@ -379,11 +390,9 @@
                 }).catch(() => {
                 });
             },
-            //改变product table选中状态时触发的事件
             changeProductChecked(e) {
                 this.selectProductList = e;
             },
-            //提交表单
             submit() {
                 if (this.$validateForm(this.outboundData, this.$db.warehouse.outbound)) {
                     return;
@@ -564,6 +573,8 @@
                     this.volumeUnitOption=v.codes;
                   }
                 })
+              }).finally(()=>{
+                  this.loadingPage=false;
               });
             },
 
@@ -581,7 +592,7 @@
 
         },
         created() {
-            this.getUnit();
+            this.getOutboundNo();
         },
         watch: {
             selectProductList(n) {
