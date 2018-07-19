@@ -172,8 +172,11 @@
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuCode" :label="$i.warehouse.skuCode">
-                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput"
-                                      v-model="orderProduct.skuCode"></el-input>
+                            <el-input
+                                    :placeholder="$i.warehouse.pleaseInput"
+                                    size="mini"
+                                    class="speInput"
+                                    v-model="orderProduct.skuCode"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
@@ -535,6 +538,11 @@
                     this.productData[index].outboundSkuTotalNetWeight = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonNetWeight)).done();
                     //出库产品总毛重
                     this.productData[index].outboundSkuTotalGrossWeight = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonGrossWeight)).done();
+                }else if(!value){
+                    this.productData[index].outboundSkuTotalQty=0;
+                    this.productData[index].outboundSkuTotalVolume=0;
+                    this.productData[index].outboundSkuTotalNetWeight=0;
+                    this.productData[index].outboundSkuTotalGrossWeight=0;
                 }
             },
 
