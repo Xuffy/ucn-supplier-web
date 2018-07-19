@@ -593,10 +593,13 @@
     border-right: 1px solid #FFFFFF;
   }
 
+  .ucn-table tfoot tr:nth-child(even),
   .ucn-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
   }
-  .ucn-table tbody tr:nth-child(even) td{
+
+  .ucn-table tfoot tr:nth-child(even) td,
+  .ucn-table tbody tr:nth-child(even) td {
     border-right: 1px solid #f9f9f9;
   }
 

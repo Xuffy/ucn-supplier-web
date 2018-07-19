@@ -62,11 +62,8 @@
     width: 100%;
     padding-left: 180px;
     padding-top: 60px;
-    /*padding-bottom: 50px;*/
     transition: all .4s;
     box-sizing: border-box;
-    /*min-width: 1186px;*/
-    /*overflow: auto;*/
   }
 
   .app-main {
