@@ -91,6 +91,9 @@
              * 表格事件
              * */
             getData(query){
+                if(query && !query.categoryId){
+                    query.categoryId=null;
+                }
                 Object.assign(this.queryConfig,query);
                 let params=this.$depthClone(this.queryConfig);
                 if(_.isArray(params.country)){

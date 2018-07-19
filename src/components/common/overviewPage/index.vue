@@ -280,17 +280,10 @@
                 })
             },
             getUnit(codes){
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res,'单位')
-                // });
-                // this.$ajax.get(this.$apis.get_country).then(res=>{
-                //     console.log(res,'国家')
-                // });
                 const unitAjax=this.$ajax.post(this.$apis.get_partUnit,codes,{cache:true});
                 const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
                 return this.$ajax.all([unitAjax,countryAjax]);
             },
-
 
             /**
              *  一些事件
