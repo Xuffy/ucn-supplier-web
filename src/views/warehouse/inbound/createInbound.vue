@@ -619,12 +619,10 @@
                                 e.skuUnitVolume = (_.findWhere(this.volumeUnitOption, { code: String(e.skuUnitVolume) }) || {}).name;
                                 e.skuUnitWeight = (_.findWhere(this.weightUnitOption, { code: String(e.skuUnitWeight) }) || {}).name;
 
-
                                 this.productData.push(e);
                             });
                         });
-                        this.loadingProductTable = false;
-                    }).catch(err => {
+                    }).finally(() => {
                         this.loadingProductTable = false;
                     });
                 }
