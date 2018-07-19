@@ -217,13 +217,11 @@
         this.showDialog = true;
         this.isModify = isModify;
 
-        if(this.$refs.filterColumn) {
           this.$nextTick(() => {
             this.$refs.filterColumn.update(false, dataList).then(res => {
               this.dataList = this.$refs.filterColumn.getFilterData(dataList, res);
             });
           })
-        }
         return dataList;
 
       },
