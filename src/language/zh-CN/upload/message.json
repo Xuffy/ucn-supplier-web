@@ -1,9 +1,10 @@
 {
-  "typeLimit": "²»¿Éµ¼ÈëµÄÎÄ¼şÀàĞÍ",
-  "sizeLimit": "µ¼ÈëÎÄ¼ş´óĞ¡²»¿É³¬¹ı",
-  "numberLimit": "Ö»ÄÜÉÏ´«ÎÄ¼şÊıÁ¿",
-  "uploadingAttachments": "ÉÏ´«¸½¼ş",
-  "viewAttachment": "²é¿´¸½¼ş",
-  "uploadPhotos": "µ¼ÈëÍ¼Æ¬",
-  "viewPicture": "²é¿´Í¼Æ¬"
+  "typeLimit": "ä¸å¯å¯¼å…¥çš„æ–‡ä»¶ç±»å‹",
+  "sizeLimit": "å¯¼å…¥æ–‡ä»¶å¤§å°ä¸å¯è¶…è¿‡",
+  "numberLimit": "åªèƒ½ä¸Šä¼ æ–‡ä»¶æ•°é‡",
+  "uploadingAttachments": "ä¸Šä¼ é™„ä»¶",
+  "viewAttachment": "æŸ¥çœ‹é™„ä»¶",
+  "uploadPhotos": "å¯¼å…¥å›¾ç‰‡",
+  "uploadImage": "ä¸Šä¼ å›¾ç‰‡",
+  "viewPicture": "æŸ¥çœ‹å›¾ç‰‡"
 }
