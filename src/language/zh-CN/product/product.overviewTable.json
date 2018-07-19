@@ -1,7 +1,7 @@
 {
   "pic": "图片",
   "status": "销售状态",
-  "recycle": "是否失效",
+  "recycle": "有效性",
   "code": "供应商货号",
   "nameCn": "产品中文名",
   "descCn": "产品中文描述",

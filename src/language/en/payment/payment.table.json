@@ -15,5 +15,7 @@
   "actualDateOfReceipt": "Actual Date of Receipt",
   "type": "type",
   "currency": "Currency",
-  "_totalRow": "Total"
+  "timestamp": "timestamp",
+  "_totalRow": "Total",
+  "paymentNumber": "paymentNumber"
 }

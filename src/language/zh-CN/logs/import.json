@@ -1,6 +1,7 @@
 {
   "importTitle":"导入任务",
-  "lookImportTitle":"查看导入任务",
+  "taskList":"任务列表",
+  "lookImportTitle": "查看导入任务",
   "statusCancel":"已取消",
   "statusExecution":"执行完成",
   "statusExecuting":"执行中",
@@ -14,7 +15,13 @@
   "uploadSuccessRows":"成功行数",
   "uploadErrorRows":"失败行数",
   "uploadAction":"执行结果下载",
-  "downSuccess":"成功日志下载",
-  "downError":"失败日志下载",
-  "refreshTask": "刷新任务"
+  "exportAction": "操作",
+  "downSuccess": "下载成功",
+  "creationTime": "创建时间",
+  "downError": "下载错误",
+  "inOperating": "在操作...",
+  "retry": "重试",
+  "exportDownload": "导出下载",
+  "refreshTask": "刷新任务",
+  "exportSuccess": "导出任务正在执行，是否到任务中心查看？"
 }

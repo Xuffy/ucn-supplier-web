@@ -1,6 +1,6 @@
 {
   "shippmentInvoiceNo": "Shippment Invoice No.",
-  "logisticsID": "Logistics ID",
+  "logisticsID": "Logistics No.",
   "logisticsStatus": "Logistics Status",
   "createDate": "Create Date",
   "estDelivaryDate": "Est. Delivery Date",
@@ -24,7 +24,7 @@
   "permitedForTransportation": "Permitted for Transportation",
   "BLType": "B/L Type",
   "BLQuantity": "B/L Quantity",
-  "BLNumber": "B/L Number",
+  "BLNumber": "B/L No.",
   "shipper": "Shipper",
   "consignee": "Consignee",
   "notify": "Notify"

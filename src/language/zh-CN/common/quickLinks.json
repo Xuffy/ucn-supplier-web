@@ -14,9 +14,9 @@
   "supplierOverview": "供应商总览",
   "inquiryOverview": "询价总览",
   "orderOverview": "订单总览",
-  "warehouseOverview": "仓库",
-  "inboundOverview": "入库",
-  "outboundOverview": "出库",
+  "warehouseOverview": "仓库总览",
+  "inboundOverview": "入库总览",
+  "outboundOverview": "出库总览",
   "QCOrderOverview": "验货单总览",
   "logisticPlanOverview": "物流计划总览",
   "loadingListOrderOverview": "装货清单总览",
@@ -24,5 +24,5 @@
   "compareSupplierOverview": "比较供应商总览",
   "productOverview": "产品总览",
   "customerOverview": "客户总览",
-  "addSupplier": "Add Supplier"
+  "addSupplier": "添加供应商"
 }

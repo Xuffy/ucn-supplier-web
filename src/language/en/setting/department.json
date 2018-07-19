@@ -12,11 +12,14 @@
   "disable": "Disable",
   "privilege": "Privilege",
   "save": "Save",
-  "privilegeSetSuccess": "权限设置成功",
-  "privilegePage": "功能权限",
-  "privilegeData": "数据权限",
+  "privilegeSetSuccess": "Privilege set successfully",
+  "privilegePage": "Function privilege",
+  "privilegeData": "Data privilege",
   "roleExisted": "The role name has already existed",
   "addUser": "Add New User",
-  "editUse": "Edit Use",
-  "successfulOperation": "Successful operation"
+  "editUse": "Edit",
+  "successfulOperation": "Operation successful",
+  "invitationSuccess":"Invitation successful",
+  "disabledUser":"Are you sure to disable the users?",
+  "enabledUser":"Are you sure to enable the users?"
 }

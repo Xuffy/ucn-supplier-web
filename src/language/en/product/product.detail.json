@@ -1,8 +1,8 @@
 {
   "saleStatus": "SKU sale status",
-  "supplierNo": "supplier code",
-  "incoterm": "incoterm",
-  "incotermArea": "incoterm area",
-  "incotermPrice": "price",
-  "addCustomer": "add customer"
+  "supplierNo": "Supplier code",
+  "incoterm": "Incoterm",
+  "incotermArea": "Incoterm area",
+  "incotermPrice": "Price",
+  "addCustomer": "Add customer"
 }

@@ -1,6 +1,6 @@
 {
   "orderOverview": "Payment Overview",
-  "orderCreateDate": "Order Create Date",
+  "orderCreateDate": "Order Date",
   "view": "View",
   "status": "Status",
   "overdue": "Overdue",
@@ -10,15 +10,17 @@
   "purchaseOrder": "Purchase order",
   "qcOrder": "QC order",
   "logistticOrder": "Logisttic order",
-  "TBCBYSUPPLIER": "待供应商确认",
-  "TBCBYCUSTOMER": "待客户确认",
-  "PROCESS": "进行中",
-  "FINISHED": "已完成",
-  "CANCLED": "已取消",
-  "waitingQc": "未验货",
-  "completedQc": "已验货",
-  "draft": "LS_DRAFT",
-  "lsPlan": "LS_PLAN"
+  "TBCBYSUPPLIER": "TBC by supplier",
+  "TBCBYCUSTOMER": "TBC by customer",
+  "PROCESS": "Process",
+  "FINISHED": "Finish",
+  "CANCLED": "Cancel",
+  "waitingQc": "Uninspected",
+  "completedQc": "Inspected",
+  "draft": "logistic plan draft",
+  "lsPlan": "logistic plan",
+  "urgedSuccess": "Operate successfully",
+  "urgingPaymentTime": "间隔一分钟才能再次催款"
 
 
 }

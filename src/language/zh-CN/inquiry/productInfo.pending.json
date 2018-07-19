@@ -97,7 +97,7 @@
   "gp20SkuQuantity": "20GP产品数量",
   "gp40SkuQuantity": "40GP产品数量",
   "hq40SkuQuantity": "40HQ产品数量",
-  "trayDimension": "托盘尺寸",
+  "trayDimension ": "托盘尺寸",
   "skuQuantityPerTray": "每托盘产品数量",
   "specialTransportRequirements": "特殊运输要求",
   "inventoryCostCalculationMethod": "库存成本计算方式",
@@ -116,6 +116,6 @@
   "otherPackingInformationCn": "其他包装信息CN",
   "otherPackingInformationEn": "其他包装信息EN",
   "adjustSkuAndPackageOrNot": "产品或包装可否调整",
-  "updateDt": "time",
-  "cifCurrency": "CIF Currency"
+  "updateDt": "更新时间",
+  "cifCurrency": "CIF 币种"
 }
