@@ -534,9 +534,9 @@
                         volumeUnitDictCode: productUnit.volumeUnitDictCode,
                         weightUnitDictCode: productUnit.weightUnitDictCode,
                         skuWidth: v.skuWidth?v.skuWidth:0,
-                        supplierId: 0,
-                        supplierName: v.supplierName,
-                        supplierNo: v.supplierNo,
+                        supplierId: v.skuSupplierId,
+                        supplierName: v.skuSupplierName,
+                        supplierNo: v.skuSupplierCode,
                         supplierOrderNo: v.supplierOrderNo,
                     });
                 });
