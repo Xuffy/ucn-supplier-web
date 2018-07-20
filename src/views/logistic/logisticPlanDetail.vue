@@ -26,7 +26,7 @@
     <form-list :DeliveredEdit="DeliveredEdit" :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"
     />
     <form-list :DeliveredEdit="DeliveredEdit" name="TransportInfo" :fieldDisplay="fieldDisplay" @hightLightModifyFun="hightLightModifyFun"
-      :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle" />
+      :listData="transportInfoArr" :selectArr="selectArr" :edit="edit" :title="$i.logistic.transportInfoTitle" />
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
@@ -55,7 +55,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
-      <v-table ref="productInfo" code="ulogistics_PlanDetail" :totalRow="productListTotal" :data="productList" @action="action" :buttons="productbButtons"
+      <v-table ref="productInfo" :code="configUrl[pageName]&&configUrl[pageName].setTheField" :totalRow="productListTotal" :data="productList" @action="action" :buttons="productbButtons"
         @change-checked="selectProduct"
         native-sort="orderNo"
         @change-sort="$refs.productInfo.setSort(productList)">
@@ -80,7 +80,7 @@
         @change-checked="changeChecked"
         @tableBtnClick="ProductFromOrderDetail"
         @search="getSupplierIds"
-        tableCode="ulogistics_PlanDetail"
+        :tableCode="configUrl[pageName]&&configUrl[pageName].setTheField"
         @change-sort="changeSort">
         <v-pagination slot="pagination" :page-data="pageParams"/>
         <div slot=footerBtn>
@@ -92,7 +92,8 @@
     <messageBoard v-if="!isParams" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus"
       @sendData="sendData" />
-    <v-history-modify code="ulogistics_PlanDetail" 
+    <v-history-modify 
+    :code="configUrl[pageName]&&configUrl[pageName].setTheField" 
     ref="HM" disabled-remark 
     :beforeSave="closeModify" 
     @save="closeModifyNext" 
@@ -200,17 +201,21 @@
         configUrl: {
           placeLogisticPlan: {
             saveAsDraft: this.$apis.save_draft_logistic_plan,
-            send: this.$apis.send_logistic_plan
+            send: this.$apis.send_logistic_plan,
+            setTheField: 'ulogistics_PlanDetail'
           },
           loadingListDetail: {
-            send: this.$apis.update_logistic_plan
+            send: this.$apis.update_logistic_plan,
+            setTheField: 'ulogistics_OrderDetail'
           },
           planDetail: {
-            send: this.$apis.update_logistic_plan
+            send: this.$apis.update_logistic_plan,
+            setTheField: 'ulogistics_PlanDetail'
           },
           planDraftDetail: {
             saveAsDraft: this.$apis.save_draft_logistic_plan,
-            send: this.$apis.send_draft_logistic_plan
+            send: this.$apis.send_draft_logistic_plan,
+            setTheField: 'ulogistics_PlanDetail'
           }
         },
         pageName: '',
@@ -425,6 +430,12 @@
           this.selectArr.supplier = res;
         })
       },
+      //获取国家信息
+      countryAll(){
+        this.$ajax.get(`${this.$apis.country_all}`).then(res => {
+          this.$set(this.selectArr,'country',res);
+        })
+      },
       createdPlanData(res = this.initData, qrg) {
         this.oldPlanObject = this.$depthClone(res);
         const stringArray = [
@@ -465,6 +476,7 @@
             item.fieldDisplay.value = null;
           }
         })
+        this.countryAll();
       },
       //匹配发运状态 name
       // matchShipmentStatus(){
