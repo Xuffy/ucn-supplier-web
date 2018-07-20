@@ -11,6 +11,9 @@ export default {
     quotationNo: { // 询价子单号 系统自动生成
 
     },
+    entryDt: { // 创建时间
+        transForm: 'time'
+    },
     status: { // 系统带入，共四个状态及其触发： 询价状态
         transForm: 'INQUIRY_STATUS'
     },

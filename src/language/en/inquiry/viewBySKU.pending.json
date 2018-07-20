@@ -1,6 +1,7 @@
 {
   "inquiryNo": "Inquiry No.",
   "quotationNo": "Quotation No.",
+  "entryDt": "Inquiry Date",
   "status": "Status",
   "supplierName": "Supplier name",
   "skuCode": "Supplier SKU code",
