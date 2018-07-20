@@ -16,5 +16,6 @@
   "type": "类型",
   "currency": "币种",
   "timestamp": "timestamp",
-  "_totalRow": "总计"
+  "_totalRow": "总计",
+  "paymentNumber": "paymentNumber"
 }

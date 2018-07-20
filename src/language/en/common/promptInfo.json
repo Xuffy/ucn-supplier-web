@@ -36,7 +36,8 @@
   "sureDeleteToCompare": "Are you sure to delete this compare?",
   "sureRecover": "确定恢复",
   "recoverSuccess": "恢复成功",
-  "deleteProduct": "确定删除选中商品"
+  "deleteProduct": "确定删除选中商品",
+  "searchType": "please choose a type"
 
 
 }

@@ -447,12 +447,11 @@
                 this.$ajax.post(this.$apis.get_serviceQcOrderProduct, this.productInfoConfig).then(res => {
                     this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas, e => {
                         e.deliveryDate._value = this.$dateFormat(e.deliveryDate.value, "yyyy-mm-dd");
-                        e.skuUnitDictCode._value = _.findWhere(this.skuUnitOption, { code: e.skuUnitDictCode.value }).name;
-                        e.volumeUnitDictCode._value = _.findWhere(this.volumeOption, { code: e.volumeUnitDictCode.value }).name;
-                        e.weightUnitDictCode._value = _.findWhere(this.weightOption, { code: e.weightUnitDictCode.value }).name;
-                        e.lengthUnitDictCode._value = _.findWhere(this.lengthOption, { code: e.lengthUnitDictCode.value }).name;
+                        e.skuUnitDictCode._value=(_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}) || {}).name;
+                        e.volumeUnitDictCode._value=(_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}) || {}).name;
+                        e.weightUnitDictCode._value=(_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}) || {}).name;
+                        e.lengthUnitDictCode._value=(_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}) || {}).name;
                     });
-                    console.log(this.productInfoData, "this.productInfoData");
                     let diffData = [];
                     _.map(this.productInfoData, v => {
                         diffData.push(v.skuId.value + v.orderNo.value);
