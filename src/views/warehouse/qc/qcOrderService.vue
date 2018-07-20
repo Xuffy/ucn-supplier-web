@@ -515,10 +515,10 @@
           this.productInfoData.forEach(v => {
             v.skuQcResultDictCode = '';
             v.deliveryDate = this.$dateFormat(v.deliveryDate, 'yyyy-mm-dd');
-            v.skuUnitDictCode = _.findWhere(this.skuUnitOption, {code: v.skuUnitDictCode}).name;
-            v.volumeUnitDictCode = _.findWhere(this.volumeOption, {code: v.volumeUnitDictCode}).name;
-            v.weightUnitDictCode = _.findWhere(this.weightOption, {code: v.weightUnitDictCode}).name;
-            v.lengthUnitDictCode = _.findWhere(this.lengthOption, {code: v.lengthUnitDictCode}).name;
+            v.skuUnitDictCode = (_.findWhere(this.skuUnitOption, {code: v.skuUnitDictCode}) || {}).name;
+            v.volumeUnitDictCode = (_.findWhere(this.volumeOption, {code: v.volumeUnitDictCode}) || {}).name;
+            v.weightUnitDictCode = (_.findWhere(this.weightOption, {code: v.weightUnitDictCode}) || {}).name;
+            v.lengthUnitDictCode = (_.findWhere(this.lengthOption, {code: v.lengthUnitDictCode}) || {}).name;
           });
           let diffData = [];
           _.map(this.productInfoData, v => {
