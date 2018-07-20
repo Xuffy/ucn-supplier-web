@@ -327,7 +327,6 @@
             };
         },
         methods: {
-
             getInboudNo(){
                 this.loadingPage=true;
                 this.$ajax.post(this.$apis.GET_WAREHOUSE_NO,{
@@ -406,7 +405,6 @@
                         type: "warning"
                     });
                 }
-
                 for (let i = 0; i < this.productData.length; i++) {
                     if (this.$validateForm(this.productData[i], this.$db.warehouse.inboundProduct)) {
                         return;

@@ -23,6 +23,9 @@ export default {
     quotationNo: { //系统带入：当前询价单的子单号
 
     },
+    entryDt: { // 创建时间
+      transForm: 'time'
+    },
     status: { //系统带入，共四个状态：TOC-C;TOB-S;finish;cancel 
         transForm: 'INQUIRY_STATUS'
     },
