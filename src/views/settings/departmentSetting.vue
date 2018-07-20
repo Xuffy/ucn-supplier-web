@@ -750,18 +750,15 @@
         let emails = [];
 
         this.inviteUserLoading = true;
-        _.map(this.selectList, v => {
-          emails.push(v.email.value);
-        });
+        _.map(this.selectList, v => emails.push(v.email.value));
 
         this.$ajax.post(this.$apis.invite_departmentUser,
           {
             emails,
             callback: `${config.ENV.LOGIN_URL}/#/activation?activeToken=%s&email=%s&redirect=${Base64.encode(window.location.origin + '/#/login')}`
           })
-          .then(res => {
-            this.$message.success(this.$i.setting.invitationSuccess);
-          }).finally(() => this.inviteUserLoading = false);
+          .then(res => this.$message.success(this.$i.setting.invitationSuccess))
+          .finally(() => this.inviteUserLoading = false);
       },
       getUnit() {
         this.$ajax.post(this.$apis.get_partUnit, ['LANGUAGE'], {cache: true})
@@ -771,7 +768,7 @@
         let nodes = [], dataNodes
           , params = {resourceCodes: [], domainCodes: []};
 
-        nodes = this.$refs.privilegeTree.getHalfCheckedNodes().concat(this.$refs.privilegeTree.getCheckedNodes(true));
+        nodes = this.$refs.privilegeTree.getHalfCheckedNodes().concat(this.$refs.privilegeTree.getCheckedNodes());
         dataNodes = this.$refs.privilegeTree.getNode('dataAll');
         this.loadingPrivilege = true;
 
@@ -807,23 +804,21 @@
           deptId: this.userData.deptId,
           roleId: this.checkedRole[0]
         }).then(res => {
+          console.log(res)
           this.$ajax.all([
             this.getPrivilegeResource(),
             this.getPrivilegeData()
           ]).then(() => {
-            let checked = [];
-            if (!_.isEmpty(res.selectedDomainUserIds)) {
-              let users = [];
-              _.mapObject(res.selectedDomainUserIds, (val, key) => {
-                _.map(val, v => users.push(`${key}_${v}`));
-              })
-              checked = checked.concat(users);
-            }
+            let checked = []
+              , resourceCodeStr = res.selectedResourceCodes.join(',');
 
-            if (!_.isEmpty(res.selectedResourceCodes)) {
-              checked = checked.concat(res.selectedResourceCodes);
-            }
-            this.$refs.privilegeTree.setCheckedKeys(checked)
+            !_.isEmpty(res.selectedDomainUserIds)
+            && _.mapObject(res.selectedDomainUserIds, (val, key) => _.map(val, v => checked.push(`${key}_${v}`)));
+
+            !_.isEmpty(res.selectedResourceCodes)
+            && _.map(res.selectedResourceCodes, val => resourceCodeStr.indexOf(`${val}:`) === -1 && checked.push(val));
+
+            this.$refs.privilegeTree.setCheckedKeys(checked);
           });
         });
       },

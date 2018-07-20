@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="ucn-app" :class="{'ucn-language-zh':$localStore.get('language') === 'zh-CN'}">
     <router-view></router-view>
     <v-view-picture ref="viewPicture"></v-view-picture>
   </div>
