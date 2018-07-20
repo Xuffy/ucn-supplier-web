@@ -14,7 +14,7 @@
   "sureRestore": "确认还原？",
   "restoreSuccess": "还原成功！",
   "sureConfirm": "是否确认？",
-  "pleaseAddProduct": "请添加图片！",
+  "pleaseAddProduct": "请添加产品！",
   "sureDunning": "确定催款？",
   "dunningSuccess": "催款成功！",
   "nothingDunning": "没有可催款项",
@@ -25,5 +25,6 @@
   "keywordMustInput": "还有必填字段未填写",
   "pleaseChooseAType": "请选择类型",
   "pleaseChooseService": "请选择服务",
-  "deleteSuccess":"删除成功！"
+  "deleteSuccess":"删除成功！",
+  "pleaseChooseQcMethod":"Please Choose QC Method"
 }

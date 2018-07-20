@@ -10,5 +10,7 @@
   "save": "Save",
   "download":"Download",
   "remove": "Remove",
-  "recover": "Recover"
+  "recover": "Recover",
+  "all": "All",
+  "detail": "Detail"
 }

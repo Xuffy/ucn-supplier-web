@@ -250,7 +250,7 @@
                     label="Me">
                 <template slot-scope="scope">
                     <el-date-picker
-                            :class="{'high-light':scope.row && scope.row.fieldUpdates.customer===''}"
+                            :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.customer===''}"
                             @change="handleResponsibilityChange(scope.row,'customer')"
                             v-model="scope.row.customer"
                             :editable="false"
@@ -266,7 +266,7 @@
                     label="Supplier">
                 <template slot-scope="scope">
                     <el-date-picker
-                            :class="{'high-light':scope.row && scope.row.fieldUpdates.supplier===''}"
+                            :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.supplier===''}"
                             @change="handleResponsibilityChange(scope.row,'supplier')"
                             v-model="scope.row.supplier"
                             align="right"
@@ -283,7 +283,7 @@
                     label="Remark">
                 <template slot-scope="scope">
                     <el-input
-                            :class="{'high-light':scope.row && scope.row.fieldUpdates.remark===''}"
+                            :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.remark===''}"
                             @change="handleResponsibilityChange(scope.row,'remark')"
                             :disabled="scope.row.type!==1 && scope.row.type!==3 && scope.row.type!==5 || !isModify"
                             :placeholder="(scope.row.type===1 || scope.row.type===3 || scope.row.type===5) && isModify?$i.order.pleaseInput:''"
@@ -298,7 +298,7 @@
                     label="Actual Date">
                 <template slot-scope="scope">
                     <el-date-picker
-                            :class="{'high-light':scope.row && scope.row.fieldUpdates.actualDt===''}"
+                            :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.actualDt===''}"
                             @change="handleResponsibilityChange(scope.row,'actualDt')"
                             v-model="scope.row.actualDt"
                             align="right"
@@ -599,7 +599,8 @@
                     <el-button
                             v-authorize="'ORDER:DETAIL:CANCEL'"
                             :disabled="loadingPage || hasCancelOrder || hasFinishOrder"
-                            @click="refuseOrder"
+                            @click="cancelOrder"
+                            :loading="disableClickCancel"
                             type="danger">{{$i.order.cancelOrder}}</el-button>
                     <el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
                 </div>
@@ -1096,6 +1097,7 @@
                     :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuDeliveryDates"
+                    :precision="0"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
         </v-history-modify>
@@ -1156,6 +1158,7 @@
                 disableClickAccept:false,
                 disableClickConfirm:false,
                 hasFinishOrder:false,
+                disableClickCancel:false,
 
                 /**
                  * 页面基础配置
@@ -1878,6 +1881,7 @@
              * responsibility事件
              * */
             handleResponsibilityChange(data,key){
+                this.orderForm.responsibilityFlag=true;
                 if(!data.fieldUpdate){
                     data.fieldUpdate={};
                 }
@@ -1961,13 +1965,49 @@
                     let data=_.filter(this.productTableData, (m) =>
                         m.skuSysCode.value === e.skuSysCode.value
                     );
-                    console.log(param)
+
                     this.$ajax.post(this.$apis.ORDER_HISTORY,param).then(res=>{
                         let arr=[];
                         _.map(res.datas,v=>{
                             arr.push(JSON.parse(v.history));
                         });
-                        this.$refs.HM.init(data,this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(arr, 'skuSysCode')),false);
+
+                        let history=this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(arr, "skuSysCode"),item=>{
+                            if (item._remark) {
+                                item.label.value = this.$i.order.remarks;
+                                if (item.skuPictures) {
+                                    item.skuPictures._image = false;
+                                }
+                                item.skuLabelPic._image = false;
+                                item.skuPkgMethodPic._image = false;
+                                item.skuInnerCartonPic._image = false;
+                                item.skuOuterCartonPic._image = false;
+                                item.skuAdditionalOne._image = false;
+                                item.skuAdditionalTwo._image = false;
+                                item.skuAdditionalThree._image = false;
+                                item.skuAdditionalFour._image = false;
+                            }
+                            else {
+                                item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                                item.skuSample._value = item.skuSample.value ? "YES" : "NO";
+                                item.skuSample.value = item.skuSample.value ? "1" : "0";
+                                item.skuUnit._value = item.skuUnit ? this.$change(this.skuUnitOption, "skuUnit", item, true).name : "";
+                                item.skuUnitWeight._value = item.skuUnitWeight ? this.$change(this.weightOption, "skuUnitWeight", item, true).name : "";
+                                item.skuUnitLength._value = item.skuUnitLength ? this.$change(this.lengthOption, "skuUnitLength", item, true).name : "";
+                                item.skuExpireUnit._value = item.skuExpireUnit ? this.$change(this.expirationDateOption, "skuExpireUnit", item, true).name : "";
+                                item.skuStatus._value = item.skuStatus ? _.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }).name : "";
+                                item.skuUnitVolume._value = item.skuUnitVolume ? this.$change(this.volumeOption, "skuUnitVolume", item, true).name : "";
+                                item.skuSaleStatus._value = item.skuSaleStatus ? this.$change(this.skuSaleStatusOption, "skuSaleStatus", item, true).name : "";
+
+                                if (item.skuCategoryId.value) {
+                                    item.skuCategoryId._value = _.findWhere(this.category, { id: item.skuCategoryId.value }).name;
+                                }
+                                item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory ? this.$change(this.quarantineTypeOption, "skuInspectQuarantineCategory", item, true).name : "";
+                                item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
+                            }
+                        });
+
+                        this.$refs.HM.init(data,history,false);
                     }).finally(()=>{
 
                     })
@@ -2272,7 +2312,7 @@
                         planRefundAmount: 0,
                         actualRefundDt: "",
                         actualRefundAmount: 0,
-                        currencyCode:this.orderForm.currency,
+                        currencyCode:this.initialData.currency,
                         status:10,
                         isNew:true,
                     });
@@ -2483,7 +2523,29 @@
                 });
             },
             cancelOrder(){
+                this.$confirm(this.$i.order.sureCancel, this.$i.order.prompt, {
+                    confirmButtonText: this.$i.order.sure,
+                    cancelButtonText: this.$i.order.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    this.disableClickCancel=true;
+                    this.$ajax.post(this.$apis.ORDER_CANCEL,{
+                        ids:[this.orderForm.id],
+                        orderNos:[this.orderForm.orderNo],
+                    }).then(()=>{
+                        this.$message({
+                            message: this.$i.order.handleSuccess,
+                            type: 'success'
+                        });
+                        this.$router.push('/order/overview');
+                        this.disableClickCancel=false;
+                    }).catch(()=>{
+                        this.getDetail();
+                        this.disableClickCancel=false;
+                    });
+                }).catch(() => {
 
+                });
             },
             confirmOrder(){
                 this.disableClickConfirm=true;
@@ -2499,7 +2561,6 @@
             downloadOrder(){
                 this.$fetch.export_task('EXPORT_ORDER',{ids:[this.orderForm.id]});
             },
-
             acceptOrder(){
                 this.disableClickAccept=true;
                 this.$ajax.post(this.$apis.ORDER_ACCEPT,{
@@ -2517,6 +2578,10 @@
                     type: 'warning'
                 }).then(() => {
                     this.disableClickRefuse=true;
+                    // return console.log({
+                    //     ids:[this.orderForm.id],
+                    //     orderNos:[this.orderForm.orderNo],
+                    // })
                     this.$ajax.post(this.$apis.ORDER_REFUSE,{
                         ids:[this.orderForm.id],
                         orderNos:[this.orderForm.orderNo],

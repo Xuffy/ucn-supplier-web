@@ -138,7 +138,7 @@
             </el-tabs>
         </div>
 
-        <v-import-template ref="importCategory" code="PRODUCT_SUPPLIER" biz-code="PRODUCT_SUPPLIER"></v-import-template>
+        <v-import-template ref="importCategory" code="BIZ_SKU_SUPPLIER_IMPORT" biz-code="BIZ_SKU_SUPPLIER_IMPORT"></v-import-template>
     </div>
 </template>
 

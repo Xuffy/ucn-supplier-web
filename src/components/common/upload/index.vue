@@ -239,7 +239,7 @@
           }
         });
 
-        this.$emit('change', _.values(this.fileList));
+        this.$emit('change', _.values(this.fileList), true);
       },
       getFiles(type) {
         let files = _.pluck(_.values(this.fileList), 'fileKey')

@@ -255,7 +255,7 @@
     background-color: rgba(119, 119, 119, .5);
   }
 
-</style>
-<style>
-
+  .ucn-menu /deep/ .el-menu-item [class^="el-icon-"] {
+    margin-right: 0;
+  }
 </style>

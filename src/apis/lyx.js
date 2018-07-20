@@ -44,4 +44,5 @@ export default {
   logistics_order_archive: ['/logistics/order/archive','a_localtion', 'BASE_URL'],
   logistics_plan_recover: ['/logistics/plan/recover','a_localtion', 'BASE_URL'],
   logistics_order_recover: ['/logistics/order/recover','a_localtion', 'BASE_URL'],
+  country_all: ['/country/all','UMETA_URL', 'BASE_URL']
 }
