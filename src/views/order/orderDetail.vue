@@ -1878,6 +1878,7 @@
              * responsibility事件
              * */
             handleResponsibilityChange(data,key){
+                this.orderForm.responsibilityFlag=true;
                 if(!data.fieldUpdate){
                     data.fieldUpdate={};
                 }
