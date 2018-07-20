@@ -599,7 +599,8 @@
                     <el-button
                             v-authorize="'ORDER:DETAIL:CANCEL'"
                             :disabled="loadingPage || hasCancelOrder || hasFinishOrder"
-                            @click="refuseOrder"
+                            @click="cancelOrder"
+                            :loading="disableClickCancel"
                             type="danger">{{$i.order.cancelOrder}}</el-button>
                     <el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
                 </div>
@@ -1096,6 +1097,7 @@
                     :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuDeliveryDates"
+                    :precision="0"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
         </v-history-modify>
@@ -1156,6 +1158,7 @@
                 disableClickAccept:false,
                 disableClickConfirm:false,
                 hasFinishOrder:false,
+                disableClickCancel:false,
 
                 /**
                  * 页面基础配置
@@ -2309,7 +2312,7 @@
                         planRefundAmount: 0,
                         actualRefundDt: "",
                         actualRefundAmount: 0,
-                        currencyCode:this.orderForm.currency,
+                        currencyCode:this.initialData.currency,
                         status:10,
                         isNew:true,
                     });
@@ -2520,7 +2523,29 @@
                 });
             },
             cancelOrder(){
+                this.$confirm(this.$i.order.sureCancel, this.$i.order.prompt, {
+                    confirmButtonText: this.$i.order.sure,
+                    cancelButtonText: this.$i.order.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    this.disableClickCancel=true;
+                    this.$ajax.post(this.$apis.ORDER_CANCEL,{
+                        ids:[this.orderForm.id],
+                        orderNos:[this.orderForm.orderNo],
+                    }).then(()=>{
+                        this.$message({
+                            message: this.$i.order.handleSuccess,
+                            type: 'success'
+                        });
+                        this.$router.push('/order/overview');
+                        this.disableClickCancel=false;
+                    }).catch(()=>{
+                        this.getDetail();
+                        this.disableClickCancel=false;
+                    });
+                }).catch(() => {
 
+                });
             },
             confirmOrder(){
                 this.disableClickConfirm=true;
@@ -2536,7 +2561,6 @@
             downloadOrder(){
                 this.$fetch.export_task('EXPORT_ORDER',{ids:[this.orderForm.id]});
             },
-
             acceptOrder(){
                 this.disableClickAccept=true;
                 this.$ajax.post(this.$apis.ORDER_ACCEPT,{
@@ -2554,6 +2578,10 @@
                     type: 'warning'
                 }).then(() => {
                     this.disableClickRefuse=true;
+                    // return console.log({
+                    //     ids:[this.orderForm.id],
+                    //     orderNos:[this.orderForm.orderNo],
+                    // })
                     this.$ajax.post(this.$apis.ORDER_REFUSE,{
                         ids:[this.orderForm.id],
                         orderNos:[this.orderForm.orderNo],
