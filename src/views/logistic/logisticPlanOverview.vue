@@ -193,8 +193,8 @@
     },
     watch: {
       viewBy(newVal) {
-        this.selectCount = []
-        this.initPage();
+        // this.selectCount = []
+        // this.initPage();
         this.fetchDataList()
       },
       pageType() {
@@ -308,7 +308,7 @@
       },
       action(e) {
         if(this.pageType == 'loadingList'){
-          this.$router.push({path: `/logistic/loadingListDetail`, query: {id: e.id.value}})
+          this.$windowOpen({url:`/logistic/loadingListDetail`,params:{id: e.id.value}});
         }else{
           this.$windowOpen({url:`/logistic/${this.jumpPage[this.pageType]}`,params:{id: e.id.value}});
         }
@@ -330,9 +330,9 @@
         this.$router.push('/logistic/placeLogisticPlan')
       },
       fetchDataList(arg) {
-        if(arg){
-         this.initPage();
-        }
+        // if(arg){
+        //  this.initPage();
+        // }
         const url = this.urlObj[this.pageType][this.viewBy].url
         const db = this.urlObj[this.pageType][this.viewBy].db
         this.tableLoading = true

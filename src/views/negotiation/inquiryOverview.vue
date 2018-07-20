@@ -46,9 +46,9 @@
       </div>
     </div>
     <v-table
-      code='inquiry_list'
+      :code="viewByStatus ? 'inquiry_sku_list': 'inquiry_list'"
       :data="tabData"
-      :buttons="[{label: 'detail', type: 'detail'}]"
+      :buttons="[{label: $i.common.detail, type: 'detail'}]"
       :height="450"
       @action="action"
       @change-sort="onListSortChange"

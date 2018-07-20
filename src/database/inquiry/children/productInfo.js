@@ -39,6 +39,7 @@ export default {
   pic: {
     key: 'skuPictures',
     _image: true,
+    _sort: false,
     _upload: {
       readonly: true
     }
