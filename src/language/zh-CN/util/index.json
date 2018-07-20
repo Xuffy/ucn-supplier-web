@@ -1,9 +1,9 @@
 {
-  "validateRequired": "Please fill in",
-  "validateCorrect": "Please fill in correctly",
-  "validateValueGreater": "the value cannot be greater than",
-  "validateValueLess": "the value cannot be less than",
-  "validateLengthGreater": "the length cannot be greater than",
-  "validateLengthLess": "the length can not be less than",
-  "validateDigits": "digits"
+  "validateRequired": "请填写",
+  "validateCorrect": "请正确填写",
+  "validateValueGreater": "值不能大于",
+  "validateValueLess": "值不能小于",
+  "validateLengthGreater": "长度不能大于",
+  "validateLengthLess": "长度不能小雨",
+  "validateDigits": "数字"
 }

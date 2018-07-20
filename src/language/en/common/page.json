@@ -1,19 +1,20 @@
 {
   "systemMessage": "System Message",
-  "markAsReaded": "Mark as Read",
+  "markAsRead": "Mark as Read",
   "more": "More",
   "signOut": "Sign out",
   "new": "New",
   "quickLink": "Quick Link",
   "addNewLinks": "Add new links",
   "draft": "Draft",
-  "recycleBin": "Recycle",
+  "recycleBin": "Archive",
   "log": "Log",
   "admin": "Admin",
   "user": "User",
   "home": "Home",
-  "goSignIn": "正在跳转登录",
+  "goSignIn": "Go sign in now",
   "cleanCache": "Clean up the data cache",
-  "signIn": "Sign in"
+  "signIn": "Sign in",
+  "archive": "Archive"
 }
 

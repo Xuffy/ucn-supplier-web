@@ -2,13 +2,13 @@
   "remark3": "Import the data into the template form into the system",
   "remark2": "Input data in a template",
   "remark1": "Download the import",
-  "remark": "Remark",
+  "remark": "Note",
   "template": "Template",
   "import": "Import",
   "upload": "Upload",
   "selectFile": "Select the file",
-  "note": "Note",
+  "note": "Tips",
   "importPrompt": "Data from the same email will be overwritten",
-  "fileTypePrompt":"Please upload the zip or XLS files",
-  "fileNumberPrompt":"The import file is beyond the limit, please try again later"
+  "fileTypePrompt":"Please upload the zip or XLS/XLSX files",
+  "fileNumberPrompt":"The import file size exceeds the 200M limit, please try again later"
 }

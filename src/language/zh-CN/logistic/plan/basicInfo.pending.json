@@ -4,7 +4,7 @@
   "logisticsStatus": "物流状态",
   "createDate": "创建日期",
   "estDelivaryDate": "预计交货日期",
-  "declareDate": "报关日期",
+  "declareDate": "清关日期",
   "bookingDate": "订舱日期",
   "estContainerStuffingDate": "预计装柜日期",
   "estCustomsCleanceDate": "预计截关日期",

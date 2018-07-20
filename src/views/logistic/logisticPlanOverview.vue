@@ -204,23 +204,26 @@
       }
     },
     mounted() {
-      this.setLog({query:{code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'}});
+      this.setMenuLink({
+        path: '',
+        query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
+        type: 100,
+        label: this.$i.common.log
+      });
+      this.setMenuLink({
+        path: '/logistic/draft',
+        type: 10,
+        label: this.$i.common.draft
+      });
       this.fetchData()
-      this.registerRoutes()
     },
     methods: {
-      ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      ...mapActions(['setMenuLink']),
       initPage(){
         this.pageParams = {
           pn: 1,
           ps: 10
         };
-      },
-      registerRoutes() {
-        this.$store.commit('SETRECYCLEBIN', {
-          name: 'overviewArchive',
-          show: true
-        })
       },
       fetchData() {
         if (this.pageType === 'plan') {

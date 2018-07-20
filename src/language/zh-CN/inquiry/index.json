@@ -3,10 +3,10 @@
   "inquiryDetailTitle": "询价单号",
   "inquiryNo": "创建询价单",
   "basicInfo": "基本信息",
-  "supplierRequired": "至少需要选择一个供应商",
-  "skuRequired": "至少选择一个产品",
-  "incotermRequired": "Incoterm is required.",
-  "discountRateMustNumber": "Discount Rate must a number",
-  "noItemSelected": "没有选择任何条目！",
+  "supplierRequired": "请至少选择一个供应商.",
+  "skuRequired": "请至少选择一款产品.",
+  "incotermRequired": "请选择价格条款.",
+  "discountRateMustNumber": "折扣率一栏请填写数字",
+  "noItemSelected": "请至少选择一项!",
   "skuAvailableQtyMustGreatNotLessThanOne": "产品有现货时现货数量必须有值并且不小于1"
 }

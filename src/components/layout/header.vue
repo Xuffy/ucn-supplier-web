@@ -66,7 +66,7 @@
               <el-row>
                 <el-col :span="12" style="text-align: left;padding: 5px 10px">
                   <el-button type="text" size="mini" @click="readMessage" v-if="message.count">
-                    {{$i.common.markAsReaded}}
+                    {{$i.common.markAsRead}}
                   </el-button>
                 </el-col>
                 <el-col :span="12" style="text-align: right;padding: 5px 10px">

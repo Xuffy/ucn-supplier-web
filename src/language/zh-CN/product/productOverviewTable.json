@@ -3,7 +3,7 @@
   "supplierCode": "供应商编号",
   "pic": "图片",
   "code": "供应商货号",
-  "recycle": "是否失效",
+  "recycle": "有效性",
   "nameCn": "产品中文名",
   "descCn": "产品中文描述",
   "nameEn": "产品英文名",
@@ -116,5 +116,5 @@
   "otherPackInfoCn": "其他包装信息CN",
   "otherPackInfoEn": "其他包装信息EN",
   "adjustPackage": "产品或包装可否调整",
-  "pictures": "Picture"
+  "pictures": "图片"
 }

@@ -3,5 +3,5 @@
   "description": "描述",
   "operater": "操作人",
   "operationDate": "操作日期",
-  "operationType": "Operation Type"
+  "operationType": "操作类型"
 }

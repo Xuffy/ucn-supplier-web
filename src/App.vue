@@ -13,19 +13,19 @@
     computed: {
       ...mapState({
         quickLink: state => state.quickLink,
-        layout: state => state.layout
+        layout: state => state.layout,
+        menuLink: state => state.menuLink
       }),
     },
     watch: {
       $route(val) {
-        this.quickLink.draft = {show: false};
-        this.quickLink.recycleBin = {show: false};
-        this.quickLink.log = {show: false};
+        this.menuLink.list = [];
 
         this.layout.paddingRight = 0;
       }
     },
     created() {
+      this.menuLink.list = [];
       this.layout.hideMenu = this.$userAction.get('hideMenu');
 
     }
