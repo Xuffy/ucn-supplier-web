@@ -19,7 +19,8 @@
   "completedQc": "已验货",
   "draft": "物流计划草稿",
   "lsPlan": "物流计划",
-  "urgedSuccess": "催促成功"
+  "urgedSuccess": "催促成功",
+  "urgingPaymentTime": "间隔一分钟才能再次催款"
 
 
 }

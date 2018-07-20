@@ -228,6 +228,5 @@
   "isConfirmPeration" : "Confirm Operation？",
   "operationSuccess" : "Success！",
   "operationFailed" : "Failed！",
-  "jumping" : "Jumping...",
-  "dataIsExist" : "该条数据已存在！"
+  "jumping" : "Jumping..."
 }
