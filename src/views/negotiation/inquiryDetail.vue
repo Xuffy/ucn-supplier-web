@@ -420,25 +420,11 @@ export default {
     },
     save(data) {
       // modify 编辑完成反填数据
-      let items = _.map(data, item => {
-        let changedFields = {};
-        _.map(item, (o, field) => {
-          if (['fieldDisplay', 'fieldRemarkDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
-            return;
-          }
-          if (o._isModified === true) {
-            changedFields[field] = '1';
-          }
-        });
-        item.$changedFields = changedFields;
-        return item;
-      });
-
       if (this.idType === 'basicInfo') {
-        this.newTabData = items;
+        this.newTabData = data;
       } else if (this.idType === 'producInfo') {
         this.newProductTabData = _.map(this.newProductTabData, oldItem => {
-          let tmp = _.filter(items, item => _.findWhere(oldItem, {'key': 'skuId'}).value === _.findWhere(item, {'key': 'skuId'}).value && !!oldItem._remark === !!item._remark);
+          let tmp = _.filter(data, item => _.findWhere(oldItem, {'key': 'skuId'}).value === _.findWhere(item, {'key': 'skuId'}).value && !!oldItem._remark === !!item._remark);
           return tmp[0] || oldItem;
         });
       }
@@ -537,7 +523,7 @@ export default {
     },
     modify() {
       // 页面编辑提交
-      let parentNode = this.dataFilter(this.newTabData)[0] ? this.dataFilter(this.newTabData)[0] : '';
+      let parentNode = this.dataFilter(this.newTabData)[0];
       let arr = this.newProductTabData.filter(i => !i._disabled);
       parentNode.details = this.dataFilter(arr);
       parentNode.draft = 0;
@@ -562,8 +548,21 @@ export default {
       });
       return o;
     },
+    getChangeFields(item) {
+      let excludeFields = ['fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay', 'status', 'entryDt', 'updateDt'];
+      let changedFields = {};
+      Object.keys(item).forEach(key => {
+        if (excludeFields.indexOf(key) > -1) {
+          return;
+        }
+        if (item[key]._isModified === true) {
+          changedFields[key] = '1';
+        }
+      });
+      return changedFields;
+    },
     dataFilter(data) {
-      let excludeColumns = '$changedFields,fieldDisplay,fieldRemarkDisplay,entryDt,updateDt,status';
+      let excludeColumns = 'fieldDisplay,fieldRemarkDisplay,entryDt,updateDt,status';
       let datas = data.filter(item => !item._remark);
       let remarks = data.filter(item => item._remark);
 
@@ -573,10 +572,10 @@ export default {
         let isDetailInfo = item.hasOwnProperty('skuId');
         let key = isDetailInfo ? 'skuId' : 'id';
         let remark = remarks.find(i => i[key].value.toString() === item[key].value.toString());
-        o.fieldDisplay = item.$changedFields;
+        o.fieldDisplay = this.getChangeFields(item);
         if (remark) {
           o.fieldRemark = this.getRemarkObject(remark);
-          o.fieldRemarkDisplay = remark.$changedFields;
+          o.fieldRemarkDisplay = this.getChangeFields(remark);
         }
         Object.keys(item).forEach(field => {
           let val = item[field];
