@@ -176,6 +176,8 @@
                           e.lengthUnitDictCode._value=e.lengthUnitDictCode.value?_.findWhere(this.getDict('LH_UNIT'),{code:e.lengthUnitDictCode.value}).name:'';
                           e.volumeUnitDictCode._value=e.volumeUnitDictCode.value?_.findWhere(this.getDict('VE_UNIT'),{code:e.volumeUnitDictCode.value}).name:'';
                           e.weightUnitDictCode._value=e.weightUnitDictCode.value?_.findWhere(this.getDict('WT_UNIT'),{code:e.weightUnitDictCode.value}).name:'';
+
+                          e.inboundDate._value = e.inboundDate.value?this.$dateFormat(e.inboundDate.value, "yyyy-mm-dd"):'';
                         });
                         _.map(res.datas,v=>{
                             _.map(v,(val,key)=>{
