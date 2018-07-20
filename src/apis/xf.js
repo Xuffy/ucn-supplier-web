@@ -31,5 +31,6 @@ export default {
   EXPORTFILE_EXPORTTASKE: ['/exportFile/exportTaske', 'UIE_URL'],
   EXPORTFILE_GETEXPORTTASKE: ['/exportFile/getExportTaske', 'UIE_URL'],
   CODE_PART: ['/code/part', 'UMETA_URL'],
-  EXPORTFILE_EXECUTE: ['/exportFile/execute', 'UIE_URL']
+  EXPORTFILE_EXECUTE: ['/exportFile/execute', 'UIE_URL'],
+  UTASK_COUNTBYTYPEANDMODULE: ['/utask/countByTypeAndModule', 'UWORKBENCH_URL']
 }

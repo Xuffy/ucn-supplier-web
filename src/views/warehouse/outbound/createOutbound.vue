@@ -1,5 +1,5 @@
 <template>
-    <div class="create-inbound">
+    <div class="create-inbound" v-loading="loadingPage">
         <div class="title">
             {{$i.warehouse.basicInfo}}
         </div>
@@ -172,8 +172,11 @@
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuCode" :label="$i.warehouse.skuCode">
-                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput"
-                                      v-model="orderProduct.skuCode"></el-input>
+                            <el-input
+                                    :placeholder="$i.warehouse.pleaseInput"
+                                    size="mini"
+                                    class="speInput"
+                                    v-model="orderProduct.skuCode"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
@@ -258,6 +261,8 @@
                 selectProductList: [],
                 loadingProductTable: false,
                 outboundTypeOption: [],
+                loadingPage:false,
+
                 /**
                  * 外部展示数据
                  * */
@@ -321,7 +326,18 @@
             };
         },
         methods: {
-            //新增产品
+
+            getOutboundNo(){
+                this.loadingPage=true;
+                this.$ajax.post(this.$apis.GET_WAREHOUSE_NO,{
+                    type:'outbound_no'
+                }).then(res=>{
+                    this.getUnit();
+                    this.outboundData.outboundNo=res.content;
+                }).catch(err=>{
+                    this.loadingPage=false;
+                })
+            },
             addProduct() {
                 //先把在外部的数据的id取出来，拿到内部去对比
                 this.selectList = [];
@@ -331,7 +347,6 @@
                 this.disabledCancelSearch = true;
                 this.getProductData();
             },
-            //请求弹出框数据
             getProductData() {
                 this.$ajax.post(this.$apis.get_inboundSku, this.orderProduct).then(res => {
                     this.orderNoOption = [];
@@ -360,7 +375,6 @@
                     this.loadingTable = false;
                 });
             },
-            //移除产品
             removeProduct() {
                 this.$confirm("确定移除产品?", "提示", {
                     confirmButtonText: "确定",
@@ -376,11 +390,9 @@
                 }).catch(() => {
                 });
             },
-            //改变product table选中状态时触发的事件
             changeProductChecked(e) {
                 this.selectProductList = e;
             },
-            //提交表单
             submit() {
                 if (this.$validateForm(this.outboundData, this.$db.warehouse.outbound)) {
                     return;
@@ -535,6 +547,11 @@
                     this.productData[index].outboundSkuTotalNetWeight = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonNetWeight)).done();
                     //出库产品总毛重
                     this.productData[index].outboundSkuTotalGrossWeight = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonGrossWeight)).done();
+                }else if(!value){
+                    this.productData[index].outboundSkuTotalQty=0;
+                    this.productData[index].outboundSkuTotalVolume=0;
+                    this.productData[index].outboundSkuTotalNetWeight=0;
+                    this.productData[index].outboundSkuTotalGrossWeight=0;
                 }
             },
 
@@ -556,6 +573,8 @@
                     this.volumeUnitOption=v.codes;
                   }
                 })
+              }).finally(()=>{
+                  this.loadingPage=false;
               });
             },
 
@@ -573,7 +592,7 @@
 
         },
         created() {
-            this.getUnit();
+            this.getOutboundNo();
         },
         watch: {
             selectProductList(n) {

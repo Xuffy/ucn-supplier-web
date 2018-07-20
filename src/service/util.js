@@ -46,7 +46,9 @@ export default {
   /**
    * 格式化日期
    */
-  $dateFormat: dateFormat,
+  $dateFormat() {
+    return arguments[0] ? dateFormat(...arguments) : '';
+  },
 
   /**
    * 国际化语言配置

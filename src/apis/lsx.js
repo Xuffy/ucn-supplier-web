@@ -98,6 +98,7 @@ export default {
   save_sellerQcOrder: ['/qc/result/save', 'USUPPLY_URL'],
   REWORK_HANDLE: ['/qc/rework/handle', 'USUPPLY_URL'],
   RETURN_HANDLE:['/qc/return/handle','USUPPLY_URL'],
+  GET_WAREHOUSE_NO:['/warehouse/noGenerate/{type}','USUPPLY_URL'],
 
 
 

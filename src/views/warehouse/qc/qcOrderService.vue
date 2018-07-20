@@ -522,9 +522,7 @@
 
                         }
                     }
-
                 });
-
                 return sums;
             },
 
@@ -550,20 +548,6 @@
                 this.qcOrderConfig.surveyor = this.qcDetail.surveyor;
                 this.qcOrderConfig.serviceFee = this.qcDetail.serviceFee;
 
-                /*let allow = true;
-                this.productInfoData.forEach(v => {
-                  if (v.actOuterCartonSkuQty || v.actOuterCartonInnerBoxQty || v.actInnerCartonSkuQty || v.innerCartonLength || v.innerCartonWidth || v.innerCartonHeight || v.innerCartonNetWeight || v.innerCartonGrossWeight || v.innerCartonVolume || v.outerCartonLength || v.outerCartonWidth || v.outerCartonHeight || v.outerCartonNetWeight || v.outerCartonGrossWeight || v.qualifiedSkuCartonTotalQty || v.unqualifiedSkuCartonTotalQty || v.unqualifiedType || v.skuBarCodeResultDictCode || v.skuLabelResultDictCode || v.innerPackingBarCodeResultDictCode || v.outerCartonBarCodeResultDictCode || v.shippingMarkResultDictCode || v.remarks) {
-                    if (!v.skuQcResultDictCode) {
-                      allow = false;
-                    }
-                  }
-                });
-                if (!allow) {
-                  return this.$message({
-                    message: this.$i.warehouse.mustHaveQcResult,
-                    type: 'warning'
-                  });
-                }*/
                 this.qcOrderConfig.qcResultDetailParams = [];
                 this.productInfoData.forEach(v => {
                     let skuQcResultDictCode;
@@ -592,7 +576,7 @@
                         outerCartonNetWeight: v.outerCartonNetWeight,
                         outerCartonWidth: v.outerCartonWidth,
                         qcOrderDetailId: v.id,
-                        qcPic: v.qcPic,
+                        qcPics: v.qcPics,
                         qualifiedSkuCartonTotalQty: v.qualifiedSkuCartonTotalQty,
                         remark: v.remark,
                         shippingMarkResultDictCode: v.shippingMarkResultDictCode,
@@ -603,7 +587,6 @@
                         unqualifiedType: v.unqualifiedType
                     });
                 });
-
                 this.disableClickSubmit = true;
                 this.$ajax.post(this.$apis.save_sellerQcOrder, this.qcOrderConfig).then(res => {
                     this.disableClickSubmit = false;
