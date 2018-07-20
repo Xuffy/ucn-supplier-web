@@ -11,5 +11,6 @@
   "followingProductCantAddOrder":"以下产品无法被创建订单",
   "recoverSuccess":"Recover Success!",
   "sureSetDown":"Sure Set Down?",
-  "setDownSuccess":"Set Down Success"
+  "setDownSuccess":"Set Down Success",
+  "sureRecover":"Sure Recover?"
 }

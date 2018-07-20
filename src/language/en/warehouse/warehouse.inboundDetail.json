@@ -78,5 +78,8 @@
   "skuInnerCartonHeight": "Width of inner carton",
   "skuInnerCartonWeightNet": "N.W. of innner carton",
   "skuInnerCartonRoughWeight": "G.W. of innner carton",
-  "supplierCode":"Supplier Code"
+  "supplierCode":"Supplier Code",
+  "skuUnitLength":"长度单位",
+  "skuUnitVolume":"体积单位",
+  "skuUnitWeight":"重量单位"
 }

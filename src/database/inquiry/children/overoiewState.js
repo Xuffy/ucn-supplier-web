@@ -1,23 +1,23 @@
 export default {
-    TBCByCustomer: {
-        key: '',
-        text: 'TBC By Customer',
-        id: 22
-    },
-    TBCBySupplier: {
-        key: '',
-        text: 'TBC By Supplier',
-        id: 21
-    },
-    finish: {
-        key: '',
-        text: 'finish',
-        id: 99
-    },
-    cancel: {
-        key: '',
-        text: 'cancel',
-        id: 1
-    },
-
+  TBCByCustomer: {
+    key: '',
+    text: 'inquiryTbc',
+    id: 22
+  },
+  TBCBySupplier: {
+    key: '',
+    text: 'inquiryTbs',
+    id: 21
+  },
+  finish: {
+    key: '',
+    text: 'inquiryFinished',
+    id: 99
+  },
+  cancel: {
+    key: '',
+    text: 'inquiryCanceled',
+    id: 1
+  }
 };
+

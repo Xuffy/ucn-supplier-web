@@ -123,7 +123,7 @@
                     :summary-method="getSummaries"
                     show-summary
                     border
-                    style="width: 100%">
+                    style="width: 100%;max-height:400px">
                 <el-table-column
                         align="center"
                         fixed="left"

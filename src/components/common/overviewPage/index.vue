@@ -271,8 +271,8 @@
                 });
             },
             getCategory(){
-                const myCategory=this.$ajax.get(this.$apis.get_buyer_sys_category, {});
-                const sysCategory=this.$ajax.get(this.$apis.get_buyer_my_category, {});
+                const myCategory=this.$ajax.get(this.$apis.CATEGORY_SYSTEM, {});
+                const sysCategory=this.$ajax.get(this.$apis.CATEGORY_MINE, {});
                 return this.$ajax.all([myCategory,sysCategory]).then(res=>{
                     return res;
                 }).catch(err=>{

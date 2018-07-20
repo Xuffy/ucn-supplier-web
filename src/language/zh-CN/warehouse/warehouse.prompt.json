@@ -25,5 +25,6 @@
   "keywordMustInput": "还有必填字段未填写",
   "pleaseChooseAType": "请选择类型",
   "pleaseChooseService": "请选择服务",
-  "deleteSuccess":"删除成功！"
+  "deleteSuccess":"删除成功！",
+  "pleaseChooseQcMethod":"Please Choose QC Method"
 }
