@@ -10,7 +10,7 @@
             v-for="item in $db.inquiry.overoiewState"
             :label="item.id"
             :key="item.id">
-            {{ item.text }}
+            {{ $i.inquiry[item.text] }}
           </el-radio-button>
         </el-radio-group>
       </div>
