@@ -45,7 +45,7 @@
                     <el-button @click="editProduct">{{$i.product.edit}}</el-button>
                     <el-button :loading="disabledSetupBtn" @click="setUpDown">{{btnInfo}}</el-button>
                     <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
-                    <el-button @click="()=>$refs.importCategory.show()">{{$i.product.upload}}</el-button>
+                    <el-button @click="()=>$refs.importCategory.show()" :tips="$i.product.uploadTips">{{$i.product.upload}}</el-button>
                     <el-button
                             :loading="disabledDeleteBtn"
                             type="danger"
