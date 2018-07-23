@@ -1606,6 +1606,9 @@
                         v._isModified=false;
                     });
                     _.map(this.orderForm.fieldUpdate,(v,k)=>{
+                        if(k==='attachments'){
+                            k='attachment';
+                        }
                         this.$db.order.orderDetail[k]._isModified=true;
                     });
                     this.orderForm.fieldUpdate={};
@@ -2971,8 +2974,6 @@
                 })
             },
 
-
-
             /**
              * 搜索框事件
              * */
@@ -3063,6 +3064,15 @@
         background-color: yellow !important;
     }
     .high-light >>> input{
+        background-color: yellow !important;
+    }
+    .isModify >>> textarea{
+        background-color: yellow !important;
+    }
+    .isModify >>> li{
+        background-color: yellow !important;
+    }
+    .high-light >>> textarea{
         background-color: yellow !important;
     }
     .speCol{

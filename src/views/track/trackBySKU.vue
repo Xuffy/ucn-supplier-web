@@ -154,9 +154,11 @@
       //.........download
       download(){
         if(this.selectedData.length>0){
-          let params=[];
+          let params={
+            checkBoxParams:[]
+          };
           _.map(this.selectedData,v=> {
-            params.push({
+            params.checkBoxParams.push({
               orderId: v.orderId.value,
               logisticsId: v.logisticsId.value,
               qcId: v.qcId.value
