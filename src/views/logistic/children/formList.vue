@@ -2,49 +2,47 @@
   <div>
     <div class="hd" v-if="showHd"></div>
     <div class="hd active">{{ title }}</div>
-    <el-row :gutter="10">
-      <el-form label-width="300px" label-position="right" class="form" >
-        <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
+    <el-form label-width="300px" label-position="right" class="form" >
+      <div v-for="a of listData" :key="'el-col-' + a.label" class="form-warp">
 
-          <el-form-item v-if="DeliveredEdit&&a.key=='actDepartureDate'&&a.type === 'date'" :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'">
-              <el-date-picker v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" :placeholder="$i.logistic.pleaseChoose" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
+        <el-form-item v-if="DeliveredEdit&&a.key=='actDepartureDate'&&a.type === 'date'" :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'">
+            <el-date-picker v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" :placeholder="$i.logistic.pleaseChoose" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
+        </el-form-item>
+        <!-- <el-form-item v-if="DeliveredEdit&&a.key=='logisticsStatus'&&a.type === 'selector'" :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'">
+            <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.pleaseChoose" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
+              <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
+                v-if="selectArr[a.key]" />
+            </el-select>
+        </el-form-item> -->
+
+        <el-form-item v-if="!edit&&!(DeliveredEdit&&a.key=='actDepartureDate')" :label="a.label+'：'">
+          <p class="textFilter" :style="fieldDisplay&&fieldDisplay.hasOwnProperty(a.key) ? definedStyle : ''">{{ textFilter(a) }}</p>
+        </el-form-item>
+        <div v-if="edit">
+          <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'input'">
+            <el-input :placeholder="$i.logistic.pleaseChoose" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" v-model="a.value" :disabled="a.disabled" @change="selectChange(a.value,a.key)"/>
           </el-form-item>
-          <!-- <el-form-item v-if="DeliveredEdit&&a.key=='logisticsStatus'&&a.type === 'selector'" :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'">
-              <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.pleaseChoose" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
-                <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
-                  v-if="selectArr[a.key]" />
-              </el-select>
-          </el-form-item> -->
 
-          <el-form-item v-if="!edit&&!(DeliveredEdit&&a.key=='actDepartureDate')" :label="a.label+'：'">
-            <p class="textFilter" :style="fieldDisplay&&fieldDisplay.hasOwnProperty(a.key) ? definedStyle : ''">{{ textFilter(a) }}</p>
+          <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'selector'">
+            <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.pleaseChoose" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
+              <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
+                v-if="selectArr[a.key]" />
+            </el-select>
           </el-form-item>
-          <div v-if="edit">
-            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'input'">
-              <el-input :placeholder="$i.logistic.pleaseChoose" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" v-model="a.value" :disabled="a.disabled" @change="selectChange(a.value,a.key)"/>
-            </el-form-item>
+          
+          <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'filterable'">
+            <el-select filterable v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.placeholder" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
+              <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr.country" :key="item.id"
+                v-if="selectArr.country" />
+            </el-select>
+          </el-form-item>
 
-            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'selector'">
-              <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.pleaseChoose" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
-                <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
-                  v-if="selectArr[a.key]" />
-              </el-select>
-            </el-form-item>
-            
-            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'filterable'">
-              <el-select filterable v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.placeholder" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
-                <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr.country" :key="item.id"
-                  v-if="selectArr.country" />
-              </el-select>
-            </el-form-item>
-
-            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'date'">
-              <el-date-picker format="yyyy-MM-dd" v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" :placeholder="$i.logistic.pleaseChoose" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
-            </el-form-item>
-          </div>
-        </el-col>
-      </el-form>
-    </el-row>
+          <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'date'">
+            <el-date-picker format="yyyy-MM-dd" v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" :placeholder="$i.logistic.pleaseChoose" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
+          </el-form-item>
+        </div>
+      </div>
+    </el-form>
   </div>
 </template>
 <script>
@@ -161,17 +159,25 @@
     }
   }
   .form {
+    display: flex;
+    flex-wrap: wrap;
+    .form-warp{
+      flex: 1;
+    }
+    /deep/.el-form-item--mini .el-form-item__content{
+      line-height: 26px;
+    }
     /deep/.el-form-item p{
       min-width: 150px;
     }
     /deep/.el-input,
     /deep/.el-input__inner {
       width: 100%;
-      min-width: 150px;
+      // min-width: 150px;
     }
     /deep/.el-select{
       width: 100%;
-      min-width: 150px;
+      // min-width: 150px;
     }
     /deep/.definedStyleClass input{
       background:yellow;

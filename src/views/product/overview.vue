@@ -1,135 +1,135 @@
 <template>
     <div class="bookmark">
         <!--<div class="title">-->
-            <!--<span>{{$i.product.title}}</span>-->
-            <!--<el-button class="title-btn"-->
-                       <!--@click="switchDisplay"-->
-                       <!--type="text">{{btnInfo}}-->
-            <!--</el-button>-->
+        <!--<span>{{$i.product.title}}</span>-->
+        <!--<el-button class="title-btn"-->
+        <!--@click="switchDisplay"-->
+        <!--type="text">{{btnInfo}}-->
+        <!--</el-button>-->
         <!--</div>-->
         <!--<div>-->
-            <!--<el-form ref="productFormTop" :model="productForm" label-width="190px">-->
-                <!--<el-row class="speZone">-->
-                    <!--<el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'"-->
-                            <!--v-for="v in $db.product.overview" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item :prop="v.key" :label="v.label">-->
-                            <!--<drop-down v-model="productForm[v.key]"-->
-                                       <!--v-if="v.showType==='dropdown'"-->
-                                       <!--:list="categoryList"-->
-                                       <!--:defaultProps="defaultProps"-->
-                                       <!--ref="dropDown" :expandOnClickNode="false"></drop-down>-->
-                            <!--<el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>-->
-                            <!--<el-select class="speSelect" v-if="v.showType==='select'" size="mini"-->
-                                       <!--v-model="productForm[v.key]" placeholder="不限">-->
-                                <!--<el-option-->
-                                        <!--v-for="item in v.options"-->
-                                        <!--:key="item.value"-->
-                                        <!--:label="item.label"-->
-                                        <!--:value="item.value">-->
-                                <!--</el-option>-->
-                            <!--</el-select>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                <!--</el-row>-->
-            <!--</el-form>-->
+        <!--<el-form ref="productFormTop" :model="productForm" label-width="190px">-->
+        <!--<el-row class="speZone">-->
+        <!--<el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'"-->
+        <!--v-for="v in $db.product.overview" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+        <!--<el-form-item :prop="v.key" :label="v.label">-->
+        <!--<drop-down v-model="productForm[v.key]"-->
+        <!--v-if="v.showType==='dropdown'"-->
+        <!--:list="categoryList"-->
+        <!--:defaultProps="defaultProps"-->
+        <!--ref="dropDown" :expandOnClickNode="false"></drop-down>-->
+        <!--<el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>-->
+        <!--<el-select class="speSelect" v-if="v.showType==='select'" size="mini"-->
+        <!--v-model="productForm[v.key]" placeholder="不限">-->
+        <!--<el-option-->
+        <!--v-for="item in v.options"-->
+        <!--:key="item.value"-->
+        <!--:label="item.label"-->
+        <!--:value="item.value">-->
+        <!--</el-option>-->
+        <!--</el-select>-->
+        <!--</el-form-item>-->
+        <!--</el-col>-->
+        <!--</el-row>-->
+        <!--</el-form>-->
         <!--</div>-->
         <!--<div class="body" :class="{hide:hideBody}">-->
-            <!--<el-form ref="productForm" :model="productForm" label-width="190px">-->
-                <!--<el-row class="speZone">-->
-                    <!--<el-col v-if="!v.isDefaultShow && v.belongPage==='sellerProductOverview'"-->
-                            <!--v-for="v in $db.product.overview" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item :prop="v.key" :label="v.label">-->
-                            <!--<drop-down-->
-                                    <!--v-if="v.showType==='dropdown'"-->
-                                    <!--class=""-->
-                                    <!--v-model="productForm[v.key]"-->
-                                    <!--:list="categoryList"-->
-                                    <!--ref="dropDown"></drop-down>-->
+        <!--<el-form ref="productForm" :model="productForm" label-width="190px">-->
+        <!--<el-row class="speZone">-->
+        <!--<el-col v-if="!v.isDefaultShow && v.belongPage==='sellerProductOverview'"-->
+        <!--v-for="v in $db.product.overview" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+        <!--<el-form-item :prop="v.key" :label="v.label">-->
+        <!--<drop-down-->
+        <!--v-if="v.showType==='dropdown'"-->
+        <!--class=""-->
+        <!--v-model="productForm[v.key]"-->
+        <!--:list="categoryList"-->
+        <!--ref="dropDown"></drop-down>-->
 
-                            <!--<el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>-->
-                            <!--<el-select class="speSelect" v-if="v.showType==='select'" size="mini"-->
-                                       <!--v-model="productForm[v.key]" placeholder="请选择">-->
-                                <!--<el-option-->
-                                        <!--v-for="item in v.options"-->
-                                        <!--:key="item.value"-->
-                                        <!--:label="item.label"-->
-                                        <!--:value="item.value">-->
-                                <!--</el-option>-->
-                            <!--</el-select>-->
-                            <!--<div v-if="v.showType==='exwNumber'" class="section-number">-->
-                                <!--<el-input size="mini" class="section-input"-->
-                                          <!--v-model="productForm.minExwPrice"></el-input>-->
-                                <!--<div class="section-line">&#45;&#45;</div>-->
-                                <!--<el-input size="mini" class="section-input"-->
-                                          <!--v-model="productForm.maxExwPrice"></el-input>-->
-                            <!--</div>-->
-                            <!--<div v-if="v.showType==='fobNumber'" class="section-number">-->
-                                <!--<el-input size="mini" class="section-input"-->
-                                          <!--v-model="productForm.minFobPrice"></el-input>-->
-                                <!--<div class="section-line">&#45;&#45;</div>-->
-                                <!--<el-input size="mini" class="section-input"-->
-                                          <!--v-model="productForm.maxFobPrice"></el-input>-->
-                            <!--</div>-->
-                            <!--<el-input v-if="v.showType==='number'" size="mini" v-model="productForm[v.key]"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                <!--</el-row>-->
-            <!--</el-form>-->
+        <!--<el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>-->
+        <!--<el-select class="speSelect" v-if="v.showType==='select'" size="mini"-->
+        <!--v-model="productForm[v.key]" placeholder="请选择">-->
+        <!--<el-option-->
+        <!--v-for="item in v.options"-->
+        <!--:key="item.value"-->
+        <!--:label="item.label"-->
+        <!--:value="item.value">-->
+        <!--</el-option>-->
+        <!--</el-select>-->
+        <!--<div v-if="v.showType==='exwNumber'" class="section-number">-->
+        <!--<el-input size="mini" class="section-input"-->
+        <!--v-model="productForm.minExwPrice"></el-input>-->
+        <!--<div class="section-line">&#45;&#45;</div>-->
+        <!--<el-input size="mini" class="section-input"-->
+        <!--v-model="productForm.maxExwPrice"></el-input>-->
+        <!--</div>-->
+        <!--<div v-if="v.showType==='fobNumber'" class="section-number">-->
+        <!--<el-input size="mini" class="section-input"-->
+        <!--v-model="productForm.minFobPrice"></el-input>-->
+        <!--<div class="section-line">&#45;&#45;</div>-->
+        <!--<el-input size="mini" class="section-input"-->
+        <!--v-model="productForm.maxFobPrice"></el-input>-->
+        <!--</div>-->
+        <!--<el-input v-if="v.showType==='number'" size="mini" v-model="productForm[v.key]"></el-input>-->
+        <!--</el-form-item>-->
+        <!--</el-col>-->
+        <!--</el-row>-->
+        <!--</el-form>-->
         <!--</div>-->
         <!--<div class="btn-group">-->
-            <!--<el-button @click="search" :loading="disabledSearch" type="primary">{{$i.product.search}}</el-button>-->
-            <!--<el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>-->
+        <!--<el-button @click="search" :loading="disabledSearch" type="primary">{{$i.product.search}}</el-button>-->
+        <!--<el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>-->
         <!--</div>-->
         <!--<div class="footer">-->
-            <!--<v-table-->
-                    <!--code="udata_supply_sku_overview"-->
-                    <!--:height="500"-->
-                    <!--:loading="loadingTable"-->
-                    <!--:data="tableDataList"-->
-                    <!--:buttons="[{label: $i.product.detail, type: 1}]"-->
-                    <!--@change-checked="changeChecked"-->
-                    <!--@change-sort="val=>{getData(val)}"-->
-                    <!--@action="btnClick">-->
-                <!--<template slot="header">-->
-                    <!--<div class="btns">-->
-                        <!--<el-button-->
-                                <!--v-authorize="'PRODUCT:OVERVIEW:ADD_PRODUCT'"-->
-                                <!--@click="addNewProduct">{{$i.product.addNewProduct}}-->
-                        <!--</el-button>-->
-                        <!--<el-button-->
-                                <!--v-authorize="'PRODUCT:OVERVIEW:SET_SALE'"-->
-                                <!--:disabled="disabledDeleteGoods"-->
-                                <!--:loading="disableClickSetUp"-->
-                                <!--@click="setUp">{{$i.product.setUp}}-->
-                        <!--</el-button>-->
-                        <!--<el-button-->
-                                <!--v-authorize="'PRODUCT:OVERVIEW:SET_NOT_SALE'"-->
-                                <!--:disabled="disabledDeleteGoods"-->
-                                <!--:loading="disableClickSetDown"-->
-                                <!--@click="setDown">{{$i.product.setDown}}-->
-                        <!--</el-button>-->
-                        <!--<el-button-->
-                                <!--v-authorize="'PRODUCT:OVERVIEW:UPLOAD_PRODUCT'"-->
-                                <!--@click="()=>$refs.importCategory.show()">{{$i.button.upload}}-->
-                        <!--</el-button>-->
-                        <!--<el-button-->
-                                <!--v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'"-->
-                                <!--@click="download">-->
-                            <!--{{$i.product.downloadSelected}}({{selectList.length?selectList.length:"All"}})-->
-                        <!--</el-button>-->
-                        <!--<el-button @click="deleteGood"-->
-                                   <!--:loading="loadingDeleteGoods"-->
-                                   <!--:disabled="disabledDeleteGoods" type="danger"-->
-                                   <!--v-authorize="'PRODUCT:OVERVIEW:ARCHIVE'">{{$i.common.remove}}-->
-                        <!--</el-button>-->
-                    <!--</div>-->
-                <!--</template>-->
-            <!--</v-table>-->
-            <!--<page-->
-                    <!--:page-sizes="[50,100,200,500]"-->
-                    <!--@size-change="changeSize"-->
-                    <!--@change="changePage"-->
-                    <!--:page-data="pageData"></page>-->
+        <!--<v-table-->
+        <!--code="udata_supply_sku_overview"-->
+        <!--:height="500"-->
+        <!--:loading="loadingTable"-->
+        <!--:data="tableDataList"-->
+        <!--:buttons="[{label: $i.product.detail, type: 1}]"-->
+        <!--@change-checked="changeChecked"-->
+        <!--@change-sort="val=>{getData(val)}"-->
+        <!--@action="btnClick">-->
+        <!--<template slot="header">-->
+        <!--<div class="btns">-->
+        <!--<el-button-->
+        <!--v-authorize="'PRODUCT:OVERVIEW:ADD_PRODUCT'"-->
+        <!--@click="addNewProduct">{{$i.product.addNewProduct}}-->
+        <!--</el-button>-->
+        <!--<el-button-->
+        <!--v-authorize="'PRODUCT:OVERVIEW:SET_SALE'"-->
+        <!--:disabled="disabledDeleteGoods"-->
+        <!--:loading="disableClickSetUp"-->
+        <!--@click="setUp">{{$i.product.setUp}}-->
+        <!--</el-button>-->
+        <!--<el-button-->
+        <!--v-authorize="'PRODUCT:OVERVIEW:SET_NOT_SALE'"-->
+        <!--:disabled="disabledDeleteGoods"-->
+        <!--:loading="disableClickSetDown"-->
+        <!--@click="setDown">{{$i.product.setDown}}-->
+        <!--</el-button>-->
+        <!--<el-button-->
+        <!--v-authorize="'PRODUCT:OVERVIEW:UPLOAD_PRODUCT'"-->
+        <!--@click="()=>$refs.importCategory.show()">{{$i.button.upload}}-->
+        <!--</el-button>-->
+        <!--<el-button-->
+        <!--v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'"-->
+        <!--@click="download">-->
+        <!--{{$i.product.downloadSelected}}({{selectList.length?selectList.length:"All"}})-->
+        <!--</el-button>-->
+        <!--<el-button @click="deleteGood"-->
+        <!--:loading="loadingDeleteGoods"-->
+        <!--:disabled="disabledDeleteGoods" type="danger"-->
+        <!--v-authorize="'PRODUCT:OVERVIEW:ARCHIVE'">{{$i.common.remove}}-->
+        <!--</el-button>-->
+        <!--</div>-->
+        <!--</template>-->
+        <!--</v-table>-->
+        <!--<page-->
+        <!--:page-sizes="[50,100,200,500]"-->
+        <!--@size-change="changeSize"-->
+        <!--@change="changePage"-->
+        <!--:page-data="pageData"></page>-->
         <!--</div>-->
 
         <overview-page
@@ -188,9 +188,6 @@
                           :page-data="pageData"></v-pagination>
         </overview-page>
 
-
-
-
         <el-dialog
                 class="speDialog"
                 :title="$i.product.prompt"
@@ -204,13 +201,14 @@
             </span>
         </el-dialog>
 
-        <v-import-template ref="importCategory" code="BIZ_SKU_SUPPLIER_IMPORT" biz-code="BIZ_SKU_SUPPLIER_IMPORT"></v-import-template>
+        <v-import-template ref="importCategory" code="BIZ_SKU_SUPPLIER_IMPORT"
+                           biz-code="BIZ_SKU_SUPPLIER_IMPORT"></v-import-template>
     </div>
 </template>
 
 <script>
     import sectionNumber from "../product/sectionNumber";
-    import { VPagination, VTable, dropDownSingle, VImportTemplate,overviewPage } from "@/components/index";
+    import { VPagination, VTable, dropDownSingle, VImportTemplate, overviewPage } from "@/components/index";
     import { mapActions } from "vuex";
 
     export default {
@@ -226,21 +224,21 @@
         props: {},
         data() {
             return {
-                title:this.$i.product.title,
-                labelWidth:220,
-                productData:[],
-                pageData:{},
-                loadingTable:false,
-                partDialogVisible:false,
-                queryConfig:{
-                    pn:1,
-                    ps:50,
-                    recycle:false
+                title: this.$i.product.title,
+                labelWidth: 220,
+                productData: [],
+                pageData: {},
+                loadingTable: false,
+                partDialogVisible: false,
+                queryConfig: {
+                    pn: 1,
+                    ps: 50,
+                    recycle: false
                 },
-                selectList:[],
-                disableClickSetUp:false,
-                disableClickSetDown:false,
-                loadingDeleteGoods:false,
+                selectList: [],
+                disableClickSetUp: false,
+                disableClickSetDown: false,
+                loadingDeleteGoods: false,
 
                 /**
                  * 字典
@@ -251,7 +249,8 @@
                 volumeOption: [],
                 lengthOption: [],
                 skuUnitOption: [],
-                countryOption: []
+                countryOption: [],
+                quarantineTypeOption:[]
             };
         },
         methods: {
@@ -260,13 +259,13 @@
                 this.selectList = e;
             },
             getData(query) {
-                if(query && !query.categoryId){
-                    query.categoryId=null;
+                if (query && !query.categoryId) {
+                    query.categoryId = null;
                 }
-                Object.assign(this.queryConfig,query);
-                let params=this.$depthClone(this.queryConfig);
-                if(_.isArray(params.country)){
-                    params.country=params.country.join(',');
+                Object.assign(this.queryConfig, query);
+                let params = this.$depthClone(this.queryConfig);
+                if (_.isArray(params.country)) {
+                    params.country = params.country.join(",");
                 }
                 this.loadingTable = true;
                 this.$ajax.post(this.$apis.get_productList, params).then(res => {
@@ -296,6 +295,7 @@
                         }
 
                         e.yearListed.value = this.$dateFormat(e.yearListed.value, "yyyy-mm");
+                        e.inspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, e.inspectQuarantineCategory.value) || {}).name;
                         return e;
                     });
                     this.pageData = res;
@@ -313,7 +313,6 @@
                     }
                 });
             },
-
             setUp() {
                 let id = [];
                 this.selectList.forEach(v => {
@@ -323,16 +322,13 @@
                 this.$ajax.post(this.$apis.set_sellerProductPutAway, id).then(res => {
                     this.getData();
                     this.$message({
-                        message: "上架成功",
+                        message: this.$i.product.setUpSuccess,
                         type: "success"
                     });
                     this.disableClickSetUp = false;
                 }).catch(err => {
                     this.disableClickSetUp = false;
                 });
-                // }).catch(() => {
-                //
-                // });
             },
             setDown() {
                 this.$confirm(this.$i.product.sureSetDown, this.$i.product.prompt, {
@@ -375,7 +371,7 @@
                     type: "warning"
                 }).then(() => {
                     let id = _.pluck(_.pluck(this.selectList, "id"), "value");
-                    this.loadingDeleteGoods=true;
+                    this.loadingDeleteGoods = true;
                     this.$ajax.post(this.$apis.post_sku_deleteAll, id)
                         .then(res => {
                             this.$message({
@@ -383,8 +379,8 @@
                                 message: this.$i.common.deleteTheSuccess
                             });
                             this.getData();
-                        }).finally(()=>{
-                        this.loadingDeleteGoods=false;
+                        }).finally(() => {
+                        this.loadingDeleteGoods = false;
                     });
                 });
             },
@@ -430,9 +426,9 @@
             }
         },
         created() {
-            const partUnit=this.$ajax.post(this.$apis.get_partUnit, ["SKU_SALE_STATUS", "WT_UNIT", "ED_UNIT", "VE_UNIT", "LH_UNIT", "SKU_UNIT"], { cache: true });
-            const countryAjax=this.$ajax.get(this.$apis.get_country, {}, { cache: true });
-            this.$ajax.all([partUnit,countryAjax]).then(res=>{
+            const partUnit = this.$ajax.post(this.$apis.get_partUnit, ["SKU_SALE_STATUS", "WT_UNIT", "ED_UNIT", "VE_UNIT", "LH_UNIT", "SKU_UNIT", "QUARANTINE_TYPE"], { cache: true });
+            const countryAjax = this.$ajax.get(this.$apis.get_country, {}, { cache: true });
+            this.$ajax.all([partUnit, countryAjax]).then(res => {
                 res[0].forEach(v => {
                     if (v.code === "SKU_SALE_STATUS") {
                         this.statusOption = v.codes;
@@ -446,6 +442,8 @@
                         this.lengthOption = v.codes;
                     } else if (v.code === "SKU_UNIT") {
                         this.skuUnitOption = v.codes;
+                    } else if (v.code === "QUARANTINE_TYPE") {
+                        this.quarantineTypeOption = v.codes;
                     }
                 });
                 this.countryOption = res[1];
@@ -468,9 +466,7 @@
                 }
             ]);
         },
-        watch: {
-
-        }
+        watch: {}
     };
 </script>
 
