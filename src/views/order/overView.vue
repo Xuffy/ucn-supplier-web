@@ -47,7 +47,7 @@
                                 type='danger'
                                 :loading="disableClickDelete"
                                 :disabled='disableDelete'
-                                @click='deleteOrder'>{{($i.order.archive)}}</el-button>
+                                @click='deleteOrder'>{{($i.order.archive)}}({{archiveLength}})</el-button>
                     </div>
                     <div class="viewBy">
                         <span>{{$i.order.viewBy}}</span>
@@ -131,6 +131,7 @@
                 tableCode:'uorder_list',
                 disableDelete:true,
                 disableClickDelete:false,
+                archiveLength:0,
 
                 /**
                  * 字典
@@ -330,6 +331,7 @@
         },
         watch: {
             selectedList(n){
+                let archiveLength=0;
                 let disableArchive=false;
                 if(n.length===0){
                     disableArchive=true;
@@ -337,6 +339,8 @@
                     _.map(n,v=>{
                         if(v.status.value!=='已取消'){
                             disableArchive=true;
+                        }else{
+                            archiveLength++;
                         }
                     });
                 }
@@ -355,9 +359,11 @@
                     }else{
                         this.disableFinish=true;
                     }
-                }else{
+                }
+                else{
                     this.disableFinish=true;
                 }
+                this.archiveLength=archiveLength;
             },
         }
     }
