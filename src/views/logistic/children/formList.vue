@@ -161,6 +161,9 @@
     }
   }
   .form {
+    /deep/.el-form-item--mini .el-form-item__content{
+      line-height: 26px;
+    }
     /deep/.el-form-item p{
       min-width: 150px;
     }

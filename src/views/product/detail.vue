@@ -45,7 +45,7 @@
                     <el-button @click="editProduct">{{$i.product.edit}}</el-button>
                     <el-button :loading="disabledSetupBtn" @click="setUpDown">{{btnInfo}}</el-button>
                     <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
-                    <el-button @click="()=>$refs.importCategory.show()">{{$i.product.upload}}</el-button>
+                    <el-button @click="()=>$refs.importCategory.show()" :tips="$i.product.uploadTips">{{$i.product.upload}}</el-button>
                     <el-button
                             :loading="disabledDeleteBtn"
                             type="danger"
@@ -129,6 +129,7 @@
                     </v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
+                    <span v-if="!productForm.attachments" class="noData">{{$i.product.noData}}</span>
                     <v-upload :limit="20" readonly :list="productForm.attachments" ref="uploadAttachmemt"></v-upload>
                 </el-tab-pane>
                 <!--<el-tab-pane :label="$t('productSeller.page.remark')" name="Remark">-->
@@ -632,6 +633,10 @@
     }
     .speForm .el-row .list .el-input{
         width: 80%;
+    }
+    .noData{
+        font-size: 14px;
+        color: #606266;
     }
 
 
