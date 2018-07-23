@@ -499,6 +499,7 @@ export const routerMap = [
       redirect: '/warehouse/overview',
       name: 'warehouse',
       meta: {
+          auth:'WAREHOUSE',
         name: $i.router.warehouse
       },
       noDropdown: false,
@@ -507,6 +508,7 @@ export const routerMap = [
           path: 'overview',
           name: 'WarehouseOverview',
           meta: {
+              auth:'WAREHOUSE:OVERVIEW',
             name: $i.router.warehouseOverview
           },
           component: () => import('../views/warehouse/warehouseOverview.vue'),
@@ -567,6 +569,7 @@ export const routerMap = [
           path: 'qcOverview',
           name: 'qcOverview',
           meta: {
+              auth:'QC:ORDER_OVERVIEW',
             name: $i.router.qcOverview
           },
           component: () => import('../views/warehouse/qc/qcOverview'),
@@ -576,6 +579,7 @@ export const routerMap = [
           name: 'qcOrder',
           hidden: true,
           meta: {
+              auth:'QC:ORDER_DETAIL',
             name: $i.router.qcOrderDetail
           },
           component: () => import('../views/warehouse/qc/qcOrder')
@@ -585,6 +589,7 @@ export const routerMap = [
           name: 'qcOrderService',
           hidden: true,
           meta: {
+              auth:'QC:ORDER_DETAIL',
             name: $i.router.qcOrderDetail
           },
           component: () => import('../views/warehouse/qc/qcOrderService')
@@ -594,6 +599,7 @@ export const routerMap = [
           name: 'qcOrderDetail',
           hidden: true,
           meta: {
+              auth:'QC:ORDER_DETAIL',
             name: $i.router.qcOrderDetail
           },
           component: () => import('../views/warehouse/qc/qcOrderDetail')
