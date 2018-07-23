@@ -24,13 +24,14 @@ const deleteArr = (list, fieldRemark) => {
 const deleteObject = (list, fieldRemark, details) => {
   _.mapObject(list, (val, key) => {
     if (key.substring(0, 1) === '_') delete list[key];
+
     if (list[fieldRemark]) deleteObject(list[fieldRemark]);
     if (key === details) deleteArr(list[details], fieldRemark)
   });
 };
 
 // 需要直接下载的文件格式
-const NEED_DOWNLOAD_FILE = ['jpg', 'gif', 'png', 'pdf', 'text', 'bmp', 'jpeg', 'webp'];
+const NEED_DOWNLOAD_FILE = ['jpg', 'gif', 'png', 'pdf', 'txt', 'bmp', 'jpeg', 'webp'];
 
 export default {
   /**

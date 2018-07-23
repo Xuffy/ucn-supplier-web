@@ -281,6 +281,8 @@
                 :editable="false"
                 v-model="addUser.birthday"
                 type="date"
+                format="yyyy-MM-dd"
+                @change="() => addUser.birthday = $dateFormat(addUser.birthday, 'yyyy-mm-dd')"
                 :placeholder="$i.setting.pleaseChoose">
               </el-date-picker>
             </el-form-item>
@@ -713,7 +715,7 @@
           delete params.userId;
         }
 
-        params.birthday = this.$dateFormat(params.birthday, 'yyyy-mm-dd');
+        // params.birthday = this.$dateFormat(params.birthday, 'yyyy-mm-dd');
 
         this.$ajax.post(this.$apis.add_departmentUser, params)
           .then(res => {
@@ -804,7 +806,6 @@
           deptId: this.userData.deptId,
           roleId: this.checkedRole[0]
         }).then(res => {
-          console.log(res)
           this.$ajax.all([
             this.getPrivilegeResource(),
             this.getPrivilegeData()
