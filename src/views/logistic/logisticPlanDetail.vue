@@ -339,7 +339,8 @@
       })
       this.transportInfoArr = _.map(this.$db.logistic.transportInfoObj, (value, key) => {
         return value;
-      })
+      });
+      this.countryAll();
     },
     methods: {
       ...mapActions(['setMenuLink']),
@@ -476,7 +477,6 @@
             item.fieldDisplay.value = null;
           }
         })
-        this.countryAll();
       },
       //匹配发运状态 name
       // matchShipmentStatus(){
