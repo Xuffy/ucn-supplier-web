@@ -499,6 +499,7 @@ export const routerMap = [
       redirect: '/warehouse/overview',
       name: 'warehouse',
       meta: {
+          auth:'WAREHOUSE',
         name: $i.router.warehouse
       },
       noDropdown: false,
@@ -507,6 +508,7 @@ export const routerMap = [
           path: 'overview',
           name: 'WarehouseOverview',
           meta: {
+              auth:'WAREHOUSE:OVERVIEW',
             name: $i.router.warehouseOverview
           },
           component: () => import('../views/warehouse/warehouseOverview.vue'),
@@ -515,6 +517,7 @@ export const routerMap = [
           path: 'inbound',
           name: 'InboundOverview',
           meta: {
+              auth:'WAREHOUSE:INBOUND',
             name: $i.router.inboundOverview
           },
           component: () => import('../views/warehouse/inbound/inboundOverview.vue'),
@@ -524,6 +527,7 @@ export const routerMap = [
           name: 'createInbound',
           hidden: true,
           meta: {
+              auth:'WAREHOUSE:INBOUND:CREATE_INBOUND',
             name: $i.router.createInbound
           },
           component: () => import('../views/warehouse/inbound/createInbound'),
@@ -541,6 +545,7 @@ export const routerMap = [
           path: 'outbound',
           name: 'OutboundOverview',
           meta: {
+              auth:'WAREHOUSE:OUTBOUND',
             name: $i.router.outboundOverview
           },
           component: () => import('../views/warehouse/outbound/outboundOverview'),
@@ -550,6 +555,7 @@ export const routerMap = [
           name: 'createOutbound',
           hidden: true,
           meta: {
+              auth:'WAREHOUSE:INBOUND:CREATE_OUTBOUND',
             name: $i.router.createOutbound
           },
           component: () => import('../views/warehouse/outbound/createOutbound'),
@@ -567,9 +573,7 @@ export const routerMap = [
           path: 'qcOverview',
           name: 'qcOverview',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
+              auth:'QC:ORDER_OVERVIEW',
             name: $i.router.qcOverview
           },
           component: () => import('../views/warehouse/qc/qcOverview'),
@@ -579,6 +583,7 @@ export const routerMap = [
           name: 'qcOrder',
           hidden: true,
           meta: {
+              auth:'QC:ORDER_DETAIL',
             name: $i.router.qcOrderDetail
           },
           component: () => import('../views/warehouse/qc/qcOrder')
@@ -588,6 +593,7 @@ export const routerMap = [
           name: 'qcOrderService',
           hidden: true,
           meta: {
+              auth:'QC:ORDER_DETAIL',
             name: $i.router.qcOrderDetail
           },
           component: () => import('../views/warehouse/qc/qcOrderService')
@@ -597,6 +603,7 @@ export const routerMap = [
           name: 'qcOrderDetail',
           hidden: true,
           meta: {
+              auth:'QC:ORDER_DETAIL',
             name: $i.router.qcOrderDetail
           },
           component: () => import('../views/warehouse/qc/qcOrderDetail')

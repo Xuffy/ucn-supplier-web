@@ -5,7 +5,7 @@
                @close="dialogClose">
       <el-checkbox-group v-model="checkedList">
         <el-row>
-          <el-col :span="8" v-for="item in $db.common.quickLink" :key="item.key">
+          <el-col :span="8" v-for="item in $db.common.quickLink" :key="item.key" v-if="$auth(item.auth)">
             <el-checkbox :label="item.key">
               {{item.label}}
             </el-checkbox>
@@ -112,9 +112,7 @@
         // if (_.isEmpty(this.checkedList)) return this.quickLink.show = false;
 
         this.loading = true;
-        _.map(this.checkedList, (val, index) => {
-          data.push({bizCode: 'QUICK_LINK', itemCode: val, seqNum: index})
-        });
+        _.map(this.checkedList, (val, index) => data.push({bizCode: 'QUICK_LINK', itemCode: val, seqNum: index}));
 
         this.$ajax.post(this.$apis.ITEMFAVORITE_UPDATE, data)
           .then(() => {

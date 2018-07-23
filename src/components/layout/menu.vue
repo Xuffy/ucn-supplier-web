@@ -12,6 +12,7 @@
           <span v-text="$i.common.quickLink" style="vertical-align: middle"></span>
         </div>
         <el-menu-item v-for="(item,index) in quickLink.list"
+                      v-if="$auth(item.auth)"
                       :index="'1-' + index" :key="index">
           <el-tooltip :effect="layout.hideMenu ? 'dark' : 'light'" :content="item.label"
                       placement="right">

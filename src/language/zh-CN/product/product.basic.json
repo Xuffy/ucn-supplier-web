@@ -99,5 +99,6 @@
   "detailBig":"Detail",
   "bookmarkArchive":"Bookmark Archive",
   "compareArchive":"Compare Archive",
-  "save":"Save"
+  "save":"Save",
+  "noData":"No data"
 }

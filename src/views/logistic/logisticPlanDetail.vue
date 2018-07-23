@@ -339,7 +339,8 @@
       })
       this.transportInfoArr = _.map(this.$db.logistic.transportInfoObj, (value, key) => {
         return value;
-      })
+      });
+      this.countryAll();
     },
     methods: {
       ...mapActions(['setMenuLink']),
@@ -454,8 +455,8 @@
         this.remark = res.remark
         this.containerInfo = (res.containerDetail || []).map(el=>{el.isModify=false;return el});
         this.containerinfoMatch = this.$depthClone(res.containerDetail || []).map(el=>{el.isModify=false;return el});
-        this.feeList = (res.fee && [res.fee]).map(el=>{el.isModify=false;return el});
-        this.feeListMatch = this.$depthClone(res.fee && [res.fee]).map(el=>{el.isModify=false;return el});
+        this.feeList = (res.fee ? [res.fee] :[]).map(el=>{el.isModify=false;return el});
+        this.feeListMatch = this.$depthClone(res.fee ? [res.fee] :[]).map(el=>{el.isModify=false;return el});
         res.product = res.product.map((item, i) => {
           item.vId = i;
           return item;
@@ -476,7 +477,6 @@
             item.fieldDisplay.value = null;
           }
         })
-        this.countryAll();
       },
       //匹配发运状态 name
       // matchShipmentStatus(){
@@ -996,7 +996,7 @@
           this.$set(this.transportInfoObj, a.key, a.value)
         })
          //判断 ContainerInfo 是否修改过高亮 以便不传后台返回的修改值
-        this.oldPlanObject.containerDetail =  this.$depthClone(this.oldPlanObject.containerDetail).map(el=>{
+        this.oldPlanObject.containerDetail =   this.oldPlanObject.containerDetail&&this.$depthClone(this.oldPlanObject.containerDetail).map(el=>{
           if(!el.isModify&&'fieldDisplay' in el){
             el.fieldDisplay = {};
           }
@@ -1004,7 +1004,7 @@
         });
 
         //判断 feeInfo 是否修改过高亮 以便不传后台返回的修改值
-        this.oldPlanObject.fee =  this.$depthClone([this.oldPlanObject.fee]).map(el=>{
+        this.oldPlanObject.fee =  this.oldPlanObject.fee&&this.$depthClone([this.oldPlanObject.fee]).map(el=>{
           if(!el.isModify&&'fieldDisplay' in el){
             el.fieldDisplay = {};
           }

@@ -660,6 +660,10 @@
                             this.weightOption = v.codes;
                         }
                     });
+                    this.getProductInfo();
+                }).catch(res => {
+                    this.getProductInfo();
+                    
                 });
 
                 this.$ajax.get(this.$apis.get_currencyUnit, {}, { cache: true }).then(res => {
@@ -684,7 +688,6 @@
         },
         created() {
             this.getQcOrderDetail();
-            this.getProductInfo();
             this.getUnit();
             this.getService();
         },
