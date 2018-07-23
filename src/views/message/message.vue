@@ -1,7 +1,7 @@
 <template>
   <div class="message">
     <div class="head">
-      <el-button @click="manageMessage">{{$i.common.messageManagement}}</el-button>
+      <el-button @click="manageMessage" v-authorize="MESSAGE:MANAGEMENT">{{$i.common.messageManagement}}</el-button>
       <el-button type="primary" @click="postRead" :disabled="isResd">{{$i.common.markAsRead}}</el-button>
       <!-- <h1 style="color:red">这个页面表格要加一列title</h1> -->
     </div>
