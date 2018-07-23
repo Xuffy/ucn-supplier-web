@@ -435,8 +435,9 @@ export default {
    */
 
   $windowOpen(config) {
-    let {url, params} = config;
-    return window.open(`${window.location.origin}${config.url}?${Qs.stringify(params)}`, '_blank');
+    let {url, params} = config, str;
+    str = _.isEmpty(params) ? '' : '?';
+    return window.open(`${window.location.origin}${config.url}${str}${Qs.stringify(params)}`, '_blank');
   },
 
   $mul() {

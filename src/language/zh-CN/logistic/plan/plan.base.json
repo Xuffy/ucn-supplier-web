@@ -229,5 +229,7 @@
   "operationSuccess" : "操作成功！",
   "operationFailed" : "操作失败！",
   "jumping" : "正在跳转...",
-  "dataIsExist" : "该条数据已存在！"
+  "dataIsExist" : "该条数据已存在！",
+  "skuQty" : "订单数量",
+  "skuCartonQty" : "订单外箱数"
 }

@@ -265,6 +265,7 @@
     margin-right: 40px;
     cursor: pointer;
     vertical-align: middle;
+    transition: all .5s;
   }
 
   .logo-icon {
@@ -302,11 +303,11 @@
   }
 
   .header-right {
-    /*text-align: right;*/
-    /*padding-right: 20px;*/
     position: absolute;
     right: 20px;
     top: 0;
+    background-color: #3f3f3f;
+    padding-left: 10px;
   }
 
   .user-box {
@@ -340,6 +341,7 @@
   .el-menu-item {
     padding: 0 34px 0 0;
     border: none !important;
+    transition: all .5s;
   }
 
   .el-menu-item:hover,
@@ -490,4 +492,15 @@
   .ucn-header .el-menu--horizontal > .el-submenu:hover .el-submenu__title {
     color: #909399;
   }
+
+  .ucn-language-zh .ucn-header .el-submenu,
+  .ucn-language-zh .ucn-header .el-menu-item {
+    padding: 0 55px 0 0;
+  }
+
+  .ucn-language-zh .ucn-header .el-submenu span,
+  .ucn-language-zh .ucn-header .el-menu-item a {
+    font-size: 14px;
+  }
+
 </style>

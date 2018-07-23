@@ -58,5 +58,5 @@ export default {
     warehouseOverview,
     outboundDetailProductData,
     qcOrderDetailBasicInfo,
-  inboundProduct
+    inboundProduct
 }

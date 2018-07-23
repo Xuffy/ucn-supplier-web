@@ -6,6 +6,9 @@ export default {
   transportationWay: {
     type: 'text'
   },
+  containerNo:{
+    type: 'number'
+  },
   loadingType:{
     type: 'number'
   },

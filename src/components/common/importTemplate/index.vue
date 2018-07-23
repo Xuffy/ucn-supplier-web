@@ -24,7 +24,7 @@
             :on-exceed="handleExceed"
             :before-upload="beforeAvatarUpload"
             :file-list="fileList">
-            <el-button type="primary">{{$i.importTemplate.selectFile}}
+            <el-button type="primary">{{this.tips || $i.importTemplate.selectFile}}
               <i class="el-icon-upload el-icon--right"></i>
             </el-button>
           </el-upload>
@@ -59,6 +59,10 @@
     //传送的数据
     props: {
       code: {
+        type: String,
+        default: '',
+      },
+      tips: {
         type: String,
         default: '',
       },

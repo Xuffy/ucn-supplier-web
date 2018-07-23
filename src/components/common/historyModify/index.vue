@@ -17,7 +17,6 @@
         max-height="400px"
         style="display:flex;flex-direction:column;"
         :cell-style="setCellStyle"
-        :span-method="objectSpanMethod"
         border>
         <el-table-column v-for="(item,columnIndex) in dataColumn" :key="item.id"
                          v-if="(!item._hide && !item._hidden) || item._title"
@@ -28,7 +27,7 @@
           <template slot-scope="{ row }" v-if="row[item.key] && !row[item.key]._hide">
             <div v-if="!row[item.key]._edit || row[item.key]._title">
               {{row[item.key]._value || row[item.key].value}}
-              <p v-if="row[item.key]._title" v-text="row[item.key]._title"></p>
+              <!--<p v-if="row[item.key]._title" v-text="row[item.key]._title"></p>-->
             </div>
 
             <div v-else>
@@ -69,14 +68,15 @@
               <div v-else>
                 <!--文本输入-->
                 <el-input v-if="row[item.key].type === 'String' || row._remark" clearable
-                          @change="() => row[item.key]._isModified = true"
+                          @change="changeOperate(row[item.key],row)"
+                          :placeholder="row._remark ? $i.setting.remark :''"
                           v-model="row[item.key].value" size="mini"></el-input>
 
                 <!--数字输入-->
                 <v-input-number
                   v-else-if="row[item.key].type === 'Number'"
                   v-model="row[item.key].value"
-                  @change="() => row[item.key]._isModified = true"
+                  @change="changeOperate(row[item.key],row)"
                   :min="row[item.key].min || 0"
                   :max="row[item.key].max || 99999999"
                   controls-position="right"
@@ -233,6 +233,7 @@
         item._value = obj ? obj[item._optionLabel || 'name'] : '';
         item._isModified = true;
         this.$emit('select-change', item, row);
+        this.changeOperate(item, row);
       },
       getFilterData(data = [], k = 'id') {
         let list = [];
@@ -288,6 +289,10 @@
         if (!_.isEmpty(item) && !_.isEmpty(item._style)) {
           return item._style;
         }
+      },
+      changeOperate(item,row) {
+        item._isModified = true;
+        this.$emit('change', item, row);
       }
     },
   }
