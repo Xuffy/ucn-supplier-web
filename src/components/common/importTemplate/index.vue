@@ -17,14 +17,14 @@
           <el-upload
             :action="$apis.IMPORTFILE_IMPORTTASKE"
             :headers="{'U-Session-Token':$localStore.get('token')}"
-            :on-preview="()=>$router.push({path:'/logs/import'})"
+            :on-preview="()=>$router.push({path:'/logs/task'})"
             :limit="10"
             :data="{templateCode:code,bizCode:bizCode}"
             name="importFile"
             :on-exceed="handleExceed"
             :before-upload="beforeAvatarUpload"
             :file-list="fileList">
-            <el-button type="primary">{{$i.importTemplate.selectFile}}
+            <el-button type="primary">{{this.tips || $i.importTemplate.selectFile}}
               <i class="el-icon-upload el-icon--right"></i>
             </el-button>
           </el-upload>
@@ -35,7 +35,7 @@
             <a :href="downTemplate" v-if="downTemplate" target="_blank" v-text="$i.importTemplate.template"></a></h5>
           <h5>2.{{$i.importTemplate.remark2}}</h5>
           <h5>3.{{$i.importTemplate.remark3}}</h5>
-          <router-link to="/logs/import">
+          <router-link to="/logs/task">
             <el-button type="text">{{$i.logs.lookImportTitle}}</el-button>
           </router-link>
         </el-form-item>
@@ -59,6 +59,10 @@
     //传送的数据
     props: {
       code: {
+        type: String,
+        default: '',
+      },
+      tips: {
         type: String,
         default: '',
       },

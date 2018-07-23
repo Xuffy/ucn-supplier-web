@@ -81,6 +81,7 @@
                 v-loading="loadProductTable"
                 class="speTable"
                 :data="productTable"
+                :totalRow="totalRow"
                 :buttons="[{label:$i.warehouse.detail,type:1}]"
                 @action="btnClick"
                 @change-checked="changeChecked">
@@ -146,6 +147,7 @@
 
 
         <div class="footBtn">
+            <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
             <el-button @click="closeWindow" type="primary">{{$i.warehouse.close}}</el-button>
         </div>
 
@@ -207,28 +209,50 @@
 
                 //字典
                 skuUnitOption:[],
+              lengthUnitOption:[],
+              volumeUnitOption:[],
+              weightUnitOption:[],
+            }
+        },
+        computed:{
+            totalRow(){
+                let obj={};
+                if(this.productTable.length<=0){
+                    return;
+                }
+                _.map(this.productTable,v=>{
+                    _.mapObject(v,(item,key)=>{
+                        if(item._calculate){
+                            obj[key]={
+                                value: Number(item.value)  + (Number(obj[key] ? obj[key].value : 0) || 0),
+                            };
+                        }else{
+                            obj[key] = {
+                                value: ''
+                            };
+                        }
+                    })
+                });
+                return [obj];
+
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             getData(){
                 this.loadingTable=true;
                 this.$ajax.get(`${this.$apis.get_inboundDetail}?id=${this.$route.query.id}`).then(res=>{
                     this.inboundData=res;
-                    console.log(this.inboundData,'???')
                     this.$ajax.post(this.$apis.get_inboundSku,{
                         inboundId: this.$route.query.id,
                         pn: 1,
                         ps: 50,
-                        // sorts: [
-                        //     {
-                        //         orderBy: "",
-                        //         orderType: "",
-                        //     }
-                        // ],
                     }).then(res=>{
                         this.productTable = this.$getDB(this.$db.warehouse.inboundDetailProductTable, res.datas,(e)=>{
                             e.skuUnitDictCode._value=e.skuUnitDictCode.value?_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}).name:'';
+                            e.lengthUnitDictCode._value=e.lengthUnitDictCode.value?_.findWhere(this.lengthUnitOption,{code:e.lengthUnitDictCode.value}).name:'';
+                            e.volumeUnitDictCode._value=e.volumeUnitDictCode.value?_.findWhere(this.volumeUnitOption,{code:e.volumeUnitDictCode.value}).name:'';
+                            e.weightUnitDictCode._value=e.weightUnitDictCode.value?_.findWhere(this.weightUnitOption,{code:e.weightUnitDictCode.value}).name:'';
                         });
                         this.loadingTable=false;
                     }).catch(err=>{
@@ -256,7 +280,9 @@
             changeChecked(e){
 
             },
-
+            download(){
+                this.$fetch.export_task('INBOUND',{inboundNos:[this.inboundData.inboundNo]});
+            },
             //关闭窗口
             closeWindow(){
                 window.close();
@@ -265,12 +291,18 @@
              * 获取字典
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE','SKU_UNIT'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE','SKU_UNIT','WT_UNIT','LH_UNIT','VE_UNIT'],{cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='IBD_TYPE'){
                             this.inboundTypeOption=v.codes;
                         }else if(v.code==='SKU_UNIT'){
                             this.skuUnitOption=v.codes;
+                        }else if(v.code==='WT_UNIT'){
+                            this.weightUnitOption=v.codes;
+                        }else if(v.code==='LH_UNIT'){
+                            this.lengthUnitOption=v.codes;
+                        }else if(v.code==='VE_UNIT'){
+                            this.volumeUnitOption=v.codes;
                         }
                     });
                 });
@@ -284,7 +316,12 @@
             this.getUnit();
         },
         mounted(){
-            this.setLog({query: {code: 'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                label: this.$i.common.log
+            });
         },
     }
 </script>

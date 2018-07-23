@@ -38,7 +38,7 @@
                  style="display: inline-block;margin-left: 30px!important;"
                  @click="quickLink.show = true"></el-button>
       <br/>
-      <el-button size="mini" v-for="item in quickLink.list" :key="item.id">
+      <el-button size="mini" v-for="item in quickLink.list" :key="item.id" v-if="$auth(item.auth)">
         <router-link :to="item.link || '/'">
           {{item.label}}
         </router-link>
@@ -102,26 +102,27 @@
     },
     mounted() {
       this.userInfo.userType === 0 && this.getBasicInfo();
-     /* // µ⁄“ª÷÷ µ•∏ˆ…Ë÷√
+      /*// Á¨¨‰∏ÄÁßç Âçï‰∏™ËÆæÁΩÆ
       this.setMenuLink({
         path: '',
         query: {code: ''},
         type: 10,
+        auth: 'ADASDAS',
         label: this.$i.common.archive
       });
 
-      // ∂‡∏ˆ…Ë÷√
-      this.setMenuLink([{
-        path: '',
-        query: {code: ''},
-        type: 10,
-        label: this.$i.common.archive
-      }, {
-        path: '',
-        query: {code: ''},
-        type: 100, // type = 100  Œ™log
-        label: this.$i.common.archive
-      }]);*/
+       // Â§ö‰∏™ËÆæÁΩÆ
+       this.setMenuLink([{
+         path: '',
+         query: {code: ''},
+         type: 10,
+         label: this.$i.common.archive
+       }, {
+         path: '',
+         query: {code: ''},
+         type: 100, // type = 100  ‰∏∫log
+         label: this.$i.common.archive
+       }]);*/
 
     },
     computed: {

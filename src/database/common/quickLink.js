@@ -5,7 +5,7 @@ export default {
     customer: true,
     supplier: false,
     server: false,
-    defaultShow: true,
+    auth: ['INQUIRY:OVERVIEW:CREATE_INQUIRY']
   },
   createOrder: {
     icon: 'icon-dingdanC',
@@ -13,7 +13,7 @@ export default {
     customer: true,
     supplier: false,
     server: false,
-    defaultShow: true,
+    auth:['ORDER:OVERVIEW:CREATE']
   },
   addProduct: {
     icon: 'icon-chanpinC',
@@ -21,7 +21,7 @@ export default {
     customer: false,
     supplier: true,
     server: false,
-    defaultShow: true,
+    auth:['PRODUCT:OVERVIEW:ADD_PRODUCT']
   },
   createInbound: {
     icon: 'icon-rukuC',
@@ -29,7 +29,7 @@ export default {
     customer: false,
     supplier: true,
     server: false,
-    defaultShow: true,
+    auth:['']
   },
   createQC: {
     icon: 'icon-QCC',
@@ -37,7 +37,7 @@ export default {
     customer: true,
     supplier: false,
     server: false,
-    defaultShow: true,
+    auth:['QC:ORDER_OVERVIEW:CREATE']
   },
   createOutbound: {
     icon: 'icon-chukuC',
@@ -45,7 +45,7 @@ export default {
     customer: false,
     supplier: true,
     server: false,
-    defaultShow: true,
+    auth:['']
   },
   placeLogisticPlan: {
     icon: 'icon-wuliuC',
@@ -53,7 +53,7 @@ export default {
     customer: true,
     supplier: false,
     server: false,
-    defaultShow: true,
+    auth:['LOGISTICS:PLAN_DETAIL']
   },
   // placeLogisticOrder: {icon: '', link: ''},
   message: {
@@ -62,6 +62,7 @@ export default {
     customer: true,
     supplier: true,
     server: true,
+    auth:['']
   },
   sourcingOverview: { // todo not
     icon: '',
@@ -69,6 +70,7 @@ export default {
     customer: true,
     supplier: false,
     server: false,
+    auth:['PRODUCT:OVERVIEW']
   },
   bookmarkOverview: {
     icon: 'icon-shuqian',
@@ -76,6 +78,7 @@ export default {
     customer: true,
     supplier: false,
     server: false,
+    auth:['PRODUCT:BOOKMARK_OVERVIEW']
   },
   compareInquiryOverview: {// todo not
     icon: '',
@@ -83,6 +86,7 @@ export default {
     customer: true,
     supplier: false,
     server: false,
+    auth:['INQUIRY:COMPARE_OVERVIEW']
   },
   supplierOverview: {
     icon: 'icon-gongyingshang',
@@ -90,6 +94,7 @@ export default {
     customer: true,
     supplier: false,
     server: false,
+    auth:['SUPPLIER:OVERVIEW']
   },
   inquiryOverview: {
     icon: 'icon-xunpan',
@@ -97,6 +102,7 @@ export default {
     customer: true,
     supplier: false,
     server: false,
+    auth:['INQUIRY:OVERVIEW']
   },
   orderOverview: {
     icon: 'icon-dingdan',
@@ -104,6 +110,7 @@ export default {
     customer: true,
     supplier: true,
     server: false,
+    auth:['ORDER:OVERVIEW']
   },
   warehouseOverview: {
     icon: '',
@@ -111,6 +118,7 @@ export default {
     customer: true,
     supplier: true,
     server: false,
+    auth:['WAREHOUSE:OVERVIEW']
   },
   inboundOverview: {
     icon: 'icon-ruku',
@@ -118,6 +126,7 @@ export default {
     customer: false,
     supplier: true,
     server: false,
+    auth:['']
   },
   outboundOverview: {
     icon: 'icon-chuku',
@@ -125,6 +134,7 @@ export default {
     customer: false,
     supplier: true,
     server: false,
+    auth:['']
   },
   QCOrderOverview: {
     icon: 'icon-QC',
@@ -132,6 +142,7 @@ export default {
     customer: true,
     supplier: true,
     server: true,
+    auth:['QC:ORDER_OVERVIEW']
   },
   logisticPlanOverview: {
     icon: 'icon-wuliu',
@@ -139,6 +150,7 @@ export default {
     customer: true,
     supplier: false,
     server: false,
+    auth:['LOGISTICS:PLAN_OVERVIEW']
   },
   loadingListOrderOverview: { // todo not
     icon: '',
@@ -146,6 +158,7 @@ export default {
     customer: true,
     supplier: true,
     server: false,
+    auth:['LOADING_LIST:OVERVIEW']
   },
   track: {
     icon: 'icon-genzong',
@@ -153,6 +166,7 @@ export default {
     customer: true,
     supplier: false,
     server: false,
+    auth:['']
   },
   compareSupplierOverview: {
     icon: 'icon-duibiS',
@@ -160,6 +174,7 @@ export default {
     customer: true,
     supplier: false,
     server: false,
+    auth:['SUPPLIER:COMPARE_OVERVIEW']
   },
   productOverview: { // todo
     icon: '',
@@ -167,6 +182,7 @@ export default {
     customer: false,
     supplier: true,
     server: false,
+    auth:['PRODUCT:OVERVIEW']
   },
   customerOverview: {
     icon: 'icon-kehu',
@@ -174,5 +190,6 @@ export default {
     customer: false,
     supplier: true,
     server: true,
+    auth:['CUSTOMER:OVERVIEW']
   },
 }

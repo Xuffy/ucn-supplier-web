@@ -21,6 +21,9 @@ export default {
     entryDt:{
         _hide:true
     },
+    fieldUpdate:{
+        _hide:true
+    },
     skuPic:{
         _slot:'skuPictures',
         type:'pic',
@@ -96,21 +99,27 @@ export default {
     skuMaterialCn:{},
     skuQty:{
         _slot:'skuQty',
+        _calculate:true
     },
     skuPrice:{
         _slot:'skuPrice',
+        _calculate:true
     },
     skuQualifiedQty:{
-        _disabled:true
+        _disabled:true,
+        _calculate:true
     },
     skuUntestedQty:{
-        _disabled:true
+        _disabled:true,
+        _calculate:true
     },
     skuDeliveredQty:{
-        _disabled:true
+        _disabled:true,
+        _calculate:true
     },
     skuUndeliveredQty:{
-        _disabled:true
+        _disabled:true,
+        _calculate:true
     },
     skuRateValueAddedTax:{
         _slot:'skuRateValueAddedTax',
@@ -178,6 +187,7 @@ export default {
     skuInnerCartonUnit:{},
     skuInnerCartonQty:{
         _slot:'skuInnerCartonQty',
+        _calculate:true
     },
     skuInnerCartonLength:{
         _slot:'skuInnerCartonLength',
@@ -204,9 +214,11 @@ export default {
     skuOuterCartonDesc:{},
     skuInnerCartonOuterNum:{
         _slot:'skuInnerCartonOuterNum',
+        _calculate:true
     },
     skuOuterCartonQty:{
         _slot:'skuOuterCartonQty',
+        _calculate:true
     },
     skuOuterCartonLength:{
         _slot:'skuOuterCartonLength',
@@ -281,6 +293,7 @@ export default {
     },
     skuSampleQty:{
         _slot:'skuSampleQty',
+        _calculate:true
     },
     skuSamplePrice:{
         _slot:'skuSamplePrice',

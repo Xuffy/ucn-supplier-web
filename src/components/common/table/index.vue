@@ -10,17 +10,17 @@
                         @change="val => {$emit('filter-value',val)}"></v-filter-value>-->
 
         <v-filter-column v-if="!hideFilterColumn && code" ref="filterColumn" :code="code"
-                         @change="changeFilterColumn"></v-filter-column>
+                         @change="val => {dataList = $refs.filterColumn.getFilterData(dataList, val)}"></v-filter-column>
       </div>
     </div>
 
     <div class="table-container" ref="tableContainer">
-      <div class="fixed-left" v-if="selection"
+      <div class="fixed-left" v-if="dataList.length && selection"
            ref="fixedLeft" :class="{show:dataColumn.length}">
         <input type="checkbox" v-model="checkedAll" :class="{visibility:selectionRadio}" ref="checkboxAll"
                @change="changeCheckedAll"/>
       </div>
-      <div class="fixed-right" v-if="buttons"
+      <div class="fixed-right" v-if="dataList.length && buttons"
            ref="fixedRight" :class="{show:dataColumn.length}">
         {{$i.table.action}}
       </div>
@@ -38,12 +38,17 @@
               <div>#</div>
             </td>
             <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && item.key"
-                :class="{'sort-wrapper':item._sort}">
+                :class="{'sort-wrapper':item._sort,active:currentSort.orderBy === item.key}"
+                @click="item._sort && changeSort(item.key)">
               <div>
                 {{item.label}}
-                <div class="sort-box">
-                  <i class="el-icon-caret-top"></i>
-                  <i class="el-icon-caret-bottom"></i>
+                <div class="sort-box" v-if="!disabledSort || item._sort">
+                  <i class="el-icon-caret-top"
+                     :class="{active:currentSort.orderType === 'asc' && currentSort.orderBy === item.key}"
+                     @click.stop="changeSort(item.key,'asc')"></i>
+                  <i class="el-icon-caret-bottom"
+                     :class="{active:currentSort.orderType === 'desc' && currentSort.orderBy === item.key}"
+                     @click.stop="changeSort(item.key,'desc')"></i>
                 </div>
               </div>
             </td>
@@ -75,7 +80,7 @@
                        :src="getImage(cItem._value || cItem.value)"
                        height="30px"
                        width="30px"
-                       @click="$refs.tableViewPicture.show(cItem._value || cItem.value)"></v-image>
+                       @click="setViewPicture(cItem._value || cItem.value)"></v-image>
 
               <el-popover
                 v-else-if="cItem._upload && !item._remark"
@@ -89,14 +94,15 @@
               </el-popover>
 
               <div v-else
-                   :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
-                   v-text="cItem._value || cItem.value"></div>
+                   :style="{color:cItem._color || '','min-width': cItem._width || setWidth(cItem)}"
+                   v-text="cItem._value || cItem.value || '--'"></div>
             </td>
             <!--操作按钮显示-->
             <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
               <div style="white-space: nowrap;">
                 <span class="button"
                       v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
+                      v-authorize="aItem.auth"
                       :class="{disabled:aItem.disabled || item._disabled}"
                       @click="(!aItem.disabled && !item._disabled) && $emit('action',item,aItem.type, index)">
                   {{aItem.label || aItem}}</span>
@@ -109,7 +115,7 @@
           <tfoot ref="tableFoot" v-if="totalRow">
           <tr v-for="totalItem in totalRow">
             <td>
-              <div v-text="totalItem._totalRow ? totalItem._totalRow.label : '总计'"></div>
+              <div v-text="totalItem._totalRow ? totalItem._totalRow.label : $i.product.total"></div>
             </td>
             <td v-if="rowspan < 2">
             </td>
@@ -124,7 +130,7 @@
         </table>
 
         <div v-else class="empty">
-          {{$i.hintMessage.noData}}
+          {{loading ? $i.table.gettingData : $i.hintMessage.noData}}
         </div>
       </div>
     </div>
@@ -133,7 +139,6 @@
       <slot name="footer"></slot>
     </div>
 
-    <v-view-picture ref="tableViewPicture"></v-view-picture>
   </div>
 </template>
 
@@ -163,13 +168,13 @@
 
   import VFilterValue from './filterValue'
   import VFilterColumn from './filterColumn'
-  import VViewPicture from '../viewPicture/index'
   import VUpload from '../upload/index'
   import VImage from '../image/index'
+  import {mapActions, mapState} from 'vuex';
 
   export default {
     name: 'VTable',
-    components: {VFilterValue, VViewPicture, VImage, VFilterColumn, VUpload},
+    components: {VFilterValue, VImage, VFilterColumn, VUpload},
     props: {
       data: {
         type: Array,
@@ -212,6 +217,14 @@
         type: Boolean,
         default: false,
       },
+      nativeSort: {
+        type: [Boolean, String],
+        default: false,
+      },
+      disabledSort: {
+        type: Boolean,
+        default: false,
+      },
       totalRow: {
         type: [Boolean, Array],
         default: false,
@@ -228,6 +241,7 @@
         checkedAll: false,
         interval: null,
         tableAttr: {st: 0, sl: 0},
+        currentSort: {orderBy: '', orderType: ''}
       }
     },
     watch: {
@@ -242,9 +256,64 @@
     mounted() {
       this.setDataList(this.data, true);
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
-      this.interval = setInterval(this.updateTable, 400);
+      this.interval = setInterval(this.updateTable, 300);
     },
     methods: {
+      ...mapActions(['setViewPicture']),
+      changeSort(key, type) {
+        let params = {sorts: []};
+        if (key !== this.currentSort.orderBy) {
+          this.currentSort = this.$options.data().currentSort;
+        }
+
+        this.currentSort.orderBy = key;
+
+        if (type) {
+          this.currentSort.orderType = type;
+        } else if (this.currentSort.orderType === 'desc') {
+          this.currentSort = this.$options.data().currentSort;
+        } else {
+          this.currentSort.orderType = this.currentSort.orderType === 'asc' ? 'desc' : 'asc';
+        }
+        params.sorts = this.currentSort.orderType ? [this.currentSort] : [];
+
+        this.$emit('change-sort', params);
+      },
+      setSort(data) {
+        let sortData = [], newData = [], key
+          , sorts = this.currentSort;
+
+        if (_.isEmpty(sorts) || !this.nativeSort) {
+          return false;
+        }
+
+        if (!this.currentSort.orderType && data) {
+          return this.dataList = data;
+        }
+
+        key = _.isString(this.nativeSort) ? this.nativeSort : 'id';
+
+        _.map(this.dataList, val => {
+          if (_.isEmpty(val._remark)) {
+            sortData.push(_.mapObject(val, v => {
+              return v._value || v.value;
+            }))
+          }
+        });
+
+        sortData = _.sortBy(sortData, sorts.orderBy);
+
+        sortData = sorts.orderType === 'desc' ? sortData.reverse() : sortData;
+
+        _.map(sortData, val => {
+          _.map(this.dataList, v => {
+            if (val[key] && v[key].value === val[key]) {
+              newData.push(v);
+            }
+          });
+        });
+        this.dataList = newData;
+      },
       onFilterColumn(checked) {
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
       },
@@ -327,23 +396,23 @@
 
         this.resetFile();
         if (!this.hideFilterColumn && this.$refs.filterColumn && this.code && !_.isEmpty(val)) {
-          this.$refs.filterColumn.getConfig(false, val).then(res => {
-            let to = setTimeout(() => {
-              clearTimeout(to);
-              this.dataList = this.$refs.filterColumn.getFilterData(val, res);
-              type && this.filterColumn();
+          this.$refs.filterColumn.update(false, val).then(res => {
+            // let to = setTimeout(() => {
+            //   clearTimeout(to);
+            this.dataList = this.$refs.filterColumn.getFilterData(val, res);
+            type && this.filterColumn();
+            this.$nextTick(() => this.setSort())
 
-              // this.updateTable()
-            }, 50);
+            // }, 50);
           })
         } else {
-          let to = setTimeout(() => {
-            clearTimeout(to);
-            this.dataList = val;
-            type && this.filterColumn();
+          // let to = setTimeout(() => {
+          //   clearTimeout(to);
+          this.dataList = val;
+          // this.setSort();
+          type && this.filterColumn();
 
-            // this.updateTable()
-          }, 50);
+          // }, 50);
         }
       },
       resetFile() {
@@ -366,6 +435,15 @@
           return val;
         }));
         this.changeCheck(this.dataList, this.checkedAll);
+      },
+      update() {
+        this.$refs.filterColumn.update().then(res => {
+          this.dataList = this.$refs.filterColumn.getFilterData(this.dataList, res);
+        });
+      },
+      setWidth(item) {
+        let val = item._value || item.value;
+        return _.isString(val) && val.length > 50 ? `${val.length * 2}px` : '80px';
       }
     },
     beforeDestroy() {
@@ -451,11 +529,6 @@
 
   }
 
-  .ucn-table thead tr td {
-    /*position: absolute;*/
-    /*z-index: 9999;*/
-  }
-
   .ucn-table thead td {
     background-color: #ECEFF1;
     color: #999999;
@@ -469,11 +542,8 @@
   }
 
   .ucn-table tfoot td {
-    /*border-top: 1px solid #ebeef5;*/
-    /*border-right: 1px solid #ebeef5;*/
     box-sizing: border-box;
     position: relative;
-    /*background-color: #f6f8f9;*/
     color: #999999;
   }
 
@@ -527,23 +597,23 @@
     border-right: 1px solid #FFFFFF;
   }
 
+  .ucn-table tfoot tr:nth-child(even),
+  .ucn-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  .ucn-table tfoot tr:nth-child(even) td,
+  .ucn-table tbody tr:nth-child(even) td {
+    border-right: 1px solid #f9f9f9;
+  }
+
   .ucn-table tbody td .img {
     vertical-align: middle;
     cursor: pointer;
   }
 
-  .ucn-table thead tr:nth-child(even) td,
-  .ucn-table tbody tr:nth-child(even) td {
-    /*background-color: #fafafa;*/
-  }
-
   .ucn-table tbody tr.disabled td {
     color: #dad8d8;
-  }
-
-  .ucn-table tbody tr td:hover,
-  .ucn-table tbody tr:hover td {
-    /*background-color: #ebeff1 !important;*/
   }
 
   .ucn-table.fixed-left-box tbody tr:not(.rowspan) td:first-child,
@@ -627,10 +697,10 @@
     cursor: pointer;
   }
 
-  thead td:not(.sort-wrapper) .sort-box {
+  /*thead td:not(.sort-wrapper) .sort-box {
     display: none;
     cursor: initial;
-  }
+  }*/
 
   .sort-box {
     display: inline-flex;
@@ -645,6 +715,7 @@
     opacity: 0;
   }
 
+  .sort-wrapper.active .sort-box,
   .sort-wrapper:hover .sort-box {
     opacity: 1;
   }
@@ -653,6 +724,7 @@
     height: 10px;
   }
 
+  .sort-box i.active,
   .sort-box i:hover {
     color: #409EFF;
   }

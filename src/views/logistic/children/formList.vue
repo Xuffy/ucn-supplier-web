@@ -7,10 +7,10 @@
         <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
 
           <el-form-item v-if="DeliveredEdit&&a.key=='actDepartureDate'&&a.type === 'date'" :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'">
-              <el-date-picker v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
+              <el-date-picker v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" :placeholder="$i.logistic.pleaseChoose" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
           </el-form-item>
           <!-- <el-form-item v-if="DeliveredEdit&&a.key=='logisticsStatus'&&a.type === 'selector'" :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'">
-              <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" placeholder="请输入内容" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
+              <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.pleaseChoose" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
                 <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
                   v-if="selectArr[a.key]" />
               </el-select>
@@ -21,18 +21,25 @@
           </el-form-item>
           <div v-if="edit">
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'input'">
-              <el-input placeholder="请输入内容" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" v-model="a.value" :disabled="a.disabled" @change="selectChange(a.value,a.key)"/>
+              <el-input :placeholder="$i.logistic.pleaseChoose" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" v-model="a.value" :disabled="a.disabled" @change="selectChange(a.value,a.key)"/>
             </el-form-item>
 
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'selector'">
-              <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" placeholder="请输入内容" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
+              <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.pleaseChoose" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
                 <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
                   v-if="selectArr[a.key]" />
               </el-select>
             </el-form-item>
+            
+            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'filterable'">
+              <el-select filterable v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.placeholder" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
+                <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr.country" :key="item.id"
+                  v-if="selectArr.country" />
+              </el-select>
+            </el-form-item>
 
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'date'">
-              <el-date-picker format="yyyy-MM-dd" v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
+              <el-date-picker format="yyyy-MM-dd" v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" :placeholder="$i.logistic.pleaseChoose" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
             </el-form-item>
           </div>
         </el-col>
@@ -49,8 +56,7 @@
         type:Object,
         default (){
           return {
-            color: '#f56c6c',
-            'text-shadow': '2px 1px 2px'
+            background:'yellow'
           }
         }
       },
@@ -125,6 +131,10 @@
           let obj = this.selectArr[a.key].find(item => item.code == a.value)
           return obj ? obj.name : null
         }
+        if(a.type === 'filterable' && this.selectArr.country){
+          let obj = this.selectArr.country.find(item => item.code == a.value)
+          return obj ? obj.name : null
+        }
       }
     },
   }
@@ -151,6 +161,9 @@
     }
   }
   .form {
+    /deep/.el-form-item--mini .el-form-item__content{
+      line-height: 26px;
+    }
     /deep/.el-form-item p{
       min-width: 150px;
     }
@@ -164,8 +177,7 @@
       min-width: 150px;
     }
     /deep/.definedStyleClass input{
-      background:#f56c6c;
-      color:#fff;
+      background:yellow;
     }
   }
 

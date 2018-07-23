@@ -26,12 +26,15 @@
                         :data="tableDataList"
                         :buttons="[{label: $i.warehouse.detail, type: 1}]"
                         @change-checked="changeChecked"
+                        @change-sort="val=>{getQcData(val)}"
                         @action="btnClick">
-                    <!--<template slot="header">-->
-                        <!--<div class="btns">-->
-                            <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
-                        <!--</div>-->
-                    <!--</template>-->
+                    <template slot="header">
+                        <div class="btns">
+                            <el-button
+                                    v-authorize="'QC:ORDER_OVERVIEW:DOWNLOAD'"
+                                    @click="download">{{$i.warehouse.download}}({{selectList.length?selectList.length:$i.warehouse.all}})</el-button>
+                        </div>
+                    </template>
                 </v-table>
                 <page
                         :page-sizes="[50,100,200,500]"
@@ -73,32 +76,28 @@
                     ps: 50,
                     qcOrderNo: '',
                     qcStatusDictCode: '',
-                    // sorts: [
-                    //     {
-                    //         orderBy: "string",
-                    //         orderType: "string",
-                    //     }
-                    // ],
                 },
                 searchId:1,
                 searchOptions:[
                     {
-                        label:'验货单号',
+                        label:this.$i.warehouse.qcOrderNo,
                         id:1
                     },
                 ]
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             changeStatus(){
                 this.qcOrderConfig.pn=1;
                 this.getQcData();
             },
 
             //获取表格数据
-            getQcData(){
+            getQcData(e){
                 this.loadingTable=true;
+                this.selectList=[];
+                Object.assign(this.qcOrderConfig,e);
                 this.$ajax.post(this.$apis.get_qcOrderData,this.qcOrderConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.warehouse.qcOverview, res.datas,e=>{
                         e.qcMethodDictCode.value=this.$change(this.qcMethodsOption,'qcMethodDictCode',e).name;
@@ -152,6 +151,12 @@
                     })
                 }
             },
+            download(){
+                let qcOrderNos=_.pluck(_.pluck(this.selectList,'qcOrderNo'),'value');
+                let params=this.$depthClone(this.qcOrderConfig);
+                params.qcOrderNos=qcOrderNos;
+                this.$fetch.export_task('QC_ORDER',params);
+            },
 
             changeChecked(e){
                 this.selectList=e;
@@ -191,7 +196,13 @@
             this.getUnit();
         },
         mounted(){
-            this.setLog({query: {code: 'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                auth:'QC:LOG',
+                label: this.$i.common.log
+            });
         },
         watch:{
             selectList(n){

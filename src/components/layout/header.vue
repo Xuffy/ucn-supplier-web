@@ -8,9 +8,9 @@
 
 
           <template v-for="(item,index) in routerList">
-
-            <el-menu-item v-if="item.children.length && item.noDropdown && !item.hidden && menuAuth(item)"
-                          :index="index + ''">
+            <el-menu-item
+              v-if="item.children.length && item.noDropdown && !item.hidden && menuAuth(item)"
+              :index="index + ''">
               <router-link class="link"
                            :to="item.path+'/'+item.children[0].path">
                 {{item.meta ? item.meta.name : ''}}
@@ -39,7 +39,17 @@
         </el-menu>
       </div>
 
-      <div class="header-right" style="color: #999999!important;">
+      <div class="header-right" style="color: #999999!important;line-height: 57px">
+        <el-dropdown placement="bottom">
+          <span class="icon-menu"><i class="iconfont icon-duoyuyan"></i></span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="item in languageOption" :key="item.type">
+              <span @click="changeLanguage(item)" v-text="item.label"></span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+
+
         <div class="message-box" v-popover:messageBox>
           <el-badge :value="message.count || ''">
             <i class="el-icon-bell"></i>
@@ -77,13 +87,14 @@
           </el-popover>
         </div>
 
-        <div style="display: inline-block">
-          <el-dropdown trigger="click">
-            <a href="javascript:void(0)" class="el-dropdown-link" style="cursor: pointer">
-              {{userInfo.userType === 0 ? $i.common.admin : $i.common.user}}&nbsp;&nbsp;|&nbsp;&nbsp;
-            </a>
+        <div class="user-box">
+          <el-dropdown placement="bottom">
+            <a href="javascript:void(0)" class="" style="cursor: pointer">
+              {{userInfo.userName || 'User Name'}}
+            </a>&nbsp;&nbsp;|&nbsp;&nbsp;
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item><span @click="clearData">{{$i.common.cleanCache}}</span></el-dropdown-item>
+              <el-dropdown-item disabled>Signed in as {{userInfo.userName || 'User Name'}}</el-dropdown-item>
+              <el-dropdown-item divided><span @click="clearData">{{$i.common.cleanCache}}</span></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <a href="javascript:void(0)" @click="logout">
@@ -109,6 +120,10 @@
         routerList: [],
         activeName: null,
         activeOpen: [],
+        languageOption: [
+          {type: 'zh-CN', label: '简体中文'},
+          {type: 'en', label: 'English'},
+        ],
         message: {
           count: 0,
           show: false,
@@ -120,7 +135,6 @@
     watch: {
       $route() {
         this.updateMenuActive();
-        // this.getMessage();
       },
       'message.show'(val) {
         val && this.getMessage();
@@ -207,7 +221,16 @@
         history.go(0);
       },
       menuAuth(item) {
-        return !(item.meta && item.meta.auth && !this.$auth(item.meta.auth));
+        if (item.meta && item.meta.auth) {
+          return this.$auth(item.meta.auth);
+        }
+        return true;
+      },
+      changeLanguage({type}) {
+        if (this.$localStore.get('language') !== type) {
+          this.$localStore.set('language', type);
+          this.clearData();
+        }
       }
     },
   }
@@ -223,7 +246,6 @@
     position: fixed;
     width: 100%;
     z-index: 999;
-    min-width: 1366px;
     overflow: hidden;
   }
 
@@ -235,17 +257,19 @@
 
   .header {
     height: 100%;
-    line-height: 60px;
     background-color: @header-back;
   }
 
   .logo {
-    /*width: 90px;*/
-    /*margin-left: 20px;*/
     margin-left: 20px;
-    margin-right: 20px;
+    margin-right: 40px;
     cursor: pointer;
     vertical-align: middle;
+    transition: all .5s;
+  }
+
+  .logo-icon {
+    margin-right: 15px;
   }
 
   .title {
@@ -279,19 +303,30 @@
   }
 
   .header-right {
-    /*text-align: right;*/
-    /*padding-right: 20px;*/
     position: absolute;
     right: 20px;
     top: 0;
+    background-color: #3f3f3f;
+    padding-left: 10px;
   }
 
   .user-box {
     vertical-align: middle;
+    display: inline-block;
   }
 
-  .user-box .ivu-icon-person {
-    font-size: 20px;
+  .user-box a {
+    transition: all .5s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 80px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .user-box a:hover {
+    color: #eeeeee;
   }
 
   .el-menu--horizontal {
@@ -304,8 +339,9 @@
 
   .el-submenu,
   .el-menu-item {
-    padding: 0 0 0 2.7vw;
+    padding: 0 34px 0 0;
     border: none !important;
+    transition: all .5s;
   }
 
   .el-menu-item:hover,
@@ -387,6 +423,18 @@
     text-align: right;
     color: #CDCDCD;
   }
+
+  .icon-menu {
+    vertical-align: middle;
+    display: inline-block;
+  }
+
+  .icon-menu i {
+    font-size: 20px;
+    color: #eeeeee;
+    margin-right: 10px;
+    cursor: pointer;
+  }
 </style>
 <style>
   .message-popover {
@@ -418,6 +466,8 @@
     font-size: 12px;
     padding: 0;
     padding-right: 5px;
+    border: none;
+    line-height: 58px;
   }
 
   .ucn-header-menu .el-menu--horizontal > .el-menu-item a {
@@ -442,4 +492,15 @@
   .ucn-header .el-menu--horizontal > .el-submenu:hover .el-submenu__title {
     color: #909399;
   }
+
+  .ucn-language-zh .ucn-header .el-submenu,
+  .ucn-language-zh .ucn-header .el-menu-item {
+    padding: 0 55px 0 0;
+  }
+
+  .ucn-language-zh .ucn-header .el-submenu span,
+  .ucn-language-zh .ucn-header .el-menu-item a {
+    font-size: 14px;
+  }
+
 </style>

@@ -1,11 +1,13 @@
 <template>
-    <div class="create-inbound">
+    <div class="create-inbound" v-loading="loadingPage">
         <div class="title">
             {{$i.warehouse.basicInfo}}
         </div>
         <el-form ref="basicInfo" class="speForm" label-width="200px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.warehouse.inbound" v-if="v.belong==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:8" :md="v.fullLine?24:8" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col class="speCol" v-for="v in $db.warehouse.inbound" v-if="v.belong==='basicInfo'" :key="v.key"
+                        :xs="24" :sm="v.fullLine?24:8" :md="v.fullLine?24:8" :lg="v.fullLine?24:8"
+                        :xl="v.fullLine?24:8">
                     <el-form-item :label="v.label" :required="v._rules?v._rules.required:false">
                         <div v-if="v.showType==='input'">
                             <el-input
@@ -16,7 +18,8 @@
                                     :placeholder="v.sysCreate?$i.warehouse.systemGeneration:$i.warehouse.pleaseInput"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
-                            <el-select class="speInput" size="mini" v-model="inboundData[v.key]" :placeholder="$i.warehouse.pleaseChoose">
+                            <el-select class="speInput" size="mini" v-model="inboundData[v.key]"
+                                       :placeholder="$i.warehouse.pleaseChoose">
                                 <el-option
                                         v-for="item in inboundTypeOption"
                                         :key="item.id"
@@ -77,8 +80,11 @@
             {{$i.warehouse.productInfo}}
         </div>
         <div class="btns">
-            <el-button type="primary" :disabled="loadingProductTable" @click="addProduct">{{$i.warehouse.addProduct}}</el-button>
-            <el-button @click="removeProduct" :disabled="selectOuterProductList.length===0" type="danger">{{$i.warehouse.removeProduct}}</el-button>
+            <el-button type="primary" :disabled="loadingProductTable" @click="addProduct">{{$i.warehouse.addProduct}}
+            </el-button>
+            <el-button @click="removeProduct" :disabled="selectOuterProductList.length===0" type="danger">
+                {{$i.warehouse.removeProduct}}
+            </el-button>
         </div>
 
         <el-table
@@ -99,8 +105,9 @@
             </el-table-column>
             <el-table-column
                     v-for="v in $db.warehouse.inboundOrderProductTable"
+                    :class-name="v.must ? 'ucn-table-required' : ''"
                     :key="v.key"
-                    :label="(v.must?'*':'')+$i.warehouse[v.key]"
+                    :label="$i.warehouse[v.key]"
                     :prop="v.key"
                     align="center"
                     width="180">
@@ -119,19 +126,19 @@
                     </div>
                     <div v-else-if="v.showType==='input'">
                         <!--<div v-if="v.needInput">-->
-                            <!--<el-input-->
-                                    <!--placeholder="请输入内容"-->
-                                    <!--v-model="scope.row[v.key]"-->
-                                    <!--@focus="handleBlur"-->
-                                    <!--clearable>-->
-                            <!--</el-input>-->
+                        <!--<el-input-->
+                        <!--placeholder="请输入内容"-->
+                        <!--v-model="scope.row[v.key]"-->
+                        <!--@focus="handleBlur"-->
+                        <!--clearable>-->
+                        <!--</el-input>-->
                         <!--</div>-->
                         <!--<div v-else>-->
-                            <el-input
-                                    :placeholder="$i.warehouse.pleaseInput"
-                                    v-model="scope.row[v.key]"
-                                    clearable>
-                            </el-input>
+                        <el-input
+                                :placeholder="$i.warehouse.pleaseInput"
+                                v-model="scope.row[v.key]"
+                                clearable>
+                        </el-input>
                         <!--</div>-->
                     </div>
                     <div v-else-if="v.showType==='select'">
@@ -165,45 +172,11 @@
                     align="center"
                     width="100">
                 <template slot-scope="scope">
-                    <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                    <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
-
-        <div class="total">
-            <div class="title">
-                {{$i.warehouse.summary}}
-            </div>
-            <el-form :modal="inboundData" label-width="200px" :label-position="labelPosition">
-                <el-row>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.cartonOfProducts">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundData.skuTotalCartonQty"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.grossWeightOfProducts">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundData.skuTotalGrossWeight"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.volumeOfProducts">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundData.skuTotalVolume"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.netWeightOfProducts">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundData.skuTotalNetWeight"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.quantityOfProducts">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundData.skuTotalQty"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-        </div>
 
         <div class="footBtn">
             <el-button :loading="disabledSubmit" @click="submit" type="primary">{{$i.warehouse.submit}}</el-button>
@@ -218,38 +191,36 @@
                 <el-row>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="orderNo" :label="$i.warehouse.orderNo">
-                            <el-select clearable size="mini" class="speInput" v-model="orderProduct.orderNo" filterable :placeholder="$i.warehouse.pleaseChoose">
-                                <el-option
-                                        v-for="item in orderNoOption"
-                                        :key="item.id"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput"
+                                      v-model="orderProduct.orderNo"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuCode" :label="$i.warehouse.skuCode">
-                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput" v-model="orderProduct.skuCode"></el-input>
+                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput"
+                                      v-model="orderProduct.skuCode"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuNameCn" :label="$i.warehouse.skuNameCn">
-                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput" v-model="orderProduct.skuNameCn"></el-input>
+                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput"
+                                      v-model="orderProduct.skuNameCn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuBarCode" :label="$i.warehouse.skuBarCode">
-                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput" v-model="orderProduct.skuBarCode"></el-input>
+                            <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput"
+                                      v-model="orderProduct.skuBarCode"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
             <div class="search-btn">
-                <el-button :disabled="disabledSearch" :loading="disabledClickSubmit" @click="searchOrderData" type="primary">{{$i.warehouse.search}}</el-button>
+                <el-button :disabled="disabledSearch" :loading="disabledClickSubmit" @click="searchOrderData"
+                           type="primary">{{$i.warehouse.search}}
+                </el-button>
                 <el-button :disabled="disabledCancelSearch" @click="clearSearchData">{{$i.warehouse.clear}}</el-button>
             </div>
-
             <v-table
                     code="uwarehouse_inbound_sku"
                     :height="500"
@@ -272,195 +243,194 @@
 
 <script>
 
-    import {VTimeZone,VTable,VUpload,VPagination} from '@/components/index'
+    import { VTimeZone, VTable, VUpload, VPagination } from "@/components/index";
 
     export default {
         name: "createInbound",
-        components:{
+        components: {
             VTable,
             VTimeZone,
             VUpload,
             VPagination
         },
-        data(){
-            return{
+        data() {
+            return {
                 /**
                  * 页面基础配置
                  * */
-                labelPosition:'right',
-                disabledSubmit:false,
-                orderNoOption:[],
-                pickerOptions1: {
-                    // disabledDate(time) {
-                    //     return time.getTime() > Date.now();
-                    // },
-                },
-                addOrderDialogVisible:false,
-                productTableData:[],
-                selectProductList:[],
-                loadingProductTable:false,
-                inboundTypeOption:[],
-                pageData:{},
+                labelPosition: "right",
+                disabledSubmit: false,
+                orderNoOption: [],
+                pickerOptions1: {},
+                addOrderDialogVisible: false,
+                productTableData: [],
+                selectProductList: [],
+                loadingProductTable: false,
+                inboundTypeOption: [],
+                pageData: {},
+                loadingPage:false,
 
                 /**
                  * 外部展示数据
                  * */
-                productIds:[],                  //用于存储用于外部展示的产品ID
-                productData:[],                 //添加到外部用于展示的产品详细信息
-                inboundData:{
-                    inboundNo:'',       //新建的时候不传
-                    inboundDate:'',
-                    warehouseNo:'',
-                    warehouseName:'',
-                    inboundTypeDictCode:'',
-                    warehouseManager:'',
-                    remark:'',
-                    purchaser:'',
-                    carrier:'',
-                    carrierPhone:'',
-                    timeZone:'',
-                    attachments:[],
-                    inboundSkuBeanCreateParams:[],      //新增的产品数组
+                productIds: [],                  //用于存储用于外部展示的产品ID
+                productData: [],                 //添加到外部用于展示的产品详细信息
+                inboundData: {
+                    inboundNo: "",       //新建的时候不传
+                    inboundDate: "",
+                    warehouseNo: "",
+                    warehouseName: "",
+                    inboundTypeDictCode: "",
+                    warehouseManager: "",
+                    remark: "",
+                    purchaser: "",
+                    carrier: "",
+                    carrierPhone: "",
+                    timeZone: "",
+                    attachments: [],
+                    inboundSkuBeanCreateParams: [],      //新增的产品数组
                     //新增的产品总计
                     skuTotalCartonQty: 0,
                     skuTotalGrossWeight: 0,
                     skuTotalNetWeight: 0,
                     skuTotalQty: 0,
-                    skuTotalVolume: 0,
+                    skuTotalVolume: 0
                 },
-                selectOuterProductList:[],
+                selectOuterProductList: [],
                 /**
                  * 弹出框数据
                  * */
-                selectList:[],
-                loadingTable:false,
-                tableDataList:[],           //弹出框表格数据
+                selectList: [],
+                loadingTable: false,
+                tableDataList: [],           //弹出框表格数据
 
                 //btns禁用状态
-                disabledSearch:true,
-                disabledCancelSearch:true,
-                disabledClickSubmit:false,
+                disabledSearch: true,
+                disabledCancelSearch: true,
+                disabledClickSubmit: false,
 
                 //add order product搜索数据
-                orderProduct:{
+                orderProduct: {
                     orderNo: "",
                     pn: 1,
                     ps: 50,
-                    skuCode:"",
+                    skuCode: "",
                     skuBarCode: "",
-                    skuNameCn: "",
+                    skuNameCn: ""
                 },
 
-
                 //字典
-                skuUnitOption:[],
-            }
+                skuUnitOption: [],
+                lengthUnitOption: [],
+                volumeUnitOption: [],
+                weightUnitOption: []
+            };
         },
-        methods:{
-            //新增产品
-            addProduct(){
+        methods: {
+            getInboudNo(){
+                this.loadingPage=true;
+                this.$ajax.post(this.$apis.GET_WAREHOUSE_NO,{
+                    type:'inbound_no'
+                }).then(res=>{
+                    this.getUnit();
+                    this.inboundData.inboundNo=res.content;
+                }).catch(err=>{
+                    this.loadingPage=false;
+                })
+            },
+            addProduct() {
                 //先把在外部的数据的id取出来，拿到内部去对比
-                this.selectList=[];
-                this.addOrderDialogVisible=true;
+                this.selectList = [];
+                this.addOrderDialogVisible = true;
                 this.getProductData();
             },
-            getProductData(){
-                this.loadingTable=true;
-                this.disabledSearch=true;
-                this.disabledCancelSearch=true;
+            getProductData() {
+                this.loadingTable = true;
+                this.disabledSearch = true;
+                this.disabledCancelSearch = true;
                 //请求弹出框数据
-                this.$ajax.post(this.$apis.get_productInfo,this.orderProduct).then(res=>{
-                    this.orderNoOption=[];
-                    _.uniq(_.pluck(res.datas, 'orderNo')).forEach((v,k)=>{
+                this.$ajax.post(this.$apis.get_productInfo, this.orderProduct).then(res => {
+                    this.orderNoOption = [];
+                    _.uniq(_.pluck(res.datas, "orderNo")).forEach((v, k) => {
                         this.orderNoOption.push({
-                            id:k+1,
-                            value:v,
-                            label:v
+                            id: k + 1,
+                            value: v,
+                            label: v
                         });
                     });
                     this.tableDataList = this.$getDB(this.$db.warehouse.inboundOrderTable, res.datas);
                     /**
                      * 每次打开弹窗时进行置灰判断
                      * */
-                    this.tableDataList.forEach(v=>{
-                        if(v.skuId.value===0){  //id为0的是脏数据，不能选
-                            this.$set(v,'_disabled',true);
-                        }else{
-
-                            this.productData.forEach(m=>{
-                                if(v.skuId.value===m.skuId && m.orderNo===v.orderNo.value){
-                                    this.$set(v,'_disabled',true);
-                                    this.$set(v,'_checked',true);
-                                    this.selectList.push(v);
+                    this.tableDataList.forEach(v => {
+                        if (v.skuId.value === 0) {  //id为0的是脏数据，不能选
+                            this.$set(v, "_disabled", true);
+                        } else {
+                            this.productData.forEach(m => {
+                                if (v.skuId.value === m.skuId && m.orderNo === v.orderNo.value) {
+                                    this.$set(v, "_disabled", true);
+                                    this.$set(v, "_checked", true);
                                 }
                             });
                         }
                     });
-                    this.pageData=res;
-                }).finally(err=>{
-                    this.disabledSearch=false;
-                    this.disabledCancelSearch=false;
-                    this.loadingTable=false;
+                    this.pageData = res;
+                }).finally(() => {
+                    this.disabledSearch = false;
+                    this.disabledCancelSearch = false;
+                    this.loadingTable = false;
                 });
             },
-
-            //移除产品
-            removeProduct(){
+            removeProduct() {
                 this.$confirm(this.$i.warehouse.sureRemove, this.$i.warehouse.prompt, {
                     confirmButtonText: this.$i.warehouse.sure,
                     cancelButtonText: this.$i.warehouse.cancel,
-                    type: 'warning'
+                    type: "warning"
                 }).then(() => {
-                    this.productData=_.difference(this.productData,this.selectOuterProductList);
-                    console.log(this.productData,'data')
+                    this.productData = _.difference(this.productData, this.selectOuterProductList);
                     this.$message({
-                        type: 'success',
+                        type: "success",
                         message: this.$i.warehouse.removeSuccess
                     });
                 }).catch(() => {
                 });
             },
-
-            //提交表单
-            submit(){
-                if(this.$validateForm(this.inboundData, this.$db.warehouse.inbound)){
+            submit() {
+                if (this.$validateForm(this.inboundData, this.$db.warehouse.inbound)) {
                     return;
                 }
-                if(this.productData.length===0){
+                if (this.productData.length === 0) {
                     return this.$message({
                         message: this.$i.warehouse.pleaseAddProduct,
-                        type: 'warning'
+                        type: "warning"
                     });
                 }
-
-                for (let i=0;i<this.productData.length;i++){
-                  if(this.$validateForm(this.productData[i], this.$db.warehouse.inboundProduct)){
-                    return;
-                  }
+                for (let i = 0; i < this.productData.length; i++) {
+                    if (this.$validateForm(this.productData[i], this.$db.warehouse.inboundProduct)) {
+                        return;
+                    }
                 }
-                /*let allow=true;
-                let mustKey=['inboundOutCartonTotalQty','skuOuterCartonVolume','skuOuterCartonRoughWeight','skuOuterCartonNetWeight','skuNetWeight','skuInnerCartonLength','skuInnerCartonWidth','skuInnerCartonHeight','skuInnerCartonWeightNet','skuInnerCartonRoughWeight','skuInnerCartonVolume'];
-                console.log(this.productData)
-                _.map(this.productData,v=>{
-                    _.map(mustKey,k=>{
-                        if(v[k]!==0 && v[k]!=='0' && !v[k]){
-                          console.log(k)
-                            allow=false;
+                this.productData.forEach(v => {
+                    let productUnit = {};
+                    _.map(this.skuUnitOption, data => {
+                        if (v.skuUnit === data.name) {
+                            productUnit.skuUnit = data.code;
                         }
-                    })
-                });
-                if(!allow){
-                    return this.$message({
-                        message: this.$i.warehouse.keywordMustInput,
-                        type: 'warning'
                     });
-                }
-*/
-                this.productData.forEach(v=>{
-                    let skuUnit;
-                    _.map(this.skuUnitOption,data=>{
-                        if(v.skuUnit===data.name){
-                            skuUnit=data.code;
+
+                    _.map(this.lengthUnitOption, data => {
+                        if (v.skuUnitLength === data.name) {
+                            productUnit.lengthUnitDictCode = data.code;
+                        }
+                    });
+                    _.map(this.volumeUnitOption, data => {
+                        if (v.skuUnitVolume === data.name) {
+                            productUnit.volumeUnitDictCode = data.code;
+                        }
+                    });
+                    _.map(this.weightUnitOption, data => {
+                        if (v.skuUnitWeight === data.name) {
+                            productUnit.weightUnitDictCode = data.code;
                         }
                     });
                     this.inboundData.inboundSkuBeanCreateParams.push({
@@ -468,19 +438,19 @@
                         customerNo: v.customerNo,
                         customerOrderNo: v.customerOrderNo,
                         customerSkuCode: v.skuCustomerSkuCode,
-                        factorySkuCode: v.factorySkuCode?v.factorySkuCode:'',
-                        inboundOutCartonTotalQty: v.inboundOutCartonTotalQty?v.inboundOutCartonTotalQty:0,
-                        inboundSkuTotalGrossWeight: v.inboundSkuTotalGrossWeight?v.inboundSkuTotalGrossWeight:0,
-                        inboundSkuTotalNetWeight: v.inboundSkuTotalNetWeight?v.inboundSkuTotalNetWeight:0,
-                        inboundSkuTotalQty: v.inboundSkuTotalQty?v.inboundSkuTotalQty:0,
-                        inboundSkuTotalVolume: v.inboundSkuTotalVolume?v.inboundSkuTotalVolume:0,
-                        innerCartonGrossWeight: v.skuInnerCartonRoughWeight?v.skuInnerCartonRoughWeight:0,
-                        innerCartonHeight: v.skuInnerCartonHeight?v.skuInnerCartonHeight:0,
-                        innerCartonLength: v.skuInnerCartonLength?v.skuInnerCartonLength:0,
-                        innerCartonNetWeight: v.skuInnerCartonWeightNet?v.skuInnerCartonWeightNet:0,
+                        factorySkuCode: v.factorySkuCode ? v.factorySkuCode : "",
+                        inboundOutCartonTotalQty: v.inboundOutCartonTotalQty ? v.inboundOutCartonTotalQty : 0,
+                        inboundSkuTotalGrossWeight: v.inboundSkuTotalGrossWeight ? v.inboundSkuTotalGrossWeight : 0,
+                        inboundSkuTotalNetWeight: v.inboundSkuTotalNetWeight ? v.inboundSkuTotalNetWeight : 0,
+                        inboundSkuTotalQty: v.inboundSkuTotalQty ? v.inboundSkuTotalQty : 0,
+                        inboundSkuTotalVolume: v.inboundSkuTotalVolume ? v.inboundSkuTotalVolume : 0,
+                        innerCartonGrossWeight: v.skuInnerCartonRoughWeight ? v.skuInnerCartonRoughWeight : 0,
+                        innerCartonHeight: v.skuInnerCartonHeight ? v.skuInnerCartonHeight : 0,
+                        innerCartonLength: v.skuInnerCartonLength ? v.skuInnerCartonLength : 0,
+                        innerCartonNetWeight: v.skuInnerCartonWeightNet ? v.skuInnerCartonWeightNet : 0,
                         innerCartonPackingMethodCn: v.skuInnerCartonMethodCn,
-                        innerCartonVolume: v.skuInnerCartonVolume?v.skuInnerCartonVolume:0,
-                        innerCartonWidth: v.skuInnerCartonWidth?v.skuInnerCartonWidth:0,
+                        innerCartonVolume: v.skuInnerCartonVolume ? v.skuInnerCartonVolume : 0,
+                        innerCartonWidth: v.skuInnerCartonWidth ? v.skuInnerCartonWidth : 0,
                         /**
                          * inventory,outbound暂时全部传0
                          * */
@@ -497,10 +467,10 @@
                         outboundSkuTotalNetWeight: 0,
                         outboundSkuTotalQty: 0,
                         outboundSkuTotalVolume: 0,
-                        outerCartonGrossWeight: v.skuOuterCartonRoughWeight?v.skuOuterCartonRoughWeight:0,
-                        outerCartonNetWeight: v.skuOuterCartonNetWeight?v.skuOuterCartonNetWeight:0,
-                        outerCartonSkuQty: v.skuOuterCartonQty?v.skuOuterCartonQty:0,
-                        outerCartonVolume: v.skuOuterCartonVolume?v.skuOuterCartonVolume:0,
+                        outerCartonGrossWeight: v.skuOuterCartonRoughWeight ? v.skuOuterCartonRoughWeight : 0,
+                        outerCartonNetWeight: v.skuOuterCartonNetWeight ? v.skuOuterCartonNetWeight : 0,
+                        outerCartonSkuQty: v.skuOuterCartonQty ? v.skuOuterCartonQty : 0,
+                        outerCartonVolume: v.skuOuterCartonVolume ? v.skuOuterCartonVolume : 0,
                         packingMethodCn: v.skuMethodPkgCn,
                         skuBarCode: v.skuBarCode,
                         skuBrand: v.skuBrand,
@@ -508,53 +478,53 @@
                         skuDescCn: v.skuDescCn,
                         skuDescCustomer: v.skuDescCustomer,
                         skuDescEn: v.skuDescEn,
-                        skuHeight: v.skuHeight?v.skuHeight:0,
+                        skuHeight: v.skuHeight ? v.skuHeight : 0,
                         skuId: v.skuId,
                         skuLabel: v.skuLabel,
-                        skuLength: v.skuLength?v.skuLength:0,
+                        skuLength: v.skuLength ? v.skuLength : 0,
                         skuMaterialCn: v.skuMaterialCn,
                         skuMaterialEn: v.skuMaterialEn,
                         skuNameCn: v.skuNameCn,
                         skuNameCustomer: v.skuNameCustomer,
                         skuNameEn: v.skuNameEn,
-                        skuNetWeight: v.skuNetWeight?v.skuNetWeight:0,
-                        skuUnitDictCode: skuUnit,
-                        skuWidth: v.skuWidth?v.skuWidth:0,
-                        supplierId: 0,
-                        supplierName: v.supplierName,
-                        supplierNo: v.supplierNo,
-                        supplierOrderNo: v.supplierOrderNo,
+                        skuNetWeight: v.skuNetWeight ? v.skuNetWeight : 0,
+                        skuUnitDictCode: productUnit.skuUnit,
+                        lengthUnitDictCode: productUnit.lengthUnitDictCode,
+                        volumeUnitDictCode: productUnit.volumeUnitDictCode,
+                        weightUnitDictCode: productUnit.weightUnitDictCode,
+                        skuWidth: v.skuWidth ? v.skuWidth : 0,
+                        supplierId: v.skuSupplierId,
+                        supplierName: v.skuSupplierName,
+                        supplierNo: v.skuSupplierCode,
+                        supplierOrderNo: v.supplierOrderNo
                     });
                 });
                 this.inboundData.attachments = this.$refs.attachmentUpload[0].getFiles();
-                this.disabledSubmit=true;
-                this.$ajax.post(this.$apis.add_inbound,this.inboundData).then(res=>{
+                this.disabledSubmit = true;
+                this.$ajax.post(this.$apis.add_inbound, this.inboundData).then(res => {
                     this.$message({
                         message: this.$i.warehouse.submitSuccess,
-                        type: 'success'
+                        type: "success"
                     });
-                    this.$router.push('/warehouse/inbound');
-                }).finally(()=>{
-                    this.disabledSubmit=false;
+                    this.$router.push("/warehouse/inbound");
+                }).finally(() => {
+                    this.disabledSubmit = false;
                 });
             },
-
-            cancel(){
+            cancel() {
                 window.close();
             },
-            //改变product table选中状态时触发的事件
-            changeProductChecked(e){
-                this.selectOuterProductList=e;
+            changeProductChecked(e) {
+                this.selectOuterProductList = e;
             },
-            //表格统计
             getSummaries(param) {
                 const { columns, data } = param;
                 const sums = [];
                 columns.forEach((column, index) => {
                     if (index === 0) {
-                        sums[index] = '总价';
-                    }else{
-                        if(index===11 || index===12 || index===13 || index===14 || index===15 || index===16 || index===17){
+                        sums[index] = this.$i.warehouse.total;
+                    } else {
+                        if (index === 14 || index === 15 || index === 16 || index === 17 || index === 18 || index === 19) {
                             const values = data.map(item => Number(item[column.property]));
                             if (!values.every(value => isNaN(value))) {
                                 sums[index] = values.reduce((prev, curr) => {
@@ -569,17 +539,17 @@
                             } else {
                                 sums[index] = 0;
                             }
-                            if(index===12){
-                                this.inboundData.skuTotalQty=sums[index];
-                            }else if(index===13){
-                                this.inboundData.skuTotalCartonQty=sums[index];
-                            }else if(index===14){
-                                this.inboundData.skuTotalVolume=sums[index];
-                            }else if(index===15){
-                                this.inboundData.skuTotalNetWeight=sums[index];
-                            }else if(index===16){
-                                this.inboundData.skuTotalGrossWeight=sums[index];
-                            }else if(index===17){
+                            if (index === 12) {
+                                this.inboundData.skuTotalQty = sums[index];
+                            } else if (index === 13) {
+                                this.inboundData.skuTotalCartonQty = sums[index];
+                            } else if (index === 14) {
+                                this.inboundData.skuTotalVolume = sums[index];
+                            } else if (index === 15) {
+                                this.inboundData.skuTotalNetWeight = sums[index];
+                            } else if (index === 16) {
+                                this.inboundData.skuTotalGrossWeight = sums[index];
+                            } else if (index === 17) {
 
                             }
                         }
@@ -592,125 +562,85 @@
             /**
              * 弹出框事件
              * */
-            searchOrderData(){
-                this.loadingTable=true;
-                this.disabledClickSubmit=true;
-                this.$ajax.post(this.$apis.get_productInfo,this.orderProduct).then(res=>{
+            searchOrderData() {
+                this.loadingTable = true;
+                this.disabledClickSubmit = true;
+                this.$ajax.post(this.$apis.get_productInfo, this.orderProduct).then(res => {
                     this.tableDataList = this.$getDB(this.$db.warehouse.inboundOrderTable, res.datas);
                     /**
                      * 每次搜索时进行置灰判断
                      * */
-                    this.tableDataList.forEach(v=>{
-                        if(v.skuId.value===0){  //id为0的是脏数据，不能选
-                            this.$set(v,'_disabled',true);
-                        }else{
-                            this.productData.forEach(m=>{
-                                if(v.skuId.value===m.skuList[0].skuId){
-                                    this.$set(v,'_disabled',true);
-                                    this.$set(v,'_checked',true);
+                    this.tableDataList.forEach(v => {
+                        if (v.skuId.value === 0) {  //id为0的是脏数据，不能选
+                            this.$set(v, "_disabled", true);
+                        } else {
+                            this.productData.forEach(m => {
+                                if (v.skuId.value === m.skuList[0].skuId) {
+                                    this.$set(v, "_disabled", true);
+                                    this.$set(v, "_checked", true);
                                 }
                             });
                         }
                     });
-                    this.pageData=res;
-                }).finally(err=>{
-                    this.loadingTable=false;
-                    this.disabledClickSubmit=false;
+                    this.pageData = res;
+                }).finally(err => {
+                    this.loadingTable = false;
+                    this.disabledClickSubmit = false;
                 });
             },
-            clearSearchData(){
-                this.orderProduct.orderNo='';
-                this.orderProduct.skuCode='';
-                this.orderProduct.skuBarCode='';
-                this.orderProduct.skuNameCn='';
+            clearSearchData() {
+                this.orderProduct.orderNo = "";
+                this.orderProduct.skuCode = "";
+                this.orderProduct.skuBarCode = "";
+                this.orderProduct.skuNameCn = "";
             },
-            changeChecked(e){
-                this.selectList=e;
+            changeChecked(e) {
+                this.selectList = _.filter(e,(val)=>{
+                    return !val._disabled
+                });
             },
-            postData(){
-                this.productIds=[];
-                let arr=this.$copyArr(this.selectList);
-                if(arr.length===0){
-                    return this.$message({
-                        message: this.$i.warehouse.pleaseChooseProduct,
-                        type: 'warning'
-                    });
-                }
-                let orderNos=[];
-                arr.forEach(v=>{
-                    if(v._checked && !v._disabled && v.skuId.value!==0){
-                        v._checked=false;
-                        v._disabled=false;
-                        this.productIds.push(v.skuId.value);
+            postData() {
+                this.productIds = [];
+                let arr = this.$copyArr(this.selectList);
+                let orderNos = [];
+                arr.forEach(v => {
+                    if (v._checked && !v._disabled && v.skuId.value !== 0) {
+                        v._checked = false;
+                        v._disabled = false;
+                        this.productIds.push(v.id.value);
                         orderNos.push(v.orderNo.value);
                     }
                 });
-                if(this.productIds.length!==0){
+                if (this.productIds.length !== 0) {
                     //表示有新增产品
-                    this.loadingProductTable=true;
-                    this.$ajax.post(this.$apis.get_orderSku,{
-                        skuIds:this.productIds,
-                        orderNos:orderNos
-                    }).then(res=>{
-                        _.map(res,v=>{
-                            _.map(v.skuList,e=>{
-                                e.customerOrderNo=v.customerOrderNo;
-                                e.customerNo=v.customerNo;
-                                e.skuCustomsNameCn=v.skuCustomsNameCn;
-                                e.supplierName=v.supplierName;
-                                e.supplierCode=v.supplierCode;
-                                e.supplierOrderNo=v.supplierOrderNo;
-                                e.customerName=v.customerName;
+                    this.loadingProductTable = true;
+                    this.$ajax.post(this.$apis.get_orderSku, { ids: this.productIds }).then(res => {
+                        _.map(res, v => {
+                            _.map(v.skuList, e => {
+                                e.customerOrderNo = v.customerOrderNo;
+                                e.customerNo = v.customerNo;
+                                e.skuCustomsNameCn = v.skuCustomsNameCn;
+                                e.supplierName = v.supplierName;
+                                e.supplierCode = v.supplierCode;
+                                e.supplierOrderNo = v.supplierOrderNo;
+                                e.customerName = v.customerName;
+
+                                e.skuUnit =(_.findWhere(this.skuUnitOption, { code: String(e.skuUnit) }) || {}).name;
+                                e.skuUnitLength = (_.findWhere(this.lengthUnitOption, { code: String(e.skuUnitLength) }) || {}).name;
+                                e.skuUnitVolume = (_.findWhere(this.volumeUnitOption, { code: String(e.skuUnitVolume) }) || {}).name;
+                                e.skuUnitWeight = (_.findWhere(this.weightUnitOption, { code: String(e.skuUnitWeight) }) || {}).name;
+
                                 this.productData.push(e);
-                            })
+                            });
                         });
-                        console.log(this.productData,'this.productData')
-                        console.log(this.skuUnitOption,'this.skuUnitOption')
-                        _.map(this.productData,v=>{
-                            v.skuUnit=v.skuUnit?_.findWhere(this.skuUnitOption,{code:String(v.skuUnit)}).name:'';
-                        })
-
-                        /**
-                         * 计算底部summary
-                         * */
-                        // inboundOutCartonTotalQty
-                        let skuTotalCartonQty=0,
-                            skuTotalGrossWeight=0,
-                            skuTotalNetWeight=0,
-                            skuTotalQty=0,
-                            skuTotalVolume=0;
-
-                        // this.productData.forEach(v=>{
-                        //     if(v.inboundOutCartonTotalQty){
-                        //         skuTotalCartonQty+=v.inboundOutCartonTotalQty;
-                        //     }
-                        //     if(v.inboundSkuTotalGrossWeight){
-                        //         skuTotalGrossWeight+=v.inboundSkuTotalGrossWeight;
-                        //     }
-                        //     if(v.inboundSkuTotalNetWeight){
-                        //         skuTotalNetWeight+=v.inboundSkuTotalNetWeight;
-                        //     }
-                        //     if(v.inboundSkuTotalQty){
-                        //         skuTotalQty+=v.inboundSkuTotalQty;
-                        //     }
-                        //     if(v.inboundSkuTotalVolume){
-                        //         skuTotalVolume+=v.inboundSkuTotalVolume;
-                        //     }
-                        // });
-                        // this.$set(this.inboundData,'skuTotalCartonQty',skuTotalCartonQty);
-                        // this.$set(this.inboundData,'skuTotalGrossWeight',skuTotalGrossWeight);
-                        // this.$set(this.inboundData,'skuTotalNetWeight',skuTotalNetWeight);
-                        // this.$set(this.inboundData,'skuTotalQty',skuTotalQty);
-                        // this.$set(this.inboundData,'skuTotalVolume',skuTotalVolume);
-                        this.loadingProductTable=false;
-                    }).catch(err=>{
-                        this.loadingProductTable=false;
+                    }).finally(() => {
+                        this.loadingProductTable = false;
                     });
                 }
                 this.clearSearchData();
-                this.addOrderDialogVisible=false;
+                this.addOrderDialogVisible = false;
             },
-            closeDialog(){
+            closeDialog() {
                 this.addOrderDialogVisible = false;
                 this.clearSearchData();
             },
@@ -718,146 +648,148 @@
             /**
              * 分页操作
              * */
-            changePage(e){
-                this.orderProduct.pn=e;
+            changePage(e) {
+                this.orderProduct.pn = e;
                 this.getProductData();
             },
-            changeSize(e){
-                this.orderProduct.ps=e;
+            changeSize(e) {
+                this.orderProduct.ps = e;
                 this.getProductData();
             },
-
-
 
             /**
              * 页面表格事件
              * */
-            handleBlur(e,index){
-                if(e==='inboundOutCartonTotalQty'){
+            handleBlur(e, index) {
+                if (e === "inboundOutCartonTotalQty") {
                     //处理入库产品总箱数输入框
-                    if(!this.productData[index][e] || !this.productData[index]['skuOuterCartonQty']){
-                        this.productData[index].inboundSkuTotalQty='';
-                    }else{
-                        this.productData[index].inboundSkuTotalQty=this.productData[index][e]*this.productData[index]['skuOuterCartonQty'];
+                    if (!this.productData[index][e] || !this.productData[index]["skuOuterCartonQty"]) {
+                        this.productData[index].inboundSkuTotalQty = "";
+                    } else {
+                        this.productData[index].inboundSkuTotalQty = this.productData[index][e] * this.productData[index]["skuOuterCartonQty"];
                     }
 
                     //处理入库产品总净重
-                    if(!this.productData[index][e] || !this.productData[index]['skuOuterCartonNetWeight']){
-                        this.productData[index].inboundSkuTotalNetWeight='';
-                    }else{
-                        this.productData[index].inboundSkuTotalNetWeight=this.productData[index][e]*this.productData[index]['skuOuterCartonNetWeight'];
+                    if (!this.productData[index][e] || !this.productData[index]["skuOuterCartonNetWeight"]) {
+                        this.productData[index].inboundSkuTotalNetWeight = "";
+                    } else {
+                        this.productData[index].inboundSkuTotalNetWeight = this.productData[index][e] * this.productData[index]["skuOuterCartonNetWeight"];
                     }
 
                     //处理入库产品总毛重
-                    if(!this.productData[index][e] || !this.productData[index]['skuOuterCartonRoughWeight']){
-                        this.productData[index].inboundSkuTotalGrossWeight='';
-                    }else{
-                        this.productData[index].inboundSkuTotalGrossWeight=this.productData[index][e]*this.productData[index]['skuOuterCartonRoughWeight'];
+                    if (!this.productData[index][e] || !this.productData[index]["skuOuterCartonRoughWeight"]) {
+                        this.productData[index].inboundSkuTotalGrossWeight = "";
+                    } else {
+                        this.productData[index].inboundSkuTotalGrossWeight = this.productData[index][e] * this.productData[index]["skuOuterCartonRoughWeight"];
                     }
 
                     //处理入库产品总体积
-                    if(!this.productData[index][e] || !this.productData[index]['skuOuterCartonVolume']){
-                        this.productData[index].inboundSkuTotalVolume='';
-                    }else{
-                        this.productData[index].inboundSkuTotalVolume=this.productData[index][e]*this.productData[index]['skuOuterCartonVolume'];
+                    if (!this.productData[index][e] || !this.productData[index]["skuOuterCartonVolume"]) {
+                        this.productData[index].inboundSkuTotalVolume = "";
+                    } else {
+                        this.productData[index].inboundSkuTotalVolume = this.productData[index][e] * this.productData[index]["skuOuterCartonVolume"];
                     }
-                }else if(e==='skuOuterCartonVolume'){
+                } else if (e === "skuOuterCartonVolume") {
                     //处理外箱体积
-                    if(!this.productData[index]['inboundOutCartonTotalQty'] || !this.productData[index]['skuOuterCartonVolume']){
-                        this.productData[index].inboundSkuTotalVolume='';
-                    }else{
-                        this.productData[index].inboundSkuTotalVolume=this.productData[index]['inboundOutCartonTotalQty']*this.productData[index]['skuOuterCartonVolume'];
+                    if (!this.productData[index]["inboundOutCartonTotalQty"] || !this.productData[index]["skuOuterCartonVolume"]) {
+                        this.productData[index].inboundSkuTotalVolume = "";
+                    } else {
+                        this.productData[index].inboundSkuTotalVolume = this.productData[index]["inboundOutCartonTotalQty"] * this.productData[index]["skuOuterCartonVolume"];
                     }
-                }else if(e==='skuOuterCartonRoughWeight'){
+                } else if (e === "skuOuterCartonRoughWeight") {
                     //处理外箱毛重
-                    if(!this.productData[index]['inboundOutCartonTotalQty'] || !this.productData[index]['skuOuterCartonRoughWeight']){
-                        this.productData[index].inboundSkuTotalGrossWeight='';
-                    }else{
-                        this.productData[index].inboundSkuTotalGrossWeight=this.productData[index]['inboundOutCartonTotalQty']*this.productData[index]['skuOuterCartonRoughWeight'];
+                    if (!this.productData[index]["inboundOutCartonTotalQty"] || !this.productData[index]["skuOuterCartonRoughWeight"]) {
+                        this.productData[index].inboundSkuTotalGrossWeight = "";
+                    } else {
+                        this.productData[index].inboundSkuTotalGrossWeight = this.productData[index]["inboundOutCartonTotalQty"] * this.productData[index]["skuOuterCartonRoughWeight"];
                     }
-                }else if(e==='skuOuterCartonNetWeight'){
+                } else if (e === "skuOuterCartonNetWeight") {
                     //处理外箱净重
-                    if(!this.productData[index]['inboundOutCartonTotalQty'] || !this.productData[index]['skuOuterCartonNetWeight']){
-                        this.productData[index].inboundSkuTotalNetWeight='';
-                    }else{
-                        this.productData[index].inboundSkuTotalNetWeight=this.productData[index]['inboundOutCartonTotalQty']*this.productData[index]['skuOuterCartonNetWeight'];
+                    if (!this.productData[index]["inboundOutCartonTotalQty"] || !this.productData[index]["skuOuterCartonNetWeight"]) {
+                        this.productData[index].inboundSkuTotalNetWeight = "";
+                    } else {
+                        this.productData[index].inboundSkuTotalNetWeight = this.productData[index]["inboundOutCartonTotalQty"] * this.productData[index]["skuOuterCartonNetWeight"];
                     }
                 }
             },
-            handleClick(e){
+            handleClick(e) {
                 this.$windowOpen({
-                    url:'/product/detail',
-                    params:{
-                        id:e.skuId
+                    url: "/product/detail",
+                    params: {
+                        id: e.skuId
                     }
-                })
+                });
             },
 
             /**
              * 获取字典
              * */
-            getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['IBD_TYPE','SKU_UNIT'],{cache:true}).then(res=>{
-                    res.forEach(v=>{
-                        if(v.code==='IBD_TYPE'){
-                            this.inboundTypeOption=v.codes;
-                        }else if(v.code==='SKU_UNIT'){
-                            this.skuUnitOption=v.codes;
+            getUnit() {
+                this.$ajax.post(this.$apis.get_partUnit, ["IBD_TYPE", "SKU_UNIT", "WT_UNIT", "LH_UNIT", "VE_UNIT"], { cache: true }).then(res => {
+                    res.forEach(v => {
+                        if (v.code === "IBD_TYPE") {
+                            this.inboundTypeOption = v.codes;
+                        } else if (v.code === "SKU_UNIT") {
+                            this.skuUnitOption = v.codes;
+                        } else if (v.code === "WT_UNIT") {
+                            this.weightUnitOption = v.codes;
+                        } else if (v.code === "LH_UNIT") {
+                            this.lengthUnitOption = v.codes;
+                        } else if (v.code === "VE_UNIT") {
+                            this.volumeUnitOption = v.codes;
                         }
-                    })
+                    });
+                }).finally(()=>{
+                    this.loadingPage=false;
                 });
-
-                // this.$ajax.get(this.$apis.get_allUnit,).then(res=>{
-                //     console.log(res)
-                // });
-            },
-
+            }
         },
-        created(){
-            this.getUnit();
+        created() {
+            this.getInboudNo();
         },
-        watch:{
-
-        }
-    }
+        watch: {}
+    };
 </script>
 
 <style scoped>
-    .title{
+    .title {
         font-weight: bold;
         font-size: 16px;
         height: 32px;
         line-height: 32px;
-        color:#666666;
+        color: #666666;
     }
 
-    .btns{
+    .btns {
         margin-top: 5px;
     }
 
-    .speInput{
+    .speInput {
         width: 80%;
         max-width: 1000px !important;
     }
-    .speInput >>> .el-select{
+
+    .speInput >>> .el-select {
         display: block;
     }
 
-    .search-btn{
+    .search-btn {
         text-align: center;
     }
 
-    .total{
+    .total {
         margin-top: 80px;
     }
-    .product-table{
+
+    .product-table {
         margin-top: 10px;
     }
-    .product-table >>> .el-checkbox{
+
+    .product-table >>> .el-checkbox {
         margin: 0;
     }
 
-    .footer{
+    .footer {
         background-color: #ffffff;
         position: fixed;
         bottom: 0;
@@ -865,8 +797,7 @@
         padding: 10px;
     }
 
-
-    .footBtn{
+    .footBtn {
         border-top: 1px solid #e0e0e0;
         height: 40px;
         line-height: 40px;
@@ -875,9 +806,10 @@
         left: 0;
         bottom: 0;
         width: 100%;
-        z-index:5;
+        z-index: 5;
     }
-    .dialog-footer{
+
+    .dialog-footer {
         text-align: center;
     }
 

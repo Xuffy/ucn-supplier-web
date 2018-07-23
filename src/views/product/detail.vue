@@ -45,7 +45,11 @@
                     <el-button @click="editProduct">{{$i.product.edit}}</el-button>
                     <el-button :loading="disabledSetupBtn" @click="setUpDown">{{btnInfo}}</el-button>
                     <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
-                    <!--<el-button :loading="disabledDeleteBtn" type="danger" @click="deleteProduct">{{$i.product.delete}}</el-button>-->
+                    <el-button @click="()=>$refs.importCategory.show()" :tips="$i.product.uploadTips">{{$i.product.upload}}</el-button>
+                    <el-button
+                            :loading="disabledDeleteBtn"
+                            type="danger"
+                            @click="deleteProduct">{{$i.product.delete}}</el-button>
                 </div>
             </div>
         </div>
@@ -125,6 +129,7 @@
                     </v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
+                    <span v-if="!productForm.attachments" class="noData">{{$i.product.noData}}</span>
                     <v-upload :limit="20" readonly :list="productForm.attachments" ref="uploadAttachmemt"></v-upload>
                 </el-tab-pane>
                 <!--<el-tab-pane :label="$t('productSeller.page.remark')" name="Remark">-->
@@ -133,11 +138,13 @@
                 <!--</el-tab-pane>-->
             </el-tabs>
         </div>
+
+        <v-import-template ref="importCategory" code="BIZ_SKU_SUPPLIER_IMPORT" biz-code="BIZ_SKU_SUPPLIER_IMPORT"></v-import-template>
     </div>
 </template>
 
 <script>
-    import {VTable,VImage,VUpload} from '@/components/index'
+    import {VTable,VImage,VUpload,VImportTemplate} from '@/components/index'
     import addTable from '../product/addlineTable'
     import {mapActions} from 'vuex'
 
@@ -147,7 +154,8 @@
             addTable,
             VTable,
             VImage,
-            VUpload
+            VUpload,
+            VImportTemplate
         },
         data(){
             return{
@@ -338,13 +346,7 @@
             }
         },
         methods:{
-            ...mapActions(['setLog']),
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-            },
+            ...mapActions(['setMenuLink']),
             handleClick(){
                 //切换tab页
             },
@@ -430,8 +432,6 @@
                     }
                 });
             },
-
-            //设置商品上/下架状态
             setUpDown(){
                 let info,status,successInfo,url;
                 if(this.productForm.status===1){
@@ -469,43 +469,29 @@
                     }).catch(err=>{
                         this.disabledSetupBtn=false;
                     });
-                    //
-                    //
-                    // this.$ajax.post(`${this.$apis.change_productStatus}?status=${status}`,{
-                    //     id:this.productForm.id,
-                    // }).then(res=>{
-                    //
-                    // }).catch(err=>{
-                    //
-                    // });
                 }).catch(() => {
 
                 });
             },
-
-            //添加新产品
             addNewProduct(){
                 this.$windowOpen({
                     url:"/product/addNewProduct",
                 })
             },
-
-            //删除产品
             deleteProduct(){
-                this.$confirm('是否确认删除该商品?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
+                    confirmButtonText: this.$i.product.sure,
+                    cancelButtonText: this.$i.product.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.disabledDeleteBtn=true;
                     this.$ajax.post(this.$apis.delete_product,{id:this.productForm.id}).then(res=>{
                         this.$message({
                             type: 'success',
-                            message: '删除成功!'
+                            message: this.$i.product.deleteSuccess
                         });
-                        this.$router.push('/sellerProduct/overview');
-                        this.disabledDeleteBtn=false;
-                    }).catch(err=>{
+                        this.$router.push('/product/overview');
+                    }).finally(()=>{
                         this.disabledDeleteBtn=false;
                     });
                 }).catch(() => {
@@ -518,12 +504,6 @@
             },
         },
         mounted(){
-            // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-            //     console.log(res)
-            // })
-
-
-
             this.loadingTable=true;
             this.$ajax.post(this.$apis.get_partUnit,['ITM','SKU_UNIT','ED_UNIT','QUARANTINE_TYPE','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS'],{cache:true}).then(res=>{
                 res.forEach(v => {
@@ -558,7 +538,20 @@
             }).finally(()=>{
                 this.loadingTable=false;
             });
-            this.setLog({query: {code: 'PRODUCT'}});
+            this.setMenuLink([{
+                path: "/logs/index",
+                query: { code: "PRODUCT" },
+                type: 10,
+                auth: "PRODUCT:LOG",
+                label: this.$i.common.log
+            },
+                {
+                    path: "archive",
+                    type: 20,
+                    auth: "PRODUCT:ARCHIVE",
+                    label: this.$i.common.archive
+                }
+            ]);
         },
     }
 </script>
@@ -640,6 +633,10 @@
     }
     .speForm .el-row .list .el-input{
         width: 80%;
+    }
+    .noData{
+        font-size: 14px;
+        color: #606266;
     }
 
 

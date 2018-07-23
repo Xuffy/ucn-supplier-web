@@ -6,7 +6,8 @@ export default {
         _hide:true
     },
     skuPics: {
-        _image:true
+        _image:true,
+        _sort:false
     },
     skuInventoryStatusDictCode:{},
     skuQcStatusDictCode:{},

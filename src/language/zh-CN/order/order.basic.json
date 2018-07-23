@@ -64,5 +64,6 @@
   "recover":"恢复",
   "archiveOrder":"归档订单",
   "archiveDraft":"归档草稿",
-  "detail":"详情"
+  "detail":"详情",
+  "skuNo":"SKU货号"
 }

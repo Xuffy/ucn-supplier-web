@@ -281,6 +281,8 @@
                 :editable="false"
                 v-model="addUser.birthday"
                 type="date"
+                format="yyyy-MM-dd"
+                @change="() => addUser.birthday = $dateFormat(addUser.birthday, 'yyyy-mm-dd')"
                 :placeholder="$i.setting.pleaseChoose">
               </el-date-picker>
             </el-form-item>
@@ -423,7 +425,6 @@
       this.getUnit();
     },
     mounted() {
-      this.setLog({query: {code: 'departmentSetting'}});
     },
     watch: {
       searchDepartment(val) {
@@ -437,7 +438,6 @@
       },
     },
     methods: {
-      ...mapActions(['setLog']),
       pageSizeChange(val) {
         this.userListPage.ps = val;
         this.getDepartmentUser();
@@ -715,7 +715,7 @@
           delete params.userId;
         }
 
-        params.birthday = this.$dateFormat(params.birthday, 'yyyy-mm-dd');
+        // params.birthday = this.$dateFormat(params.birthday, 'yyyy-mm-dd');
 
         this.$ajax.post(this.$apis.add_departmentUser, params)
           .then(res => {
@@ -735,7 +735,7 @@
 
       },
       disabledUser(userId, type = true) {
-        this.$confirm(`是否确认${type ? 'disable' : 'enable'}用户`, '提示', {
+        this.$confirm(type ? this.$i.setting.disabledUser : this.$i.setting.enabledUser, this.$i.hintMessage.systemHints, {
           confirmButtonText: this.$i.button.confirm,
           cancelButtonText: this.$i.button.ccancel,
           type: 'warning'
@@ -752,32 +752,25 @@
         let emails = [];
 
         this.inviteUserLoading = true;
-        _.map(this.selectList, v => {
-          emails.push(v.email.value);
-        });
+        _.map(this.selectList, v => emails.push(v.email.value));
 
         this.$ajax.post(this.$apis.invite_departmentUser,
           {
             emails,
             callback: `${config.ENV.LOGIN_URL}/#/activation?activeToken=%s&email=%s&redirect=${Base64.encode(window.location.origin + '/#/login')}`
           })
-          .then(res => {
-            this.$message.success('邀请成功');
-          }).finally(err => {
-          this.inviteUserLoading = false;
-        });
+          .then(res => this.$message.success(this.$i.setting.invitationSuccess))
+          .finally(() => this.inviteUserLoading = false);
       },
       getUnit() {
         this.$ajax.post(this.$apis.get_partUnit, ['LANGUAGE'], {cache: true})
-          .then(res => {
-            this.languageOption = res[0].codes;
-          });
+          .then(res => this.languageOption = res[0].codes);
       },
       savePrivilege() {
         let nodes = [], dataNodes
           , params = {resourceCodes: [], domainCodes: []};
 
-        nodes = this.$refs.privilegeTree.getCheckedNodes(true);
+        nodes = this.$refs.privilegeTree.getHalfCheckedNodes().concat(this.$refs.privilegeTree.getCheckedNodes());
         dataNodes = this.$refs.privilegeTree.getNode('dataAll');
         this.loadingPrivilege = true;
 
@@ -817,19 +810,16 @@
             this.getPrivilegeResource(),
             this.getPrivilegeData()
           ]).then(() => {
-            let checked = [];
-            if (!_.isEmpty(res.selectedDomainUserIds)) {
-              let users = [];
-              _.mapObject(res.selectedDomainUserIds, (val, key) => {
-                _.map(val, v => users.push(`${key}_${v}`));
-              })
-              checked = checked.concat(users);
-            }
+            let checked = []
+              , resourceCodeStr = res.selectedResourceCodes.join(',');
 
-            if (!_.isEmpty(res.selectedResourceCodes)) {
-              checked = checked.concat(res.selectedResourceCodes);
-            }
-            this.$refs.privilegeTree.setCheckedKeys(checked)
+            !_.isEmpty(res.selectedDomainUserIds)
+            && _.mapObject(res.selectedDomainUserIds, (val, key) => _.map(val, v => checked.push(`${key}_${v}`)));
+
+            !_.isEmpty(res.selectedResourceCodes)
+            && _.map(res.selectedResourceCodes, val => resourceCodeStr.indexOf(`${val}:`) === -1 && checked.push(val));
+
+            this.$refs.privilegeTree.setCheckedKeys(checked);
           });
         });
       },
@@ -853,7 +843,6 @@
             return {name: val.bizDomainName, code: val.bizDomainCode, children: users};
           });
 
-          console.log(list)
           this.privilegeData[1].children = list;
         });
       }

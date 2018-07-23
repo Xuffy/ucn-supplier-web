@@ -185,7 +185,7 @@ export default {
         this.bodyData.recycleSupplier = 1;
         break;
     }
-
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
     this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
       .then(data => this.setDic(codeUtils.convertDicValueType(data)))
       .then(this.getInquiryList);

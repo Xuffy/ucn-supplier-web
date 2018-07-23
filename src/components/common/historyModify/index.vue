@@ -7,32 +7,34 @@
       :close-on-click-modal="false"
       :visible.sync="showDialog">
 
+      <div style="width: 100%;text-align: right">
+        <v-filter-column v-if="code" ref="filterColumn" :code="code"
+                         @change="val => {dataList = $refs.filterColumn.getFilterData(dataList, val)}"></v-filter-column>
+      </div>
+
       <el-table
         :data="dataList"
         max-height="400px"
         style="display:flex;flex-direction:column;"
-        :span-method="objectSpanMethod"
+        :cell-style="setCellStyle"
         border>
-        <el-table-column v-for="item in dataColumn" :key="item.id"
-                         v-if="!item._hide"
+        <el-table-column v-for="(item,columnIndex) in dataColumn" :key="item.id"
+                         v-if="(!item._hide && !item._hidden) || item._title"
                          min-width="200px"
+                         :fixed="!!item._title"
                          :prop="item.key"
                          :label="item.label">
-
           <template slot-scope="{ row }" v-if="row[item.key] && !row[item.key]._hide">
             <div v-if="!row[item.key]._edit || row[item.key]._title">
               {{row[item.key]._value || row[item.key].value}}
-              <p v-if="row[item.key]._title" v-text="row[item.key]._title"></p>
+              <!--<p v-if="row[item.key]._title" v-text="row[item.key]._title"></p>-->
             </div>
-
-            <!--<div v-else-if="row[item.key]._image">
-              <v-image class="img" :src="getImage(item._value || item.value)" height="30px" width="30px"></v-image>
-            </div>-->
 
             <div v-else>
               <span
                 v-if="(row[item.key]._disabled && !row._remark) || (!isModify && !row[item.key]._upload) || (!isModify && row._remark)"
-                v-text="row[item.key]._value || row[item.key].value"></span>
+                v-text="row[item.key]._value || row[item.key].value">
+              </span>
 
               <!--附件上传-->
               <div v-else-if="row[item.key]._upload && !row._remark">
@@ -40,7 +42,7 @@
                   placement="bottom"
                   width="300"
                   trigger="click">
-                  <v-upload @change="val => {changeUploadFile(val,row[item.key])}"
+                  <v-upload @change="(val,type) => {changeUploadFile(val,row[item.key],type)}"
                             :limit="row[item.key]._upload.limit || 5"
                             :ref="item.key + 'Upload'"
                             :only-image="row[item.key]._image"
@@ -66,27 +68,28 @@
               <div v-else>
                 <!--文本输入-->
                 <el-input v-if="row[item.key].type === 'String' || row._remark" clearable
-                          @change="() => row[item.key]._isModified = true"
+                          @change="changeOperate(row[item.key],row)"
+                          :placeholder="row._remark ? $i.setting.remark :''"
                           v-model="row[item.key].value" size="mini"></el-input>
 
                 <!--数字输入-->
-                <el-input-number
+                <v-input-number
                   v-else-if="row[item.key].type === 'Number'"
                   v-model="row[item.key].value"
-                  @change="() => row[item.key]._isModified = true"
+                  @change="changeOperate(row[item.key],row)"
                   :min="row[item.key].min || 0"
                   :max="row[item.key].max || 99999999"
                   controls-position="right"
                   size="mini"
                   :controls="false"
-                  style="width:100%;"></el-input-number>
+                  style="width:100%;"></v-input-number>
 
                 <!--下拉选项-->
                 <el-select
                   v-else-if="row[item.key].type === 'Select' && row[item.key]._option"
                   clearable
                   v-model="row[item.key].value"
-                  @change="val => {changeSelect(val,row[item.key])}"
+                  @change="val => {changeSelect(val,row[item.key],row)}"
                   :placeholder="$i.order.pleaseChoose">
                   <el-option
                     v-for="(optionItem,index) in row[item.key]._option"
@@ -113,11 +116,12 @@
 <script>
   import VUpload from '../upload/index';
   import VImage from '../image/index';
-  // testData = testData.content.details;
+  import VFilterColumn from '../table/filterColumn';
+  import VInputNumber from '../inputNumber/index';
 
   export default {
     name: 'VHistoryModify',
-    components: {VUpload, VImage},
+    components: {VUpload, VImage, VFilterColumn, VInputNumber},
     props: {
       visible: {
         type: Boolean,
@@ -128,7 +132,10 @@
         default: false
       },
       beforeSave: Function,
-      closeBefore: Function
+      code: {
+        type: String,
+        default: '',
+      }
     },
     data() {
       return {
@@ -156,26 +163,24 @@
         this.modified = true;
 
         data[0] = _.mapObject(data[0], (val, key) => {
-          let files;
-          if (val._upload && _.isObject(val._upload)) {
+          let files,
             uploadVm = this.$refs[key + 'Upload'];
+          if (val._upload && _.isObject(val._upload) && !_.isEmpty(uploadVm)) {
             uploadVm = _.isArray(uploadVm) ? uploadVm[0] : uploadVm;
             files = uploadVm.getFiles(true);
             val.value = files.key;
             val._value = files.url;
           }
           return val;
-        })
+        });
+
         if (typeof this.beforeSave === 'function' && this.beforeSave(data) === false) {
-          return;
+          return false;
         }
 
-        if (this.closeBefore) {
-          this.closeBefore(data, () => this.showDialog = false)
-        } else {
-          this.$emit('save', data);
-          this.showDialog = false
-        }
+        this.disabledRemark && data.pop();
+        this.$emit('save', data);
+        this.showDialog = false
       },
       getImage(value, split = ',') {
         if (_.isEmpty(value)) return '';
@@ -185,6 +190,8 @@
         return value[0];
       },
       init(editData, history = [], isModify = true) {
+        let dataList = [];
+
         if (isModify && (_.isEmpty(editData) || !_.isArray(editData))) {
           return false
         }
@@ -193,7 +200,7 @@
         this.dataColumn = [];
         // 初始化可编辑行
         _.map(this.$depthClone(editData), (value, index) => {
-          this.$set(this.dataList, index, _.mapObject(value, (val, key) => {
+          dataList.push(_.mapObject(value, (val, key) => {
             if (!_.isObject(val)) {
               return val;
             }
@@ -204,24 +211,31 @@
             return val;
           }));
         });
-        this.dataList = this.dataList.concat(history);
+        dataList = dataList.concat(history);
 
-        this.defaultData = this.$depthClone(this.dataList);
-        this.dataColumn = this.dataList[0];
+        this.defaultData = this.$depthClone(dataList);
+        this.dataColumn = dataList[0];
         this.showDialog = true;
         this.isModify = isModify;
 
-        return this.dataList;
+        this.$nextTick(() => {
+          this.$refs.filterColumn.update(false, dataList).then(res => {
+            this.dataList = this.$refs.filterColumn.getFilterData(dataList, res);
+          });
+        })
+        return dataList;
 
       },
-      changeSelect(val, item) {
+      changeSelect(val, item, row) {
         let param = {}, obj;
         param[item._optionValue || 'code'] = val;
         obj = _.findWhere(item._option, param);
         item._value = obj ? obj[item._optionLabel || 'name'] : '';
         item._isModified = true;
+        this.$emit('select-change', item, row);
+        this.changeOperate(item, row);
       },
-      getFilterData(data, k = 'id') {
+      getFilterData(data = [], k = 'id') {
         let list = [];
         _.map(data, value => {
           list.push(value);
@@ -236,9 +250,9 @@
         });
         return list;
       },
-      changeUploadFile(val, item) {
+      changeUploadFile(val, item, type) {
         this.$set(item._upload, 'list', val);
-        this.$set(item, '_isModified', true);
+        !type && this.$set(item, '_isModified', true);
       },
       closeDialog() {
         if (this.modified) {
@@ -246,12 +260,13 @@
         }
         _.map(this.dataList, value => {
           _.map(value, val => {
-            if (_.isObject(val) && val._upload && this.$refs[val.key + 'Upload']) {
+            if (_.isObject(val) && val._upload && !_.isEmpty(this.$refs[val.key + 'Upload'])) {
               this.$refs[val.key + 'Upload'][0].reset();
             }
           });
         });
         this.modified = false;
+        this.$emit('closed', null);
         this.$emit('update:visible', false);
       },
       objectSpanMethod({row, column, rowIndex, columnIndex}) {
@@ -268,6 +283,16 @@
             };
           }
         }
+      },
+      setCellStyle({column, row}) {
+        let item = row[column.property];
+        if (!_.isEmpty(item) && !_.isEmpty(item._style)) {
+          return item._style;
+        }
+      },
+      changeOperate(item,row) {
+        item._isModified = true;
+        this.$emit('change', item, row);
       }
     },
   }

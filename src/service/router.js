@@ -81,12 +81,16 @@ export const routerMap = [
       component: Layout,
       redirect: '/product/overview',
       name: 'product',
-      meta: {name: $i.router.product},
+      meta: {
+        auth: 'PRODUCT',
+        name: $i.router.product
+      },
       children: [
         {
           path: 'overview',
           name: 'overview',
           meta: {
+            auth: 'PRODUCT:OVERVIEW',
             name: $i.router.productSourcingOverview
           },
           component: () => import('../views/product/overview')
@@ -95,6 +99,7 @@ export const routerMap = [
           path: 'addNewProduct',
           name: 'addNewProduct',
           meta: {
+            auth: 'PRODUCT:OVERVIEW:ADD_PRODUCT',
             name: $i.router.addNewProduct
           },
           component: () => import('../views/product/addNewProduct')
@@ -104,15 +109,28 @@ export const routerMap = [
           name: 'Detail',
           hidden: true,
           meta: {
+            auth: 'PRODUCT:DETAIL',
             name: $i.router.productSourcingDetail
           },
           component: () => import('../views/product/detail')
+        },
+        {
+          path: 'archive',
+          name: 'Archive',
+          hidden: true,
+          meta: {
+            name: $i.router.productSourcingDetail
+          },
+          component: () => import('../views/product/archive')
         },
       ]
     },
     {
       path: '/payment',
-      meta: {name: $i.router.payment},
+      meta: {
+        name: $i.router.payment,
+        auth: ['PAYMENT']
+      },
       component: Layout,
       redirect: '/payment/index',
       noDropdown: true,
@@ -133,7 +151,10 @@ export const routerMap = [
       path: '/order',
       component: Layout,
       redirect: '/order/overview',
-      meta: {name: $i.router.order},
+      meta: {
+        name: $i.router.order,
+        auth: 'ORDER'
+      },
       noDropdown: true,
       children: [
         {
@@ -141,7 +162,8 @@ export const routerMap = [
           name: 'order',
           meta: {
             log: true,
-            name: $i.router.orderOverview
+            name: $i.router.orderOverview,
+            auth: 'ORDER:OVERVIEW'
           },
           component: () => import('../views/order/overView.vue')
         },
@@ -149,39 +171,28 @@ export const routerMap = [
           path: 'detail',
           name: 'orderDetail',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
+            auth: 'ORDER:DETAIL',
             name: $i.router.orderDetail
           },
-          component: () => import('../views/order/poDetail/poDetail.vue')
+          component: () => import('../views/order/orderDetail.vue')
         }, {
-          path: 'draftOverview',
-          name: 'orderDraft',
+          path: 'archive',
+          name: 'orderArchive',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: $i.router.orderDraft
-          },
-          component: () => import('../views/order/draftOverview.vue')
-        }, {
-          path: 'recycleBin',
-          name: 'orderRecycleBin',
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
+            auth: 'ORDER:ARCHIVE',
             name: $i.router.orderRecycleBin
           },
-          component: () => import('../views/order/recycleBin.vue')
+          component: () => import('../views/order/archive.vue')
         }
       ]
     },
     {
       path: '/logistic',
       name: 'logistic',
-      meta: {name: $i.router.logistic},
+      meta: {
+        name: $i.router.logistic,
+        auth: ['LOGISTICS']
+      },
       component: Layout,
       redirect: '/logistic/plan',
       children: [
@@ -191,7 +202,9 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-            name: $i.router.logisticPlanOverview
+            importTask: true,
+            name: $i.router.logisticPlanOverview,
+            auth: ['LOGISTICS:PLAN_OVERVIEW']
           },
           component: () => import('../views/logistic/overviewWrapper')
         },
@@ -201,7 +214,9 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-            name: $i.router.logisticLoadingListOverview
+            importTask: true,
+            name: $i.router.logisticLoadingListOverview,
+            auth: ['LOADING_LIST:OVERVIEW']
           },
           component: () => import('../views/logistic/overviewWrapper')
         },
@@ -223,9 +238,51 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-            name: $i.router.logisticLoadingArchive
+            name: $i.router.logisticLoadingArchive,
+            auth: ['LOGISTICS:PLAN_DRAFT_OVERVIEW']
           },
           component: () => import('../views/logistic/overviewWrapper')
+        },
+        {
+          path: 'archivePlan',
+          name: 'archivePlan',
+          hidden: true,
+          meta: {
+            draft: '/logistic/draft',
+            recycleBin: false,
+            log: true,
+            importTask: false,
+            name: $i.router.archive,
+            auth: ['LOGISTICS:ARCHIVE']
+          },
+          component: () => import('../views/logistic/archivePlan')
+        },
+        // {
+        //   path: 'archiveDraft',
+        //   name: 'archiveDraft',
+        //   hidden: true,
+        //   meta: {
+        //     draft: '/logistic/draft',
+        //     recycleBin: false,
+        //     log: true,
+        //     importTask: false,
+        //     name: $i.router.archive
+        //   },
+        //   component: () => import('../views/logistic/archiveDraft')
+        // },
+        {
+          path: 'archiveLoadingList',
+          name: 'archiveLoadingList',
+          hidden: true,
+          meta: {
+            draft: '/logistic/draft',
+            recycleBin: false,
+            log: true,
+            importTask: false,
+            name: $i.router.archive,
+            auth: ['LOADING_LIST:ARCHIVE']
+          },
+          component: () => import('../views/logistic/archiveLoadingList')
         },
         {
           path: 'placeLogisticPlan',
@@ -245,9 +302,9 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-
-            name: $i.router.logisticPlaceDetail
-
+            importTask: true,
+            name: $i.router.logisticPlaceDetail,
+            auth: ['LOGISTICS:PLAN_DETAIL']
           },
           component: () => import('../views/logistic/logisticPlanDetail')
         },
@@ -259,7 +316,9 @@ export const routerMap = [
             draft: '/logistic/draft',
             recycleBin: false,
             log: true,
-            name: $i.router.logisticLoadingList
+            importTask: true,
+            name: $i.router.logisticLoadingList,
+            auth: ['LOADING_LIST:DETAIL']
           },
           component: () => import('../views/logistic/logisticPlanDetail')
         },
@@ -269,7 +328,10 @@ export const routerMap = [
       path: '/settings',
       component: Layout,
       redirect: '/settings/department',
-      meta: {name: $i.router.settings},
+      meta: {
+        name: $i.router.settings,
+        auth: ['SETTING']
+      },
       children: [
         {
           path: 'department',
@@ -302,7 +364,8 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: $i.router.settingsPersonal
+            name: $i.router.settingsPersonal,
+            auth: ['SETTING:PERSONAL']
           },
           component: () => import('../views/settings/personalSetting')
         },
@@ -358,10 +421,10 @@ export const routerMap = [
           component: () => import('../views/logs/logs.vue')
         },
         {
-          path: 'import',
-          name: 'logsImport',
+          path: 'task',
+          name: 'logsTask',
           meta: {},
-          component: () => import('../views/logs/import.vue')
+          component: () => import('../views/logs/task.vue')
         }
       ]
     },
@@ -369,7 +432,10 @@ export const routerMap = [
       path: '/message',
       component: Layout,
       redirect: '/message/index',
-      meta: {name: $i.router.message},
+      meta: {
+        name: $i.router.message,
+        auth: ['MESSAGE']
+      },
       hidden: true,
       children: [
         {
@@ -384,13 +450,9 @@ export const routerMap = [
             name: $i.router.messageManagement
           },
           component: () => import('../views/message/messageManagement.vue'),
-        },
-
+        }
       ],
     },
-    // todo 供应商路由
-
-    //draft  草稿箱路由
     {
       path: '/draft',
       component: Layout,
@@ -411,7 +473,6 @@ export const routerMap = [
         }
       ]
     },
-    //recycleBin  回收站路由
     {
       path: '/recycle',
       component: Layout,
@@ -438,124 +499,127 @@ export const routerMap = [
       redirect: '/warehouse/overview',
       name: 'warehouse',
       meta: {
-        name: '仓库'
+        auth: 'WAREHOUSE',
+        name: $i.router.warehouse
       },
       noDropdown: false,
       children: [
         {
           path: 'overview',
-          name: 'Warehouse Overview',
+          name: 'WarehouseOverview',
           meta: {
-            name: '仓库总览'
+            auth: 'WAREHOUSE:OVERVIEW',
+            name: $i.router.warehouseOverview
           },
           component: () => import('../views/warehouse/warehouseOverview.vue'),
         },
         {
           path: 'inbound',
-          name: 'Inbound Overview',
+          name: 'InboundOverview',
           meta: {
-            name: '入库总览'
+            // auth:'WAREHOUSE:INBOUND',
+            name: $i.router.inboundOverview
           },
           component: () => import('../views/warehouse/inbound/inboundOverview.vue'),
         },
         {
           path: 'createInbound',
-          name: 'create Inbound',
+          name: 'createInbound',
           hidden: true,
           meta: {
-            name: '创建入库单'
+            // auth:'WAREHOUSE:INBOUND:CREATE_INBOUND',
+            name: $i.router.createInbound
           },
           component: () => import('../views/warehouse/inbound/createInbound'),
         },
         {
           path: 'inboundDetail',
-          name: 'inbound Detail',
+          name: 'inboundDetail',
           hidden: true,
           meta: {
-            name: '入库详情',
+            name: $i.router.inboundDetail
           },
           component: () => import('../views/warehouse/inbound/inboundDetail'),
         },
         {
           path: 'outbound',
-          name: 'Outbound Overview',
+          name: 'OutboundOverview',
           meta: {
-            name: '出库总览'
+            // auth:'WAREHOUSE:OUTBOUND',
+            name: $i.router.outboundOverview
           },
           component: () => import('../views/warehouse/outbound/outboundOverview'),
         },
         {
           path: 'createOutbound',
-          name: 'create Outbound',
+          name: 'createOutbound',
           hidden: true,
           meta: {
-            name: '创建出库单'
+            // auth:'WAREHOUSE:INBOUND:CREATE_OUTBOUND',
+            name: $i.router.createOutbound
           },
           component: () => import('../views/warehouse/outbound/createOutbound'),
         },
         {
           path: 'outboundDetail',
-          name: 'outbound Detail',
+          name: 'outboundDetail',
           hidden: true,
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: '出库单详情',
+            name: $i.router.outboundDetail
           },
           component: () => import('../views/warehouse/outbound/outboundDetail'),
         },
         {
           path: 'qcOverview',
-          name: 'qc Overview',
+          name: 'qcOverview',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: '货单预览',
+            auth: 'QC:ORDER_OVERVIEW',
+            name: $i.router.qcOverview
           },
           component: () => import('../views/warehouse/qc/qcOverview'),
         },
         {
           path: 'qcOrder',
-          name: 'qc Order',
+          name: 'qcOrder',
           hidden: true,
           meta: {
-            name: 'qc Order'
+            auth: 'QC:ORDER_DETAIL',
+            name: $i.router.qcOrderDetail
           },
           component: () => import('../views/warehouse/qc/qcOrder')
         },
         {
           path: 'qcOrderService',
-          name: 'qc Order Service',
+          name: 'qcOrderService',
           hidden: true,
           meta: {
-            name: 'qc Order Service'
+            auth: 'QC:ORDER_DETAIL',
+            name: $i.router.qcOrderDetail
           },
           component: () => import('../views/warehouse/qc/qcOrderService')
         },
         {
           path: 'qcOrderDetail',
-          name: 'qc Order Detail',
+          name: 'qcOrderDetail',
           hidden: true,
           meta: {
-            name: 'qc Order Detail'
+            auth: 'QC:ORDER_DETAIL',
+            name: $i.router.qcOrderDetail
           },
           component: () => import('../views/warehouse/qc/qcOrderDetail')
         }
       ]
     },
     {
-
       path: '/customer',
       component: Layout,
-      meta: {name: 'customer'},
+      meta: {
+        name: 'customer',
+        auth: ['CUSTOMER']
+      },
       redirect: '/customer/overview',
       noDropdown: true,
       hidden: false,
-      meta: {
-        name: '客户'
-      },
       children: [
         {
           path: 'overview',
@@ -564,7 +628,8 @@ export const routerMap = [
             draft: false,
             recycleBin: false,
             log: false,
-            name: '客户总览'
+            name: '客户总览',
+            auth: ['CUSTOMER:OVERVIEW']
           },
           component: () => import('../views/customer/overview.vue')
         },
@@ -576,8 +641,21 @@ export const routerMap = [
             draft: false,
             recycleBin: false,
             log: false,
+            auth: ['CUSTOMER:DETAIL']
           },
           component: () => import('../views/customer/customerDetail.vue')
+        },
+        {
+          path: 'customerArchive',
+          name: 'customerArchive',
+          hidden: true,
+          meta: {
+            draft: false,
+            recycleBin: false,
+            log: false,
+            auth: ['CUSTOMER:ARCHIVE']
+          },
+          component: () => import('../views/customer/archive.vue')
         }
       ]
     },
@@ -586,6 +664,7 @@ export const routerMap = [
 
 
 let router = new Router({
+  mode: 'history',
   routes: routerMap
 });
 

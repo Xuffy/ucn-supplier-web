@@ -1,9 +1,8 @@
 <template>
   <div class="filter-column">
     <el-popover
-      :width="200"
       v-model="visible"
-      @after-leave="getConfig()"
+      @after-leave="update()"
       placement="bottom-end"
       trigger="click">
       <i slot="reference" class="iconfont icon-shezhi"></i>
@@ -45,6 +44,9 @@
       code: {
         type: String,
         default: '',
+      },
+      getConfig: {
+        type: Function
       }
     },
     data() {
@@ -68,6 +70,40 @@
     mounted() {
     },
     methods: {
+      update(isUpdate = false, data = []) {
+
+        if (!_.isEmpty(data)) {
+          this.columns = _.values(data[0]);
+        }
+
+        return this.$ajax.get(this.$apis.GRIDFAVORITE_PARTWITHSETTING, {bizCode: this.code}, {cache: !isUpdate})
+          .then(res => {
+            let list = _.pluck(_.where(res, {isChecked: 1}), 'property')
+              , dataList = [];
+
+            this.columns = _.map(this.columns, val => {
+              let item = _.findWhere(res, {property: val._filed || val.key})
+              if (!val._hide && item) {
+                item._name = val.label;
+                dataList.push(item);
+              }
+
+              if (_.isObject(val) && _.isUndefined(val._sort)) {
+                val._sort = !!item && item.sortable === 1;
+              }
+              return val;
+            });
+
+            this.init(dataList, list);
+
+            return list;
+          });
+      },
+      init(data, checkList) {
+        this.dataList[0].children = data;
+
+        this.$nextTick(() => this.$refs.columnTree.setCheckedKeys(checkList));
+      },
       filterNode(value, data) {
         if (!value) return true;
         return data._name && data._name.toLowerCase().indexOf(value.toLowerCase()) !== -1;
@@ -80,35 +116,6 @@
             }
             return v;
           });
-        });
-      },
-      getConfig(isUpdate = false, data = []) {
-
-        if (!_.isEmpty(data)) {
-          this.columns = data[0];
-        }
-
-        return this.$ajax.get(this.$apis.GRIDFAVORITE_PARTWITHSETTING, {bizCode: this.code}, {
-          cache: true,
-          updateCache: isUpdate
-        }).then(res => {
-          let list = _.pluck(_.where(res, {isChecked: 1}), 'property')
-            , dataList = [];
-
-          _.map(this.columns, (val, key) => {
-            let item = _.findWhere(res, {property: val._filed || key})
-            if (!val._hide && item) {
-              item._name = val.label;
-              dataList.push(item);
-            }
-          });
-
-          this.dataList[0].children = dataList;
-
-          this.$nextTick(() => {
-            this.$refs.columnTree.setCheckedKeys(list);
-          });
-          return list;
         });
       },
       submitFilter() {
@@ -124,17 +131,13 @@
         this.$ajax.post(this.$apis.GRIDFAVORITE_UPDATE, params)
           .then(res => {
             this.visible = false;
-            this.getConfig(true).then(data => {
-              this.$emit('change', data);
-            });
+            this.update(true).then(data => this.$emit('change', data));
           })
-          .finally(() => {
-            this.loading = false;
-          });
+          .finally(() => this.loading = false);
       },
       cancel() {
         this.visible = false;
-        this.getConfig();
+        this.update();
       }
     }
   }

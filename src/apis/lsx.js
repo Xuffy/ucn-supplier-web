@@ -21,7 +21,9 @@ export default {
   update_contact: ['/supplier/contact/{id}', 'USUPPLY_URL'],
   add_contact: ['/supplier/contact', 'USUPPLY_URL'],
   update_supplier: ['/supplier/{id}', 'USUPPLY_URL'],
-  get_productTradeHistory:['/sku/history','USUPPLY_URL'],
+  get_productTradeHistory: ['/sku/history','USUPPLY_URL'],
+  post_sku_recoverAll: ['/sku/recoverAll', 'USUPPLY_URL'],
+  post_sku_deleteAll: ['/sku/deleteAll', 'USUPPLY_URL'],
 
   //department setting
   get_departmentOverview: ['/department/overview', 'UUSER_URL'],
@@ -96,6 +98,7 @@ export default {
   save_sellerQcOrder: ['/qc/result/save', 'USUPPLY_URL'],
   REWORK_HANDLE: ['/qc/rework/handle', 'USUPPLY_URL'],
   RETURN_HANDLE:['/qc/return/handle','USUPPLY_URL'],
+  GET_WAREHOUSE_NO:['/warehouse/noGenerate/{type}','USUPPLY_URL'],
 
 
 

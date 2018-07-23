@@ -271,8 +271,8 @@
                 });
             },
             getCategory(){
-                const myCategory=this.$ajax.get(this.$apis.get_buyer_sys_category, {});
-                const sysCategory=this.$ajax.get(this.$apis.get_buyer_my_category, {});
+                const myCategory=this.$ajax.get(this.$apis.CATEGORY_SYSTEM, {});
+                const sysCategory=this.$ajax.get(this.$apis.CATEGORY_MINE, {});
                 return this.$ajax.all([myCategory,sysCategory]).then(res=>{
                     return res;
                 }).catch(err=>{
@@ -280,17 +280,10 @@
                 })
             },
             getUnit(codes){
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res,'单位')
-                // });
-                // this.$ajax.get(this.$apis.get_country).then(res=>{
-                //     console.log(res,'国家')
-                // });
                 const unitAjax=this.$ajax.post(this.$apis.get_partUnit,codes,{cache:true});
                 const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
                 return this.$ajax.all([unitAjax,countryAjax]);
             },
-
 
             /**
              *  一些事件

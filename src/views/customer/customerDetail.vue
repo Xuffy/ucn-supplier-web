@@ -28,6 +28,13 @@
                    </el-row>
                   </el-form>
                 <div class="btns" v-if="noEdit">
+                  <el-button @click="deleteCustomer" type="danger" v-show="$route.query.type==='read'"
+                  v-authorize="'CUSTOMER:DETAIL:ARCHIVE'">
+                    {{$i.button.delete}}
+                  </el-button>
+                  <el-button @click="downloadCustomer" type="primary" v-authorize="'CUSTOMER:DETAIL:DOWNLOAD'">
+                    {{$i.button.download}}
+                  </el-button>
                 </div>
             </div>
         </div>
@@ -184,6 +191,7 @@
                 lookRemarkFormVisible:false,
                 isModifyAddress:false,
                 formLabelWidth:'80px',
+                disableClickDeleteBtn: false,
             }
         },
         methods: {
@@ -249,7 +257,7 @@
                 this.$ajax.post(`${this.$apis.post_customerUpdataRmark}/${this.addRemarkData.id}`,this.addRemarkData)
                     .then(res => {
                     this.$message({
-                        message: '修改成功',
+                        message: this.$i.common.modifySuccess,
                         type: 'success'
                     });
                     this.getListRemark();
@@ -264,7 +272,7 @@
                 this.$ajax.post(this.$apis.post_addCustomerListRemark,this.addRemarkData)
                     .then(res => {
                         this.$message({
-                        message: '添加成功',
+                        message: this.$i.common.addSuccess,
                         type: 'success'
                         });
                         this.getListRemark();
@@ -278,15 +286,15 @@
                 }
                 },
                 deleteRemark(e){
-                this.$confirm('确定删除该备注?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.common.sureToDeleteRemark, this.$i.common.prompt, {
+                    confirmButtonText: this.$i.common.confirm,
+                    cancelButtonText: this.$i.common.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.$ajax.post(this.$apis.post_deleteCustomerRemark,{id:e.id.value}).then(res=>{
                     this.$message({
                         type: 'success',
-                        message: '删除成功!'
+                        message: this.$i.common.deleteTheSuccess
                     });
                     this.getListRemark();
                     }).catch(err=>{
@@ -446,7 +454,7 @@
               this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
                 this.get_data();
                 this.$message({
-                  message: '上传成功',
+                  message: this.$i.common.uploadedSuccess,
                   type: 'success'
                 });
               })
@@ -455,11 +463,38 @@
               this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
                 this.get_data();
                 this.$message({
-                  message: '上传成功',
+                  message:  this.$i.common.uploadedSuccess,
                   type: 'success'
                 });
               })
             }
+          },
+          //删除
+          deleteCustomer(){
+            this.$confirm(this.$i.common.sureDelete, this.$i.common.prompt, {
+              confirmButtonText: this.$i.common.sure,
+              cancelButtonText: this.$i.common.cancel,
+              type: 'warning'
+            }).then(() => {
+              this.disableClickDeleteBtn = true;
+              const params = []
+              params.push(this.basicDate.id)
+              this.$ajax.post(this.$apis.post_supply_batchDelete, this.selectNumber).then(res => {
+                this.disableClickDeleteBtn = false;
+                this.getData();
+                this.$message({
+                  type: 'success',
+                  message: this.$i.common.deleteTheSuccess
+                });
+              }).finally(() => {
+                this.disableClickDeleteBtn = false;
+              });
+            })
+          },
+          //下载
+          downloadCustomer(){
+            this.$fetch.export_task('UDATA_SUPPLIER_EXPORT_CUSTOMER_IDS',{ids:this.basicDate.id});
+
           },
         },
         created() {

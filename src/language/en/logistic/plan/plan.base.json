@@ -11,7 +11,6 @@
   "plan": "logistic Plan",
   "logisticPlanNo": "logistic Plan No.",
   "saveAsDraft": "Save As Draft",
-
   "RecycleOverview": "Archive",
   "draftOverview": "Draft Overview",
   "loadingListOverview": "Loading List Overview",
@@ -229,5 +228,8 @@
   "isConfirmPeration" : "Confirm Operation？",
   "operationSuccess" : "Success！",
   "operationFailed" : "Failed！",
-  "jumping" : "Jumping..."
+  "jumping" : "Jumping...",
+  "dataIsExist" : "该条数据已存在！",
+  "skuQty" : "Purchase QTY",
+  "skuCartonQty" : "Purchase QTY of Outer Carton"
 }

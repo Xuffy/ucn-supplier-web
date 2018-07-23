@@ -9,11 +9,14 @@
                         <v-upload :limit="20" :list="productForm.pictures" :onlyImage="true" ref="upload"></v-upload>
                     </el-form-item>
                 </el-col>
-                <el-col style="height: 51px;" v-if="v.belongTab==='basicInfo' && !v.isHide" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                <el-col style="min-height: 51px;" v-if="v.belongTab==='basicInfo' && !v.isHide"
+                        v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24"
+                        :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :required="v._rules?v._rules.required:false" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
                             <div v-if="v.isWeight">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
+                                           :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in skuUnitOption"
                                             :key="item.id"
@@ -23,7 +26,8 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isCountry">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" multiple filterable collapse-tags :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" multiple
+                                           filterable collapse-tags :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in countryOption"
                                             :key="item.id"
@@ -33,7 +37,8 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isReadily">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
+                                           :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in readilyOption"
                                             :key="item.id"
@@ -43,7 +48,8 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isDateUnit">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
+                                           :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in dateOption"
                                             :key="item.id"
@@ -53,7 +59,8 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isSaleStatus">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
+                                           :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in v.options"
                                             :key="item.code"
@@ -63,7 +70,8 @@
                                 </el-select>
                             </div>
                             <div v-else>
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
+                                           :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in v.options"
                                             :key="item.value"
@@ -87,7 +95,7 @@
                                     class="speTextarea"
                                     size="mini"
                                     type="textarea"
-                                    autosize
+                                    :autosize="{ minRows: 2}"
                                     :placeholder="$i.product.pleaseInput"
                                     v-model="productForm[v.key]">
                             </el-input>
@@ -131,7 +139,8 @@
                             <el-button
                                     @click="addCustomer"
                                     size="mini"
-                                    type="primary">{{$i.product.add}}</el-button>
+                                    type="primary">{{$i.product.add}}
+                            </el-button>
                             <el-table
                                     :data="tableData"
                                     style="width: 541px"
@@ -153,7 +162,9 @@
                                         align="center"
                                         width="180">
                                     <template slot-scope="scope">
-                                        <el-button @click="removeCustomer(scope.row)" type="text" size="small">{{$i.product.remove}}</el-button>
+                                        <el-button @click="removeCustomer(scope.row)" type="text" size="small">
+                                            {{$i.product.remove}}
+                                        </el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -164,12 +175,16 @@
         </el-form>
 
         <div class="title">{{$i.product.customerInfo}}</div>
-        <el-form :model="productForm" ref="productForm2" class="speForm" label-width="230px" :label-position="labelPosition">
+        <el-form :model="productForm" ref="productForm2" class="speForm" label-width="230px"
+                 :label-position="labelPosition">
             <el-row>
-                <el-col style="height: 51px;" v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                <el-col style="min-height: 51px;" v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab"
+                        :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12"
+                        :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
-                            <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                            <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
+                                       :placeholder="$i.product.pleaseChoose">
                                 <div v-if="v.key==='inspectQuarantineCategory'">
                                     <el-option
                                             v-for="item in quarantineTypeOption"
@@ -222,7 +237,8 @@
         </el-form>
 
         <div class="title">{{$i.product.priceInfo}}</div>
-        <el-form :model="productForm" ref="productForm3" class="speForm" label-width="230px" :label-position="labelPosition">
+        <el-form :model="productForm" ref="productForm3" class="speForm" label-width="230px"
+                 :label-position="labelPosition">
             <el-table
                     :data="productForm.price"
                     border
@@ -417,9 +433,12 @@
         </el-form>
 
         <div class="title">{{$i.product.packingInfo}}</div>
-        <el-form :model="productForm" ref="productForm4" class="speForm" label-width="230px" :label-position="labelPosition">
+        <el-form :model="productForm" ref="productForm4" class="speForm" label-width="230px"
+                 :label-position="labelPosition">
             <el-row>
-                <el-col style="height: 51px;" v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                <el-col style="min-height: 51px;" v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab"
+                        :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12"
+                        :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
                             <div v-if="v.isWeight">
@@ -508,9 +527,12 @@
         </el-form>
 
         <div class="title">{{$i.product.logisticInfo}}</div>
-        <el-form :model="productForm" ref="productForm5" class="speForm" label-width="230px" :label-position="labelPosition">
+        <el-form :model="productForm" ref="productForm5" class="speForm" label-width="230px"
+                 :label-position="labelPosition">
             <el-row>
-                <el-col style="height: 51px;" v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                <el-col style="min-height: 51px;" v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab"
+                        :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12"
+                        :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
                             <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
@@ -557,13 +579,17 @@
         </el-form>
 
         <div class="title">{{$i.product.otherInfo}}</div>
-        <el-form :model="productForm" ref="productForm6" class="speForm" label-width="230px" :label-position="labelPosition">
+        <el-form :model="productForm" ref="productForm6" class="speForm" label-width="230px"
+                 :label-position="labelPosition">
             <el-row>
-                <el-col style="height: 51px;" v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                <el-col style="min-height: 51px;" v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab"
+                        :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12"
+                        :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
                             <div v-if="v.isCountry">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" filterable multiple collapse-tags :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" filterable
+                                           multiple collapse-tags :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in countryOption"
                                             :key="item.id"
@@ -573,7 +599,8 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isUDB">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
+                                           :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in udbOption"
                                             :key="item.id"
@@ -583,7 +610,8 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isSkuPkg">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
+                                           :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in skuPkgOption"
                                             :key="item.id"
@@ -593,7 +621,8 @@
                                 </el-select>
                             </div>
                             <div v-else>
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
+                                           :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in v.options"
                                             :key="item.value"
@@ -679,10 +708,13 @@
         </div>
 
         <div class="footBtn">
-            <el-button @click="finish" :disabled="loadingData" :loading="disabledSubmit" type="primary">{{$i.product.finish}}</el-button>
+            <el-button @click="finish" :disabled="loadingData" :loading="disabledSubmit" type="primary">
+                {{$i.product.finish}}
+            </el-button>
         </div>
 
-        <el-dialog width="70%" :title="$i.product.addCustomer" :visible.sync="addCustomerDialogVisible" custom-class="ucn-dialog-center">
+        <el-dialog width="70%" :title="$i.product.addCustomer" :visible.sync="addCustomerDialogVisible"
+                   custom-class="ucn-dialog-center">
             <el-form ref="customerQuery" :model="customerQuery" label-width="120px">
                 <el-row class="speZone">
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
@@ -696,7 +728,8 @@
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="name" :label="$i.product.customerType">
-                            <el-select class="speInput" v-model="customerQuery.type" clearable :placeholder="$i.product.pleaseChoose">
+                            <el-select class="speInput" v-model="customerQuery.type" clearable
+                                       :placeholder="$i.product.pleaseChoose">
                                 <el-option
                                         v-for="item in customerTypeOption"
                                         :key="item.id"
@@ -705,15 +738,16 @@
                                 </el-option>
                             </el-select>
                             <!--<el-input-->
-                                    <!--class="speInput"-->
-                                    <!--:placeholder="$i.product.pleaseInput"-->
-                                    <!--size="mini"-->
-                                    <!--v-model="customerQuery.type"></el-input>-->
+                            <!--class="speInput"-->
+                            <!--:placeholder="$i.product.pleaseInput"-->
+                            <!--size="mini"-->
+                            <!--v-model="customerQuery.type"></el-input>-->
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="name" :label="$i.product.customerCountry">
-                            <el-select class="speInput" size="mini" v-model="customerQuery.country" filterable :placeholder="$i.product.pleaseChoose">
+                            <el-select class="speInput" size="mini" v-model="customerQuery.country" filterable
+                                       :placeholder="$i.product.pleaseChoose">
                                 <el-option
                                         v-for="item in countryOption"
                                         :key="item.id"
@@ -735,7 +769,8 @@
                 </el-row>
             </el-form>
             <div style="text-align: center">
-                <el-button :disabled="loadingTable" @click="searchCustomer" type="primary">{{$i.warehouse.search}}</el-button>
+                <el-button :disabled="loadingTable" @click="searchCustomer" type="primary">{{$i.warehouse.search}}
+                </el-button>
                 <el-button :disabled="loadingTable" @click="clearCustomerSearch">{{$i.warehouse.clear}}</el-button>
             </div>
             <v-table
@@ -746,86 +781,76 @@
                     @action="btnClick">
             </v-table>
             <div slot="footer" class="dialog-footer">
-                <el-button :disabled="loadingTable" :loading="disableClickPost" type="primary" @click="postData">{{$i.product.sure}}</el-button>
-                <el-button :disabled="loadingTable" @click="addCustomerDialogVisible = false">{{$i.product.cancel}}</el-button>
+                <el-button :disabled="loadingTable" :loading="disableClickPost" type="primary" @click="postData">
+                    {{$i.product.sure}}
+                </el-button>
+                <el-button :disabled="loadingTable" @click="addCustomerDialogVisible = false">{{$i.product.cancel}}
+                </el-button>
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script>
-    import imgHandler from '../product/imgHandler'
-    import {dropDownSingle,VTable,VUpload} from '@/components/index'
+    import imgHandler from "../product/imgHandler";
+    import { dropDownSingle, VTable, VUpload } from "@/components/index";
 
     export default {
         name: "addNewProduct",
-        components:{
+        components: {
             imgHandler,
             VUpload,
             VTable,
-            dropDown:dropDownSingle
+            dropDown: dropDownSingle
         },
-        data(){
-            return{
-                skuStatusOption:[],
+        data() {
+            return {
+                skuStatusOption: [],
                 /**
                  * 字典数据
                  * */
-                currencyOption:[],      //币种字典
-                countryOption:[],       //国家字典
-                weightOption:[],        //重量单位
-                saleStatusOption:[],    //销售状态字典
-                dateOption:[],          //日期单位
-                lengthOption:[],        //长度单位
-                volumeOption:[],        //体积单位
-                oemOption:[],           //可否贴牌
-                udbOption:[],           //是否展示包装盒
-                skuPkgOption:[],        //产品包装可否调整
-                readilyOption:[],       //是否现货
-                skuUnitOption:[],       //计量单位
-                quarantineTypeOption:[],//检疫类别单位
-                customerTypeOption:[],  //客户类型
+                currencyOption: [],      //币种字典
+                countryOption: [],       //国家字典
+                weightOption: [],        //重量单位
+                saleStatusOption: [],    //销售状态字典
+                dateOption: [],          //日期单位
+                lengthOption: [],        //长度单位
+                volumeOption: [],        //体积单位
+                oemOption: [],           //可否贴牌
+                udbOption: [],           //是否展示包装盒
+                skuPkgOption: [],        //产品包装可否调整
+                readilyOption: [],       //是否现货
+                skuUnitOption: [],       //计量单位
+                quarantineTypeOption: [],//检疫类别单位
+                customerTypeOption: [],  //客户类型
 
-                loadingData:true,
-                labelPosition:'left',
-                disabledSubmit:false,               //防止用户多次提及表单
-                imgGroup:[],
-                addCustomerDialogVisible:false,     //弹出框可见
-                disableClickPost:false,
+                loadingData: true,
+                labelPosition: "left",
+                disabledSubmit: false,               //防止用户多次提及表单
+                imgGroup: [],
+                addCustomerDialogVisible: false,     //弹出框可见
+                disableClickPost: false,
                 //配置可见性用户
-                tableData:[],
+                tableData: [],
                 pickerOptions1: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
-                    },
+                    }
                 },
-                categoryList:[
-                    {
-                        id:5125,
-                        name:"自己的分类",
-                        children:[],
-                        _disableClick:true,
-                    },
-                    {
-                        id:123,
-                        name:"系统分类",
-                        children:[],
-                        _disableClick:true,
-                    },
-                ],
-                boxSize:{
-                    length:'',
-                    width:'',
-                    height:''
+                categoryList: [],
+                boxSize: {
+                    length: "",
+                    width: "",
+                    height: ""
                 },
-                countryList:[],
-                customerQuery:{
+                countryList: [],
+                customerQuery: {
                     name: "",
                     type: null,
-                    country: '',
+                    country: "",
                     city: "",
                     pn: 1,
-                    ps: 1000,
+                    ps: 1000
                     // sorts: [
                     //     {
                     //         "nativeSql": true,
@@ -844,12 +869,12 @@
                     //     }
                     // ],
                 },
-                productForm:{
-                    attachments:[],
-                    id: '',                         //新增传空
-                    ids:[],                         //选择的可见
-                    pictures:[],
-                    visibility:true,                //全网可见为true,否则false
+                productForm: {
+                    attachments: [],
+                    id: "",                         //新增传空
+                    ids: [],                         //选择的可见
+                    pictures: [],
+                    visibility: true,                //全网可见为true,否则false
                     status: 1,                      //0下架 1上架
                     nameEn: "",
                     barcode: "",                    //产品条码
@@ -871,26 +896,26 @@
                     minOrderQty: 1,
                     deliveryDates: 1,               //交期(做完需要多少天)
                     design: "",
-                    noneSellCountry: '',             //禁售国家
+                    noneSellCountry: "",             //禁售国家
                     applicableAge: 1,
                     expireDates: 1,
-                    expireUnit: '3',                  //保质期单位
+                    expireUnit: "3",                  //保质期单位
                     comments: "",
-                    readilyAvailable: '0',
+                    readilyAvailable: "0",
                     availableQty: 1,
-                    mainSaleCountry: '',
+                    mainSaleCountry: "",
                     mainSaleArea: "",
                     productionDates: 1,             //开发时间
                     qualityStander: "",
                     yearListed: "",
-                    useDisplayBox: '1',
+                    useDisplayBox: "1",
                     displayBoxQty: 0,
                     otherPackInfoCn: "",
                     otherPackInfoEn: "",
-                    adjustPackage: '1',
+                    adjustPackage: "1",
                     lengthWidthHeight: "",
                     recycle: false,                     //只有在recycleBin里才是false
-                    categoryId: '',                      //类型id
+                    categoryId: "",                      //类型id
                     rateValueAddedTax: 1,               //增值税率
                     taxRefundRate: 1,
                     customsCode: "",
@@ -918,9 +943,9 @@
                     inventory: 0,
                     safeInventory: 0,
                     minInventory: 0,
-                    unitWeight: '7',                      //重量单位
-                    unitLength: '5',                      //长度单位
-                    unitVolume: '3',                      //提及单位
+                    unitWeight: "7",                      //重量单位
+                    unitLength: "5",                      //长度单位
+                    unitVolume: "3",                      //提及单位
                     length: 0,
                     width: 0,
                     height: 0,
@@ -951,467 +976,480 @@
                     outerCartonVolume: 0,
                     outerCartonMethodCn: "",
                     outerCartonMethodEn: "",
-                    oem: '1',
+                    oem: "1",
                     logisticId: 1,
                     pkgId: 1,
                     price: [
                         {
                             cifArea: "",
-                            cifCurrency: 'USD',
+                            cifCurrency: "USD",
                             cifPrice: null,
                             dduArea: "",
-                            dduCurrency: 'USD',
+                            dduCurrency: "USD",
                             dduPrice: null,
-                            fobCurrency: 'USD',
+                            fobCurrency: "USD",
                             fobPrice: null,                    //价格起始是多少
                             fobPort: "",
                             exwPrice: null,                    //价格起始是多少
-                            exwCurrency: 'USD',
+                            exwCurrency: "USD",
                             status: 1                       //1成本价，2基础报价
                         },
                         {
                             cifArea: "",
-                            cifCurrency: 'USD',
+                            cifCurrency: "USD",
                             cifPrice: null,
                             dduArea: "",
-                            dduCurrency: 'USD',
+                            dduCurrency: "USD",
                             dduPrice: null,
-                            fobCurrency: 'USD',
+                            fobCurrency: "USD",
                             fobPrice: null,
                             fobPort: "",
                             exwPrice: null,
-                            exwCurrency: 'USD',
+                            exwCurrency: "USD",
                             status: 2
-                        },
+                        }
                     ]
                 },
-                rules:{
-                    nameEn:[
-                        {max:45,message: '最大长度为45',}
+                rules: {
+                    nameEn: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    nameCn:[
-                        {max:45,message: '最大长度为45',}
+                    nameCn: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    barcode:[
-                        {max:45,message: '最大长度为45',}
+                    barcode: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    descEn:[
-                        {max:300,message: '最大长度为300',}
+                    descEn: [
+                        { max: 300, message: "最大长度为300" }
                     ],
-                    descCn:[
-                        {max:300,message: '最大长度为300',}
+                    descCn: [
+                        { max: 300, message: "最大长度为300" }
                     ],
-                    descCustomer:[
-                        {max:300,message: '最大长度为300',}
+                    descCustomer: [
+                        { max: 300, message: "最大长度为300" }
                     ],
-                    nameCustomer:[
-                        {max:100,message: '最大长度为100',}
+                    nameCustomer: [
+                        { max: 100, message: "最大长度为100" }
                     ],
-                    customerSkuCode:[
-                        {max:50,message: '最大长度为50',}
+                    customerSkuCode: [
+                        { max: 50, message: "最大长度为50" }
                     ],
-                    supplierCode:[
-                        {max:45,message: '最大长度为45',}
+                    supplierCode: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    supplierName:[
-                        {max:80,message: '最大长度为80',}
+                    supplierName: [
+                        { max: 80, message: "最大长度为80" }
                     ],
-                    code:[
-                        {required: true, message: this.$i.product.supplierSkuCodeIsRequired, trigger: 'blur' },
-                        {max:40,message: '最大长度为40',}
+                    code: [
+                        { required: true, message: this.$i.product.supplierSkuCodeIsRequired, trigger: "blur" },
+                        { max: 40, message: "最大长度为40" }
                     ],
-                    unit:[
-                        {max:45,message: '最大长度为45',}
+                    unit: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    formation:[
-                        {max:100,message: '最大长度为100',}
+                    formation: [
+                        { max: 100, message: "最大长度为100" }
                     ],
-                    materialEn:[
-                        {max:60,message: '最大长度为60',}
+                    materialEn: [
+                        { max: 60, message: "最大长度为60" }
                     ],
-                    materialCn:[
-                        {max:60,message: '最大长度为60',}
+                    materialCn: [
+                        { max: 60, message: "最大长度为60" }
                     ],
-                    colourEn:[
-                        {max:45,message: '最大长度为45',}
+                    colourEn: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    colourCn:[
-                        {max:45,message: '最大长度为45',}
+                    colourCn: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    design:[
-                        {max:45,message: '最大长度为45',}
+                    design: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    expireUnit:[
-                        {max:45,message: '最大长度为45',}
+                    expireUnit: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    comments:[
-                        {max:300,message: '最大长度为300',}
+                    comments: [
+                        { max: 300, message: "最大长度为300" }
                     ],
-                    mainSaleArea:[
-                        {max:45,message: '最大长度为45',}
+                    mainSaleArea: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    qualityStander:[
-                        {max:100,message: '最大长度为100',}
+                    qualityStander: [
+                        { max: 100, message: "最大长度为100" }
                     ],
-                    otherPackInfoCn:[
-                        {max:100,message: '最大长度为100',}
+                    otherPackInfoCn: [
+                        { max: 100, message: "最大长度为100" }
                     ],
-                    otherPackInfoEn:[
-                        {max:100,message: '最大长度为100',}
+                    otherPackInfoEn: [
+                        { max: 100, message: "最大长度为100" }
                     ],
                     //暂时未处理的验证规则
-                    lengthWidthHeight:[
+                    lengthWidthHeight: [
                         // {max:100,message: '最大长度为100',}
                     ],
-                    customsCode:[
-                        {max:45,message: '最大长度为45',}
+                    customsCode: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    customsNameCn:[
-                        {max:100,message: '最大长度为100',}
+                    customsNameCn: [
+                        { max: 100, message: "最大长度为100" }
                     ],
-                    customsNameEn:[
-                        {max:100,message: '最大长度为100',}
+                    customsNameEn: [
+                        { max: 100, message: "最大长度为100" }
                     ],
-                    tradeMarkCn:[
-                        {max:45,message: '最大长度为45',}
+                    tradeMarkCn: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    tradeMarkEn:[
-                        {max:45,message: '最大长度为45',}
+                    tradeMarkEn: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    commodityInspectionCn:[
-                        {max:100,message: '最大长度为100',}
+                    commodityInspectionCn: [
+                        { max: 100, message: "最大长度为100" }
                     ],
-                    commodityInspectionEn:[
-                        {max:100,message: '最大长度为100',}
+                    commodityInspectionEn: [
+                        { max: 100, message: "最大长度为100" }
                     ],
-                    declareElement:[
-                        {max:100,message: '最大长度为100',}
+                    declareElement: [
+                        { max: 100, message: "最大长度为100" }
                     ],
-                    origin:[
-                        {max:45,message: '最大长度为45',}
+                    origin: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    inspectQuarantineCategory:[
-                        {max:45,message: '最大长度为45',}
+                    inspectQuarantineCategory: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    brand:[
-                        {max:45,message: '最大长度为45',}
+                    brand: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    brandRemark:[
-                        {max:100,message: '最大长度为100',}
+                    brandRemark: [
+                        { max: 100, message: "最大长度为100" }
                     ],
-                    brandRelated:[
-                        {max:45,message: '最大长度为45',}
+                    brandRelated: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    certificat:[
-                        {max:45,message: '最大长度为45',}
+                    certificat: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    specialTransportRequire:[
-                        {max:100,message: '最大长度为100',}
+                    specialTransportRequire: [
+                        { max: 100, message: "最大长度为100" }
                     ],
-                    inventoryCostMethod:[
-                        {max:100,message: '最大长度为100',}
+                    inventoryCostMethod: [
+                        { max: 100, message: "最大长度为100" }
                     ],
-                    warehourceDefault:[
-                        {max:100,message: '最大长度为100',}
+                    warehourceDefault: [
+                        { max: 100, message: "最大长度为100" }
                     ],
-                    methodPkgCn:[
-                        {max:45,message: '最大长度为45',}
+                    methodPkgCn: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    methodPkgEn:[
-                        {max:45,message: '最大长度为45',}
+                    methodPkgEn: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    innerCartonUnit:[
-                        {max:45,message: '最大长度为45',}
+                    innerCartonUnit: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    innerCartonDesc:[
-                        {max:100,message: '最大长度为100',}
+                    innerCartonDesc: [
+                        { max: 100, message: "最大长度为100" }
                     ],
-                    innerCartonMethodCn:[
-                        {max:30,message: '最大长度为30',}
+                    innerCartonMethodCn: [
+                        { max: 30, message: "最大长度为30" }
                     ],
-                    innerCartonMethodEn:[
-                        {max:45,message: '最大长度为45',}
+                    innerCartonMethodEn: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    outerCartonUnit:[
-                        {max:20,message: '最大长度为20',}
+                    outerCartonUnit: [
+                        { max: 20, message: "最大长度为20" }
                     ],
-                    outerCartonDesc:[
-                        {max:100,message: '最大长度为100',}
+                    outerCartonDesc: [
+                        { max: 100, message: "最大长度为100" }
                     ],
-                    outerCartonMethodCn:[
-                        {max:45,message: '最大长度为45',}
+                    outerCartonMethodCn: [
+                        { max: 45, message: "最大长度为45" }
                     ],
-                    outerCartonMethodEn:[
-                        {max:45,message: '最大长度为45',}
-                    ],
+                    outerCartonMethodEn: [
+                        { max: 45, message: "最大长度为45" }
+                    ]
 
                 },
                 //dropDown Data
-                defaultProps:{
-                    label:'name',
-                    children:'children'
+                defaultProps: {
+                    label: "name",
+                    children: "children"
                 },
                 options: [],
 
                 /**
                  * 弹出框data
                  * */
-                loadingTable:false,
-                tableDataList:[],
-                selectList:[],
-            }
+                loadingTable: false,
+                tableDataList: [],
+                selectList: []
+            };
         },
-        methods:{
+        methods: {
             //获取类别数据
-            getCategoryId(){
-                this.$ajax.get(this.$apis.CATEGORY_SYSTEM,{}).then(res=>{
-                    this.categoryList[1].children=res;
-                }).catch(err=>{
+            getCategoryId() {
+                const sys=this.$ajax.get(this.$apis.CATEGORY_SYSTEM, {});
+                const mine=this.$ajax.get(this.$apis.CATEGORY_MINE, {});
 
-                });
-                this.$ajax.get(this.$apis.CATEGORY_MINE,{}).then(res=>{
-                    this.categoryList[0].children=res;
-                }).catch(err=>{
+                let category=[
+                    {
+                        id: 5125124,
+                        name: this.$i.product.myCategory,
+                        children: [],
+                        _disableClick: true
+                    },
+                    {
+                        id: 12122353,
+                        name: this.$i.product.sysCategory,
+                        children: [],
+                        _disableClick: true
+                    }
+                ];
 
+                this.$ajax.all([sys,mine]).then(res=>{
+                    category[1].children = res[0];
+                    category[0].children = res[1];
+                    this.categoryList=category;
                 });
             },
 
             //添加客户
-            addCustomer(){
-                this.addCustomerDialogVisible=true;
-                this.loadingTable=true;
-                this.$ajax.post(this.$apis.get_sellerCustomer,this.customerQuery).then(res=>{
-                    this.loadingTable=false;
-                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
-                        this.tableData.forEach(v=>{
-                            if(v.customerId===e.id.value){
-                                this.$set(e,'_disabled',true);
-                                this.$set(e,'_checked',true);
+            addCustomer() {
+                this.addCustomerDialogVisible = true;
+                this.loadingTable = true;
+                this.$ajax.post(this.$apis.get_sellerCustomer, this.customerQuery).then(res => {
+                    this.loadingTable = false;
+                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas, e => {
+                        this.tableData.forEach(v => {
+                            if (v.customerId === e.id.value) {
+                                this.$set(e, "_disabled", true);
+                                this.$set(e, "_checked", true);
                             }
                         });
                     });
-                    console.log(this.tableDataList,'this.tableDataList')
-                    console.log(this.tableData,'this.tableData')
-                }).catch(err=>{
-                    this.loadingTable=false;
+                    console.log(this.tableDataList, "this.tableDataList");
+                    console.log(this.tableData, "this.tableData");
+                }).catch(err => {
+                    this.loadingTable = false;
                 });
             },
-            removeCustomer(data){
-                let item=_.findWhere(this.tableData,{code:data.code});
-                this.tableData=_.difference(this.tableData,[item]);
+            removeCustomer(data) {
+                let item = _.findWhere(this.tableData, { code: data.code });
+                this.tableData = _.difference(this.tableData, [item]);
             },
 
             //完成新增
-            finish(){
-                if(this.$validateForm(this.productForm,this.$db.product.detailTab)){
+            finish() {
+                if (this.$validateForm(this.productForm, this.$db.product.detailTab)) {
                     return;
                 }
 
-                let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
-                this.$set(this.productForm,'lengthWidthHeight',size);
-                this.disabledSubmit=true;
-                if(this.$route.query.id && this.$route.query.isEdit){
+                let size = this.boxSize.length + "*" + this.boxSize.width + "*" + this.boxSize.height;
+                this.$set(this.productForm, "lengthWidthHeight", size);
+                this.disabledSubmit = true;
+                if (this.$route.query.id && this.$route.query.isEdit) {
                     //代表是编辑
-                    let param=Object.assign({},this.productForm);
+                    let param = Object.assign({}, this.productForm);
 
-                    _.mapObject(param,(e,k)=>{
-                        if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox'){
-                            param[k]=parseInt(param[k]);
-                        }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
-                            let item='';
-                            if(param[k].length===0){
-                                param[k]='';
-                            }else{
-                                param[k].forEach((v,index)=>{
-                                    if(index===param[k].length-1){
-                                        item+=v;
-                                    }else{
-                                        item+=(v+',');
+                    _.mapObject(param, (e, k) => {
+                        if (k === "status" || k === "unit" || k === "readilyAvailable" || k === "expireUnit" || k === "unitLength" || k === "unitVolume" || k === "unitWeight" || k === "oem" || k === "useDisplayBox") {
+                            param[k] = parseInt(param[k]);
+                        } else if (k === "noneSellCountry" || k === "mainSaleCountry") {
+                            let item = "";
+                            if (param[k].length === 0) {
+                                param[k] = "";
+                            } else {
+                                param[k].forEach((v, index) => {
+                                    if (index === param[k].length - 1) {
+                                        item += v;
+                                    } else {
+                                        item += (v + ",");
                                     }
                                 });
-                                param[k]=item;
+                                param[k] = item;
                             }
-                        }else if(k==='adjustPackage'){
-                            param[k]=param[k]==='1'?true:false;
+                        } else if (k === "adjustPackage") {
+                            param[k] = param[k] === "1" ? true : false;
                         }
                     });
-                    if(!param.readilyAvailable){
-                        param.availableQty=0;
+                    if (!param.readilyAvailable) {
+                        param.availableQty = 0;
                     }
-                    if(param.visibility){
-                        param.ids=[];
-                    }else{
-                        param.ids=[];
-                        this.tableData.forEach(v=>{
+                    if (param.visibility) {
+                        param.ids = [];
+                    } else {
+                        param.ids = [];
+                        this.tableData.forEach(v => {
                             param.ids.push(v.customerId);
                         });
                     }
-                    param.pictures=this.$refs.upload.getFiles();
-                    param.attachments=this.$refs.uploadAttachment.getFiles();
-                    this.$ajax.post(this.$apis.update_buyerProductDetail,param).then(res=>{
+                    param.pictures = this.$refs.upload.getFiles();
+                    param.attachments = this.$refs.uploadAttachment.getFiles();
+                    this.$ajax.post(this.$apis.update_buyerProductDetail, param).then(res => {
                         this.$message({
                             message: this.$i.product.modifySuccess,
-                            type: 'success'
+                            type: "success"
                         });
-                        this.disabledSubmit=false;
+                        this.disabledSubmit = false;
                         this.$router.push({
-                            path:'/product/detail',
-                            query:{
-                                id:res
-                            },
+                            path: "/product/detail",
+                            query: {
+                                id: res
+                            }
                         });
-                    }).catch(err=>{
-                        this.disabledSubmit=false;
+                    }).catch(err => {
+                        this.disabledSubmit = false;
                     });
                 }
-                else{
+                else {
                     //代表是新增
-                    let param=Object.assign({},this.productForm);
-                    _.mapObject(param,(e,k)=>{
-                        if(k==='status' || k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight' || k==='oem' || k==='useDisplayBox'){
-                            param[k]=parseInt(param[k]);
-                        }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
-                            let item='';
-                            if(param[k].length===0){
-                                param[k]='';
-                            }else{
-                                param[k].forEach((v,index)=>{
-                                    if(index===param[k].length-1){
-                                        item+=v;
-                                    }else{
-                                        item+=(v+',');
+                    let param = Object.assign({}, this.productForm);
+                    _.mapObject(param, (e, k) => {
+                        if (k === "status" || k === "unit" || k === "readilyAvailable" || k === "expireUnit" || k === "unitLength" || k === "unitVolume" || k === "unitWeight" || k === "oem" || k === "useDisplayBox") {
+                            param[k] = parseInt(param[k]);
+                        } else if (k === "noneSellCountry" || k === "mainSaleCountry") {
+                            let item = "";
+                            if (param[k].length === 0) {
+                                param[k] = "";
+                            } else {
+                                param[k].forEach((v, index) => {
+                                    if (index === param[k].length - 1) {
+                                        item += v;
+                                    } else {
+                                        item += (v + ",");
                                     }
                                 });
-                                param[k]=item;
+                                param[k] = item;
                             }
-                        }else if(k==='adjustPackage'){
-                            param[k]=param[k]==='1'?true:false;
+                        } else if (k === "adjustPackage") {
+                            param[k] = param[k] === "1" ? true : false;
                         }
                     });
-                    if(!param.readilyAvailable){
-                        param.availableQty=0;
+                    if (!param.readilyAvailable) {
+                        param.availableQty = 0;
                     }
-                    if(param.visibility){
-                        param.ids=[];
+                    if (param.visibility) {
+                        param.ids = [];
                     }
-                    else{
-                        param.ids=[];
-                        this.tableData.forEach(v=>{
+                    else {
+                        param.ids = [];
+                        this.tableData.forEach(v => {
                             param.ids.push(v.customerId);
                         });
                     }
-                    param.pictures=this.$refs.upload.getFiles();
-                    param.attachments=this.$refs.uploadAttachment.getFiles();
+                    param.pictures = this.$refs.upload.getFiles();
+                    param.attachments = this.$refs.uploadAttachment.getFiles();
 
-                    this.$ajax.post(this.$apis.add_newSKU,param).then(res=>{
+                    this.$ajax.post(this.$apis.add_newSKU, param).then(res => {
                         this.$message({
                             message: this.$i.product.successfullyAdd,
-                            type: 'success'
+                            type: "success"
                         });
-                        this.disabledSubmit=false;
+                        this.disabledSubmit = false;
                         this.$router.push({
-                            path:'/product/detail',
-                            query:{
-                                id:res
-                            },
+                            path: "/product/detail",
+                            query: {
+                                id: res
+                            }
                         });
-                    }).catch(err=>{
-                        this.disabledSubmit=false;
+                    }).catch(err => {
+                        this.disabledSubmit = false;
                     });
                 }
             },
 
             //获取产品详情
-            getGoodsData(){
-                this.loadingData=true;
-                this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
-                    this.productForm=res;
-                    let lengthWidthHeight=this.productForm.lengthWidthHeight.split('*');
-                    this.boxSize.length=lengthWidthHeight[0];
-                    this.boxSize.width=lengthWidthHeight[1];
-                    this.boxSize.height=lengthWidthHeight[2];
-                    _.mapObject(this.productForm,(e,k)=>{
-                        if(k==='unit' || k==='readilyAvailable' || k==='expireUnit' || k==='unitLength' || k==='unitVolume' || k==='unitWeight'){
-                            this.productForm[k]=String(this.productForm[k]);
-                        }else if(k==='noneSellCountry' || k==='mainSaleCountry'){
-                            if(this.productForm[k]){
-                                this.productForm[k]=this.productForm[k].split(',');
-                            }else{
-                                this.productForm[k]=[];
+            getGoodsData() {
+                this.loadingData = true;
+                this.$ajax.get(this.$apis.get_productDetail, { id: this.$route.query.id }).then(res => {
+                    this.productForm = res;
+                    let lengthWidthHeight = this.productForm.lengthWidthHeight.split("*");
+                    this.boxSize.length = lengthWidthHeight[0];
+                    this.boxSize.width = lengthWidthHeight[1];
+                    this.boxSize.height = lengthWidthHeight[2];
+                    _.mapObject(this.productForm, (e, k) => {
+                        if (k === "unit" || k === "readilyAvailable" || k === "expireUnit" || k === "unitLength" || k === "unitVolume" || k === "unitWeight") {
+                            this.productForm[k] = String(this.productForm[k]);
+                        } else if (k === "noneSellCountry" || k === "mainSaleCountry") {
+                            if (this.productForm[k]) {
+                                this.productForm[k] = this.productForm[k].split(",");
+                            } else {
+                                this.productForm[k] = [];
                             }
-                        }else if(k==='adjustPackage' || k==='oem' || k==='useDisplayBox'){
-                            this.productForm[k]=this.productForm[k]?'1':'0';
+                        } else if (k === "adjustPackage" || k === "oem" || k === "useDisplayBox") {
+                            this.productForm[k] = this.productForm[k] ? "1" : "0";
                         }
                     });
-                    this.$ajax.post(this.$apis.get_sellerCustomerList,{
-                        id:this.productForm.id,
-                        pn:1,
-                        ps:1000
-                    }).then(res=>{
-                        this.tableData=res.datas;
-                    }).finally(err=>{
-                        this.loadingData=false;
+                    this.$ajax.post(this.$apis.get_sellerCustomerList, {
+                        id: this.productForm.id,
+                        pn: 1,
+                        ps: 1000
+                    }).then(res => {
+                        this.tableData = res.datas;
+                    }).finally(err => {
+                        this.loadingData = false;
                     });
-                }).catch(err=>{
-                    this.loadingData=false;
+                }).catch(err => {
+                    this.loadingData = false;
                 });
             },
 
             /**
              * 弹出框事件
              * */
-            changeChecked(e){
-                this.selectList=e;
+            changeChecked(e) {
+                this.selectList = e;
             },
-            btnClick(e){
-                console.log(e)
+            btnClick(e) {
+                console.log(e);
             },
-            searchCustomer(){
-                this.loadingTable=true;
-                this.$ajax.post(this.$apis.get_sellerCustomerGroup,this.customerQuery).then(res=>{
-                    this.loadingTable=false;
-                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas,e=>{
-                        this.tableData.forEach(v=>{
-                            if(v.id===e.id.value){
-                                this.$set(e,'_disabled',true);
-                                this.$set(e,'_checked',true);
+            searchCustomer() {
+                this.loadingTable = true;
+                this.$ajax.post(this.$apis.get_sellerCustomerGroup, this.customerQuery).then(res => {
+                    this.loadingTable = false;
+                    this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas, e => {
+                        this.tableData.forEach(v => {
+                            if (v.id === e.id.value) {
+                                this.$set(e, "_disabled", true);
+                                this.$set(e, "_checked", true);
                             }
-                        })
+                        });
                     });
 
-                }).catch(err=>{
-                    this.loadingTable=false;
+                }).catch(err => {
+                    this.loadingTable = false;
                 });
             },
-            clearCustomerSearch(){
-                this.customerQuery.name='';
-                this.customerQuery.type=null;
-                this.customerQuery.country='';
-                this.customerQuery.city='';
+            clearCustomerSearch() {
+                this.customerQuery.name = "";
+                this.customerQuery.type = null;
+                this.customerQuery.country = "";
+                this.customerQuery.city = "";
                 // this.countryList=[];
             },
-            postData(){
-                let id=[];
-                this.tableDataList.forEach(v=>{
-                    if(v._checked && !v._disabled){
+            postData() {
+                let id = [];
+                this.tableDataList.forEach(v => {
+                    if (v._checked && !v._disabled) {
                         id.push(v.id.value);
                     }
                 });
-                if(id.length){
-                    this.disableClickPost=true;
-                    this.$ajax.post(this.$apis.get_sellerCustomerGroup,id).then(res=>{
-                        res.forEach(v=>{
-                            v.customerId=v.id;
+                if (id.length) {
+                    this.disableClickPost = true;
+                    this.$ajax.post(this.$apis.get_sellerCustomerGroup, id).then(res => {
+                        res.forEach(v => {
+                            v.customerId = v.id;
                             this.tableData.push(v);
                         });
-                        this.addCustomerDialogVisible=false;
-                        this.disableClickPost=false;
-                    }).catch(err=>{
-                        this.addCustomerDialogVisible=false;
-                        this.disableClickPost=false;
+                        this.addCustomerDialogVisible = false;
+                        this.disableClickPost = false;
+                    }).catch(err => {
+                        this.addCustomerDialogVisible = false;
+                        this.disableClickPost = false;
                     });
-                }else{
-                    this.addCustomerDialogVisible=false;
+                } else {
+                    this.addCustomerDialogVisible = false;
                 }
 
             },
@@ -1419,49 +1457,49 @@
             /**
              * 获取字典
              * */
-            getUnit(){
+            getUnit() {
                 //币种单位
-                const currencyAjax=this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true});
+                const currencyAjax = this.$ajax.get(this.$apis.get_currencyUnit, {}, { cache: true });
                 //国家
-                const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
+                const countryAjax = this.$ajax.get(this.$apis.get_country, {}, { cache: true });
                 //数据字典
-                const codeAjax=this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS','RA_IS','SKU_UNIT','QUARANTINE_TYPE','CUSTOMER_TYPE'],{cache:true});
-                this.loadingData=true;
-                this.$ajax.all([currencyAjax,countryAjax,codeAjax]).then(res=>{
-                    this.currencyOption=res[0];
-                    this.countryOption=res[1];
-                    res[2].forEach(v=>{
-                        if(v.code==='ED_UNIT'){
-                            this.dateOption=v.codes;
-                        }else if(v.code==='WT_UNIT'){
-                            this.weightOption=v.codes;
-                        }else if(v.code==='VE_UNIT'){
-                            this.volumeOption=v.codes;
-                        }else if(v.code==='LH_UNIT'){
-                            this.lengthOption=v.codes;
-                        }else if(v.code==='SKU_SALE_STATUS'){
-                            this.saleStatusOption=v.codes;
-                        }else if(v.code==='OEM_IS'){
-                            this.oemOption=v.codes;
-                        }else if(v.code==='UDB_IS'){
-                            this.udbOption=v.codes;
-                        }else if(v.code==='SKU_PG_IS'){
-                            this.skuPkgOption=v.codes;
-                        }else if(v.code==='RA_IS'){
-                            this.readilyOption=v.codes;
-                        }else if(v.code==='SKU_UNIT'){
-                            this.skuUnitOption=v.codes;
-                        }else if(v.code==='QUARANTINE_TYPE'){
-                            this.quarantineTypeOption=v.codes;
-                        }else if(v.code==='CUSTOMER_TYPE'){
-                            this.customerTypeOption=v.codes;
+                const codeAjax = this.$ajax.post(this.$apis.get_partUnit, ["SKU_SALE_STATUS", "SKU_READILY_AVAIALBLE", "ED_UNIT", "WT_UNIT", "VE_UNIT", "LH_UNIT", "OEM_IS", "UDB_IS", "SKU_PG_IS", "RA_IS", "SKU_UNIT", "QUARANTINE_TYPE", "CUSTOMER_TYPE"], { cache: true });
+                this.loadingData = true;
+                this.$ajax.all([currencyAjax, countryAjax, codeAjax]).then(res => {
+                    this.currencyOption = res[0];
+                    this.countryOption = res[1];
+                    res[2].forEach(v => {
+                        if (v.code === "ED_UNIT") {
+                            this.dateOption = v.codes;
+                        } else if (v.code === "WT_UNIT") {
+                            this.weightOption = v.codes;
+                        } else if (v.code === "VE_UNIT") {
+                            this.volumeOption = v.codes;
+                        } else if (v.code === "LH_UNIT") {
+                            this.lengthOption = v.codes;
+                        } else if (v.code === "SKU_SALE_STATUS") {
+                            this.saleStatusOption = v.codes;
+                        } else if (v.code === "OEM_IS") {
+                            this.oemOption = v.codes;
+                        } else if (v.code === "UDB_IS") {
+                            this.udbOption = v.codes;
+                        } else if (v.code === "SKU_PG_IS") {
+                            this.skuPkgOption = v.codes;
+                        } else if (v.code === "RA_IS") {
+                            this.readilyOption = v.codes;
+                        } else if (v.code === "SKU_UNIT") {
+                            this.skuUnitOption = v.codes;
+                        } else if (v.code === "QUARANTINE_TYPE") {
+                            this.quarantineTypeOption = v.codes;
+                        } else if (v.code === "CUSTOMER_TYPE") {
+                            this.customerTypeOption = v.codes;
                         }
                     });
-                    if(this.$route.query.isEdit){
+                    if (this.$route.query.isEdit) {
                         this.getGoodsData();
                     }
-                }).finally(()=>{
-                    this.loadingData=false;
+                }).finally(() => {
+                    this.loadingData = false;
                 });
 
                 //
@@ -1515,98 +1553,112 @@
                 // }).catch(err=>{
                 //     this.loadingData=false;
                 // });
-            },
+            }
         },
-        created(){
+        created() {
             this.getCategoryId();
             this.getUnit();
         },
-    }
+    };
 </script>
 
 <style scoped>
-    .manually-add{
+    .manually-add {
         position: relative;
     }
-    .number{
+
+    .number {
         min-height: 51px;
     }
-    .number >>> .el-input-number--mini{
-        width:80%;
-    }
-    .select >>> .el-select{
+
+    .number >>> .el-input-number--mini {
         width: 80%;
     }
 
-    .title{
+    .select >>> .el-select {
+        width: 80%;
+    }
+
+    .title {
         font-weight: bold;
         font-size: 18px;
         height: 32px;
         line-height: 32px;
-        color:#666666;
+        color: #666666;
         margin-top: 10px;
     }
 
-    .addPic{
+    .addPic {
         height: 50px;
         line-height: 50px;
     }
-    .addPic>div{
+
+    .addPic > div {
         float: left;
         height: 50px;
         line-height: 50px;
     }
-    .addPic .imgGroup{
+
+    .addPic .imgGroup {
         margin-left: 10px;
     }
-    .addPic .btns{
+
+    .addPic .btns {
         margin-left: 20px;
     }
 
-    .speForm .el-form-item--small.el-form-item{
+    .speForm .el-form-item--small.el-form-item {
         /*margin-bottom: 0;*/
     }
-    .speForm .el-row .list .el-input{
+
+    .speForm .el-row .list .el-input {
         width: 80%;
     }
 
-    .tableList >>> .el-form-item__content{
-        margin-left: 0!important;
+    .tableList >>> .el-form-item__content {
+        margin-left: 0 !important;
     }
 
-    .speTextarea{
+    .speTextarea {
         width: 90%;
     }
-    .speSelect{
-        width: 80%;
-    }
-    .speInputNumber{
-        width: 80%;
-    }
-    .speInputNumber >>> input{
-        text-align: left;
-    }
-    .speInput{
+
+    .speSelect {
         width: 80%;
     }
 
-    .speNum{
+    .speInputNumber {
+        width: 80%;
+    }
+
+    .speInputNumber >>> input {
+        text-align: left;
+    }
+
+    .speInput {
+        width: 80%;
+    }
+
+    .speNum {
         width: 60px;
     }
-    .speIcon{
+
+    .speIcon {
         display: inline-block;
         height: 28px;
         line-height: 28px;
     }
-    .dropdown{
+
+    .dropdown {
         height: 32px;
         width: 80%;
     }
-    .speNumbberInput{
+
+    .speNumbberInput {
         width: 80%;
     }
 
-    .footBtn{
+    .footBtn {
         border-top: 1px solid #e0e0e0;
         height: 40px;
         line-height: 40px;
@@ -1618,7 +1670,8 @@
         text-align: left;
         z-index: 5;
     }
-    .dialog-footer{
+
+    .dialog-footer {
         text-align: center;
     }
 </style>

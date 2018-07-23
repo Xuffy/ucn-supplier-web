@@ -14,13 +14,13 @@
                               <div v-if="v.type==='input'">
                                 <el-input
                                   size="mini"
-                                  placeholder="请输入内容"
+                                  :placeholder="$i.common.inputkeyWordToSearch"
                                   v-model="params[v.key]">
                                 </el-input>
                               </div>
                               <div v-if="v.type==='select'">
                                 {{params[v.country]}}
-                                <el-select class="speWidth" v-model="params[v.key]" placeholder="请选择">
+                                <el-select class="speWidth" v-model="params[v.key]" :placeholder="$i.common.inputSearch">
                                   <el-option
                                     size="mini"
                                     v-for="item in options[v.key]"
@@ -49,21 +49,31 @@
               </div>
         </div>
 <!--        表格-->
-          <div style="margin-top: 20px;">
-              <!-- <el-button @click="deleteCustomer" type="primary">{{$i.button.delete}}</el-button> -->
-          </div>
-             <v-table
-                    :height=360
-                    :loading='loading'
-                    :data="tabData"
-                    :buttons="[{label: 'Detail', type: 1}]"
-                    @action="detail"
-                    @change-checked='checked'
-                    style='marginTop:10px'/>
-              <page
-                :page-data="pageData"
-                @change="handleSizeChange"
-                @size-change="pageSizeChange"></page>
+       <v-table
+              code="udata_supply_supplier_customer_overview"
+              @change-sort="sort"
+              :height=500
+              :loading='loading'
+              :data="tabData"
+              :buttons="[{label: 'Detail', type: 1}]"
+              @action="detail"
+              @change-checked='checked'
+              style='marginTop:10px'>
+            <template slot="header">
+              <div style="margin-top: 20px;">
+                <el-button @click="deleteCustomer" type="danger" :disabled='!selectNumber.length>0'
+                v-authorize="'CUSTOMER:OVERVIEW:ARCHIVE'">
+                  {{$i.button.remove}}({{selectNumber.length}})</el-button>
+                <el-button @click="downloadCustomer" type="primary" v-authorize="'CUSTOMER:OVERVIEW:DOWNLOAD'"
+                           :disabled='!tabData.length>0'>{{$i.button.download}}
+                  ({{selectNumber.length===0?$i.common.all:selectNumber.length}})</el-button>
+              </div>
+            </template>
+       </v-table>
+        <page
+          :page-data="pageData"
+          @change="handleSizeChange"
+          @size-change="pageSizeChange"></page>
 
 
       <div v-show='!isButton'  style='display:flex; justify-content: center'>
@@ -102,6 +112,7 @@
                 value: 1,
                 hideBody: true, //是否显示body
                 btnInfo: 'Show the Advance',
+                disableClickDeleteBtn: false,
                 loading: false,
                 pageData: {},
                 endpn: '',
@@ -114,8 +125,9 @@
                     payment: null,
                     pn: 1,
                     ps: 50,
-                    // recycle: false,
-                    type: null
+                    recycle: false,
+                    type: null,
+                    sorts:[]
                 },
                 tabData: [],
                 selectedData: [],
@@ -131,7 +143,7 @@
         },
         methods: {
                ...mapActions([
-                 'setLog'
+                 'setMenuLink'
             ]),
             handleSizeChange(val) {
               this.params.pn = val;
@@ -181,6 +193,7 @@
                 this.$windowOpen({
                     url: '/customer/detail',
                     params: {
+                        type: 'read',
                         id: item.id.value,
                         companyId: item.companyId.value
                     }
@@ -188,17 +201,24 @@
                 });
             },
             deleteCustomer(){
-                 this.$ajax.post(this.$apis.post_supply_batchDelete, this.selectNumber)
-                    .then(res => {
-                        this.$message({
-                          message: '删除成功',
-                          type: 'success'
-                        });
-                        this.getData()
-                    })
-                    .catch((res) => {
-                        console.log(res)
-                    });
+              this.$confirm(this.$i.common.sureDelete, this.$i.common.prompt, {
+                confirmButtonText: this.$i.common.sure,
+                cancelButtonText: this.$i.common.cancel,
+                type: 'warning'
+              }).then(() => {
+                this.disableClickDeleteBtn = true;
+                this.$ajax.post(this.$apis.post_supply_batchDelete, this.selectNumber).then(res => {
+                  this.disableClickDeleteBtn = false;
+                  this.selectNumber =[];
+                  this.getData();
+                  this.$message({
+                    type: 'success',
+                    message: this.$i.common.deleteTheSuccess
+                  });
+                }).finally(() => {
+                  this.disableClickDeleteBtn = false;
+                });
+              })
             },
             //.........checked
             checked(item) {
@@ -252,14 +272,19 @@
                     console.log(err)
                 });
             },
-            handleSizeChange(val) {
-                this.params.pn = val;
-                this.getData()
-            },
-            pageSizeChange(val) {
-                this.params.ps = val;
-                this.getData()
-            },
+          downloadCustomer(){
+            let ids=_.pluck(_.pluck(this.selectedData,"id"),'value');
+            if(ids.length>0){
+              this.$fetch.export_task('UDATA_SUPPLIER_EXPORT_CUSTOMER_IDS',{ids:ids});
+            }else{
+              let params=this.$depthClone(this.params);
+              this.$fetch.export_task('UDATA_SUPPLIER_EXPORT_CUSTOMER_PARAMS',params);
+            }
+          },
+          sort(item){
+            this.params.sorts = item.sorts;
+            this.getData();
+          },
         },
         created() {
             this.getData();
@@ -267,7 +292,19 @@
             this.getCountryAll();
         },
         mounted(){
-          this.setLog({query:{code:'SUPPLIER_CUSTOMER_REMARK'}});
+          this.setMenuLink([{
+            path: '',
+            query: {code: 'SUPPLIER_CUSTOMER_REMARK'},
+            type: 100,
+            label: this.$i.common.log
+          },
+          {
+            path: 'customerArchive',
+            type: 10,
+            label: this.$i.common.archive,
+            auth:'CUSTOMER:ARCHIVE'
+          },
+          ]);
         },
         watch: {}
     }
@@ -332,12 +369,6 @@
     .btnline {
         margin-top: 20px;
         width: 100%;
-        border-top: 1px solid black;
-    }
-
-    .btnline .el-button {
-        margin-right: 8px;
-        margin-top: 20px;
     }
 
     .el-select {

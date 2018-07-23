@@ -18,9 +18,9 @@
         <div class="operation-box" :class="{readonly:readonly,image:readonly}"
              v-show="item.progress === 1 || item.url">
 
-          <i class="el-icon-download" @click="downloadFile(item)"></i>
+          <i class="el-icon-download" @click="$download(item.url)"></i>
           <i class="el-icon-delete" @click="deleteFile(item)"></i>
-          <i class="el-icon-view" @click="$refs.uploadViewPicture.show(item.url)"></i>
+          <i class="el-icon-view" @click="setViewPicture(item.url)"></i>
         </div>
 
       </li>
@@ -30,22 +30,21 @@
       <li v-for="item in fileList">
         <i class="el-icon-success" v-if="item.progress === 1"></i>
         <i class="el-icon-document"></i>
-        <span v-text="item.fileName" :title="item.fileName" @click="downloadFile(item)"></span>
+        <span v-text="item.fileName" :title="item.fileName" @click="$download(item.url)"></span>
         <i v-if="!readonly" class="el-icon-delete" @click="deleteFile(item)"></i>
         <el-progress :percentage="parseInt(item.progress * 100)"
                      v-if="item.progress && item.progress !== 1"></el-progress>
       </li>
     </ul>
-    <v-view-picture ref="uploadViewPicture"></v-view-picture>
   </div>
 </template>
 
 <script>
   import OSS from 'ali-oss';
   import co from 'co';
-  import VViewPicture from '../viewPicture/index'
   import VImage from '../image/index'
   import config from '../../../service/config';
+  import {mapActions, mapState} from 'vuex';
 
   const imageType = ['JPG', 'PNG'];
   const prohibitType = ['EXE'];
@@ -82,7 +81,7 @@
         default: 'normal' // normal 、small
       }
     },
-    components: {VViewPicture, VImage},
+    components: {VImage},
     data() {
       return {
         tenantId: '',
@@ -106,6 +105,7 @@
       }
     },
     methods: {
+      ...mapActions(['setViewPicture']),
       uploadFile() {
         this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
           let client = this.signature(data)
@@ -180,9 +180,6 @@
         this.fileList = list;
         this.$emit('change', _.values(list));
       },
-      downloadFile(item) {
-        item.url && window.open(item.url);
-      },
       signature(params) {
         return new OSS.Wrapper({
           region: params.region,
@@ -242,7 +239,7 @@
           }
         });
 
-        this.$emit('change', _.values(this.fileList));
+        this.$emit('change', _.values(this.fileList), true);
       },
       getFiles(type) {
         let files = _.pluck(_.values(this.fileList), 'fileKey')
@@ -251,6 +248,7 @@
         return type ? {key, url: _.pluck(_.values(this.fileList), 'url')} : key;
       },
       reset() {
+        this.setList();
         this.$emit('update:list', []);
       }
     },
@@ -267,6 +265,7 @@
     background-color: #fbfdff;
     border: 1px dashed #c0ccda;
     border-radius: 6px;
+    margin-bottom: 5px;
     box-sizing: border-box;
     line-height: 146px;
     position: relative;
@@ -325,7 +324,8 @@
     word-wrap: break-word;
     border: 1px solid #c0ccda;
     border-radius: 6px;
-    margin-left: 10px;
+    margin-right: 5px;
+    margin-bottom: 5px;
     position: relative;
     vertical-align: middle;
     box-sizing: border-box;

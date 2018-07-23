@@ -3,8 +3,8 @@
     <div class="title">
       {{$i.track.trackBySKU}}
     </div>
-    <div class="body" style="overflow: hidden">
-      <div class="head" style="float: left">
+    <div class="body">
+      <div class="head">
         <div>
           <span class="text">{{$i.payment.status}} : </span>
           <el-radio-group size="mini" @change="getList" v-model="params.status">
@@ -17,22 +17,34 @@
           </el-radio-group>
         </div>
       </div>
-      <div class="search" style="float: right">
-        <select-search
-          v-model="searchId"
-          class="search"
-          :options=options
-          @inputEnter="inputEnter"
-          :searchLoad="searchLoad">
-        </select-search>
-      </div>
     </div>
     <v-table
       code="track"
       :data="dataList"
       :height="500"
-      :selection="false"
-      :loading='loading' />
+      @change-sort="sort"
+      @change-checked='checked'
+      :loading='loading'>
+      <template slot="header">
+        <div style="overflow: hidden">
+          <div style="float: left">
+            <el-button @click="download" :disabled='!(dataList.length)>0'>
+              {{$i.common.download}}
+              ({{selectedData.length===0?$i.common.all:selectedData.length}})
+            </el-button>
+          </div>
+          <div class="search"style="float: right;margin-right:10px">
+            <select-search
+              v-model="searchId"
+              class="search"
+              :options=options
+              @inputEnter="inputEnter"
+              :searchLoad="searchLoad">
+            </select-search>
+          </div>
+        </div>
+      </template>
+    </v-table>
     <page
       :page-data="pageData"
       @change="handleSizeChange"
@@ -54,16 +66,18 @@
     data(){
       return{
         dataList: [],
+        selectedData: [],
         searchLoad: false,
         loading: false,
         searchId:'',
         pageData:{},
         params:{
-          "pn": 1,
-          "ps": 50,
-          "skuCodeLike":'',
-          "orderNoLike":'',
-          "status": ''
+          pn: 1,
+          ps: 50,
+          skuCodeLike:'',
+          orderNoLike:'',
+          status: '',
+          sorts:[]
         },
         options: [{
           id: '1',
@@ -127,6 +141,34 @@
         }).catch(err=>{
           this.loading = false;
         });
+      },
+      //...............sort
+      sort(item){
+        this.params.sorts =  item.sorts;
+        this.getList();
+      },
+      //.........checked
+      checked(item) {
+        this.selectedData = item;
+      },
+      //.........download
+      download(){
+        if(this.selectedData.length>0){
+          let params={
+            checkBoxParams:[]
+          };
+          _.map(this.selectedData,v=> {
+            params.checkBoxParams.push({
+              orderId: v.orderId.value,
+              logisticsId: v.logisticsId.value,
+              qcId: v.qcId.value
+            })
+          })
+          this.$fetch.export_task('TRACK_TRACK_INFO',params);
+        }else{
+          let params=this.$depthClone(this.params);
+          this.$fetch.export_task('TRACK_TRACK_INFO',params);
+        }
       },
     },
     created(){

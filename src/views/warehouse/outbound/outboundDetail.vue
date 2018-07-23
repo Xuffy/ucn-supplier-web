@@ -83,9 +83,11 @@
                 :data="productTable"
                 :buttons="[{label:'Detail',type:1}]"
                 @action="btnClick"
+                :totalRow="totalRow"
                 @change-checked="changeChecked"></v-table>
 
         <div class="footBtn">
+            <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
             <el-button @click="closeWindow" type="primary">{{$i.warehouse.close}}</el-button>
         </div>
 
@@ -132,11 +134,34 @@
                  * */
                 loadProductTable:false,
                 productTable:[],
-                totalRow:[],
+               dataDicts:{}
+            }
+        },
+        computed:{
+            totalRow(){
+                let obj={};
+                if(this.productTable.length<=0){
+                    return;
+                }
+                _.map(this.productTable,v=>{
+                    _.mapObject(v,(item,key)=>{
+                        if(item._calculate){
+                            obj[key]={
+                                value: Number(item.value)  + (Number(obj[key] ? obj[key].value : 0) || 0),
+                            };
+                        }else{
+                            obj[key] = {
+                                value: ''
+                            };
+                        }
+                    })
+                });
+                return [obj];
+
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             getData(){
                 this.loadingTable=true;
                 this.$ajax.get(`${this.$apis.get_outBoundDetail}?id=${this.$route.query.id}`).then(res=>{
@@ -145,15 +170,15 @@
                         outboundId: this.$route.query.id,
                         pn: 1,
                         ps: 50,
-
-                        // sorts: [
-                        //     {
-                        //         orderBy: "",
-                        //         orderType: "",
-                        //     }
-                        // ],
                     }).then(res=>{
-                        this.productTable = this.$getDB(this.$db.warehouse.outboundDetailProductData, res.datas);
+                        this.productTable = this.$getDB(this.$db.warehouse.outboundDetailProductData, res.datas,e=>{
+                          e.skuUnitDictCode._value=e.skuUnitDictCode.value?_.findWhere(this.getDict('SKU_UNIT'),{code:e.skuUnitDictCode.value}).name:'';
+                          e.lengthUnitDictCode._value=e.lengthUnitDictCode.value?_.findWhere(this.getDict('LH_UNIT'),{code:e.lengthUnitDictCode.value}).name:'';
+                          e.volumeUnitDictCode._value=e.volumeUnitDictCode.value?_.findWhere(this.getDict('VE_UNIT'),{code:e.volumeUnitDictCode.value}).name:'';
+                          e.weightUnitDictCode._value=e.weightUnitDictCode.value?_.findWhere(this.getDict('WT_UNIT'),{code:e.weightUnitDictCode.value}).name:'';
+
+                          e.inboundDate._value = e.inboundDate.value?this.$dateFormat(e.inboundDate.value, "yyyy-mm-dd"):'';
+                        });
                         _.map(res.datas,v=>{
                             _.map(v,(val,key)=>{
                                 if(key==='outboundSkuTotalQty' || key==='outboundOutCartonTotalQty' || key==='outboundSkuTotalVolume' || key==='outboundSkuTotalNetWeight' || key==='outboundSkuTotalGrossWeight'){
@@ -161,9 +186,8 @@
                                     v[key]=null;
                                 }
                             })
-                        })
 
-                        this.totalRow=this.$getDB(this.$db.warehouse.outboundDetailProductData, res.datas);
+                        })
                         this.loadingTable=false;
                     }).catch(err=>{
                         this.loadingTable=false;
@@ -187,28 +211,53 @@
             changeChecked(e){
 
             },
-
+            download(){
+                this.$fetch.export_task('OUTBOUND',{outboundNos:[this.outboundData.outboundNo]});
+            },
             //关闭窗口
             closeWindow(){
                 window.close();
             },
 
-            getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['OBD_STATUS'],{cache:true}).then(res=>{
-                    this.outboundOption=res[0].codes;
-                    console.log(this.outboundOption,'this.outboundOption')
+            getDataDicts(){
+                this.$ajax.post(this.$apis.get_partUnit,['OBD_STATUS','SKU_UNIT','WT_UNIT','LH_UNIT','VE_UNIT'],{cache:true}).then(res=>{
+                  console.log(res,"getDataDicts");
+                  this.dataDicts={};
+                  res.forEach(v => {
+                    this.dataDicts[v.code]=v.codes;
+                  });
+                  this.outboundOption=this.dataDicts['OBD_STATUS'];
                     this.getData();
                 }).catch(err=>{
 
                 })
-
             },
+          getDict(type,code){
+              if(!code){
+                return this.dataDicts[type];
+              }
+              let v;
+              this.dataDicts[type].forEach(o=>{
+                if(o.code==code){
+                  v=o;
+                }
+              })
+              if(!v){
+                console.log('未找到数据字典：'+type+'='+code);
+              }
+              return v;
+          }
         },
         created(){
-            this.getUnit();
+            this.getDataDicts();
         },
         mounted(){
-            this.setLog({query: {code: 'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                label: this.$i.common.log
+            });
         },
     }
 </script>

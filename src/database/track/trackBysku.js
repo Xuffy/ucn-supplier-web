@@ -362,4 +362,19 @@ export default {
   shipServiceProvider: {
     key: 'shipServiceProvider'
   },
+  orderId: {
+    key: 'orderId',
+    _important:true,
+    _hide:true
+  },
+  logisticsId: {
+    key: 'logisticsId',
+    _important:true,
+    _hide:true
+  },
+  qcId: {
+    key: 'qcId',
+    _important:true,
+    _hide:true
+  }
 }

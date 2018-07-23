@@ -43,6 +43,18 @@ export default {
         key:'skuUnit',          //字典
         belong:'skuList',
     },
+    skuUnitLength:{
+        key:'skuUnitLength',          //字典
+        belong:'skuList',
+    },
+    skuUnitVolume:{
+        key:'skuUnitVolume',          //字典
+        belong:'skuList',
+    },
+    skuUnitWeight:{
+        key:'skuUnitWeight',          //字典
+        belong:'skuList',
+    },
     skuQty:{
         key:'skuQty'
     },

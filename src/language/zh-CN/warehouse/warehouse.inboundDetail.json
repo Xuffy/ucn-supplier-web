@@ -78,5 +78,8 @@
   "skuInnerCartonHeight": "中包高",
   "skuInnerCartonWeightNet": "中包净重",
   "skuInnerCartonRoughWeight": "中包毛重",
-  "supplierCode":"供应商编号"
+  "supplierCode":"供应商编号",
+  "skuUnitLength":"长度单位",
+  "skuUnitVolume":"体积单位",
+  "skuUnitWeight":"重量单位"
 }

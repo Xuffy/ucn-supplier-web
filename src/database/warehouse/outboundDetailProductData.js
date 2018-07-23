@@ -12,11 +12,26 @@ export default {
     factorySkuCode:{},
     customerSkuCode:{},
     skuUnitDictCode:{},
-    outboundSkuTotalQty:{},
-    outboundOutCartonTotalQty:{},
-    outboundSkuTotalVolume:{},
-    outboundSkuTotalNetWeight:{},
-    outboundSkuTotalGrossWeight:{},
+  lengthUnitDictCode:{
+    key:'lengthUnitDictCode',
+  },
+  volumeUnitDictCode:{},
+  weightUnitDictCode:{},
+    outboundSkuTotalQty:{
+        _calculate:true
+    },
+    outboundOutCartonTotalQty:{
+        _calculate:true
+    },
+    outboundSkuTotalVolume:{
+        _calculate:true
+    },
+    outboundSkuTotalNetWeight:{
+        _calculate:true
+    },
+    outboundSkuTotalGrossWeight:{
+        _calculate:true
+    },
     outerCartonSkuQty:{},
     outerCartonVolume:{},
     outerCartonGrossWeight:{},

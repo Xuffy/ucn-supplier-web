@@ -19,7 +19,7 @@ const axios = Axios.create({
   timeout: _config.TIMEOUT,
   headers: {
     'Content-Type': 'application/json;charset=utf-8',
-    'Accept-Language': _config.LANGUAGE,
+    'Accept-Language': localStore.get('language') || _config.LANGUAGE,
   },
   transformRequest: [function (data) {
     return data;
@@ -66,7 +66,7 @@ const $ajax = (config) => {
   this.setUrl = (url, params) => {
     let p = {};
 
-    if (_.isEmpty(url)){
+    if (_.isEmpty(url)) {
       throw new Error('Request url exception');
     }
 
@@ -117,7 +117,7 @@ const $ajax = (config) => {
       , resData = false
       , _options = _.extend(...this.sethHeader(options, config));
 
-    if (!config.updateCache && config.cache) {
+    if (config.cache) {
       if (!_.isEmpty(resCache) && _.isArray(resCache)) {
         let res = _.findWhere(resCache, {id: md5(url + _options.data)});
         if (res) {
@@ -260,7 +260,7 @@ axios.interceptors.response.use(
     // 缓存设置
     resCache = sessionStore.get('request_cache') || [];
 
-    if (config.updateCache || config.cache) {
+    if (!_.isUndefined(config.cache)) {
       let rcList = [], id = md5(config.url + config.data);
 
       rcList = _.filter(resCache, val => {

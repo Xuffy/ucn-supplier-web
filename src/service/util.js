@@ -3,9 +3,11 @@ import {localStore, sessionStore} from 'service/store';
 import database from '../database/index';
 import $i from '../language/index';
 import router from 'service/router'
+import $fetch from 'service/fetch'
 import _config from "./config";
 import store from '@/store';
 import Qs from 'qs'
+import Downloadjs from 'downloadjs';
 import {Message, MessageBox} from 'element-ui';
 
 
@@ -14,18 +16,22 @@ import {Message, MessageBox} from 'element-ui';
  */
 const deleteArr = (list, fieldRemark) => {
   _.map(list, item => {
-    if (item) deleteObject(item);
-    if (item[fieldRemark]) deleteObject(item[fieldRemark]);
+    item && deleteObject(item);
+    item[fieldRemark] && deleteObject(item[fieldRemark]);
   });
 };
 
 const deleteObject = (list, fieldRemark, details) => {
   _.mapObject(list, (val, key) => {
     if (key.substring(0, 1) === '_') delete list[key];
+
     if (list[fieldRemark]) deleteObject(list[fieldRemark]);
     if (key === details) deleteArr(list[details], fieldRemark)
   });
 };
+
+// 需要直接下载的文件格式
+const NEED_DOWNLOAD_FILE = ['jpg', 'gif', 'png', 'pdf', 'txt', 'bmp', 'jpeg', 'webp'];
 
 export default {
   /**
@@ -41,7 +47,9 @@ export default {
   /**
    * 格式化日期
    */
-  $dateFormat: dateFormat,
+  $dateFormat() {
+    return arguments[0] ? dateFormat(...arguments) : '';
+  },
 
   /**
    * 国际化语言配置
@@ -49,10 +57,13 @@ export default {
   $i,
 
   /**
+   * 公共请求
+   */
+  $fetch,
+  /**
    * 字段配置
    */
   $db: database,
-
 
   /**
    * 字段配置
@@ -122,13 +133,31 @@ export default {
       , auths = (user.userResourceCodes || []).concat(user.userType)
       , pass = false;
 
+    if (user.userType === 0 || !value === '') {
+      return true;
+    }
+
     value = _.isArray(value) ? value : [value];
 
-    _.map(value, val => {
-      pass = _.indexOf(auths, val) > -1;
-    });
+    _.map(value, val => pass = _.indexOf(auths, val) > -1);
 
     return pass;
+  },
+
+  $download(url) {
+    let str, flag;
+
+    if (!url || !_.isString(url)) {
+      return false;
+    }
+
+    str = url.split('?')[0];
+    flag = false;
+    if (str && _.find(NEED_DOWNLOAD_FILE, val => str.toLocaleLowerCase().indexOf(val.toLocaleLowerCase()) > -1)) {
+      Downloadjs(url);
+    } else {
+      window.open(url);
+    }
   },
 
   /**
@@ -407,8 +436,9 @@ export default {
    */
 
   $windowOpen(config) {
-    let {url, params} = config;
-    return window.open(`//${window.location.host}/#${config.url}?${Qs.stringify(params)}`, '_blank');
+    let {url, params} = config, str;
+    str = _.isEmpty(params) ? '' : '?';
+    return window.open(`${window.location.origin}${config.url}${str}${Qs.stringify(params)}`, '_blank');
   },
 
   $mul() {

@@ -81,7 +81,11 @@
         </div>
         <el-tabs type="border-card">
             <el-tab-pane :label="$i.warehouse.qcResult">
-                <el-button :disabled="selectFirst.length===0" type="primary" @click="accept">{{$i.warehouse.accept}}</el-button>
+                <el-button
+                        v-authorize="'QC:ORDER_DETAIL:PRODUCT_CONFIRM_SKU'"
+                        :disabled="selectFirst.length===0"
+                        type="primary"
+                        @click="accept">{{$i.warehouse.accept}}</el-button>
                 <el-table
                         v-loading="loadingProductTable"
                         class="speTable"
@@ -124,13 +128,19 @@
                 </el-table>
             </el-tab-pane>
             <el-tab-pane :label="$i.warehouse.applyRework">
-                <el-button :disabled="selectSecond.length===0" @click="acceptRework" type="primary">{{$i.warehouse.acceptRework}}</el-button>
+                <el-button
+                        v-authorize="'QC:ORDER_DETAIL:PRODUCT_REWORK'"
+                        :disabled="selectSecond.length===0"
+                        @click="acceptRework"
+                        type="primary">{{$i.warehouse.acceptRework}}</el-button>
                 <el-table
                         v-loading="loadingProductTable"
                         class="speTable"
                         :data="productTable1"
                         style="width: 100%;margin-top: 10px"
                         border
+                        :summary-method="getSummaries"
+                        show-summary
                         @selection-change="handleSecondTable">
                     <el-table-column
                             align="center"
@@ -165,12 +175,18 @@
                 </el-table>
             </el-tab-pane>
             <el-tab-pane :label="$i.warehouse.applyReturn">
-                <el-button :disabled="selectThird.length===0" @click="acceptReturn" type="primary">{{$i.warehouse.acceptReturn}}</el-button>
+                <el-button
+                        v-authorize="'QC:ORDER_DETAIL:PRODUCT_RETURN'"
+                        :disabled="selectThird.length===0"
+                        @click="acceptReturn"
+                        type="primary">{{$i.warehouse.acceptReturn}}</el-button>
                 <el-table
                         v-loading="loadingProductTable"
                         class="speTable"
                         :data="productTable2"
                         style="width: 100%;margin-top: 10px"
+                        :summary-method="getSummaries"
+                        show-summary
                         border
                         @selection-change="handleThirdTable">
                     <el-table-column
@@ -206,7 +222,6 @@
                 </el-table>
             </el-tab-pane>
         </el-tabs>
-
 
         <div class="summary">
             <div class="second-title">
@@ -328,14 +343,12 @@
             </el-form>
         </div>
 
-
         <div class="footBtn">
+            <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
             <el-button :disabled="loadingTable" type="danger" @click="cancel">{{$i.warehouse.exit}}</el-button>
         </div>
 
-
-
-        <el-dialog width="40%" title="将QC数据更新到产品库" :visible.sync="dialogFormVisible">
+        <el-dialog width="40%" :title="$i.warehouse.updateQcDataToProductLibrary" :visible.sync="dialogFormVisible">
             <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAll">全选</el-checkbox>
             <el-checkbox-group v-model="acceptConfig.fields" @change="handleCheckedCitiesChange">
                 <el-row>
@@ -359,12 +372,9 @@
             </div>
         </el-dialog>
 
-
         <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
 
         <v-view-picture ref="pics"></v-view-picture>
-
-
 
     </div>
 </template>
@@ -459,7 +469,7 @@
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             getData(){
                 this.$ajax.get(`${this.$apis.get_qcOrderDetail}?id=${this.$route.query.id}`).then(res=>{
                     this.qcOrderData=res;
@@ -534,6 +544,9 @@
                 }else{
                     return 1;
                 }
+            },
+            download(){
+                this.$fetch.export_task('QC_ORDER',{qcOrderNos:[this.qcOrderData.qcOrderNo]});
             },
             cancel(){
                 window.close();
@@ -623,7 +636,7 @@
                     if (index === 0) {
                         sums[index] = this.$i.warehouse.totalMoney;
                         return;
-                    }else if(index===17 || index===18 || index===21 || index===44 || index===45 || index===46 || index===47 || index===48 || index===49 || index===50 || index===51 || index===52 || index===53 || index===54 || index===67){
+                    }else if(index===17 || index===18 || index===43 || index===44 || index===45 || index===46 || index===47 || index===48 || index===49 || index===50 || index===51 || index===52 || index===53 || index===66){
                         const values = data.map(item => Number(item[column.property]));
                         if (!values.every(value => isNaN(value))) {
                             sums[index] = values.reduce((prev, curr) => {
@@ -710,7 +723,13 @@
             });
         },
         mounted(){
-            this.setLog({query: {code: 'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                auth:'QC:LOG',
+                label: this.$i.common.log
+            });
         },
         watch:{
             dialogFormVisible(n){

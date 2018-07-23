@@ -74,4 +74,12 @@ export default {
     key: 'type',
     _hide:true
   },
+  timestamp: {
+    _important:true,
+    _hide:true
+  },
+  paymentNumber:{
+    _important:true,
+    _hide:true
+  }
 }

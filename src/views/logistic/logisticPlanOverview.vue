@@ -16,32 +16,6 @@
         <select-search :options="options" @inputEnter="searchFn" v-model="selectSearch"/>
       </div>
     </div>
-    <div class="btn-wrap">
-      <div class="fn btn">
-        <div v-if="pageType === 'plan' || pageType === 'loadingList'">
-          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <!-- <el-button @click.stop="addNew" v-if="pageType != 'loadingList'">{{ $i.logistic.placeLogisticPlan }}</el-button> -->
-          <!-- <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button> -->
-        </div>
-        <div v-if="pageType === 'draft'">
-          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <el-button>{{ $i.logistic.send }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <!-- <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
-          <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button> -->
-        </div>
-        <div v-if="pageType === 'archive'">
-          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <el-button>{{ $i.logistic.recover }}({{ selectCount.length || $i.logistic.all }})</el-button>
-        </div>
-      </div>
-      <div class="view-by-btn">
-        <span>{{ $i.logistic.viewBy }}&nbsp;</span>
-        <el-radio-group v-model="viewBy" size="mini">
-          <el-radio-button v-for="a in urlObj[pageType]" :key="a.key" :label="a.label">{{ a.text }}</el-radio-button>
-        </el-radio-group>
-      </div>
-    </div>
     <v-table
       :code="urlObj[pageType][viewBy].setTheField"
       :data="tabData"
@@ -51,8 +25,30 @@
       :loading="tableLoading"
       :height="height"
       ref="tab"
-    />
-    <v-pagination :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange"/>
+      @change-sort="changeSort"
+    >
+      <div slot="header">
+        <div class="btn-wrap">
+          <div class="fn btn">
+            <div v-if="pageType === 'plan'">
+              <el-button v-authorize="auth[pageType]&&auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==5)">{{ $i.logistic.archive }}</el-button>
+            </div>
+            <div v-if="pageType === 'loadingList'">
+              <el-button v-authorize="auth[pageType]&&auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==4)">{{ $i.logistic.archive }}</el-button>
+            </div>
+          </div>
+          <div class="view-by-btn">
+            <span>{{ $i.logistic.viewBy }}&nbsp;</span>
+            <el-radio-group v-model="viewBy" size="mini">
+              <el-radio-button v-for="a in urlObj[pageType]" :key="a.key" :label="a.label">{{ a.text }}</el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
+      </div>
+    </v-table>
+    <v-pagination :pageSizes="[50,100,200]" :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange"/>
   </div>
 </template>
 <script>
@@ -66,10 +62,7 @@
         height:500,
         tableLoading: false,
         ls_plan: [],
-        pageParams: {
-          pn: 1,
-          ps: 10
-        },
+        pageParams: null,
         selectCount: [],
         fillterVal: 'all',
         tabData: [],
@@ -88,6 +81,16 @@
             label: this.$i.logistic.orderNo
           }
         ],
+        auth:{
+          plan: {
+            DOWNLOAD :'LOGISTICS:PLAN_OVERVIEW:DOWNLOAD',
+            ARCHIVE  : 'LOGISTICS:PLAN_OVERVIEW:ARCHIVE'
+          },
+          loadingList: {
+            DOWNLOAD:'LOADING_LIST:OVERVIEW:DOWNLOAD',
+            ARCHIVE:'LOADING_LIST:OVERVIEW:ARCHIVE'
+          }
+        },
         headerText: {
           plan: this.$i.logistic.logisticsPlanOverview,
           loadingList: this.$i.logistic.loadingListOverview,
@@ -178,7 +181,8 @@
               url: this.$apis.get_sku_list,
               db: this.$db.logistic.sku
             }
-          }
+          },
+          downloadIds:[]
         }
       }
     },
@@ -189,8 +193,8 @@
     },
     watch: {
       viewBy(newVal) {
-        this.selectCount = []
-        this.initPage();
+        // this.selectCount = []
+        // this.initPage();
         this.fetchDataList()
       },
       pageType() {
@@ -204,26 +208,68 @@
       }
     },
     mounted() {
-      this.setMenuLink({
+      let menuList = [{
         path: '',
         query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
         type: 100,
+        auth: (()=>{ 
+          let code = null;
+          if(this.pageType=="plan"){
+            code = 'LOGISTICS:LOG';
+          }else if(this.pageType=="loadingList"){
+            code = 'LOADING_LIST:LOG';
+          }
+          return code
+        })(),
         label: this.$i.common.log
-      });
-      this.setMenuLink({
-        path: '/logistic/draft',
-        type: 10,
-        label: this.$i.common.draft
-      });
+      }];
+      if(this.pageType=="plan"){
+        menuList.push(
+          {
+            path: '/logistic/archivePlan',
+            auth: 'LOGISTICS:PLAN_DETAIL:ARCHIVE',
+            label: this.$i.logistic.archivePlan
+          }
+        )
+      }else if(this.pageType=="loadingList"){
+        menuList.push(
+          {
+            path: '/logistic/archiveLoadingList',
+            auth: 'LOADING_LIST:DETAIL:ARCHIVE',
+            label: this.$i.logistic.archiveLoadingList
+          }
+        )
+      }
+      this.setMenuLink(menuList);
       this.fetchData()
     },
     methods: {
       ...mapActions(['setMenuLink']),
+      changeSort(arr){
+        this.pageParams.sorts = arr.sorts;
+        this.fetchDataList();
+      },
       initPage(){
         this.pageParams = {
           pn: 1,
-          ps: 10
+          ps: 50
         };
+      },
+      download(){
+        const url = this.urlObj[this.pageType][this.viewBy].url
+        const db = this.urlObj[this.pageType][this.viewBy].db
+        const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
+        this.pageType === 'draft' && (this.pageParams.planStatus = 1)
+        this.pageType === 'plan' && (this.pageParams.planStatus = 2)
+        let code = this.pageType=="loadingList" ? 'LOGISTICS_ORDER' : 'LOGISTICS_PLAN'
+        this.$fetch.export_task(code,{lgStatus, ...this.pageParams,ids:this.downloadIds})
+      },
+      sendArchive(){
+        let url = this.pageType=="loadingList" ? this.$apis.logistics_order_archive : this.$apis.logistics_plan_archive;
+        this.$ajax.post(url,{ids:this.downloadIds}).then(res => {
+          this.selectCount = [];
+          this.fetchDataList();
+        })
       },
       fetchData() {
         if (this.pageType === 'plan') {
@@ -238,9 +284,9 @@
         this.fetchDataList()
       },
       deleteData() {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
+          confirmButtonText: this.$i.logistic.confirm,
+          cancelButtonText: this.$i.logistic.cancel,
           type: 'warning'
         }).then(() => {
           this.$ajax.post(this.$apis.delete_by_ids, {ids: this.selectCount.map(a => a.id.value)}).then(res => {
@@ -249,19 +295,22 @@
             this.selectCount = []
             this.$message({
               type: 'success',
-              message: '删除成功!'
+              message: this.$i.logistic.operationSuccess
             })
           })
         })
       },
       changeChecked(arr) {
         this.selectCount = arr
+        this.downloadIds = arr.map(el => {
+          return el.id.value
+        })
       },
       action(e) {
         if(this.pageType == 'loadingList'){
-          this.$router.push({path: `/logistic/loadingListDetail`, query: {id: e.id.value}})
+          this.$windowOpen({url:`/logistic/loadingListDetail`,params:{id: e.id.value}});
         }else{
-          this.$router.push({path: `/logistic/${this.jumpPage[this.pageType]}`, query: {id: e.id.value}})
+          this.$windowOpen({url:`/logistic/${this.jumpPage[this.pageType]}`,params:{id: e.id.value}});
         }
       },
       searchFn(obj) {
@@ -281,9 +330,9 @@
         this.$router.push('/logistic/placeLogisticPlan')
       },
       fetchDataList(arg) {
-        if(arg){
-         this.initPage();
-        }
+        // if(arg){
+        //  this.initPage();
+        // }
         const url = this.urlObj[this.pageType][this.viewBy].url
         const db = this.urlObj[this.pageType][this.viewBy].db
         this.tableLoading = true
@@ -300,11 +349,10 @@
               return val
             })
           })
-          this.pageParams = {
-            pn: res.pn,
-            ps: res.ps,
-            tc: res.tc
-          }
+          this.selectCount = [];
+          this.$set(this.pageParams,'pn',res.pn);
+          this.$set(this.pageParams,'ps',res.ps);
+          this.$set(this.pageParams,'tc',res.tc);
           this.tableLoading = false
         })
       },
@@ -334,7 +382,7 @@
   }
 
   .btn-wrap {
-    padding: 10px;
+    padding: 0 25px 5px 0;
     display: flex;
     justify-content: space-between;
 

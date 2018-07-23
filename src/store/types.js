@@ -1,9 +1,5 @@
-const constant = {
-  SETMENULINK: 'setMenuLink',
-  SETDRAFT: 'SETDRAFT',
-  SETRECYCLEBIN: 'SETRECYCLEBIN',
-  SETLOG: 'SETLOG',
+export default {
+  SET_MENU_LINK: 'setMenuLink',
+  VIEW_PICTURE: 'viewPicture',
   DIC: 'DIC'
 };
-
-export default constant;

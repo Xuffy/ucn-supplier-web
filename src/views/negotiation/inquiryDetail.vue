@@ -52,7 +52,7 @@
             <el-button type="primary" @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.originValue !== 21" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
             <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.originValue + ''!=='99'||tabData[0].status.originValue+''!=='1'" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.archive }}</el-button> -->
             <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue !== 21" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
-            <el-button>{{ $i.common.download }}</el-button>
+            <el-button @click="exportDatas">{{ $i.common.download }}</el-button>
             <el-button type="warning" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="![21, 22].includes(tabData[0].status.originValue)">{{ $i.common.cancel }}</el-button>
             <el-button type="danger" @click="ajaxInqueryAction('delete')" :disabled="tabData[0].status.originValue !== 1">{{ $i.common.archive }}</el-button>
           </div>
@@ -117,7 +117,7 @@ export default {
       disabledLine: [],
       trig: 0,
       disabledTabData: [],
-      id: '',
+      id: null,
       compareLists: false,
       tabData: [],
       productTabData: [],
@@ -198,7 +198,7 @@ export default {
     }
   },
   created() {
-    this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
+    this.setMenuLink([{path: '/negotiation/recycleBin/inquiry', label: this.$i.common.recycleBin}, {path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log}]);
 
     if (this.$localStore.get('$in_quiryCompare')) {
       this.compareConfig = this.$localStore.get('$in_quiryCompare');
@@ -226,7 +226,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setRecycleBin', 'setDic']),
+    ...mapActions(['setMenuLink', 'setDic']),
     deleteInquiry() {
       this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
         confirmButtonText: this.$i.common.confirm,
@@ -364,6 +364,11 @@ export default {
       let url = this.$apis.parse(this.$apis.BUYER_GET_INQIIRY_DETAIL_LIST, {id: this.id});
       this.$ajax.post(url, this.params).then(this.showDetails);
     },
+    exportDatas() {
+      if (this.id) {
+        this.$fetch.export_task('INQUIRY_ORDER', {'draft': 0, 'recycleSupplier': false, 'id': this.id});
+      }
+    },
     onListSortChange(args) {
       this.params.sorts = args.sorts;
       this.getInquiryDetailList();
@@ -484,7 +489,7 @@ export default {
     // Produc info 按钮操作
     producInfoAction(data, type) {
       if (type === 'detail') {
-        this.$router.push({path: '/product/detail', query: {id: data.skuId.value}});
+        this.$router.push({path: '/product/sourcingDetail', query: {id: data.skuId.value}});
         return;
       }
       if (['histoty', 'modify'].indexOf(type) === -1) return;
@@ -503,9 +508,11 @@ export default {
     },
     // 接受单
     ajaxInqueryAction(type) {
-      this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {action: type, ids: [this.id]}).then(() => {
-        this.$router.push('/negotiation/inquiry');
-      });
+      if (this.id) {
+        this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {action: type, ids: [this.id]}).then(() => {
+          this.$router.push('/negotiation/inquiry');
+        });
+      }
     },
     // 删除product 某个单
     removeProduct() {

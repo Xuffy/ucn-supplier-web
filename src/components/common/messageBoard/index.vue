@@ -11,9 +11,12 @@
         <li v-for="item in messageList" :key="item.id">
           <span class="name">{{item.sendByUserName}}</span>
           <label class="time">{{$dateFormat(item.sendTime,'yyyy-mm-dd HH:MM:ss')}}</label>
-          <pre class="box" v-text="item.content"></pre>
-          <v-image class="image" v-for="imgItem in item.picUrls" :key="imgItem" :src="imgItem"
-                   width="100px" height="100px" @click="$refs.viewPicture.show(item.picUrls)"></v-image>
+          <pre class="box" v-if="item.content.trim()" v-text="item.content"></pre>
+          <div style="display: block;margin-top: 10px">
+            <v-image class="image" v-for="(imgItem,index) in item.picUrls" :key="imgItem" :src="imgItem"
+                     width="55px" height="55px"
+                     @click="setViewPicture({url:item.picUrls[index],list:item.picUrls})"></v-image>
+          </div>
         </li>
       </ul>
       <div class="form-box" v-if="!readonly">
@@ -31,7 +34,6 @@
       </div>
     </div>
 
-    <v-view-picture ref="viewPicture"></v-view-picture>
   </div>
 </template>
 
@@ -43,15 +45,13 @@
 
   import VUpload from '../upload/index'
   import VImage from '../image'
-  import VViewPicture from '../viewPicture'
   import {mapActions, mapState} from 'vuex';
 
   export default {
     name: 'VMessageBoard',
     components: {
       VUpload,
-      VImage,
-      VViewPicture
+      VImage
     },
     //传送的数据
     props: {
@@ -70,6 +70,9 @@
       readonly: {
         type: Boolean,
         default: false
+      },
+      arguments: {
+        type: Object
       }
     },
     data() {
@@ -105,28 +108,36 @@
       this.getMessage();
     },
     methods: {
+      ...mapActions(['setViewPicture']),
       sendMessage() {
-        let files = this.$refs.fileUpload.getFiles() || [];
+        let files = this.$refs.fileUpload.getFiles() || []
+          , {partnerType, companyId, tenantId, userId} = this.$localStore.get('user')
+          , sender = [null, 'purchasers', 'suppliers', 'servicers']
+          , params;
         if (!this.messageContent && _.isEmpty(files)) {
           return this.$message.warning(this.$i.common.content);
         }
 
         this.submitLoading = true;
-
-        this.$ajax.post(this.$apis.CHATMESSAGE_ADD, {
+        params = {
           moduleCode: this.module,
           bizCode: this.code,
           bizNo: this.id,
           content: this.messageContent,
           picPaths: files
-        }).then(data => {
+        };
+
+        if (this.arguments) {
+          params = _.extend(params, this.arguments);
+          params[sender[partnerType]] = [{companyId, tenantId, userId}];
+        }
+
+        this.$ajax.post(this.$apis.CHATMESSAGE_ADD, params).then(data => {
           this.messageContent = '';
           this.getMessage();
           this.$refs.fileUpload.reset();
           this.$emit('send');
-        }).finally(() => {
-          this.submitLoading = false;
-        });
+        }).finally(() => this.submitLoading = false);
       },
       getMessage() {
         if (!this.module || !this.code || !this.id) {
@@ -138,13 +149,9 @@
           .then(data => {
             data = data.datas || [];
             this.messageList = data.reverse();
-            this.$refs.messageBox && this.$nextTick(() => {
-              this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
-            })
+            this.$refs.messageBox && this.$nextTick(() => this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight)
           })
-          .finally(() => {
-            this.contentLoading = false;
-          });
+          .finally(() => this.contentLoading = false);
       },
       changeShow() {
         this.layout.paddingRight = this.layout.paddingRight ? 0 : '365px';
@@ -267,6 +274,7 @@
 
   .message-box > li {
     position: relative;
+    margin-bottom: 10px;
   }
 
   .message-box .name {
@@ -282,7 +290,7 @@
 
   .message-box .box {
     color: #666666;
-    padding: 10px;
+    padding: 10px 10px 0 10px;
     line-height: 18px;
     white-space: pre-wrap;
     word-wrap: break-word;

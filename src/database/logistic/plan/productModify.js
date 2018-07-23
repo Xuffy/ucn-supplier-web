@@ -20,6 +20,13 @@ export default {
   "orderNo": {
     type: 'text'
   },
+  "skuPictures":{
+    type: 'text',
+    _image:true,
+    _upload:{
+      readonly:true
+    }
+  },
   "orderId": {
     type: 'text',
     _hide: true

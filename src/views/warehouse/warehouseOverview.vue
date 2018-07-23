@@ -6,14 +6,9 @@
         <div class="body">
             <div class="head">
                 <span>{{$i.warehouse.status}}</span>
-                <el-radio-group class="radioGroup" @change="changeStatus" v-model="inboundStatus" size="mini">
-                    <el-radio-button label="0">全部</el-radio-button>
-                    <el-radio-button label="WAIT_FOR_QC">待验货</el-radio-button>
-                    <el-radio-button label="APPLY_FOR_REWORK">申请返工</el-radio-button>
-                    <el-radio-button label="CONFIRMATION_OF_REWORK">确认返工</el-radio-button>
-                    <el-radio-button label="APPLY_FOR_RETURN">申请退货</el-radio-button>
-                    <el-radio-button label="CONFIRMATION_OF_RETURN">确认退货</el-radio-button>
-                    <el-radio-button label="CONFIRMED">已确认</el-radio-button>
+                <el-radio-group class="radioGroup" @change="changeStatus" v-model="warehouseConfig.skuInventoryStatusDictCode" size="mini">
+                    <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
+                    <el-radio-button v-for="v in warehouseStatusOption" :key="v.id" :label="v.code">{{v.name}}</el-radio-button>
                 </el-radio-group>
                 <select-search
                         class="search"
@@ -29,12 +24,15 @@
                         :data="tableDataList"
                         :buttons="[{label: $i.warehouse.detail, type: 1}]"
                         @change-checked="changeChecked"
+                        @change-sort="val=>{getWarehouseData(val)}"
                         @action="btnClick">
-                    <!--<template slot="header">-->
-                        <!--<div class="btns">-->
-                            <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'全部'}})</el-button>-->
-                        <!--</div>-->
-                    <!--</template>-->
+                    <template slot="header">
+                        <div class="btns">
+                            <el-button
+                                    v-authorize="'WAREHOUSE:DOWNLOAD'"
+                                    @click="download">{{$i.warehouse.download}}({{selectList.length?selectList.length:$i.warehouse.all}})</el-button>
+                        </div>
+                    </template>
                 </v-table>
                 <page
                         :page-sizes="[50,100,200,500]"
@@ -71,26 +69,12 @@
                 pageData:{},
                 warehouseConfig:{
                     inboundNo: "",
-                    operatorFilters: [
-                    //     {
-                    //         columnName: "",
-                    //         operator: "",
-                    //         property: "",
-                    //         resultMapId: "",
-                    //         value: {}
-                    //     }
-                    ],
                     orderNo: "",
                     pn: 1,
                     ps: 50,
                     skuCode: "",
-                    skuInventoryStatusDictCode: null,
-                    sorts: [
-                    //     {
-                    //         orderBy: "",
-                    //         orderType: "",
-                    //     }
-                    ],
+                    skuInventoryStatusDictCode: '',
+                    sorts:[{orderBy:"entryDt",orderType:"desc"}]
                 },
                 searchId:1,
                 searchOptions:[
@@ -111,10 +95,11 @@
 
                 //字典配置
                 skuUnitOption:[],
+                warehouseStatusOption:[],
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             changeStatus(e){
                 this.warehouseConfig.pn=1;
                 if(e==='0'){
@@ -126,8 +111,10 @@
             },
 
             //获取表格数据
-            getWarehouseData(){
+            getWarehouseData(e){
                 this.loadingTable=true;
+                Object.assign(this.warehouseConfig,e);
+                this.selectList=[];
                 this.$ajax.post(this.$apis.get_warehouseOverviewData,this.warehouseConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.warehouse.warehouseOverview, res.datas,(e)=>{
                         e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
@@ -140,8 +127,6 @@
                     this.loadingTable=false;
                 });
             },
-
-
             searchInbound(e){
                 // this.warehouseConfig.inboundNo=e.key;
                 if(!e.id){
@@ -165,7 +150,6 @@
                 }
                 this.getWarehouseData();
             },
-
             btnClick(e){
                 this.$windowOpen({
                     url:'/product/detail',
@@ -174,11 +158,15 @@
                     }
                 })
             },
-
             changeChecked(e){
                 this.selectList=e;
             },
-
+            download(){
+                let ids=_.pluck(_.pluck(this.selectList,'id'),'value');
+                let params=this.$depthClone(this.warehouseConfig);
+                params.inboundSkuIds=ids;
+                this.$fetch.export_task('WAREHOUES',params);
+            },
 
             /**
              * 分页操作
@@ -192,14 +180,14 @@
                 this.getWarehouseData();
             },
 
-
-
             getUnit(){
                 this.loadingTable=true;
-                this.$ajax.post(this.$apis.get_partUnit,['SKU_UNIT'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['SKU_UNIT','SKU_INVENTORY_STATUS'],{cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='SKU_UNIT'){
                             this.skuUnitOption=v.codes;
+                        }else if(v.code==='SKU_INVENTORY_STATUS'){
+                            this.warehouseStatusOption=v.codes;
                         }
                     });
                     this.getWarehouseData();
@@ -212,7 +200,13 @@
             this.getUnit();
         },
         mounted(){
-            this.setLog({query: {code: 'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                auth:'WAREHOUSE:LOG',
+                label: this.$i.common.log
+            });
         },
         watch:{
             selectList(n){

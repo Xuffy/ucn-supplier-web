@@ -1,7 +1,7 @@
 <template>
   <div class="message">
     <div class="head">
-      <el-button @click="manageMessage">{{$i.common.messageManagement}}</el-button>
+      <el-button @click="manageMessage" v-authorize="'MESSAGE:MANAGEMENT'">{{$i.common.messageManagement}}</el-button>
       <el-button type="primary" @click="postRead" :disabled="isResd">{{$i.common.markAsRead}}</el-button>
       <!-- <h1 style="color:red">这个页面表格要加一列title</h1> -->
     </div>
@@ -148,7 +148,7 @@
           this.$ajax.post(url, this.updatesetting)
             .then(res => {
               this.$message({
-                message: '配置成功',
+                message: this.$i.common.configuration,
                 type: 'success',
               });
               this.getMessageQuery()
@@ -158,7 +158,7 @@
           this.$ajax.post(url, this.updatesetting)
             .then(res => {
               this.$message({
-                message: '配置成功',
+                message: this.$i.common.configuration,
                 type: 'success',
               });
               this.getMessageQuery()
@@ -202,9 +202,9 @@
                 return val
               })
               if(e.read.value){
-                e.read.value = '已读';
+                e.read.value = this.$i.common.read;
               }else{
-                e.read.value = '未读'
+                e.read.value = this.$i.common.unread;
               }
               return e
             });
@@ -233,7 +233,7 @@
           .then(res => {
             this.$message({
               type: 'success',
-              message: '系统将消息置为已读!'
+              message: this.$i.common.read
             });
             this.getDataInfo()
           })
@@ -249,22 +249,22 @@
               switch (val.messageType)
               {
                 case 1:
-                  val.message = 'Platform message'
+                  val.message = this.$i.message.platformMessage
                   break;
                 case 2:
-                  val.message = 'Company message'
+                  val.message = this.$i.message.companyMessage
                   break;
                 case 3:
-                  val.message = 'Pending task'
+                  val.message = this.$i.message.pendingTask
                   break;
                 case 4:
-                  val.message = 'Future task'
+                  val.message = this.$i.message.futureTask
                   break;
                 case 5:
-                  val.message = 'Push'
+                  val.message = this.$i.message.push
                   break;
                 case 6:
-                  val.message = 'FYI'
+                  val.message = this.$i.message.FYI
                   break;
               }
               if (val.subscribeEmail == 1){

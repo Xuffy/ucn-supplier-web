@@ -10,7 +10,8 @@ export const basicInfoObj = {
   logisticsStatus: {
     type: 'selector',
     value: 2,
-    defaultVal: 2
+    defaultVal: 2,
+    disabled:true 
   },
   customerName: {
     type: 'input',
@@ -154,6 +155,299 @@ export const basicInfoObj = {
     value: null
   }
 }
+
+export const dbBasicInfoObj ={
+  "id": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
+  },
+  "vId": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
+  },
+  "argID": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
+  },
+  "containerId": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
+  },
+  "skuSupplierId": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
+  },
+  "entryDt": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
+  },
+  "entryName": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
+  },
+  "orderNo": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuPictures":{
+    type: 'String',
+    _image:true,
+    _upload:{
+      readonly:true
+    },
+    typeSlef: 'text'
+  },
+  "orderId": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
+  },
+  "skuId": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
+  },
+  "toShipCartonQty": {
+    type: 'String',
+    typeSlef: 'text',
+    _important: true
+  },
+  "fieldDisplay": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
+  },
+  "toShipQty": {
+    type: 'String',
+    typeSlef: 'text',
+    _important: true
+  },
+  "skuCode": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuNameEn": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+  },
+  "skuNameCn": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuNameCustomer": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "blSkuName": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuCustomsNameCn": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuCustomsNameEn": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "hsCode": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "reportElement": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuSupplierName": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuSupplierCode": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuCustomerSkuCode": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "factorySkuCode": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuUnit": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "unitExportPrice": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _important: true
+  },
+  "totalExportPrice": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _important: true
+  },
+  "currency": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuQty": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuCartonQty": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "containerNo": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "containerType": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "totalQuantityInContainer": {
+    key: 'totalContainerQty',
+    _filed: 'totalContainerQty',
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _important: true
+  },
+  "totalVolumeInContainer": {
+    key: 'totalContainerVolume',
+    _filed: 'totalContainerVolume',
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _important: true
+  },
+  "totalNetWeightInContainer": {
+    key: 'totalContainerNetWeight',
+    _filed: 'totalContainerNetWeight',
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _important: true
+  },
+  "totalQuantityOfOuterCartonsInContainer": {
+    key: 'totalContainerOuterCartonsQty',
+    _filed: 'totalContainerOuterCartonsQty',
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _important: true
+  },
+  "skuOuterCartonQty": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuOuterCartonLength": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuOuterCartonWidth": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuOuterCartonHeight": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuOuterCartonNetWeight": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuOuterCartonRoughWeight": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuOuterCartonVolume": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuShippingMarks": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuOuterCartonBarCode": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuOuterCartonCode": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuSupplierCompanyId": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
+  },
+  "skuSupplierTenantId": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
+  },
+  "shipmentStatus": {
+    type: 'String',
+    typeSlef: 'text',
+    _disabled: true
+  }
+}
+
 export const ExchangeRateInfo = {
   'CNYUSD':{
     type: 'input',
@@ -202,7 +496,7 @@ export const transportInfoObj = {
     value: null
   },
   departureCountry: {
-    type: 'input',
+    type: 'filterable',
     value: null
   },
   departurePort: {
@@ -213,7 +507,7 @@ export const transportInfoObj = {
     }
   },
   destinationCountry: {
-    type: 'input',
+    type: 'filterable',
     value: null
   },
   destinationPort: {
@@ -300,4 +594,24 @@ export const dbProductInfo = {
   //     required:true
   //   }
   // },
+}
+
+export const dbcontainerInfo = {
+  containerType: {
+    _rules:{
+      required:true
+    }
+  }
+}
+
+export const addProductFromOrderFilter = {
+  "orderNo": {
+    _isDefaultShow:true
+  },
+  "skuCode": {
+    _isDefaultShow:true
+  },
+  "skuNameEn": {
+    _isDefaultShow:true
+  }
 }

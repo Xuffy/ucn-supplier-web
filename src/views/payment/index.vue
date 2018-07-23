@@ -23,29 +23,6 @@
               <el-radio-button label="20">{{$i.common.qcOrder}}</el-radio-button>
             </el-radio-group>
           </div>
-          <div class="search">
-            <select-search
-              v-model="searchId"
-              class="search"
-              :options=options
-              @inputEnter="inputEnter"
-              :searchLoad="searchLoad">
-            </select-search>
-          </div>
-          <div class="Date">
-            <span class="text" style="width:145px">{{$i.payment.orderCreateDate}} : </span>
-            <el-date-picker
-              v-model="date"
-              type="daterange"
-              align="right"
-              unlink-panels
-              :range-separator="$i.element.to"
-              :start-placeholder="$i.element.startDate"
-              :end-placeholder="$i.element.endDate"
-              value-format="timestamp"
-              :picker-options="dateOptions">
-            </el-date-picker>
-          </div>
         </div>
       </div>
       <br>
@@ -53,6 +30,7 @@
       <div class="main">
         <v-table :data="tableDataList"
                  code="ledger"
+                 @change-sort="sort"
                  :totalRow="totalRow"
                  :loading="tabLoad"
                  :buttons="setButtons"
@@ -60,7 +38,38 @@
                  :rowspan="1"
                  :height="500"
                  @filter-value="onFilterValue"
-        ></v-table>
+        >
+          <template slot="header">
+            <div style="overflow: hidden">
+              <el-button style="float: left" @click="downloadPayment" v-authorize="'PAYMENT:DOWNLOAD'">
+                {{$i.common.download}}
+              </el-button>
+              <div class="Date">
+                <span class="text1" >{{$i.payment.orderCreateDate}} : </span>
+                <el-date-picker
+                  v-model="date"
+                  type="daterange"
+                  align="right"
+                  unlink-panels
+                  :range-separator="$i.element.to"
+                  :start-placeholder="$i.element.startDate"
+                  :end-placeholder="$i.element.endDate"
+                  value-format="timestamp"
+                  :picker-options="dateOptions">
+                </el-date-picker>
+              </div>
+              <div class="search">
+                <select-search
+                  v-model="searchId"
+                  class="search"
+                  :options=options
+                  @inputEnter="inputEnter"
+                  :searchLoad="searchLoad">
+                </select-search>
+              </div>
+            </div>
+          </template>
+        </v-table>
         <page
           :page-data="pageData"
           @change="handleSizeChange"
@@ -72,7 +81,8 @@
 </template>
 <script>
 
-  import {VTable,VPagination,selectSearch} from '@/components/index'
+  import {VTable,VPagination,selectSearch} from '@/components/index';
+  import { mapActions } from 'vuex';
   export default {
     name:'payment',
     components:{
@@ -152,6 +162,7 @@
       },
     },
     methods:{
+      ...mapActions(['setMenuLink']),
       onFilterValue(val) {
         console.log(val);
       },
@@ -284,25 +295,50 @@
       urgingPayment(item) {
         // ① 催款，此操作会给对应付款人发一条提示付款的信息，在对方的workbench显示；
         // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
+        if(item.timestamp.value === ''){
+          item.paymentNumber.value = true;
+          item.timestamp.value = new Date().getTime();
+        }else if (((new Date().getTime()-item.timestamp.value)/1000)<=60 && item.paymentNumber.value){
+          this.$message({
+            type: 'warning',
+            message: this.$i.payment.urgingPaymentTime
+          });
+          return false
+        }
         this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}`)
           .then(res => {
-            // console.log(res)
             this.$message({
               type: 'success',
-              message: '催促成功!'
+              message: this.$i.payment.urgedSuccess
             });
           }).catch((res) => {
-
+          item.paymentNumber.value = false;
         });
       },
       setButtons(item){
         // disabled:true/false   10 付款 20 退款
-        if(_.findWhere(item, {'key': 'type'}).value === 10 && _.findWhere(item, {'key': 'planReceiveAmount'}).value !== _.findWhere(item, {'key': 'actualReceiveAmount'}).value) return [{label: this.$i.payment.urgingPayment, type: '1'},{label: this.$i.payment.detail, type: '2'}];
+        if(_.findWhere(item, {'key': 'type'}).value === 10 && _.findWhere(item, {'key': 'planReceiveAmount'}).value !== _.findWhere(item, {'key': 'actualReceiveAmount'}).value) return [{label: this.$i.payment.urgingPayment, type: '1',auth:'PAYMENT:URGING'},{label: this.$i.payment.detail, type: '2'}];
         return [{label: this.$i.payment.detail, type: '2'}];
       },
-      handleSizeChange(val) {
-        this.params.ps = val;
+      //...............sort
+      sort(item){
+        this.params.sorts =  item.sorts;
+        this.getList();
       },
+      downloadPayment(){
+        let params=this.$depthClone(this.params);
+        cosnole.log(params)
+        this.$fetch.export_task('EXPORT_LEDGER',params);
+      },
+    },
+    mounted(){
+      this.setMenuLink({
+        path: '/logs',
+        query: {code: 'PAYMENT'},
+        type: 100,
+        label: this.$i.common.log,
+        auth: 'PAYMENT:LOG'
+      });
     },
     created(){
       this.viewByStatus = '1';
@@ -338,12 +374,14 @@
   .spe-div .View{
     float: left;
   }
-  .spe-div .search{
-    float: right;
-    margin-left: 10px;
+  .Date{
+    float: left;
+    margin-left: 20%;
   }
-  .spe-div .Date{
+
+  .search{
     float: right;
+    margin-right: 10px;
   }
 
 </style>

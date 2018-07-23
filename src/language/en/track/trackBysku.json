@@ -114,5 +114,8 @@
   "emailOfBuyer": "Email Of Buyer",
   "phoneOfBuyer": "Phone Of Buyer",
   "emailOfSeller": "Email Of Seller",
-  "phoneOfSeller": "Phone Of Seller"
+  "phoneOfSeller": "Phone Of Seller",
+  "orderId": "orderId",
+  "logisticsId": "logisticsId",
+  "qcId": "qcId"
 }
