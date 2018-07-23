@@ -38,7 +38,7 @@
                  style="display: inline-block;margin-left: 30px!important;"
                  @click="quickLink.show = true"></el-button>
       <br/>
-      <el-button size="mini" v-for="item in quickLink.list" :key="item.id">
+      <el-button size="mini" v-for="item in quickLink.list" :key="item.id" v-if="$auth(item.auth)">
         <router-link :to="item.link || '/'">
           {{item.label}}
         </router-link>

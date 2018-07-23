@@ -39,7 +39,7 @@
             </td>
             <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && item.key"
                 :class="{'sort-wrapper':item._sort,active:currentSort.orderBy === item.key}"
-                @click="changeSort(item.key)">
+                @click="item._sort && changeSort(item.key)">
               <div>
                 {{item.label}}
                 <div class="sort-box" v-if="!disabledSort || item._sort">
