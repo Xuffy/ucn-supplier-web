@@ -567,9 +567,6 @@ export const routerMap = [
           path: 'qcOverview',
           name: 'qcOverview',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: $i.router.qcOverview
           },
           component: () => import('../views/warehouse/qc/qcOverview'),
