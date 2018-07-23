@@ -517,6 +517,7 @@ export const routerMap = [
           path: 'inbound',
           name: 'InboundOverview',
           meta: {
+              auth:'WAREHOUSE:INBOUND',
             name: $i.router.inboundOverview
           },
           component: () => import('../views/warehouse/inbound/inboundOverview.vue'),
@@ -526,6 +527,7 @@ export const routerMap = [
           name: 'createInbound',
           hidden: true,
           meta: {
+              auth:'WAREHOUSE:INBOUND:CREATE_INBOUND',
             name: $i.router.createInbound
           },
           component: () => import('../views/warehouse/inbound/createInbound'),
@@ -543,6 +545,7 @@ export const routerMap = [
           path: 'outbound',
           name: 'OutboundOverview',
           meta: {
+              auth:'WAREHOUSE:OUTBOUND',
             name: $i.router.outboundOverview
           },
           component: () => import('../views/warehouse/outbound/outboundOverview'),
@@ -552,6 +555,7 @@ export const routerMap = [
           name: 'createOutbound',
           hidden: true,
           meta: {
+              auth:'WAREHOUSE:INBOUND:CREATE_OUTBOUND',
             name: $i.router.createOutbound
           },
           component: () => import('../views/warehouse/outbound/createOutbound'),
