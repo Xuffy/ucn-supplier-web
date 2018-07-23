@@ -998,7 +998,7 @@
          //判断 ContainerInfo 是否修改过高亮 以便不传后台返回的修改值
         this.oldPlanObject.containerDetail =   this.oldPlanObject.containerDetail&&this.$depthClone(this.oldPlanObject.containerDetail).map(el=>{
           if(!el.isModify&&'fieldDisplay' in el){
-            el.fieldDisplay = {};
+            el.fieldDisplay = null;
           }
           return el;
         });
@@ -1006,7 +1006,7 @@
         //判断 feeInfo 是否修改过高亮 以便不传后台返回的修改值
         this.oldPlanObject.fee =  this.oldPlanObject.fee&&this.$depthClone([this.oldPlanObject.fee]).map(el=>{
           if(!el.isModify&&'fieldDisplay' in el){
-            el.fieldDisplay = {};
+            el.fieldDisplay = null;
           }
           return el;
         })[0];
