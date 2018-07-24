@@ -231,5 +231,9 @@
   "jumping" : "正在跳转...",
   "dataIsExist" : "该条数据已存在！",
   "skuQty" : "订单数量",
-  "skuCartonQty" : "订单外箱数"
+  "skuCartonQty" : "订单外箱数",
+  "Negociate" : "修改",
+  "Copy" : "复制",
+  "Detail" : "详细",
+  "History" : "历史"
 }

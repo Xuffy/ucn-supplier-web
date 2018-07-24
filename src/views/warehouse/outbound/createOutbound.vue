@@ -159,9 +159,9 @@
                 :title="$i.warehouse.addProduct"
                 :visible.sync="addOrderDialogVisible"
                 width="70%">
-            <el-form :modal="orderProduct" ref="orderProduct" label-width="200px" :label-position="labelPosition">
+            <el-form :modal="orderProduct" ref="orderProduct" label-width="120px" :label-position="labelPosition">
                 <el-row>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="orderNo" :label="$i.warehouse.orderNo">
                             <el-input
                                     :placeholder="$i.warehouse.pleaseInput"
@@ -170,7 +170,7 @@
                                     v-model="orderProduct.orderNo"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="skuCode" :label="$i.warehouse.skuCode">
                             <el-input
                                     :placeholder="$i.warehouse.pleaseInput"
@@ -179,7 +179,7 @@
                                     v-model="orderProduct.skuCode"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="skuNameCn" :label="$i.warehouse.skuNameCn">
                             <el-input
                                     :placeholder="$i.warehouse.pleaseInput"
@@ -188,13 +188,13 @@
                                     v-model="orderProduct.skuNameCn"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="skuBarCode" :label="$i.warehouse.skuBarCode">
                             <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput"
                                       v-model="orderProduct.skuBarCode"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="inboundNo" :label="$i.warehouse.inboundNo">
                             <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput"
                                       v-model="orderProduct.inboundNo"></el-input>
@@ -624,7 +624,7 @@
     }
 
     .speInput {
-        width: 80%;
+        width: 100%;
     }
 
     .search-btn {

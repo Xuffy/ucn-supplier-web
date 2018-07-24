@@ -272,22 +272,22 @@
       },
       productbButtons() {
         let aArr = [{
-            label: 'Negociate',
+            label: this.$i.logistic.Negociate,
             type: 1,
             disabled: !this.edit
           },
           {
-            label: 'Copy',
+            label:  this.$i.logistic.Copy,
             type: 4,
             disabled: !this.edit
           },
           {
-            label: 'Detail',
+            label:  this.$i.logistic.Detail,
             type: 3
           }
         ]
         this.$route.name == 'placeLogisticPlan' ? aArr : aArr.splice(1, 0, {
-          label: 'History',
+          label:  this.$i.logistic.History,
           type: 2,
           disabled: !this.edit
         })
@@ -500,12 +500,16 @@
       batchDunning() {
         let argArr = [];
         this.paymentList.forEach((item) => {
-          if (item.planPayAmount > item.actualPayAmount) {
-            argArr.push({
-              'id': item.id,
-              'version': item.version
-            })
-          }
+           argArr.push({
+            'id': item.id,
+            'version': item.version
+          })
+          // if (item.planPayAmount > item.actualPayAmount) {
+          //   argArr.push({
+          //     'id': item.id,
+          //     'version': item.version
+          //   })
+          // } 暂定功能
         });
         let seconds = 60;
         this.dunningDisabled = true;
@@ -532,9 +536,9 @@
       createdPaymentData(res = this.oldPaymentObject, dunning) {
         this.oldPaymentObject = JSON.parse(JSON.stringify(res))
         this.paymentList = res.datas
-        if (!dunning) {
-          this.dunningDisabled = !this.paymentList.some((item) => item.planPayAmount > item.actualPayAmount);
-        }
+        // if (!dunning) {
+        //   this.dunningDisabled = !this.paymentList.some((item) => item.planPayAmount > item.actualPayAmount);
+        // } 暂定功能
         this.paymentSum = res.statisticsDatas[0]
       },
       getNewLogisticsNo() {
@@ -613,6 +617,7 @@
           return this.$windowOpen({url:'/product/detail',params:{id:e.skuId.value}})
         } else if (status == 4) {
           let newAddArr = this.$depthClone(this.productList[i]);
+          console.log(newAddArr)
           newAddArr.id.value = null;
           newAddArr.fieldDisplay.value=null;
           newAddArr = _.mapObject(newAddArr,(v,k)=>{
@@ -671,7 +676,7 @@
               this.productModifyList = this.$getDB(this.$db.logistic.productModify,res.history.map(el => {
                 let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
                 el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-                el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm') 
+                el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm:ss') 
                 return el;
               }));
               this.$refs.HM.init(this.productModifyList,[],false);
