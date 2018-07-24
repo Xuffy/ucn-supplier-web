@@ -193,12 +193,12 @@ export default {
               const value = Number(curr);
               if(column.property=="totalContainerSkuPrice"){
                 if (!isNaN(value)) {
-                  return this.$numAdd(prev , this.$mul(curr,currencyCodeArr[i]));
+                  return this.$calc.add(prev , this.$calc.multiply(curr,currencyCodeArr[i]));
                 } else {
                   return prev;
                 }
               }else{
-                return this.$numAdd(prev , curr || 0);
+                return this.$calc.add(prev , curr || 0);
               }
             }, 0);
             sums[index] += 0;
