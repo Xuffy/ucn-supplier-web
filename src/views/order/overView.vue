@@ -225,6 +225,7 @@
                 url=(this.view==='1'?this.$apis.OVERVIEW_ORDERPAGE:this.$apis.OVERVIEW_SKUPAGE);
                 query=(this.view==='1'?this.$db.order.overviewByOrder:this.$db.order.overviewBysku);
                 Object.assign(this.params,e);
+                this.selectedList = [];
                 this.$ajax.post(url, this.params)
                     .then((res) => {
                         this.loading = false;
