@@ -296,7 +296,7 @@
                         }
 
                         e.yearListed.value = this.$dateFormat(e.yearListed.value, "yyyy-mm");
-                        e.inspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, e.inspectQuarantineCategory.value) || {}).name;
+                        e.inspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, {code:e.inspectQuarantineCategory.value}) || {}).name;
                         return e;
                     });
                     this.pageData = res;
