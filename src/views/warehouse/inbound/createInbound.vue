@@ -87,6 +87,7 @@
             </el-button>
         </div>
         <v-filter-column
+                class="gear"
                 ref="filterColumn"
                 code="uwarehouse_inbound_sku"
                 @change="changeColumn"></v-filter-column>
@@ -759,6 +760,12 @@
 
     .product-table >>> .el-checkbox {
         margin: 0;
+    }
+
+    .gear{
+        float: right;
+        margin-right: 5px;
+        margin-bottom: 5px;
     }
 
     .footer {
