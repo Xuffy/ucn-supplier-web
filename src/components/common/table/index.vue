@@ -95,7 +95,7 @@
 
               <div v-else
                    :style="{color:cItem._color || '','min-width': cItem._width || setWidth(cItem)}"
-                   v-text="cItem._value || cItem.value || '--'"></div>
+                   v-text="cItem._value || cItem.value || (cItem.value === 0 ? cItem.value : '--')"></div>
             </td>
             <!--操作按钮显示-->
             <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
