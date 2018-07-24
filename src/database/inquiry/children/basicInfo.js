@@ -117,7 +117,8 @@ export default {
     type: 'Number',
     state: 'rate',
     min: 0,
-    max: 100
+    max: 100,
+    _hide: true
   },
   departurePort: { // 发运港口  ok
     rules: [],
@@ -155,9 +156,9 @@ export default {
     _disabled: true,
     transForm: 'EL_IS'
   },
-  skuQty: {
-    _inquiryHide: true,
-    _hide: true
+  quantity: {
+    key: 'skuQty',
+    _inquiryHide: true
   },
   inquiryRemark: { // 询价备注
     key: 'remark',
