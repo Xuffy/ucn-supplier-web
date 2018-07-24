@@ -165,6 +165,7 @@
                     </el-button>
                     <el-button
                             v-authorize="'PRODUCT:OVERVIEW:UPLOAD_PRODUCT'"
+                            :tips="$i.product.uploadTips"
                             @click="()=>$refs.importCategory.show()">{{$i.button.upload}}
                     </el-button>
                     <el-button
@@ -201,7 +202,7 @@
             </span>
         </el-dialog>
 
-        <v-import-template ref="importCategory" code="BIZ_SKU_SUPPLIER_IMPORT"
+        <v-import-template ref="importCategory" code="BIZ_SKU_SUPPLIER_IMPORT" :tips="$i.product.uploadTips"
                            biz-code="BIZ_SKU_SUPPLIER_IMPORT"></v-import-template>
     </div>
 </template>
