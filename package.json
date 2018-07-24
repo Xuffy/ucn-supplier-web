@@ -20,7 +20,6 @@
     "downloadjs": "^1.4.7",
     "element-ui": "2.4.4",
     "js-base64": "^2.4.3",
-    "mockjs": "^1.0.1-beta3",
     "nprogress": "^0.2.0",
     "storess": "^2.0.12",
     "ucn-tool": "^1.0.0",
