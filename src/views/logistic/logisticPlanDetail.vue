@@ -617,7 +617,6 @@
           return this.$windowOpen({url:'/product/detail',params:{id:e.skuId.value}})
         } else if (status == 4) {
           let newAddArr = this.$depthClone(this.productList[i]);
-          console.log(newAddArr)
           newAddArr.id.value = null;
           newAddArr.fieldDisplay.value=null;
           newAddArr = _.mapObject(newAddArr,(v,k)=>{
@@ -627,6 +626,7 @@
             return v;
           })
           this.productList.splice(i + 1, 0, newAddArr);
+          console.log(this.productList,'this.productList')
           return;
         }
         this.productInfoModifyStatus = status
