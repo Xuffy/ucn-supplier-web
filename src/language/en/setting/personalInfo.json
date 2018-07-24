@@ -13,5 +13,6 @@
   "oldPassword": "Old Password",
   "newPassword": "New Password",
   "confirmPassword": "Confirm Password",
-  "comfirmNewPassword": "Comfirm New Password"
+  "comfirmNewPassword": "Comfirm New Password",
+  "replace": "Replace"
 }
