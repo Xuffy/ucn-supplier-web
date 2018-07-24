@@ -186,7 +186,7 @@ export default {
 
       validate = item._rules;
 
-      if (validate.required && (_.isNull(val) || _.isNaN(val) || _.isUndefined(val) || val === '')) {
+      if (validate.required && (_.isNull(val) || _.isNaN(val) || _.isUndefined(val) || val === '' || val===0)) {
         Message.warning(`${$i.util.validateRequired} ${item.label}`);
         return key;
       }

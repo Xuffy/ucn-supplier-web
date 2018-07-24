@@ -38,12 +38,12 @@
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
+                            <v-input-number
                                     class="speInput"
                                     size="mini"
                                     v-model="inboundData[v.key]"
                                     :controls="false"
-                                    :min="0"></el-input-number>
+                                    :min="0"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -86,7 +86,10 @@
                 {{$i.warehouse.removeProduct}}
             </el-button>
         </div>
-
+        <v-filter-column
+                ref="filterColumn"
+                code="uwarehouse_inbound_sku"
+                @change="changeColumn"></v-filter-column>
         <el-table
                 v-loading="loadingProductTable"
                 class="product-table"
@@ -104,65 +107,34 @@
                     width="55">
             </el-table-column>
             <el-table-column
-                    v-for="v in $db.warehouse.inboundOrderProductTable"
+                    v-for="v in columnConfig"
                     :class-name="v.must ? 'ucn-table-required' : ''"
+                    v-if="!v._hidden && !v._hide"
                     :key="v.key"
                     :label="$i.warehouse[v.key]"
                     :prop="v.key"
                     align="center"
                     width="180">
                 <template slot-scope="scope">
-                    <div v-if="v.belong==='skuList'">
-                        <div v-if="v.showType==='input'">
-                            <el-input
-                                    :placeholder="$i.warehouse.pleaseInput"
-                                    v-model="scope.row[v.key]"
-                                    clearable>
-                            </el-input>
-                        </div>
-                        <div v-else>
-                            {{scope.row[v.key]}}
-                        </div>
-                    </div>
-                    <div v-else-if="v.showType==='input'">
-                        <!--<div v-if="v.needInput">-->
-                        <!--<el-input-->
-                        <!--placeholder="请输入内容"-->
-                        <!--v-model="scope.row[v.key]"-->
-                        <!--@focus="handleBlur"-->
-                        <!--clearable>-->
-                        <!--</el-input>-->
-                        <!--</div>-->
-                        <!--<div v-else>-->
+                    <div v-if="v.showType==='input'">
                         <el-input
                                 :placeholder="$i.warehouse.pleaseInput"
-                                v-model="scope.row[v.key]"
+                                v-model="scope.row[v.key].value"
                                 clearable>
                         </el-input>
-                        <!--</div>-->
-                    </div>
-                    <div v-else-if="v.showType==='select'">
-                        <el-select v-model="scope.row[v.key]" :placeholder="$i.warehouse.pleaseChoose">
-                            <el-option
-                                    v-for="item in v.options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
                     </div>
                     <div v-else-if="v.showType==='number'">
-                        <el-input-number
+                        <v-input-number
                                 :disabled="v.computed"
-                                v-model="scope.row[v.key]"
+                                v-model="scope.row[v.key].value"
                                 @blur="handleBlur(v.key,scope.$index)"
-                                :controls="false"></el-input-number>
+                                :controls="false"></v-input-number>
                     </div>
                     <div v-else-if="v.key==='unqualifiedType'">
                         0
                     </div>
                     <div v-else>
-                        {{scope.row[v.key]}}
+                        {{scope.row[v.key].value}}
                     </div>
                 </template>
             </el-table-column>
@@ -243,7 +215,7 @@
 
 <script>
 
-    import { VTimeZone, VTable, VUpload, VPagination } from "@/components/index";
+    import { VTimeZone, VTable, VUpload, VPagination, VFilterColumn, VInputNumber } from "@/components/index";
 
     export default {
         name: "createInbound",
@@ -251,7 +223,9 @@
             VTable,
             VTimeZone,
             VUpload,
-            VPagination
+            VPagination,
+            VFilterColumn,
+            VInputNumber
         },
         data() {
             return {
@@ -268,7 +242,9 @@
                 loadingProductTable: false,
                 inboundTypeOption: [],
                 pageData: {},
-                loadingPage:false,
+                loadingPage: false,
+                code: "",
+                columnConfig: "",
 
                 /**
                  * 外部展示数据
@@ -327,16 +303,16 @@
             };
         },
         methods: {
-            getInboudNo(){
-                this.loadingPage=true;
-                this.$ajax.post(this.$apis.GET_WAREHOUSE_NO,{
-                    type:'inbound_no'
-                }).then(res=>{
+            getInboudNo() {
+                this.loadingPage = true;
+                this.$ajax.post(this.$apis.GET_WAREHOUSE_NO, {
+                    type: "inbound_no"
+                }).then(res => {
                     this.getUnit();
-                    this.inboundData.inboundNo=res.content;
-                }).catch(err=>{
-                    this.loadingPage=false;
-                })
+                    this.inboundData.inboundNo = res.content;
+                }).catch(err => {
+                    this.loadingPage = false;
+                });
             },
             addProduct() {
                 //先把在外部的数据的id取出来，拿到内部去对比
@@ -405,52 +381,47 @@
                         type: "warning"
                     });
                 }
-                for (let i = 0; i < this.productData.length; i++) {
-                    if (this.$validateForm(this.productData[i], this.$db.warehouse.inboundProduct)) {
-                        return;
-                    }
-                }
+                this.inboundData.inboundSkuBeanCreateParams=[];
                 this.productData.forEach(v => {
                     let productUnit = {};
                     _.map(this.skuUnitOption, data => {
-                        if (v.skuUnit === data.name) {
+                        if (v.skuUnit.value === data.name) {
                             productUnit.skuUnit = data.code;
                         }
                     });
-
                     _.map(this.lengthUnitOption, data => {
-                        if (v.skuUnitLength === data.name) {
+                        if (v.skuUnitLength.value === data.name) {
                             productUnit.lengthUnitDictCode = data.code;
                         }
                     });
                     _.map(this.volumeUnitOption, data => {
-                        if (v.skuUnitVolume === data.name) {
+                        if (v.skuUnitVolume.value === data.name) {
                             productUnit.volumeUnitDictCode = data.code;
                         }
                     });
                     _.map(this.weightUnitOption, data => {
-                        if (v.skuUnitWeight === data.name) {
+                        if (v.skuUnitWeight.value === data.name) {
                             productUnit.weightUnitDictCode = data.code;
                         }
                     });
                     this.inboundData.inboundSkuBeanCreateParams.push({
-                        customerName: v.customerName,
-                        customerNo: v.customerNo,
-                        customerOrderNo: v.customerOrderNo,
-                        customerSkuCode: v.skuCustomerSkuCode,
-                        factorySkuCode: v.factorySkuCode ? v.factorySkuCode : "",
-                        inboundOutCartonTotalQty: v.inboundOutCartonTotalQty ? v.inboundOutCartonTotalQty : 0,
-                        inboundSkuTotalGrossWeight: v.inboundSkuTotalGrossWeight ? v.inboundSkuTotalGrossWeight : 0,
-                        inboundSkuTotalNetWeight: v.inboundSkuTotalNetWeight ? v.inboundSkuTotalNetWeight : 0,
-                        inboundSkuTotalQty: v.inboundSkuTotalQty ? v.inboundSkuTotalQty : 0,
-                        inboundSkuTotalVolume: v.inboundSkuTotalVolume ? v.inboundSkuTotalVolume : 0,
-                        innerCartonGrossWeight: v.skuInnerCartonRoughWeight ? v.skuInnerCartonRoughWeight : 0,
-                        innerCartonHeight: v.skuInnerCartonHeight ? v.skuInnerCartonHeight : 0,
-                        innerCartonLength: v.skuInnerCartonLength ? v.skuInnerCartonLength : 0,
-                        innerCartonNetWeight: v.skuInnerCartonWeightNet ? v.skuInnerCartonWeightNet : 0,
-                        innerCartonPackingMethodCn: v.skuInnerCartonMethodCn,
-                        innerCartonVolume: v.skuInnerCartonVolume ? v.skuInnerCartonVolume : 0,
-                        innerCartonWidth: v.skuInnerCartonWidth ? v.skuInnerCartonWidth : 0,
+                        customerName: v.customerName.value,
+                        customerNo: v.customerNo.value,
+                        customerOrderNo: v.customerOrderNo.value,
+                        customerSkuCode: v.skuCustomerSkuCode.value,
+                        factorySkuCode: v.factorySkuCode.value ? v.factorySkuCode.value : "",
+                        inboundOutCartonTotalQty: v.inboundOutCartonTotalQty.value ? v.inboundOutCartonTotalQty.value : 0,
+                        inboundSkuTotalGrossWeight: v.inboundSkuTotalGrossWeight.value ? v.inboundSkuTotalGrossWeight.value : 0,
+                        inboundSkuTotalNetWeight: v.inboundSkuTotalNetWeight.value ? v.inboundSkuTotalNetWeight.value : 0,
+                        inboundSkuTotalQty: v.inboundSkuTotalQty.value ? v.inboundSkuTotalQty.value : 0,
+                        inboundSkuTotalVolume: v.inboundSkuTotalVolume.value ? v.inboundSkuTotalVolume.value : 0,
+                        innerCartonGrossWeight: v.skuInnerCartonRoughWeight.value ? v.skuInnerCartonRoughWeight.value : 0,
+                        innerCartonHeight: v.skuInnerCartonHeight.value ? v.skuInnerCartonHeight.value : 0,
+                        innerCartonLength: v.skuInnerCartonLength.value ? v.skuInnerCartonLength.value : 0,
+                        innerCartonNetWeight: v.skuInnerCartonWeightNet.value ? v.skuInnerCartonWeightNet.value : 0,
+                        innerCartonPackingMethodCn: v.skuInnerCartonMethodCn.value,
+                        innerCartonVolume: v.skuInnerCartonVolume.value ? v.skuInnerCartonVolume.value : 0,
+                        innerCartonWidth: v.skuInnerCartonWidth.value ? v.skuInnerCartonWidth.value : 0,
                         /**
                          * inventory,outbound暂时全部传0
                          * */
@@ -459,47 +430,53 @@
                         inventorySkuNetWeight: 0,
                         inventorySkuQty: 0,
                         inventorySkuVolume: 0,
-                        orderId: v.orderId,
-                        orderNo: v.orderNo,
-                        orderSkuQty: v.skuQty,
+                        orderId: v.orderId.value,
+                        orderNo: v.orderNo.value,
+                        orderSkuQty: v.skuQty.value,
                         outboundOutCartonTotalQty: 0,
                         outboundSkuTotalGrossWeight: 0,
                         outboundSkuTotalNetWeight: 0,
                         outboundSkuTotalQty: 0,
                         outboundSkuTotalVolume: 0,
-                        outerCartonGrossWeight: v.skuOuterCartonRoughWeight ? v.skuOuterCartonRoughWeight : 0,
-                        outerCartonNetWeight: v.skuOuterCartonNetWeight ? v.skuOuterCartonNetWeight : 0,
-                        outerCartonSkuQty: v.skuOuterCartonQty ? v.skuOuterCartonQty : 0,
-                        outerCartonVolume: v.skuOuterCartonVolume ? v.skuOuterCartonVolume : 0,
-                        packingMethodCn: v.skuMethodPkgCn,
-                        skuBarCode: v.skuBarCode,
-                        skuBrand: v.skuBrand,
-                        skuCode: v.skuCode,
-                        skuDescCn: v.skuDescCn,
-                        skuDescCustomer: v.skuDescCustomer,
-                        skuDescEn: v.skuDescEn,
-                        skuHeight: v.skuHeight ? v.skuHeight : 0,
-                        skuId: v.skuId,
-                        skuLabel: v.skuLabel,
-                        skuLength: v.skuLength ? v.skuLength : 0,
-                        skuMaterialCn: v.skuMaterialCn,
-                        skuMaterialEn: v.skuMaterialEn,
-                        skuNameCn: v.skuNameCn,
-                        skuNameCustomer: v.skuNameCustomer,
-                        skuNameEn: v.skuNameEn,
-                        skuNetWeight: v.skuNetWeight ? v.skuNetWeight : 0,
+                        outerCartonGrossWeight: v.skuOuterCartonRoughWeight.value ? v.skuOuterCartonRoughWeight.value : 0,
+                        outerCartonNetWeight: v.skuOuterCartonNetWeight.value ? v.skuOuterCartonNetWeight.value : 0,
+                        outerCartonSkuQty: v.skuOuterCartonQty.value ? v.skuOuterCartonQty.value : 0,
+                        outerCartonVolume: v.skuOuterCartonVolume.value ? v.skuOuterCartonVolume.value : 0,
+                        packingMethodCn: v.skuMethodPkgCn.value,
+                        skuBarCode: v.skuBarCode.value,
+                        skuBrand: v.skuBrand.value,
+                        skuCode: v.skuCode.value,
+                        skuDescCn: v.skuDescCn.value,
+                        skuDescCustomer: v.skuDescCustomer.value,
+                        skuDescEn: v.skuDescEn.value,
+                        skuHeight: v.skuHeight.value ? v.skuHeight.value : 0,
+                        skuId: v.skuId.value,
+                        skuLabel: v.skuLabel.value,
+                        skuLength: v.skuLength.value ? v.skuLength.value : 0,
+                        skuMaterialCn: v.skuMaterialCn.value,
+                        skuMaterialEn: v.skuMaterialEn.value,
+                        skuNameCn: v.skuNameCn.value,
+                        skuNameCustomer: v.skuNameCustomer.value,
+                        skuNameEn: v.skuNameEn.value,
+                        skuNetWeight: v.skuNetWeight.value ? v.skuNetWeight.value : 0,
                         skuUnitDictCode: productUnit.skuUnit,
                         lengthUnitDictCode: productUnit.lengthUnitDictCode,
                         volumeUnitDictCode: productUnit.volumeUnitDictCode,
                         weightUnitDictCode: productUnit.weightUnitDictCode,
-                        skuWidth: v.skuWidth ? v.skuWidth : 0,
-                        supplierId: v.skuSupplierId,
-                        supplierName: v.skuSupplierName,
-                        supplierNo: v.skuSupplierCode,
-                        supplierOrderNo: v.supplierOrderNo
+                        skuWidth: v.skuWidth.value ? v.skuWidth.value : 0,
+                        supplierId: v.skuSupplierId.value,
+                        supplierName: v.skuSupplierName.value,
+                        supplierNo: v.skuSupplierCode.value,
+                        supplierOrderNo: v.supplierOrderNo.value
                     });
                 });
+                for (let i = 0; i < this.inboundData.inboundSkuBeanCreateParams.length; i++) {
+                    if (this.$validateForm(this.inboundData.inboundSkuBeanCreateParams[i], this.$db.warehouse.inboundOrderProductTable)) {
+                        return;
+                    }
+                }
                 this.inboundData.attachments = this.$refs.attachmentUpload[0].getFiles();
+
                 this.disabledSubmit = true;
                 this.$ajax.post(this.$apis.add_inbound, this.inboundData).then(res => {
                     this.$message({
@@ -519,43 +496,14 @@
             },
             getSummaries(param) {
                 const { columns, data } = param;
-                const sums = [];
-                columns.forEach((column, index) => {
-                    if (index === 0) {
-                        sums[index] = this.$i.warehouse.total;
-                    } else {
-                        if (index === 14 || index === 15 || index === 16 || index === 17 || index === 18 || index === 19) {
-                            const values = data.map(item => Number(item[column.property]));
-                            if (!values.every(value => isNaN(value))) {
-                                sums[index] = values.reduce((prev, curr) => {
-                                    const value = Number(curr);
-                                    if (!isNaN(value)) {
-                                        return prev + curr;
-                                    } else {
-                                        return prev;
-                                    }
-                                }, 0);
-                                // sums[index] += ' 元';
-                            } else {
-                                sums[index] = 0;
-                            }
-                            if (index === 12) {
-                                this.inboundData.skuTotalQty = sums[index];
-                            } else if (index === 13) {
-                                this.inboundData.skuTotalCartonQty = sums[index];
-                            } else if (index === 14) {
-                                this.inboundData.skuTotalVolume = sums[index];
-                            } else if (index === 15) {
-                                this.inboundData.skuTotalNetWeight = sums[index];
-                            } else if (index === 16) {
-                                this.inboundData.skuTotalGrossWeight = sums[index];
-                            } else if (index === 17) {
-
-                            }
-                        }
-                    }
+                let obj = {};
+                let keys = [, "inboundSkuTotalQty", "inboundOutCartonTotalQty", "inboundSkuTotalVolume", "inboundSkuTotalNetWeight", "inboundSkuTotalGrossWeight"];
+                _.map(keys, val => {
+                    let a = _.pluck(_.pluck(data, val), "value");
+                    obj[val] = _.reduce(_.compact(a), (memo, num) => Number(memo) + Number(num), 0);
                 });
-
+                let sums=_.map(_.pluck(columns, "property"), val => !_.isUndefined(obj[val]) ? obj[val] : '');
+                sums[0]= this.$i.warehouse.total;
                 return sums;
             },
 
@@ -595,8 +543,8 @@
                 this.orderProduct.skuNameCn = "";
             },
             changeChecked(e) {
-                this.selectList = _.filter(e,(val)=>{
-                    return !val._disabled
+                this.selectList = _.filter(e, (val) => {
+                    return !val._disabled;
                 });
             },
             postData() {
@@ -615,23 +563,35 @@
                     //表示有新增产品
                     this.loadingProductTable = true;
                     this.$ajax.post(this.$apis.get_orderSku, { ids: this.productIds }).then(res => {
+                        let arr = [];
+                        console.log(res,'res')
                         _.map(res, v => {
                             _.map(v.skuList, e => {
                                 e.customerOrderNo = v.customerOrderNo;
                                 e.customerNo = v.customerNo;
-                                e.skuCustomsNameCn = v.skuCustomsNameCn;
-                                e.supplierName = v.supplierName;
-                                e.supplierCode = v.supplierCode;
+                                // e.skuCustomsNameCn = e.skuCustomsNameCn;
+                                // e.supplierName = v.supplierName;
+                                // e.supplierCode = v.supplierCode;
                                 e.supplierOrderNo = v.supplierOrderNo;
+                                // e.supplierId=v.skuSupplierId;
                                 e.customerName = v.customerName;
-
-                                e.skuUnit =(_.findWhere(this.skuUnitOption, { code: String(e.skuUnit) }) || {}).name;
+                                e.factorySkuCode = "";
+                                e.inboundSkuTotalQty = null;
+                                e.inboundOutCartonTotalQty = null;
+                                e.inboundSkuTotalVolume = null;
+                                e.inboundSkuTotalNetWeight = null;
+                                e.inboundSkuTotalGrossWeight = null;
+                                e.skuUnit = (_.findWhere(this.skuUnitOption, { code: String(e.skuUnit) }) || {}).name;
                                 e.skuUnitLength = (_.findWhere(this.lengthUnitOption, { code: String(e.skuUnitLength) }) || {}).name;
                                 e.skuUnitVolume = (_.findWhere(this.volumeUnitOption, { code: String(e.skuUnitVolume) }) || {}).name;
                                 e.skuUnitWeight = (_.findWhere(this.weightUnitOption, { code: String(e.skuUnitWeight) }) || {}).name;
-
-                                this.productData.push(e);
+                                arr.push(e);
                             });
+                        });
+                        arr = this.$getDB(this.$db.warehouse.inboundOrderProductTable, arr);
+                        this.$refs.filterColumn.update(false, arr).then(data => {
+                            this.productData = this.$refs.filterColumn.getFilterData(arr, data);
+                            this.columnConfig = this.productData[0];
                         });
                     }).finally(() => {
                         this.loadingProductTable = false;
@@ -643,6 +603,11 @@
             closeDialog() {
                 this.addOrderDialogVisible = false;
                 this.clearSearchData();
+            },
+            changeColumn(val) {
+                this.productData = this.$refs.filterColumn.getFilterData(this.productData, val);
+                this.columnConfig = this.productData[0];
+                console.log(this.productData, "this.productData");
             },
 
             /**
@@ -663,60 +628,64 @@
             handleBlur(e, index) {
                 if (e === "inboundOutCartonTotalQty") {
                     //处理入库产品总箱数输入框
-                    if (!this.productData[index][e] || !this.productData[index]["skuOuterCartonQty"]) {
-                        this.productData[index].inboundSkuTotalQty = "";
+                    if (!this.productData[index][e].value || !this.productData[index]["skuOuterCartonQty"].value) {
+                        this.productData[index].inboundSkuTotalQty.value = "";
                     } else {
-                        this.productData[index].inboundSkuTotalQty = this.productData[index][e] * this.productData[index]["skuOuterCartonQty"];
+                        this.productData[index].inboundSkuTotalQty.value = this.productData[index][e].value * this.productData[index]["skuOuterCartonQty"].value;
                     }
 
                     //处理入库产品总净重
-                    if (!this.productData[index][e] || !this.productData[index]["skuOuterCartonNetWeight"]) {
-                        this.productData[index].inboundSkuTotalNetWeight = "";
+                    if (!this.productData[index][e].value || !this.productData[index]["skuOuterCartonNetWeight"].value) {
+                        this.productData[index].inboundSkuTotalNetWeight.value = "";
                     } else {
-                        this.productData[index].inboundSkuTotalNetWeight = this.productData[index][e] * this.productData[index]["skuOuterCartonNetWeight"];
+                        this.productData[index].inboundSkuTotalNetWeight.value = this.productData[index][e].value * this.productData[index]["skuOuterCartonNetWeight"].value;
                     }
 
                     //处理入库产品总毛重
-                    if (!this.productData[index][e] || !this.productData[index]["skuOuterCartonRoughWeight"]) {
-                        this.productData[index].inboundSkuTotalGrossWeight = "";
+                    if (!this.productData[index][e].value || !this.productData[index]["skuOuterCartonRoughWeight"].value) {
+                        this.productData[index].inboundSkuTotalGrossWeight.value = "";
                     } else {
-                        this.productData[index].inboundSkuTotalGrossWeight = this.productData[index][e] * this.productData[index]["skuOuterCartonRoughWeight"];
+                        this.productData[index].inboundSkuTotalGrossWeight.value = this.productData[index][e].value * this.productData[index]["skuOuterCartonRoughWeight"].value;
                     }
 
                     //处理入库产品总体积
-                    if (!this.productData[index][e] || !this.productData[index]["skuOuterCartonVolume"]) {
-                        this.productData[index].inboundSkuTotalVolume = "";
+                    if (!this.productData[index][e].value || !this.productData[index]["skuOuterCartonVolume"].value) {
+                        this.productData[index].inboundSkuTotalVolume.value = "";
                     } else {
-                        this.productData[index].inboundSkuTotalVolume = this.productData[index][e] * this.productData[index]["skuOuterCartonVolume"];
+                        this.productData[index].inboundSkuTotalVolume.value = this.productData[index][e].value * this.productData[index]["skuOuterCartonVolume"].value;
                     }
-                } else if (e === "skuOuterCartonVolume") {
+                }
+                else if (e === "skuOuterCartonVolume") {
                     //处理外箱体积
-                    if (!this.productData[index]["inboundOutCartonTotalQty"] || !this.productData[index]["skuOuterCartonVolume"]) {
-                        this.productData[index].inboundSkuTotalVolume = "";
+                    if (!this.productData[index]["inboundOutCartonTotalQty"].value || !this.productData[index]["skuOuterCartonVolume"].value) {
+                        this.productData[index].inboundSkuTotalVolume.value = "";
                     } else {
-                        this.productData[index].inboundSkuTotalVolume = this.productData[index]["inboundOutCartonTotalQty"] * this.productData[index]["skuOuterCartonVolume"];
+                        this.productData[index].inboundSkuTotalVolume.value = this.productData[index]["inboundOutCartonTotalQty"].value * this.productData[index]["skuOuterCartonVolume"].value;
                     }
-                } else if (e === "skuOuterCartonRoughWeight") {
+                }
+                else if (e === "skuOuterCartonRoughWeight") {
                     //处理外箱毛重
-                    if (!this.productData[index]["inboundOutCartonTotalQty"] || !this.productData[index]["skuOuterCartonRoughWeight"]) {
-                        this.productData[index].inboundSkuTotalGrossWeight = "";
+                    if (!this.productData[index]["inboundOutCartonTotalQty"].value || !this.productData[index]["skuOuterCartonRoughWeight"].value) {
+                        this.productData[index].inboundSkuTotalGrossWeight.value = "";
                     } else {
-                        this.productData[index].inboundSkuTotalGrossWeight = this.productData[index]["inboundOutCartonTotalQty"] * this.productData[index]["skuOuterCartonRoughWeight"];
+                        this.productData[index].inboundSkuTotalGrossWeight.value = this.productData[index]["inboundOutCartonTotalQty"].value * this.productData[index]["skuOuterCartonRoughWeight"].value;
                     }
-                } else if (e === "skuOuterCartonNetWeight") {
+                }
+                else if (e === "skuOuterCartonNetWeight") {
                     //处理外箱净重
-                    if (!this.productData[index]["inboundOutCartonTotalQty"] || !this.productData[index]["skuOuterCartonNetWeight"]) {
-                        this.productData[index].inboundSkuTotalNetWeight = "";
+                    if (!this.productData[index]["inboundOutCartonTotalQty"].value || !this.productData[index]["skuOuterCartonNetWeight"].value) {
+                        this.productData[index].inboundSkuTotalNetWeight.value = "";
                     } else {
-                        this.productData[index].inboundSkuTotalNetWeight = this.productData[index]["inboundOutCartonTotalQty"] * this.productData[index]["skuOuterCartonNetWeight"];
+                        this.productData[index].inboundSkuTotalNetWeight.value = this.productData[index]["inboundOutCartonTotalQty"].value * this.productData[index]["skuOuterCartonNetWeight"].value;
                     }
                 }
             },
             handleClick(e) {
+                console.log(e,'e')
                 this.$windowOpen({
                     url: "/product/detail",
                     params: {
-                        id: e.skuId
+                        id: e.skuId.value
                     }
                 });
             },
@@ -739,13 +708,16 @@
                             this.volumeUnitOption = v.codes;
                         }
                     });
-                }).finally(()=>{
-                    this.loadingPage=false;
+                }).finally(() => {
+                    this.loadingPage = false;
                 });
             }
         },
         created() {
             this.getInboudNo();
+        },
+        mounted() {
+            this.columnConfig = this.$db.warehouse.inboundOrderProductTable;
         },
         watch: {}
     };
