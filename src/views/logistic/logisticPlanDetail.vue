@@ -500,12 +500,16 @@
       batchDunning() {
         let argArr = [];
         this.paymentList.forEach((item) => {
-          if (item.planPayAmount > item.actualPayAmount) {
-            argArr.push({
-              'id': item.id,
-              'version': item.version
-            })
-          }
+           argArr.push({
+            'id': item.id,
+            'version': item.version
+          })
+          // if (item.planPayAmount > item.actualPayAmount) {
+          //   argArr.push({
+          //     'id': item.id,
+          //     'version': item.version
+          //   })
+          // } 暂定功能
         });
         let seconds = 60;
         this.dunningDisabled = true;
@@ -532,9 +536,9 @@
       createdPaymentData(res = this.oldPaymentObject, dunning) {
         this.oldPaymentObject = JSON.parse(JSON.stringify(res))
         this.paymentList = res.datas
-        if (!dunning) {
-          this.dunningDisabled = !this.paymentList.some((item) => item.planPayAmount > item.actualPayAmount);
-        }
+        // if (!dunning) {
+        //   this.dunningDisabled = !this.paymentList.some((item) => item.planPayAmount > item.actualPayAmount);
+        // } 暂定功能
         this.paymentSum = res.statisticsDatas[0]
       },
       getNewLogisticsNo() {
@@ -671,7 +675,7 @@
               this.productModifyList = this.$getDB(this.$db.logistic.productModify,res.history.map(el => {
                 let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
                 el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-                el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm') 
+                el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm:ss') 
                 return el;
               }));
               this.$refs.HM.init(this.productModifyList,[],false);
@@ -998,7 +1002,7 @@
          //判断 ContainerInfo 是否修改过高亮 以便不传后台返回的修改值
         this.oldPlanObject.containerDetail =   this.oldPlanObject.containerDetail&&this.$depthClone(this.oldPlanObject.containerDetail).map(el=>{
           if(!el.isModify&&'fieldDisplay' in el){
-            el.fieldDisplay = {};
+            el.fieldDisplay = null;
           }
           return el;
         });
@@ -1006,7 +1010,7 @@
         //判断 feeInfo 是否修改过高亮 以便不传后台返回的修改值
         this.oldPlanObject.fee =  this.oldPlanObject.fee&&this.$depthClone([this.oldPlanObject.fee]).map(el=>{
           if(!el.isModify&&'fieldDisplay' in el){
-            el.fieldDisplay = {};
+            el.fieldDisplay = null;
           }
           return el;
         })[0];

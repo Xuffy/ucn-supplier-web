@@ -218,7 +218,7 @@ export default {
             sums[index] = values.reduce((prev, curr,i) => {
               const value = Number(curr);
               if (!isNaN(value)) {
-                return this.$numAdd(prev , this.$mul(curr,currencyCodeArr[i]));
+                return this.$calc.add(prev , this.$calc.multiply(curr,currencyCodeArr[i]));
               } else {
                 return prev;
               }

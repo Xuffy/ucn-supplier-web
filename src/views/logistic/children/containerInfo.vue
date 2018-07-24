@@ -8,55 +8,55 @@
         :row-class-name="tableRowClassName">
         <!-- <el-table-column type="selection" width="100" align="center" class-name="checkbox-no-margin" v-if="edit"/> -->
         <el-table-column type="index" width="50" align="center"/>
-        <el-table-column :label="$i.logistic.containerNo" width="140" align="center" prop="containerNo">
+        <el-table-column :label="$i.logistic.containerNo" width="140" align="center" prop='{"key":"containerNo","total":false}'>
           <template slot-scope="scope">
             <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.containerNo" v-if="edit" @change="ContainerInfoLight('containerNo',scope.row.containerNo,scope.$index,scope)"></el-input>
             <span v-else>{{ scope.row.containerNo }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.sealNo" width="120" align="center" prop="sealNo">
+        <el-table-column :label="$i.logistic.sealNo" width="120" align="center" prop='{"key":"sealNo","total":false}'>
           <template slot-scope="scope">
             <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.sealNo" v-if="edit" @change="ContainerInfoLight('sealNo',scope.row.sealNo,scope.$index,scope)"></el-input>
             <span v-else>{{ scope.row.sealNo }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.containerWeight" width="140" prop="containerWeight" align="center">
+        <el-table-column :label="$i.logistic.containerWeight" width="140" prop='{"key":"containerWeight","total":true}' align="center">
           <template slot-scope="scope">
             <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.containerWeight" v-if="edit" @change="ContainerInfoLight('containerWeight',scope.row.containerWeight,scope.$index,scope)"></el-input>
             <span v-else>{{ scope.row.containerWeight }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.containerType" width="140" align="center" prop="containerType">
+        <el-table-column :label="$i.logistic.containerType" width="140" align="center" prop='{"key":"containerType","total":true}'>
           <template slot-scope="scope">
             <span>{{ scope.row.containerType }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.vgm" prop="vgm" width="120" align="center">
+        <el-table-column :label="$i.logistic.vgm" width="120" align="center" prop='{"key":"vgm","total":true}'>
           <template slot-scope="scope">
             <span>{{ scope.row.vgm }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.totalQuantityInContainer" width="200" prop="totalContainerQty" align="center">
+        <el-table-column :label="$i.logistic.totalQuantityInContainer" width="200" prop='{"key":"totalContainerQty","total":true}' align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.totalContainerQty }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.totalVolumeInContainer" width="200" prop="totalContainerVolume" align="center">
+        <el-table-column :label="$i.logistic.totalVolumeInContainer" width="200" prop='{"key":"totalContainerVolume","total":true}' align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.totalContainerVolume }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.totalNetWeightInContainer" width="200" prop="totalContainerNetWeight" align="center">
+        <el-table-column :label="$i.logistic.totalNetWeightInContainer" width="200" prop='{"key":"totalContainerNetWeight","total":true}' align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.totalContainerNetWeight }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.totalQuantityOfOuterCartonsInContainer" width="300" prop="totalContainerOuterCartonsQty" align="center">
+        <el-table-column :label="$i.logistic.totalQuantityOfOuterCartonsInContainer" width="300" prop='{"key":"totalContainerOuterCartonsQty","total":true}' align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.totalContainerOuterCartonsQty }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.totalSkuPriceInContainer" width="200" prop="totalContainerSkuPrice" align="center">
+        <el-table-column :label="$i.logistic.totalSkuPriceInContainer" width="200" prop='{"key":"totalContainerSkuPrice","total":true}' align="center">
           <template slot-scope="scope">
             <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input>
             <span v-else>{{ scope.row.totalContainerSkuPrice }}</span>
@@ -147,7 +147,7 @@ export default {
     },
     lightHight({row, column, rowIndex, columnIndex}){
       if(column.property&&row.fieldDisplay){
-        if(column.property in row.fieldDisplay){
+        if( JSON.parse(column.property).key in row.fieldDisplay){
           return 'lightHight'
         }
       }
@@ -167,7 +167,7 @@ export default {
             sums[index] = this.$i.logistic.sum;
             return;
           }
-          const values = data.map(item => Number(item[column.property]) );
+          const values = data.map(item => Number(item[column.property&&JSON.parse(column.property).key]));
           //提取data 拼接成汇率的key 
           const currencyCode = data.map(item => {
             if(item.exchangeCurrency!=this.currencyCode){
@@ -188,17 +188,17 @@ export default {
               currencyCodeArr.push(1)
             }
           })
-          if (!values.every(value => isNaN(value))) {
+          if (!values.every(value => isNaN(value))&&column.property&&JSON.parse(column.property).total) {
             sums[index] = values.reduce((prev, curr,i) => {
               const value = Number(curr);
               if(column.property=="totalContainerSkuPrice"){
                 if (!isNaN(value)) {
-                  return this.$numAdd(prev , this.$mul(curr,currencyCodeArr[i]));
+                  return this.$calc.add(prev , this.$calc.multiply(curr,currencyCodeArr[i]));
                 } else {
                   return prev;
                 }
               }else{
-                return this.$numAdd(prev , curr || 0);
+                return this.$calc.add(prev , curr || 0);
               }
             }, 0);
             sums[index] += 0;

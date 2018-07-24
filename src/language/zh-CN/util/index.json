@@ -1,9 +1,9 @@
 {
-  "validateRequired": "ÇëÌîĞ´",
-  "validateCorrect": "ÇëÕıÈ·ÌîĞ´",
-  "validateValueGreater": "Öµ²»ÄÜ´óÓÚ",
-  "validateValueLess": "Öµ²»ÄÜĞ¡ÓÚ",
-  "validateLengthGreater": "³¤¶È²»ÄÜ´óÓÚ",
-  "validateLengthLess": "³¤¶È²»ÄÜĞ¡Óê",
-  "validateDigits": "Êı×Ö"
+  "validateRequired": "è¯·å¡«å†™",
+  "validateCorrect": "è¯·æ­£ç¡®å¡«å†™",
+  "validateValueGreater": "å€¼ä¸èƒ½å¤§äº",
+  "validateValueLess": "å€¼ä¸èƒ½å°äº",
+  "validateLengthGreater": "é•¿åº¦ä¸èƒ½å¤§äº",
+  "validateLengthLess": "é•¿åº¦ä¸èƒ½å°é›¨",
+  "validateDigits": "æ•°å­—"
 }

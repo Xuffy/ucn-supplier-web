@@ -10,7 +10,7 @@
       <el-form label-width="80px">
 
         <el-form-item :label="$i.importTemplate.note" class="remark-box important">
-          <h5>{{$i.importTemplate.importPrompt}}</h5>
+          <h5>{{this.tips || $i.importTemplate.importPrompt}}</h5>
         </el-form-item>
 
         <el-form-item :label="$i.importTemplate.upload">
@@ -24,7 +24,7 @@
             :on-exceed="handleExceed"
             :before-upload="beforeAvatarUpload"
             :file-list="fileList">
-            <el-button type="primary">{{this.tips || $i.importTemplate.selectFile}}
+            <el-button type="primary">{{$i.importTemplate.selectFile}}
               <i class="el-icon-upload el-icon--right"></i>
             </el-button>
           </el-upload>
