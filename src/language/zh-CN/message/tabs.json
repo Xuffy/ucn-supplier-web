@@ -6,6 +6,7 @@
   "push": "消息提醒",
   "FYI": "与我相关",
   "read": "已读",
-  "unread": "未读"
+  "unread": "未读",
+  "messageSetting": "消息设置"
 
 }
