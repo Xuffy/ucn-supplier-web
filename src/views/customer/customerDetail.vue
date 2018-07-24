@@ -141,7 +141,7 @@
         data() {
             return {
                 noEdit: true,
-                id:Number(this.$route.query.id),
+                id:this.$route.query.id,
                 tabName: 'address', //默认打开的tab
                 basicDate: [],
                 accounts: [],
