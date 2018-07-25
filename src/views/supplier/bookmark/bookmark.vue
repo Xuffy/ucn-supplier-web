@@ -1,30 +1,30 @@
 <template>
     <div class="SupplierSourcing">
             <div class="title">
-             {{$i.supplierBookmark}}            
+             {{$i.supplierBookmark}}
         </div>
 <!--        搜索条件-->
             <div style='marginTop:20px;'>
                 <el-form ref="parms" :model="parms" label-width="200px" size="mini">
                     <el-row>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="8" 
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8"
                            v-for='(item,index) in $db.supplier.overview'
-                           :key="index"                   
+                           :key="index"
                            >
-                            <el-form-item class="form-list" 
+                            <el-form-item class="form-list"
                              v-if="item.showType==='text'"
-                            :label="item.label" 
-                            :prop="item.key"                    
+                            :label="item.label"
+                            :prop="item.key"
                             >
                                 <el-input v-model="parms[item.key]" placeholder="Enter something..."></el-input>
                             </el-form-item>
                             <el-form-item class="form-list"  v-if="item.showType==='select'"
-                            :label="item.label" 
+                            :label="item.label"
                             :prop="item.key" >
                                 <el-select v-model="parms[item.key]"></el-select>
                                </el-form-item>
                                <el-form-item class="form-list"  v-if="item.showType==='dropdown'"
-                                :label="item.label" 
+                                :label="item.label"
                                 :prop="item.key">
                                  <div class="speDropdown">
                                      <drop-down ref="dropDown"  v-model="parms[item.key]" :list="dropData"
@@ -37,7 +37,7 @@
                         </el-row>
     </el-form>
             </div>
-           
+
             <div class="btn-group">
             <el-button @click="search" type="primary" class="search" >{{$i.common.search}}</el-button>
             <el-button @click="clear('parms')">{{$i.common.clear}}</el-button>
@@ -50,19 +50,19 @@
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_ORDER'"  @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
 <!--                 <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>-->
-                  <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}({{selectedNumber.length}})</el-button>
+                  <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.archive}}({{selectedNumber.length}})</el-button>
 
-              </div>  
+              </div>
               <div>
-                 
-              </div>          
+
+              </div>
         </div>
 <!--        表格-->
-             <v-table 
+             <v-table
                    :height=360
-                    :data="tabData" 
+                    :data="tabData"
                     :buttons="[{label: 'detail', type: 1}]"
-                    @action="detail" 
+                    @action="detail"
                     @change-checked='checked'
                     :loading='loading'
                     style='marginTop:10px'/>
