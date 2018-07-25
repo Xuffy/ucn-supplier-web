@@ -4,41 +4,71 @@
       <el-row>
         <el-col :span="12">
           <el-form-item :label="$i.setting.email +':'" required>
-            <el-input type="email" style="max-width:200px;" v-model="form.email" disabled="disabled"></el-input>
+            <el-input
+              type="email"
+              style="max-width:200px;"
+              v-model="form.email"
+              :placeholder="$i.common.inputkeyWordToSearch"
+              disabled="disabled"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12" >
           <el-form-item :label="$i.setting.userName+':'" required >
-            <el-input style="max-width:200px" v-model="form.userName" :disabled="isModify"></el-input>
+            <el-input
+              style="max-width:200px"
+              v-model="form.userName"
+              :placeholder="$i.common.inputkeyWordToSearch"
+              :disabled="isModify"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item  :label="$i.setting.password+':'">
-            <el-input style="max-width:140px;" type="password" disabled="disabled" name="fakeusernameremembered" auto-complete="new-password"></el-input>
-            <button type="button" :class="isModifyPass?'Disbutton':'button'"   @click="modifyPassword()">{{$i.setting.replace}}</button>
-            <!-- <el-button style=" " @click="dialogVisible = true">Replace</el-button> -->
+            <el-input
+              style="max-width:140px;"
+              type="password"
+              disabled="disabled"
+              name="fakeusernameremembered"
+              auto-complete="new-password"></el-input>
+            <button
+              type="button"
+              :class="isModifyPass?'Disbutton':'button'"
+              @click="modifyPassword()">{{$i.setting.replace}}</button>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item  :label="$i.setting.tel+':'" required>
-            <el-input style="max-width:200px" v-model="form.tel" :disabled="isModify"></el-input>
+            <el-input
+              style="max-width:200px"
+              v-model="form.tel"
+              :placeholder="$i.common.inputkeyWordToSearch"
+              :disabled="isModify"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="$i.setting.birthday+':'"  v-if="isVisible" >
             <div style="display:flex;max-width:200px;">
-              <el-date-picker type="date" placeholder="选择日期" value-format="timestamp" v-model="form.birthday"  style="max-width:300px;" :disabled="isModify"></el-date-picker>
+              <el-date-picker
+                type="date"
+                :placeholder="$i.common.inputSearch"
+                value-format="timestamp"
+                v-model="form.birthday"
+                style="max-width:300px;"
+                :disabled="isModify"></el-date-picker>
             </div>
           </el-form-item>
         </el-col>
         <el-col :span="12" >
           <el-form-item  :label="$i.setting.department+':'" v-if="isVisible">
-            <el-input style="max-width:200px"v-model="form.deptName"  disabled="disabled"></el-input>
+            <el-input
+              style="max-width:200px"
+              v-model="form.deptName"
+              :placeholder="$i.common.inputkeyWordToSearch"
+              disabled="disabled"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item  :label="$i.setting.language+':'"  v-if="isVisible" required>
-            <el-select v-model="form.lang" placeholder="请选择" style="width: 200px" :disabled="isModify">
+            <el-select v-model="form.lang" :placeholder="$i.common.inputSearch" style="width: 200px" :disabled="isModify">
               <el-option
                 v-for="item in language"
                 :key="item.code"
@@ -51,12 +81,16 @@
         </el-col>
         <el-col :span="12" >
           <el-form-item  :label="$i.setting.role+':'" v-if="isVisible">
-            <el-input style="max-width:200px" v-model="form.roleName" disabled="disabled"></el-input>
+            <el-input
+              style="max-width:200px"
+              v-model="form.roleName"
+              :placeholder="$i.common.inputkeyWordToSearch"
+              disabled="disabled"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="$i.setting.gender+':'"  v-if="isVisible" required>
-            <el-select v-model="form.gender" placeholder="please input" style="width: 200px" :disabled="isModify">
+            <el-select v-model="form.gender" :placeholder="$i.common.inputSearch" style="width: 200px" :disabled="isModify">
               <el-option
                 v-for="item in sex"
                 :key="item.id"
@@ -109,7 +143,7 @@
     data() {
       var validatePass = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请输入密码'));
+          callback(new Error(this.$i.common.enterPassword));
         } else {
           if (this.modifyPass.comfirmNewPassword.length !== '') {
             this.$refs.modifyPass.validateField('comfirmNewPassword');
@@ -119,9 +153,9 @@
       };
       var validatePass2 = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请再次输入密码'));
+          callback(new Error(this.$i.common.enterPasswordAgain));
         } else if (value !== this.modifyPass.newPassword) {
-          callback(new Error('两次输入密码不一致!'));
+          callback(new Error(this.$i.common.theTwoPasswordsDoNotMatch));
         } else {
           callback();
         }
@@ -150,19 +184,6 @@
         modifyEmail:{
           newEmail:''
         },
-        genderOptions:[{
-          value: '男',
-          label: 'Male',
-          key: 1
-        }, {
-          value: '女',
-          label: 'Female',
-          key: 0
-        }, {
-          value: '未知',
-          label: 'Unknown',
-          key: 2
-        }],
         dialogVisibleO:false,
         formLabelWidth: '160px',
         language:[],
@@ -225,7 +246,7 @@
           }else{
             this.$message({
               type: 'warning',
-              message: '两次输入的密码请保持一致！'
+              message: this.$i.common.theTwoPasswordsDoNotMatch
             });
             return  false;
           }
@@ -252,7 +273,7 @@
           .then(res => {
             this.$message({
               type: 'success',
-              message: '修改成功!'
+              message: this.$i.common.modifySuccess
             });
             this.isModifyPass = false;
             this.isModify = true;
@@ -269,7 +290,7 @@
         if(this.modifyPass.password == this.modifyPass.comfirmNewPassword){
           this.$message({
             type: 'warning',
-            message: '新密码不能与旧密码相同!'
+            message: this.$i.common.cannotPassword
           });
           return false;
         }
@@ -282,7 +303,7 @@
         this.$ajax.put(this.$apis.put_user_profile_password,params)
           .then(res => {
             this.dialogVisibleO = false;
-            this.$message({type: 'success', message: '修改成功!'});
+            this.$message({type: 'success', message: this.$i.common.modifySuccess});
             this.modifyPass = {
               password:'',
               newPassword:'',

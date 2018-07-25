@@ -37,7 +37,8 @@
   "sureRecover": "确定恢复",
   "recoverSuccess": "恢复成功",
   "deleteProduct": "确定删除选中商品",
-  "searchType": "please choose a type"
+  "searchType": "please choose a type",
+  "sureDeleteAccount": "确定删除该账户信息"
 
 
 }
