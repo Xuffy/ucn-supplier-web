@@ -16,7 +16,7 @@
       </div>
       <select-search
         :options="options"
-        @inputChange="inputEnter"
+        @inputEnter="inputEnter"
         :searchLoad="searchLoad"
       />
     </div>
@@ -166,6 +166,7 @@
       },
       viewByChange() {
         this.params.sorts = null;
+        this.params.pn = 1;
         this.gettabData();
       },
       exportDatas() {

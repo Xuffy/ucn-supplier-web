@@ -63,7 +63,7 @@
               <div style="margin-top: 20px;">
                 <el-button @click="deleteCustomer" type="danger" :disabled='!selectNumber.length>0'
                 v-authorize="'CUSTOMER:OVERVIEW:ARCHIVE'">
-                  {{$i.button.remove}}({{selectNumber.length}})</el-button>
+                  {{$i.common.archive}}({{selectNumber.length}})</el-button>
                 <el-button @click="downloadCustomer" type="primary" v-authorize="'CUSTOMER:OVERVIEW:DOWNLOAD'"
                            :disabled='!tabData.length>0'>{{$i.button.download}}
                   ({{selectNumber.length===0?$i.common.all:selectNumber.length}})</el-button>

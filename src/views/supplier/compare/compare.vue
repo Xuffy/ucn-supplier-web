@@ -19,7 +19,7 @@
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'">{{$i.product.createInquiry}}</el-button>
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'" @click="createOrder">{{$i.product.createOrder}}</el-button>
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
+                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.common.archive}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
                 <el-button v-if="!isModify" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'">{{$i.product.createInquiry}}</el-button>
@@ -28,7 +28,7 @@
                 <el-button v-if="!isModify" @click="modifyCompare" >Modify</el-button>
 
                 <el-button v-if="isModify" @click="addNewProduct" v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'">{{$i.product.addNew}}</el-button>
-                <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.product.delete}}</el-button>
+                <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.common.archive}}</el-button>
             </span>
             <el-checkbox-group v-model="screenTableStatus" class="compare-checkbox">
                 <el-checkbox label="1">{{$i.product.hideTheSame}}</el-checkbox>
@@ -70,7 +70,7 @@
                 :isButton=false
                  :disabledLine="disabledLine"
                 >
-               
+
             </VSupplier>
         </el-dialog>
 
@@ -121,25 +121,25 @@
         },
         methods:{
             getList() {
-                
+
                 if(this.$route.params.type==='new'){
-                   
+
                     //表示是新建detail还未保存
                     let id=[];
                     this.$route.query.id.split(',').forEach(v=>{
                         id.push(Number(v));
                     });
-                    let time=new Date(); 
+                    let time=new Date();
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
                     this.$ajax.post(this.$apis.post_listSupplierByIds,id).then(
-                        res=>{                       
+                        res=>{
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res);
                         console.log(this.tableDataList)
                         this.disabledLine=this.tableDataList;
                     }).catch(err=>{
-                            
+
                     })
-                   
+
                 }else if(this.$route.params.type==='modify'){
                     //表示这里已经生成对应的compare单，直接获取该单数据即可
                     this.compareName=this.$route.query.compareName;
@@ -167,7 +167,7 @@
                         //         orderType: "string",
                         //     }
                         // ]
-                    };  
+                    };
                     this.$ajax.post(this.$apis.post_supplier_listCompareDetails,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas);
                         this.disabledLine=this.tableDataList;
@@ -261,7 +261,7 @@
             },
 
             handleOkClick(e){
-                
+
                 //如果总条数>100，则进行提示
                 let totalLen=0;
                 this.tableDataList.forEach(v=>{
@@ -306,7 +306,7 @@
 
             //保存该compare list
             saveCompare(){
-               
+
                 if(!this.compareName){
                     this.$message({
                         message: 'Please Input Compare Name',
