@@ -70,5 +70,7 @@
   "beneficiaryAddress": "Beneficiary address",
   "beneficiaryBankName": "Beneficiary bank name",
   "beneficiaryBankSWIFT": "Beneficiary bank SWIFT",
-  "accountType": "Account type"
+  "accountType": "Account type",
+  "exportLicenseYes": "有",
+  "exportLicenseNo": "无"
 }

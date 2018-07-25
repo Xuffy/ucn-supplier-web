@@ -493,7 +493,9 @@
           },
           //下载
           downloadCustomer(){
-            this.$fetch.export_task('UDATA_SUPPLIER_EXPORT_CUSTOMER_IDS',{ids:this.basicDate.id});
+            let ids = [];
+            ids.push(this.basicDate.id)
+            this.$fetch.export_task('UDATA_SUPPLIER_EXPORT_CUSTOMER_IDS',{ids:ids});
 
           },
         },
