@@ -2,21 +2,21 @@
     <div class="souringDetail">
         <div class="head">
             <div class="title">
-                <img :src='basicDate.logo'/> 
+                <img :src='basicDate.logo'/>
                 <span>{{basicDate.name}}</span>
             </div>
-            <div class="detail">             
-                 <el-form  label-width="190px">          
-                    <el-row>             
+            <div class="detail">
+                 <el-form  label-width="190px">
+                    <el-row>
                         <el-row class="right">
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8"
                                    v-for='(item,index) in $db.supplier.detail'
                                    :key='index'
-                                   >                         
+                                   >
                                     <el-form-item label-width="260px" :prop="item.key" :label="item.label+' :'">
                                        {{basicDate[item.key]}}
                                     </el-form-item>
-                            </el-col>                          
+                            </el-col>
                         </el-row>
 
                 </el-row>
@@ -26,7 +26,7 @@
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:CREATE_ORDER'" @click='createOrder'>{{$i.common.createOrder}}</el-button>
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:ADD_COMPARE'" @click='addCompare'>{{$i.common.addToCompare}}</el-button>
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:PRODUCT'" @click='supplierProducts'>{{$i.common.supplierProducts}}</el-button>
-                    <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}</el-button>
+                    <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:DELETE'" @click='remove' type='danger'>{{$i.common.archive}}</el-button>
                 </div>
 <!--
                 <div class="btns" v-else>
@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="body">
-            <el-tabs v-model="tabName" type="card" >          
+            <el-tabs v-model="tabName" type="card" >
                 <el-tab-pane :label="$i.address" name="address">
                     <v-table  :data="address"  style='marginTop:10px'/>
                 </el-tab-pane>
@@ -52,11 +52,11 @@
                 </el-tab-pane>
 <!--
                 <el-tab-pane :label="$i.inquireHistory"  name="inquireHistory">
-                  <v-table  :data="tabData"   style='marginTop:10px'/> 
+                  <v-table  :data="tabData"   style='marginTop:10px'/>
                 </el-tab-pane>
 -->
                 <el-tab-pane :label="$i.remark" name="remark">
-                    <v-remark  
+                    <v-remark
                      style='marginTop:10px'
                      :tableData='remarkData'
                      />
@@ -72,12 +72,12 @@
             </el-tabs>
         </div>
 
-     <VCompareList 
+     <VCompareList
              v-if="showCompareList"
             :data="compareData"
             @clearData="clearData"
             @goCompare="goCompare"
-            @closeTag="handleClose"      
+            @closeTag="handleClose"
      ></VCompareList>
 
     </div>
