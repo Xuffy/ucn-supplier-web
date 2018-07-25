@@ -147,7 +147,7 @@
           column = this.$db.inquiry.viewByInqury;
         } else {
           url = this.$apis.BUYER_POST_INQIIRY_LIST_SKU;
-          column = this.$db.inquiry.viewBySKU;
+          column = this.$db.inquiry.overviewBySKU;
         }
         this.$ajax.post(url, this.params).then(res => {
           this.params.tc = res.tc;
