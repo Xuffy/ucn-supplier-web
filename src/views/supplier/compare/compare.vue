@@ -70,7 +70,7 @@
                 :isButton=false
                  :disabledLine="disabledLine"
                 >
-               
+
             </VSupplier>
         </el-dialog>
 
@@ -121,25 +121,25 @@
         },
         methods:{
             getList() {
-                
+
                 if(this.$route.params.type==='new'){
-                   
+
                     //表示是新建detail还未保存
                     let id=[];
                     this.$route.query.id.split(',').forEach(v=>{
                         id.push(Number(v));
                     });
-                    let time=new Date(); 
+                    let time=new Date();
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
                     this.$ajax.post(this.$apis.post_listSupplierByIds,id).then(
-                        res=>{                       
+                        res=>{
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res);
                         console.log(this.tableDataList)
                         this.disabledLine=this.tableDataList;
                     }).catch(err=>{
-                            
+
                     })
-                   
+
                 }else if(this.$route.params.type==='modify'){
                     //表示这里已经生成对应的compare单，直接获取该单数据即可
                     this.compareName=this.$route.query.compareName;
@@ -167,7 +167,7 @@
                         //         orderType: "string",
                         //     }
                         // ]
-                    };  
+                    };
                     this.$ajax.post(this.$apis.post_supplier_listCompareDetails,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas);
                         this.disabledLine=this.tableDataList;
@@ -261,7 +261,7 @@
             },
 
             handleOkClick(e){
-                
+
                 //如果总条数>100，则进行提示
                 let totalLen=0;
                 this.tableDataList.forEach(v=>{
@@ -306,7 +306,7 @@
 
             //保存该compare list
             saveCompare(){
-               
+
                 if(!this.compareName){
                     this.$message({
                         message: 'Please Input Compare Name',
