@@ -82,7 +82,7 @@
       </v-product>
     </el-dialog>
     <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @save="save" :beforeSave="beforeSave" ref="HM"></v-history-modify>
-    <v-message-board v-if="chatParams" module="inquiry" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
+    <v-message-board v-if="chatParams" module="INQUIRY" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
   </div>
 </template>
 <script>
@@ -430,6 +430,9 @@ export default {
       } else if (this.idType === 'producInfo') {
         this.newProductTabData = _.map(this.newProductTabData, oldItem => {
           let tmp = _.filter(data, item => _.findWhere(oldItem, {'key': 'skuId'}).value === _.findWhere(item, {'key': 'skuId'}).value && !!oldItem._remark === !!item._remark);
+          if (tmp[0] && tmp[0].skuPictures && tmp[0].skuPictures._image) {
+            tmp[0].skuPictures.value = tmp[0].skuPictures._value;
+          }
           return tmp[0] || oldItem;
         });
       }
