@@ -166,6 +166,7 @@
       },
       viewByChange() {
         this.params.sorts = null;
+        this.params.pn = 1;
         this.gettabData();
       },
       exportDatas() {
