@@ -489,7 +489,7 @@ export default {
     // Produc info 按钮操作
     producInfoAction(data, type) {
       if (type === 'detail') {
-        this.$router.push({path: '/product/sourcingDetail', query: {id: data.skuId.value}});
+        this.$router.push({path: '/product/detail', query: {id: data.skuId.value}});
         return;
       }
       if (['histoty', 'modify'].indexOf(type) === -1) return;
