@@ -304,6 +304,7 @@
           .then(res => {
             this.dialogVisibleO = false;
             this.$message({type: 'success', message: this.$i.common.modifySuccess});
+            this.getUserProfile();
             this.modifyPass = {
               password:'',
               newPassword:'',
