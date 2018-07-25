@@ -75,16 +75,13 @@ export default {
     _disabled: true
   },
   skuNameInCustomerLanguage: {
-    key: 'skuNameCustomer',
-    _disabled: true
+    key: 'skuNameCustomer'
   },
   skuDescriptionInCustomerLanguage: {
-    key: 'skuDescCustomer',
-    _disabled: true
+    key: 'skuDescCustomer'
   },
   customerSkuCode: {
-    key: 'skuCustomerSkuCode',
-    _disabled: true
+    key: 'skuCustomerSkuCode'
   },
   supplierName: {
     key: 'skuSupplierName',

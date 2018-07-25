@@ -16,7 +16,7 @@
       </div>
       <select-search
         :options="options"
-        @inputChange="inputEnter"
+        @inputEnter="inputEnter"
         :searchLoad="searchLoad"
       />
     </div>
