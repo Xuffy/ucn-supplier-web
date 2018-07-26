@@ -57,7 +57,7 @@
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <v-table ref="productInfo" :code="configUrl[pageName]&&configUrl[pageName].setTheField" :totalRow="productListTotal" :data="productList" @action="action" :buttons="productbButtons"
         @change-checked="selectProduct"
-        native-sort="orderNo"
+        native-sort="onlyID"
         @change-sort="$refs.productInfo.setSort(productList)">
         <div slot="header" class="product-header">
           <el-button v-if="edit" type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
@@ -459,6 +459,7 @@
         this.feeListMatch = this.$depthClone(res.fee ? [res.fee] :[]).map(el=>{el.isModify=false;return el});
         res.product = res.product.map((item, i) => {
           item.vId = i;
+          item.onlyID = new Date().getTime();
           return item;
         });
         this.productList = this.$getDB(this.$db.logistic.productInfo, res.product.map(el => {
@@ -619,6 +620,7 @@
           let newAddArr = this.$depthClone(this.productList[i]);
           newAddArr.id.value = null;
           newAddArr.fieldDisplay.value=null;
+          newAddArr.onlyID.value=new Date().getTime();
           newAddArr = _.mapObject(newAddArr,(v,k)=>{
             if(v._style){
               delete v._style
@@ -756,6 +758,7 @@
           let sliceStr = this.selectArr.skuIncoterm.find(item => item.code == a.skuIncoterm).name;
           sliceStr = sliceStr.slice(0, 1) + sliceStr.slice(1 - sliceStr.length).toLowerCase();
           a.id = null
+          a.onlyID=new Date().getTime();
           a.vId = +new Date()
           a.blSkuName = null
           a.hsCode = null
@@ -1082,9 +1085,6 @@
       }
     },
     watch: {
-      productList(v){
-        console.log(v)
-      },
       containerinfoMatch: {
         handler: function (val) {
           val.forEach(el => {
