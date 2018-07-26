@@ -95,7 +95,7 @@
                 v-for="item in sex"
                 :key="item.id"
                 :label="item.name"
-                :value="item.code"
+                :value="Number(item.code)"
                 style="width: 200px">
               </el-option>
             </el-select>
