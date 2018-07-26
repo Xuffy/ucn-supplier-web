@@ -32,11 +32,11 @@
           <div class="fn btn">
             <div v-if="pageType === 'plan'">
               <el-button v-authorize="auth[pageType]&&auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==5)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==5&&viewBy=='plan')">{{ $i.logistic.archive }}</el-button>
             </div>
             <div v-if="pageType === 'loadingList'">
               <el-button v-authorize="auth[pageType]&&auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==4)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==4&&viewBy=='plan')">{{ $i.logistic.archive }}</el-button>
             </div>
           </div>
           <div class="view-by-btn">
@@ -194,7 +194,7 @@
     watch: {
       viewBy(newVal) {
         // this.selectCount = []
-        // this.initPage();
+        this.initPage();
         this.fetchDataList()
       },
       pageType() {

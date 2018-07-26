@@ -57,7 +57,7 @@
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <v-table ref="productInfo" :code="configUrl[pageName]&&configUrl[pageName].setTheField" :totalRow="productListTotal" :data="productList" @action="action" :buttons="productbButtons"
         @change-checked="selectProduct"
-        native-sort="onlyID"
+        native-sort="vId"
         @change-sort="$refs.productInfo.setSort(productList)">
         <div slot="header" class="product-header">
           <el-button v-if="edit" type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
@@ -458,8 +458,7 @@
         this.feeList = (res.fee ? [res.fee] :[]).map(el=>{el.isModify=false;return el});
         this.feeListMatch = this.$depthClone(res.fee ? [res.fee] :[]).map(el=>{el.isModify=false;return el});
         res.product = res.product.map((item, i) => {
-          item.vId = i;
-          item.onlyID = new Date().getTime();
+          item.vId = this.$getUUID();
           return item;
         });
         this.productList = this.$getDB(this.$db.logistic.productInfo, res.product.map(el => {
@@ -620,7 +619,7 @@
           let newAddArr = this.$depthClone(this.productList[i]);
           newAddArr.id.value = null;
           newAddArr.fieldDisplay.value=null;
-          newAddArr.onlyID.value=new Date().getTime();
+          newAddArr.vId.value = this.$getUUID();
           newAddArr = _.mapObject(newAddArr,(v,k)=>{
             if(v._style){
               delete v._style
@@ -758,8 +757,7 @@
           let sliceStr = this.selectArr.skuIncoterm.find(item => item.code == a.skuIncoterm).name;
           sliceStr = sliceStr.slice(0, 1) + sliceStr.slice(1 - sliceStr.length).toLowerCase();
           a.id = null
-          a.onlyID=new Date().getTime();
-          a.vId = +new Date()
+          a.vId = this.$getUUID();
           a.blSkuName = null
           a.hsCode = null
           a.currency = null
@@ -846,7 +844,7 @@
           this.$set(this.productList[item].fieldDisplay, 'value',fieldDisplayObj);
         })
         const id = currrentProduct.id.value
-        const vId = +new Date();
+        const vId = this.$getUUID();
         const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
         index === -1 ? this.modifyProductArray.push(this.restoreObj(currrentProduct)) : (this.modifyProductArray[index] =
           this.restoreObj(currrentProduct))
