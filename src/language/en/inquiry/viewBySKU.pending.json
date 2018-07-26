@@ -6,7 +6,7 @@
   "supplierName": "Supplier name",
   "skuCode": "Supplier SKU code",
   "skuNameEN": "SKU name EN",
-  "price": "Price",
+  "price": "SKU Price",
   "currency": "Currency",
   "incoterm": "Incoterm",
   "departurePort": "Departure port",

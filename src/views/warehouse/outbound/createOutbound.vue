@@ -94,7 +94,13 @@
                 {{$i.warehouse.removeProduct}}
             </el-button>
         </div>
-
+        <div class="gear">
+                <v-filter-column
+                    ref="filterColumn"
+                    code="uwarehouse_qc_order_detail"
+                    @change="changeColumn">
+                </v-filter-column>
+            </div>
         <el-table
                 v-loading="loadingProductTable"
                 class="product-table"
@@ -112,27 +118,28 @@
                     width="55">
             </el-table-column>
             <el-table-column
-                    v-for="v in $db.warehouse.outboundProduct"
+                    v-for="v in columnConfig"
                     :key="v.key"
                     :prop="v.key"
                     :label="$i.warehouse[v.key]"
                     :class-name="v._rules &&  v._rules.required ? 'ucn-table-required' : ''"
                     align="center"
+                    v-if="!v._hidden && !v._hide"
                     width="180">
-                <template slot-scope="scope">
+                <template slot-scope="scope" v-if="scope.row[v.key]">
                     <div v-if="v.showType==='number'">
                         <el-input-number
-                                @blur="handleBlur(v,scope.row[v.key],scope.$index)"
+                                @blur="handleBlur(v,scope.row[v.key].value,scope.$index)"
                                 :disabled="v.computed"
-                                v-model="scope.row[v.key]"
+                                v-model="scope.row[v.key].value"
                                 :min="0"
                                 :controls="false"></el-input-number>
                     </div>
                     <div v-else-if="v.key==='inboundDate' || v.key==='warehouseName' || v.key==='warehouseNo'">
-                        {{scope.row.inboundVo[v.key]}}
+                        {{scope.row.inboundVo[v.key].value}}
                     </div>
                     <div v-else>
-                        {{scope.row[v.key]}}
+                        {{scope.row[v.key].value}}
                     </div>
                 </template>
             </el-table-column>
@@ -231,7 +238,7 @@
 
 <script>
 
-    import { VTimeZone, VUpload, VTable, VPagination } from "@/components/index";
+    import { VTimeZone, VUpload, VTable, VPagination, VFilterColumn } from "@/components/index";
     import Math from "mathjs";
 
     export default {
@@ -240,7 +247,8 @@
             VTable,
             VTimeZone,
             VUpload,
-            page: VPagination
+            page: VPagination,
+            VFilterColumn
         },
         data() {
             return {
@@ -323,10 +331,14 @@
               lengthUnitOption:[],
               volumeUnitOption:[],
               weightUnitOption:[],
+              columnConfig: ''
             };
         },
         methods: {
-
+            changeColumn(val) {
+                this.productData = this.$refs.filterColumn.getFilterData(this.productData, val);
+                this.columnConfig = this.productData[0];
+            },
             getOutboundNo(){
                 this.loadingPage=true;
                 this.$ajax.post(this.$apis.GET_WAREHOUSE_NO,{
@@ -350,6 +362,7 @@
             getProductData() {
                 this.$ajax.post(this.$apis.get_inboundSku, this.orderProduct).then(res => {
                     this.orderNoOption = [];
+                    // console.log(res.datas)
                     _.uniq(_.pluck(res.datas, "orderNo")).forEach((v, k) => {
                         this.orderNoOption.push({
                             id: k + 1,
@@ -359,7 +372,7 @@
                     });
                     this.tableDataList = this.$getDB(this.$db.warehouse.outboundOrderTable, res.datas, e => {
                         this.productData.forEach(v => {
-                            if (e.id.value === v.id) {
+                            if (e.id.value === v.id.value) {
                                 this.$set(e, "_disabled", true);
                                 this.$set(e, "_checked", true);
                             }
@@ -473,7 +486,7 @@
                     this.$ajax.post(this.$apis.get_outboundProductData, {
                         ids: id
                     }).then(res => {
-                        console.log(res.datas,'res')
+                        let arr = []
                         res.datas.forEach(v => {
                             v.outboundOutCartonTotalQty = 0;
                             v.outboundSkuTotalGrossWeight = 0;
@@ -488,8 +501,14 @@
                             v.lengthUnitDictCode=v.lengthUnitDictCode?_.findWhere(this.lengthUnitOption,{code:String(v.lengthUnitDictCode)}).name:'';
                             v.volumeUnitDictCode=v.volumeUnitDictCode?_.findWhere(this.volumeUnitOption,{code:String(v.volumeUnitDictCode)}).name:'';
                             v.weightUnitDictCode=v.weightUnitDictCode?_.findWhere(this.weightUnitOption,{code:String(v.weightUnitDictCode)}).name:'';
+                            arr.push(v)
                         });
                         this.loadingProductTable = false;
+                        arr = this.$getDB(this.$db.warehouse.outboundProduct, arr);
+                        this.$refs.filterColumn.update(false, arr).then(data => {
+                            this.productData = this.$refs.filterColumn.getFilterData(arr, data);
+                            this.columnConfig = this.productData[0];
+                        });
                     }).catch(err => {
                         this.loadingProductTable = false;
                     });
@@ -602,6 +621,9 @@
                     this.disableRemoveProduct = true;
                 }
             }
+        },
+        mounted () {
+            this.columnConfig = this.$db.warehouse.outboundProduct;
         }
     };
 </script>
@@ -674,6 +696,10 @@
     .speInput /deep/ .el-select {
         display: block;
     }
-
+    .gear{
+        float: right;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
 
 </style>
