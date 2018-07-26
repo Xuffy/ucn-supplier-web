@@ -50,9 +50,9 @@
               <el-date-picker
                 type="date"
                 :placeholder="$i.common.inputSearch"
-                value-format="timestamp"
                 v-model="form.birthday"
                 style="max-width:300px;"
+                @change="val => {form.birthday = $dateFormat(form.birthday,'yyyy-mm-dd')}"
                 :disabled="isModify"></el-date-picker>
             </div>
           </el-form-item>
@@ -95,7 +95,7 @@
                 v-for="item in sex"
                 :key="item.id"
                 :label="item.name"
-                :value="item.code"
+                :value="Number(item.code)"
                 style="width: 200px">
               </el-option>
             </el-select>
@@ -304,6 +304,7 @@
           .then(res => {
             this.dialogVisibleO = false;
             this.$message({type: 'success', message: this.$i.common.modifySuccess});
+            this.getUserProfile();
             this.modifyPass = {
               password:'',
               newPassword:'',

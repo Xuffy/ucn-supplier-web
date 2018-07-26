@@ -155,7 +155,7 @@
             },
             //获取字典
             getCodePart(){
-              this.$ajax.post(this.$apis.POST_CODE_PART,["PMT","CUSTOMER_TYPE","ITM"]).then(res=>{
+              this.$ajax.post(this.$apis.POST_CODE_PART,["PMT","CUSTOMER_TYPE","ITM"],{ cache: true }).then(res=>{
                 this.options.payment = _.findWhere(res, {'code': 'PMT'}).codes;
                 this.options.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
                 this.options.type = _.findWhere(res, {'code': 'CUSTOMER_TYPE'}).codes;
@@ -165,7 +165,7 @@
             },
               //获取国家
             getCountryAll(){
-              this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+              this.$ajax.get(this.$apis.GET_COUNTRY_ALL, {}, { cache: true }).then(res=>{
                  this.options.country = res
               }).catch(err=>{
                 console.log(err)
@@ -222,7 +222,6 @@
             },
             //.........checked
             checked(item) {
-                console.log(item)
                 this.selectedData = item
                 let number = []
                 this.selectedData.forEach(item => {
@@ -287,9 +286,9 @@
           },
         },
         created() {
-            this.getData();
             this.getCodePart();
             this.getCountryAll();
+            this.getData();
         },
         mounted(){
           this.setMenuLink([{

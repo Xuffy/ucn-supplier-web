@@ -44,22 +44,22 @@ export default {
         showType:'input'
     },
     skuCustomsCode:{
-        key:'skuCustomerSkuCode',
+        key:'customerSkuCode',
     },
     skuUnit:{
-        key:'skuUnit',          //字典
+        key:'skuUnitDictCode',          //字典
     },
     skuUnitLength:{
-        key:'skuUnitLength',          //字典
+        key:'lengthUnitDictCode',          //字典
     },
     skuUnitVolume:{
-        key:'skuUnitVolume',          //字典
+        key:'volumeUnitDictCode',          //字典
     },
     skuUnitWeight:{
-        key:'skuUnitWeight',          //字典
+        key:'weightUnitDictCode',          //字典
     },
     skuQty:{
-        key:'skuQty'
+        key:'orderSkuQty'
     },
     inboundSkuTotalQty:{        //入库产品总数量
         key:'inboundSkuTotalQty',       //需要计算
@@ -95,10 +95,10 @@ export default {
         computed:true,
     },
     skuOuterCartonQty:{
-        key:'skuOuterCartonQty',
+        key:'outerCartonSkuQty',
     },
     skuOuterCartonVolume:{
-        key:'skuOuterCartonVolume',         //可修改，必填
+        key:'outerCartonVolume',         //可修改，必填
         showType:'number',
         must:true,
         _rules:{
@@ -106,7 +106,7 @@ export default {
         }
     },
     skuOuterCartonRoughWeight:{
-        key:'skuOuterCartonRoughWeight',        //可修改，必填
+        key:'outerCartonGrossWeight',        //可修改，必填
         showType:'number',
         must:true,
         _rules:{
@@ -114,7 +114,7 @@ export default {
         }
     },
     skuOuterCartonNetWeight:{
-        key:'skuOuterCartonNetWeight',        //可修改，必填
+        key:'outerCartonNetWeight',        //可修改，必填
         showType:'number',
         must:true,
         _rules:{
@@ -125,10 +125,10 @@ export default {
         key:'unqualifiedType',
     },
     skuMethodPkgCn:{
-        key:'skuMethodPkgCn',
+        key:'packingMethodCn',
     },
     skuInnerCartonMethodCn:{
-        key:'skuInnerCartonMethodCn',
+        key:'innerCartonPackingMethodCn',
     },
     skuDescEn:{
         key:'skuDescEn',
@@ -154,7 +154,7 @@ export default {
         must:true
     },
     skuInnerCartonLength:{
-        key:'skuInnerCartonLength',         //可修改，必填
+        key:'innerCartonLength',         //可修改，必填
         showType:'number',
         must:true,
         _rules:{
@@ -162,7 +162,7 @@ export default {
         }
     },
     skuInnerCartonWidth:{
-        key:'skuInnerCartonWidth',         //可修改，必填
+        key:'innerCartonWidth',         //可修改，必填
         showType:'number',
         must:true,
         _rules:{
@@ -170,17 +170,17 @@ export default {
         }
     },
     skuInnerCartonHeight:{
-        key:'skuInnerCartonHeight',         //可修改，必填
+        key:'innerCartonHeight',         //可修改，必填
         showType:'number',
         must:true
     },
     skuInnerCartonWeightNet:{
-        key:'skuInnerCartonWeightNet',         //可修改，必填
+        key:'innerCartonNetWeight',         //可修改，必填
         showType:'number',
         must:true
     },
     skuInnerCartonRoughWeight:{
-        key:'skuInnerCartonRoughWeight',         //可修改，必填
+        key:'innerCartonGrossWeight',         //可修改，必填
         showType:'number',
         must:true,
         _rules:{
@@ -191,7 +191,7 @@ export default {
         key:'skuBrand',
     },
     skuInnerCartonVolume:{
-        key:'skuInnerCartonVolume',
+        key:'innerCartonVolume',
         showType:'number',
         must:true,
         _rules:{
@@ -217,7 +217,7 @@ export default {
         key:'supplierName',
     },
     supplierCode:{
-        key:'supplierCode',
+        key:'supplierNo',
     },
     supplierOrderNo:{
         key:'supplierOrderNo',
