@@ -130,7 +130,7 @@
         </table>
 
         <div v-else class="empty">
-          {{loading ? $i.table.gettingData : $i.hintMessage.noData}}
+          {{loading ? $i.table.gettingData : (emptyText || $i.hintMessage.noData)}}
         </div>
       </div>
     </div>
@@ -230,6 +230,10 @@
         default: false,
       },
       code: {
+        type: String,
+        default: '',
+      },
+      emptyText: {
         type: String,
         default: '',
       }

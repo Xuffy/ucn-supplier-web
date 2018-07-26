@@ -9,5 +9,6 @@
   "noLatestNews": "最近无消息",
   "operationFailed": "操作失败",
   "pleaseEnter": "请填写",
-  "noData": "无数据"
+  "noData": "无数据",
+  "noAuthority": "您没有访问权限，请联系管理员"
 }

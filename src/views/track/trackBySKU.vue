@@ -133,7 +133,7 @@
           this.dataList = this.$getDB(this.$db.track.track, res.datas,item=>{
             let country;
             _.mapObject(item, val => {
-              val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+              val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd HH:MM:ss'))
               return val
             })
           });

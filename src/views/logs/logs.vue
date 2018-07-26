@@ -38,7 +38,7 @@
       </el-form>
 
       <div class="btn-group">
-        <el-button @click="getbizlogs" type="primary" class="search" >{{$i.common.search}}</el-button>
+        <el-button @click="searchLog" type="primary" class="search" >{{$i.common.search}}</el-button>
         <el-button @click="clear()">{{$i.common.clear}}</el-button>
       </div>
       <!--<el-input-->
@@ -150,6 +150,11 @@
         this.date = '';
 
       },
+      searchLog(){
+        this.params.pn = '';
+        this.params.ps ='';
+        this.getbizlogs();
+      },
       //分页
       handleSizeChange(val) {
         this.params.pn = val;
@@ -168,7 +173,7 @@
             this.pageData = res
             this.logslist = this.$getDB(this.$db.logs.table, res.datas,  item => {
               _.mapObject(item, val => {
-                val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'))
+                val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd HH:MM:ss'))
                 return val
               })
             });

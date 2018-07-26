@@ -14,7 +14,7 @@
 
       <el-table
         :data="dataList"
-        max-height="400px"
+        height="400"
         style="display:flex;flex-direction:column;"
         :cell-style="setCellStyle"
         border>
