@@ -626,7 +626,6 @@
             return v;
           })
           this.productList.splice(i + 1, 0, newAddArr);
-          console.log(this.productList,'this.productList')
           return;
         }
         this.productInfoModifyStatus = status
@@ -1083,6 +1082,9 @@
       }
     },
     watch: {
+      productList(v){
+        console.log(v)
+      },
       containerinfoMatch: {
         handler: function (val) {
           val.forEach(el => {
