@@ -516,7 +516,7 @@
           },
           //获取字典
           getCodePart(){
-            this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","SUPPLIER_TYPE","EL_IS","SEX"]).then(res=>{
+            this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","SUPPLIER_TYPE","EL_IS","SEX"],{cache:true}).then(res=>{
               this.options.payment = _.findWhere(res, {'code': 'PMT'}).codes;
               this.options.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
               this.options.type = _.findWhere(res, {'code': 'SUPPLIER_TYPE'}).codes;
@@ -528,7 +528,7 @@
           },
           //获取国家
           getCountryAll(){
-            this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+            this.$ajax.get(this.$apis.GET_COUNTRY_ALL,{},{cache:true}).then(res=>{
               this.options.country = res
             }).catch(err=>{
               console.log(err)
@@ -536,7 +536,7 @@
           },
           //获取部门列表
           getDepartment(){
-            this.$ajax.get(this.$apis.GET_DEPARTMENT).then(res=>{
+            this.$ajax.get(this.$apis.GET_DEPARTMENT,{},{cache:true}).then(res=>{
               this.department = res
             }).catch(err=>{
               console.log(err)
