@@ -50,9 +50,9 @@
               <el-date-picker
                 type="date"
                 :placeholder="$i.common.inputSearch"
-                value-format="timestamp"
                 v-model="form.birthday"
                 style="max-width:300px;"
+                @change="val => {form.birthday = $dateFormat(form.birthday,'yyyy-mm-dd')}"
                 :disabled="isModify"></el-date-picker>
             </div>
           </el-form-item>

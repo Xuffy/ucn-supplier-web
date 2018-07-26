@@ -173,7 +173,7 @@
             this.pageData = res
             this.logslist = this.$getDB(this.$db.logs.table, res.datas,  item => {
               _.mapObject(item, val => {
-                val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'))
+                val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd HH:MM:ss'))
                 return val
               })
             });
