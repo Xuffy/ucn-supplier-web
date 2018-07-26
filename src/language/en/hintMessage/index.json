@@ -9,5 +9,6 @@
   "noLatestNews": "No latest news",
   "operationFailed": "Operation fails",
   "pleaseEnter": "Please enter",
-  "noData": "No data"
+  "noData": "No data",
+  "noAuthority": "You do not have access, please contact the administrator"
 }
