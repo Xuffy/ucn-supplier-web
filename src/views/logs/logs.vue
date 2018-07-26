@@ -38,7 +38,7 @@
       </el-form>
 
       <div class="btn-group">
-        <el-button @click="getbizlogs" type="primary" class="search" >{{$i.common.search}}</el-button>
+        <el-button @click="searchLog" type="primary" class="search" >{{$i.common.search}}</el-button>
         <el-button @click="clear()">{{$i.common.clear}}</el-button>
       </div>
       <!--<el-input-->
@@ -149,6 +149,11 @@
         this.params.operationContent = '';
         this.date = '';
 
+      },
+      searchLog(){
+        this.params.pn = '';
+        this.params.ps ='';
+        this.getbizlogs();
       },
       //分页
       handleSizeChange(val) {
