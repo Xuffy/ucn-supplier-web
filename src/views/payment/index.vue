@@ -168,7 +168,7 @@
       },
       inputEnter(val) {
         if (!val.id) return this.$message({
-          message: 'please choose a type',
+          message: this.$i.common.keyType,
           type: 'warning'
         });
         if (val.id == '1') {
