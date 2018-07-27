@@ -386,43 +386,44 @@
                 this.productData.forEach(v => {
                     let productUnit = {};
                     _.map(this.skuUnitOption, data => {
-                        if (v.skuUnit.value === data.name) {
+                        if (v.skuUnitDictCode.value === data.name) {
                             productUnit.skuUnit = data.code;
                         }
                     });
                     _.map(this.lengthUnitOption, data => {
-                        if (v.skuUnitLength.value === data.name) {
+                        if (v.lengthUnitDictCode.value === data.name) {
                             productUnit.lengthUnitDictCode = data.code;
                         }
                     });
                     _.map(this.volumeUnitOption, data => {
-                        if (v.skuUnitVolume.value === data.name) {
+                        if (v.volumeUnitDictCode.value === data.name) {
                             productUnit.volumeUnitDictCode = data.code;
                         }
                     });
                     _.map(this.weightUnitOption, data => {
-                        if (v.skuUnitWeight.value === data.name) {
+                        if (v.weightUnitDictCode.value === data.name) {
                             productUnit.weightUnitDictCode = data.code;
                         }
                     });
+                    console.log(v,'data')
                     this.inboundData.inboundSkuBeanCreateParams.push({
                         customerName: v.customerName.value,
                         customerNo: v.customerNo.value,
                         customerOrderNo: v.customerOrderNo.value,
-                        customerSkuCode: v.skuCustomerSkuCode.value,
+                        customerSkuCode: v.customerSkuCode.value,
                         factorySkuCode: v.factorySkuCode.value ? v.factorySkuCode.value : "",
                         inboundOutCartonTotalQty: v.inboundOutCartonTotalQty.value ? v.inboundOutCartonTotalQty.value : 0,
                         inboundSkuTotalGrossWeight: v.inboundSkuTotalGrossWeight.value ? v.inboundSkuTotalGrossWeight.value : 0,
                         inboundSkuTotalNetWeight: v.inboundSkuTotalNetWeight.value ? v.inboundSkuTotalNetWeight.value : 0,
                         inboundSkuTotalQty: v.inboundSkuTotalQty.value ? v.inboundSkuTotalQty.value : 0,
                         inboundSkuTotalVolume: v.inboundSkuTotalVolume.value ? v.inboundSkuTotalVolume.value : 0,
-                        innerCartonGrossWeight: v.skuInnerCartonRoughWeight.value ? v.skuInnerCartonRoughWeight.value : 0,
-                        innerCartonHeight: v.skuInnerCartonHeight.value ? v.skuInnerCartonHeight.value : 0,
-                        innerCartonLength: v.skuInnerCartonLength.value ? v.skuInnerCartonLength.value : 0,
-                        innerCartonNetWeight: v.skuInnerCartonWeightNet.value ? v.skuInnerCartonWeightNet.value : 0,
-                        innerCartonPackingMethodCn: v.skuInnerCartonMethodCn.value,
-                        innerCartonVolume: v.skuInnerCartonVolume.value ? v.skuInnerCartonVolume.value : 0,
-                        innerCartonWidth: v.skuInnerCartonWidth.value ? v.skuInnerCartonWidth.value : 0,
+                        innerCartonGrossWeight: v.innerCartonGrossWeight.value ? v.skuInnerCartonRoughWeight.value : 0,
+                        innerCartonHeight: v.innerCartonHeight.value ? v.skuInnerCartonHeight.value : 0,
+                        innerCartonLength: v.innerCartonLength.value ? v.skuInnerCartonLength.value : 0,
+                        innerCartonNetWeight: v.innerCartonNetWeight.value ? v.skuInnerCartonWeightNet.value : 0,
+                        innerCartonPackingMethodCn: v.innerCartonPackingMethodCn.value,
+                        innerCartonVolume: v.innerCartonVolume.value ? v.skuInnerCartonVolume.value : 0,
+                        innerCartonWidth: v.innerCartonWidth.value ? v.skuInnerCartonWidth.value : 0,
                         /**
                          * inventory,outbound暂时全部传0
                          * */
@@ -477,6 +478,8 @@
                     }
                 }
                 this.inboundData.attachments = this.$refs.attachmentUpload[0].getFiles();
+
+                return;
 
                 this.disabledSubmit = true;
                 this.$ajax.post(this.$apis.add_inbound, this.inboundData).then(res => {
@@ -565,21 +568,29 @@
                     this.loadingProductTable = true;
                     this.$ajax.post(this.$apis.get_orderSku, { ids: this.productIds }).then(res => {
                         let arr = [];
-                        console.log(res,'res')
                         _.map(res, v => {
                             _.map(v.skuList, e => {
                                 e.customerOrderNo = v.customerOrderNo;
                                 e.customerNo = v.customerNo;
                                 e.customerSkuCode=e.skuCustomerSkuCode;
+                                e.customerName=v.customerName;
+                                e.factorySkuCode='';
+                                e.inboundSkuTotalGrossWeight=null;
+                                e.inboundSkuTotalQty=null;
+                                e.inboundSkuTotalNetWeight=null;
+                                e.inboundSkuTotalVolume=null;
+                                e.inboundOutCartonTotalQty=e.skuInboundQty;
+                                // innerCartonGrossWeight
+
+
+
                                 e.inboundNo=this.inboundData.inboundNo;
-                                e.innerCartonGrossWeight=e.skuInnerCartonRoughWeight;
                                 e.innerCartonHeight=e.skuInnerCartonHeight;
                                 e.innerCartonLength=e.skuInnerCartonLength;
                                 e.innerCartonNetWeight=e.skuInnerCartonWeightNet;
                                 e.innerCartonPackingMethodCn=e.skuInnerCartonMethodCn;
                                 e.innerCartonVolume=e.skuInnerCartonVolume;
                                 e.innerCartonWidth=e.skuInnerCartonWidth;
-                                e.lengthUnitDictCode=e
                                 e.lengthUnitDictCode = (_.findWhere(this.lengthUnitOption, { code: String(e.skuUnitLength) }) || {}).name;
                                 e.orderNo=v.orderNo;
                                 e.orderSkuQty=e.skuQty;
@@ -619,7 +630,6 @@
             changeColumn(val) {
                 this.productData = this.$refs.filterColumn.getFilterData(this.productData, val);
                 this.columnConfig = this.productData[0];
-                console.log(this.productData, "this.productData");
             },
 
             /**
@@ -639,24 +649,28 @@
              * */
             handleBlur(e, index) {
                 if (e === "inboundOutCartonTotalQty") {
+                    console.log(this.productData,'this.productData')
+                    console.log(index,'index')
+                    console.log(e,'e')
                     //处理入库产品总箱数输入框
-                    if (!this.productData[index][e].value || !this.productData[index]["skuOuterCartonQty"].value) {
+                    if (!this.productData[index][e].value || !this.productData[index]["outerCartonSkuQty"].value) {
                         this.productData[index].inboundSkuTotalQty.value = "";
                     } else {
-                        this.productData[index].inboundSkuTotalQty.value = this.productData[index][e].value * this.productData[index]["skuOuterCartonQty"].value;
+                        this.productData[index].inboundSkuTotalQty.value = this.productData[index][e].value * this.productData[index]["outerCartonSkuQty"].value;
                     }
-
                     //处理入库产品总净重
-                    if (!this.productData[index][e].value || !this.productData[index]["skuOuterCartonNetWeight"].value) {
+                    if (!this.productData[index][e].value || !this.productData[index]["outerCartonNetWeight"].value) {
                         this.productData[index].inboundSkuTotalNetWeight.value = "";
                     } else {
-                        this.productData[index].inboundSkuTotalNetWeight.value = this.productData[index][e].value * this.productData[index]["skuOuterCartonNetWeight"].value;
+                        this.productData[index].inboundSkuTotalNetWeight.value = this.productData[index][e].value * this.productData[index]["outerCartonNetWeight"].value;
                     }
 
                     //处理入库产品总毛重
                     if (!this.productData[index][e].value || !this.productData[index]["skuOuterCartonRoughWeight"].value) {
+                        console.log(11111)
                         this.productData[index].inboundSkuTotalGrossWeight.value = "";
                     } else {
+                        console.log(123124)
                         this.productData[index].inboundSkuTotalGrossWeight.value = this.productData[index][e].value * this.productData[index]["skuOuterCartonRoughWeight"].value;
                     }
 
