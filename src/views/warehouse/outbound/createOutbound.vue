@@ -97,7 +97,7 @@
         <div class="gear">
                 <v-filter-column
                     ref="filterColumn"
-                    code="uwarehouse_qc_order_detail"
+                    code="uwarehouse_outbound_sku"
                     @change="changeColumn">
                 </v-filter-column>
             </div>
@@ -135,9 +135,9 @@
                                 :min="0"
                                 :controls="false"></el-input-number>
                     </div>
-                    <div v-else-if="v.key==='inboundDate' || v.key==='warehouseName' || v.key==='warehouseNo'">
+                    <!-- <div v-else-if="v.key==='inboundDate' || v.key==='warehouseName' || v.key==='warehouseNo'">
                         {{scope.row.inboundVo[v.key].value}}
-                    </div>
+                    </div> -->
                     <div v-else>
                         {{scope.row[v.key].value}}
                     </div>
@@ -496,12 +496,19 @@
                             this.productData.push(v);
                         });
                         this.productData.forEach(v => {
+                            let obj = {}
                             v.inboundVo.inboundDate = this.$dateFormat(v.inboundVo.inboundDate, "yyyy-mm-dd");
                             v.skuUnitDictCode = v.skuUnitDictCode ? _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }).name : "";
                             v.lengthUnitDictCode=v.lengthUnitDictCode?_.findWhere(this.lengthUnitOption,{code:String(v.lengthUnitDictCode)}).name:'';
                             v.volumeUnitDictCode=v.volumeUnitDictCode?_.findWhere(this.volumeUnitOption,{code:String(v.volumeUnitDictCode)}).name:'';
                             v.weightUnitDictCode=v.weightUnitDictCode?_.findWhere(this.weightUnitOption,{code:String(v.weightUnitDictCode)}).name:'';
-                            arr.push(v)
+                            obj.warehouseNo = v.inboundVo.warehouseNo;
+                            obj.warehouseName = v.inboundVo.warehouseName;
+                            obj.inboundDate = v.inboundVo.inboundDate;
+                            obj.inventorySkuPrice = 0;
+                            obj.inventoryDays = 0;
+                            obj.inventoryServiceFee = 0;
+                            arr.push(Object.assign(obj, v))
                         });
                         this.loadingProductTable = false;
                         arr = this.$getDB(this.$db.warehouse.outboundProduct, arr);

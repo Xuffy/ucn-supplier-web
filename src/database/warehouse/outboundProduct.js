@@ -2,6 +2,7 @@ export default {
     id: {
         _hide:true
     },
+    skuBarCode:{},
     skuCode:{
         key:'skuCode',
     },
@@ -11,18 +12,20 @@ export default {
     skuNameEn:{
         key:'skuNameEn',
     },
-    customerSkuCode:{
-        key:'customerSkuCode',
-    },
-    factorySkuCode:{
-        key:'factorySkuCode',
-    },
+    skuNameCustomer: {},
     skuMaterialCn:{
         key:'skuMaterialCn',
     },
     skuMaterialEn:{
         key:'skuMaterialEn',
     },
+    factorySkuCode:{
+        key:'factorySkuCode',
+    },
+    customerSkuCode:{
+        key:'customerSkuCode',
+    },
+
     skuUnitDictCode:{
         key:'skuUnitDictCode',
         showType:'select',
@@ -87,6 +90,30 @@ export default {
     outerCartonNetWeight:{
         key:'outerCartonNetWeight',
     },
+    inboundNo:{ //入库单号
+        key:'inboundNo',
+    },
+    skuDescEn:{
+        key:'skuDescEn',
+    },
+    skuDescCn:{
+        key:'skuDescCn',
+    },
+    skuDescCustomer:{
+        key:'skuDescCustomer',
+    },
+    skuLabel:{
+        key:'skuLabel',
+    },
+    orderNo:{
+        key:'orderNo',
+    },
+    warehouseNo:{
+        key:'warehouseNo'
+    },
+    warehouseName:{
+        key:'warehouseName'
+    },
     inboundDate:{
         key:'inboundDate',
     },
@@ -102,35 +129,10 @@ export default {
         key:'inventoryServiceFee',
         showType:'number',
     },
-    inboundNo:{
-        key:'inboundNo',
-    },
     skuBarCode:{
         key:'skuBarCode'
     },
     skuNameCustomer:{
         key:'skuNameCustomer'
-    },
-    skuDescEn:{
-        key:'skuDescEn',
-    },
-    skuDescCn:{
-        key:'skuDescCn',
-    },
-    skuDescCustomer:{
-        key:'skuDescCustomer',
-    },
-    orderNo:{
-        key:'orderNo',
-    },
-    warehouseNo:{
-        key:'warehouseNo'
-    },
-    warehouseName:{
-        key:'warehouseName'
-    },
-    skuLabel:{
-        key:'skuLabel',
-    },
-
+    }
 }
