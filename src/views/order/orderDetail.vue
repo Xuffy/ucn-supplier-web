@@ -656,6 +656,7 @@
 
         <v-history-modify
                 code="uorder_sku_list"
+                :beforeSave="beforeSave"
                 @save="saveNegotiate"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
@@ -1663,6 +1664,36 @@
                         params.supplierCompanyId=v.companyId;
                     }
                 });
+
+                if(this.productTableData.length===0){
+                    return this.$message({
+                        message: this.$i.order.pleaseAddProduct,
+                        type: 'warning'
+                    });
+                }
+                //判断产品客户语言描述，产品客户语言品名和客户货号必填
+                if(!this.productTableData[0].skuDescCustomer.value){
+                    this.$message({
+                        message: this.productTableData[0].skuDescCustomer.label+this.$i.order.shouldFill,
+                        type: 'warning'
+                    });
+                    return false;
+                }
+                else if(!this.productTableData[0].skuNameCustomer.value){
+                    this.$message({
+                        message: this.productTableData[0].skuNameCustomer.label+this.$i.order.shouldFill,
+                        type: 'warning'
+                    });
+                    return false;
+                }
+                else if(!this.productTableData[0].skuCustomerSkuCode.value){
+                    this.$message({
+                        message: this.productTableData[0].skuCustomerSkuCode.label+this.$i.order.shouldFill,
+                        type: 'warning'
+                    });
+                    return false;
+                }
+
                 let orderSkuUpdateList=[];
                 _.map(this.productTableData,item=>{
                     let isModify=false,isModifyStatus=false;
@@ -2065,6 +2096,27 @@
             },
             handleCancel(){
                 this.productTableDialogVisible=false;
+            },
+            beforeSave(data){
+                if(!data[0].skuDescCustomer.value){
+                    this.$message({
+                        message: data[0].skuDescCustomer.label+this.$i.order.shouldFill,
+                        type: 'warning'
+                    });
+                    return false;
+                }else if(!data[0].skuNameCustomer.value){
+                    this.$message({
+                        message: data[0].skuNameCustomer.label+this.$i.order.shouldFill,
+                        type: 'warning'
+                    });
+                    return false;
+                }else if(!data[0].skuCustomerSkuCode.value){
+                    this.$message({
+                        message: data[0].skuCustomerSkuCode.label+this.$i.order.shouldFill,
+                        type: 'warning'
+                    });
+                    return false;
+                }
             },
             saveNegotiate(e){
                 if(!this.orderForm.orderSkuUpdateList || this.orderForm.orderSkuUpdateList.length===0){

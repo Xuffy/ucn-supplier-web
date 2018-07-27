@@ -49,13 +49,13 @@ export default {
         _disabled:true
     },
     skuDescCustomer:{
-        _disabled:true
+        type:"String"
     },
     skuNameCustomer:{
-        _disabled:true
+        type:"String"
     },
     skuCustomerSkuCode:{
-        _disabled:true
+        type:"String"
     },
     skuCode:{
         _disabled:true
