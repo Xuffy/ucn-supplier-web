@@ -1147,7 +1147,6 @@
                 skuSaleStatusOption:[],
                 skuStatusTotalOption:[],
 
-
                 /**
                  * 底部按钮禁用状态
                  * */
@@ -1525,32 +1524,32 @@
                     this.loadingPage=false;
                 })
             },
-            getDetail(e){
+            getDetail(e,isTrue){
                 this.loadingPage=true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
                     orderId:this.$route.query.orderId,
                     orderNo:this.$route.query.orderNo || this.$route.query.code
                 }).then(res=>{
                     this.orderForm=res;
-                    if(this.orderForm.status==='1' || this.orderForm.status==='2'){
+                    _.map(this.$db.order.orderDetail,v=>{
+                        v._isModified=false;
+                    });
+                    if(this.orderForm.status==='1' || this.orderForm.status==='2' && !isTrue){
                         /**
                          * 高亮处理
                          * */
-                        _.map(this.$db.order.orderDetail,v=>{
-                            v._isModified=false;
-                        });
                         _.map(this.orderForm.fieldUpdate,(v,k)=>{
                             if(k==='attachments'){
                                 k='attachment';
                             }
                             this.$db.order.orderDetail[k]._isModified=true;
                         });
-                        this.orderForm.fieldUpdate={};
                         _.map(this.orderForm.responsibilityList,v=>{
                             v.fieldUpdates=v.fieldUpdate;
                             v.fieldUpdate={};
                         });
                     }
+                    this.orderForm.fieldUpdate={};
                     this.initialData=this.$depthClone(this.orderForm)
                     this.savedIncoterm=Object.assign({},res).incoterm;
                     _.map(this.supplierOption,v=>{
@@ -1596,7 +1595,7 @@
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     });
-                    if(this.orderForm.status==='1' || this.orderForm.status==='2'){
+                    if(this.orderForm.status==='1' || this.orderForm.status==='2' && !isTrue){
                         _.map(this.productTableData,v=>{
                             if(v.fieldUpdate.value){
                                 _.map(v.fieldUpdate.value,(value,key)=>{
@@ -1616,15 +1615,15 @@
                     }else{
                         this.disableModify=false;
                     }
-                    if(res.status!=='1'){
-                        this.disableConfirm=true;
-                    }else{
-                        this.disableConfirm=false;
-                    }
                     if(this.orderForm.status==='1' && !this.orderForm.supplierUserId){
                         this.hasHandleOrder=false;
                     }else{
                         this.hasHandleOrder=true;
+                    }
+                    if(res.status!=='1'){
+                        this.disableConfirm=true;
+                    }else{
+                        this.disableConfirm=false;
                     }
                     if(res.status==='4'){
                         this.hasFinishOrder=true;
@@ -1644,7 +1643,10 @@
                      * */
                     this.getPaymentData();
                 }).finally(err=>{
-                    this.loadingPage=false;
+                    this.$nextTick(()=>{
+                        this.loadingPage=false;
+                    });
+
                     this.disableClickCancelModify=false;
                     if(e){
                         this.isModify=false;
@@ -1671,7 +1673,6 @@
                         if(val._isModifyStatus){
                             isModifyStatus=true;
                         }
-
                     });
                     if(isModify || isModifyStatus){
                         let isIn=false;
@@ -2511,7 +2512,7 @@
                     ids: [this.orderForm.id],
                     orderNos:[this.orderForm.orderNo]
                 }).then(res=>{
-                    this.getDetail();
+                    this.getDetail(false,true);
                 }).finally(err=>{
                     this.disableClickConfirm=false;
                 });
