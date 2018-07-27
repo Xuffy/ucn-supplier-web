@@ -98,5 +98,9 @@ export default {
   },
   transportCompany: {
     type: 'text'
+  },
+  logisticsStatus: {
+    type: 'text',
+    _hide:true
   }
 }

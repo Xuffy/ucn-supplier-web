@@ -26,5 +26,9 @@ export default {
   },
   blNo: {
     type: 'text'
+  },
+  logisticsStatus: {
+    type: 'text',
+    _hide:true
   }
 }
