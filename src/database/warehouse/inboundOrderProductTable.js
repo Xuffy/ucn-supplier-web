@@ -18,6 +18,9 @@ export default {
     skuSupplierCode:{
         _hide:true
     },
+    customerName:{
+        _hide:true
+    },
     skuBarCode:{
         key:'skuBarCode',
     },
@@ -209,9 +212,6 @@ export default {
     },
     customerNo:{
         key:'customerNo'
-    },
-    customerName:{
-        key:'customerName',
     },
     supplierName:{
         key:'supplierName',
