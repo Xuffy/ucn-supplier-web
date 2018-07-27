@@ -152,6 +152,10 @@ export default {
   "containerType":{
     type: 'text'
   },
+  "totalContainerGrossWeight": {
+    type: 'text',
+    _important:true
+  },
   "totalQuantityInContainer":{
     key:'totalContainerQty',
     type: 'text',
