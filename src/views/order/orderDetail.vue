@@ -207,24 +207,24 @@
             </el-row>
         </el-form>
 
-        <div class="title">
-            {{$i.order.exchangeRate}}
-        </div>
-        <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
-            <el-row>
-                <el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                    <el-form-item :label="$i.order[v.currency]">
-                        <el-input-number
-                                :disabled="true"
-                                :placeholder="$i.order.pleaseInput"
-                                class="speInput speNumber"
-                                v-model="v.exchangeRate"
-                                :controls="false">
-                        </el-input-number>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-        </el-form>
+        <!--<div class="title">-->
+            <!--{{$i.order.exchangeRate}}-->
+        <!--</div>-->
+        <!--<el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">-->
+            <!--<el-row>-->
+                <!--<el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                    <!--<el-form-item :label="$i.order[v.currency]">-->
+                        <!--<el-input-number-->
+                                <!--:disabled="true"-->
+                                <!--:placeholder="$i.order.pleaseInput"-->
+                                <!--class="speInput speNumber"-->
+                                <!--v-model="v.exchangeRate"-->
+                                <!--:controls="false">-->
+                        <!--</el-input-number>-->
+                    <!--</el-form-item>-->
+                <!--</el-col>-->
+            <!--</el-row>-->
+        <!--</el-form>-->
 
         <div class="title">
             {{$i.order.responsibility}}
