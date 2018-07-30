@@ -123,8 +123,9 @@
 </template>
 
 <script>
-    import VCompareList from '../product/compareList'
-    import VAttachment from './attachment'
+    import { mapActions} from 'vuex';
+    import VCompareList from '../product/compareList';
+    import VAttachment from './attachment';
     import {
         VTable,VUpload,VImage
     } from '@/components/index';
@@ -195,6 +196,9 @@
             }
         },
         methods: {
+            ...mapActions([
+              'setMenuLink'
+            ]),
             handleClick(tab, event) {
                 switch(Number(tab.index)){
                     case 3:
@@ -477,12 +481,17 @@
               this.disableClickDeleteBtn = true;
               const params = []
               params.push(this.basicDate.id)
-              this.$ajax.post(this.$apis.post_supply_batchDelete, this.selectNumber).then(res => {
+              this.$ajax.post(this.$apis.post_supply_batchDelete, params).then(res => {
                 this.disableClickDeleteBtn = false;
-                this.getData();
                 this.$message({
                   type: 'success',
-                  message: this.$i.common.deleteTheSuccess
+                  message: this.$i.common.deleteTheSuccess,
+                  onClose: (() => {
+                    this.$router.push({
+                      path: '/customer/overview',
+                    })
+                  })
+
                 });
               }).finally(() => {
                 this.disableClickDeleteBtn = false;
@@ -503,6 +512,14 @@
           this.getCodePart();
           this.getCurrency();
         },
+      mounted(){
+        this.setMenuLink({
+            path: 'customerArchive',
+            type: 10,
+            label: this.$i.common.archive,
+            auth:''
+          });
+      },
     }
 
 </script>
