@@ -514,6 +514,7 @@
                                 e.packingMethodCn=e.skuMethodPkgCn;
                                 e.supplierName=e.skuSupplierName;
                                 e.supplierNo=e.skuSupplierCode;
+                                e.supplierId=e.skuSupplierId;
                                 e.supplierOrderNo=v.supplierOrderNo;
                                 e.inboundSkuTotalVolume=null;       //计算
                                 e.inboundSkuTotalNetWeight=null;    //计算
