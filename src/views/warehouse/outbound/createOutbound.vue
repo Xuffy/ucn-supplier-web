@@ -125,7 +125,7 @@
                     :class-name="v._rules &&  v._rules.required ? 'ucn-table-required' : ''"
                     align="center"
                     v-if="!v._hidden && !v._hide"
-                    width="180"
+                    :width="v.key === 'skuNameCustomer' ? '250' : '180'"
                     :sortable="v.sortable">
                 <template slot-scope="scope" v-if="scope.row[v.key]">
                     <div v-if="v.showType==='number'">
