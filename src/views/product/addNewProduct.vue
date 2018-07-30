@@ -37,8 +37,12 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isReadily">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
-                                           :placeholder="$i.product.pleaseChoose">
+                                <el-select
+                                        class="speSelect"
+                                        size="mini"
+                                        clearable
+                                        v-model="productForm[v.key]"
+                                        :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in readilyOption"
                                             :key="item.id"
@@ -102,23 +106,23 @@
                         </div>
                         <div v-if="v.showType==='number'">
                             <div v-if="v.isAvailableQty">
-                                <el-input-number
+                                <v-input-number
                                         class="speInputNumber"
                                         size="mini"
                                         :controls="false"
                                         v-model="productForm[v.key]"
                                         :min="0"
                                         :disabled="!parseInt(productForm.readilyAvailable)">
-                                </el-input-number>
+                                </v-input-number>
                             </div>
                             <div v-else>
-                                <el-input-number
+                                <v-input-number
                                         class="speInputNumber"
                                         size="mini"
                                         :controls="false"
                                         v-model="productForm[v.key]"
                                         :min="0">
-                                </el-input-number>
+                                </v-input-number>
                             </div>
                         </div>
                         <div v-if="v.showType==='dropdown'">
@@ -223,13 +227,13 @@
                             </el-input>
                         </div>
                         <div v-if="v.showType==='number'">
-                            <el-input-number
+                            <v-input-number
                                     class="speInputNumber"
                                     size="mini"
                                     :controls="false"
                                     v-model="productForm[v.key]"
                                     :min="0">
-                            </el-input-number>
+                            </v-input-number>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -280,11 +284,10 @@
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
-                            <el-input-number
+                            <v-input-number
                                     v-model="scope.row.fobPrice"
                                     :controls="false"
-                                    :min="0"
-                                    label="描述文字"></el-input-number>
+                                    :min="0"></v-input-number>
                         </el-form-item>
                     </template>
                 </el-table-column>
@@ -309,11 +312,11 @@
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
-                            <el-input-number
+                            <v-input-number
                                     v-model="scope.row.exwPrice"
                                     :controls="false"
                                     :min="0"
-                                    label="描述文字"></el-input-number>
+                                    label="描述文字"></v-input-number>
                         </el-form-item>
                     </template>
                 </el-table-column>
@@ -342,11 +345,11 @@
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
-                            <el-input-number
+                            <v-input-number
                                     v-model="scope.row.cifPrice"
                                     :controls="false"
                                     :min="0"
-                                    label="描述文字"></el-input-number>
+                                    label="描述文字"></v-input-number>
                         </el-form-item>
                     </template>
                 </el-table-column>
@@ -389,11 +392,11 @@
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
-                            <el-input-number
+                            <v-input-number
                                     v-model="scope.row.dduPrice"
                                     :controls="false"
                                     :min="0"
-                                    label="描述文字"></el-input-number>
+                                    label="描述文字"></v-input-number>
                         </el-form-item>
                     </template>
                 </el-table-column>
@@ -512,14 +515,13 @@
                             </el-input>
                         </div>
                         <div v-if="v.showType==='number'">
-                            <el-input-number
+                            <v-input-number
                                     class="speInputNumber"
                                     size="mini"
                                     :controls="false"
                                     v-model="productForm[v.key]"
-                                    :min="0"
-                                    label="描述文字">
-                            </el-input-number>
+                                    :min="0">
+                            </v-input-number>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -564,14 +566,14 @@
                             </el-input>
                         </div>
                         <div v-if="v.showType==='number'">
-                            <el-input-number
+                            <v-input-number
                                     class="speInputNumber"
                                     size="mini"
                                     :controls="false"
                                     v-model="productForm[v.key]"
                                     :min="0"
                                     label="描述文字">
-                            </el-input-number>
+                            </v-input-number>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -599,8 +601,12 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isUDB">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
-                                           :placeholder="$i.product.pleaseChoose">
+                                <el-select
+                                        class="speSelect"
+                                        size="mini"
+                                        v-model="productForm[v.key]"
+                                        clearable
+                                        :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in udbOption"
                                             :key="item.id"
@@ -610,8 +616,12 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isSkuPkg">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
-                                           :placeholder="$i.product.pleaseChoose">
+                                <el-select
+                                        class="speSelect"
+                                        size="mini"
+                                        v-model="productForm[v.key]"
+                                        clearable
+                                        :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in skuPkgOption"
                                             :key="item.id"
@@ -653,38 +663,38 @@
                         </div>
                         <div v-if="v.showType==='number'">
                             <div v-if="v.key==='lengthWidthHeight'">
-                                <el-input-number
+                                <v-input-number
                                         class="speNum"
                                         size="mini"
                                         :controls="false"
                                         v-model="boxSize.length"
                                         :min="0">
-                                </el-input-number>
+                                </v-input-number>
                                 <div class="speIcon">*</div>
-                                <el-input-number
+                                <v-input-number
                                         class="speNum"
                                         size="mini"
                                         :controls="false"
                                         v-model="boxSize.width"
                                         :min="0">
-                                </el-input-number>
+                                </v-input-number>
                                 <div class="speIcon">*</div>
-                                <el-input-number
+                                <v-input-number
                                         class="speNum"
                                         size="mini"
                                         :controls="false"
                                         v-model="boxSize.height"
                                         :min="0">
-                                </el-input-number>
+                                </v-input-number>
                             </div>
                             <div v-else>
-                                <el-input-number
+                                <v-input-number
                                         class="speInputNumber"
                                         size="mini"
                                         :controls="false"
                                         v-model="productForm[v.key]"
                                         :min="0">
-                                </el-input-number>
+                                </v-input-number>
                             </div>
                         </div>
                         <div v-if="v.showType==='date'">
@@ -793,7 +803,7 @@
 
 <script>
     import imgHandler from "../product/imgHandler";
-    import { dropDownSingle, VTable, VUpload } from "@/components/index";
+    import { dropDownSingle, VTable, VUpload ,VInputNumber} from "@/components/index";
 
     export default {
         name: "addNewProduct",
@@ -801,7 +811,8 @@
             imgHandler,
             VUpload,
             VTable,
-            dropDown: dropDownSingle
+            dropDown: dropDownSingle,
+            VInputNumber
         },
         data() {
             return {
@@ -893,31 +904,31 @@
                     materialCn: "",
                     colourEn: "",
                     colourCn: "",
-                    minOrderQty: 1,
-                    deliveryDates: 1,               //交期(做完需要多少天)
+                    // minOrderQty: 1,
+                    // deliveryDates: 1,               //交期(做完需要多少天)
                     design: "",
                     noneSellCountry: "",             //禁售国家
-                    applicableAge: 1,
-                    expireDates: 1,
+                    // applicableAge: 1,
+                    // expireDates: 1,
                     expireUnit: "3",                  //保质期单位
                     comments: "",
-                    readilyAvailable: "0",
-                    availableQty: 1,
+                    // readilyAvailable: "0",
+                    // availableQty: 1,
                     mainSaleCountry: "",
                     mainSaleArea: "",
-                    productionDates: 1,             //开发时间
+                    // productionDates: 1,             //开发时间
                     qualityStander: "",
                     yearListed: "",
-                    useDisplayBox: "1",
-                    displayBoxQty: 0,
+                    useDisplayBox: null,
+                    // displayBoxQty: 0,
                     otherPackInfoCn: "",
                     otherPackInfoEn: "",
-                    adjustPackage: "1",
+                    adjustPackage: null,
                     lengthWidthHeight: "",
                     recycle: false,                     //只有在recycleBin里才是false
                     categoryId: "",                      //类型id
-                    rateValueAddedTax: 1,               //增值税率
-                    taxRefundRate: 1,
+                    // rateValueAddedTax: 1,               //增值税率
+                    // taxRefundRate: 1,
                     customsCode: "",
                     customsNameCn: "",
                     customsNameEn: "",
@@ -932,51 +943,51 @@
                     brandRemark: "",
                     brandRelated: "",
                     certificat: "",
-                    gp20SkuQty: 0,
-                    gp40SkuQty: 0,
-                    hq40SkuQty: 0,
-                    tryDimension: 1,                    //托盘尺寸？？？
-                    skuQtyPerTray: 0,
+                    // gp20SkuQty: 0,
+                    // gp40SkuQty: 0,
+                    // hq40SkuQty: 0,
+                    // tryDimension: 1,                    //托盘尺寸？？？
+                    // skuQtyPerTray: 0,
                     specialTransportRequire: "",
                     inventoryCostMethod: "",
                     warehourceDefault: "",
-                    inventory: 0,
-                    safeInventory: 0,
-                    minInventory: 0,
+                    // inventory: 0,
+                    // safeInventory: 0,
+                    // minInventory: 0,
                     unitWeight: "7",                      //重量单位
                     unitLength: "5",                      //长度单位
                     unitVolume: "3",                      //提及单位
-                    length: 0,
-                    width: 0,
-                    height: 0,
-                    netWeight: 0,
-                    volume: 0,
+                    // length: 0,
+                    // width: 0,
+                    // height: 0,
+                    // netWeight: 0,
+                    // volume: 0,
                     methodPkgCn: "",
                     methodPkgEn: "",
                     innerCartonUnit: "",                //中包单位
-                    innerCartonQty: 0,
-                    innerCartonLength: 0,
-                    innerCartonWidth: 0,
-                    innerCartonHeight: 0,
-                    innerCartonWeightNet: 0,
-                    innerCartonRoughWeight: 0,
-                    innerCartonVolume: 0,
+                    // innerCartonQty: 0,
+                    // innerCartonLength: 0,
+                    // innerCartonWidth: 0,
+                    // innerCartonHeight: 0,
+                    // innerCartonWeightNet: 0,
+                    // innerCartonRoughWeight: 0,
+                    // innerCartonVolume: 0,
                     innerCartonDesc: "",
                     innerCartonMethodCn: "",
                     innerCartonMethodEn: "",
                     outerCartonUnit: "",                //外箱单位
                     outerCartonDesc: "",
-                    innerCartonOuterNum: 0,
-                    outerCartonQty: 0,
-                    outerCartonLength: 0,
-                    outerCartonWidth: 0,
-                    outerCartonHeight: 0,
-                    outerCartonNetWeight: 0,
-                    outerCartonRoughWeight: 0,
-                    outerCartonVolume: 0,
+                    // innerCartonOuterNum: 0,
+                    // outerCartonQty: 0,
+                    // outerCartonLength: 0,
+                    // outerCartonWidth: 0,
+                    // outerCartonHeight: 0,
+                    // outerCartonNetWeight: 0,
+                    // outerCartonRoughWeight: 0,
+                    // outerCartonVolume: 0,
                     outerCartonMethodCn: "",
                     outerCartonMethodEn: "",
-                    oem: "1",
+                    oem: null,
                     logisticId: 1,
                     pkgId: 1,
                     price: [
@@ -1571,7 +1582,7 @@
         min-height: 51px;
     }
 
-    .number >>> .el-input-number--mini {
+    .number >>> .v-input-number--mini {
         width: 80%;
     }
 

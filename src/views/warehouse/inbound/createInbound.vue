@@ -131,9 +131,7 @@
                                 @blur="handleBlur(v.key,scope.$index)"
                                 :controls="false"></v-input-number>
                     </div>
-                    <div v-else-if="v.key==='unqualifiedType'">
-                        0
-                    </div>
+                    <div v-else-if="v.key==='unqualifiedType'"></div>
                     <div v-else>
                         {{scope.row[v.key].value}}
                     </div>
@@ -205,7 +203,6 @@
                     @size-change="changeSize"
                     @change="changePage"
                     :page-data="pageData"></v-pagination>
-
             <div slot="footer" class="dialog-footer">
                 <el-button :disabled="disabledSearch" type="primary" @click="postData">{{$i.warehouse.sure}}</el-button>
                 <el-button :disabled="disabledCancelSearch" @click="closeDialog">{{$i.warehouse.cancel}}</el-button>
@@ -383,94 +380,33 @@
                     });
                 }
                 this.inboundData.inboundSkuBeanCreateParams=[];
-                this.productData.forEach(v => {
-                    let productUnit = {};
+                let productData=this.$depthClone(this.productData);
+                productData.forEach(v => {
                     _.map(this.skuUnitOption, data => {
                         if (v.skuUnitDictCode.value === data.name) {
-                            productUnit.skuUnit = data.code;
+                            v.skuUnitDictCode.value = data.code;
                         }
                     });
                     _.map(this.lengthUnitOption, data => {
                         if (v.lengthUnitDictCode.value === data.name) {
-                            productUnit.lengthUnitDictCode = data.code;
+                            v.lengthUnitDictCode.value = data.code;
                         }
                     });
                     _.map(this.volumeUnitOption, data => {
                         if (v.volumeUnitDictCode.value === data.name) {
-                            productUnit.volumeUnitDictCode = data.code;
+                            v.volumeUnitDictCode.value = data.code;
                         }
                     });
                     _.map(this.weightUnitOption, data => {
                         if (v.weightUnitDictCode.value === data.name) {
-                            productUnit.weightUnitDictCode = data.code;
+                            v.weightUnitDictCode.value = data.code;
                         }
                     });
-                    console.log(v,'data')
-                    this.inboundData.inboundSkuBeanCreateParams.push({
-                        customerName: v.customerName.value,
-                        customerNo: v.customerNo.value,
-                        customerOrderNo: v.customerOrderNo.value,
-                        customerSkuCode: v.customerSkuCode.value,
-                        factorySkuCode: v.factorySkuCode.value ? v.factorySkuCode.value : "",
-                        inboundOutCartonTotalQty: v.inboundOutCartonTotalQty.value ? v.inboundOutCartonTotalQty.value : 0,
-                        inboundSkuTotalGrossWeight: v.inboundSkuTotalGrossWeight.value ? v.inboundSkuTotalGrossWeight.value : 0,
-                        inboundSkuTotalNetWeight: v.inboundSkuTotalNetWeight.value ? v.inboundSkuTotalNetWeight.value : 0,
-                        inboundSkuTotalQty: v.inboundSkuTotalQty.value ? v.inboundSkuTotalQty.value : 0,
-                        inboundSkuTotalVolume: v.inboundSkuTotalVolume.value ? v.inboundSkuTotalVolume.value : 0,
-                        innerCartonGrossWeight: v.innerCartonGrossWeight.value ? v.skuInnerCartonRoughWeight.value : 0,
-                        innerCartonHeight: v.innerCartonHeight.value ? v.skuInnerCartonHeight.value : 0,
-                        innerCartonLength: v.innerCartonLength.value ? v.skuInnerCartonLength.value : 0,
-                        innerCartonNetWeight: v.innerCartonNetWeight.value ? v.skuInnerCartonWeightNet.value : 0,
-                        innerCartonPackingMethodCn: v.innerCartonPackingMethodCn.value,
-                        innerCartonVolume: v.innerCartonVolume.value ? v.skuInnerCartonVolume.value : 0,
-                        innerCartonWidth: v.innerCartonWidth.value ? v.skuInnerCartonWidth.value : 0,
-                        /**
-                         * inventory,outbound暂时全部传0
-                         * */
-                        inventoryOutCartonQty: 0,
-                        inventorySkuGrossWeight: 0,
-                        inventorySkuNetWeight: 0,
-                        inventorySkuQty: 0,
-                        inventorySkuVolume: 0,
-                        orderId: v.orderId.value,
-                        orderNo: v.orderNo.value,
-                        orderSkuQty: v.skuQty.value,
-                        outboundOutCartonTotalQty: 0,
-                        outboundSkuTotalGrossWeight: 0,
-                        outboundSkuTotalNetWeight: 0,
-                        outboundSkuTotalQty: 0,
-                        outboundSkuTotalVolume: 0,
-                        outerCartonGrossWeight: v.skuOuterCartonRoughWeight.value ? v.skuOuterCartonRoughWeight.value : 0,
-                        outerCartonNetWeight: v.skuOuterCartonNetWeight.value ? v.skuOuterCartonNetWeight.value : 0,
-                        outerCartonSkuQty: v.skuOuterCartonQty.value ? v.skuOuterCartonQty.value : 0,
-                        outerCartonVolume: v.skuOuterCartonVolume.value ? v.skuOuterCartonVolume.value : 0,
-                        packingMethodCn: v.skuMethodPkgCn.value,
-                        skuBarCode: v.skuBarCode.value,
-                        skuBrand: v.skuBrand.value,
-                        skuCode: v.skuCode.value,
-                        skuDescCn: v.skuDescCn.value,
-                        skuDescCustomer: v.skuDescCustomer.value,
-                        skuDescEn: v.skuDescEn.value,
-                        skuHeight: v.skuHeight.value ? v.skuHeight.value : 0,
-                        skuId: v.skuId.value,
-                        skuLabel: v.skuLabel.value,
-                        skuLength: v.skuLength.value ? v.skuLength.value : 0,
-                        skuMaterialCn: v.skuMaterialCn.value,
-                        skuMaterialEn: v.skuMaterialEn.value,
-                        skuNameCn: v.skuNameCn.value,
-                        skuNameCustomer: v.skuNameCustomer.value,
-                        skuNameEn: v.skuNameEn.value,
-                        skuNetWeight: v.skuNetWeight.value ? v.skuNetWeight.value : 0,
-                        skuUnitDictCode: productUnit.skuUnit,
-                        lengthUnitDictCode: productUnit.lengthUnitDictCode,
-                        volumeUnitDictCode: productUnit.volumeUnitDictCode,
-                        weightUnitDictCode: productUnit.weightUnitDictCode,
-                        skuWidth: v.skuWidth.value ? v.skuWidth.value : 0,
-                        supplierId: v.skuSupplierId.value,
-                        supplierName: v.skuSupplierName.value,
-                        supplierNo: v.skuSupplierCode.value,
-                        supplierOrderNo: v.supplierOrderNo.value
-                    });
+                    let obj={};
+                    for(let key in v){
+                        obj[key]=v[key].value;
+                    }
+                    this.inboundData.inboundSkuBeanCreateParams.push(obj);
                 });
                 for (let i = 0; i < this.inboundData.inboundSkuBeanCreateParams.length; i++) {
                     if (this.$validateForm(this.inboundData.inboundSkuBeanCreateParams[i], this.$db.warehouse.inboundOrderProductTable)) {
@@ -478,9 +414,6 @@
                     }
                 }
                 this.inboundData.attachments = this.$refs.attachmentUpload[0].getFiles();
-
-                return;
-
                 this.disabledSubmit = true;
                 this.$ajax.post(this.$apis.add_inbound, this.inboundData).then(res => {
                     this.$message({
@@ -570,44 +503,38 @@
                         let arr = [];
                         _.map(res, v => {
                             _.map(v.skuList, e => {
-                                e.customerOrderNo = v.customerOrderNo;
-                                e.customerNo = v.customerNo;
-                                e.customerSkuCode=e.skuCustomerSkuCode;
-                                e.customerName=v.customerName;
-                                e.factorySkuCode='';
-                                e.inboundSkuTotalGrossWeight=null;
-                                e.inboundSkuTotalQty=null;
-                                e.inboundSkuTotalNetWeight=null;
-                                e.inboundSkuTotalVolume=null;
-                                e.inboundOutCartonTotalQty=e.skuInboundQty;
-                                // innerCartonGrossWeight
-
-
-
-                                e.inboundNo=this.inboundData.inboundNo;
-                                e.innerCartonHeight=e.skuInnerCartonHeight;
-                                e.innerCartonLength=e.skuInnerCartonLength;
+                                e.unqualifiedType='';
+                                e.innerCartonVolume=e.skuInnerCartonVolume;
                                 e.innerCartonNetWeight=e.skuInnerCartonWeightNet;
                                 e.innerCartonPackingMethodCn=e.skuInnerCartonMethodCn;
-                                e.innerCartonVolume=e.skuInnerCartonVolume;
                                 e.innerCartonWidth=e.skuInnerCartonWidth;
-                                e.lengthUnitDictCode = (_.findWhere(this.lengthUnitOption, { code: String(e.skuUnitLength) }) || {}).name;
-                                e.orderNo=v.orderNo;
-                                e.orderSkuQty=e.skuQty;
-                                e.outerCartonGrossWeight=e.skuOuterCartonRoughWeight;
-                                e.outerCartonNetWeight=e.skuOuterCartonNetWeight;
-                                e.outerCartonSkuQty=e.skuOuterCartonQty;
-                                e.outerCartonVolume=e.skuOuterCartonVolume;
-                                e.ownerId=v.ownerId;
+                                e.innerCartonGrossWeight=e.skuInnerCartonRoughWeight;
+                                e.innerCartonLength=e.skuInnerCartonLength;
+                                e.innerCartonHeight=e.skuInnerCartonHeight;
                                 e.packingMethodCn=e.skuMethodPkgCn;
-                                e.skuUnitDictCode=(_.findWhere(this.skuUnitOption, { code: String(e.skuUnit) }) || {}).name;
-                                e.supplierId=e.skuSupplierUserId;
                                 e.supplierName=e.skuSupplierName;
                                 e.supplierNo=e.skuSupplierCode;
-                                e.supplierOrderNo = v.supplierOrderNo;
-                                e.unqualifiedType=0;        //???
+                                e.supplierOrderNo=v.supplierOrderNo;
+                                e.inboundSkuTotalVolume=null;       //计算
+                                e.inboundSkuTotalNetWeight=null;    //计算
+                                e.inboundSkuTotalQty=null;          //计算
+                                e.inboundSkuTotalGrossWeight=null;  //计算
+                                e.inboundOutCartonTotalQty=null;    //填写
+                                e.orderSkuQty=e.skuQty;
+                                e.outerCartonSkuQty=e.skuOuterCartonQty;
+                                e.outerCartonVolume=e.skuOuterCartonVolume;
+                                e.outerCartonNetWeight=e.skuOuterCartonNetWeight;
+                                e.outerCartonGrossWeight=e.skuOuterCartonRoughWeight;
+                                e.customerName=v.customerName;
+                                e.customerNo=v.customerNo;
+                                e.customerOrderNo=v.customerOrderNo;
+                                e.customerSkuCode=e.skuCustomerSkuCode;
+                                e.factorySkuCode='';        //填写
                                 e.volumeUnitDictCode=(_.findWhere(this.volumeUnitOption, { code: String(e.skuUnitVolume) }) || {}).name;
+                                e.skuUnitDictCode=(_.findWhere(this.skuUnitOption, { code: String(e.skuUnit) }) || {}).name;;
                                 e.weightUnitDictCode=(_.findWhere(this.weightUnitOption, { code: String(e.skuUnitWeight) }) || {}).name;
+                                e.lengthUnitDictCode=(_.findWhere(this.lengthUnitOption, { code: String(e.skuUnitLength) }) || {}).name;
+
                                 arr.push(e);
                             });
                         });
@@ -649,13 +576,11 @@
              * */
             handleBlur(e, index) {
                 if (e === "inboundOutCartonTotalQty") {
-                    console.log(this.productData,'this.productData')
-                    console.log(index,'index')
-                    console.log(e,'e')
                     //处理入库产品总箱数输入框
                     if (!this.productData[index][e].value || !this.productData[index]["outerCartonSkuQty"].value) {
                         this.productData[index].inboundSkuTotalQty.value = "";
-                    } else {
+                    }
+                    else {
                         this.productData[index].inboundSkuTotalQty.value = this.productData[index][e].value * this.productData[index]["outerCartonSkuQty"].value;
                     }
                     //处理入库产品总净重
@@ -664,45 +589,42 @@
                     } else {
                         this.productData[index].inboundSkuTotalNetWeight.value = this.productData[index][e].value * this.productData[index]["outerCartonNetWeight"].value;
                     }
-
                     //处理入库产品总毛重
-                    if (!this.productData[index][e].value || !this.productData[index]["skuOuterCartonRoughWeight"].value) {
-                        console.log(11111)
+                    if (!this.productData[index][e].value || !this.productData[index]["outerCartonGrossWeight"].value) {
                         this.productData[index].inboundSkuTotalGrossWeight.value = "";
                     } else {
-                        console.log(123124)
-                        this.productData[index].inboundSkuTotalGrossWeight.value = this.productData[index][e].value * this.productData[index]["skuOuterCartonRoughWeight"].value;
+                        this.productData[index].inboundSkuTotalGrossWeight.value = this.productData[index][e].value * this.productData[index]["outerCartonGrossWeight"].value;
                     }
 
                     //处理入库产品总体积
-                    if (!this.productData[index][e].value || !this.productData[index]["skuOuterCartonVolume"].value) {
+                    if (!this.productData[index][e].value || !this.productData[index]["outerCartonVolume"].value) {
                         this.productData[index].inboundSkuTotalVolume.value = "";
                     } else {
-                        this.productData[index].inboundSkuTotalVolume.value = this.productData[index][e].value * this.productData[index]["skuOuterCartonVolume"].value;
+                        this.productData[index].inboundSkuTotalVolume.value = this.productData[index][e].value * this.productData[index]["outerCartonVolume"].value;
                     }
                 }
-                else if (e === "skuOuterCartonVolume") {
+                else if (e === "outerCartonVolume") {
                     //处理外箱体积
-                    if (!this.productData[index]["inboundOutCartonTotalQty"].value || !this.productData[index]["skuOuterCartonVolume"].value) {
+                    if (!this.productData[index]["inboundOutCartonTotalQty"].value || !this.productData[index]["outerCartonVolume"].value) {
                         this.productData[index].inboundSkuTotalVolume.value = "";
                     } else {
-                        this.productData[index].inboundSkuTotalVolume.value = this.productData[index]["inboundOutCartonTotalQty"].value * this.productData[index]["skuOuterCartonVolume"].value;
+                        this.productData[index].inboundSkuTotalVolume.value = this.productData[index]["inboundOutCartonTotalQty"].value * this.productData[index]["outerCartonVolume"].value;
                     }
                 }
-                else if (e === "skuOuterCartonRoughWeight") {
+                else if (e === "outerCartonGrossWeight") {
                     //处理外箱毛重
-                    if (!this.productData[index]["inboundOutCartonTotalQty"].value || !this.productData[index]["skuOuterCartonRoughWeight"].value) {
+                    if (!this.productData[index]["inboundOutCartonTotalQty"].value || !this.productData[index]["outerCartonGrossWeight"].value) {
                         this.productData[index].inboundSkuTotalGrossWeight.value = "";
                     } else {
-                        this.productData[index].inboundSkuTotalGrossWeight.value = this.productData[index]["inboundOutCartonTotalQty"].value * this.productData[index]["skuOuterCartonRoughWeight"].value;
+                        this.productData[index].inboundSkuTotalGrossWeight.value = this.productData[index]["inboundOutCartonTotalQty"].value * this.productData[index]["outerCartonGrossWeight"].value;
                     }
                 }
-                else if (e === "skuOuterCartonNetWeight") {
+                else if (e === "outerCartonNetWeight") {
                     //处理外箱净重
-                    if (!this.productData[index]["inboundOutCartonTotalQty"].value || !this.productData[index]["skuOuterCartonNetWeight"].value) {
+                    if (!this.productData[index]["inboundOutCartonTotalQty"].value || !this.productData[index]["outerCartonNetWeight"].value) {
                         this.productData[index].inboundSkuTotalNetWeight.value = "";
                     } else {
-                        this.productData[index].inboundSkuTotalNetWeight.value = this.productData[index]["inboundOutCartonTotalQty"].value * this.productData[index]["skuOuterCartonNetWeight"].value;
+                        this.productData[index].inboundSkuTotalNetWeight.value = this.productData[index]["inboundOutCartonTotalQty"].value * this.productData[index]["outerCartonNetWeight"].value;
                     }
                 }
             },

@@ -25,6 +25,7 @@
                             <div v-else-if="v.type==='select'">
                                 <el-select class="speLine"
                                            v-model="formData[v.key]"
+                                           clearable
                                            :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in v._options"

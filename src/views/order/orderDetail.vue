@@ -315,8 +315,22 @@
             {{$i.order.payment}}
         </div>
         <div class="payment-table">
-            <el-button :loading="disableClickPayback" :disabled="!hasHandleOrder" @click="applyPayback" type="primary">{{$i.order.applyRefund}}</el-button>
-            <el-button :disabled="!hasHandleOrder" :loading="disableRemind" @click="remindPay">{{$i.order.remindCustomerPay}}</el-button>
+            <el-button
+                    :loading="disableClickPayback"
+                    :disabled="!hasHandleOrder"
+                    @click="applyPayback"
+                    type="primary">{{$i.order.applyRefund}}</el-button>
+
+            <v-button
+                    ref="vButton"
+                    v-authorize="'ORDER:DETAIL:PRESS_FOR_PAYMENT'"
+                    :disabled="!hasHandleOrder"
+                    :loading="disableRemind"
+                    @click="remindPay">
+                {{$i.order.remindCustomerPay}}
+            </v-button>
+
+            <!--<el-button :disabled="!hasHandleOrder" :loading="disableRemind" @click="remindPay">{{$i.order.remindCustomerPay}}</el-button>-->
             <el-table
                     v-loading="loadingPaymentTable"
                     class="payTable"
@@ -567,6 +581,36 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                        <!--<el-form-item :label="$i.order.orderTotalNetWeight">-->
+                            <!--<el-input-->
+                                    <!--class="summaryInput"-->
+                                    <!--size="mini"-->
+                                    <!--v-model="orderForm.totalNetWeight"-->
+                                    <!--:disabled="true">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                        <!--<el-form-item :label="$i.order.orderTotalGrossWeight">-->
+                            <!--<el-input-->
+                                    <!--class="summaryInput"-->
+                                    <!--size="mini"-->
+                                    <!--v-model="orderForm.totalGrossWeight"-->
+                                    <!--:disabled="true">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                        <!--<el-form-item :label="$i.order.orderTotalVolume">-->
+                            <!--<el-input-->
+                                    <!--class="summaryInput"-->
+                                    <!--size="mini"-->
+                                    <!--v-model="orderForm.totalVolume"-->
+                                    <!--:disabled="true">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
                 </el-row>
             </el-form>
         </div>
@@ -1109,7 +1153,7 @@
 
 <script>
 
-    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify,VMessageBoard} from '@/components/index'
+    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify,VMessageBoard,VButton} from '@/components/index'
     import VProduct from '@/views/product/addProduct';
     import {mapActions} from 'vuex'
 
@@ -1122,7 +1166,8 @@
             VUpload,
             VProduct,
             VHistoryModify,
-            VMessageBoard
+            VMessageBoard,
+            VButton
         },
         data(){
             return{
@@ -1181,28 +1226,28 @@
                 quickCreateDialogVisible:false,
                 tableData:[],
                 selectSearch:'',
-                productInfoBtn:[
+                productInfoBtn: [
                     {
-                        label: 'Negotiate',
-                        type: 'negotiate'
+                        label: this.$i.order.modify,
+                        type: "negotiate"
                     },
                     {
-                        label: 'History',
-                        type: 'history'
+                        label: this.$i.order.history,
+                        type: "history"
                     },
                     {
-                        label: 'Detail',
-                        type: 'detail'
+                        label: this.$i.order.detail,
+                        type: "detail"
                     }
                 ],
-                productNotModifyBtn:[
+                productNotModifyBtn: [
                     {
-                        label: 'History',
-                        type: 'history'
+                        label: this.$i.order.history,
+                        type: "history"
                     },
                     {
-                        label: 'Detail',
-                        type: 'detail'
+                        label: this.$i.order.detail,
+                        type: "detail"
                     }
                 ],
                 loadingProductTable:false,
@@ -1904,38 +1949,11 @@
                     let arr=[];
                     _.map(this.productTableData,v=>{
                         if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
-                            if(!v._remark){
-                                this.chooseProduct=v;
-                                // this.handlePriceBlur({},v);
-                            }
                             arr.push(v);
                         }
                     });
-                    if(this.$refs.uploadSkuLabelPic){
-                        this.$refs.uploadSkuLabelPic.reset();
-                    }
-                    if(this.$refs.uploadSkuPkgMethodPic){
-                        this.$refs.uploadSkuPkgMethodPic.reset();
-                    }
-                    if(this.$refs.uploadSkuInnerCartonPic){
-                        this.$refs.uploadSkuInnerCartonPic.reset();
-                    }
-                    if(this.$refs.uploadSkuOuterCartonPic){
-                        this.$refs.uploadSkuOuterCartonPic.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalOne){
-                        this.$refs.uploadSkuAdditionalOne.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalTwo){
-                        this.$refs.uploadSkuAdditionalTwo.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalThree){
-                        this.$refs.uploadSkuAdditionalThree.reset();
-                    }
-                    if(this.$refs.uploadSkuAdditionalFour){
-                        this.$refs.uploadSkuAdditionalFour.reset();
-                    }
-                    this.chooseProduct=this.$refs.HM.init(arr, []);
+
+                    this.chooseProduct=this.getHistory(e,arr,true);
                 }else if(type==='detail'){
                     this.$windowOpen({
                         url:'/product/detail',
@@ -1944,64 +1962,67 @@
                         }
                     })
                 }else if(type==='history'){
-                    let param={
-                        operatorFilters: [],
-                        orderId: this.$route.query.orderId,
-                        pn: 1,
-                        ps: 50,
-                        skuId: e.skuId.value,
-                        sorts: [],
-                    };
                     let data=_.filter(this.productTableData, (m) =>
                         m.skuSysCode.value === e.skuSysCode.value
                     );
 
-                    this.$ajax.post(this.$apis.ORDER_HISTORY,param).then(res=>{
-                        let arr=[];
-                        _.map(res.datas,v=>{
-                            arr.push(JSON.parse(v.history));
-                        });
-
-                        let history=this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(arr, "skuSysCode"),item=>{
-                            if (item._remark) {
-                                item.label.value = this.$i.order.remarks;
-                                if (item.skuPictures) {
-                                    item.skuPictures._image = false;
-                                }
-                                item.skuLabelPic._image = false;
-                                item.skuPkgMethodPic._image = false;
-                                item.skuInnerCartonPic._image = false;
-                                item.skuOuterCartonPic._image = false;
-                                item.skuAdditionalOne._image = false;
-                                item.skuAdditionalTwo._image = false;
-                                item.skuAdditionalThree._image = false;
-                                item.skuAdditionalFour._image = false;
-                            }
-                            else {
-                                item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
-                                item.skuSample._value = item.skuSample.value ? "YES" : "NO";
-                                item.skuSample.value = item.skuSample.value ? "1" : "0";
-                                item.skuUnit._value = item.skuUnit ? this.$change(this.skuUnitOption, "skuUnit", item, true).name : "";
-                                item.skuUnitWeight._value = item.skuUnitWeight ? this.$change(this.weightOption, "skuUnitWeight", item, true).name : "";
-                                item.skuUnitLength._value = item.skuUnitLength ? this.$change(this.lengthOption, "skuUnitLength", item, true).name : "";
-                                item.skuExpireUnit._value = item.skuExpireUnit ? this.$change(this.expirationDateOption, "skuExpireUnit", item, true).name : "";
-                                item.skuStatus._value = item.skuStatus ? _.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }).name : "";
-                                item.skuUnitVolume._value = item.skuUnitVolume ? this.$change(this.volumeOption, "skuUnitVolume", item, true).name : "";
-                                item.skuSaleStatus._value = item.skuSaleStatus ? this.$change(this.skuSaleStatusOption, "skuSaleStatus", item, true).name : "";
-
-                                if (item.skuCategoryId.value) {
-                                    item.skuCategoryId._value = _.findWhere(this.category, { id: item.skuCategoryId.value }).name;
-                                }
-                                item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory ? this.$change(this.quarantineTypeOption, "skuInspectQuarantineCategory", item, true).name : "";
-                                item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
-                            }
-                        });
-
-                        this.$refs.HM.init(data,history,false);
-                    }).finally(()=>{
-
-                    })
+                    this.getHistory(e,data);
                 }
+            },
+            getHistory(e,data,isTrue){
+                let param={
+                    operatorFilters: [],
+                    orderId: this.$route.query.orderId,
+                    pn: 1,
+                    ps: 50,
+                    skuId: e.skuId.value,
+                    sorts: [],
+                };
+                this.$ajax.post(this.$apis.ORDER_HISTORY,param).then(res=>{
+                    let array=[];
+                    _.map(res.datas,v=>{
+                        array.push(JSON.parse(v.history));
+                    });
+
+                    let history=this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(array, "skuSysCode"),item=>{
+                        if (item._remark) {
+                            item.label.value = this.$i.order.remarks;
+                            if (item.skuPictures) {
+                                item.skuPictures._image = false;
+                            }
+                            item.skuLabelPic._image = false;
+                            item.skuPkgMethodPic._image = false;
+                            item.skuInnerCartonPic._image = false;
+                            item.skuOuterCartonPic._image = false;
+                            item.skuAdditionalOne._image = false;
+                            item.skuAdditionalTwo._image = false;
+                            item.skuAdditionalThree._image = false;
+                            item.skuAdditionalFour._image = false;
+                        }
+                        else {
+                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                            item.skuSample._value = item.skuSample.value ? "YES" : "NO";
+                            item.skuSample.value = item.skuSample.value ? "1" : "0";
+                            item.skuUnit._value = item.skuUnit ? this.$change(this.skuUnitOption, "skuUnit", item, true).name : "";
+                            item.skuUnitWeight._value = item.skuUnitWeight ? this.$change(this.weightOption, "skuUnitWeight", item, true).name : "";
+                            item.skuUnitLength._value = item.skuUnitLength ? this.$change(this.lengthOption, "skuUnitLength", item, true).name : "";
+                            item.skuExpireUnit._value = item.skuExpireUnit ? this.$change(this.expirationDateOption, "skuExpireUnit", item, true).name : "";
+                            item.skuStatus._value = item.skuStatus ? _.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }).name : "";
+                            item.skuUnitVolume._value = item.skuUnitVolume ? this.$change(this.volumeOption, "skuUnitVolume", item, true).name : "";
+                            item.skuSaleStatus._value = item.skuSaleStatus ? this.$change(this.skuSaleStatusOption, "skuSaleStatus", item, true).name : "";
+
+                            if (item.skuCategoryId.value) {
+                                item.skuCategoryId._value = _.findWhere(this.category, { id: item.skuCategoryId.value }).name;
+                            }
+                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory ? this.$change(this.quarantineTypeOption, "skuInspectQuarantineCategory", item, true).name : "";
+                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
+                        }
+                    });
+
+                    return this.$refs.HM.init(data,history,isTrue?true:false);
+                }).finally(()=>{
+
+                })
             },
             changeProductChecked(e){
                 this.selectProductInfoTable=e;
@@ -2282,7 +2303,8 @@
                 this.loadingPaymentTable=true;
                 this.$ajax.post(this.$apis.PAYMENT_LIST,{
                     orderNo:this.orderForm.orderNo,
-                    orderType:10
+                    orderType:10,
+                    moduleCode:'ORDER'
                 }).then(res=>{
                     this.paymentData=res.datas;
                 }).finally(err=>{
@@ -2298,7 +2320,8 @@
                     this.loadingPaymentTable=true;
                     this.$ajax.post(this.$apis.PAYMENT_ACCEPT,{
                         id:data.id,
-                        version:data.version
+                        version:data.version,
+                        moduleCode:'ORDER'
                     }).then(res=>{
                         this.$message({
                             type: 'success',
