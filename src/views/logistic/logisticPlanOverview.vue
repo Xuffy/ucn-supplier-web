@@ -32,11 +32,11 @@
           <div class="fn btn">
             <div v-if="pageType === 'plan'">
               <el-button v-authorize="auth[pageType]&&auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==5)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(isArchive&&viewBy=='plan')">{{ $i.logistic.archive }}</el-button>
             </div>
             <div v-if="pageType === 'loadingList'">
               <el-button v-authorize="auth[pageType]&&auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==4)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(isArchive&&viewBy=='plan')">{{ $i.logistic.archive }}</el-button>
             </div>
           </div>
           <div class="view-by-btn">
@@ -58,6 +58,7 @@
     name: 'logisticPlanOverview',
     data() {
       return {
+        isArchive:false,
         selectSearch:'',
         height:500,
         tableLoading: false,
@@ -194,7 +195,7 @@
     watch: {
       viewBy(newVal) {
         // this.selectCount = []
-        // this.initPage();
+        this.initPage();
         this.fetchDataList()
       },
       pageType() {
@@ -302,6 +303,15 @@
       },
       changeChecked(arr) {
         this.selectCount = arr
+        this.isArchive = arr.length&&arr.map(el=>{
+          if( this.pageType === 'loadingList'){
+            return el.logisticsStatus.value == 4;
+          }else if(this.pageType === 'plan'){
+            return (el.logisticsStatus.value == 4 || el.logisticsStatus.value == 5)
+          }else if(this.pageType === 'draft'){
+            return true;
+          }
+        }).every(el=> el);
         this.downloadIds = arr.map(el => {
           return el.id.value
         })
