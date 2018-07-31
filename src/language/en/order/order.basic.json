@@ -67,5 +67,9 @@
   "archiveDraft":"Archive Draft",
   "detail":"Detail",
   "skuNo":"SKU货号",
-  "history":"History"
+  "history":"History",
+  "customerBig":"Customer",
+  "supplierBig":"Supplier",
+  "remarkBig":"Remark",
+  "actualDate":"Actual Date"
 }
