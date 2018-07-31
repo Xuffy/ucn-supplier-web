@@ -70,5 +70,7 @@
   "customerBig":"Customer",
   "supplierBig":"Supplier",
   "remarkBig":"Remark",
-  "actualDate":"Actual Date"
+  "actualDate":"Actual Date",
+  "hasConfirm":"已确认",
+  "hasCanceled":"已取消"
 }
