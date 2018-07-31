@@ -154,5 +154,6 @@
   "unpaidAmount": "未付金额",
   "orderTotalNetWeight":"订单总净重",
   "orderTotalGrossWeight":"订单总毛重",
-  "orderTotalVolume":"订单总体积"
+  "orderTotalVolume":"订单总体积",
+  "skuLabelPics": "产品标签照片"
 }

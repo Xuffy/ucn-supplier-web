@@ -1610,7 +1610,7 @@
                             if(item.skuPictures){
                                 item.skuPictures._image=false;
                             }
-                            item.skuLabelPic._image=false;
+                            item.skuLabelPics._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
                             item.skuOuterCartonPic._image=false;
@@ -1786,7 +1786,7 @@
                     if(v.skuInspectQuarantineCategory){
                         v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code;
                     }
-                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    let picKey=['skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
                     _.map(picKey, item => {
                         if (_.isArray(v[item])) {
                             v[item] = (v[item][0] ? v[item][0] : null);
@@ -1817,8 +1817,8 @@
                 });
                 params.skuList=this.dataFilter(this.productTableData);
                 _.map(params.skuList,v=>{
-                    if(_.isArray(v.skuLabelPic)){
-                        v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
+                    if(_.isArray(v.skuLabelPics)){
+                        v.skuLabelPics=(v.skuLabelPics[0]?v.skuLabelPics[0]:null);
                     }
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
@@ -1983,14 +1983,13 @@
                     _.map(res.datas,v=>{
                         array.push(JSON.parse(v.history));
                     });
-
                     let history=this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(array, "skuSysCode"),item=>{
                         if (item._remark) {
                             item.label.value = this.$i.order.remarks;
                             if (item.skuPictures) {
                                 item.skuPictures._image = false;
                             }
-                            item.skuLabelPic._image = false;
+                            // item.skuLabelPics._image = false;
                             item.skuPkgMethodPic._image = false;
                             item.skuInnerCartonPic._image = false;
                             item.skuOuterCartonPic._image = false;
@@ -2081,7 +2080,7 @@
                             if(item.skuPictures){
                                 item.skuPictures._image=false;
                             }
-                            item.skuLabelPic._image=false;
+                            item.skuLabelPics._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
                             item.skuOuterCartonPic._image=false;
@@ -2753,7 +2752,7 @@
                             skuInventoryCostMethod: '',
                             skuLabel: '',
                             skuLabelDesc: '',
-                            skuLabelPic: '',
+                            skuLabelPics: '',
                             skuLength: null,
                             skuLengthWidthHeight: '',
                             skuMainSaleArea: '',
@@ -2935,7 +2934,7 @@
                             if(item.skuPictures){
                                 item.skuPictures._image=false;
                             }
-                            item.skuLabelPic._image=false;
+                            item.skuLabelPics._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
                             item.skuOuterCartonPic._image=false;
@@ -2984,14 +2983,14 @@
                 });
                 params.skuList=this.dataFilter(this.productTableData);
                 _.map(params.skuList,v=>{
-                    if(_.isArray(v.skuLabelPic)){
-                        v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
+                    if(_.isArray(v.skuLabelPics)){
+                        v.skuLabelPics=(v.skuLabelPics[0]?v.skuLabelPics[0]:null);
                     }
                     v.skuSample=v.skuSample==='1'?true:false;
                     if(v.skuInspectQuarantineCategory){
                         v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code;
                     }
-                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    let picKey=['skuLabelPics','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
                     _.map(picKey,item=>{
                         if(_.isArray(v[item])){
                             v[item]=(v[item][0]?v[item][0]:null);

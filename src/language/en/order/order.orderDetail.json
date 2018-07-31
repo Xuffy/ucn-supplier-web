@@ -154,5 +154,6 @@
   "unpaidAmount": "Unpaid Amount",
   "orderTotalNetWeight":"Order Total Net Weight",
   "orderTotalGrossWeight":"Order Total Gross Weight",
-  "orderTotalVolume":"Order Total Volume"
+  "orderTotalVolume":"Order Total Volume",
+  "skuLabelPics": "SKU Label Pic"
 }
