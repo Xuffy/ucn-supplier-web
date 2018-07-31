@@ -55,7 +55,7 @@
               :height=500
               :loading='loading'
               :data="tabData"
-              :buttons="[{label: 'Detail', type: 1}]"
+              :buttons="[{label: $i.common.detail, type: 1}]"
               @action="detail"
               @change-checked='checked'
               style='marginTop:10px'>
@@ -86,8 +86,8 @@
 
 <script>
 
-    import { mapActions} from 'vuex'
-    import {dropDownSingle,VPagination,VTable} from '@/components/index'
+    import { mapActions} from 'vuex';
+    import {dropDownSingle,VPagination,VTable} from '@/components/index';
     export default {
         name: "SupplierSourcing",
         components: {
@@ -155,10 +155,10 @@
             },
             //获取字典
             getCodePart(){
-              this.$ajax.post(this.$apis.POST_CODE_PART,["PMT","CUSTOMER_TYPE","ITM"],{ cache: true }).then(res=>{
+              this.$ajax.post(this.$apis.POST_CODE_PART,["PMT","SP_TYPE","ITM"],{ cache: true }).then(res=>{
                 this.options.payment = _.findWhere(res, {'code': 'PMT'}).codes;
                 this.options.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
-                this.options.type = _.findWhere(res, {'code': 'CUSTOMER_TYPE'}).codes;
+                this.options.type = _.findWhere(res, {'code': 'SP_TYPE'}).codes;
               }).catch(err=>{
                 console.log(err)
               });
