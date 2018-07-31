@@ -73,5 +73,7 @@
   "remarkBig":"Remark",
   "actualDate":"Actual Date",
   "hasConfirm":"已确认",
-  "hasCanceled":"已取消"
+  "hasCanceled":"已取消",
+  "supplierAbbr":"Supplier Abbr",
+  "customerAbbr":"Customer Abbr"
 }
