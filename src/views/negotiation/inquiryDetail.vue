@@ -450,29 +450,7 @@ export default {
         return;
       }
       let historyApi = item.skuId ? this.$apis.GET_INQUIRY_DETAIL_HISTORY : this.$apis.GET_INQUIRY_HISTORY;
-      // 历史中始终要显示的列
-      let excludeColumns = ['id', 'skuId', 'fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay', 'updateDt', 'updateId', 'updateName', 'status', '_remark'];
       this.$ajax.get(historyApi, {id: item.id.value}).then(res => {
-        // 处理只显示修改列
-        res.forEach((i, idx) => {
-          if (idx === res.length - 1) {
-            return;
-          }
-          let showKeys = excludeColumns.concat(i.fieldDisplay ? Object.keys(i.fieldDisplay) : []);
-          Object.keys(i).forEach(field => {
-            if (!showKeys.includes(field)) {
-              i[field] = null;
-            }
-          });
-          let showRemarkKeys = excludeColumns.concat(i.fieldRemarkDisplay ? Object.keys(i.fieldRemarkDisplay) : []);
-          if (i.fieldRemark && showRemarkKeys) {
-            Object.keys(i.fieldRemark).forEach(field => {
-              if (!showRemarkKeys.includes(field)) {
-                i.fieldRemark[field] = null;
-              }
-            });
-          }
-        });
         if (type === 'basicInfo') {
           this.$refs.HM.init(inquiries, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res), i => this.$filterDic(i)), config.type === 'modify');
         } else {
