@@ -148,6 +148,11 @@ export default {
     key: 'skuAvailableQty',
     type: 'Number'
   },
+  qty: {
+    key: 'qty',
+    type: 'Number',
+    _disabled: true
+  },
   restrictedSellingCountry: {
     key: 'skuNoneSellCountry',
     _disabled: true,

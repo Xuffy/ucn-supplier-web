@@ -26,6 +26,11 @@ export default {
     skuNameEN: { // 系统带入：inquiry中的sku 名称 产品英文品名
       key: 'skuNameEn'
     },
+    qty: {
+      key: 'qty',
+      type: 'Number',
+      _disabled: true
+    },
     skuFobCurrency: { // FOB币种
       transForm: 'CY_UNIT'
     },
