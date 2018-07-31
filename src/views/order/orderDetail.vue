@@ -641,7 +641,6 @@
             </div>
         </div>
 
-
         <el-dialog
                 :title="$i.order.addProduct"
                 :visible.sync="productTableDialogVisible"
