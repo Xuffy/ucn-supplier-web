@@ -1147,7 +1147,6 @@
                 skuSaleStatusOption:[],
                 skuStatusTotalOption:[],
 
-
                 /**
                  * 底部按钮禁用状态
                  * */
@@ -1465,41 +1464,11 @@
              * 获取页面数据
              * */
             getUnit(){
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
-                //获取币种
-                this.$ajax.get(this.$apis.CURRENCY_ALL,{}).then(res=>{
-                    this.currencyOption=res;
-                    this.allowQuery++;
-                })
-                    .finally(err=> {
-
-                        }
-                    );
-
-                //获取国家
-                this.$ajax.get(this.$apis.COUNTRY_ALL,{},{cache:true}).then(res=>{
-                    this.countryOption=res;
-                }).finally(err=>{
-
-                });
-
-
-                //获取汇率
-                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{}).then(res=>{
-                    this.allowQuery++;
-                    _.map(this.orderForm.exchangeRateList,v=>{
-                        _.map(res,m=>{
-                            if(v.currency===m.symbol){
-                                v.exchangeRate=m.price;
-                            }
-                        })
-                    })
-                }).finally(err=>{
-
-                });
-
+                let currency,country,exchangeRate,unit;
+                currency=this.$ajax.get(this.$apis.CURRENCY_ALL,{});
+                country=this.$ajax.get(this.$apis.COUNTRY_ALL,{},{cache:true});
+                exchangeRate=this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{});
+                unit=this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS','SKU_SALE_STATUS','SKU_STATUS'],{cache:true});
                 this.skuStatusOption=[
                     {
                         code:'PROCESS',
@@ -1510,11 +1479,17 @@
                         name:'已取消'
                     },
                 ];
-
-
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS','SKU_SALE_STATUS','SKU_STATUS']).then(res=>{
-                    this.allowQuery++;
-                    res.forEach(v=>{
+                this.$ajax.all([currency,country,exchangeRate,unit]).then(res=>{
+                    this.currencyOption=res[0];
+                    this.countryOption=res[1];
+                    _.map(this.orderForm.exchangeRateList,v=>{
+                        _.map(res[2],m=>{
+                            if(v.currency===m.symbol){
+                                v.exchangeRate=m.price;
+                            }
+                        })
+                    })
+                    res[3].forEach(v=>{
                         if(v.code==='ITM'){
                             this.incotermOption=v.codes;
                         }else if(v.code==='PMT'){
@@ -1543,80 +1518,38 @@
                             this.skuStatusTotalOption=v.codes;
                         }
                     })
-                }).finally(err=>{
 
-                });
-                let ids=this.$route.query.ids;
-                if(!ids){
-                    return;
-                }
-                ids=ids.slice(0,ids.length-1);
-                this.loadingProductTable=true;
-                this.$ajax.post(this.$apis.ORDER_SKUS,ids.split(',')).then(res=>{
-                    let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
-                        if(item._remark){
-                            item.label.value=this.$i.order.remarks;
-                            if(item.skuPictures){
-                                item.skuPictures._image=false;
-                            }
-                            item.skuLabelPic._image=false;
-                            item.skuPkgMethodPic._image=false;
-                            item.skuInnerCartonPic._image=false;
-                            item.skuOuterCartonPic._image=false;
-                            item.skuAdditionalOne._image=false;
-                            item.skuAdditionalTwo._image=false;
-                            item.skuAdditionalThree._image=false;
-                            item.skuAdditionalFour._image=false;
-                        }
-                        else{
-                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
-                            item.skuSample._value=item.skuSample.value?'YES':'NO';
-                            item.skuSample.value=item.skuSample.value?'1':'0';
-                            item.skuUnit._value=item.skuUnit?this.$change(this.skuUnitOption,'skuUnit',item,true).name:'';
-                            item.skuUnitWeight._value=item.skuUnitWeight?this.$change(this.weightOption,'skuUnitWeight',item,true).name:'';
-                            item.skuUnitLength._value=item.skuUnitLength?this.$change(this.lengthOption,'skuUnitLength',item,true).name:'';
-                            item.skuExpireUnit._value=item.skuExpireUnit?this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name:'';
-                            item.skuStatus._value=item.skuStatus?_.findWhere(this.skuStatusTotalOption,{code:item.skuStatus.value}).name:'';
-                            item.skuUnitVolume._value=item.skuUnitVolume?this.$change(this.volumeOption,'skuUnitVolume',item,true).name:'';
-                            item.skuSaleStatus._value=item.skuSaleStatus?this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name:'';
-                            if(item.skuCategoryId.value){
-                                item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
-                            }
-                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
-                        }
-                    });
-                    _.map(data,v=>{
-                        this.productTableData.push(v);
-                    });
-                }).finally(err=>{
-                    this.loadingProductTable=false;
-                });
+                    this.getDetail();
+                }).finally(()=>{
+                    this.loadingPage=false;
+                })
             },
-            getDetail(e){
+            getDetail(e,isTrue){
                 this.loadingPage=true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
                     orderId:this.$route.query.orderId,
                     orderNo:this.$route.query.orderNo || this.$route.query.code
                 }).then(res=>{
                     this.orderForm=res;
-                    /**
-                     * 高亮处理
-                     * */
                     _.map(this.$db.order.orderDetail,v=>{
                         v._isModified=false;
                     });
-                    _.map(this.orderForm.fieldUpdate,(v,k)=>{
-                        if(k==='attachments'){
-                            k='attachment';
-                        }
-                        this.$db.order.orderDetail[k]._isModified=true;
-                    });
+                    if(this.orderForm.status==='1' || this.orderForm.status==='2' && !isTrue){
+                        /**
+                         * 高亮处理
+                         * */
+                        _.map(this.orderForm.fieldUpdate,(v,k)=>{
+                            if(k==='attachments'){
+                                k='attachment';
+                            }
+                            this.$db.order.orderDetail[k]._isModified=true;
+                        });
+                        _.map(this.orderForm.responsibilityList,v=>{
+                            v.fieldUpdates=v.fieldUpdate;
+                            v.fieldUpdate={};
+                        });
+                    }
                     this.orderForm.fieldUpdate={};
-                    _.map(this.orderForm.responsibilityList,v=>{
-                        v.fieldUpdates=v.fieldUpdate;
-                        v.fieldUpdate={};
-                    });
-
                     this.initialData=this.$depthClone(this.orderForm)
                     this.savedIncoterm=Object.assign({},res).incoterm;
                     _.map(this.supplierOption,v=>{
@@ -1662,16 +1595,18 @@
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     });
-                    _.map(this.productTableData,v=>{
-                        if(v.fieldUpdate.value){
-                            _.map(v.fieldUpdate.value,(value,key)=>{
-                                if(key!=='skuPictures'){
-                                    v[key]._style={'backgroundColor':'yellow'};
-                                }
-                            })
-                            v.fieldUpdate.value={};
-                        }
-                    });
+                    if(this.orderForm.status==='1' || this.orderForm.status==='2' && !isTrue){
+                        _.map(this.productTableData,v=>{
+                            if(v.fieldUpdate.value){
+                                _.map(v.fieldUpdate.value,(value,key)=>{
+                                    if(key!=='skuPictures'){
+                                        v[key]._style={'backgroundColor':'yellow'};
+                                    }
+                                })
+                                v.fieldUpdate.value={};
+                            }
+                        });
+                    }
                     this.markImportant=this.orderForm.importantSupplier;
 
                     //判断底部按钮能不能点
@@ -1680,15 +1615,15 @@
                     }else{
                         this.disableModify=false;
                     }
-                    if(res.status!=='1'){
-                        this.disableConfirm=true;
-                    }else{
-                        this.disableConfirm=false;
-                    }
                     if(this.orderForm.status==='1' && !this.orderForm.supplierUserId){
                         this.hasHandleOrder=false;
                     }else{
                         this.hasHandleOrder=true;
+                    }
+                    if(res.status!=='1'){
+                        this.disableConfirm=true;
+                    }else{
+                        this.disableConfirm=false;
                     }
                     if(res.status==='4'){
                         this.hasFinishOrder=true;
@@ -1708,7 +1643,10 @@
                      * */
                     this.getPaymentData();
                 }).finally(err=>{
-                    this.loadingPage=false;
+                    this.$nextTick(()=>{
+                        this.loadingPage=false;
+                    });
+
                     this.disableClickCancelModify=false;
                     if(e){
                         this.isModify=false;
@@ -1735,7 +1673,6 @@
                         if(val._isModifyStatus){
                             isModifyStatus=true;
                         }
-
                     });
                     if(isModify || isModifyStatus){
                         let isIn=false;
@@ -2575,7 +2512,7 @@
                     ids: [this.orderForm.id],
                     orderNos:[this.orderForm.orderNo]
                 }).then(res=>{
-                    this.getDetail();
+                    this.getDetail(false,true);
                 }).finally(err=>{
                     this.disableClickConfirm=false;
                 });
@@ -3051,13 +2988,6 @@
                 auth:'ORDER:ARCHIVE',
                 label: this.$i.order.archive
             });
-        },
-        watch:{
-            allowQuery(n){
-                if(n===3){
-                    this.getDetail();
-                }
-            },
         },
     }
 </script>

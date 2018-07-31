@@ -40,7 +40,7 @@
   "volumeOfSubQualityProducts": "不合格产品净重",
   "grossWeightOfSubQualityProducts": "不合格产品毛重",
   "skuQuantity": "SKU款式数",
-  "exit": "取消",
+  "exit": "退出",
   "skuQcResult": "产品验货结果",
   "actQtyOfOuterCarton": "实际外箱产品数",
   "actQuantityOfInnerBoxOuterCarton": "外箱中包数",
