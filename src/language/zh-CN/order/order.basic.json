@@ -65,5 +65,7 @@
   "archiveOrder":"归档订单",
   "archiveDraft":"归档草稿",
   "detail":"详情",
-  "skuNo":"SKU货号"
+  "skuNo":"SKU货号",
+  "hasConfirm":"已确认",
+  "hasCanceled":"已取消"
 }
