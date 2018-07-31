@@ -151,5 +151,8 @@
   "totalNetWeight": "外箱总净重",
   "totalVolume": "外箱总体积",
   "paidAmount": "已付金额",
-  "unpaidAmount": "未付金额"
+  "unpaidAmount": "未付金额",
+  "orderTotalNetWeight":"订单总净重",
+  "orderTotalGrossWeight":"订单总毛重",
+  "orderTotalVolume":"订单总体积"
 }
