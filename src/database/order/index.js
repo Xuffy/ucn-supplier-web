@@ -26,5 +26,5 @@ export default {
     orderDetail,
     createOrder,
     inquiryOverview,
-    productIskuStatusnfoTable
+    productInfoTable
 }
