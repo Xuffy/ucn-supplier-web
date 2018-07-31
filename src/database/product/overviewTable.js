@@ -13,7 +13,8 @@ export default {
     },
     pic: {
         key:'pictures',
-        _image:true
+        _image:true,
+        _fixed:'left'
     },
     skuSaleStatus: {
         key:'status'
@@ -22,7 +23,7 @@ export default {
 
     },
     code:{
-        
+        _fixed:'left'
     },
     nameCn:{
         
