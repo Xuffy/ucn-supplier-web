@@ -33,7 +33,9 @@ export default {
 
     },
     quantity: { //系统计算：当前询价单所有产品的数量
-        key: 'skuQty'
+        key: 'skuQty',
+        type: 'Number',
+        _toFixed: 1
     },
     currency: { //系统带入，当前inquiry所选的币种
         key: 'currency',

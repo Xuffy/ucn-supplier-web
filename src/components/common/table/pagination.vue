@@ -1,6 +1,7 @@
 <template>
   <div class="ucn-pagination" :class="{show:pageLayout}">
     <el-pagination
+      background
       @size-change="size => {$emit('size-change', size)}"
       @current-change="page => {$emit('change', page)}"
       :page-sizes="pageSizes"
@@ -82,13 +83,12 @@
           ps: this.pageSize,
           tc: this.pageTotal,
         } : {});
-
-        if (!this.pageInfo.tc || !this.pageInfo.ps){
+        if (!this.pageInfo.tc || !this.pageInfo.ps) {
           return this.pageLayout = '';
-        }else if (this.pageInfo.tc <= this.pageInfo.ps) {
+        } else if (this.pageInfo.tc <= this.pageInfo.ps) {
           return this.pageLayout = 'pager,sizes,total';
         } else {
-          this.pageLayout = 'prev, pager, next,sizes, jumper,total';
+          this.pageLayout = 'prev, pager, next,sizes,total, jumper';
         }
       }
     }
@@ -105,4 +105,7 @@
     visibility: inherit !important;
   }
 
+  .ucn-pagination /deep/ .el-pagination {
+    white-space: initial;
+  }
 </style>

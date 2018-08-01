@@ -4,29 +4,16 @@
     <h3 class="ucn-content-title inline" v-text="$i.workbench.dataDashboard"></h3>
     <br/><br/>
 
-    <el-row class="data-table" :gutter="20" v-loading="loading">
-      <el-col :span="6" v-for="(item,index) in dataList" :key="index">
-        <table>
-          <tr>
-            <td class="title" v-text="item.title"></td>
-            <td class="value">
-              <div v-if="item.list[0]" v-text="item.list[0].value + ' ' + item.list[0].unit"></div>&nbsp;
-            </td>
-          </tr>
-          <tr>
-            <td class="title" rowspan="2" v-text="item.name"></td>
-            <td class="value">
-              <div v-if="item.list[1]" v-text="item.list[1].value + ' ' + item.list[1].unit"></div>&nbsp;
-            </td>
-          </tr>
-          <tr>
-            <td class="value">
-              <div v-if="item.list[2]" v-text="item.list[2].value + ' ' + item.list[2].unit"></div>&nbsp;
-            </td>
-          </tr>
-        </table>
-      </el-col>
-    </el-row>
+    <div style="display: flex;">
+      <div class="data-box" v-for="(item,index) in dataList" :key="index">
+        <p v-text="item.title">purchase order</p>
+        <p v-text="item.name">purchase order</p>
+        <ul>
+          <li v-for="uItem in item.list"
+              v-text="uItem.value + ' ' + uItem.unit"></li>
+        </ul>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -106,7 +93,35 @@
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .data-table {
+  .data-box {
+    width: 300px;
+    padding: 10px;
+    border: solid 1px #c5c5c5;
+    box-sizing: border-box;
+    margin-right: 10px;
+  }
+
+  .data-box p {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .data-box p:nth-child(2) {
+    text-align: center;
+  }
+
+  .data-box ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .data-box ul li {
+    width: 33.33%;
+    text-align: center;
+  }
+
+  /*.data-table {
     min-height: 80px;
   }
 
@@ -140,7 +155,7 @@
 
   .data-table .el-col-6 {
     margin-bottom: 10px;
-  }
+  }*/
 
   /*.dataDashboard .el-picker-panel__shortcut{*/
   /*font-size: 12px;*/

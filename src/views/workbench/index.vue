@@ -32,7 +32,7 @@
       </li>-->
     </ul>
 
-    <div class="quickLink">
+    <!--<div class="quickLink">
       <h3 class="ucn-content-title inline" @click="$refs.importFile.show()" v-text="$i.workbench.quickLink"></h3>
       <el-button size="mini" type="primary" icon="el-icon-plus"
                  style="display: inline-block;margin-left: 30px!important;"
@@ -43,8 +43,7 @@
           {{item.label}}
         </router-link>
       </el-button>
-    </div>
-    <br/><br/>
+    </div>-->
     <v-data-dashboard v-authorize="'WORKBENCH:DATA_DASHBOARD'"></v-data-dashboard>
     <br/><br/>
     <el-row :gutter="10">
