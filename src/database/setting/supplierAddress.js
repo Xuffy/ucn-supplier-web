@@ -39,5 +39,8 @@ export default {
     id:{
         key: 'id',
         _hide:true,
+    },
+    defaultAddress: {
+      key: 'def'
     }
 }
