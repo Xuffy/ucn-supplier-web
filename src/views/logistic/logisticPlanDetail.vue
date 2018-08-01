@@ -618,11 +618,7 @@
         } else if (status == 4) {
           let newAddArr = this.$depthClone(this.productList[i]);
           newAddArr.id.value = null;
-<<<<<<< HEAD
-          newAddArr.fieldDisplay.value=null;
-=======
           newAddArr.fieldDisplay.value = null;
->>>>>>> refs/remotes/origin/F-DFK-20180726-0727033423
           newAddArr.vId.value = this.$getUUID();
           newAddArr = _.mapObject(newAddArr,(v,k)=>{
             if(v._style){
@@ -848,11 +844,7 @@
           this.$set(this.productList[item].fieldDisplay, 'value',fieldDisplayObj);
         })
         const id = currrentProduct.id.value
-<<<<<<< HEAD
         const vId = this.$getUUID();
-=======
-        const vId = this.$getUUID();;
->>>>>>> refs/remotes/origin/F-DFK-20180726-0727033423
         const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
         index === -1 ? this.modifyProductArray.push(this.restoreObj(currrentProduct)) : (this.modifyProductArray[index] =
           this.restoreObj(currrentProduct))
