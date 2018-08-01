@@ -125,21 +125,21 @@
                 <template slot="header">
                     <slot name="btns"></slot>
                     <!--<div class="btns" v-if="!hideBtns">-->
-                        <!--&lt;!&ndash;<el-button @click="createInquiry">{{`${$i.product.createInquiry}(${selectList.length})`}}</el-button>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<el-button @click="createOrder">{{`${$i.product.createOrder}(${selectList.length})`}}</el-button>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<el-button @click="compareProducts" :disabled="disabledCompare">{{`${$i.product.compare}(${selectList.length})`}}&ndash;&gt;-->
-                        <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<el-button @click="addToBookmark" :loading="disableClickAddBookmark"&ndash;&gt;-->
-                                   <!--&lt;!&ndash;:disabled="disabledAddBookmark">{{`${$i.product.addToBookmark}(${selectList.length})`}}&ndash;&gt;-->
-                        <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
-                        <!--<el-button v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'" :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>-->
-                        <!--&lt;!&ndash;<el-button type="danger">{{$i.product.delete}}</el-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button @click="createInquiry">{{`${$i.product.createInquiry}(${selectList.length})`}}</el-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button @click="createOrder">{{`${$i.product.createOrder}(${selectList.length})`}}</el-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button @click="compareProducts" :disabled="disabledCompare">{{`${$i.product.compare}(${selectList.length})`}}&ndash;&gt;-->
+                    <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button @click="addToBookmark" :loading="disableClickAddBookmark"&ndash;&gt;-->
+                    <!--&lt;!&ndash;:disabled="disabledAddBookmark">{{`${$i.product.addToBookmark}(${selectList.length})`}}&ndash;&gt;-->
+                    <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
+                    <!--<el-button v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'" :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>-->
+                    <!--&lt;!&ndash;<el-button type="danger">{{$i.product.delete}}</el-button>&ndash;&gt;-->
                     <!--</div>-->
                     <!--&lt;!&ndash;<div class="btns" v-if="type==='recycle'">&ndash;&gt;-->
-                        <!--&lt;!&ndash;<el-button :disabled="disabledRecover" :loading="disabledClickRecover" @click="recover"&ndash;&gt;-->
-                                   <!--&lt;!&ndash;type="primary">{{$i.product.recover}}&ndash;&gt;-->
-                        <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<el-button>{{$i.product.download+'('+downloadRecycleListInfo+')'}}</el-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button :disabled="disabledRecover" :loading="disabledClickRecover" @click="recover"&ndash;&gt;-->
+                    <!--&lt;!&ndash;type="primary">{{$i.product.recover}}&ndash;&gt;-->
+                    <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-button>{{$i.product.download+'('+downloadRecycleListInfo+')'}}</el-button>&ndash;&gt;-->
                     <!--&lt;!&ndash;</div>&ndash;&gt;-->
                 </template>
             </v-table>

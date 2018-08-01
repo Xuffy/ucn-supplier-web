@@ -399,6 +399,7 @@
                         this.btnInfo=this.$i.product.setUp;
                     }
                     this.tableData = this.$getDB(this.$db.product.detailPriceTable, this.productForm.price,e=>{
+                        console.log(e,'e')
                         e.status._value=e.status.value===1?this.$i.warehouse.costPrice:this.$i.warehouse.basicQuotation;
                         return e;
                     });
