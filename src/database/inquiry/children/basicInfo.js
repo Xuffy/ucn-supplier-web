@@ -19,7 +19,8 @@ export default {
   },
   inquiryAmount: {
     _inquiryHide: true,
-    _hide: true
+    _hide: true,
+    _toFixed: 2
   },
   timeZone: {
     _inquiryHide: true,
