@@ -240,6 +240,7 @@ export default {
         _rules:{
             required:true
         },
+        accuracy: 2
     },
     innerCartonNetWeight:{
         showType:'number',
@@ -247,6 +248,7 @@ export default {
         _rules:{
             required:true
         },
+        accuracy: 2
     },
     
     innerCartonWidth:{
@@ -255,6 +257,7 @@ export default {
         _rules:{
             required:true
         },
+        accuracy: 2
     },
     innerCartonGrossWeight:{
         showType:'number',
@@ -262,6 +265,7 @@ export default {
         _rules:{
             required:true
         },
+        accuracy: 2
     },
     innerCartonLength:{
         showType:'number',
@@ -269,6 +273,7 @@ export default {
         _rules:{
             required:true
         },
+        accuracy: 2
     },
     innerCartonHeight:{
         showType:'number',
@@ -276,6 +281,7 @@ export default {
         _rules:{
             required:true
         },
+        accuracy: 2
     },
     skuNetWeight:{
         showType:'number',
@@ -283,6 +289,7 @@ export default {
         _rules:{
             required:true
         },
+        accuracy: 2
     },
     inboundOutCartonTotalQty:{
         showType:'number',
@@ -297,16 +304,19 @@ export default {
         _rules:{
             required:true
         },
+        accuracy: 2
     },
     outerCartonSkuQty:{
         showType:'number',
     },
     outerCartonVolume:{
         showType:'number',
+        accuracy: 3
     },
     
     outerCartonGrossWeight:{
         showType:'number',
+        accuracy: 2
     },
     inboundSkuTotalVolume:{
         showType:'number',

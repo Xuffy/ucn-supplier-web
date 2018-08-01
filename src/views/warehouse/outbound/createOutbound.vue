@@ -140,6 +140,8 @@
                             :disabled="v.computed"
                             v-model="scope.row[v.key].value"
                             :min="0"
+                            :mark="v.label"
+                            :accuracy="v.accuracy ? v.accuracy : null"
                             :controls="false"></v-input-number>
                     </div>
                     <!-- <div v-else-if="v.key==='inboundDate' || v.key==='warehouseName' || v.key==='warehouseNo'">
