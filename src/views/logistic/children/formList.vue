@@ -161,6 +161,9 @@
     }
   }
   .form {
+    /deep/.el-form-item__label{
+      font-weight: bold;
+    }
     /deep/.el-form-item--mini .el-form-item__content{
       line-height: 26px;
     }

@@ -256,7 +256,7 @@ export default {
         cancelButtonText: this.$i.logistic.cancel,
         type: 'warning'
       }).then(() => {
-        this.$ajax.post(`${url}/${this.tableData[i].id}?version=${this.tableData[i].version}`).then(({ status }) => {
+        this.$ajax.post(`${url}/${this.tableData[i].id}?version=${this.tableData[i].version}?moduleCode=LOGISTIC`).then(({ status }) => {
           this.$emit('updatePaymentWithView', { i, edit: false, status })
         })
       })    

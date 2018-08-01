@@ -235,5 +235,6 @@
   "Negociate" : "修改",
   "Copy" : "复制",
   "Detail" : "详细",
-  "History" : "历史"
+  "History" : "历史",
+  "totalContainerGrossWeight" : "集装箱总毛重"
 }
