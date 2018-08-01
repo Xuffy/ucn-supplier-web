@@ -49,24 +49,30 @@
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.supplier.documentRequired" name="document">
-                    <el-form label-width="200px" :model="documents">
+                  <el-form label-width="200px">
                     <el-row>
-                      <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
-                        <el-form-item  :label="$i.setting.documentRequired +':'">
-                            <span>{{documents.document}}</span>
-                        </el-form-item>
-                        <el-form-item :label="$i.setting.factoryInspectionReport +':'">
-                            <span>{{documents.aduitDetails}}</span>
-                        </el-form-item>
-                        <el-form-item  :label="$i.setting.packingList +':'">
-                            <span>{{documents.packingList}}</span>
-                        </el-form-item>
-                        <el-form-item :label="$i.setting.invoice +':'">
-                            <span>{{documents.invoice}}</span>
-                        </el-form-item>
-                        <el-form-item :label="$i.setting.examiningReport +':'">
-                            <span>{{documents.examiningReport}}</span>
-                        </el-form-item>
+                      <el-col :span="24">
+                        <div class="documentBox">
+                          <ul class="documentBoxCon">
+                            <li class="documentBoxCon1" v-for="(item,index) in documentTypeClone" >
+                              <el-checkbox
+                                disabled
+                                :checked="item.checked"
+                                @change="handleCheckedDocument(item,index)">
+                                {{item.name}}
+                              </el-checkbox>
+                              <div class="uploadBox" disabled="item.checked">
+                                <v-upload
+                                  oss-private
+                                  :ref="'uploadDocument'+item.code"
+                                  :limit="20"
+                                  :list="item.attachments"
+                                  :readonly="true"
+                                />
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
                       </el-col>
                     </el-row>
                   </el-form>
@@ -156,6 +162,7 @@
                 type:[],
                 country:[],
                 currency:[],
+                documentType:[],
                 addRemarkData:{
                   customerId: null,
                   id: null,
@@ -173,14 +180,8 @@
                     pn: 1,
                     ps: 50,
                 },
-                documents:{
-                   aduitDetails:null,
-                   document:null,
-                   examiningReport:null,
-                   invoice:null,
-                   packingList:null
-
-                },
+                documents:[],
+                documentTypeClone:[],
                 compareConfig: {
                     showCompareList: false, //是否显示比较列表
                 },
@@ -339,11 +340,12 @@
             },
             //获取字典
             getCodePart(){
-              this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS","SEX"]).then(res=>{
+              this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS","SEX","DOCUMENT_TYPE"]).then(res=>{
                 this.payment = _.findWhere(res, {'code': 'PMT'}).codes;
                 this.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
                 this.type = _.findWhere(res, {'code': 'CUSTOMER_TYPE'}).codes;
                 this.sex = _.findWhere(res, {'code': 'SEX'}).codes;
+                this.documentType = _.findWhere(res, {'code': 'DOCUMENT_TYPE'}).codes;
               }).catch(err=>{
                 console.log(err)
               });
@@ -391,9 +393,18 @@
                       e.gender._value = gender.name || '';
                       return e;
                     });
-                    if(res.documents[0]){
-                        this.documents = res.documents[0];
-                    }
+                    this.documentTypeClone = this.$depthClone(this.documentType)
+                    this.documentTypeClone.forEach(v=>{
+                      res.documents.forEach(m =>{
+                        if (v.code === m.code){
+                          v.attachments= m.attachments,
+                          v.checked= m.checked,
+                          v.code= m.code,
+                          v.newId= m.id,
+                          v.version= m.version
+                        }
+                      })
+                  });
                     this.loading = false
                 })
                 .catch((res) => {
@@ -617,7 +628,16 @@
       height: 200px;
       line-height: 200px;
     }
-
+    .documentBoxCon{
+      overflow: hidden;
+    }
+    .documentBoxCon1{
+      width: 18%;
+      float: left;
+    }
+    .uploadBox{
+      padding-top: 10px;
+    }
     /*
     .attchment {
         display: flex;
