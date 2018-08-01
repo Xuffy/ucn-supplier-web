@@ -1475,7 +1475,7 @@
                         name:'已确认'
                     },
                     {
-                        code:'CANCLED',
+                        code:'CANCELED',
                         name:'已取消'
                     },
                 ];

@@ -84,6 +84,10 @@
   "histoty": "History",
   "yes": "YES",
   "no": "No",
-  "history": "History"
+  "history": "History",
+  "cm":"cm",
+  "kg":"kg",
+  "m3":"m³",
+  "g":"g"
 }
 

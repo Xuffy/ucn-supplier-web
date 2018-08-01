@@ -3,6 +3,7 @@
     <div class="title">
       {{$i.setting.departmentSetting}}
     </div>
+
     <div class="body">
       <el-row :gutter="15">
         <el-col :span="8">
@@ -34,13 +35,16 @@
                        :props="{label: 'deptName'}"
                        node-key="deptId"
                        default-expand-all
+                       draggable
+                       :allow-drop="(draggingNode, dropNode, type) => type === 'prev' && !dropNode.childNodes.length"
+                       @node-drop="departmentDrop"
                        :expand-on-click-node="false"
                        :filter-node-method="filterDepartment"
                        @node-click="departmentClick">
                 <div class="custom-tree-node" slot-scope="{ node, data }"
                      :class="{isAction:node.data.deptId === userData.deptId}">
                   <div v-if="!data.children">
-                    <span v-text="node.label + '(' + node.data.deptUserCount + ')'"></span>
+                    <span class="name-title" v-text="node.label + '(' + node.data.deptUserCount + ')'"></span>
                     <div class="action">
                       <el-button
                         class="treeBtn"
@@ -93,12 +97,15 @@
                 show-checkbox
                 node-key="roleId"
                 default-expand-all
+                draggable
+                :allow-drop="(draggingNode, dropNode, type) => type === 'prev' && !dropNode.childNodes.length"
+                @node-drop="roleDrop"
                 :expand-on-click-node="false"
                 :filter-node-method="filterRole"
                 @check="roleCheckClick">
                 <div class="custom-tree-node" slot-scope="{ node, data }">
                   <div v-if="!data.children">
-                    <span v-text="node.label + '(' + data.roleUserCount + ')'"></span>
+                    <span class="name-title" v-text="node.label + '(' + data.roleUserCount + ')'"></span>
                     <div class="action">
                       <el-button
                         class="treeBtn"
@@ -158,6 +165,7 @@
         </el-col>
       </el-row>
     </div>
+
     <div class="footer">
       <div class="title">{{$i.setting.belongingUsers}}</div>
       <div class="btns">
@@ -281,7 +289,6 @@
                 :editable="false"
                 v-model="addUser.birthday"
                 type="date"
-                format="yyyy-MM-dd"
                 @change="() => addUser.birthday = $dateFormat(addUser.birthday, 'yyyy-mm-dd')"
                 :placeholder="$i.setting.pleaseChoose">
               </el-date-picker>
@@ -386,7 +393,7 @@
         roleOption: [],
         departmentData: [],
         departmentUserTotal: 0,          //department总人数
-        roleData: [{roleName: $i.setting.all, children: []}],
+        roleData: [],
         privilegeData: [
           {name: $i.setting.privilegePage, children: [], code: 'pageAll'},
           {name: $i.setting.privilegeData, children: [], code: 'dataAll'}
@@ -425,6 +432,11 @@
       this.getUnit();
     },
     mounted() {
+      this.setMenuLink({
+        type: 100,
+        query: {code: 'DEPARTMENT_SETTING', bizCode: 'BIZ_USER'},
+        label: this.$i.common.log
+      });
     },
     watch: {
       searchDepartment(val) {
@@ -438,6 +450,7 @@
       },
     },
     methods: {
+      ...mapActions(['setMenuLink']),
       pageSizeChange(val) {
         this.userListPage.ps = val;
         this.getDepartmentUser();
@@ -489,7 +502,7 @@
             if (item.status.value !== 0) {
               item._disabledCheckbox = true;
             }
-            item.birthday.value = this.$dateFormat(item.birthday.value, 'yyyy-mm-dd');
+            item.birthday.value = this.$dateFormat(item.birthday.value, 'dd-mmm-yyyy');
             gender = _.findWhere(this.genderOption, {code: item.gender.value}) || {};
             status = _.findWhere(this.actionOption, {code: item.status.value}) || {};
             lang = _.findWhere(this.languageOption, {code: item.lang.value}) || {};
@@ -517,10 +530,10 @@
       departmentClick(data) {
         this.userData = this.$options.data().userData;
         this.userData.deptId = data.deptId;
-        this.roleData[0].children = this.$depthClone(data.deptRoles || []);
+        this.roleData = this.$depthClone(data.deptRoles || []);
         this.searchRole = '';
         this.$nextTick(() => {
-          this.$refs.roleTree.setCheckedNodes(this.roleData[0].children);
+          this.$refs.roleTree.setCheckedNodes(this.roleData);
           this.roleCheckClick();
         });
       },
@@ -587,7 +600,7 @@
                 return this.$i.setting.pleaseInput;
               }
 
-              roleItem = _.findWhere(this.roleData[0].children, {roleName: value.trim()});
+              roleItem = _.findWhere(this.roleData, {roleName: value.trim()});
 
               if (roleItem && (!item || roleItem.roleId !== item.roleId)) {
                 return this.$i.setting.roleExisted;
@@ -680,7 +693,7 @@
       },
       btnClick(item, type) {
         if (type === 1) {
-          this.roleOption = this.$copyArr(this.roleData[0].children);
+          this.roleOption = this.$copyArr(this.roleData);
           this.addUser = _.mapObject(item, val => val.value);
           this.editUserdialog.type = 1;
           this.editUserdialog.show = true;
@@ -690,7 +703,7 @@
       },
       addUsers() {
         //设置基本信息
-        this.roleOption = this.$copyArr(this.roleData[0].children);
+        this.roleOption = this.$copyArr(this.roleData);
 
         this.addUser = this.$options.data().addUser;
 
@@ -722,7 +735,7 @@
             this.getDepartmentData().then(depRes => {
               let roles = _.findWhere(depRes, {deptId: this.userData.deptId});
 
-              this.roleData[0].children = roles ? roles.deptRoles : [];
+              this.roleData = roles ? roles.deptRoles : [];
             });
             this.getDepartmentUser();
             this.editUserdialog.show = false;
@@ -845,6 +858,29 @@
 
           this.privilegeData[1].children = list;
         });
+      },
+      departmentDrop() {
+        let sorts = []
+          , data = this.$depthClone(this.departmentData);
+
+        _.map(data.reverse(), (val, index) => sorts.push({deptId: val.deptId, sort: index + 1}));
+
+        this.$ajax.post(this.$apis.DEPARTMENT_UPDATESORT, {sorts});
+      },
+      roleDrop(node) {
+        let checked = this.$refs.roleTree.getCheckedNodes(true)
+          , sorts = []
+          , data = this.$depthClone(this.roleData);
+
+        if (node.checked) {
+          checked.push(node.data);
+          this.$refs.roleTree.setCheckedNodes(checked);
+        }
+
+        _.map(data.reverse(), (val, index) => sorts.push({roleId: val.roleId, sort: index + 1}));
+
+
+        this.$ajax.post(this.$apis.ROLE_UPDATESORT, {deptId: this.userData.deptId, sorts});
       }
     },
   }
@@ -962,5 +998,9 @@
 
   .speInput {
     width: 80%;
+  }
+
+  .name-title {
+    cursor: move;
   }
 </style>

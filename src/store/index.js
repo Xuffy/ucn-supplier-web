@@ -17,6 +17,7 @@ const initialState = {
     hideMenu: false,
     paddingRight: 0
   },
+  navBar: null,
   menuLink: {
     list: []
   },
@@ -30,6 +31,9 @@ const actions = {
    * @param commit
    * @param params  数据：{path:'',query:'',label:'',type:1}
    */
+  setNavBar({commit}, params) {
+    commit(type.SET_NAV_BAR, params);
+  },
   setMenuLink({commit}, params) {
     commit(type.SET_MENU_LINK, params);
   },
@@ -75,6 +79,16 @@ const mutations = {
   },
   [type.VIEW_PICTURE](state, params) {
     state.viewPicture.vm.show(params);
+  },
+  [type.SET_NAV_BAR](state, params) {
+    let data = {};
+    if (_.isObject(params)) {
+      data = _.extend(data, params);
+    } else{
+      data.label = params;
+    }
+
+    state.navBar = data;
   },
   [type.DIC](state, params) {
     state.dic = params;

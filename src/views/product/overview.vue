@@ -1,137 +1,5 @@
 <template>
     <div class="bookmark">
-        <!--<div class="title">-->
-        <!--<span>{{$i.product.title}}</span>-->
-        <!--<el-button class="title-btn"-->
-        <!--@click="switchDisplay"-->
-        <!--type="text">{{btnInfo}}-->
-        <!--</el-button>-->
-        <!--</div>-->
-        <!--<div>-->
-        <!--<el-form ref="productFormTop" :model="productForm" label-width="190px">-->
-        <!--<el-row class="speZone">-->
-        <!--<el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'"-->
-        <!--v-for="v in $db.product.overview" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-        <!--<el-form-item :prop="v.key" :label="v.label">-->
-        <!--<drop-down v-model="productForm[v.key]"-->
-        <!--v-if="v.showType==='dropdown'"-->
-        <!--:list="categoryList"-->
-        <!--:defaultProps="defaultProps"-->
-        <!--ref="dropDown" :expandOnClickNode="false"></drop-down>-->
-        <!--<el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>-->
-        <!--<el-select class="speSelect" v-if="v.showType==='select'" size="mini"-->
-        <!--v-model="productForm[v.key]" placeholder="不限">-->
-        <!--<el-option-->
-        <!--v-for="item in v.options"-->
-        <!--:key="item.value"-->
-        <!--:label="item.label"-->
-        <!--:value="item.value">-->
-        <!--</el-option>-->
-        <!--</el-select>-->
-        <!--</el-form-item>-->
-        <!--</el-col>-->
-        <!--</el-row>-->
-        <!--</el-form>-->
-        <!--</div>-->
-        <!--<div class="body" :class="{hide:hideBody}">-->
-        <!--<el-form ref="productForm" :model="productForm" label-width="190px">-->
-        <!--<el-row class="speZone">-->
-        <!--<el-col v-if="!v.isDefaultShow && v.belongPage==='sellerProductOverview'"-->
-        <!--v-for="v in $db.product.overview" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-        <!--<el-form-item :prop="v.key" :label="v.label">-->
-        <!--<drop-down-->
-        <!--v-if="v.showType==='dropdown'"-->
-        <!--class=""-->
-        <!--v-model="productForm[v.key]"-->
-        <!--:list="categoryList"-->
-        <!--ref="dropDown"></drop-down>-->
-
-        <!--<el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>-->
-        <!--<el-select class="speSelect" v-if="v.showType==='select'" size="mini"-->
-        <!--v-model="productForm[v.key]" placeholder="请选择">-->
-        <!--<el-option-->
-        <!--v-for="item in v.options"-->
-        <!--:key="item.value"-->
-        <!--:label="item.label"-->
-        <!--:value="item.value">-->
-        <!--</el-option>-->
-        <!--</el-select>-->
-        <!--<div v-if="v.showType==='exwNumber'" class="section-number">-->
-        <!--<el-input size="mini" class="section-input"-->
-        <!--v-model="productForm.minExwPrice"></el-input>-->
-        <!--<div class="section-line">&#45;&#45;</div>-->
-        <!--<el-input size="mini" class="section-input"-->
-        <!--v-model="productForm.maxExwPrice"></el-input>-->
-        <!--</div>-->
-        <!--<div v-if="v.showType==='fobNumber'" class="section-number">-->
-        <!--<el-input size="mini" class="section-input"-->
-        <!--v-model="productForm.minFobPrice"></el-input>-->
-        <!--<div class="section-line">&#45;&#45;</div>-->
-        <!--<el-input size="mini" class="section-input"-->
-        <!--v-model="productForm.maxFobPrice"></el-input>-->
-        <!--</div>-->
-        <!--<el-input v-if="v.showType==='number'" size="mini" v-model="productForm[v.key]"></el-input>-->
-        <!--</el-form-item>-->
-        <!--</el-col>-->
-        <!--</el-row>-->
-        <!--</el-form>-->
-        <!--</div>-->
-        <!--<div class="btn-group">-->
-        <!--<el-button @click="search" :loading="disabledSearch" type="primary">{{$i.product.search}}</el-button>-->
-        <!--<el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>-->
-        <!--</div>-->
-        <!--<div class="footer">-->
-        <!--<v-table-->
-        <!--code="udata_supply_sku_overview"-->
-        <!--:height="500"-->
-        <!--:loading="loadingTable"-->
-        <!--:data="tableDataList"-->
-        <!--:buttons="[{label: $i.product.detail, type: 1}]"-->
-        <!--@change-checked="changeChecked"-->
-        <!--@change-sort="val=>{getData(val)}"-->
-        <!--@action="btnClick">-->
-        <!--<template slot="header">-->
-        <!--<div class="btns">-->
-        <!--<el-button-->
-        <!--v-authorize="'PRODUCT:OVERVIEW:ADD_PRODUCT'"-->
-        <!--@click="addNewProduct">{{$i.product.addNewProduct}}-->
-        <!--</el-button>-->
-        <!--<el-button-->
-        <!--v-authorize="'PRODUCT:OVERVIEW:SET_SALE'"-->
-        <!--:disabled="disabledDeleteGoods"-->
-        <!--:loading="disableClickSetUp"-->
-        <!--@click="setUp">{{$i.product.setUp}}-->
-        <!--</el-button>-->
-        <!--<el-button-->
-        <!--v-authorize="'PRODUCT:OVERVIEW:SET_NOT_SALE'"-->
-        <!--:disabled="disabledDeleteGoods"-->
-        <!--:loading="disableClickSetDown"-->
-        <!--@click="setDown">{{$i.product.setDown}}-->
-        <!--</el-button>-->
-        <!--<el-button-->
-        <!--v-authorize="'PRODUCT:OVERVIEW:UPLOAD_PRODUCT'"-->
-        <!--@click="()=>$refs.importCategory.show()">{{$i.button.upload}}-->
-        <!--</el-button>-->
-        <!--<el-button-->
-        <!--v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'"-->
-        <!--@click="download">-->
-        <!--{{$i.product.downloadSelected}}({{selectList.length?selectList.length:"All"}})-->
-        <!--</el-button>-->
-        <!--<el-button @click="deleteGood"-->
-        <!--:loading="loadingDeleteGoods"-->
-        <!--:disabled="disabledDeleteGoods" type="danger"-->
-        <!--v-authorize="'PRODUCT:OVERVIEW:ARCHIVE'">{{$i.common.remove}}-->
-        <!--</el-button>-->
-        <!--</div>-->
-        <!--</template>-->
-        <!--</v-table>-->
-        <!--<page-->
-        <!--:page-sizes="[50,100,200,500]"-->
-        <!--@size-change="changeSize"-->
-        <!--@change="changePage"-->
-        <!--:page-data="pageData"></page>-->
-        <!--</div>-->
-
         <overview-page
                 :title="title"
                 :label-width="labelWidth"
@@ -271,6 +139,26 @@
                 this.loadingTable = true;
                 this.$ajax.post(this.$apis.get_productList, params).then(res => {
                     this.productData = this.$getDB(this.$db.product.overviewTable, res.datas, e => {
+                        console.log(e, "e");
+                        e.length.label=`${e.length.label}(${this.$i.common.cm})`;
+                        e.width.label=`${e.width.label}(${this.$i.common.cm})`;
+                        e.height.label=`${e.height.label}(${this.$i.common.cm})`;
+                        e.netWeight.label=`${e.netWeight.label}(${this.$i.common.g})`;
+                        e.volume.label=`${e.volume.label}(${this.$i.common.m3})`;
+                        e.innerCartonHeight.label=`${e.innerCartonHeight.label}(${this.$i.common.cm})`;
+                        e.innerCartonLength.label=`${e.innerCartonLength.label}(${this.$i.common.cm})`;
+                        e.innerCartonWidth.label=`${e.innerCartonWidth.label}(${this.$i.common.cm})`;
+                        e.innerCartonWeightNet.label=`${e.innerCartonWeightNet.label}(${this.$i.common.g})`;
+                        e.innerCartonRoughWeight.label=`${e.innerCartonRoughWeight.label}(${this.$i.common.g})`;
+                        e.innerCartonVolume.label=`${e.innerCartonVolume.label}(${this.$i.common.m3})`;
+                        e.outerCartonHeight.label=`${e.outerCartonHeight.label}(${this.$i.common.cm})`;
+                        e.outerCartonLength.label=`${e.outerCartonLength.label}(${this.$i.common.cm})`;
+                        e.outerCartonWidth.label=`${e.outerCartonWidth.label}(${this.$i.common.cm})`;
+                        e.outerCartonNetWeight.label=`${e.outerCartonNetWeight.label}(${this.$i.common.g})`;
+                        e.outerCartonRoughWeight.label=`${e.outerCartonRoughWeight.label}(${this.$i.common.g})`;
+                        e.outerCartonVolume.label=`${e.outerCartonVolume.label}(${this.$i.common.m3})`;
+
+
                         e.status.value = this.$change(this.statusOption, "status", e, true).name;
                         e.expireUnit.value = this.$change(this.dateOption, "expireUnit", e, true).name;
                         e.unit.value = this.$change(this.skuUnitOption, "unit", e, true).name;
