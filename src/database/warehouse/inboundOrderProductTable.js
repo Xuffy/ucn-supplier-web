@@ -234,6 +234,7 @@ export default {
         _hide:true
     },
 
+    unqualifiedType:{},
     innerCartonVolume:{
         showType:'number',
         must:true,
@@ -248,7 +249,7 @@ export default {
             required:true
         },
     },
-    
+    innerCartonPackingMethodCn:{},
     innerCartonWidth:{
         showType:'number',
         must:true,
@@ -277,6 +278,9 @@ export default {
             required:true
         },
     },
+    skuNameCn:{},
+    skuMaterialCn:{},
+    skuDescCn:{},
     skuNetWeight:{
         showType:'number',
         must:true,
@@ -284,30 +288,17 @@ export default {
             required:true
         },
     },
-    inboundOutCartonTotalQty:{
-        showType:'number',
-        must:true,
-        _rules:{
-            required:true
-        },
-    },
-    outerCartonNetWeight:{
-        showType:'number',
-        must:true,
-        _rules:{
-            required:true
-        },
-    },
-    outerCartonSkuQty:{
-        showType:'number',
-    },
-    outerCartonVolume:{
-        showType:'number',
-    },
-    
-    outerCartonGrossWeight:{
-        showType:'number',
-    },
+    packingMethodCn:{},
+    skuWidth:{},
+    skuBarCode:{},
+    skuLabel:{},
+    skuDescEn:{},
+    skuLength:{},
+    volumeUnitDictCode:{},
+    supplierName:{},
+    supplierNo:{},
+    supplierOrderNo:{},
+    skuCode:{},
     inboundSkuTotalVolume:{
         showType:'number',
         computed:true
@@ -324,26 +315,31 @@ export default {
         showType:'number',
         computed:true
     },
-    unqualifiedType:{},
-    innerCartonPackingMethodCn:{},
-    skuNameCn:{},
-    skuMaterialCn:{},
-    skuDescCn:{},
-    packingMethodCn:{},
-    skuWidth:{},
-    skuBarCode:{},
-    skuLabel:{},
-    skuDescEn:{},
-    skuLength:{},
-    volumeUnitDictCode:{},
-    supplierName:{},
-    supplierNo:{},
-    supplierOrderNo:{},
-    skuCode:{},
-    
+    inboundOutCartonTotalQty:{
+        showType:'number',
+        must:true,
+        _rules:{
+            required:true
+        },
+    },
     orderSkuQty:{},
     skuBrand:{},
-    
+    outerCartonSkuQty:{
+        showType:'number',
+    },
+    outerCartonVolume:{
+        showType:'number',
+    },
+    outerCartonNetWeight:{
+        showType:'number',
+        must:true,
+        _rules:{
+            required:true
+        },
+    },
+    outerCartonGrossWeight:{
+        showType:'number',
+    },
     customerName:{},
     customerNo:{},
     customerOrderNo:{},
@@ -357,4 +353,6 @@ export default {
     orderNo:{},
     weightUnitDictCode:{},
     lengthUnitDictCode:{},
+
+
 }
