@@ -253,6 +253,7 @@ export default {
     skuComments:{},
     skuStatus:{
         _slot:'skuStatus',
+        _fixed:'left'
     },
     skuSaleStatus:{
         _disabled:true

@@ -2,17 +2,12 @@
     <div class="overview">
         <div class="title">
             <span>{{title}}</span>
-            <el-button class="title-btn"
-                       v-if="showAdvancedBtn"
-                       @click="hideBody = !hideBody"
-                       type="text">{{hideBody?$i.product.advanced:$i.product.hideTheAdvanced}}
-            </el-button>
         </div>
         <div class="search-option">
             <el-form :label-width="`${labelWidth}px`">
                 <el-row>
                     <el-col v-for="v in formColumn" :key="v.key" v-if="v._isDefaultShow"  :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :prop="v.key" :label="v.label">
+                        <el-form-item :prop="v.key" :label="`${v.label} :`">
                             <div v-if="v.type==='dropdown'">
                                 <drop-down-single
                                         class="speLine"
@@ -47,7 +42,7 @@
             <el-form :model="formData" ref="formData" class="body" :class="{hide:hideBody}" :label-width="`${labelWidth}px`">
                 <el-row>
                     <el-col class="search-item" v-for="v in formColumn" :key="v.key" v-if="!v._isDefaultShow"  :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :prop="v.key" :label="v.label">
+                        <el-form-item :prop="v.key" :label="`${v.label} :`">
                             <div v-if="v.type==='dropdown'">
                                 <drop-down-single
                                         class="speLine"
@@ -101,8 +96,21 @@
             </el-form>
         </div>
         <div class="search-btn">
-            <el-button @click="search" :loading="disabledSearch" type="primary">{{$i.product.search}}</el-button>
-            <el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>
+            <el-button
+                    @click="search"
+                    :loading="disabledSearch"
+                    type="primary">{{$i.product.search}}</el-button>
+            <el-button
+                    @click="clear"
+                    type="info"
+                    plain>{{$i.product.clear}}</el-button>
+            <el-button
+                    class="advancedBtn"
+                    type="text"
+                    v-if="showAdvancedBtn"
+                    @click="hideBody = !hideBody">
+                {{hideBody?$i.product.advanced:$i.product.hideTheAdvanced}}
+            </el-button>
         </div>
         <div class="table">
             <v-table
@@ -215,7 +223,7 @@
             }
         },
         methods:{
-            init(){
+            init(param){
                 //处理初始化数据
                 let queryCode=[];
                 let allDefault=true;
@@ -227,6 +235,9 @@
                         allDefault=false;
                     }
                 });
+                if(param){
+                    Object.assign(this.formData,param);
+                }
                 if(allDefault){
                     this.showAdvancedBtn=false;
                 }else{
@@ -271,8 +282,8 @@
                 });
             },
             getCategory(){
-                const myCategory=this.$ajax.get(this.$apis.CATEGORY_SYSTEM, {});
-                const sysCategory=this.$ajax.get(this.$apis.CATEGORY_MINE, {});
+                const myCategory=this.$ajax.get(this.$apis.get_buyer_sys_category, {});
+                const sysCategory=this.$ajax.get(this.$apis.get_buyer_my_category, {});
                 return this.$ajax.all([myCategory,sysCategory]).then(res=>{
                     return res;
                 }).catch(err=>{
@@ -280,10 +291,17 @@
                 })
             },
             getUnit(codes){
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res,'单位')
+                // });
+                // this.$ajax.get(this.$apis.get_country).then(res=>{
+                //     console.log(res,'国家')
+                // });
                 const unitAjax=this.$ajax.post(this.$apis.get_partUnit,codes,{cache:true});
                 const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
                 return this.$ajax.all([unitAjax,countryAjax]);
             },
+
 
             /**
              *  一些事件
@@ -340,9 +358,8 @@
         color: #666666;
         margin-bottom: 5px;
     }
-    .title-btn {
-        float: right;
-        margin-right: 5px;
+    .advancedBtn >>> span{
+        text-decoration: underline;
     }
     .body {
         overflow: hidden;
