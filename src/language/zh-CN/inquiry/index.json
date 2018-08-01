@@ -12,5 +12,6 @@
   "inquiryTbc": "待采购商确认",
   "inquiryTbs": "待供应商确认",
   "inquiryFinished": "已完成",
-  "inquiryCanceled": "已取消"
+  "inquiryCanceled": "已取消",
+  "addNewTitle": "Add New"
 }

@@ -12,5 +12,6 @@
   "inquiryTbc": "TBC By Customer",
   "inquiryTbs": "TBC By Supplier",
   "inquiryFinished": "finish",
-  "inquiryCanceled": "cancel"
+  "inquiryCanceled": "cancel",
+  "addNewTitle": "Add New"
 }

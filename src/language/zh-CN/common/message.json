@@ -21,5 +21,6 @@
   "repeat": "分类名不能重复",
   "theClassificationNameCanNotBeEmpty": "分类名不能为空",
   "addEmptying": "添加子集会导致父级节点对应关系被清空，请问确定添加吗？",
-  "close": "关闭"
+  "close": "关闭",
+  "decimalLimit": "只能输入{length}位小数"
 }
