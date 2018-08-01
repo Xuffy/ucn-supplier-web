@@ -33,10 +33,10 @@
 
 <script>
   const AUTH_LIST = {
-    'CUST_PO_PLACED': 'WORKBENCH:DATA_DASHBOARD:ORDERS_PLACED',
-    'CUST_PO_IN_PROCESSING': 'WORKBENCH:DATA_DASHBOARD:ORDERS_PROCESS',
-    'CUST_PO_CANCELED': 'WORKBENCH:DATA_DASHBOARD:ORDERS_CANCELED',
-    'CUST_LO_IN_PROCESSING': 'WORKBENCH:DATA_DASHBOARD:LOGISTICS_ORDERS_PROCESS',
+    'SUPPLIER_PO_IN_PROCESSING': 'WORKBENCH:DATA_DASHBOARD:ORDERS_PROCESS',
+    'SUPPLIER_IO_TBQ': 'WORKBENCH:DATA_DASHBOARD:INQUIRY_QUOTE',
+    'SUPPLIER_PAY_TO_RECEIVE': 'WORKBENCH:DATA_DASHBOARD:PAYMENT_RECEIVE',
+    'SUPPLIER_LO_TO_SHIP': 'WORKBENCH:DATA_DASHBOARD:GOODS_TO_SHIPPED',
   };
 
   export default {
@@ -55,10 +55,14 @@
     },
     methods: {
       getData() {
+        let params = [];
         this.loading = true;
-        this.$ajax.post(this.$apis.UDA_FINDDATAANALYSISLIST, {
-          statPoints: ['SUPPLIER_PO_IN_PROCESSING', 'SUPPLIER_IO_TBQ', 'SUPPLIER_PAY_TO_RECEIVE', 'SUPPLIER_LO_TO_SHIP']
-        })
+
+        _.mapObject(AUTH_LIST, (val, key) => {
+          this.$auth(val) && params.push(key)
+        });
+
+        !_.isEmpty(params) && this.$ajax.post(this.$apis.UDA_FINDDATAANALYSISLIST, {statPoints: params})
           .then(res => {
             this.dataList = [];
             this.getCode().then(data => {
@@ -92,9 +96,7 @@
               });
             });
           })
-          .finally(() => {
-            this.loading = false;
-          });
+          .finally(() => this.loading = false);
       },
       getCode() {
         return this.$ajax.post(this.$apis.POST_CODE_PART, ['UDA_BIZ_CODE', 'STAT_POINT', 'STAT_ITEM_UNIT'], {cache: true});

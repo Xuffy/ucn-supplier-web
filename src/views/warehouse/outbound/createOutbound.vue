@@ -97,7 +97,7 @@
         <div class="gear">
                 <v-filter-column
                     ref="filterColumn"
-                    code="uwarehouse_qc_order_detail"
+                    code="uwarehouse_outbound_sku"
                     @change="changeColumn">
                 </v-filter-column>
             </div>
@@ -125,19 +125,36 @@
                     :class-name="v._rules &&  v._rules.required ? 'ucn-table-required' : ''"
                     align="center"
                     v-if="!v._hidden && !v._hide"
-                    width="180">
+                    :width="v.key === 'skuNameCustomer' ? '250' : '180'"
+                    :sortable="v.sortable">
                 <template slot-scope="scope" v-if="scope.row[v.key]">
                     <div v-if="v.showType==='number'">
-                        <el-input-number
+                        <!-- <el-input-number
                                 @blur="handleBlur(v,scope.row[v.key].value,scope.$index)"
                                 :disabled="v.computed"
                                 v-model="scope.row[v.key].value"
                                 :min="0"
-                                :controls="false"></el-input-number>
+                                :controls="false"></el-input-number> -->
+                        <v-input-number
+                            @blur="handleBlur(v,scope.row[v.key].value,scope.$index)"
+                            :disabled="v.computed"
+                            v-model="scope.row[v.key].value"
+                            :min="0"
+                            :controls="false"></v-input-number>
                     </div>
-                    <div v-else-if="v.key==='inboundDate' || v.key==='warehouseName' || v.key==='warehouseNo'">
+                    <!-- <div v-else-if="v.key==='inboundDate' || v.key==='warehouseName' || v.key==='warehouseNo'">
                         {{scope.row.inboundVo[v.key].value}}
-                    </div>
+                    </div> -->
+                    <!-- <div v-else-if="v.showType==='select'"> -->
+                        <!-- <el-select v-model="scope.row[v.key].value" placeholder="请选择">
+                            <el-option
+                            v-for="item in v.options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select> -->
+                    <!-- </div> -->
                     <div v-else>
                         {{scope.row[v.key].value}}
                     </div>
@@ -238,7 +255,7 @@
 
 <script>
 
-    import { VTimeZone, VUpload, VTable, VPagination, VFilterColumn } from "@/components/index";
+    import { VTimeZone, VUpload, VTable, VPagination, VFilterColumn,VInputNumber } from "@/components/index";
     import Math from "mathjs";
 
     export default {
@@ -248,7 +265,8 @@
             VTimeZone,
             VUpload,
             page: VPagination,
-            VFilterColumn
+            VFilterColumn,
+            VInputNumber
         },
         data() {
             return {
@@ -416,17 +434,17 @@
                 }
 
                 for (let i = 0; i < this.productData.length; i++) {
-                    if (this.$validateForm(this.productData[i], this.$db.warehouse.outboundProduct)) {
+                    if (this.$validateForm(this.productData[i].outboundOutCartonTotalQty, this.$db.warehouse.outboundProduct)) {
                         return;
                     }
                 }
                 this.outboundData.outboundSkuCreateParams = [];
                 this.productData.forEach(v => {
                     this.outboundData.outboundSkuCreateParams.push({
-                        inboundSkuId: v.id,
-                        inventoryServiceFee: v.inventoryServiceFee ? v.inventoryServiceFee : 0,
-                        inventorySkuPrice: v.inventorySkuPrice ? v.inventorySkuPrice : 0,
-                        outboundOutCartonTotalQty: v.outboundOutCartonTotalQty ? v.outboundOutCartonTotalQty : 0
+                        inboundSkuId: v.id.value,
+                        inventoryServiceFee: v.inventoryServiceFee.value ? v.inventoryServiceFee.value : 0,
+                        inventorySkuPrice: v.inventorySkuPrice.value ? v.inventorySkuPrice.value : 0,
+                        outboundOutCartonTotalQty: v.outboundOutCartonTotalQty.value ? v.outboundOutCartonTotalQty.value : 0
                     });
                 });
                 this.outboundData.attachments = this.$refs.attachmentUpload[0].getFiles();
@@ -496,12 +514,19 @@
                             this.productData.push(v);
                         });
                         this.productData.forEach(v => {
+                            let obj = {}
                             v.inboundVo.inboundDate = this.$dateFormat(v.inboundVo.inboundDate, "yyyy-mm-dd");
                             v.skuUnitDictCode = v.skuUnitDictCode ? _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }).name : "";
                             v.lengthUnitDictCode=v.lengthUnitDictCode?_.findWhere(this.lengthUnitOption,{code:String(v.lengthUnitDictCode)}).name:'';
                             v.volumeUnitDictCode=v.volumeUnitDictCode?_.findWhere(this.volumeUnitOption,{code:String(v.volumeUnitDictCode)}).name:'';
                             v.weightUnitDictCode=v.weightUnitDictCode?_.findWhere(this.weightUnitOption,{code:String(v.weightUnitDictCode)}).name:'';
-                            arr.push(v)
+                            obj.warehouseNo = v.inboundVo.warehouseNo;
+                            obj.warehouseName = v.inboundVo.warehouseName;
+                            obj.inboundDate = v.inboundVo.inboundDate;
+                            obj.inventorySkuPrice = 0;
+                            obj.inventoryDays = 0;
+                            obj.inventoryServiceFee = 0;
+                            arr.push(Object.assign(obj, v))
                         });
                         this.loadingProductTable = false;
                         arr = this.$getDB(this.$db.warehouse.outboundProduct, arr);
@@ -559,18 +584,22 @@
             handleBlur(e, value, index) {
                 if (e.isNeed && value) {
                     //出库产品总数量
-                    this.productData[index].outboundSkuTotalQty = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonSkuQty)).done();
-                    //出库产品总体积
-                    this.productData[index].outboundSkuTotalVolume = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonVolume)).done();
-                    //出库产品总净重
-                    this.productData[index].outboundSkuTotalNetWeight = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonNetWeight)).done();
-                    //出库产品总毛重
-                    this.productData[index].outboundSkuTotalGrossWeight = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonGrossWeight)).done();
+                    this.productData[index].outboundSkuTotalQty.value = Number(value) * Number(this.productData[index].outerCartonSkuQty.value);
+                    this.productData[index].outboundSkuTotalVolume.value = Number(value) * Number(this.productData[index].outerCartonVolume.value);
+                    this.productData[index].outboundSkuTotalNetWeight.value = Number(value) * Number(this.productData[index].outerCartonNetWeight.value);
+                    this.productData[index].outboundSkuTotalGrossWeight.value = Number(value) * Number(this.productData[index].outerCartonGrossWeight.value);
+                    // this.productData[index].outboundSkuTotalQty = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonSkuQty)).done();
+                    // //出库产品总体积
+                    // this.productData[index].outboundSkuTotalVolume = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonVolume)).done();
+                    // //出库产品总净重
+                    // this.productData[index].outboundSkuTotalNetWeight = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonNetWeight)).done();
+                    // //出库产品总毛重
+                    // this.productData[index].outboundSkuTotalGrossWeight = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonGrossWeight)).done();
                 }else if(!value){
-                    this.productData[index].outboundSkuTotalQty=0;
-                    this.productData[index].outboundSkuTotalVolume=0;
-                    this.productData[index].outboundSkuTotalNetWeight=0;
-                    this.productData[index].outboundSkuTotalGrossWeight=0;
+                    this.productData[index].outboundSkuTotalQty.value=0;
+                    this.productData[index].outboundSkuTotalVolume.value=0;
+                    this.productData[index].outboundSkuTotalNetWeight.value=0;
+                    this.productData[index].outboundSkuTotalGrossWeight.value=0;
                 }
             },
 

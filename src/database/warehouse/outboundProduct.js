@@ -2,30 +2,61 @@ export default {
     id: {
         _hide:true
     },
-    skuCode:{
-        key:'skuCode',
+    
+    outboundOutCartonTotalQty:{
+        key:'outboundOutCartonTotalQty',        //需要传的参数
+        showType:'number',
+        sortable: true,
+        isNeed:true,
+        _rules:{
+            required:true,
+            type:'Number'
+        }
     },
-    skuNameCn:{
-        key:'skuNameCn',
+    inventoryDays:{
+        key:'inventoryDays',
+        showType:'number',
+        sortable: true,
     },
-    skuNameEn:{
-        key:'skuNameEn',
+    inventorySkuPrice:{        //需要传的参数
+        key:'inventorySkuPrice',
+        showType:'number',
+        sortable: true,
     },
-    customerSkuCode:{
-        key:'customerSkuCode',
+    inventoryServiceFee:{        //需要传的参数
+        key:'inventoryServiceFee',
+        showType:'number',
+        sortable: true,
     },
-    factorySkuCode:{
-        key:'factorySkuCode',
+    
+    outboundSkuTotalQty:{   //出库产品总数量
+        key:'outboundSkuTotalQty',
+        showType:'number',
+        sortable: true,
+        computed:true
     },
-    skuMaterialCn:{
-        key:'skuMaterialCn',
+    outboundSkuTotalVolume:{
+        key:'outboundSkuTotalVolume',
+        showType:'number',
+        sortable: true,
+        computed:true
     },
-    skuMaterialEn:{
-        key:'skuMaterialEn',
+    outboundSkuTotalNetWeight:{
+        key:'outboundSkuTotalNetWeight',
+        showType:'number',
+        sortable: true,
+        computed:true
+    },
+    outboundSkuTotalGrossWeight:{
+        key:'outboundSkuTotalGrossWeight',
+        sortable: true,
+        showType:'number',
+        computed:true
     },
     skuUnitDictCode:{
         key:'skuUnitDictCode',
         showType:'select',
+        sortable: true,
         options:[
             {
                 label:'kg',
@@ -37,6 +68,40 @@ export default {
             }
         ]
     },
+    skuBarCode:{
+    },
+    skuCode:{
+        key:'skuCode',
+        sortable: true
+    },
+    skuNameCn:{
+        key:'skuNameCn',
+        sortable: true
+    },
+    skuNameEn:{
+        key:'skuNameEn',
+        sortable: true
+    },
+    skuNameCustomer: {
+        sortable: true
+    },
+    skuMaterialCn:{
+        key:'skuMaterialCn',
+        sortable: true
+    },
+    skuMaterialEn:{
+        key:'skuMaterialEn',
+        sortable: true
+    },
+    factorySkuCode:{
+        key:'factorySkuCode',
+    },
+    customerSkuCode:{
+        key:'customerSkuCode',
+        sortable: true
+    },
+
+    
   lengthUnitDictCode:{
         key:'lengthUnitDictCode',
     },
@@ -46,70 +111,28 @@ export default {
   weightUnitDictCode:{
         key:'weightUnitDictCode',
     },
-    outboundSkuTotalQty:{   //出库产品总数量
-        key:'outboundSkuTotalQty',
-        showType:'number',
-        computed:true
-    },
-    outboundOutCartonTotalQty:{
-        key:'outboundOutCartonTotalQty',        //需要传的参数
-        showType:'number',
-        isNeed:true,
-        _rules:{
-            required:true,
-            type:'Number'
-        }
-    },
-    outboundSkuTotalVolume:{
-        key:'outboundSkuTotalVolume',
-        showType:'number',
-        computed:true
-    },
-    outboundSkuTotalNetWeight:{
-        key:'outboundSkuTotalNetWeight',
-        showType:'number',
-        computed:true
-    },
-    outboundSkuTotalGrossWeight:{
-        key:'outboundSkuTotalGrossWeight',
-        showType:'number',
-        computed:true
-    },
+    
+    
+    
     outerCartonSkuQty:{         //外箱产品数
         key:'outerCartonSkuQty',
+        sortable: true,
     },
     outerCartonVolume:{
         key:'outerCartonVolume',
+        sortable: true,
     },
     outerCartonGrossWeight:{
         key:'outerCartonGrossWeight',
+        sortable: true,
     },
     outerCartonNetWeight:{
         key:'outerCartonNetWeight',
+        sortable: true,
     },
-    inboundDate:{
-        key:'inboundDate',
-    },
-    inventoryDays:{
-        key:'inventoryDays',
-        showType:'number',
-    },
-    inventorySkuPrice:{        //需要传的参数
-        key:'inventorySkuPrice',
-        showType:'number',
-    },
-    inventoryServiceFee:{        //需要传的参数
-        key:'inventoryServiceFee',
-        showType:'number',
-    },
-    inboundNo:{
+    inboundNo:{ //入库单号
         key:'inboundNo',
-    },
-    skuBarCode:{
-        key:'skuBarCode'
-    },
-    skuNameCustomer:{
-        key:'skuNameCustomer'
+        sortable: true,
     },
     skuDescEn:{
         key:'skuDescEn',
@@ -120,17 +143,30 @@ export default {
     skuDescCustomer:{
         key:'skuDescCustomer',
     },
-    orderNo:{
-        key:'orderNo',
-    },
-    warehouseNo:{
-        key:'warehouseNo'
-    },
-    warehouseName:{
-        key:'warehouseName'
-    },
     skuLabel:{
         key:'skuLabel',
     },
-
+    orderNo:{
+        key:'orderNo',
+        sortable: true,
+    },
+    warehouseNo:{
+        key:'warehouseNo',
+        sortable: true,
+    },
+    warehouseName:{
+        key:'warehouseName',
+        sortable: true,
+    },
+    inboundDate:{
+        key:'inboundDate',
+        sortable: true
+    },
+    
+    // skuBarCode:{
+    //     key:'skuBarCode'
+    // },
+    // skuNameCustomer:{
+    //     key:'skuNameCustomer',
+    // }
 }

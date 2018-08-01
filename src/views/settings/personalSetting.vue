@@ -208,7 +208,7 @@
           })
       },
       postLanguage(){
-        this.$ajax.post(this.$apis.POST_CODE_PART,['LANGUAGE','SEX'])
+        this.$ajax.post(this.$apis.POST_CODE_PART,['LANGUAGE','SEX'],{cache:true})
           .then(res => {
             this.language = _.findWhere(res, {'code': 'LANGUAGE'}).codes;
             this.sex = _.findWhere(res, {'code': 'SEX'}).codes;

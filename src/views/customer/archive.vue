@@ -55,8 +55,6 @@
       :height=500
       :loading='loading'
       :data="tabData"
-      :buttons="[{label: 'Detail', type: 1}]"
-      @action="detail"
       @change-checked='checked'
       style='marginTop:10px'>
       <template slot="header">
@@ -156,7 +154,7 @@
       },
       //获取字典
       getCodePart(){
-        this.$ajax.post(this.$apis.POST_CODE_PART,["PMT","CUSTOMER_TYPE","ITM"]).then(res=>{
+        this.$ajax.post(this.$apis.POST_CODE_PART,["PMT","CUSTOMER_TYPE","ITM"],{cache:true}).then(res=>{
           this.options.payment = _.findWhere(res, {'code': 'PMT'}).codes;
           this.options.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
           this.options.type = _.findWhere(res, {'code': 'CUSTOMER_TYPE'}).codes;
@@ -166,7 +164,7 @@
       },
       //获取国家
       getCountryAll(){
-        this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+        this.$ajax.get(this.$apis.GET_COUNTRY_ALL,{},{cache:true}).then(res=>{
           this.options.country = res
         }).catch(err=>{
           console.log(err)
@@ -188,18 +186,6 @@
       //搜查
       search() {
         this.getData()
-      },
-      //...........进入detail
-      detail(item) {
-        this.$windowOpen({
-          url: '/customer/detail',
-          params: {
-            type: 'archive',
-            id: item.id.value,
-            companyId: item.companyId.value
-          }
-
-        });
       },
       //.........checked
       checked(item) {
@@ -254,7 +240,7 @@
         });
       },
       postBatchRecover(){
-        this.$confirm(this.$i.common.sureRecover, this.$i.common.prompt, {
+        this.$confirm(this.$i.common.sureRecover+'?', this.$i.common.prompt, {
           confirmButtonText: this.$i.common.confirm,
           cancelButtonText: this.$i.common.cancel,
           type: 'warning'
