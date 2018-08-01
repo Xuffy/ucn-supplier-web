@@ -1381,66 +1381,12 @@
                     payment: "",
                     paymentDays: 0,
                     productFlag: false,
-                    // paymentRemark: "",
-                    // paymentStatus: "",
                     quotationNo: "",
                     remark: "",
                     remind: true,
                     responsibilityFlag: false,
-                    responsibilityList: [
-                        // {
-                        //     type: '0',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                        // {
-                        //     type: '1',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                        // {
-                        //     type: '2',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                        // {
-                        //     type: '3',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                        // {
-                        //     type: '4',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                        // {
-                        //     type: '5',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                    ],
+                    responsibilityList: [],
                     skuList: [],
-                    // skuQty: 0,
-                    // skuSupplierName: "",
-                    // status: "",
                     supplierCode: "",
                     supplierId: 0,
                     supplierName: "",
