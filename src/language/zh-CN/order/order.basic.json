@@ -67,5 +67,6 @@
   "detail":"详情",
   "skuNo":"SKU货号",
   "hasConfirm":"已确认",
-  "hasCanceled":"已取消"
+  "hasCanceled":"已取消",
+  "history":"历史"
 }

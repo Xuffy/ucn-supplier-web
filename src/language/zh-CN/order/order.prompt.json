@@ -17,5 +17,7 @@
   "sureConfirm": "确认接单？",
   "supplierNotTheSame": "你选择的产品与所选供应商不一致",
   "nothingToDun":"没有可催款项",
-  "dunSuccess":"催款成功"
+  "dunSuccess":"催款成功",
+  "shouldFill":"应该填写",
+  "pleaseAddProduct":"请添加产品"
 }

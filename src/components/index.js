@@ -23,6 +23,7 @@ import VHistory from '@/views/negotiation/children/history';
 import addNewInqury from '@/views/negotiation/children/addNewInqury';
 import overviewPage from './common/overviewPage/index';
 import VInputNumber from './common/inputNumber/index';
+import VButton from './common/countDownButton/index';
 
 export {
   VImage,
@@ -47,5 +48,6 @@ export {
   VHistory,
   addNewInqury,
   overviewPage,
-  VInputNumber
+  VInputNumber,
+  VButton
 };

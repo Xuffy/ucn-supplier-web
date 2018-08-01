@@ -37,8 +37,8 @@ export default {
 
 
     //payment
-    PAYMENT_LIST:['/payment/list/{orderNo}/{orderType}','USUPPLY_URL'],
-    PAYMENT_ACCEPT:['/payment/accept/{id}?version={version}','USUPPLY_URL'],
+    PAYMENT_LIST:['/payment/list/{orderNo}/{orderType}?moduleCode={moduleCode}','USUPPLY_URL'],
+    PAYMENT_ACCEPT:['/payment/accept/{id}?version={version}?moduleCode={moduleCode}','USUPPLY_URL'],
     PAYMENT_NO:['/payment/genNo','USUPPLY_URL'],
     PAYMENT_SAVE:['/payment/save','USUPPLY_URL'],
     PAYMENT_UPDATE:['/payment/update','BASE_URL'],

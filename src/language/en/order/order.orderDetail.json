@@ -151,5 +151,9 @@
   "totalNetWeight": "Total N.W. of Outer Carton",
   "totalVolume": "Total Volume of Outer Carton",
   "paidAmount": "Paid Amount",
-  "unpaidAmount": "Unpaid Amount"
+  "unpaidAmount": "Unpaid Amount",
+  "orderTotalNetWeight":"Order Total Net Weight",
+  "orderTotalGrossWeight":"Order Total Gross Weight",
+  "orderTotalVolume":"Order Total Volume",
+  "skuLabelPics": "SKU Label Pic"
 }
