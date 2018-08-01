@@ -37,5 +37,9 @@ export default {
   },
   containerType: {
     type: 'select'
+  },
+  logisticsStatus: {
+    type: 'text',
+    _hide:true
   }
 }

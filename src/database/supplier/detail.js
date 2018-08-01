@@ -23,10 +23,10 @@ export default {
       key: 'city',
       ullLine:false,
     },
-    customerSource:{
-      key:'customerSource',
-      ullLine:false,
-    },
+    // customerSource:{
+    //   key:'customerSource',
+    //   ullLine:false,
+    // },
     paymentItem: {
       key: 'payment',
       ullLine:false,

@@ -7,7 +7,7 @@
             <div class="detail">
                  <el-form  label-width="190px">
                    <el-row>
-                     <el-col :span="4">
+                     <el-col :span="4" class="img-box">
                        <v-image :src="basicDate.logo" style="height: 230px"/>
                      </el-col>
                      <el-col :span="20">
@@ -16,7 +16,7 @@
                            <el-col
                              v-for='(item,index) in $db.supplier.detail'
                              :key='index'
-                             :xs="24" :sm="item.fullLine?24:8" :md="item.fullLine?24:8" :lg="item.fullLine?24:8" :xl="item.fullLine?24:8"
+                             :xs="24" :sm="item.fullLine?24:24" :md="item.fullLine?24:12" :lg="item.fullLine?24:12" :xl="item.fullLine?24:8"
                            >
                              <el-form-item label-width="260px" :prop="item.key" :label="item.label+' :'">
                                {{basicDate[item.key]}}
@@ -96,7 +96,7 @@
                   <v-table
                     :data="remarkData"
                     style='marginTop:10px'
-                    :buttons="[{label: 'Modify', type: 2},{label: 'Delete', type: 3}]"
+                    :buttons="[{label: $i.common.modify, type: 2},{label: $i.common.delete, type: 3}]"
                     @action="remarkAction"
                     :selection="false"/>
                 </el-tab-pane>
@@ -123,8 +123,9 @@
 </template>
 
 <script>
-    import VCompareList from '../product/compareList'
-    import VAttachment from './attachment'
+    import { mapActions} from 'vuex';
+    import VCompareList from '../product/compareList';
+    import VAttachment from './attachment';
     import {
         VTable,VUpload,VImage
     } from '@/components/index';
@@ -195,6 +196,9 @@
             }
         },
         methods: {
+            ...mapActions([
+              'setMenuLink'
+            ]),
             handleClick(tab, event) {
                 switch(Number(tab.index)){
                     case 3:
@@ -358,15 +362,13 @@
                     this.code = res.code
                     this.basicDate = res;
                     this.basicDate.filingDate = this.$dateFormat(this.basicDate.filingDate, 'yyyy-mm-dd');
-                    let country,type,payment,currency;
+                    let country,type,payment;
                     country = _.findWhere(this.country, {code: this.basicDate.country}) || {};
                     type = _.findWhere(this.type, {code: (this.basicDate.type)+''}) || {};
                     payment = _.findWhere(this.payment, {code: (this.basicDate.payment)+''}) || {};
-                    currency = _.findWhere(this.currency, {code: this.basicDate.currency}) || {};
                     this.basicDate.type = type.name || '';
                     this.basicDate.country = country.name || '';
                     this.basicDate.payment = payment.name || '';
-                    this.basicDate.currency = currency.name || '';
 
                     this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
                     this.address = this.$getDB(this.$db.supplier.detailTable, res.address, e => {
@@ -479,12 +481,17 @@
               this.disableClickDeleteBtn = true;
               const params = []
               params.push(this.basicDate.id)
-              this.$ajax.post(this.$apis.post_supply_batchDelete, this.selectNumber).then(res => {
+              this.$ajax.post(this.$apis.post_supply_batchDelete, params).then(res => {
                 this.disableClickDeleteBtn = false;
-                this.getData();
                 this.$message({
                   type: 'success',
-                  message: this.$i.common.deleteTheSuccess
+                  message: this.$i.common.deleteTheSuccess,
+                  onClose: (() => {
+                    this.$router.push({
+                      path: '/customer/overview',
+                    })
+                  })
+
                 });
               }).finally(() => {
                 this.disableClickDeleteBtn = false;
@@ -505,6 +512,14 @@
           this.getCodePart();
           this.getCurrency();
         },
+      mounted(){
+        this.setMenuLink({
+            path: 'customerArchive',
+            type: 10,
+            label: this.$i.common.archive,
+            auth:''
+          });
+      },
     }
 
 </script>
@@ -617,41 +632,7 @@
       height: 200px;
       line-height: 200px;
     }
-
-    /*
-    .attchment {
-        display: flex;
-        justify-content: flex-start;
-        height: 400px;
+    .img-box{
+      height: 184px;background-color: #f9f9f9;
     }
-
-    .attchment_item {
-        width: 180px;
-        height: 60px;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        border: 1px solid #BEBEBE;
-        border-radius: 3px;
-        margin-left: 20px;
-    }
-
-    .attchment_item_content {
-        width: 180px;
-        display: flex;
-        justify-content: center;
-        align-items: baseline;
-    }
-
-    .attchment_item p {
-        font-size: 14px;
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-
-    .attchment_item i {
-        font-size: 40px;
-    }
-*/
-
 </style>

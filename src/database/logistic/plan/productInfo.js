@@ -5,12 +5,6 @@ export default {
     typeSlef: 'text',
     _hide: true
   },
-  "onlyID":{
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text',
-    _hide: true
-  },
   "vId": {
     type: 'String',
     _disabled: true,
