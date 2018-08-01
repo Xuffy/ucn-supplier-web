@@ -85,10 +85,12 @@
       </div>
     </div>
 
-    <v-import-template ref="importCategory" code="BIZ_SKU_CATEGORY_IMPORT" biz-code="BIZ_SKU_CATEGORY"></v-import-template>
+    <v-import-template ref="importCategory" code="BIZ_SKU_CATEGORY_IMPORT"
+                       biz-code="BIZ_SKU_CATEGORY"></v-import-template>
   </div>
 </template>
 <script>
+  import {mapActions} from 'vuex'
   import {VImportTemplate} from '@/components/index'
 
   export default {
@@ -123,8 +125,14 @@
       this.getMgeneralCategoryData();
       this.getMyCategoryData();
       this.getMappingCategory();
+      this.setMenuLink({
+        type: 100,
+        query: {code: 'CATEGORY', bizCode: 'BIZ_SUPPLY_CATEGORY'},
+        label: this.$i.common.log
+      });
     },
     methods: {
+      ...mapActions(['setMenuLink']),
       getMgeneralCategoryData() {
         this.$ajax.get(this.$apis.GET_PURCHASE_SYS_CATEGORY)
           .then(res => {
