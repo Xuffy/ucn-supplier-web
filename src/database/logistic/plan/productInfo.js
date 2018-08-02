@@ -283,11 +283,5 @@ export default {
     _disabled: true,
     typeSlef: 'text',
     _hide: true
-  },
-  "shipmentStatus": {
-    type: 'Select',
-    _option:[],
-    _disabled: true,
-    typeSlef: 'text'
   }
 }

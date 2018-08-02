@@ -6,6 +6,7 @@ import productInfo from './plan/productInfo'
 import productModify from './plan/productModify'
 import {basicInfoObj,transportInfoObj,ExchangeRateInfo,payMentInfo,dbBasicInfoObj,addProductFromOrderFilter,dbProductInfo,dbcontainerInfo} from './plan/staticData'
 import sku from './plan/sku'
+import {dateInfo} from './plan/dateInfo'
 
 export default {
   basicInfo,
@@ -15,6 +16,7 @@ export default {
   productInfo,
   productModify,
   sku,
+  dateInfo,
   basicInfoObj,
   transportInfoObj,
   ExchangeRateInfo,

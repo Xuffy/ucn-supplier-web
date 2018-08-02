@@ -23,10 +23,13 @@
           :limit="20" :edit="edit" />
       </div>
     </el-row>
-    <form-list :DeliveredEdit="DeliveredEdit" :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"
-    />
+    <!-- <form-list :DeliveredEdit="DeliveredEdit" :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/> -->
     <form-list :DeliveredEdit="DeliveredEdit" name="TransportInfo" :fieldDisplay="fieldDisplay" @hightLightModifyFun="hightLightModifyFun"
       :listData="transportInfoArr" :selectArr="selectArr" :edit="edit" :title="$i.logistic.transportInfoTitle" />
+
+    <!-- 日期列表 -->
+    <dateInfo :listData="mediatorDate" :selectArr="selectArr" :basicInfoArr="basicInfoArr" :shipmentStatus="shipmentStatus" :edit="edit" :title="$i.logistic.dateInfo" @modifyTime="modifyTimeData" @shipmentStatus="changeShipmentStatus"></dateInfo>  
+
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
@@ -63,11 +66,11 @@
           <el-button v-if="edit" type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
           <el-button v-if="edit" v-authorize="auth[pageTypeCurr]&&auth[pageTypeCurr].PRODUCT_INFO_DELETE||''" type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
           <label v-if="(edit||DeliveredEdit)&&pageTypeCurr=='loadingListDetail'">{{ $i.logistic.shipmentStatus}} :</label>
-          <el-select v-if="(edit||DeliveredEdit)&&pageTypeCurr=='loadingListDetail'" v-model="ShipmentStatusCode" placeholder="请选择"
+          <!-- <el-select v-if="(edit||DeliveredEdit)&&pageTypeCurr=='loadingListDetail'" v-model="ShipmentStatusCode" placeholder="请选择"
             @change="ShipmentStatusChange">
-            <el-option v-for="item in selectArr.ShipmentStatus" :key="item.code" :label="item.name" :value="item.code">
+            <el-option v-for="item in selectArr.shipmentStatus" :key="item.code" :label="item.name" :value="item.code">
             </el-option>
-          </el-select>
+          </el-select> 留着--> 
         </div>
       </v-table>
     </div>
@@ -91,7 +94,7 @@
     </el-dialog>
     <messageBoard v-if="!isParams" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus"
-      @sendData="sendData" />
+      @sendData="sendData" :btnModifyTime="btnModifyTime" :basicInfoArr="basicInfoArr" :listData="mediatorDate" :selectArr="selectArr" :shipmentStatus="shipmentStatus" @shipmentStatus="changeShipmentStatus"/>
     <v-history-modify 
     :code="configUrl[pageName]&&configUrl[pageName].setTheField" 
     ref="HM" disabled-remark 
@@ -121,11 +124,14 @@
   import feeInfo from '@/views/logistic/children/feeInfo'
   import payment from '@/views/logistic/children/payment'
   import btns from '@/views/logistic/children/btns'
+  import dateInfo from '@/views/logistic/children/dateInfo'
 
   export default {
     name: 'logisticPlanDetail',
     data() {
       return {
+        btnModifyTime:{},
+        shipmentStatus:0,
         planId: '',
         ShipmentStatusCode: '',
         pageParams: {
@@ -164,6 +170,7 @@
         productModifyList: [],
         paymentList: [],
         containerInfo: [],
+        mediatorDate: [],
         containerinfoMatch: [],
         paymentSum: {},
         selectArr: {
@@ -196,7 +203,7 @@
           transportationWay: 'MD_TN',
           payment: 'PMT',
           skuIncoterm: 'ITM',
-          ShipmentStatus: 'SKU_LOGISTICS_STATUS'
+          shipmentStatus: 'LOGISTICS_SHIP_STATUS'
         },
         configUrl: {
           placeLogisticPlan: {
@@ -235,6 +242,7 @@
       feeInfo,
       payment,
       btns,
+      dateInfo,
       messageBoard,
       VHistoryModify,
       overviewPage,
@@ -340,9 +348,15 @@
       this.transportInfoArr = _.map(this.$db.logistic.transportInfoObj, (value, key) => {
         return value;
       });
+      this.mediatorDate = [_.mapObject(this.$db.logistic.dateInfo, (value, key) => {
+        return value;
+      })]
       this.countryAll();
     },
     methods: {
+      modifyTimeData(arg){
+        this.btnModifyTime = arg;
+      },
       ...mapActions(['setMenuLink']),
       //初始页面数据
       pageInit() {
@@ -420,7 +434,7 @@
           this.matchRate(res.currencyExchangeRate);
           this.attachmentList = res.attachment;
           this.fieldDisplay = res.fieldDisplay;
-          this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
+          this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30?moduleCode=LOGISTIC`).then(res => {
             this.createdPaymentData(res)
           })
           this.getSupplier(res.logisticsNo)
@@ -450,6 +464,40 @@
         this.transportInfoArr.forEach(a => {
           a.value = res[a.key]
         })
+        this.shipmentStatus = this.basicInfoArr.find(el=> el.key == 'shipmentStatus').value
+        //日期信息  
+        this.mediatorDate = this.$getDB(this.$db.logistic.dateInfo,[res])
+        // 未开船：Undepartured（初始状态，未到实际订舱日期时默认未开船状态）、
+        // 已放舱：Release Space，当前置状态是已订舱，发运状态可下拉选择已放舱或已提柜、
+        // 已提柜：Pick-up the Empty，当前置状态是已订舱或已放舱，发运状态可下拉选择已提柜、
+        // 在传入时  改变某些状态
+        let currObj = this.basicInfoArr.find(el=> el.key == 'shipmentStatus');
+        if(currObj){
+          //初始先禁用 下拉 根据条件 选择性的开启
+          this.basicInfoArr.find(el=> el.key=='shipmentStatus').disabled = true;
+          let arr = this.$depthClone(this.selectArr.shipmentStatus).map(el=> {
+            el.disabled = true;
+            return el;
+          });
+          if(currObj.value==0||currObj.value==1){
+            this.basicInfoArr.find(el=> el.key=='shipmentStatus').disabled = false;
+            arr = this.$depthClone(arr).map(el=> {
+              if(el.code==2||el.code==3){
+                el.disabled = false;
+              }
+              return el;
+            });
+          }else if(currObj.value==0||currObj.value==1||currObj.value==2){
+            this.basicInfoArr.find(el=> el.key=='shipmentStatus').disabled = false;
+            arr = this.$depthClone(arr).map(el=> {
+              if(el.code==3){
+                el.disabled = false;
+              }
+              return el;
+            });
+          }
+          this.$set(this.selectArr,'shipmentStatus',arr);
+        }
         this.logisticsNo = res.logisticsNo
         this.exchangeRateList = res.currencyExchangeRate || []
         this.remark = res.remark
@@ -462,7 +510,7 @@
           return item;
         });
         this.productList = this.$getDB(this.$db.logistic.productInfo, res.product.map(el => {
-          let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item =>
+          let ShipmentStatusItem = this.selectArr.shipmentStatus && this.selectArr.shipmentStatus.find(item =>
             item.code == el.shipmentStatus)
           el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
           return el;
@@ -470,26 +518,20 @@
         this.productList.forEach((item) => {
           if (item.fieldDisplay.value) {
             _.mapObject(item.fieldDisplay.value, (v, k) => {
-              this.$set(item[k], '_style', {
+              item[k]._style = {
                 background: 'yellow'
-              })
+              };
+              item[k]._mustChecked=true;
             })
             item.fieldDisplay.value = null;
           }
         })
       },
-      //匹配发运状态 name
-      // matchShipmentStatus(){
-      //   this.productList.forEach(el=>{
-      //     let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(item=> item.code == this.ShipmentStatusCode)
-      //     el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-      //   })
-      // },
       ShipmentStatusChange(e) {
         this.selectProductArr.forEach(a => {
           this.productList.forEach((item, index) => {
             if (item.vId.value == a.vId.value) {
-              let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item =>
+              let ShipmentStatusItem = this.selectArr.shipmentStatus && this.selectArr.shipmentStatus.find(item =>
                 item.code == e)
               this.$set(this.productList[index].shipmentStatus, 'value', ShipmentStatusItem ?
                 ShipmentStatusItem.name : '')
@@ -523,12 +565,12 @@
             clearInterval(this.CutDown)
           }
         }, 1000)
-        this.$ajax.post(`${this.$apis.logistics_payment_batchDunning}`, argArr).then(res => {
+        this.$ajax.post(`${this.$apis.logistics_payment_batchDunning}?moduleCode=LOGISTIC`, argArr).then(res => {
           this.$message({
             type: 'success',
             message: this.$i.logistic.operationSuccess
           })
-          this.$ajax.post(`${this.$apis.get_payment_list}${this.logisticsNo}/30`).then(res => {
+          this.$ajax.post(`${this.$apis.get_payment_list}${this.logisticsNo}/30?moduleCode=LOGISTIC`).then(res => {
             this.createdPaymentData(res, 'dunning')
           })
         })
@@ -563,19 +605,7 @@
         const params = _.map(this.dictionaryPart, v => v)
         this.$ajax.post(this.$apis.get_dictionary, params).then(res => {
           _.mapObject(this.dictionaryPart, (v, k) => {
-            this.$set(this.selectArr, k, res.find(a => a.code === v).codes)
-            if (k == "ShipmentStatus") {
-              this.selectArr[k].unshift({
-                code: "0",
-                defaultCode: 0,
-                id: 0,
-                name: " ",
-                remark: "",
-                seqNum: "",
-                typeCode: "SKU_LOGISTICS_STATUS",
-                value: "0"
-              })
-            }
+            this.$set(this.selectArr, k, res.find(a => a.code === v).codes);
           })
           this.pageInit();
         }).catch(() => {
@@ -648,7 +678,7 @@
           if('_option' in v){
             switch(k){
               case 'shipmentStatus' :
-                v._option = this.selectArr.ShipmentStatus;
+                v._option = this.selectArr.shipmentStatus;
                 if(this.pageTypeCurr=='loadingListDetail'){
                   delete v._disabled;
                 }
@@ -666,7 +696,7 @@
         if (productId) {
           if(status==1){
             this.productModifyList = [currentProduct].map(el => {
-              let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item =>item.name == el.shipmentStatus.value)
+              let ShipmentStatusItem = this.selectArr.shipmentStatus && this.selectArr.shipmentStatus.find(item =>item.name == el.shipmentStatus.value)
               el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.name : '';
               return el;
             });
@@ -674,7 +704,7 @@
           }else{
             this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
               this.productModifyList = this.$getDB(this.$db.logistic.productModify,res.history.map(el => {
-                let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
+                let ShipmentStatusItem = this.selectArr.shipmentStatus && this.selectArr.shipmentStatus.find(item => item.code == el.shipmentStatus)
                 el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
                 el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm:ss') 
                 return el;
@@ -776,22 +806,13 @@
           a.totalContainerVolume = null;
           a.totalContainerNetWeight = null;
           a.totalContainerOuterCartonsQty = null;
-          a.shipmentStatus = null;
           !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
         })
         this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList]
       },
 
       selectProduct(arr) {
-        this.selectProductArr = arr
-        //考虑 选中时也可 变化状态
-        //  this.selectProductArr.forEach(a => {
-        //   this.productList.forEach((item,index)=>{
-        //     if(item.vId.value==a.vId.value){
-        //       this.$set(this.productList[index].shipmentStatus,'value',this.ShipmentStatusCode)
-        //     }
-        //   })
-        // })
+        this.selectProductArr = arr;
       },
       removeProduct() {
         this.selectProductArr.forEach(a => {
@@ -827,7 +848,7 @@
           return 
         };
         const currrentProduct = data[0]
-        let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code ==
+        let ShipmentStatusItem = this.selectArr.shipmentStatus && this.selectArr.shipmentStatus.find(item => item.code ==
           currrentProduct.shipmentStatus.value)
         currrentProduct.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.name : '';
         this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
@@ -990,6 +1011,9 @@
       ContainerInfoLight(data){
         this.oldPlanObject.containerDetail = data;
       },
+      changeShipmentStatus(status){
+        this.basicInfoArr.find(el=> el.key == 'shipmentStatus').value = status
+      },
       sendData(keyString) {
         let url = this.pageTypeCurr == "loadingListDetail" ? this.$apis.update_logistic_order : this.configUrl[this.pageName]
           [keyString];
@@ -1043,7 +1067,7 @@
         this.oldPlanObject.product = this.productList.map((item, i) => {
           return _.mapObject(item, (v, k) => {
             if (v.typeSlef == 'text') {
-              let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(el =>
+              let ShipmentStatusItem = this.selectArr.shipmentStatus && this.selectArr.shipmentStatus.find(el =>
                 el.name == v.value)
               if (ShipmentStatusItem) {
                 return ShipmentStatusItem.code;
@@ -1064,6 +1088,8 @@
         if (this.$validateForm(this.oldPlanObject, this.$db.logistic.transportInfoObj)) {
           return;
         }
+        console.log(this.oldPlanObject)
+        return
         this.$ajax.post(url, this.oldPlanObject).then(res => {
           this.$message({
             message: this.$i.logistic.operationSuccess,

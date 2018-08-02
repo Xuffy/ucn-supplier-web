@@ -4,16 +4,32 @@
     <div class="status">
       <div class="btn-wrap">
         <div v-if="pageType === 'plan' || pageType === 'loadingList'">
-          <span>{{ $i.logistic.status}}:</span>
-          <el-radio-group v-model="fillterVal" size="mini" @change="fetchDataList('elRadioGroup')">
-            <el-radio-button label="all">{{ $i.logistic.all }}</el-radio-button>
-            <el-radio-button :label="+a.code" v-for="a of ls_plan" :key="'status-' + a.code">{{a.name}}
-            </el-radio-button>
-          </el-radio-group>
+          <div class="ls_plan">
+            <span>{{ $i.logistic.status}}:</span>
+            <el-radio-group v-model="fillterVal" size="mini" @change="fetchDataList('elRadioGroup')">
+              <el-radio-button label="all">{{ $i.logistic.all }}</el-radio-button>
+              <el-radio-button :label="+a.code" v-for="a of ls_plan[pageType === 'plan' ? 'LS_PLAN' : 'LS_STATUS']" :key="'status-' + a.code">{{a.name}}
+              </el-radio-button>
+            </el-radio-group>
+          </div>
         </div>
       </div>
       <div class="select-search-wrap">
         <select-search :options="options" @inputEnter="searchFn" v-model="selectSearch"/>
+      </div>
+    </div>
+    <div class="status">
+      <div class="btn-wrap">
+        <div v-if="pageType === 'plan' || pageType === 'loadingList'">
+          <div class="ls_plan">
+            <span>{{ $i.logistic.shipmentStatus}}:</span>
+            <el-radio-group v-model="shipmentStatus" size="mini" @change="fetchDataList('elRadioGroup')">
+              <el-radio-button label="all">{{ $i.logistic.all }}</el-radio-button>
+              <el-radio-button :label="+a.code" v-for="a of ls_plan.LOGISTICS_SHIP_STATUS" :key="'status-' + a.code">{{a.name}}
+              </el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
       </div>
     </div>
     <v-table
@@ -66,6 +82,7 @@
         pageParams: null,
         selectCount: [],
         fillterVal: 'all',
+        shipmentStatus: 'all',
         tabData: [],
         viewBy: 'plan',
         options: [
@@ -273,14 +290,8 @@
         })
       },
       fetchData() {
-        if (this.pageType === 'plan') {
-          this.getDictionary(['LS_PLAN'])
-          this.getContainerType()
-        }
-        if (this.pageType === 'loadingList') {
-          this.getContainerType()
-          this.getDictionary(['LS_STATUS'])
-        }
+        this.getDictionary(['LS_PLAN','LS_STATUS','LOGISTICS_SHIP_STATUS']);
+        this.getContainerType();
         this.initPage();
         this.fetchDataList()
       },
@@ -347,7 +358,8 @@
         const db = this.urlObj[this.pageType][this.viewBy].db
         this.tableLoading = true
         const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
-        this.$ajax.post(url, {lgStatus, ...this.pageParams}).then(res => {
+        const lsStatus = this.shipmentStatus === 'all' ? [] : [this.shipmentStatus]
+        this.$ajax.post(url, {lgStatus,lsStatus, ...this.pageParams}).then(res => {
           if (!res) return (this.tableLoading = false)
           this.tabData = this.$getDB(db, res.datas, item => {
             _.mapObject(item, val => {
@@ -368,7 +380,9 @@
       },
       getDictionary(keyCode) {
         this.$ajax.post(this.$apis.get_dictionary, keyCode).then(res => {
-          this.ls_plan = res[0].codes
+          res.forEach(el=>{
+            this.ls_plan[el.code] = el.codes;
+          })
         })
       },
       getContainerType() {
@@ -413,7 +427,7 @@
   }
   .status {
     display: flex;
-    height: 60px;
+    height: 50px;
     align-items: center;
     justify-content: space-between;
     padding: 0 15px;

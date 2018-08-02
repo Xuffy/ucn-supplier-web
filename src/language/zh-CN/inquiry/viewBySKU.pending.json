@@ -8,6 +8,7 @@
   "skuNameEN": "英文品名",
   "price": "产品单价",
   "currency": "币种",
+  "qty": "产品数量",
   "skuFobCurrency": "Fob币种",
   "skuExwCurrency": "Exw币种",
   "skuCifCurrency": "Cif币种",
