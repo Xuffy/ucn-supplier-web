@@ -34,5 +34,6 @@ export default {
   EXPORTFILE_EXECUTE: ['/exportFile/execute', 'UIE_URL'],
   UTASK_COUNTBYTYPEANDMODULE: ['/utask/countByTypeAndModule', 'UWORKBENCH_URL'],
   DEPARTMENT_UPDATESORT: ['/department/updateSort', 'UUSER_URL'],
-  ROLE_UPDATESORT: ['/role/updateSort', 'UUSER_URL']
+  ROLE_UPDATESORT: ['/role/updateSort', 'UUSER_URL'],
+  PURCHASE_CATEGORY_SORT: ['/purchase/category/sort', 'BASE_URL']
 }

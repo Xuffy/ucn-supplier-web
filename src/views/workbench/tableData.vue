@@ -119,7 +119,7 @@
           {
             page: {pn: 1, ps: 10},
             data: [],
-            label: this.$i.workbench.warehouse,
+            label: this.$i.workbench.qc,
             loading: false,
             search: {},
             type: 'WAREHOUSE',
