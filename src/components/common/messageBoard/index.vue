@@ -21,7 +21,8 @@
       </ul>
       <div class="form-box" v-if="!readonly">
         <div class="form">
-          <el-input type="textarea" v-model="messageContent"></el-input>
+          <textarea v-model="messageContent"
+                    @keydown="addListener"></textarea>
           <br/>
           <div class="upload_div">
             <v-upload only-image ref="fileUpload" :limit="5"></v-upload>
@@ -80,7 +81,7 @@
         submitLoading: false,
         contentLoading: false,
         messageContent: '',
-        messageList: [],
+        messageList: []
       }
     },
     computed: {
@@ -156,6 +157,16 @@
       changeShow() {
         this.layout.paddingRight = this.layout.paddingRight ? 0 : '365px';
         this.$userAction.set('messageBoard', !!this.layout.paddingRight);
+      },
+      addListener(e) {
+        if (e.keyCode === 13) {
+          e.preventDefault();
+          if (e.ctrlKey) {
+            this.messageContent += '\n';
+          } else {
+            this.sendMessage();
+          }
+        }
       }
     }
   }
@@ -312,6 +323,10 @@
     align-content: center;
     align-items: center;
     margin-top: 10px;
+  }
+
+  .form-box textarea {
+    width: 100%;
   }
 
   .text_enter {
