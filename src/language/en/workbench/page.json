@@ -22,5 +22,6 @@
   "goSet": "Go set",
   "setDepartment": "Set Department and User",
   "setCompany": "Set Company Info",
-  "setCategory": "Set Category"
+  "setCategory": "Set Category",
+  "qc": "QC"
 }
