@@ -565,7 +565,7 @@
             clearInterval(this.CutDown)
           }
         }, 1000)
-        this.$ajax.post(`${this.$apis.logistics_payment_batchDunning}?moduleCode=LOGISTIC`, argArr).then(res => {
+        this.$ajax.post(`${this.$apis.logistics_payment_batchDunning}/${this.logisticsNo}/30?moduleCode=LOGISTIC`, argArr).then(res => {
           this.$message({
             type: 'success',
             message: this.$i.logistic.operationSuccess
@@ -695,17 +695,11 @@
         let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
         if (productId) {
           if(status==1){
-            this.productModifyList = [currentProduct].map(el => {
-              let ShipmentStatusItem = this.selectArr.shipmentStatus && this.selectArr.shipmentStatus.find(item =>item.name == el.shipmentStatus.value)
-              el.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-              return el;
-            });
+            this.productModifyList = [currentProduct];
             this.$refs.HM.init(this.productModifyList,[]);
           }else{
             this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
               this.productModifyList = this.$getDB(this.$db.logistic.productModify,res.history.map(el => {
-                let ShipmentStatusItem = this.selectArr.shipmentStatus && this.selectArr.shipmentStatus.find(item => item.code == el.shipmentStatus)
-                el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
                 el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm:ss') 
                 return el;
               }));
@@ -848,9 +842,6 @@
           return 
         };
         const currrentProduct = data[0]
-        let ShipmentStatusItem = this.selectArr.shipmentStatus && this.selectArr.shipmentStatus.find(item => item.code ==
-          currrentProduct.shipmentStatus.value)
-        currrentProduct.shipmentStatus.value = ShipmentStatusItem ? ShipmentStatusItem.name : '';
         this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
         this.productList.forEach(item => {
           this.$set(item.fieldDisplay, 'value', null);
@@ -1088,8 +1079,6 @@
         if (this.$validateForm(this.oldPlanObject, this.$db.logistic.transportInfoObj)) {
           return;
         }
-        console.log(this.oldPlanObject)
-        return
         this.$ajax.post(url, this.oldPlanObject).then(res => {
           this.$message({
             message: this.$i.logistic.operationSuccess,

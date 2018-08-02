@@ -693,7 +693,7 @@
         mounted() {
             this.setMenuLink({
                 path: "/logs/index",
-                query: { code: "WAREHOUSE" },
+                query: { code: "QC" },
                 type: 10,
                 auth: "QC:LOG",
                 label: this.$i.common.log

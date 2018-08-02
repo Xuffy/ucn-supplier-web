@@ -1,8 +1,8 @@
 {
   "outboundOutCartonTotalQty": "Total outer carton of outbound",
-  "outboundSkuTotalVolume": "Total volume of outbound",
-  "outboundSkuTotalNetWeight": "Total N.W. of outbound",
-  "outboundSkuTotalGrossWeight": "Total G.W. of outbound",
+  "outboundSkuTotalVolume": "Total volume of outbound(m³)",
+  "outboundSkuTotalNetWeight": "Total N.W. of outbound(kg)",
+  "outboundSkuTotalGrossWeight": "Total G.W. of outbound(kg)",
   "inventorySkuPrice": "Inventory Unit Price",
   "inventoryServiceFee": "Inventory Fee",
   "inventoryDays": "Inventory Days"

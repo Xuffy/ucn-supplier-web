@@ -73,8 +73,6 @@
   "accountType": "账户类型",
   "yes": "有",
   "no": "无",
-  "exportLicenseYes": "有",
-  "exportLicenseNo": "无",
   "defaultAddress": "默认地址",
   "setDefaultAddress": "设为默认地址",
   "def" : "def",
@@ -86,5 +84,4 @@
   "shortNameLength": "简称不可超出6位",
   "abbreviationOnly" : "此简称已被使用",
   "abbreviationAllowed": "简称不可出现 I O Z字母"
-
 }

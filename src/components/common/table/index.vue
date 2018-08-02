@@ -2,7 +2,7 @@
   <div class="ucn-table" v-loading="loading || tableLoading"
        :class="{'fixed-left-box':selection,'fixed-right-box':buttons}">
     <div class="header-content" v-if="!hideFilterColumn || !hideFilterValue">
-      <div>
+      <div style="width: 100%">
         <slot name="header"></slot>
       </div>
       <div class="fixed">
@@ -70,10 +70,11 @@
 
           <tbody ref="tableBody">
           <tr v-for="(item,index) in dataList"
-              :class="{rowspan:index % rowspan !== 0,disabled:item._disabled}">
+              v-if="!item._remark"
+              :class="{rowspan:index % newRowspan !== 0,disabled:item._disabled}">
 
             <!--checkbox 渲染-->
-            <td v-if="selection && (index % rowspan === 0) " :rowspan="rowspan" class="fixed-left">
+            <td v-if="selection && (index % newRowspan === 0) " :rowspan="newRowspan" class="fixed-left">
               <div>
                 <input type="checkbox" ref="checkbox" :disabled="item._disabled || item._disabledCheckbox"
                        v-if="typeof selection === 'function' ? selection(item) : true"
@@ -83,8 +84,8 @@
             </td>
 
             <!--序号 渲染-->
-            <td v-if="index % rowspan === 0" :rowspan="rowspan" class="fixed-left">
-              <div v-text="(index / rowspan) + 1"></div>
+            <td v-if="index % newRowspan === 0" :rowspan="newRowspan" class="fixed-left">
+              <div v-text="(index / newRowspan) + 1"></div>
             </td>
 
             <!--数据内容 渲染-->
@@ -115,7 +116,7 @@
             </td>
 
             <!--操作按钮 渲染-->
-            <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan" class="fixed-right">
+            <td v-if="buttons && (index % newRowspan === 0)" :rowspan="newRowspan" class="fixed-right">
               <div style="white-space: nowrap;">
                 <span class="button"
                       v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
@@ -134,7 +135,7 @@
             <td>
               <div v-text="totalItem._totalRow ? totalItem._totalRow.label : $i.product.total"></div>
             </td>
-            <td v-if="rowspan < 2">
+            <td v-if="newRowspan < 2">
             </td>
             <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && typeof item === 'object'">
               <div v-text="totalItem[item.key]._value || totalItem[item.key].value"></div>
@@ -223,7 +224,7 @@
         type: Boolean,
         default: false,
       },
-      rowspan: {
+      newRowspan: { // 原 rowspan
         type: Number,
         default: 1,
       },
@@ -366,7 +367,7 @@
           }
 
           _.map(trs, (val, index) => {
-            if (index % this.rowspan !== 0) return false;
+            if (index % this.newRowspan !== 0) return false;
             _.map(val.getElementsByClassName('fixed-left'), (v, i) => {
               let eb = this.$refs.tableContainer.getElementsByClassName('fixed-left-header-item')[i];
 
@@ -421,14 +422,14 @@
       setDataList(val, type) {
         let e = this.$refs.tableBox, timeout = null;
 
-        this.tableLoading = true;
+        // this.tableLoading = true;
         if (this.dataList.length !== val.length) {
           e.scrollTop = 0;
           e.scrollLeft = 0;
         }
 
         timeout = setTimeout(() => {
-          this.tableLoading = false;
+          // this.tableLoading = false;
           clearTimeout(timeout);
           this.resetFile();
           if (!this.hideFilterColumn && this.$refs.filterColumn && this.code && !_.isEmpty(val)) {
@@ -443,7 +444,7 @@
             type && this.filterColumn();
             this.tableLoading = false;
           }
-        }, 500);
+        }, 100);
       },
       resetFile() {
         _.mapObject(this.dataList, value => {
@@ -739,6 +740,7 @@
 
   .header-content .fixed {
     margin-right: 5px;
+    display: flex;
   }
 
   .ucn-table /deep/ .ucn-image .image,

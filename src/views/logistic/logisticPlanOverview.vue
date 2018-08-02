@@ -1,9 +1,9 @@
 <template>
   <div class="logistic-plan-overview">
     <div class="hd-top">{{ headerText[pageType] }}</div>
-    <div class="status">
+    <div class="status" v-if="pageType === 'plan' || pageType === 'loadingList'">
       <div class="btn-wrap">
-        <div v-if="pageType === 'plan' || pageType === 'loadingList'">
+        <div>
           <div class="ls_plan">
             <span>{{ $i.logistic.status}}:</span>
             <el-radio-group v-model="fillterVal" size="mini" @change="fetchDataList('elRadioGroup')">
@@ -18,9 +18,9 @@
         <select-search :options="options" @inputEnter="searchFn" v-model="selectSearch"/>
       </div>
     </div>
-    <div class="status">
+    <div class="status" v-if="pageType === 'plan'">
       <div class="btn-wrap">
-        <div v-if="pageType === 'plan' || pageType === 'loadingList'">
+        <div>
           <div class="ls_plan">
             <span>{{ $i.logistic.shipmentStatus}}:</span>
             <el-radio-group v-model="shipmentStatus" size="mini" @change="fetchDataList('elRadioGroup')">

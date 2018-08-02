@@ -103,5 +103,7 @@
   "noData":"No data",
   "fobFormula":"FOB参考价= (EXW+$985/68*单外箱体积/外箱产品数)*1.05",
   "cifFormula":"CIF参考价= FOB+(海运费+保险费）/68*每箱体积/外箱产品数",
-  "dduFormula":"DDU参考价= CIF+港口到仓库运费/68*每箱体积/外箱产品数/汇率"
+  "dduFormula":"DDU参考价= CIF+港口到仓库运费/68*每箱体积/外箱产品数/汇率",
+  "deleteProduct":"删除",
+  "noAttachments":"没有附件"
 }
