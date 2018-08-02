@@ -34,7 +34,8 @@
       this.initWebSocket();
       window.registerWebSocketProcess("test", function (data) {
         console.log(data, "type[test] process")
-      })
+      });
+      //window.webSocketSend({"topic": "ws_test", "data": {"v": 123}});
     },
     mounted() {
       this.viewPicture.vm = this.$refs.viewPicture;
@@ -76,18 +77,17 @@
         };
         // 向服务器发送消息
         window.webSocketSend = agentData => {
+          let jsonData = JSON.stringify(agentData);
           if (window.websocket.readyState === window.websocket.OPEN) {
-            window.websocket.send(agentData);
+            window.websocket.send(jsonData);
           } else if (window.websocket.readyState === window.websocket.CONNECTING) { // 若是 正在开启状态，则等待300毫秒
-            let that = this;
             setTimeout(function () {
-              that.websocket.send(agentData);
+              window.websocket.send(jsonData);
             }, 300);
           } else {
             this.initWebSocket();
-            let that = this;
             setTimeout(function () {
-              that.websocket.send(agentData)
+              window.websocket.send(jsonData);
             }, 500);
           }
         };
