@@ -66,6 +66,17 @@
   "archiveDraft":"归档草稿",
   "detail":"详情",
   "skuNo":"SKU货号",
+  "history":"历史",
+  "customerBig":"Customer",
+  "supplierBig":"Supplier",
+  "remarkBig":"备注",
+  "actualDate":"Actual Date",
   "hasConfirm":"已确认",
-  "hasCanceled":"已取消"
+  "hasCanceled":"已取消",
+  "supplierAbbr":"供应商简称",
+  "customerAbbr":"客户简称",
+  "addResponsibility":"新增责任信息",
+  "type":"类型",
+  "customer":"采购商",
+  "supplier":"供应商"
 }

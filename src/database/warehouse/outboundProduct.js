@@ -11,22 +11,26 @@ export default {
         _rules:{
             required:true,
             type:'Number'
-        }
+        },
+        accuracy: 2
     },
     inventoryDays:{
         key:'inventoryDays',
         showType:'number',
         sortable: true,
+        accuracy: 2
     },
     inventorySkuPrice:{        //需要传的参数
         key:'inventorySkuPrice',
         showType:'number',
         sortable: true,
+        accuracy: 4
     },
     inventoryServiceFee:{        //需要传的参数
         key:'inventoryServiceFee',
         showType:'number',
         sortable: true,
+        accuracy: 4
     },
     
     outboundSkuTotalQty:{   //出库产品总数量

@@ -1,31 +1,34 @@
 <template>
   <div class="tableData">
-    <h3 class="ucn-content-title" v-text="typeLabel[type - 1]"></h3>
+    <div class="top-box">
+      <h3 class="ucn-content-title" v-text="typeLabel[type - 1]"></h3>
 
-    <div style="position: absolute;right: 0;top: -5px">
-      <el-select v-model="search.type" style="width: 100px;display: inline-block;vertical-align: middle">
-        <el-option v-for="item in searchOptions" :key="item.id" :label="item.label" :value="item.id"></el-option>
-      </el-select>
+      <div>
+        <el-select v-model="search.type">
+          <el-option v-for="item in searchOptions" :key="item.id"
+                     :label="dataList[tabIndex].label +' '+ item.label" :value="item.id"></el-option>
+        </el-select>
 
-      <el-input :placeholder="$i.hintMessage.pleaseEnter" class="input-with-select" clearable
-                v-show="search.type !== 'submittedTimeStart'"
-                style="width: 200px;vertical-align: middle"
-                v-model="search.value">
-        <el-button slot="append" icon="el-icon-search"
-                   @click="submitSearch"></el-button>
-      </el-input>
+        <el-input :placeholder="$i.hintMessage.pleaseEnter" class="input-with-select" clearable
+                  v-show="search.type !== 'submittedTimeStart'"
+                  style="width: 200px;vertical-align: middle"
+                  v-model="search.value">
+          <el-button slot="append" icon="el-icon-search"
+                     @click="submitSearch"></el-button>
+        </el-input>
 
-      <el-date-picker
-        v-show="search.type === 'submittedTimeStart'"
-        v-model="search.value"
-        type="date"
-        :editable="false"
-        value-format="yyyy-MM-dd"
-        style="width: 150px;vertical-align: middle">
-      </el-date-picker>
-      <el-button icon="el-icon-search" @click="submitSearch"
-                 style="vertical-align: middle"
-                 v-show="search.type === 'submittedTimeStart'"></el-button>
+        <el-date-picker
+          v-show="search.type === 'submittedTimeStart'"
+          v-model="search.value"
+          type="date"
+          :editable="false"
+          value-format="yyyy-MM-dd"
+          style="width: 150px;vertical-align: middle">
+        </el-date-picker>
+        <el-button icon="el-icon-search" @click="submitSearch"
+                   style="vertical-align: middle"
+                   v-show="search.type === 'submittedTimeStart'"></el-button>
+      </div>
     </div>
     <br/>
 
@@ -198,7 +201,7 @@
       },
       getDataNumber() {
         this.$ajax.get(this.$apis.UTASK_COUNTBYTYPEANDMODULE).then(res => {
-          console.log(res,1)
+          console.log(res, 1)
         });
       },
       goDetail(item) {
@@ -259,6 +262,12 @@
 <style scoped>
   .tableData {
     position: relative;
+  }
+
+  .top-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 </style>
 <style>

@@ -65,7 +65,10 @@ export default {
     supplierShortName:{
         key: 'shortName',
         type: 'input',
-        belong:'summary'
+        belong:'summary',
+        _rules:{
+          required:true,
+        }
     },
     logo:{
         key: 'logo',

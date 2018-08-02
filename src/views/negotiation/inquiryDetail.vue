@@ -352,8 +352,22 @@ export default {
       this.showDetails(res.details);
     },
     showDetails(details) {
+      let db = this.$db.inquiry.productInfo;
+      let keys = new Set();
+      details.map(i => i.fieldDisplay).forEach(i => {
+        if (i) {
+          Object.keys(i).forEach(k => keys.add(k));
+        }
+      });
+
+      for (let field in db) { 
+        if (!field) continue;
+        let key = db[field].key || field;
+        db[field]._mustChecked = keys.has(key);
+      }
+
       this.productTabData = this.newProductTabData = this.$getDB(
-        this.$db.inquiry.productInfo,
+        db,
         this.$refs.HM.getFilterData(details, 'skuId'),
         item => this.$filterDic(item)
       );

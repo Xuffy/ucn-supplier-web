@@ -71,6 +71,14 @@
   "beneficiaryBankName": "Beneficiary bank name",
   "beneficiaryBankSWIFT": "Beneficiary bank SWIFT",
   "accountType": "Account type",
+  "yes": "有",
+  "no": "无",
   "exportLicenseYes": "有",
-  "exportLicenseNo": "无"
+  "exportLicenseNo": "无",
+  "defaultAddress": "默认地址",
+  "setDefaultAddress": "设为默认地址",
+  "def" : "def",
+  "isReplace": "确认替换默认地址?",
+  "replaceSuccess": "替换成功",
+  "cancelReplace": "取消替换"
 }

@@ -204,6 +204,13 @@
                         :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                     </el-form-item>
                   </el-col>
+                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item>
+                      <el-checkbox-group v-model="addressData.def" size="medium">
+                        <el-checkbox :label="$i.setting.setDefaultAddress" @change="setAddress"></el-checkbox>
+                      </el-checkbox-group>
+                    </el-form-item>
+                  </el-col>
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -380,7 +387,8 @@
 </template>
 
 <script>
-    import { VTable,VUpload} from '@/components/index'
+    import { VTable,VUpload} from '@/components/index';
+    import { mapActions } from 'vuex';
     export default {
         name: "companyInfo",
         components:{
@@ -432,6 +440,7 @@
                     supplierId: "",
                     tenantId: "",
                     version: "",
+                    def: false
                 },
                 contactData:{
                   cellphone: "",
@@ -486,9 +495,10 @@
             }
         },
         methods:{
+          ...mapActions(['setMenuLink']),
             //获取整个页面数据
             getWholeData(){
-                this.$ajax.get(this.$apis.get_supplierWhile).then(res=>{
+                this.$ajax.get(this.$apis.get_supplierWhile,{},{cache:false}).then(res=>{
                     // this.addressData contactData
                      this.accountsData = this.$getDB(this.$db.setting.supplierAccount, res.accounts);
                      this.contactDatas = this.$getDB(this.$db.setting.supplierContact, res.concats, e=>{
@@ -499,7 +509,10 @@
                        e.deptId._value = deptId.deptName || '';
                        return e;
                      });
-                     this.addressDatas = this.$getDB(this.$db.setting.supplierAddress, res.address);
+                     this.addressDatas = this.$getDB(this.$db.setting.supplierAddress, res.address, e=>{
+                       e.def.value ? e.def._value = '是' : e.def._value = '';
+                       return e
+                     } );
                      res.exportLicense ? res.exportLicense = this.$i.setting.exportLicenseYes : res.exportLicense = this.$i.setting.exportLicenseNo
                      this.companyInfo=res;
                 }).catch(err=>{
@@ -696,6 +709,50 @@
 
                 });
             },
+          //更改默认地址
+          setAddress(){
+            let def;
+            this.addressDatas.forEach(v=>{
+              def = _.findWhere(v,{key:'def'}).value;
+            })
+            if (def){
+              this.$confirm(this.$i.setting.isReplace, this.$i.common.prompt, {
+                confirmButtonText: this.$i.common.confirm,
+                cancelButtonText: this.$i.common.cancel,
+                type: 'warning'
+              }).then(() => {
+                console.log(this.addressData.def)
+                if (this.addressData.def){
+                  this.addressData.def = true;
+                  this.$message({
+                    type: 'success',
+                    message: this.$i.setting.replaceSuccess
+                  });
+                }else{
+                  this.addressData.def = false;
+                  this.$message({
+                    type: 'success',
+                    message: this.$i.setting.cancelReplace
+                  });
+                }
+              }).catch(() => {
+                console.log(this.addressData.def)
+                if (this.addressData.def){
+                  this.addressData.def = false;
+                  this.$message({
+                    type: 'success',
+                    message: this.$i.setting.cancelReplace
+                  });
+                }else{
+                  this.addressData.def = true;
+                  this.$message({
+                    type: 'success',
+                    message: this.$i.setting.replaceSuccess
+                  });
+                }
+              });
+            }
+          },
 
             /**
              * Account操作
@@ -931,6 +988,14 @@
                this.getWholeData();
                this.getCodePart();
             // console.log(this.$db,'db')
+        },
+        mounted(){
+          this.setMenuLink({
+            path: '/logs',
+            query: {code: 'SUPPLIER',bizCode: 'BIZ_SUPPLY'},
+            type: 100,
+            label: this.$i.common.log,
+          });
         },
         watch:{
             addressDialogVisible(n){
