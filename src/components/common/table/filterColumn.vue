@@ -5,7 +5,10 @@
       @after-leave="update()"
       placement="bottom-end"
       trigger="click">
-      <i slot="reference" class="iconfont icon-shezhi"></i>
+      <div slot="reference" class="icon-btn">
+        <i class="iconfont icon-shezhi"></i>&nbsp;
+        <span>{{$i.table.setField}}</span>
+      </div>
       <div v-loading="loading">
         <el-input v-model="filterText" :placeholder="$i.common.content" prefix-icon="el-icon-search"
                   size="mini" clearable style="margin-bottom: 10px"></el-input>
@@ -19,6 +22,10 @@
             :indent="5"
             :filter-node-method="filterNode"
             ref="columnTree">
+            <div slot-scope="{ node, data }" style="display: flex;justify-content: space-between;width: 100%">
+              {{data._name}}<i class="el-icon-location field-location" v-if="!data.children && data.isChecked"
+                               @click="locationField(data)"></i>
+            </div>
           </el-tree>
         </div>
         <br/>
@@ -46,6 +53,9 @@
         default: '',
       },
       getConfig: {
+        type: Function
+      },
+      tableRef: {
         type: Function
       }
     },
@@ -78,13 +88,17 @@
 
         return this.$ajax.get(this.$apis.GRIDFAVORITE_PARTWITHSETTING, {bizCode: this.code}, {cache: !isUpdate})
           .then(res => {
-            let list = _.pluck(_.where(res, {isChecked: 1}), 'property')
-              , dataList = [];
+            let list = [], dataList = [], isSubmit = false;
 
             this.columns = _.map(this.columns, val => {
               let item = _.findWhere(res, {property: val._filed || val.key})
               if (!val._hide && item) {
                 item._name = val.label;
+                if (val._mustChecked) {
+                  item.isChecked = 1;
+                  isSubmit = true;
+                  val._mustChecked = false;
+                }
                 dataList.push(item);
               }
 
@@ -94,15 +108,20 @@
               return val;
             });
 
-            this.init(dataList, list);
+            list = _.pluck(_.where(res, {isChecked: 1}), 'property');
+
+            this.init(dataList, list, isSubmit);
 
             return list;
           });
       },
-      init(data, checkList) {
+      init(data, checkList, isSubmit) {
         this.dataList[0].children = data;
 
-        this.$nextTick(() => this.$refs.columnTree.setCheckedKeys(checkList));
+        this.$nextTick(() => {
+          this.$refs.columnTree.setCheckedKeys(checkList);
+          isSubmit && this.submitFilter();
+        });
       },
       filterNode(value, data) {
         if (!value) return true;
@@ -130,6 +149,11 @@
 
         this.$ajax.post(this.$apis.GRIDFAVORITE_UPDATE, params)
           .then(res => {
+            let e = this.tableRef();
+            if (!_.isUndefined(e.scrollLeft)) {
+              e.scrollTop = 0;
+              e.scrollLeft = 0;
+            }
             this.visible = false;
             this.update(true).then(data => this.$emit('change', data));
           })
@@ -138,6 +162,30 @@
       cancel() {
         this.visible = false;
         this.update();
+      },
+      locationField(item) {
+        let pe = this.tableRef()
+          , key = item.property
+          , timeout = null
+          , be = pe
+          , e;
+
+        if (_.isUndefined(pe.scrollLeft)) {
+          pe = pe.$el;
+          be = pe.querySelector('.el-table__body-wrapper');
+        }
+
+        e = pe.querySelector(`.location-${key}`);
+
+        if (!_.isEmpty(e)) {
+          be.scrollLeft = e.offsetLeft - (pe.offsetWidth / 2);
+          e.setAttribute('ucn-flicker', 'true');
+          this.cancel();
+          timeout = setTimeout(() => {
+            clearTimeout(timeout);
+            e.removeAttribute('ucn-flicker');
+          }, 4000)
+        }
       }
     }
   }
@@ -157,9 +205,57 @@
     cursor: pointer;
   }
 
+  .filter-column .icon-btn {
+    color: #666666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+  }
+
+  .field-location {
+    font-size: 14px;
+    margin-left: 10px;
+    color: #999999;
+  }
+
+  .field-location:hover {
+    color: #3a8ee6;
+  }
+
+
 </style>
 <style>
   .ucn-table .ivu-poptip-body {
     padding: 0;
+  }
+
+  @keyframes ucn-flicker-fade {
+    from {
+      background-color: #ffffff;
+    }
+    50% {
+      background-color: #ECEFF1;
+    }
+    to {
+      background-color: #ffffff;
+    }
+  }
+
+  @-webkit-keyframes ucn-flicker-fade {
+    from {
+      background-color: #ffffff;
+    }
+    50% {
+      background-color: #ECEFF1;
+    }
+    to {
+      background-color: #ffffff;
+    }
+  }
+
+  [ucn-flicker='true'] {
+    animation: ucn-flicker-fade 1s infinite;
+    -webkit-animation: ucn-flicker-fade 1s infinite;
   }
 </style>

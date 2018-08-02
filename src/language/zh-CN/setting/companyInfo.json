@@ -70,5 +70,16 @@
   "beneficiaryAddress": "收款人地址",
   "beneficiaryBankName": "收款银行",
   "beneficiaryBankSWIFT": "收款银行代码",
-  "accountType": "账户类型"
+  "accountType": "账户类型",
+  "yes": "有",
+  "no": "无",
+  "exportLicenseYes": "有",
+  "exportLicenseNo": "无",
+  "defaultAddress": "默认地址",
+  "setDefaultAddress": "设为默认地址",
+  "def" : "def",
+  "isReplace": "确认替换默认地址?",
+  "replaceSuccess": "替换成功",
+  "cancelReplace": "取消替换"
+
 }

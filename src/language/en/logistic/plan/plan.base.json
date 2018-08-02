@@ -229,11 +229,10 @@
   "operationSuccess" : "Success！",
   "operationFailed" : "Failed！",
   "jumping" : "Jumping...",
-  "dataIsExist" : "该条数据已存在！",
   "skuQty" : "Purchase QTY",
   "skuCartonQty" : "Purchase QTY of Outer Carton",
-  "Negociate" : "修改",
-  "Copy" : "复制",
-  "Detail" : "详细",
-  "History" : "历史"
+  "Negociate" : "Negociate",
+  "Copy" : "Copy",
+  "Detail" : "Detail",
+  "History" : "History"
 }

@@ -240,6 +240,7 @@
         <el-form :model="productForm" ref="productForm3" class="speForm" label-width="230px"
                  :label-position="labelPosition">
             <el-table
+                    class="priceTable"
                     :data="productForm.price"
                     border
                     style="width: 100%">
@@ -1340,7 +1341,7 @@
                     }
                     param.pictures = this.$refs.upload.getFiles();
                     param.attachments = this.$refs.uploadAttachment.getFiles();
-
+                    // return console.log(this.$depthClone(param.price),'params')
                     this.$ajax.post(this.$apis.add_newSKU, param).then(res => {
                         this.$message({
                             message: this.$i.product.successfullyAdd,
@@ -1617,6 +1618,9 @@
 
     .tableList >>> .el-form-item__content {
         margin-left: 0 !important;
+    }
+    .tableList{
+        margin: 5px 0;
     }
 
     .speTextarea {

@@ -13,6 +13,7 @@
   "selectTheColumn": "选择列",
   "selectionOperation": "选择操作",
   "action": "操作",
-  "checkAll": "全选"
+  "checkAll": "全选",
+  "setField": "字段设置"
 }
 

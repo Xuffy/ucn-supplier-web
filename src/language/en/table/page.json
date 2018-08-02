@@ -13,6 +13,7 @@
   "selectTheColumn": "select the column",
   "selectionOperation": "selection operation",
   "action": "Action",
-  "checkAll": "All"
+  "checkAll": "All",
+  "setField": "set field"
 }
 

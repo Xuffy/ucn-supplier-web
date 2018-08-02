@@ -12,6 +12,8 @@
 </template>
 
 <script>
+  import {mapActions, mapState} from 'vuex';
+
   export default {
     name: 'NavBar',
     data() {
@@ -19,10 +21,16 @@
         navBarList: null
       }
     },
+    computed: {
+      ...mapState({
+        navBar: state => state.navBar
+      }),
+    },
     created() {
       this.updateBreadcrumb()
     },
     methods: {
+      ...mapActions(['setNavBar']),
       updateBreadcrumb() {
         let matched = [], first = {}, htmlTitle = 'UCN';
 
@@ -34,6 +42,13 @@
         if (first && first.meta && (first.meta.name !== this.$i.common.home || first.path !== '')) {
           matched = [{meta: {name: this.$i.common.home}, path: '/'}].concat(matched)
         }
+
+        // console.log(matched[matched.length -1])
+        // if (this.navBar){
+        //   matched[matched.length -1].meta
+        //   console.log(matched.length)
+        // }
+
         this.navBarList = _.clone(matched);
 
         matched.shift();
