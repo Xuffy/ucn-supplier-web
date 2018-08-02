@@ -16,15 +16,16 @@ export default {
         _image:true,
         _fixed:'left'
     },
+    code:{
+        _fixed:'left'
+    },
     skuSaleStatus: {
         key:'status'
     },
     recycle:{
 
     },
-    code:{
-        _fixed:'left'
-    },
+
     nameCn:{
         
     },
