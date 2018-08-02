@@ -12,9 +12,9 @@
   "createDt": "创建时间",
   "carrier": "送货人员",
   "carrierPhone": "送货人电话",
-  "skuTotalVolume": "入库产品总体积",
-  "skuTotalNetWeight": "入库产品总净重",
-  "skuTotalGrossWeight": "入库产品总毛重",
+  "skuTotalVolume": "入库产品总体积(m³)",
+  "skuTotalNetWeight": "入库产品总净重(kg)",
+  "skuTotalGrossWeight": "入库产品总毛重(kg)",
   "updateName": "操作人",
   "entryDt": "创建时间"
 }

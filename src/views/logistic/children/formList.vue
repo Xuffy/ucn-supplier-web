@@ -5,41 +5,30 @@
     <el-row :gutter="10">
       <el-form label-width="300px" label-position="right" class="form" >
         <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
-
-          <el-form-item v-if="DeliveredEdit&&a.key=='actDepartureDate'&&a.type === 'date'" :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'">
-              <el-date-picker v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" :placeholder="$i.logistic.pleaseChoose" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
-          </el-form-item>
-          <!-- <el-form-item v-if="DeliveredEdit&&a.key=='logisticsStatus'&&a.type === 'selector'" :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'">
-              <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.pleaseChoose" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
-                <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
-                  v-if="selectArr[a.key]" />
-              </el-select>
-          </el-form-item> -->
-
-          <el-form-item v-if="!edit&&!(DeliveredEdit&&a.key=='actDepartureDate')" :label="a.label+'：'">
+          
+          <el-form-item v-if="!edit&&!($route.name =='logisticDraftDetail' && a.key =='logisticsStatus')" :label="a.label+'：'">
             <p class="textFilter" :style="fieldDisplay&&fieldDisplay.hasOwnProperty(a.key) ? definedStyle : ''">{{ textFilter(a) }}</p>
           </el-form-item>
-          <div v-if="edit">
+          <div v-else>
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'input'">
-              <el-input maxlength="500" :placeholder="$i.logistic.pleaseChoose" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" v-model="a.value" :disabled="a.disabled" @change="selectChange(a.value,a.key)"/>
-            </el-form-item>
-
-            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'selector'">
-              <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.pleaseChoose" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
-                <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
-                  v-if="selectArr[a.key]" />
-              </el-select>
+              <el-input maxlength="500" :placeholder="$i.logistic.placeholder" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" v-model="a.value" :disabled="a.disabled" @change="selectChange(a.value,a.key)"/>
             </el-form-item>
             
+            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'selector'&&!($route.name =='logisticDraftDetail' && a.key =='logisticsStatus')">
+              <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.placeholder" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
+                <el-option :disabled="item.disabled" :label="a.key=='exchangeCurrency' ? item.code : item.name" :value="isNaN(item.code) ? item.code : Number(item.code)" v-for="item of selectArr[a.key]" :key="item.id"/>
+              </el-select>
+            </el-form-item>
+
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'filterable'">
               <el-select filterable v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.placeholder" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
-                <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr.country" :key="item.id"
+                <el-option :label="item.name" :value="isNaN(item.code) ? item.code : Number(item.code)" v-for="item of selectArr.country" :key="item.id"
                   v-if="selectArr.country" />
               </el-select>
             </el-form-item>
 
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'date'">
-              <el-date-picker format="yyyy-MM-dd" v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" :placeholder="$i.logistic.pleaseChoose" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
+              <el-date-picker format="yyyy-MM-dd" v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" :placeholder="$i.logistic.placeholder" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
             </el-form-item>
           </div>
         </el-col>
@@ -50,7 +39,7 @@
 <script>
   export default {
     props: {
-      DeliveredEdit:[Boolean],
+      DeliveredEdit:[Boolean,String],
       name:String,
       definedStyle:{
         type:Object,
@@ -129,14 +118,14 @@
         if (a.type === 'date') return a.value ? this.$dateFormat(a.value, 'yyyy-mm-dd') : null
         if (a.type === 'selector' && this.selectArr[a.key]) {
           let obj = this.selectArr[a.key].find(item => item.code == a.value)
-          return obj ? obj.name : null
+          return obj ? a.key=='exchangeCurrency' ? obj.code : obj.name : null;
         }
         if(a.type === 'filterable' && this.selectArr.country){
           let obj = this.selectArr.country.find(item => item.code == a.value)
           return obj ? obj.name : null
         }
-      }
-    },
+      } 
+    }
   }
 
 </script>
@@ -161,8 +150,8 @@
     }
   }
   .form {
-    /deep/.el-form-item--mini .el-form-item__content{
-      line-height: 26px;
+    /deep/.el-form-item__label{
+      font-weight: bold;
     }
     /deep/.el-form-item p{
       min-width: 150px;
@@ -180,5 +169,7 @@
       background:yellow;
     }
   }
-
+  .el-select-dropdown__item.is-disabled{
+    display:none;
+  }
 </style>

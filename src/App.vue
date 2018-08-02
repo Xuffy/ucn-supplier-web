@@ -33,6 +33,8 @@
     },
     mounted() {
       this.viewPicture.vm = this.$refs.viewPicture;
+    },
+    methods: {
     }
   }
 </script>

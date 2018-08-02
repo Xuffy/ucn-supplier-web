@@ -12,9 +12,9 @@
   "createDt": "Create Date",
   "carrier": "Carrier",
   "carrierPhone": "Carrier Phone",
-  "skuTotalVolume": "Total volume of Inbound",
-  "skuTotalNetWeight": "Total N.W. of Inbound",
-  "skuTotalGrossWeight": "Total G.W. of Inbound",
+  "skuTotalVolume": "Total volume of Inbound(m³)",
+  "skuTotalNetWeight": "Total N.W. of Inbound(kg)",
+  "skuTotalGrossWeight": "Total G.W. of Inbound(kg)",
   "updateName": "Operator",
   "entryDt": "Create Time"
 }

@@ -662,62 +662,33 @@ export const routerMap = [
   ]
 ;
 
-
 let router = new Router({
   mode: 'history',
   routes: routerMap
 });
 
-
 router.beforeResolve((to, from, next) => {
   let ts = localStore.get('token')
-    , cacheParam = sessionStore.get('cache_router_param') || []
-    , cp = _.findWhere(cacheParam, {path: to.path}) // 从缓存中获取对应路由参数
-    , version;
+    , ri = localStore.get('router_intercept');
 
+  // 登录验证
+  if ((to.path !== '/login' || from.path === '/login') && _.isEmpty(ts)) {
+    return next({path: '/login'});
+  }
+
+  // 数据验证拦截
+  if (ri && (to.path !== ri.path || from.path === ri.path)) {
+    return next(ri);
+  }
+
+  // 权限验证
   if (to.meta && to.meta.auth && !Util.$auth(to.meta.auth)) {
-    return next({path: '/'});
+
+    return Notification.error({
+      title: $i.hintMessage.systemHints,
+      message: $i.hintMessage.noAuthority
+    });
   }
-
-  if (to.path !== '/login' || from.path === '/login') {
-    /*version = localStore.get('version');
-
-    if (version !== Config.VERSION) { // 版本控制
-      return next({path: '/login'});
-    }*/
-    if (_.isEmpty(ts)) { // 登录验证
-      return next({path: '/login'});
-    }
-  }
-
-  // 判断路由是否必须带入参数 todo 跳转之前页面地址没有带上参数
-  /*if (to.meta.needParam) {
-    if (_.isEmpty(to.params) && _.isEmpty(to.query)) {
-      if (!_.isEmpty(cp)) {
-        _.map(cp.query, (val, key) => {
-          to.query[key] = val;
-        });
-
-        _.map(cp.params, (val, key) => {
-          to.params[key] = val;
-        });
-      } else {
-        return to.matched.length ?
-          next({path: to.matched[1] ? to.matched[1].redirect : to.matched[0].redirect}) : next({path: '/'});
-      }
-    }
-    if (!_.isEmpty(cp)) {
-      cacheParam = _.filter(cacheParam, val => {
-        return val.path !== to.path;
-      });
-    }
-
-    cacheParam.push(_.pick(to, 'path', 'params', 'query'));
-    sessionStore.set('cache_router_param', cacheParam);
-
-  }*/
-
-  // Notification.closeAll();
 
   next();
 });

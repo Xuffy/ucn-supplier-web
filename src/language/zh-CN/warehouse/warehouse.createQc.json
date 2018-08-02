@@ -64,7 +64,7 @@
   "unqualifiedProductTotalCTNS": "不合格产品总箱数",
   "qualifiedProductsTotalCTNS": "合格产品总箱数",
   "actualProductTotalCTNS": "实际产品总箱数",
-  "grossWeightOfOuterCarton": "外箱毛重",
-  "outerCartonVolume": "外箱体积"
+  "grossWeightOfOuterCarton": "外箱毛重(kg)",
+  "outerCartonVolume": "外箱体积(m³)"
   
 }

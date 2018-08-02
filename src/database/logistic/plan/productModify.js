@@ -171,9 +171,6 @@ export default {
     key:'totalContainerOuterCartonsQty',
     type: 'text',
     _important:true
-  },
-  "shipmentStatus":{
-    type: 'text'
   }
 }
 

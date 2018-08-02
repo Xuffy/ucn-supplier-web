@@ -488,7 +488,8 @@
                 this.loadingPaymentTable = true;
                 this.$ajax.post(this.$apis.PAYMENT_LIST, {
                     orderNo: this.qcDetail.qcOrderNo,
-                    orderType: 20
+                    orderType: 20,
+                    moduleCode: 'WAREHOUSE'
                 }).then(res => {
                     this.paymentData = res.datas;
                 }).finally(() => {
@@ -692,7 +693,7 @@
         mounted() {
             this.setMenuLink({
                 path: "/logs/index",
-                query: { code: "WAREHOUSE" },
+                query: { code: "QC" },
                 type: 10,
                 auth: "QC:LOG",
                 label: this.$i.common.log

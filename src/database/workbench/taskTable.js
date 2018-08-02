@@ -1,7 +1,4 @@
 export default {
-  bizNo: {
-    key: 'bizNo',
-  },
   time: {
     key: 'submittedTime',
   },
@@ -10,6 +7,9 @@ export default {
   },
   submitter: {
     key: 'submittedByUserName',
+  },
+  bizNo: {
+    key: 'bizNo',
   },
   taskId: {
     key: 'taskId',
