@@ -8,10 +8,7 @@
   "skuNameEN": "SKU name EN",
   "price": "SKU Price",
   "currency": "Currency",
-<<<<<<< HEAD
-=======
   "qty": "QTY",
->>>>>>> remotes/origin/F-SHOW-QTY-180803-0731053038
   "skuFobCurrency": "Fob Currency",
   "skuExwCurrency": "Exw Currency",
   "skuCifCurrency": "Cif Currency",
@@ -20,12 +17,9 @@
   "skuExwPrice": "Exw Price",
   "skuCifPrice": "Cif Price",
   "skuDduPrice": "Ddu Price",
-<<<<<<< HEAD
   "skuRefFobPrice": "Exw Reference Price",
   "skuRefCifPrice": "Cif Reference Price",
   "skuRefDduPrice": "Ddu Reference Price",
-=======
->>>>>>> remotes/origin/F-SHOW-QTY-180803-0731053038
   "incoterm": "Incoterm",
   "departurePort": "Departure port",
   "destinationPort": "Destination port",
