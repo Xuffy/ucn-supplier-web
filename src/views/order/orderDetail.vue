@@ -233,7 +233,8 @@
                 class="addBtn"
                 :disabled="!isModify"
                 @click="addResponsibility">
-            {{$i.order.addResponsibility}}</el-button>
+            {{$i.order.addResponsibility}}
+        </el-button>
         <el-table
                 :data="orderForm.responsibilityList"
                 style="width: 100%">
@@ -1849,15 +1850,15 @@
                 }
                 data.fieldUpdate[key] = "";
             },
-            addResponsibility(){
+            addResponsibility() {
                 this.orderForm.responsibilityList.push({
-                    type: '',
-                    customer: '',
-                    supplier: '',
-                    remark: '',
-                    actualDt: '',
-                    orderNo:this.orderForm.orderNo
-                })
+                    type: "",
+                    customer: "",
+                    supplier: "",
+                    remark: "",
+                    actualDt: "",
+                    orderNo: this.orderForm.orderNo
+                });
             },
 
             /**
@@ -2108,21 +2109,21 @@
                             } else {
                                 if (item[k]._value) {
                                     if (item[k].key === "skuUnit") {
-                                        json[k] = item[k]._value ? _.findWhere(this.skuUnitOption, { name: item[k]._value }).code : "";
+                                        json[k] = (_.findWhere(this.skuUnitOption, { name: item[k]._value }) || {}).code;
                                     } else if (item[k].key === "skuUnitWeight") {
-                                        json[k] = item[k]._value ? _.findWhere(this.weightOption, { name: item[k]._value }).code : "";
+                                        json[k] = (_.findWhere(this.weightOption, { name: item[k]._value }) || {}).code;
                                     } else if (item[k].key === "skuUnitLength") {
-                                        json[k] = item[k]._value ? _.findWhere(this.lengthOption, { name: item[k]._value }).code : "";
+                                        json[k] =(_.findWhere(this.lengthOption, { name: item[k]._value }) || {}).code;
                                     } else if (item[k].key === "skuUnitVolume") {
-                                        json[k] = item[k]._value ? _.findWhere(this.volumeOption, { name: item[k]._value }).code : "";
+                                        json[k] =( _.findWhere(this.volumeOption, { name: item[k]._value }) || {}).code;
                                     } else if (item[k].key === "skuExpireUnit") {
-                                        json[k] = item[k]._value ? _.findWhere(this.expirationDateOption, { name: item[k]._value }).code : "";
+                                        json[k] = (_.findWhere(this.expirationDateOption, { name: item[k]._value }) || {}).code;
                                     } else if (item[k].key === "skuStatus") {
-                                        json[k] = item[k]._value ? _.findWhere(this.skuStatusTotalOption, { name: item[k]._value }).code : "";
+                                        json[k] =  (_.findWhere(this.skuStatusTotalOption, { name: item[k]._value }) || {}).code;
                                     } else if (item[k].key === "skuSample") {
-                                        json[k] = item[k]._value ? _.findWhere(this.isNeedSampleOption, { code: item[k].value }).code : "";
+                                        json[k] =  (_.findWhere(this.isNeedSampleOption, { code: item[k].value }) || {}).code;
                                     } else if (item[k].key === "skuInspectQuarantineCategory") {
-                                        json[k] = item[k]._value ? _.findWhere(this.quarantineTypeOption, { name: item[k]._value }).code : "";
+                                        json[k] = (_.findWhere(this.quarantineTypeOption, { name: item[k]._value }) || {}).code;
                                     } else {
                                         json[k] = item[k].value;
                                     }
@@ -2185,7 +2186,7 @@
                 if (row.status === -1) {
                     return "warning-row";
                 } else if (row.status === 10 || row.status === 20 || row.status === 30) {
-                    if(!row.isNew){
+                    if (!row.isNew) {
                         return "waiting-row";
                     }
                 }
@@ -2231,7 +2232,7 @@
                     this.$ajax.post(this.$apis.PAYMENT_ACCEPT, {
                         id: data.id,
                         version: data.version,
-                        moduleCode:"ORDER"
+                        moduleCode: "ORDER"
                     }).then(res => {
                         this.$message({
                             type: "success",
@@ -2258,7 +2259,7 @@
                         actualRefundAmount: 0,
                         currencyCode: this.initialData.currency,
                         status: 10,
-                        remark:'',
+                        remark: "",
                         isNew: true
                     });
                 }).finally(() => {
@@ -2308,7 +2309,7 @@
                     planRefundAmount: data.planRefundAmount,
                     planRefundDt: data.planRefundDt,
                     type: 20,
-                    remark:data.remark,
+                    remark: data.remark,
                     moduleCode: "ORDER"
                 };
                 _.map(this.currencyOption, v => {
@@ -2323,7 +2324,7 @@
                         message: this.$i.order.saveSuccess,
                         type: "success"
                     });
-                    this.$set(data,'name',(_.findWhere(this.paymentItemOption,{code:res.name} || {}).name));
+                    this.$set(data, "name", (_.findWhere(this.paymentItemOption, { code: res.name } || {}).name));
                     this.$set(data, "isNew", false);
                     this.$set(data, "version", res.version);
                     this.$set(data, "id", res.id);
@@ -2359,9 +2360,9 @@
                     name: data.name,
                     planRefundAmount: data.planRefundAmount,
                     planRefundDt: data.planRefundDt,
-                    remark:data.remark,
+                    remark: data.remark,
                     version: data.version,
-                    moduleCode:"ORDER"
+                    moduleCode: "ORDER"
                 };
                 this.loadingPaymentTable = true;
                 this.$ajax.post(this.$apis.PAYMENT_UPDATE, param).then(res => {
@@ -2413,7 +2414,7 @@
                     this.$ajax.post(this.$apis.PAYMENT_ABANDON, {
                         id: data.id,
                         version: data.version,
-                        moduleCode:"ORDER"
+                        moduleCode: "ORDER"
                     }).then(res => {
                         this.$message({
                             type: "success",
@@ -2438,7 +2439,7 @@
                     this.$ajax.post(this.$apis.PAYMENT_RESTORE, {
                         id: data.id,
                         version: data.version,
-                        moduleCode:"ORDER"
+                        moduleCode: "ORDER"
                     }).then(res => {
                         this.$message({
                             type: "success",
@@ -2720,7 +2721,8 @@
     .el-table >>> .waiting-row {
         background: yellow;
     }
-    .addBtn{
+
+    .addBtn {
         margin: 5px 0;
     }
 

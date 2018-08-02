@@ -26,11 +26,11 @@
                    :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='99'||params.status+''==='1'||params.status === null">
           {{ $i.common.accept }}<span>({{ checkedIds.length }})</span></el-button>
         <el-button @click="cancelInquiry"
-                   :disabled="!checkedData.length||params.status+''==='99'||params.status+''==='1'||params.status === null"
+                   :disabled="!cancelAble"
                    v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'">{{ $i.common.cancelTheInquiry }}<span>({{ checkedIds.length }})</span>
         </el-button>
         <el-button @click="deleteInquiry" type="danger"
-                   :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='21'||params.status === null"
+                   :disabled="!deleteAble"
                    v-authorize="'INQUIRY:OVERVIEW:DELETE'">{{ $i.common.archive }}<span>({{ checkedIds.length }})</span>
         </el-button>
         <el-button @click="exportDatas" :disabled="!tabData.length" v-authorize="'INQUIRY:OVERVIEW:DOWNLOAD'">{{
@@ -113,6 +113,12 @@
     computed: {
       checkedIds() {
         return Array.from(new Set(this.checkedData.map(i => i[i.inquiryId ? 'inquiryId' : 'id'].value)));
+      },
+      cancelAble() {
+        return new Set(this.checkedData.map(i => i.status.value).filter(i => ![21, 22].includes(i))).size === 0;
+      },
+      deleteAble() {
+        return new Set(this.checkedData.map(i => i.status.value).filter(i => ![1, 11, 99].includes(i))).size === 0;
       }
     },
     created() {
