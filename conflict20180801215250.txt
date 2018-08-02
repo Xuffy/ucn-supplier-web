@@ -1,0 +1,3 @@
+src/language/zh-CN/inquiry/viewBySKU.pending.json
+src/database/inquiry/children/viewBySKU.js
+src/language/en/inquiry/viewBySKU.pending.json

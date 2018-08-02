@@ -8,6 +8,7 @@
   "skuNameEN": "英文品名",
   "price": "产品单价",
   "currency": "币种",
+<<<<<<< HEAD
   "skuFobCurrency": "Fob币种",
   "skuExwCurrency": "Exw币种",
   "skuCifCurrency": "Cif币种",
@@ -19,6 +20,17 @@
   "skuRefFobPrice": "Fob参考价格",
   "skuRefCifPrice": "Cif参考价格",
   "skuRefDduPrice": "Ddu参考价格",
+=======
+  "qty": "产品数量",
+  "skuFobCurrency": "Fob币种",
+  "skuExwCurrency": "Exw币种",
+  "skuCifCurrency": "Cif币种",
+  "skuDduCurrency": "Ddu币种",
+  "skuFobPrice": "Fob价格",
+  "skuExwPrice": "Exw价格",
+  "skuCifPrice": "Cif价格",
+  "skuDduPrice": "Ddu价格",
+>>>>>>> refs/remotes/origin/F-SHOW-QTY-180803-0731053038
   "incoterm": "价格条款",
   "departurePort": "发运港口",
   "destinationPort": "目的港口",
