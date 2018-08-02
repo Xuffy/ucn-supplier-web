@@ -38,7 +38,7 @@ export default {
   logistics_plan_getSupplierIds: ['/logistics/plan/getSupplierIds', 'BASE_URL'],
   logistics_order_getSupplierIds: ['/logistics/order/getSupplierIds', 'BASE_URL'],
   logistics_accept_payment: ['/payment/accept', 'BASE_URL'],
-  logistics_payment_batchDunning: ['/payment/batchDunning', 'BASE_URL'],
+  logistics_payment_batchDunning: ['/payment/dunningByOrder', 'BASE_URL'],
   logistics_plan_batchSendDraft: ['/logistics/plan/batchSendDraft', 'BASE_URL'],
   logistics_plan_archive: ['/logistics/plan/archive', 'BASE_URL'],
   logistics_order_archive: ['/logistics/order/archive', 'BASE_URL'],

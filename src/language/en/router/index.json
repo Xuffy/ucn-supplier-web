@@ -70,5 +70,6 @@
   "createOutbound":"创建出库单",
   "outboundDetail":"出库单详情",
   "qcOverview":"货单预览",
-  "qcOrderDetail":"货单详情"
+  "qcOrderDetail":"货单详情",
+  "productArchive":"Product Archive"
 }

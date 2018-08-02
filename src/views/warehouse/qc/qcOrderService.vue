@@ -116,6 +116,14 @@
             <div class="second-title">
                 {{$i.warehouse.productInfo}}
             </div>
+            <div class="gear">
+                <v-filter-column
+                    ref="filterColumn"
+                    code="uwarehouse_qc_order_detail"
+                    :table-ref="() => $refs.tableBox"
+                    @change="changeColumn">
+                </v-filter-column>
+            </div>
             <el-table
                     class="product-table"
                     v-loading="loadingProductInfoTable"
@@ -123,6 +131,7 @@
                     :summary-method="getSummaries"
                     show-summary
                     border
+                    ref="tableBox"
                     style="width: 100%">
                 <el-table-column
                         align="center"
@@ -131,18 +140,19 @@
                         width="55">
                 </el-table-column>
                 <el-table-column
-                        v-for="v in $db.warehouse.qcDetailProductInfo"
-                        v-if="!v._hide"
-                        :prop="v.key"
+                        v-for="v in columnConfig"
+                        v-if="!v._hidden && !v._hide"
                         align="center"
-                        :key="v.value"
-                        :label="v.label"
+                        :key="v.key"
+                        :prop="v.key"
+                        :label="$i.warehouse[v.key]"
+                        :label-class-name="'location-' + v.key"
                         :class-name="v._rules &&  v._rules.required ? 'ucn-table-required' : ''"
                         width="180">
-                    <template slot-scope="scope">
+                    <template slot-scope="scope" v-if="scope.row[v.key]">
                         <div v-if="v.showType==='select'">
                             <div v-if="v.isQcResult">
-                                <el-select clearable v-model="scope.row[v.key]"
+                                <el-select clearable v-model="scope.row[v.key].value"
                                            :placeholder="$i.warehouse.pleaseChoose">
                                     <el-option
                                             v-for="item in qcResultOption"
@@ -153,7 +163,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isBarCodeResult">
-                                <el-select clearable v-model="scope.row[v.key]"
+                                <el-select clearable v-model="scope.row[v.key].value"
                                            :placeholder="$i.warehouse.pleaseChoose">
                                     <el-option
                                             v-for="item in barCodeResult"
@@ -163,21 +173,21 @@
                                     </el-option>
                                 </el-select>
                             </div>
-                            <div v-else>
-
-                            </div>
                         </div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
-                                    :controls="false"
-                                    v-model="scope.row[v.key]"></el-input-number>
+                                    <v-input-number
+                                        :controls="false"
+                                        v-model="scope.row[v.key].value"
+                                        :mark="v.label"
+                                        :accuracy="v.accuracy ? v.accuracy : null"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='input'">
-                            <el-input
-                                    :placeholder="$i.warehouse.pleaseInput"
-                                    v-model="scope.row[v.key]"
-                                    clearable>
-                            </el-input>
+                            <v-input-number
+                                :controls="false"
+                                :placeholder="$i.warehouse.pleaseInput"
+                                v-model="scope.row[v.key].value"
+                                :mark="v.label"
+                                :accuracy="v.accuracy ? v.accuracy : null"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='attachment'">
                             <el-popover
@@ -186,16 +196,16 @@
                                     trigger="click">
                                 <v-upload :limit="20"
                                           only-image
-                                          :list="scope.row[v.key]"
-                                          :ref="'pictureUpload'+scope.$index"></v-upload>
+                                          :list="scope.row[v.key].value"
+                                          :ref="'pictureUpload'+scope.$index"
+                                           @change="uploadChange('pictureUpload'+scope.$index, scope.row[v.key])"></v-upload>
                                 <el-button slot="reference" type="text">
-                                    {{$i.upload.uploadPhotos}}
+                                     {{scope.row[v.key].pleaseText + $i.upload.uploadPhotos + '(' + scope.row[v.key].imgNum + '/20' + ')'}}
                                 </el-button>
                             </el-popover>
-                            <!--<v-upload :limit="20" :onlyImage="true"></v-upload>-->
                         </div>
                         <div v-else>
-                            {{scope.row[v.key]}}
+                            {{scope.row[v.key].value}}
                         </div>
                     </template>
                 </el-table-column>
@@ -358,7 +368,7 @@
 </template>
 <script>
 
-    import { VTable, VMessageBoard, VUpload } from "@/components/index";
+    import { VTable, VMessageBoard, VUpload, VFilterColumn, VInputNumber } from "@/components/index";
     import { mapActions } from "vuex";
 
     export default {
@@ -366,7 +376,9 @@
         components: {
             VTable,
             VMessageBoard,
-            VUpload
+            VUpload,
+            VFilterColumn,
+            VInputNumber
         },
         data() {
             return {
@@ -443,12 +455,16 @@
                     qcTypeDictCode: "",
                     serviceFee: 0,
                     surveyor: ""
-                }
-
+                },
+                columnConfig: ''
             };
         },
         methods: {
             ...mapActions(["setMenuLink"]),
+            changeColumn(val) {
+                this.productInfoData = this.$refs.filterColumn.getFilterData(this.productInfoData, val);
+                this.columnConfig = this.productInfoData[0];
+            },
             getQcOrderDetail() {
                 this.loadingData = true;
                 this.$ajax.get(`${this.$apis.get_sellerOrderDetail}?id=${this.$route.query.id}`)
@@ -477,6 +493,15 @@
                         diffData.push(v.skuId + v.orderNo);
                     });
                     this.summaryData.skuQuantity = _.uniq(diffData).length;
+
+                    let arr = this.$copyArr(this.productInfoData)
+                    arr = this.$getDB(this.$db.warehouse.qcDetailProductInfo, arr);
+
+                    this.$refs.filterColumn.update(false, arr).then(data => {
+                        this.productInfoData = this.$refs.filterColumn.getFilterData(arr, data);
+                        this.columnConfig = this.productInfoData[0];
+                    });
+
                     this.loadingProductInfoTable = false;
                 }).catch(err => {
                     this.loadingProductInfoTable = false;
@@ -507,18 +532,72 @@
                     if (index === 0) {
                         sums[index] = this.$i.warehouse.totalMoney;
                         return;
-                    } else if (index === 17 || index === 18 || index === 43 || index === 44 || index === 45 || index === 46 || index === 47 || index === 48 || index === 49 || index === 50 || index === 51 || index === 52 || index === 53 || index === 54 || index === 67) {
-                        const values = data.map(item => Number(item[column.property]));
-                        if (!values.every(value => isNaN(value))) {
+                    } else if (
+                        // index === 17 || index === 18 || index === 43 || index === 44 || index === 45 || index === 46 || index === 47 || index === 48 || index === 49 || index === 50 || index === 51 || index === 52 || index === 53 || index === 54 || index === 67
+                        column.property === 'qualifiedSkuCartonTotalQty'
+                        || column.property === 'unqualifiedSkuCartonTotalQty'
+                        || column.property === 'qualifiedSkuQty'
+                        || column.property === 'unqualifiedSkuQty'
+                        || column.property === 'qualifiedSkuVolume'
+                        || column.property === 'unqualifiedSkuVolume'
+                        || column.property === 'qualifiedSkuNetWeight'
+                        || column.property === 'unqualifiedSkuNetWeight'
+                        || column.property === 'qualifiedSkuGrossWeight'
+                        || column.property === 'unqualifiedSkuGrossWeight'
+
+                        ) {
+                            const values = data.map(item => {
+                                if (item[column.property] !== null) {
+                                    return Number(item[column.property].value)
+                                }
+                            })
+                            if (!values.every(value => isNaN(value))) {
                             sums[index] = values.reduce((prev, curr) => {
                                 const value = Number(curr);
                                 if (!isNaN(value)) {
-                                    return prev + curr;
+                                    let num = ((prev * 100) + (curr * 100)) / 100;
+                                    if (column.property === 'qualifiedSkuCartonTotalQty') {
+                                         this.qcDetail.qualifiedSkuCartonTotalQty = num;
+                                    }
+                                    else if (column.property === 'unqualifiedSkuCartonTotalQty') {
+                                        this.qcDetail.unqualifiedSkuCartonTotalQty = num;
+                                    } 
+                                    else if (column.property === 'qualifiedSkuQty') {
+                                        this.qcDetail.qualifiedSkuQty = num;
+                                    } 
+                                    else if (column.property === 'unqualifiedSkuQty') {
+                                        this.qcDetail.unqualifiedSkuQty = num;
+                                    } 
+                                    else if (column.property === 'qualifiedSkuVolume') {
+                                        this.qcDetail.qualifiedSkuVolume = num;
+                                    } else if (column.property === 'unqualifiedSkuVolume') {
+                                        this.qcDetail.unqualifiedSkuVolume = num;
+                                    } 
+                                    else if (column.property === 'qualifiedSkuNetWeight') {
+                                        this.qcDetail.qualifiedSkuNetWeight = num;
+                                    } else if (column.property === 'unqualifiedSkuNetWeight') {
+                                        this.qcDetail.unqualifiedSkuNetWeight = num;
+                                    } else if (column.property === 'qualifiedSkuGrossWeight') {
+                                        this.qcDetail.qualifiedSkuGrossWeight = num;
+                                    } else if (column.property === 'unqualifiedSkuGrossWeight') {
+                                        this.qcDetail.unqualifiedSkuGrossWeight = num;
+                                    }
+                                    return ((prev * 100) + (curr * 100)) / 100;
                                 } else {
                                     return prev;
                                 }
                             }, 0);
-                        } else {
+                        // const values = data.map(item => Number(item[column.property]));
+                        // if (!values.every(value => isNaN(value))) {
+                        //     sums[index] = values.reduce((prev, curr) => {
+                        //         const value = Number(curr);
+                        //         if (!isNaN(value)) {
+                        //             return prev + curr;
+                        //         } else {
+                        //             return prev;
+                        //         }
+                        //     }, 0);
+                        // } else {
 
                         }
                     }
@@ -530,16 +609,7 @@
                 if (this.$validateForm(this.qcDetail, this.$db.warehouse.qcOrderDetailBasicInfo)) {
                     return false;
                 }
-                this.productInfoData = _.map(this.productInfoData, (v, k) => {
-                    v.qcPics = this.$refs["pictureUpload" + k][0].getFiles();
-                    v.qcPics = _.isEmpty(v.qcPics) ? "" : v.qcPics;
-                    return v;
-                });
-                for (let i = 0; i < this.productInfoData.length; i++) {
-                    if (this.$validateForm(this.productInfoData[i], this.$db.warehouse.qcDetailProductInfo)) {
-                        return false;
-                    }
-                }
+                let self = this
                 this.qcOrderConfig.qcDate = this.qcDetail.qcDate;
                 this.qcOrderConfig.qcMethodDictCode = this.qcDetail.qcMethodDictCode;
                 this.qcOrderConfig.qcOrderId = this.$route.query.id;
@@ -547,46 +617,52 @@
                 this.qcOrderConfig.qcTypeDictCode = this.qcDetail.qcTypeDictCode;
                 this.qcOrderConfig.surveyor = this.qcDetail.surveyor;
                 this.qcOrderConfig.serviceFee = this.qcDetail.serviceFee;
-
                 this.qcOrderConfig.qcResultDetailParams = [];
                 this.productInfoData.forEach(v => {
                     let skuQcResultDictCode;
                     if (v.skuQcResultDictCode) {
-                        skuQcResultDictCode = v.skuQcResultDictCode;
+                        skuQcResultDictCode = v.skuQcResultDictCode.value;
                     } else {
                         skuQcResultDictCode = "WAIT_FOR_QC";
                     }
-
                     this.qcOrderConfig.qcResultDetailParams.push({
-                        actInnerCartonSkuQty: v.actInnerCartonSkuQty,
-                        actOuterCartonInnerBoxQty: v.actOuterCartonInnerBoxQty,
-                        actOuterCartonSkuQty: v.actOuterCartonSkuQty,
-                        checkOuterCartonQty: v.checkOuterCartonQty,
-                        innerCartonGrossWeight: v.innerCartonGrossWeight,
-                        innerCartonHeight: v.innerCartonHeight,
-                        innerCartonLength: v.innerCartonLength,
-                        innerCartonNetWeight: v.innerCartonNetWeight,
-                        innerCartonVolume: v.innerCartonVolume,
-                        innerCartonWidth: v.innerCartonWidth,
-                        innerPackingBarCodeResultDictCode: v.innerPackingBarCodeResultDictCode,
-                        outerCartonBarCodeResultDictCode: v.outerCartonBarCodeResultDictCode,
-                        outerCartonGrossWeight: v.outerCartonGrossWeight,
-                        outerCartonHeight: v.outerCartonHeight,
-                        outerCartonLength: v.outerCartonHeight,
-                        outerCartonNetWeight: v.outerCartonNetWeight,
-                        outerCartonWidth: v.outerCartonWidth,
-                        qcOrderDetailId: v.id,
-                        qcPics: v.qcPics,
-                        qualifiedSkuCartonTotalQty: v.qualifiedSkuCartonTotalQty,
-                        remark: v.remark,
-                        shippingMarkResultDictCode: v.shippingMarkResultDictCode,
-                        skuBarCodeResultDictCode: v.skuBarCodeResultDictCode,
-                        skuLabelResultDictCode: v.skuLabelResultDictCode,
+                        actInnerCartonSkuQty: v.actInnerCartonSkuQty.value,
+                        actOuterCartonInnerBoxQty: v.actOuterCartonInnerBoxQty.value,
+                        actOuterCartonSkuQty: v.actOuterCartonSkuQty.value,
+                        checkOuterCartonQty: v.checkOuterCartonQty.value,
+                        innerCartonGrossWeight: v.innerCartonGrossWeight.value,
+                        innerCartonHeight: v.innerCartonHeight.value,
+                        innerCartonLength: v.innerCartonLength.value,
+                        innerCartonNetWeight: v.innerCartonNetWeight.value,
+                        innerCartonVolume: v.innerCartonVolume.value,
+                        innerCartonWidth: v.innerCartonWidth.value,
+                        innerPackingBarCodeResultDictCode: v.innerPackingBarCodeResultDictCode.value,
+                        outerCartonBarCodeResultDictCode: v.outerCartonBarCodeResultDictCode.value,
+                        outerCartonGrossWeight: v.outerCartonGrossWeight.value,
+                        outerCartonHeight: v.outerCartonHeight.value,
+                        outerCartonLength: v.outerCartonHeight.value,
+                        outerCartonNetWeight: v.outerCartonNetWeight.value,
+                        outerCartonWidth: v.outerCartonWidth.value,
+                        qcOrderDetailId: v.id.value,
+                        qcPics: v.qcPics.value,
+                        qualifiedSkuCartonTotalQty: v.qualifiedSkuCartonTotalQty.value,
+                        remark: v.remark.value,
+                        shippingMarkResultDictCode: v.shippingMarkResultDictCode.value,
+                        skuBarCodeResultDictCode: v.skuBarCodeResultDictCode.value,
+                        skuLabelResultDictCode: v.skuLabelResultDictCode.value,
                         skuQcResultDictCode: skuQcResultDictCode,
-                        unqualifiedSkuCartonTotalQty: v.unqualifiedSkuCartonTotalQty,
-                        unqualifiedType: v.unqualifiedType
+                        unqualifiedSkuCartonTotalQty: v.unqualifiedSkuCartonTotalQty.value,
+                        unqualifiedType: v.unqualifiedType.value
                     });
                 });
+                _.map(this.qcOrderConfig.qcResultDetailParams, (v, k) => {
+                    v.qcPics = self.$refs["pictureUpload" + k][0].getFiles();
+                });
+                for (let i = 0; i < this.qcOrderConfig.qcResultDetailParams.length; i++) {
+                    if (this.$validateForm(this.qcOrderConfig.qcResultDetailParams[i], this.$db.warehouse.qcDetailProductInfo)) {
+                        return;
+                    }
+                }
                 this.disableClickSubmit = true;
                 this.$ajax.post(this.$apis.save_sellerQcOrder, this.qcOrderConfig).then(res => {
                     this.disableClickSubmit = false;
@@ -684,6 +760,12 @@
                 // this.$ajax.post(this.$apis.get_partUnit,[]).then(res=>{
                 //     console.log(res)
                 // });
+            },
+            uploadChange (ref, e) { // 图片导入成功后显示
+
+                let length = this.$refs[ref][0].getFiles().length
+                e.imgNum = length
+                e.pleaseText = length > 0 ? '继续' : ''
             }
         },
         created() {
@@ -694,11 +776,12 @@
         mounted() {
             this.setMenuLink({
                 path: '/logs/index',
-                query: {code: 'WAREHOUSE'},
+                query: {code: 'QC'},
                 type: 10,
                 auth:'QC:LOG',
                 label: this.$i.common.log
             });
+            this.columnConfig = this.$db.warehouse.qcDetailProductInfo;
         }
     };
 </script>
@@ -747,5 +830,10 @@
         bottom: 0;
         width: 100%;
         z-index: 5;
+    }
+    .gear{
+        float: right;
+        margin-right: 5px;
+        margin-bottom: 5px;
     }
 </style>

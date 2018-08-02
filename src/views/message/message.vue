@@ -24,6 +24,7 @@
           @change-checked="changeChecked"
           :height="500"
           hide-filter-value
+          disabled-sort
         />
         <page
           :page-data="pageData"
