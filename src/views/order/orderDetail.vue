@@ -229,41 +229,48 @@
         <div class="title">
             {{$i.order.responsibility}}
         </div>
+        <el-button
+                class="addBtn"
+                :disabled="!isModify"
+                @click="addResponsibility">
+            {{$i.order.addResponsibility}}</el-button>
         <el-table
                 :data="orderForm.responsibilityList"
                 style="width: 100%">
             <el-table-column
                     prop="type"
-                    label="Type">
+                    align="center"
+                    :label="$i.order.type">
                 <template slot-scope="scope">
-                    <span v-if="scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>
-                    <span v-if="scope.row.type===1">{{$i.order.labelDesignDate}}</span>
-                    <span v-if="scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>
-                    <span v-if="scope.row.type===3">{{$i.order.receiveSampleDate}}</span>
-                    <span v-if="scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>
-                    <span v-if="scope.row.type===5">{{$i.order.otherResponsibility}}</span>
+                    <el-input
+                            :disabled="!isModify"
+                            :placeholder="isModify?$i.order.pleaseInput:''"
+                            v-model="scope.row.type"
+                            clearable>
+                    </el-input>
                 </template>
             </el-table-column>
             <el-table-column
                     prop="customer"
                     align="center"
-                    label="Me">
+                    :label="$i.order.customer">
                 <template slot-scope="scope">
                     <el-date-picker
                             :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.customer===''}"
+                            :placeholder="isModify?$i.order.pleaseChoose:''"
                             @change="handleResponsibilityChange(scope.row,'customer')"
                             v-model="scope.row.customer"
                             :editable="false"
                             align="right"
                             type="date"
-                            :disabled="true">
+                            :disabled="!isModify">
                     </el-date-picker>
                 </template>
             </el-table-column>
             <el-table-column
                     prop="supplier"
                     align="center"
-                    label="Supplier">
+                    :label="$i.order.supplier">
                 <template slot-scope="scope">
                     <el-date-picker
                             :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.supplier===''}"
@@ -272,21 +279,21 @@
                             align="right"
                             :editable="false"
                             type="date"
-                            :disabled="scope.row.type!==1 && scope.row.type!==3 && scope.row.type!==5 || !isModify"
-                            :placeholder="(scope.row.type===1 || scope.row.type===3 || scope.row.type===5) && isModify?$i.order.pleaseChoose:''">
+                            :disabled="!isModify"
+                            :placeholder="isModify?$i.order.pleaseChoose:''">
                     </el-date-picker>
                 </template>
             </el-table-column>
             <el-table-column
                     prop="Remark"
                     align="center"
-                    label="Remark">
+                    :label="$i.order.remarkBig">
                 <template slot-scope="scope">
                     <el-input
                             :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.remark===''}"
                             @change="handleResponsibilityChange(scope.row,'remark')"
-                            :disabled="scope.row.type!==1 && scope.row.type!==3 && scope.row.type!==5 || !isModify"
-                            :placeholder="(scope.row.type===1 || scope.row.type===3 || scope.row.type===5) && isModify?$i.order.pleaseInput:''"
+                            :disabled="!isModify"
+                            :placeholder="isModify?$i.order.pleaseInput:''"
                             v-model="scope.row.remark"
                             clearable>
                     </el-input>
@@ -295,7 +302,7 @@
             <el-table-column
                     prop="actualDate"
                     align="center"
-                    label="Actual Date">
+                    :label="$i.order.actualDate">
                 <template slot-scope="scope">
                     <el-date-picker
                             :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.actualDt===''}"
@@ -304,8 +311,8 @@
                             align="right"
                             type="date"
                             :editable="false"
-                            :disabled="scope.row.type!==1 && scope.row.type!==3 && scope.row.type!==5 || !isModify"
-                            :placeholder="(scope.row.type===1 || scope.row.type===3 || scope.row.type===5) && isModify?$i.order.pleaseChoose:''">
+                            :disabled="!isModify"
+                            :placeholder="isModify?$i.order.pleaseChoose:''">
                     </el-date-picker>
                 </template>
             </el-table-column>
@@ -1729,7 +1736,7 @@
                         }
                     });
                 });
-                // return console.log(this.$depthClone(params.skuList),'params.skuList')
+                // return console.log(this.$depthClone(params.responsibilityList),'params.responsibilityList')
                 params.attachments = this.$refs.upload[0].getFiles();
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
@@ -1841,6 +1848,16 @@
                     data.fieldUpdate = {};
                 }
                 data.fieldUpdate[key] = "";
+            },
+            addResponsibility(){
+                this.orderForm.responsibilityList.push({
+                    type: '',
+                    customer: '',
+                    supplier: '',
+                    remark: '',
+                    actualDt: '',
+                    orderNo:this.orderForm.orderNo
+                })
             },
 
             /**
@@ -2702,6 +2719,9 @@
 
     .el-table >>> .waiting-row {
         background: yellow;
+    }
+    .addBtn{
+        margin: 5px 0;
     }
 
     .footBtn {
