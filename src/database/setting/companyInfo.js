@@ -63,13 +63,13 @@ export default {
         belong:'summary'
     },
     supplierShortName:{
-        key: 'shortName',
-        type: 'input',
-        belong:'summary',
-        _rules:{
-          required:true,
-          length:6,
-        }
+      key: 'shortName',
+      type: 'customValidation',
+      belong: 'summary',
+      _rules:{
+        required:true,
+        length:6
+      }
     },
     logo:{
         key: 'logo',

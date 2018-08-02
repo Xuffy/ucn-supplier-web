@@ -58,6 +58,7 @@ export default {
   post_oss_company_batchUpload: ['/supplier/purchase/oss/company/batchUpload','BASE_CS','USUPPLY_URL'],
   post_oss_company_upload: ['/supplier/purchase/oss/company/upload','BASE_CS','USUPPLY_URL'],
   post_purchase_customer_updateIsSetting:['/supplier/updateIsSetting/{id}', 'USUPPLY_URL'],
+  post_sname_exist: ['/sname/exist/{id}?shortName={shortName}', 'BASE_CS', 'USUPPLY_URL'],
 
   //track
   get_track_getTrackInfoByPage: ['/track/getTrackInfoByPage','UWORKBENCH_URL'],
