@@ -13,7 +13,11 @@ export default {
     },
     pic: {
         key:'pictures',
-        _image:true
+        _image:true,
+        _fixed:'left'
+    },
+    code:{
+        _fixed:'left'
     },
     skuSaleStatus: {
         key:'status'
@@ -21,9 +25,7 @@ export default {
     recycle:{
 
     },
-    code:{
-        
-    },
+
     nameCn:{
         
     },

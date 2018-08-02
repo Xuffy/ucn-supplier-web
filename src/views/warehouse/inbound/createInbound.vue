@@ -90,12 +90,14 @@
                 class="gear"
                 ref="filterColumn"
                 code="uwarehouse_inbound_sku"
+                :table-ref="() => $refs.tableBox"
                 @change="changeColumn"></v-filter-column>
         <el-table
                 v-loading="loadingProductTable"
                 class="product-table"
                 :data="productData"
                 border
+                ref="tableBox"
                 show-summary
                 :summary-method="getSummaries"
                 @selection-change="changeProductChecked"
@@ -114,6 +116,7 @@
                     :key="v.key"
                     :label="$i.warehouse[v.key]"
                     :prop="v.key"
+                    :label-class-name="'location-' + v.key"
                     align="center"
                     width="180">
                 <template slot-scope="scope">
@@ -129,6 +132,8 @@
                                 :disabled="v.computed"
                                 v-model="scope.row[v.key].value"
                                 @blur="handleBlur(v.key,scope.$index)"
+                                :mark="v.label"
+                                :accuracy="v.accuracy ? v.accuracy : null"
                                 :controls="false"></v-input-number>
                     </div>
                     <div v-else-if="v.key==='unqualifiedType'"></div>

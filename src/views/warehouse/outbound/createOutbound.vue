@@ -98,6 +98,7 @@
                 <v-filter-column
                     ref="filterColumn"
                     code="uwarehouse_outbound_sku"
+                    :table-ref="() => $refs.tableBox"
                     @change="changeColumn">
                 </v-filter-column>
             </div>
@@ -106,6 +107,7 @@
                 class="product-table"
                 :data="productData"
                 border
+                ref="tableBox"
                 @selection-change="changeProductChecked"
                 show-summary
                 :summary-method="getSummaries"
@@ -124,6 +126,7 @@
                     :label="$i.warehouse[v.key]"
                     :class-name="v._rules &&  v._rules.required ? 'ucn-table-required' : ''"
                     align="center"
+                    :label-class-name="'location-' + v.key"
                     v-if="!v._hidden && !v._hide"
                     :width="v.key === 'skuNameCustomer' ? '250' : '180'"
                     :sortable="v.sortable">
@@ -140,6 +143,8 @@
                             :disabled="v.computed"
                             v-model="scope.row[v.key].value"
                             :min="0"
+                            :mark="v.label"
+                            :accuracy="v.accuracy ? v.accuracy : null"
                             :controls="false"></v-input-number>
                     </div>
                     <!-- <div v-else-if="v.key==='inboundDate' || v.key==='warehouseName' || v.key==='warehouseNo'">
@@ -505,6 +510,7 @@
                         ids: id
                     }).then(res => {
                         let arr = []
+                        this.productData = []
                         res.datas.forEach(v => {
                             v.outboundOutCartonTotalQty = 0;
                             v.outboundSkuTotalGrossWeight = 0;

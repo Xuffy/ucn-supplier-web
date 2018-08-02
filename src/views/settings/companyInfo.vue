@@ -1,7 +1,15 @@
 <template>
     <div class="company-info">
-        <div class="title">
+        <div class="title" :style="{'height': !showNameBox ? '32px':'0'}">
             <span><span style="color:red;font-weight: bold"></span>{{$i.setting.companyInfo}}</span>
+        </div>
+        <div class="alert" v-show="showNameBox">
+          <el-alert
+            :title="$i.setting.requiredPage"
+            type="warning"
+            :closable="false"
+            show-icon>
+          </el-alert>
         </div>
         <div class="summary">
             <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
@@ -94,6 +102,7 @@
                         :height="500"
                         :buttons="[{label: $i.button.modify, type: 1},{label: $i.button.delete, type: 2}]"
                         @action="btnAddressClick"
+                        disabled-sort
                         :selection="false"
                         />
                     </div>
@@ -109,6 +118,7 @@
                             :height="500"
                             :buttons="[{label: $i.button.modify, type: 1},{label: $i.button.delete, type: 2}]"
                             @action="btnClick"
+                            disabled-sort
                             :selection="false"
                             />
                         </div>
@@ -126,6 +136,7 @@
                             :height="500"
                             :buttons="[{label: $i.button.modify, type: 1},{label: $i.button.delete, type: 2}]"
                             @action="btnContactClick"
+                            disabled-sort
                             :selection="false"
                             />
                         </div>
@@ -202,6 +213,13 @@
                         size="mini"
                         v-model="addressData.contactPhone2"
                         :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item>
+                      <el-checkbox-group v-model="addressData.def" size="medium">
+                        <el-checkbox :label="$i.setting.setDefaultAddress" @change="setAddress"></el-checkbox>
+                      </el-checkbox-group>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -380,7 +398,8 @@
 </template>
 
 <script>
-    import { VTable,VUpload} from '@/components/index'
+    import { VTable,VUpload} from '@/components/index';
+    import { mapActions } from 'vuex';
     export default {
         name: "companyInfo",
         components:{
@@ -432,6 +451,7 @@
                     supplierId: "",
                     tenantId: "",
                     version: "",
+                    def: false
                 },
                 contactData:{
                   cellphone: "",
@@ -479,6 +499,7 @@
               isSave:true,
               //判断是否修改过
               isModify:false,
+              showNameBox:false,
               options:{},
               department:[],
               currencyList:[],
@@ -486,6 +507,7 @@
             }
         },
         methods:{
+          ...mapActions(['setMenuLink']),
             //获取整个页面数据
             getWholeData(){
                 this.$ajax.get(this.$apis.get_supplierWhile).then(res=>{
@@ -499,16 +521,25 @@
                        e.deptId._value = deptId.deptName || '';
                        return e;
                      });
-                     this.addressDatas = this.$getDB(this.$db.setting.supplierAddress, res.address);
+                     this.addressDatas = this.$getDB(this.$db.setting.supplierAddress, res.address, e=>{
+                       e.def.value ? e.def._value = '是' : e.def._value = '';
+                       return e
+                     } );
                      res.exportLicense ? res.exportLicense = this.$i.setting.exportLicenseYes : res.exportLicense = this.$i.setting.exportLicenseNo
                      this.companyInfo=res;
+                      //判断shortName是否存在
+                      if (this.companyInfo.shortName){
+                        this.$localStore.remove('router_intercept')
+                      }else{
+                        this.showNameBox = true;
+                      }
                 }).catch(err=>{
                     console.log(err)
                 });
             },
           //获取币种
           getCurrency(){
-              this.$ajax.get(this.$apis.get_currency_all).then(res=>{
+              this.$ajax.get(this.$apis.get_currency_all,{},{cache:true}).then(res=>{
                   this.options.currency = res
               }).catch(err=>{
                 console.log(err)
@@ -696,6 +727,50 @@
 
                 });
             },
+          //更改默认地址
+          setAddress(){
+            let def;
+            this.addressDatas.forEach(v=>{
+              def = _.findWhere(v,{key:'def'}).value;
+            })
+            if (def){
+              this.$confirm(this.$i.setting.isReplace, this.$i.common.prompt, {
+                confirmButtonText: this.$i.common.confirm,
+                cancelButtonText: this.$i.common.cancel,
+                type: 'warning'
+              }).then(() => {
+                console.log(this.addressData.def)
+                if (this.addressData.def){
+                  this.addressData.def = true;
+                  this.$message({
+                    type: 'success',
+                    message: this.$i.setting.replaceSuccess
+                  });
+                }else{
+                  this.addressData.def = false;
+                  this.$message({
+                    type: 'success',
+                    message: this.$i.setting.cancelReplace
+                  });
+                }
+              }).catch(() => {
+                console.log(this.addressData.def)
+                if (this.addressData.def){
+                  this.addressData.def = false;
+                  this.$message({
+                    type: 'success',
+                    message: this.$i.setting.cancelReplace
+                  });
+                }else{
+                  this.addressData.def = true;
+                  this.$message({
+                    type: 'success',
+                    message: this.$i.setting.replaceSuccess
+                  });
+                }
+              });
+            }
+          },
 
             /**
              * Account操作
@@ -932,6 +1007,14 @@
                this.getCodePart();
             // console.log(this.$db,'db')
         },
+        mounted(){
+          this.setMenuLink({
+            path: '/logs',
+            query: {code: 'SUPPLIER',bizCode: 'BIZ_SUPPLY'},
+            type: 100,
+            label: this.$i.common.log,
+          });
+        },
         watch:{
             addressDialogVisible(n){
                 if(!n){
@@ -965,7 +1048,6 @@
     .title{
         font-weight: bold;
         font-size: 18px;
-        height: 32px;
         line-height: 32px;
         color:#666666;
     }
@@ -1005,6 +1087,11 @@
     /*弹出框样式*/
     .dialog-footer{
         text-align: center;
+    }
+    .alert{
+      width: 40%;
+      margin: 0 auto;
+      padding: 15px;
     }
 
 </style>

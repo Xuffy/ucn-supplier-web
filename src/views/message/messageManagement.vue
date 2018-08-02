@@ -10,6 +10,7 @@
         hide-filter-value
         :height="500"
         :selection="false"
+        disabled-sort
       />
       <page
         :page-data="pageData"

@@ -8,6 +8,7 @@
   "skuNameEN": "SKU name EN",
   "price": "SKU Price",
   "currency": "Currency",
+  "qty": "QTY",
   "skuFobCurrency": "Fob Currency",
   "skuExwCurrency": "Exw Currency",
   "skuCifCurrency": "Cif Currency",
