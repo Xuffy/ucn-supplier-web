@@ -129,6 +129,8 @@
                                 :disabled="v.computed"
                                 v-model="scope.row[v.key].value"
                                 @blur="handleBlur(v.key,scope.$index)"
+                                :mark="v.label"
+                                :accuracy="v.accuracy ? v.accuracy : null"
                                 :controls="false"></v-input-number>
                     </div>
                     <div v-else-if="v.key==='unqualifiedType'"></div>

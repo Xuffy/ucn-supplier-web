@@ -498,7 +498,7 @@
           ...mapActions(['setMenuLink']),
             //获取整个页面数据
             getWholeData(){
-                this.$ajax.get(this.$apis.get_supplierWhile).then(res=>{
+                this.$ajax.get(this.$apis.get_supplierWhile,{},{cache:false}).then(res=>{
                     // this.addressData contactData
                      this.accountsData = this.$getDB(this.$db.setting.supplierAccount, res.accounts);
                      this.contactDatas = this.$getDB(this.$db.setting.supplierContact, res.concats, e=>{
