@@ -704,13 +704,12 @@
                 :visible.sync="productTableDialogVisible"
                 width="70%">
             <v-product
-                    :disabledLine="disabledProductLine"
-                    :forceUpdateNumber="updateProduct"
-                    :hideBtn="true"
-                    :isInModify="true"
-                    :type="type1"
-                    @handleCancel="handleCancel"
-                    @handleOK="handleProductOk"></v-product>
+                    ref="addProduct"
+                    queryType="product"
+                    :form-column="$db.product.overview"
+                    :disabledLine="disableProductLine"
+                    @sure="handleProductOk"
+                    @cancel="handleCancel"></v-product>
         </el-dialog>
 
         <v-history-modify
@@ -1168,8 +1167,14 @@
 
 <script>
 
-    import { VTable, VPagination, selectSearch, VUpload, VHistoryModify, VMessageBoard } from "@/components/index";
-    import VProduct from "@/views/product/addProduct";
+    import {
+        VTable,
+        VPagination,
+        selectSearch,
+        VUpload,
+        VHistoryModify,
+        VMessageBoard,
+        VProduct} from "@/components/index";
     import { mapActions } from "vuex";
 
     export default {
@@ -1283,6 +1288,7 @@
                 savedIncoterm: "",           //用来存储incoterm
                 disableChangeSkuStatus: false,
                 initialData: {},
+                disableProductLine:[],
 
 
                 /**
@@ -1710,7 +1716,7 @@
                     }
                     if (!item._remark) {
                         _.map(item, (v, k) => {
-                            if (v._isModified) {
+                            if (v._isModified || v._isModifyStatus) {
                                 if (!item.fieldUpdate.value) {
                                     item.fieldUpdate.value = {};
                                 }
@@ -1967,11 +1973,20 @@
                 this.selectProductInfoTable = e;
             },
             addProduct() {
-                this.disabledProductLine = this.$copyArr(this.productTableData);
-                // this.disabledProductLine=_.uniq(_.pluck(_.pluck(this.productTableData, 'skuId'), 'value'));
+                this.disableProductLine = [];
+                if (this.productTableData.length > 0) {
+                    _.map(this.productTableData, v => {
+                        if (!v._remark) {
+                            this.disableProductLine.push(v.id.value);
+                        }
+                    });
+                }
                 this.productTableDialogVisible = true;
-                this.activeTab = "product";
-                this.updateProduct = Math.random();
+                this.$nextTick(() => {
+                    if (this.$refs.addProduct) {
+                        this.$refs.addProduct.getData();
+                    }
+                });
             },
             removeProduct() {
                 this.$confirm(this.$i.order.sureDelete, this.$i.order.prompt, {

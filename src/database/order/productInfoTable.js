@@ -3,6 +3,10 @@ export default {
         _important:true,
         _title:'Remark'
     },
+    skuStatus:{
+        _slot:'skuStatus',
+        _fixed:'left'
+    },
     _remark:{
         _hide:true
     },
@@ -251,10 +255,6 @@ export default {
         _slot:'skuExpireUnit',
     },
     skuComments:{},
-    skuStatus:{
-        _slot:'skuStatus',
-        _fixed:'left'
-    },
     skuSaleStatus:{
         _disabled:true
     },
