@@ -26,6 +26,7 @@
   "barcode": "产品条码",
   "readilyAvailable": "是否现货",
   "skuAvailable": "现货数量",
+  "qty": "产品数量",
   "restrictedSellingCountry": "不可销售国家",
   "applicableAge": "适用年龄",
   "expirationDate": "保质期",

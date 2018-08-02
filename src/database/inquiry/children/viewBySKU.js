@@ -29,8 +29,12 @@ export default {
     qty: {
       key: 'qty',
       type: 'Number',
+<<<<<<< HEAD
       _disabled: true,
       _toFixed: 1
+=======
+      _disabled: true
+>>>>>>> remotes/origin/F-SHOW-QTY-180803-0731053038
     },
     skuFobCurrency: { // FOB币种
       transForm: 'CY_UNIT'

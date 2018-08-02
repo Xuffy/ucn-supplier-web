@@ -26,6 +26,7 @@
   "barcode": "SKU Barcode",
   "readilyAvailable": "Readily Available",
   "skuAvailable": "Available Quantity",
+  "qty": "QTY",
   "restrictedSellingCountry": "Restricted Selling Country",
   "applicableAge": "Applicable Age",
   "expirationDate": "Expiration Date",
