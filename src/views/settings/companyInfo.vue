@@ -24,6 +24,15 @@
                                         v-model="companyInfo[v.key]">
                                 </el-input>
                             </div>
+                            <div v-if="v.type==='customValidation'">
+                              <el-input
+                                :disabled="v.key==='code'?true:summaryDisabled"
+                                size="mini"
+                                :placeholder="$i.common.inputkeyWordToSearch"
+                                @blur="customValidation"
+                                v-model="companyInfo[v.key]">
+                              </el-input>
+                            </div>
                             <div v-if="v.type==='select'">
                                 <el-select
                                   :disabled="summaryDisabled"
@@ -995,6 +1004,41 @@
              });
              return false;
            }
+          },
+          customValidation(){
+            if(this.companyInfo.shortName === ""){ //输入不能为空
+              this.$message({
+                message: `${this.$i.util.validateRequired} ${this.$i.setting.customerShortName}`,
+                type: 'warning'
+              });
+            }else if(this.companyInfo.shortName.length>6){
+              this.$message({
+                message: this.$i.setting.shortNameLength,
+                type: 'warning'
+              });
+            }else if (!/^[0-9a-zA-Z]+$/.test(this.companyInfo.shortName)){
+              this.$message({
+                message: this.$i.setting.numberLetter,
+                type: 'warning'
+              });
+            }else if (!/^[0-9a-hj-np-yA-HJ-NP-Y]+$/g.test(this.companyInfo.shortName)){
+              this.$message({
+                message: this.$i.setting.abbreviationAllowed,
+                type: 'warning'
+              });
+            }else{
+              this.$ajax.post(this.$apis.post_sname_exist,{
+                id: this.companyInfo.id,
+                shortName: this.companyInfo.shortName
+              }).then(res=>{
+                if (res){
+                  this.$message({
+                    message: this.$i.setting.abbreviationOnly,
+                    type: 'warning'
+                  });
+                }
+              })
+            }
           },
         },
         created(){

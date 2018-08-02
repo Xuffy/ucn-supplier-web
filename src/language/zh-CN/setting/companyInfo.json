@@ -81,6 +81,10 @@
   "isReplace": "确认替换默认地址?",
   "replaceSuccess": "替换成功",
   "cancelReplace": "取消替换",
-  "requiredPage": "请先完善此页面必填信息，否则将影响流程使用"
+  "requiredPage": "请先完善此页面必填信息，否则将影响流程使用",
+  "numberLetter": "简称仅可使用字母和数字",
+  "shortNameLength": "简称不可超出6位",
+  "abbreviationOnly" : "此简称已被使用",
+  "abbreviationAllowed": "简称不可出现 I O Z字母"
 
 }
