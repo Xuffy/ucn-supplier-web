@@ -10,16 +10,6 @@ export default {
         showType:'select',
         belongTab:'basicInfo',
         isSaleStatus:true,
-        options:[
-            {
-                code:0,
-                label:'下架'
-            },
-            {
-                code:1,
-                label:'上架'
-            }
-        ]
     },
     code:{
         key:'code',
@@ -134,12 +124,14 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        accuracy:1
     },
     deliveryDates:{
         key:'deliveryDates',
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        accuracy:0
     },
     design:{
         key:'design',
@@ -171,7 +163,8 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
-        isAvailableQty:true
+        isAvailableQty:true,
+        accuracy:1
     },
     noneSellCountry:{
         key:'noneSellCountry',
@@ -185,12 +178,14 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        accuracy:0
     },
     expireDates:{
         key:'expireDates',
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
+        accuracy:0
     },
     expireUnit:{
         key:'expireUnit',
@@ -215,12 +210,14 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'customerInfo',
+        accuracy:2
     },
     taxRefundRate:{
         key:'taxRefundRate',
         type: 'String',
         showType:'number',
         belongTab:'customerInfo',
+        accuracy:2
     },
     customsCode:{
         key:'customsCode',
@@ -316,32 +313,13 @@ export default {
         key:'fobCurrency',
         showType:'select',
         belongTab:'priceInfo',
-        options:[
-            {
-                label:'USD',
-                value:0,
-            },
-            {
-                label:'CNY',
-                value:1,
-            },
-            {
-                label:'EUR',
-                value:2,
-            },
-        ],
     },
     fobPrice:{
         key:'fobPrice',
         showType:'number',
         belongTab:'priceInfo',
+        accuracy:4
     },
-
-
-
-
-
-
     fobPort:{
         key:'fobPort',
         showType:'input',
@@ -351,51 +329,23 @@ export default {
         key:'exwPrice',
         showType:'number',
         belongTab:'priceInfo',
+        accuracy:4
     },
     exwCurrency:{
         key:'exwCurrency',
         showType:'select',
         belongTab:'priceInfo',
-        options:[
-            {
-                label:'USD',
-                value:0,
-            },
-            {
-                label:'CNY',
-                value:1,
-            },
-            {
-                label:'EUR',
-                value:2,
-            },
-        ],
     },
-
-
     cifPrice:{
         key:'cifPrice',
         showType:'number',
         belongTab:'priceInfo',
+        accuracy:4
     },
     cifCurrency:{
         key:'cifCurrency',
         showType:'select',
         belongTab:'priceInfo',
-        options:[
-            {
-                label:'USD',
-                value:0,
-            },
-            {
-                label:'CNY',
-                value:1,
-            },
-            {
-                label:'EUR',
-                value:2,
-            },
-        ],
     },
     cifArea:{
         key:'cifArea',
@@ -411,29 +361,13 @@ export default {
         key:'dduCurrency',
         showType:'select',
         belongTab:'priceInfo',
-        options:[
-            {
-                label:'USD',
-                value:0,
-            },
-            {
-                label:'CNY',
-                value:1,
-            },
-            {
-                label:'EUR',
-                value:2,
-            },
-        ],
+        accuracy:4
     },
     dduArea:{
         key:'dduArea',
         showType:'input',
         belongTab:'priceInfo',
     },
-
-
-
 
     /**
      * Packing Info
@@ -464,30 +398,35 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     width:{
         key:'width',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     height:{
         key:'height',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     netWeight:{
         key:'netWeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     volume:{
         key:'volume',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:3
     },
     methodPkgCn:{
         key:'methodPkgCn',
@@ -512,42 +451,49 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonLength:{
         key:'innerCartonLength',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonWidth:{
         key:'innerCartonWidth',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonHeight:{
         key:'innerCartonHeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonWeightNet:{
         key:'innerCartonWeightNet',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonRoughWeight:{
         key:'innerCartonRoughWeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     innerCartonVolume:{
         key:'innerCartonVolume',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:3
     },
     innerCartonDesc:{
         key:'innerCartonDesc',
@@ -586,48 +532,56 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonQty:{
         key:'outerCartonQty',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:1
     },
     outerCartonLength:{
         key:'outerCartonLength',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonWidth:{
         key:'outerCartonWidth',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonHeight:{
         key:'outerCartonHeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonNetWeight:{
         key:'outerCartonNetWeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonRoughWeight:{
         key:'outerCartonRoughWeight',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:2
     },
     outerCartonVolume:{
         key:'outerCartonVolume',
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
+        accuracy:3
     },
     outerCartonMethodCn:{
         key:'outerCartonMethodCn',
@@ -657,18 +611,21 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     gp40SkuQty:{
         key:'gp40SkuQty',
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     hq40SkuQty:{
         key:'hq40SkuQty',
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     tryDimension:{
         key:'tryDimension',
@@ -681,6 +638,7 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     specialTransportRequire:{
         key:'specialTransportRequire',
@@ -705,18 +663,21 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     safeInventory:{
         key:'safeInventory',
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
     minInventory:{
         key:'minInventory',
         type: 'String',
         showType:'number',
         belongTab:'logisticInfo',
+        accuracy:1
     },
 
     /**
@@ -740,6 +701,7 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'otherInfo',
+        accuracy:0
     },
     qualityStander:{
         key:'qualityStander',
