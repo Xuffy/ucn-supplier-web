@@ -39,8 +39,12 @@
             class="filter-tree"
             :data="myCategoryData"
             :props="defaultProps"
-            default-expand-all
             highlight-current
+            default-expand-all
+            draggable
+            node-key="id"
+            :allow-drop="allowDrop"
+            @node-drop="categoryDrop"
             :filter-node-method="filterNode"
             :expand-on-click-node="false"
             @node-click="myCategoryChange"
@@ -133,6 +137,28 @@
     },
     methods: {
       ...mapActions(['setMenuLink']),
+      allowDrop(b, a, t) {
+        if (t === 'prev' && !a.childNodes.length && b.data.parentId === a.data.parentId) {
+          return true;
+        }
+
+      },
+      categoryDrop(node) {
+        let sorts = []
+          , data = this.$depthClone(this.myCategoryData);
+
+        if (node.data.parentId) {
+          data = _.map(this.$refs.tree.getNode(node.data.parentId).childNodes, val => val.data);
+        }
+
+        _.map(data, (val, index) => sorts.push({id: val.id, sort: index + 1}));
+
+        this.$ajax.post(this.$apis.PURCHASE_CATEGORY_SORT, {parentId: node.data.parentId, sorts})
+          .then(res => {
+            this.getMyCategoryData();
+            this.getMappingCategory();
+          });
+      },
       getMgeneralCategoryData() {
         this.$ajax.get(this.$apis.GET_PURCHASE_SYS_CATEGORY)
           .then(res => {
@@ -158,15 +184,6 @@
           if (item[this.treeProps.children].length && item[this.treeProps.children]) this.mappingRelationDataSplit(item[this.treeProps.children])
         });
       },
-      addData(id, data, name, type) {
-        const newChild = {id: id, name: name, parentId: data.id, isActive: false, children: []};
-        if (type === 'parents') {
-          data.push(newChild);
-        } else {
-          data.children.push(newChild);
-        }
-        this.getMappingCategory();
-      },
       addNewCategory(data, name, type) {
         const params = {
           parentId: data.id || 0,
@@ -174,7 +191,8 @@
         };
         this.$ajax.post(this.$apis.GET_PURCHASE_CATEGORY, params)
           .then(res => {
-            this.addData(res, data, name, type);
+            this.getMyCategoryData();
+            this.getMappingCategory();
             this.myCategory = '';
           });
       },
@@ -527,191 +545,3 @@
     color: #ccc
   }
 </style>
-
-<!--<style lang="less" scoped>
-  .category-common {
-
-  .hd {
-    font-weight: bold;
-    font-size: 16px;
-  }
-
-  .mappingRelation {
-    font-size: 16px;
-    color: #666;
-    text-align: center;
-    line-height: 50px;
-  }
-
-  .category-wrap {
-    display: flex;
-    padding: 20px;
-    overflow-x: auto;
-
-  .mapping {
-    width: 50px;
-    height: 30px;
-    line-height: 30px;
-    padding: 0 10px;
-    background: #fff;
-    color: #000;
-    position: relative;
-    margin-top: 245px;
-    margin-right: 30px;
-
-  &
-  ::after {
-    content: ' ';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 1px;
-    background: #d7d7d7;
-  }
-
-  &
-  ::before {
-    content: ' ';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 1px;
-    background: #d7d7d7;
-  }
-
-  i {
-    z-index: 0;
-    height: 100%;
-    width: 20px;
-    position: absolute;
-    right: 0;
-    top: 0;
-
-  &
-  ::after {
-    content: ' ';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 40px;
-    height: 1px;
-    background: #d7d7d7;
-    transform: rotate(45deg);
-  }
-
-  &
-  ::before {
-    content: ' ';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 40px;
-    height: 1px;
-    background: #d7d7d7;
-    transform: rotate(-45deg);
-  }
-
-  }
-  span {
-    position: absolute;
-    left: 10px;
-    line-height: 30px;
-    z-index: 1;
-  }
-
-  }
-  h5 {
-    font-weight: normal;
-    font-size: 20px;
-    color: #666;
-    padding: 15px 15px;
-    border-bottom: 1px solid #e0e0e0;
-  }
-
-  .my-category, .general-category {
-    width: 30vw;
-  }
-
-  .my-category, .general-category, .maping-relation {
-
-  .btn-wrap {
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  margin-right:
-
-  15
-  px
-
-  ;
-  min-width:
-
-  260
-  px
-
-  ;
-  background:#fff
-
-  ;
-  border:
-
-  1
-  px solid #e0e0e0
-
-  ;
-  /*box-shadow: 0 0 30px #e0e0e0;*/
-  border-radius:
-
-  5
-  px
-
-  ;
-  .category {
-
-  .input-hd {
-    display: flex;
-    height: 32px;
-    padding: 10px 15px;
-    border-bottom: 1px solid #e0e0e0;
-  }
-
-  .el-tree {
-    overflow: auto;
-    height: 50vh;
-  }
-
-  }
-  }
-  .maping-relation {
-    width: 40vw;
-
-  .hd {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-  .text {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: #666;
-    font-size: 12px;
-    white-space: nowrap;
-
-  b {
-    font-size: 12px;
-    white-space: nowrap;
-    color: #ccc;
-  }
-
-  }
-  }
-  }
-  }
-  }
-</style>-->
