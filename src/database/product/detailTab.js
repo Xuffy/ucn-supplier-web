@@ -426,7 +426,7 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'packingInfo',
-        accuracy:3
+        accuracy:6
     },
     methodPkgCn:{
         key:'methodPkgCn',
