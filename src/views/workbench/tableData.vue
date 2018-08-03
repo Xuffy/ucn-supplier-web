@@ -6,7 +6,7 @@
       <div>
         <el-select v-model="search.type">
           <el-option v-for="item in searchOptions" :key="item.id"
-                     :label="dataList[tabIndex].label +' '+ item.label" :value="item.id"></el-option>
+                     :label="item.label" :value="item.id"></el-option>
         </el-select>
 
         <el-input :placeholder="$i.hintMessage.pleaseEnter" class="input-with-select" clearable
