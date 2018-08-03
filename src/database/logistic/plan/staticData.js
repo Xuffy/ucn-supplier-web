@@ -17,6 +17,11 @@ export const basicInfoObj = {
     type: 'selector',
     value: null
   },
+  createDate: {
+    type: 'date',
+    value: null,
+    disabled:true 
+  },
   customerName: {
     type: 'input',
     value: null,
