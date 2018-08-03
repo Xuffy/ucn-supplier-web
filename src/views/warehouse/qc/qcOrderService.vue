@@ -230,7 +230,7 @@
             <el-form label-width="280px">
                 <el-row class="speZone">
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.warehouse.cartonOfQualifiedProducts">
+                        <el-form-item :label="$i.warehouse.cartonOfQualifiedProducts + 22">
                             <el-input
                                     class="summaryInput"
                                     size="mini"
