@@ -32,16 +32,19 @@ export default {
       pageTotal: 0,
       checkedArg: [],
       tabData: [],
-      options: [
-        {
-          id: '1',
-          label: 'Compare Name'
-        },
-        {
-          id: '2',
-          label: 'Compare Item'
-        }
-      ],
+      options: [{
+        id: 'supplierName',
+        label: this.$i.inquiry.supplierName,
+        operator: 'like'
+      }, {
+        id: 'inquiryNo',
+        label: this.$i.inquiry.InquiryNo,
+        operator: 'like'
+      }, {
+        id: 'quotationNo',
+        label: this.$i.inquiry.quotationNo,
+        operator: 'like'
+      }],
       bodyData: {
         key: '',
         keyType: '',
