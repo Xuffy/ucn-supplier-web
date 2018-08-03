@@ -151,8 +151,8 @@
 
       },
       searchLog(){
-        this.params.pn = '';
-        this.params.ps ='';
+        this.params.pn = 1;
+        this.params.ps = 50;
         this.getbizlogs();
       },
       //分页
