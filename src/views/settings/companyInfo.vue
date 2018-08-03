@@ -1032,6 +1032,7 @@
                 shortName: this.companyInfo.shortName
               }).then(res=>{
                 if (res){
+                  this.showNameBox = true;
                   this.$message({
                     message: this.$i.setting.abbreviationOnly,
                     type: 'warning'
