@@ -37,5 +37,6 @@ export default {
     // totalVolume:{},
     skuQuantity:{
         key:'skuQty'
-    }
+    },
+    customerAbbr:{}
 }

@@ -47,10 +47,10 @@
                                          :between-key="v.betweenKey"></between>
                             </div>
                             <div v-else-if="v.type==='number'">
-                                <el-input-number
+                                <v-input-number
                                         class="speNumber speLine"
                                         :controls="false"
-                                        v-model="formData[v.key]"></el-input-number>
+                                        v-model="formData[v.key]"></v-input-number>
                             </div>
                             <div v-else-if="v._slot">
                                 <slot :name="v._slot" :data="formData"></slot>
@@ -109,10 +109,10 @@
                                          :between-key="v.betweenKey"></between>
                             </div>
                             <div v-else-if="v.type==='number'">
-                                <el-input-number
+                                <v-input-number
                                         class="speNumber speLine"
                                         :controls="false"
-                                        v-model="formData[v.key]"></el-input-number>
+                                        v-model="formData[v.key]"></v-input-number>
                             </div>
                             <div v-else-if="v._slot">
                                 <slot :name="v._slot" :data="formData"></slot>
@@ -173,6 +173,7 @@
     import between from './betweenNumber'
     import VTable from '../table/index'
     import VPagination from '../table/pagination'
+    import VInputNumber from '../inputNumber/index'
 
     export default {
         name: "overview",
@@ -180,7 +181,8 @@
             dropDownSingle,
             between,
             VTable,
-            VPagination
+            VPagination,
+            VInputNumber
         },
         props:{
             title:{
