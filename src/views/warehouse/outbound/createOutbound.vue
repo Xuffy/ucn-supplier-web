@@ -138,8 +138,9 @@
                                 v-model="scope.row[v.key].value"
                                 :min="0"
                                 :controls="false"></el-input-number> -->
+                        <!-- @blur="handleBlur(v,scope.row[v.key].value,scope.$index)" -->
                         <v-input-number
-                            @blur="handleBlur(v,scope.row[v.key].value,scope.$index)"
+                            @blur="handleBlur(v,scope.row,scope.row[v.key].value)"
                             :disabled="v.computed"
                             v-model="scope.row[v.key].value"
                             :min="0"
@@ -551,30 +552,60 @@
                 const sums = [];
                 columns.forEach((column, index) => {
                     if (index === 0) {
-                        sums[index] = this.$i.warehouse.totalMoney;
-                    } else {
-                        if (index === 9 || index===10 || index===11 || index===12 || index===13) {
-                            const values = data.map(item => Number(item[column.property]));
-                            if (!values.every(value => isNaN(value))) {
-                                sums[index] = values.reduce((prev, curr) => {
-                                    const value = Number(curr);
-                                    if (!isNaN(value)) {
-                                        return prev + curr;
-                                    } else {
-                                        return prev;
-                                    }
-                                }, 0);
-                                this.outboundData.outboundSkuTotalQty = sums[index];
-                            } else {
-                                sums[index] = 0;
+                        sums[index] = this.$i.warehouse.total;
+                    } else if (column.property === 'outboundOutCartonTotalQty'
+                    || column.property === 'outboundSkuTotalQty'
+                    || column.property === 'outboundSkuTotalGrossWeight'
+                    || column.property === 'outboundSkuTotalVolume'
+                    || column.property === 'outboundSkuTotalNetWeight') {
+                        const values = data.map(item => {
+                            if (item[column.property] !== null) {
+                                return Number(item[column.property].value)
                             }
+                        })
+                        if (!values.every(value => isNaN(value))) {
+                            sums[index] = values.reduce((prev, curr) => {
+                                const value = Number(curr);
+                                if (!isNaN(value)) {
+                                    return this.jia(prev,curr);
+                                } else {
+                                    return prev;
+                                }
+                            }, 0);
+                        } else {
+                            sums[index] = 0;
                         }
                     }
                 });
 
                 return sums;
             },
-
+            mul(a, b) { // 乘
+                var c = 0,
+                    d = a.toString(),
+                    e = b.toString();
+                try {
+                    c += d.split(".")[1].length;
+                } catch (f) {}
+                try {
+                    c += e.split(".")[1].length;
+                } catch (f) {}
+                return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
+            },
+            jia(a, b) {
+                var c, d, e;
+                try {
+                    c = a.toString().split(".")[1].length;
+                } catch (f) {
+                    c = 0;
+                }
+                try {
+                    d = b.toString().split(".")[1].length;
+                } catch (f) {
+                    d = 0;
+                }
+                return e = Math.pow(10, Math.max(c, d)), (this.mul(a, e) + this.mul(b, e)) / e;
+            },
             /**
              * 页面表格事件
              * */
@@ -587,25 +618,17 @@
                     }
                 });
             },
-            handleBlur(e, value, index) {
-                if (e.isNeed && value) {
-                    //出库产品总数量
-                    this.productData[index].outboundSkuTotalQty.value = Number(value) * Number(this.productData[index].outerCartonSkuQty.value);
-                    this.productData[index].outboundSkuTotalVolume.value = Number(value) * Number(this.productData[index].outerCartonVolume.value);
-                    this.productData[index].outboundSkuTotalNetWeight.value = Number(value) * Number(this.productData[index].outerCartonNetWeight.value);
-                    this.productData[index].outboundSkuTotalGrossWeight.value = Number(value) * Number(this.productData[index].outerCartonGrossWeight.value);
-                    // this.productData[index].outboundSkuTotalQty = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonSkuQty)).done();
-                    // //出库产品总体积
-                    // this.productData[index].outboundSkuTotalVolume = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonVolume)).done();
-                    // //出库产品总净重
-                    // this.productData[index].outboundSkuTotalNetWeight = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonNetWeight)).done();
-                    // //出库产品总毛重
-                    // this.productData[index].outboundSkuTotalGrossWeight = Math.chain(value).multiply(Math.bignumber(this.productData[index].outerCartonGrossWeight)).done();
-                }else if(!value){
-                    this.productData[index].outboundSkuTotalQty.value=0;
-                    this.productData[index].outboundSkuTotalVolume.value=0;
-                    this.productData[index].outboundSkuTotalNetWeight.value=0;
-                    this.productData[index].outboundSkuTotalGrossWeight.value=0;
+            handleBlur(v, e, val) {
+                if (v.isNeed && val) {
+                    e.outboundSkuTotalQty.value = this.mul(Number(val),Number(e.outerCartonSkuQty.value));
+                    e.outboundSkuTotalVolume.value = this.mul(Number(val),Number(e.outerCartonVolume.value));
+                    e.outboundSkuTotalNetWeight.value = this.mul(Number(val),Number(e.outerCartonNetWeight.value));
+                    e.outboundSkuTotalGrossWeight.value = this.mul(Number(val),Number(e.outerCartonGrossWeight.value));
+                } else if(!val){
+                    e.outboundSkuTotalQty.value = 0;
+                    e.outboundSkuTotalVolume.value = 0;
+                    e.outboundSkuTotalNetWeight.value = 0;
+                    e.outboundSkuTotalGrossWeight.value = 0;
                 }
             },
 
