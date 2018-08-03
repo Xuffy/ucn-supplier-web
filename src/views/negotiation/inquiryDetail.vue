@@ -193,8 +193,9 @@ export default {
               }
             }
             if (!isNaN(item.value)) {
+              let value = Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0);
               obj[key] = {
-                value: Number(item.value) + (Number(obj[key] ? Number(obj[key].value.toFixed(item._toFixed || 8)) : 0) || 0)
+                value: item._toFixed ? Number(value.toFixed(item._toFixed)) : value
               };
             }
           } else {
