@@ -644,11 +644,12 @@
       line-height: 200px;
     }
     .documentBoxCon{
-      overflow: hidden;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
     }
     .documentBoxCon1{
-      width: 18%;
-      float: left;
+      width: 25%;
     }
     .uploadBox{
       padding-top: 10px;
