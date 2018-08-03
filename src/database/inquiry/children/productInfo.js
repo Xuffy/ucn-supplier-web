@@ -156,11 +156,6 @@ export default {
     _disabled: true,
     _toFixed: 1
   },
-  qty: {
-    key: 'qty',
-    type: 'Number',
-    _disabled: true
-  },
   restrictedSellingCountry: {
     key: 'skuNoneSellCountry',
     _disabled: true,
@@ -195,14 +190,20 @@ export default {
   fobPrice: {
     key: 'skuFobPrice',
     type: 'Number',
-    _totalRow: true,
+    _total: {
+      require: true,
+      unitKey: 'skuFobCurrency'
+    },
     _toFixed: 4
   },
   referenceFobPriceUsd: {
     key: 'skuRefFobPrice',
     type: 'Number',
     _disabled: true,
-    _totalRow: true,
+    _total: {
+      require: true,
+      unitKey: 'skuFobCurrency'
+    },
     _toFixed: 4
   },
   fobPort: {
@@ -212,7 +213,10 @@ export default {
   exwPrice: {
     key: 'skuExwPrice',
     type: 'Number',
-    _totalRow: true,
+    _total: {
+      require: true,
+      unitKey: 'skuExwCurrency'
+    },
     _toFixed: 4
   },
   exwCurrency: {
@@ -223,14 +227,20 @@ export default {
   cifPrice: {
     key: 'skuCifPrice',
     type: 'Number',
-    _totalRow: true,
+    _total: {
+      require: true,
+      unitKey: 'skuCifCurrency'
+    },
     _toFixed: 4
   },
   referenceCifPriceUsd: {
     key: 'skuRefCifPrice',
     type: 'Number',
     _disabled: true,
-    _totalRow: true,
+    _total: {
+      require: true,
+      unitKey: 'skuCifCurrency'
+    },
     _toFixed: 4
   },
   cifCurrency: {
@@ -245,14 +255,20 @@ export default {
   dduOrice: {
     key: 'skuDduPrice',
     type: 'Number',
-    _totalRow: true,
+    _total: {
+      require: true,
+      unitKey: 'skuDduCurrency'
+    },
     _toFixed: 4
   },
   referenceDdupriceUsd: {
     key: 'skuRefDduPrice',
     type: 'Number',
     _disabled: true,
-    _totalRow: true,
+    _total: {
+      require: true,
+      unitKey: 'skuDduCurrency'
+    },
     _toFixed: 4
   },
   dduCurrency: {
@@ -355,32 +371,32 @@ export default {
   skuLength: {
     key: 'skuLength',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 2
   },
   skuBreadth: {
     key: 'skuWidth',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 2
   },
   skuHeight: {
     key: 'skuHeight',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 2
   },
   skuNetWeight: {
     key: 'skuNetWeight',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 2
   },
   skuVolume: {
     key: 'skuVolume',
     type: 'Number',
-    _totalRow: true,
-    _toFixed: 3
+    _total: true,
+    _toFixed: 6
   },
   packingMethodCn: {
     key: 'skuMethodPkgCn',
@@ -400,44 +416,44 @@ export default {
   skuQuantityOfInnerCarton: {
     key: 'skuInnerCartonQty',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 1
   },
   lengthOfInnerCarton: {
     key: 'skuInnerCartonLength',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 2
   },
   breadthOfInnerCarton: {
     key: 'skuInnerCartonWidth',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 2
   },
   heightOfInnerCarton: {
     key: 'skuInnerCartonHeight',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 2
   },
   netWeightOfInnerCarton: {
     key: 'skuInnerCartonWeightNet',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 2
   },
   grossWeightofInnerCarton: {
     key: 'skuInnerCartonRoughWeight',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 2
   },
   volumeOfInnerCarton: {
     key: 'skuInnerCartonVolume',
     type: 'Number',
-    _totalRow: true,
-    _toFixed: 3
+    _total: true,
+    _toFixed: 6
   },
   descriptionOfInnerCarton: {
     key: 'skuInnerCartonDesc',
@@ -471,44 +487,44 @@ export default {
   skuQuantityOfOuterCarton: {
     key: 'skuOuterCartonQty',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 1
   },
   lengthOfOuterCarton: {
     key: 'skuOuterCartonLength',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 2
   },
   breadthOfOuterCarton: {
     key: 'skuOuterCartonWidth',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 2
   },
   heightOfOuterCarton: {
     key: 'skuOuterCartonHeight',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 2
   },
   netWeightOfOuterCarton: {
     key: 'skuOuterCartonNetWeight',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 2
   },
   grossWeightOfOuterCarton: {
     key: 'skuOuterCartonRoughWeight',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 2
   },
   volumeOfOuterCarton: {
     key: 'skuOuterCartonVolume',
     type: 'Number',
-    _totalRow: true,
-    _toFixed: 3
+    _total: true,
+    _toFixed: 6
   },
   packingMethodOfOuterCartonCn: {
     key: 'skuOuterCartonMethodCn',
@@ -526,19 +542,19 @@ export default {
   gp20SkuQuantity: {
     key: 'skuGp20SkuQty',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 1
   },
   gp40SkuQuantity: {
     key: 'skuGp40SkuQty',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 1
   },
   hq40SkuQuantity: {
     key: 'skuHq40SkuQty',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 1
   },
   trayDimension: {
@@ -549,7 +565,7 @@ export default {
   skuQuantityPerTray: {
     key: 'skuSkuQtyPerTray',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 1
   },
   specialTransportRequirements: {
@@ -571,19 +587,19 @@ export default {
     key: 'skuInventory',
     type: 'Number',
     min: 0,
-    _totalRow: true,
+    _total: true,
     _toFixed: 1
   },
   supplierSafeInventoryQuantity: {
     key: 'skuSafeInventory',
     type: 'Number',
-    _totalRow: true,
+    _total: true,
     _toFixed: 1
   },
   supplierMinimumInventory: {
     key: 'skuMinInventory',
     type: 'Number',
-    _totalRow: true
+    _total: true
   },
   mainsaleCountry: {
     key: 'skuMainSaleCountry',
