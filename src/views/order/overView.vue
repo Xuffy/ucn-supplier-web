@@ -350,7 +350,7 @@
                     disableArchive = true;
                 } else {
                     _.map(n, v => {
-                        if (v.status.value !== "已取消") {
+                        if (v.status.value !== "5") {
                             disableArchive = true;
                         } else {
                             archiveLength++;

@@ -56,5 +56,7 @@
   "unqualifiedSkuGrossWeight": "Total G.W. of Unqualified SKU(kg)",
   "checkOuterCartonQty": "Checked Outer Carton QTY",
   "attachments": "Attachment",
-  "qcPics": "QC Pics"
+  "qcPics": "QC Pics",
+  "qcUpload": "upload",
+  "ContinueQcUpload": "Continue uploading"
 }

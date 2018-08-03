@@ -155,5 +155,6 @@
   "orderTotalNetWeight":"订单总净重(kg)",
   "orderTotalGrossWeight":"订单总毛重(kg)",
   "orderTotalVolume":"订单总体积(m³)",
-  "inquiryNo":"询价单号"
+  "inquiryNo":"询价单号",
+  "skuLabelPics": "产品标签照片"
 }

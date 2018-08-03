@@ -158,6 +158,7 @@
                         arr.push(v);
                     }
                 });
+                console.log(arr,'arr')
                 this.$emit('sure',this.$depthClone(arr),this.queryType);
             },
             cancel(){

@@ -20,6 +20,7 @@
                                         v-model="formData[v.key]"
                                         :list="v._list"
                                         :defaultProps="v._defaultProps"
+                                        :checkInputBoxPl="$i.product.pleaseChoose"
                                         :expandOnClickNode="false">
                                 </drop-down-single>
                             </div>
@@ -81,6 +82,7 @@
                                         v-model="formData[v.key]"
                                         :list="v._list"
                                         :defaultProps="v._defaultProps"
+                                        :checkInputBoxPl="$i.product.pleaseChoose"
                                         :expandOnClickNode="false">
                                 </drop-down-single>
                             </div>

@@ -200,7 +200,7 @@
                                           :ref="'pictureUpload'+scope.$index"
                                            @change="uploadChange('pictureUpload'+scope.$index, scope.row[v.key])"></v-upload>
                                 <el-button slot="reference" type="text">
-                                     {{scope.row[v.key].pleaseText + $i.upload.uploadPhotos + '(' + scope.row[v.key].imgNum + '/20' + ')'}}
+                                     {{(scope.row[v.key].pleaseText === '' ?  $i.warehouse.qcUpload : scope.row[v.key].pleaseText) + '(' + scope.row[v.key].imgNum + '/20' + ')'}}
                                 </el-button>
                             </el-popover>
                         </div>
@@ -483,10 +483,10 @@
                     this.productInfoData.forEach(v => {
                         v.skuQcResultDictCode = "";
                         v.deliveryDate = this.$dateFormat(v.deliveryDate, "yyyy-mm-dd");
-                        v.skuUnitDictCode = _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }).name;
-                        v.volumeUnitDictCode = _.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }).name;
-                        v.weightUnitDictCode = _.findWhere(this.weightOption, { code: v.weightUnitDictCode }).name;
-                        v.lengthUnitDictCode = _.findWhere(this.lengthOption, { code: v.lengthUnitDictCode }).name;
+                        v.skuUnitDictCode = v.skuUnitDictCode ? _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }).name : '';
+                        v.volumeUnitDictCode = v.volumeUnitDictCode ? _.findWhere(this.volumeOption, { code: v.volumeUnitDictCode }).name : '';
+                        v.weightUnitDictCode = v.weightUnitDictCode ? _.findWhere(this.weightOption, { code: v.weightUnitDictCode }).name : '';
+                        v.lengthUnitDictCode = v.lengthUnitDictCode ? _.findWhere(this.lengthOption, { code: v.lengthUnitDictCode }).name : '';
                     });
                     let diffData = [];
                     _.map(this.productInfoData, v => {
@@ -765,7 +765,7 @@
 
                 let length = this.$refs[ref][0].getFiles().length
                 e.imgNum = length
-                e.pleaseText = length > 0 ? '继续' : ''
+                e.pleaseText = length > 0 ? this.$i.warehouse.ContinueQcUpload : this.$i.warehouse.qcUpload
             }
         },
         created() {
