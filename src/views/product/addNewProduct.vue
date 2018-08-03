@@ -5,7 +5,7 @@
             <el-row>
                 <!--设置高度51px以免inputNumber错位-->
                 <el-col style="height: 51px;" class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item label="Picture:">
+                    <el-form-item :label="$i.product.picture+':'">
                         <v-upload :limit="20" :list="productForm.pictures" :onlyImage="true" ref="upload"></v-upload>
                     </el-form-item>
                 </el-col>
@@ -269,10 +269,10 @@
                         align="center"
                         width="180">
                     <template slot-scope="scope">
-                        <div v-if="scope.$index===0">
+                        <div v-if="scope.row.status===1">
                             {{$i.product.costPrice}}
                         </div>
-                        <div v-if="scope.$index===1">
+                        <div v-if="scope.row.status===2">
                             {{$i.product.quotedPrice}}
                         </div>
                     </template>
@@ -782,11 +782,6 @@
                                         :value="item.code">
                                 </el-option>
                             </el-select>
-                            <!--<el-input-->
-                            <!--class="speInput"-->
-                            <!--:placeholder="$i.product.pleaseInput"-->
-                            <!--size="mini"-->
-                            <!--v-model="customerQuery.type"></el-input>-->
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
@@ -1056,7 +1051,6 @@
             getCategoryId() {
                 const sys=this.$ajax.get(this.$apis.CATEGORY_SYSTEM, {});
                 const mine=this.$ajax.get(this.$apis.CATEGORY_MINE, {});
-
                 let category=[
                     {
                         id: 5125124,
@@ -1071,15 +1065,17 @@
                         _disableClick: true
                     }
                 ];
-
                 this.$ajax.all([sys,mine]).then(res=>{
                     category[1].children = res[0];
                     category[0].children = res[1];
                     this.categoryList=category;
                 });
             },
-
             addCustomer() {
+                this.customerQuery.name='';
+                this.customerQuery.type=null;
+                this.customerQuery.country='';
+                this.customerQuery.city='';
                 this.addCustomerDialogVisible = true;
                 this.loadingTable = true;
                 this.$ajax.post(this.$apis.get_sellerCustomer, this.customerQuery).then(res => {
@@ -1092,8 +1088,6 @@
                             }
                         });
                     });
-                    console.log(this.tableDataList, "this.tableDataList");
-                    console.log(this.tableData, "this.tableData");
                 }).catch(err => {
                     this.loadingTable = false;
                 });
@@ -1224,6 +1218,71 @@
                 this.loadingData = true;
                 this.$ajax.get(this.$apis.get_productDetail, { id: this.$route.query.id }).then(res => {
                     this.productForm = res;
+                    if(!this.productForm.price || this.productForm.price.length===0){
+                        this.productForm.price=[
+                            {
+                                cifArea: "",
+                                cifCurrency: "USD",
+                                cifPrice: null,
+                                dduArea: "",
+                                dduCurrency: "USD",
+                                dduPrice: null,
+                                fobCurrency: "USD",
+                                fobPrice: null,                    //价格起始是多少
+                                fobPort: "",
+                                exwPrice: null,                    //价格起始是多少
+                                exwCurrency: "USD",
+                                status: 1                       //1成本价，2基础报价
+                            },
+                            {
+                                cifArea: "",
+                                cifCurrency: "USD",
+                                cifPrice: null,
+                                dduArea: "",
+                                dduCurrency: "USD",
+                                dduPrice: null,
+                                fobCurrency: "USD",
+                                fobPrice: null,
+                                fobPort: "",
+                                exwPrice: null,
+                                exwCurrency: "USD",
+                                status: 2
+                            }
+                        ]
+                    } else if(this.productForm.price.length===1){
+                        if(this.productForm.price[0].status===1){
+                            this.productForm.price.push({
+                                cifArea: "",
+                                cifCurrency: "USD",
+                                cifPrice: null,
+                                dduArea: "",
+                                dduCurrency: "USD",
+                                dduPrice: null,
+                                fobCurrency: "USD",
+                                fobPrice: null,
+                                fobPort: "",
+                                exwPrice: null,
+                                exwCurrency: "USD",
+                                status: 2
+                            });
+                        }else if(this.productForm.price[0].status===1){
+                            this.productForm.price.push({
+                                cifArea: "",
+                                cifCurrency: "USD",
+                                cifPrice: null,
+                                dduArea: "",
+                                dduCurrency: "USD",
+                                dduPrice: null,
+                                fobCurrency: "USD",
+                                fobPrice: null,
+                                fobPort: "",
+                                exwPrice: null,
+                                exwCurrency: "USD",
+                                status: 1
+                            });
+                        }
+                    }
+
                     let lengthWidthHeight = this.productForm.lengthWidthHeight.split("*");
                     this.boxSize.length = lengthWidthHeight[0];
                     this.boxSize.width = lengthWidthHeight[1];
@@ -1263,7 +1322,7 @@
             },
             searchCustomer() {
                 this.loadingTable = true;
-                this.$ajax.post(this.$apis.get_sellerCustomerGroup, this.customerQuery).then(res => {
+                this.$ajax.post(this.$apis.get_sellerCustomer, this.customerQuery).then(res => {
                     this.loadingTable = false;
                     this.tableDataList = this.$getDB(this.$db.product.addProductCustomer, res.datas, e => {
                         this.tableData.forEach(v => {
