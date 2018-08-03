@@ -3,6 +3,10 @@ export default {
         _important:true,
         _title:'Remark'
     },
+    skuStatus:{
+        _slot:'skuStatus',
+        _fixed:'left'
+    },
     _remark:{
         _hide:true
     },
@@ -139,6 +143,9 @@ export default {
     skuCategoryId:{
         _disabled:true
     },
+    skuCategoryName:{
+        _hide:true
+    },
     // skuCategoryOne:{},
     // skuCategoryTwo:{},
     // skuCategoryThree:{},
@@ -251,10 +258,6 @@ export default {
         _slot:'skuExpireUnit',
     },
     skuComments:{},
-    skuStatus:{
-        _slot:'skuStatus',
-        _fixed:'left'
-    },
     skuSaleStatus:{
         _disabled:true
     },
@@ -266,28 +269,33 @@ export default {
     skuShippingMarks:{},
     skuOuterCartonBarCode:{},
     skuOuterCartonCode:{},
-    skuLabelPic:{
+    skuLabelPics:{
         _slot:'skuLabelPic',
-        _image:true,
         _upload:{
-            ref:'uploadSkuLabelPic',
-            limit:1
+            limit:20
         }
-        // _image:true,
-        // type:'pic'
     },
     skuLabelDesc:{},
     skuPkgMethodPic:{
         _slot:'skuPkgMethodPic',
-        _image:true
+        _image:true,
+        _upload:{
+            limit:1
+        }
     },
     skuInnerCartonPic:{
         _slot:'skuInnerCartonPic',
-        _image:true
+        _image:true,
+        _upload:{
+            limit:1
+        }
     },
     skuOuterCartonPic:{
         _slot:'skuOuterCartonPic',
-        _image:true
+        _image:true,
+        _upload:{
+            limit:1
+        }
     },
     skuSample:{
         _slot:'skuSample',
@@ -307,18 +315,30 @@ export default {
     skuRemarkThree:{},
     skuAdditionalOne:{
         _slot:'skuAdditionalOne',
-        _image:true
+        _image:true,
+        _upload:{
+            limit:1
+        }
     },
     skuAdditionalTwo:{
         _slot:'skuAdditionalTwo',
-        _image:true
+        _image:true,
+        _upload:{
+            limit:1
+        }
     },
     skuAdditionalThree:{
         _slot:'skuAdditionalThree',
-        _image:true
+        _image:true,
+        _upload:{
+            limit:1
+        }
     },
     skuAdditionalFour:{
         _slot:'skuAdditionalFour',
-        _image:true
+        _image:true,
+        _upload:{
+            limit:1
+        }
     },
 }

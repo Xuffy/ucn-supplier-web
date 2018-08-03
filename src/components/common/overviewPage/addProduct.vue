@@ -98,13 +98,11 @@
                 }
                 let url='';
                 if(this.queryType==='product'){
-                    url=this.$apis.get_buyerProductList;
-                }else if(this.queryType==='bookmark'){
-                    url=this.$apis.get_buyerBookmarkList;
+                    url=this.$apis.get_productList;
                 }
                 this.loadingTable=true;
                 this.$ajax.post(url, params).then(res => {
-                    this.productData=this.$getDB(this.$db.product.indexTable, res.datas, (e) => {
+                    this.productData=this.$getDB(this.$db.product.overviewTable, res.datas, (e) => {
                         let noneSellCountry = '';
                         e.noneSellCountry.value.split(',').forEach(v => {
                             this.countryOption.forEach(m => {
@@ -160,6 +158,7 @@
                         arr.push(v);
                     }
                 });
+                console.log(arr,'arr')
                 this.$emit('sure',this.$depthClone(arr),this.queryType);
             },
             cancel(){
@@ -270,7 +269,7 @@
                     }).catch(err => {
 
                     });
-                }).catch(err => {
+                }).catch(() => {
                     this.loadingTable = false;
                 });
             },

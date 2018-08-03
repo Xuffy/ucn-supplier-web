@@ -240,7 +240,7 @@ export default {
         _rules:{
             required:true
         },
-        accuracy: 2
+        accuracy: 3
     },
     innerCartonNetWeight:{
         showType:'number',

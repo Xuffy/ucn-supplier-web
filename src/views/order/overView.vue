@@ -41,13 +41,15 @@
                         <el-button
                                 v-authorize="'ORDER:OVERVIEW:DOWNLOAD'"
                                 @click="downloadOrder">
-                            {{$i.order.download}}({{selectedList.length===0?$i.order.all:selectedList.length}})</el-button>
+                            {{$i.order.download}}({{selectedList.length===0?$i.order.all:selectedList.length}})
+                        </el-button>
                         <el-button
                                 v-authorize="'ORDER:OVERVIEW:ARCHIVE'"
                                 type='danger'
                                 :loading="disableClickDelete"
                                 :disabled='disableDelete'
-                                @click='deleteOrder'>{{($i.order.archive)}}({{archiveLength}})</el-button>
+                                @click='deleteOrder'>{{($i.order.archive)}}({{archiveLength}})
+                        </el-button>
                     </div>
                     <div class="viewBy">
                         <span>{{$i.order.viewBy}}</span>
@@ -73,33 +75,33 @@
      * @param options 下拉框 原始数据
      * @param value 下拉框 选中值
      */
-    import {mapActions} from 'vuex'
+    import { mapActions } from "vuex";
     import {
         dropDown,
         selectSearch,
         VPagination
-    } from '@/components/index'
+    } from "@/components/index";
     import {
         VTable
-    } from '@/components/index';
+    } from "@/components/index";
 
     export default {
-        name: 'orderOverview',
+        name: "orderOverview",
         components: {
             dropDown,
             VTable,
             selectSearch,
-            page: VPagination,
+            page: VPagination
         },
         data() {
             return {
                 /**
                  * 页面基本data
                  * */
-                view:'1',
+                view: "1",
                 pageData: {},
-                value: '',
-                keyWord: '',
+                value: "",
+                keyWord: "",
                 disabled: false, //delete的状态
                 disableFinish: true, // finish的状态
                 tabData: [],
@@ -119,38 +121,39 @@
                     {
                         id: 3,
                         label: this.$i.order.customerAbbr
-                    },
+                    }
                 ],
-                keyType: '',
+                keyType: "",
                 params: {
-                    orderNo: '',
-                    skuCode: '',
-                    status: '',
-                    customerAbbr:'',
+                    orderNo: "",
+                    skuCode: "",
+                    status: "",
+                    customerAbbr: "",
                     ps: 50,
                     pn: 1,
-                    recycleSupplier:false,
+                    recycleSupplier: false
                 },
                 selectedList: [],
                 selectedNumber: [],
-                tableCode:'uorder_list',
-                disableDelete:true,
-                disableClickDelete:false,
-                archiveLength:0,
+                tableCode: "uorder_list",
+                disableDelete: true,
+                disableClickDelete: false,
+                archiveLength: 0,
 
                 /**
                  * 字典
                  * */
                 orderStatusOption: [],
-                incotermOption:[],
-                paymentOption:[],
-            }
+                incotermOption: [],
+                paymentOption: [],
+                skuStatusOption: []
+            };
         },
         methods: {
-            ...mapActions(['setMenuLink']),
+            ...mapActions(["setMenuLink"]),
             onAction(item) {
                 this.$windowOpen({
-                    url: '/order/detail',
+                    url: "/order/detail",
                     params: {
                         orderId: item.id.value
                     }
@@ -166,64 +169,64 @@
                 this.getData();
             },
             changeView() {
-                this.disableFinish=true;
-                if (this.view === '1') {
-                    this.tableCode='uorder_list';
-                    this.getData()
+                this.disableFinish = true;
+                if (this.view === "1") {
+                    this.tableCode = "uorder_list";
+                    this.getData();
                 } else {
-                    this.tableCode='uorder_sku_list';
-                    this.getData()
+                    this.tableCode = "uorder_sku_list";
+                    this.getData();
                 }
             },
             inputEnter(val) {
                 if (!val.id) return this.$message(this.$i.order.pleaseChooseType);
                 if (val.id === 1) {
                     this.params.orderNo = val.value;
-                    this.params.skuCode = '';
-                    this.params.customerAbbr = '';
-                    this.view='1';
-                } else if(val.id===2) {
-                    this.params.orderNo = '';
+                    this.params.skuCode = "";
+                    this.params.customerAbbr = "";
+                    this.view = "1";
+                } else if (val.id === 2) {
+                    this.params.orderNo = "";
                     this.params.skuCode = val.value;
-                    this.params.customerAbbr = '';
-                    this.view='2';
-                }else if(val.id===3){
-                    this.params.orderNo = '';
-                    this.params.skuCode = '';
+                    this.params.customerAbbr = "";
+                    this.view = "2";
+                } else if (val.id === 3) {
+                    this.params.orderNo = "";
+                    this.params.skuCode = "";
                     this.params.customerAbbr = val.value;
-                    this.view='1';
+                    this.view = "1";
                 }
-                this.getData()
+                this.getData();
             },
             downloadOrder() {
-                let params=this.$depthClone(this.params);
-                params.ids=_.pluck(_.pluck(this.selectedList,'id'),'value');
-                console.log(params,'params')
-                this.$fetch.export_task('EXPORT_ORDER',params);
+                let params = this.$depthClone(this.params);
+                params.ids = _.pluck(_.pluck(this.selectedList, "id"), "value");
+                console.log(params, "params");
+                this.$fetch.export_task("EXPORT_ORDER", params);
             },
             deleteOrder() {
                 this.$confirm(this.$i.order.sureDelete, this.$i.order.prompt, {
                     confirmButtonText: this.$i.order.sure,
                     cancelButtonText: this.$i.order.cancel,
-                    type: 'warning'
+                    type: "warning"
                 }).then(() => {
-                    let ids=[];
-                    _.map(this.selectedList,v=>{
+                    let ids = [];
+                    _.map(this.selectedList, v => {
                         ids.push(v.id.value);
                     });
-                    this.disableClickDelete=true;
-                    this.$ajax.post(this.$apis.ORDER_DELETE,{
-                        ids:ids,
-                        recycleSupplier:true
-                    }).then(res=>{
-                        this.selectedList=[];
+                    this.disableClickDelete = true;
+                    this.$ajax.post(this.$apis.ORDER_DELETE, {
+                        ids: ids,
+                        recycleSupplier: true
+                    }).then(res => {
+                        this.selectedList = [];
                         this.getData();
-                    }).finally(()=>{
-                        this.disableClickDelete=false;
+                    }).finally(() => {
+                        this.disableClickDelete = false;
                     });
 
                     this.$message({
-                        type: 'success',
+                        type: "success",
                         message: this.$i.order.deleteSuccess
                     });
                 }).catch(() => {
@@ -232,82 +235,80 @@
             },
             getData(e) {
                 this.loading = true;
-                let url='',query='';
-                url=(this.view==='1'?this.$apis.OVERVIEW_ORDERPAGE:this.$apis.OVERVIEW_SKUPAGE);
-                query=(this.view==='1'?this.$db.order.overviewByOrder:this.$db.order.overviewBysku);
-                Object.assign(this.params,e);
+                let url = "", query = "";
+                url = (this.view === "1" ? this.$apis.OVERVIEW_ORDERPAGE : this.$apis.OVERVIEW_SKUPAGE);
+                query = (this.view === "1" ? this.$db.order.overviewByOrder : this.$db.order.overviewBysku);
+                Object.assign(this.params, e);
                 this.selectedList = [];
                 this.$ajax.post(url, this.params)
                     .then((res) => {
                         this.loading = false;
-                        this.tabData = this.$getDB(query, res.datas,e=>{
-                            if(e.entryDt){
-                                e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
+                        this.tabData = this.$getDB(query, res.datas, e => {
+                            if (e.entryDt) {
+                                e.entryDt.value = this.$dateFormat(e.entryDt.value, "yyyy-mm-dd");
                             }
-                            if(e.deliveryDt){
-                                e.deliveryDt.value=this.$dateFormat(e.deliveryDt.value,'yyyy-mm-dd');
+                            if (e.deliveryDt) {
+                                e.deliveryDt.value = this.$dateFormat(e.deliveryDt.value, "yyyy-mm-dd");
                             }
-                            if(e.customerAgreementDt){
-                                e.customerAgreementDt.value=this.$dateFormat(e.customerAgreementDt.value,'yyyy-mm-dd');
+                            if (e.customerAgreementDt) {
+                                e.customerAgreementDt.value = this.$dateFormat(e.customerAgreementDt.value, "yyyy-mm-dd");
                             }
-                            if(e.updateDt){
-                                e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
+                            if (e.updateDt) {
+                                e.updateDt.value = this.$dateFormat(e.updateDt.value, "yyyy-mm-dd");
                             }
-                            if(e.status){
-                                e.status.value=this.$change(this.orderStatusOption,'status',e,true).name;
+                            if (e.status) {
+                                e.status._value = (_.findWhere(this.orderStatusOption, { code: e.status.value }) || {}).name;
                             }
-                            if(e.skuStatus){
-                                e.skuStatus.value=this.$change(this.orderStatusOption,'skuStatus',e).name;
+                            if (e.skuStatus) {
+                                e.skuStatus._value = (_.findWhere(this.skuStatusOption, { code: e.skuStatus.value }) || {}).name;
                             }
-                            if(e.skuIncoterm){
-                                e.skuIncoterm.value=this.$change(this.incotermOption,'skuIncoterm',e).name;
+                            if (e.skuIncoterm) {
+                                e.skuIncoterm.value = this.$change(this.incotermOption, "skuIncoterm", e).name;
                             }
-                            if(e.incoterm){
-                                e.incoterm.value=this.$change(this.incotermOption,'incoterm',e,true).name;
+                            if (e.incoterm) {
+                                e.incoterm._value=(_.findWhere(this.incotermOption,{code:e.incoterm.value}) || {}).name;
                             }
 
-                            if(e.payment){
-                                e.payment.value=this.$change(this.paymentOption,'payment',e,true).name;
+                            if (e.payment) {
+                                e.payment.value = this.$change(this.paymentOption, "payment", e, true).name;
                             }
-                            if(e.importantSupplier){
-                                e.importantSupplier.value=(e.importantSupplier.value?'YES':'NO')
+                            if (e.importantSupplier) {
+                                e.importantSupplier.value = (e.importantSupplier.value ? "YES" : "NO");
                             }
-                            if(e.attachment){
-                                e.attachment.value=(e.attachment.value?'YES':'NO')
+                            if (e.attachment) {
+                                e.attachment.value = (e.attachment.value ? "YES" : "NO");
                             }
-                            if(e.remind){
-                                e.remind.value=(e.remind.value?'YES':'NO')
+                            if (e.remind) {
+                                e.remind.value = (e.remind.value ? "YES" : "NO");
                             }
-                            if(e.archive){
-                                e.archive.value=(e.archive.value?'YES':'NO')
+                            if (e.archive) {
+                                e.archive.value = (e.archive.value ? "YES" : "NO");
                             }
 
                         });
                         this.pageData = res;
                     })
                     .catch((res) => {
-                        this.loading = false
+                        this.loading = false;
                     });
             },
 
             //获取字典
             getUnit() {
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
-
-                this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS','ITM','PMT'], {cache: true}).then(res => {
+                this.$ajax.post(this.$apis.get_partUnit, ["ORDER_STATUS", "AE_IS", "ITM", "PMT", "SKU_STATUS"], { cache: true }).then(res => {
                     res.forEach(v => {
-                        if (v.code === 'ORDER_STATUS') {
+                        if (v.code === "ORDER_STATUS") {
                             this.orderStatusOption = v.codes;
-                        }else if(v.code==='ITM'){
-                            this.incotermOption=v.codes;
-                        }else if(v.code==='PMT'){
-                            this.paymentOption=v.codes;
+                        } else if (v.code === "ITM") {
+                            this.incotermOption = v.codes;
+                        } else if (v.code === "PMT") {
+                            this.paymentOption = v.codes;
+                        } else if (v.code === "SKU_STATUS") {
+                            this.skuStatusOption = v.codes;
                         }
                     });
                     this.getData();
-                })
+                });
             },
 
             /**
@@ -328,57 +329,57 @@
         mounted() {
             this.loading = false;
             this.setMenuLink({
-                path: '/logs/index',
-                query: {code: 'ORDER'},
+                path: "/logs/index",
+                query: { code: "ORDER" },
                 type: 10,
-                auth:'ORDER:LOG',
+                auth: "ORDER:LOG",
                 label: this.$i.common.log
             });
             this.setMenuLink({
-                path: '/order/archive',
+                path: "/order/archive",
                 type: 20,
-                auth:'ORDER:ARCHIVE',
+                auth: "ORDER:ARCHIVE",
                 label: this.$i.order.archive
             });
         },
         watch: {
-            selectedList(n){
-                let archiveLength=0;
-                let disableArchive=false;
-                if(n.length===0){
-                    disableArchive=true;
-                }else{
-                    _.map(n,v=>{
-                        if(v.status.value!=='已取消'){
-                            disableArchive=true;
-                        }else{
+            selectedList(n) {
+                let archiveLength = 0;
+                let disableArchive = false;
+                if (n.length === 0) {
+                    disableArchive = true;
+                } else {
+                    _.map(n, v => {
+                        if (v.status.value !== "5") {
+                            disableArchive = true;
+                        } else {
                             archiveLength++;
                         }
                     });
                 }
-                this.disableDelete=disableArchive;
+                this.disableDelete = disableArchive;
 
-                if(this.params.view==='1'){
-                    if(n.length>0){
-                        console.log(n)
-                        let allow=true;
-                        _.map(n,v=>{
-                            if(v.status.value!=='3'){
-                                allow=false;
+                if (this.params.view === "1") {
+                    if (n.length > 0) {
+                        console.log(n);
+                        let allow = true;
+                        _.map(n, v => {
+                            if (v.status.value !== "3") {
+                                allow = false;
                             }
                         });
-                        this.disableFinish=(allow?false:true);
-                    }else{
-                        this.disableFinish=true;
+                        this.disableFinish = (allow ? false : true);
+                    } else {
+                        this.disableFinish = true;
                     }
                 }
-                else{
-                    this.disableFinish=true;
+                else {
+                    this.disableFinish = true;
                 }
-                this.archiveLength=archiveLength;
-            },
+                this.archiveLength = archiveLength;
+            }
         }
-    }
+    };
 
 </script>
 <style scoped>
