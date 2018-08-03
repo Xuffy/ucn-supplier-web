@@ -56,5 +56,7 @@
   "unqualifiedSkuGrossWeight": "不合格总产品总毛重(kg)",
   "checkOuterCartonQty": "检查外箱数",
   "attachments": "附件",
-  "qcPics": "验货照片"
+  "qcPics": "验货照片",
+  "qcUpload": "上传图片",
+  "ContinueQcUpload": "继续上传图片"
 }

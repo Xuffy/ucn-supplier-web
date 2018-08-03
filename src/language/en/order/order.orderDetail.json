@@ -155,5 +155,6 @@
   "orderTotalNetWeight":"Order Total Net Weight(kg)",
   "orderTotalGrossWeight":"Order Total Gross Weight(kg)",
   "orderTotalVolume":"Order Total Volume(m³)",
-  "inquiryNo":"Inquiry No"
+  "inquiryNo":"Inquiry No",
+  "skuLabelPics": "SKU Label Pics"
 }

@@ -226,318 +226,324 @@
         <!--</el-row>-->
         <!--</el-form>-->
 
-        <div class="title">
-            {{$i.order.responsibility}}
-        </div>
-        <el-button
-                class="addBtn"
-                :disabled="!isModify"
-                @click="addResponsibility">
-            {{$i.order.addResponsibility}}
-        </el-button>
-        <el-table
-                :data="orderForm.responsibilityList"
-                style="width: 100%">
-            <el-table-column
-                    prop="type"
-                    align="center"
-                    :label="$i.order.type">
-                <template slot-scope="scope">
-                    <el-input
-                            :disabled="!isModify"
-                            :placeholder="isModify?$i.order.pleaseInput:''"
-                            v-model="scope.row.type"
-                            clearable>
-                    </el-input>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    prop="customer"
-                    align="center"
-                    :label="$i.order.customer">
-                <template slot-scope="scope">
-                    <el-date-picker
-                            :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.customer===''}"
-                            :placeholder="isModify?$i.order.pleaseChoose:''"
-                            @change="handleResponsibilityChange(scope.row,'customer')"
-                            v-model="scope.row.customer"
-                            :editable="false"
-                            align="right"
-                            type="date"
-                            :disabled="!isModify">
-                    </el-date-picker>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    prop="supplier"
-                    align="center"
-                    :label="$i.order.supplier">
-                <template slot-scope="scope">
-                    <el-date-picker
-                            :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.supplier===''}"
-                            @change="handleResponsibilityChange(scope.row,'supplier')"
-                            v-model="scope.row.supplier"
-                            align="right"
-                            :editable="false"
-                            type="date"
-                            :disabled="!isModify"
-                            :placeholder="isModify?$i.order.pleaseChoose:''">
-                    </el-date-picker>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    prop="Remark"
-                    align="center"
-                    :label="$i.order.remarkBig">
-                <template slot-scope="scope">
-                    <el-input
-                            :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.remark===''}"
-                            @change="handleResponsibilityChange(scope.row,'remark')"
-                            :disabled="!isModify"
-                            :placeholder="isModify?$i.order.pleaseInput:''"
-                            v-model="scope.row.remark"
-                            clearable>
-                    </el-input>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    prop="actualDate"
-                    align="center"
-                    :label="$i.order.actualDate">
-                <template slot-scope="scope">
-                    <el-date-picker
-                            :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.actualDt===''}"
-                            @change="handleResponsibilityChange(scope.row,'actualDt')"
-                            v-model="scope.row.actualDt"
-                            align="right"
-                            type="date"
-                            :editable="false"
-                            :disabled="!isModify"
-                            :placeholder="isModify?$i.order.pleaseChoose:''">
-                    </el-date-picker>
-                </template>
-            </el-table-column>
-        </el-table>
-
-        <div class="title">
-            {{$i.order.payment}}
-        </div>
-        <div class="payment-table">
-            <el-button :loading="disableClickPayback" :disabled="!hasHandleOrder" @click="applyPayback" type="primary">
-                {{$i.order.applyRefund}}
-            </el-button>
-            <el-button :disabled="!hasHandleOrder" :loading="disableRemind" @click="remindPay">
-                {{$i.order.remindCustomerPay}}
+        <div v-authorize="'ORDER:DETAIL:RESPONSIBILITY'">
+            <div class="title">
+                {{$i.order.responsibility}}
+            </div>
+            <el-button
+                    class="addBtn"
+                    :disabled="!isModify"
+                    @click="addResponsibility">
+                {{$i.order.addResponsibility}}
             </el-button>
             <el-table
-                    v-loading="loadingPaymentTable"
-                    class="payTable"
-                    :data="paymentData"
-                    border
-                    :summary-method="getSummaries"
-                    show-summary
-                    :row-class-name="tableRowClassName"
+                    :data="orderForm.responsibilityList"
                     style="width: 100%">
                 <el-table-column
-                        fixed="left"
-                        label="#"
+                        prop="type"
                         align="center"
-                        width="55">
-                    <template slot-scope="scope">
-                        {{scope.$index+1}}
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="no"
-                        :label="$i.order.payNo"
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="name"
-                        :label="$i.order.payName"
-                        width="180">
-                    <template slot-scope="scope">
-                        <el-select
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                v-model="scope.row.name"
-                                clearable
-                                :placeholder="$i.order.pleaseChoose">
-                            <el-option
-                                    v-for="item in paymentItemOption"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.code">
-                            </el-option>
-                        </el-select>
-                        <span v-else>{{scope.row.name}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        :label="$i.order.planPayDt"
-                        width="200">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.planPayDt?$dateFormat(scope.row.planPayDt,"yyyy-mm-dd"):""}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="planPayAmount"
-                        :label="$i.order.planPayAmount"
-                        width="160">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.planPayAmount}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        :label="$i.order.actualPayDt"
-                        width="200">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.actualPayDt?$dateFormat(scope.row.actualPayDt,"yyyy-mm-dd"):""}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="actualPayAmount"
-                        :label="$i.order.actualPayAmount"
-                        width="160">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.actualPayAmount}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        :label="$i.order.planRefundDt"
-                        width="200">
-                    <template slot-scope="scope">
-                        <el-date-picker
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                class="speDate"
-                                v-model="scope.row.planRefundDt"
-                                type="date"
-                                :picker-options="datePickOption"
-                                :placeholder="$i.order.pleaseChoose">
-                        </el-date-picker>
-                        <span v-else>{{scope.row.planRefundDt?$dateFormat(scope.row.planRefundDt,"yyyy-mm-dd"):""}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="planRefundAmount"
-                        :label="$i.order.planRefundAmount"
-                        width="160">
-                    <template slot-scope="scope">
-                        <el-input-number
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                class="speNumber"
-                                v-model="scope.row.planRefundAmount"
-                                :controls="false"
-                                :min="0"></el-input-number>
-                        <span v-else>{{scope.row.planRefundAmount}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="actualRefundDt"
-                        :label="$i.order.actualRefundDt"
-                        width="200">
-                    <template slot-scope="scope">
-                        <el-date-picker
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                class="speDate"
-                                v-model="scope.row.actualRefundDt"
-                                type="date"
-                                :picker-options="datePickOption1"
-                                :placeholder="$i.order.pleaseChoose">
-                        </el-date-picker>
-                        <span v-else>{{scope.row.actualRefundDt?$dateFormat(scope.row.actualRefundDt,"yyyy-mm-dd"):""}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="actualRefundAmount"
-                        :label="$i.order.actualRefundAmount"
-                        width="160">
-                    <template slot-scope="scope">
-                        <el-input-number
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                class="speNumber"
-                                v-model="scope.row.actualRefundAmount"
-                                :controls="false"
-                                :min="0"></el-input-number>
-                        <span v-else>{{scope.row.actualRefundAmount}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        prop="remark"
-                        :label="$i.order.remark"
-                        width="200">
+                        :label="$i.order.type">
                     <template slot-scope="scope">
                         <el-input
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                :placeholder="$i.order.pleaseInput"
+                                :disabled="!isModify"
+                                :placeholder="isModify?$i.order.pleaseInput:''"
+                                v-model="scope.row.type"
+                                clearable>
+                        </el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="customer"
+                        align="center"
+                        :label="$i.order.customer">
+                    <template slot-scope="scope">
+                        <el-date-picker
+                                :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.customer===''}"
+                                :placeholder="isModify?$i.order.pleaseChoose:''"
+                                @change="handleResponsibilityChange(scope.row,'customer')"
+                                v-model="scope.row.customer"
+                                :editable="false"
+                                align="right"
+                                type="date"
+                                :disabled="!isModify">
+                        </el-date-picker>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="supplier"
+                        align="center"
+                        :label="$i.order.supplier">
+                    <template slot-scope="scope">
+                        <el-date-picker
+                                :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.supplier===''}"
+                                @change="handleResponsibilityChange(scope.row,'supplier')"
+                                v-model="scope.row.supplier"
+                                align="right"
+                                :editable="false"
+                                type="date"
+                                :disabled="!isModify"
+                                :placeholder="isModify?$i.order.pleaseChoose:''">
+                        </el-date-picker>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="Remark"
+                        align="center"
+                        :label="$i.order.remarkBig">
+                    <template slot-scope="scope">
+                        <el-input
+                                :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.remark===''}"
+                                @change="handleResponsibilityChange(scope.row,'remark')"
+                                :disabled="!isModify"
+                                :placeholder="isModify?$i.order.pleaseInput:''"
                                 v-model="scope.row.remark"
                                 clearable>
                         </el-input>
-                        <span v-else>{{scope.row.remark}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                        prop="currencyCode"
-                        :label="$i.order.payCurrency"
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        fixed="right"
+                        prop="actualDate"
                         align="center"
-                        :label="$i.order.available"
-                        width="180">
+                        :label="$i.order.actualDate">
                     <template slot-scope="scope">
-                        <span v-if="scope.row.status===-1">{{$i.order.abandon}}</span>
-                        <span v-if="scope.row.status===10">{{$i.order.waitCustomerConfirm}}</span>
-                        <span v-if="scope.row.status===20">{{$i.order.waitSupplierConfirm}}</span>
-                        <span v-if="scope.row.status===30">{{$i.order.waitServiceConfirm}}</span>
-                        <span v-if="scope.row.status===40">已确认</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        fixed="right"
-                        :label="$i.order.action"
-                        align="center"
-                        width="125">
-                    <template slot-scope="scope">
-                        <div v-if="scope.row.status===20">
-                            <el-button @click="confirmPay(scope.row)" type="text">{{$i.order.confirm}}</el-button>
-                        </div>
-                        <div v-else-if="scope.row.status===40 && scope.row.planPayDt">
-                        </div>
-                        <div v-else>
-                            <div v-if="scope.row.isNew">
-                                <el-button :disabled="false" @click="saveNewPay(scope.row)" type="text" size="small">
-                                    {{$i.order.save}}
-                                </el-button>
-                                <el-button :disabled="false" @click="cancelSaveNewPay(scope.row)" type="text"
-                                           size="small">{{$i.order.cancel}}
-                                </el-button>
-                            </div>
-                            <div v-else>
-                                <div v-if="scope.row.status===-1">
-                                    <el-button v-if="scope.row.planRefundDt" @click="restorePay(scope.row)" type="text">
-                                        {{$i.order.restore}}
-                                    </el-button>
-                                </div>
-                                <div v-else-if="scope.row.isModify">
-                                    <el-button @click="saveModifyPay(scope.row)" type="text" size="small">
-                                        {{$i.order.save}}
-                                    </el-button>
-                                    <el-button @click="cancelModifyPay(scope.row)" type="text" size="small">
-                                        {{$i.order.cancel}}
-                                    </el-button>
-                                </div>
-                                <div v-else>
-                                    <el-button @click="modifyPay(scope.row)" type="text">{{$i.order.modify}}</el-button>
-                                    <el-button @click="abandonPay(scope.row)" type="text">{{$i.order.abandon}}
-                                    </el-button>
-                                </div>
-                            </div>
-                        </div>
+                        <el-date-picker
+                                :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.actualDt===''}"
+                                @change="handleResponsibilityChange(scope.row,'actualDt')"
+                                v-model="scope.row.actualDt"
+                                align="right"
+                                type="date"
+                                :editable="false"
+                                :disabled="!isModify"
+                                :placeholder="isModify?$i.order.pleaseChoose:''">
+                        </el-date-picker>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
+
+        <div v-authorize="'ORDER:DETAIL:PAYMENT'">
+            <div class="title">
+                {{$i.order.payment}}
+            </div>
+            <div class="payment-table">
+                <el-button :loading="disableClickPayback" :disabled="!hasHandleOrder" @click="applyPayback" type="primary">
+                    {{$i.order.applyRefund}}
+                </el-button>
+                <el-button :disabled="!hasHandleOrder" :loading="disableRemind" @click="remindPay">
+                    {{$i.order.remindCustomerPay}}
+                </el-button>
+                <el-table
+                        v-loading="loadingPaymentTable"
+                        class="payTable"
+                        :data="paymentData"
+                        border
+                        :summary-method="getSummaries"
+                        show-summary
+                        :row-class-name="tableRowClassName"
+                        style="width: 100%">
+                    <el-table-column
+                            fixed="left"
+                            label="#"
+                            align="center"
+                            width="55">
+                        <template slot-scope="scope">
+                            {{scope.$index+1}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="no"
+                            :label="$i.order.payNo"
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
+                            prop="name"
+                            :label="$i.order.payName"
+                            width="180">
+                        <template slot-scope="scope">
+                            <el-select
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    v-model="scope.row.name"
+                                    clearable
+                                    :placeholder="$i.order.pleaseChoose">
+                                <el-option
+                                        v-for="item in paymentItemOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code">
+                                </el-option>
+                            </el-select>
+                            <span v-else>{{scope.row.name}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            :label="$i.order.planPayDt"
+                            width="200">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.planPayDt?$dateFormat(scope.row.planPayDt,"yyyy-mm-dd"):""}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="planPayAmount"
+                            :label="$i.order.planPayAmount"
+                            width="160">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.planPayAmount}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            :label="$i.order.actualPayDt"
+                            width="200">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.actualPayDt?$dateFormat(scope.row.actualPayDt,"yyyy-mm-dd"):""}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="actualPayAmount"
+                            :label="$i.order.actualPayAmount"
+                            width="160">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.actualPayAmount}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            :label="$i.order.planRefundDt"
+                            width="200">
+                        <template slot-scope="scope">
+                            <el-date-picker
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    class="speDate"
+                                    v-model="scope.row.planRefundDt"
+                                    type="date"
+                                    :picker-options="datePickOption"
+                                    :placeholder="$i.order.pleaseChoose">
+                            </el-date-picker>
+                            <span v-else>{{scope.row.planRefundDt?$dateFormat(scope.row.planRefundDt,"yyyy-mm-dd"):""}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="planRefundAmount"
+                            :label="$i.order.planRefundAmount"
+                            width="160">
+                        <template slot-scope="scope">
+                            <el-input-number
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    class="speNumber"
+                                    v-model="scope.row.planRefundAmount"
+                                    :controls="false"
+                                    :min="0"></el-input-number>
+                            <span v-else>{{scope.row.planRefundAmount}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="actualRefundDt"
+                            :label="$i.order.actualRefundDt"
+                            width="200">
+                        <template slot-scope="scope">
+                            <el-date-picker
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    class="speDate"
+                                    v-model="scope.row.actualRefundDt"
+                                    type="date"
+                                    :picker-options="datePickOption1"
+                                    :placeholder="$i.order.pleaseChoose">
+                            </el-date-picker>
+                            <span v-else>{{scope.row.actualRefundDt?$dateFormat(scope.row.actualRefundDt,"yyyy-mm-dd"):""}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="actualRefundAmount"
+                            :label="$i.order.actualRefundAmount"
+                            width="160">
+                        <template slot-scope="scope">
+                            <el-input-number
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    class="speNumber"
+                                    v-model="scope.row.actualRefundAmount"
+                                    :controls="false"
+                                    :min="0"></el-input-number>
+                            <span v-else>{{scope.row.actualRefundAmount}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="remark"
+                            :label="$i.order.remark"
+                            width="200">
+                        <template slot-scope="scope">
+                            <el-input
+                                    v-if="scope.row.isNew || scope.row.isModify"
+                                    :placeholder="$i.order.pleaseInput"
+                                    v-model="scope.row.remark"
+                                    clearable>
+                            </el-input>
+                            <span v-else>{{scope.row.remark}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="currencyCode"
+                            :label="$i.order.payCurrency"
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            align="center"
+                            :label="$i.order.available"
+                            width="180">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.status===-1">{{$i.order.abandon}}</span>
+                            <span v-if="scope.row.status===10">{{$i.order.waitCustomerConfirm}}</span>
+                            <span v-if="scope.row.status===20">{{$i.order.waitSupplierConfirm}}</span>
+                            <span v-if="scope.row.status===30">{{$i.order.waitServiceConfirm}}</span>
+                            <span v-if="scope.row.status===40">已确认</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            :label="$i.order.action"
+                            align="center"
+                            width="125">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.status===20">
+                                <el-button @click="confirmPay(scope.row)" type="text">{{$i.order.confirm}}</el-button>
+                            </div>
+                            <div v-else-if="scope.row.status===40 && scope.row.planPayDt">
+                            </div>
+                            <div v-else>
+                                <div v-if="scope.row.isNew">
+                                    <el-button :disabled="false" @click="saveNewPay(scope.row)" type="text" size="small">
+                                        {{$i.order.save}}
+                                    </el-button>
+                                    <el-button :disabled="false" @click="cancelSaveNewPay(scope.row)" type="text"
+                                               size="small">{{$i.order.cancel}}
+                                    </el-button>
+                                </div>
+                                <div v-else>
+                                    <div v-if="scope.row.status===-1">
+                                        <el-button v-if="scope.row.planRefundDt" @click="restorePay(scope.row)" type="text">
+                                            {{$i.order.restore}}
+                                        </el-button>
+                                    </div>
+                                    <div v-else-if="scope.row.isModify">
+                                        <el-button @click="saveModifyPay(scope.row)" type="text" size="small">
+                                            {{$i.order.save}}
+                                        </el-button>
+                                        <el-button @click="cancelModifyPay(scope.row)" type="text" size="small">
+                                            {{$i.order.cancel}}
+                                        </el-button>
+                                    </div>
+                                    <div v-else>
+                                        <el-button @click="modifyPay(scope.row)" type="text">{{$i.order.modify}}</el-button>
+                                        <el-button @click="abandonPay(scope.row)" type="text">{{$i.order.abandon}}
+                                        </el-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+
+
 
         <div class="title">
             {{$i.order.productInfoBig}}
@@ -1174,7 +1180,8 @@
         VUpload,
         VHistoryModify,
         VMessageBoard,
-        VProduct} from "@/components/index";
+        VProduct
+    } from "@/components/index";
     import { mapActions } from "vuex";
 
     export default {
@@ -1288,7 +1295,7 @@
                 savedIncoterm: "",           //用来存储incoterm
                 disableChangeSkuStatus: false,
                 initialData: {},
-                disableProductLine:[],
+                disableProductLine: [],
 
 
                 /**
@@ -1569,34 +1576,20 @@
                     let data = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(res.skuList, "skuSysCode"), item => {
                         if (item._remark) {
                             item.label.value = this.$i.order.remarks;
-                            if (item.skuPictures) {
-                                item.skuPictures._image = false;
-                            }
-                            item.skuLabelPic._image = false;
-                            item.skuPkgMethodPic._image = false;
-                            item.skuInnerCartonPic._image = false;
-                            item.skuOuterCartonPic._image = false;
-                            item.skuAdditionalOne._image = false;
-                            item.skuAdditionalTwo._image = false;
-                            item.skuAdditionalThree._image = false;
-                            item.skuAdditionalFour._image = false;
                         }
                         else {
                             item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
                             item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                             item.skuSample.value = item.skuSample.value ? "1" : "0";
-                            item.skuUnit._value = item.skuUnit ? this.$change(this.skuUnitOption, "skuUnit", item, true).name : "";
-                            item.skuUnitWeight._value = item.skuUnitWeight ? this.$change(this.weightOption, "skuUnitWeight", item, true).name : "";
-                            item.skuUnitLength._value = item.skuUnitLength ? this.$change(this.lengthOption, "skuUnitLength", item, true).name : "";
-                            item.skuExpireUnit._value = item.skuExpireUnit ? this.$change(this.expirationDateOption, "skuExpireUnit", item, true).name : "";
-                            item.skuStatus._value = item.skuStatus ? _.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }).name : "";
-                            item.skuUnitVolume._value = item.skuUnitVolume ? this.$change(this.volumeOption, "skuUnitVolume", item, true).name : "";
-                            item.skuSaleStatus._value = item.skuSaleStatus ? this.$change(this.skuSaleStatusOption, "skuSaleStatus", item, true).name : "";
-                            if (item.skuCategoryId.value) {
-                                item.skuCategoryId._value = _.findWhere(this.category, { id: item.skuCategoryId.value }).name;
-                            }
-                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory ? this.$change(this.quarantineTypeOption, "skuInspectQuarantineCategory", item, true).name : "";
-                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
+                            item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
+                            item.skuUnitWeight._value = (_.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }) || {}).name;
+                            item.skuUnitLength._value = (_.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }) || {}).name;
+                            item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
+                            item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
+                            item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
+                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
+                            item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
+                            item.skuCategoryId._value = item.skuCategoryName.value;
                         }
                     });
                     this.productTableData = [];
@@ -1733,7 +1726,7 @@
                     if (v.skuInspectQuarantineCategory) {
                         v.skuInspectQuarantineCategory = _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code;
                     }
-                    let picKey = ["skuLabelPic", "skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
+                    let picKey = ["skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
                     _.map(picKey, item => {
                         if (_.isArray(v[item])) {
                             v[item] = (v[item][0] ? v[item][0] : null);
@@ -1743,7 +1736,7 @@
                         }
                     });
                 });
-                // return console.log(this.$depthClone(params.responsibilityList),'params.responsibilityList')
+                // return console.log(this.$depthClone(params.skuList),'params.responsibilityList')
                 params.attachments = this.$refs.upload[0].getFiles();
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
@@ -1752,33 +1745,6 @@
                 }).finally(err => {
                     this.disableClickSend = false;
                 });
-            },
-            saveAsDraft() {
-                let params = Object.assign({}, this.orderForm);
-                _.map(this.supplierOption, v => {
-                    if (params.supplierName === v.code) {
-                        params.supplierName = v.name;
-                        params.supplierCode = v.code;
-                        params.supplierId = v.id;
-                    }
-                });
-                params.skuList = this.dataFilter(this.productTableData);
-                _.map(params.skuList, v => {
-                    if (_.isArray(v.skuLabelPic)) {
-                        v.skuLabelPic = (v.skuLabelPic[0] ? v.skuLabelPic[0] : null);
-                    }
-                });
-                params.attachments = this.$refs.upload[0].getFiles();
-                params.draftCustomer = true;
-                this.disableClickSaveDraft = true;
-                this.$ajax.post(this.$apis.ORDER_SAVE, params).then(res => {
-                    this.$router.push("/order/overview");
-                }).finally(err => {
-                    this.disableClickSaveDraft = false;
-                });
-            },
-            getOrderNo() {
-                this.getSupplier();
             },
             getSupplier() {
                 this.loadingPage = true;
@@ -1896,6 +1862,7 @@
                             arr.push(v);
                         }
                     });
+                    console.log(this.$depthClone(arr), "arr");
                     this.chooseProduct = this.getHistory(e, arr, true);
                 }
                 else if (type === "detail") {
@@ -1910,7 +1877,7 @@
                     let data = _.filter(this.productTableData, (m) =>
                         m.skuSysCode.value === e.skuSysCode.value
                     );
-                    this.getHistory(e, data);
+                    this.getHistory(e, []);
                 }
             },
             getHistory(e, data, isTrue) {
@@ -1932,35 +1899,20 @@
                     let history = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(arr, "skuSysCode"), item => {
                         if (item._remark) {
                             item.label.value = this.$i.order.remarks;
-                            if (item.skuPictures) {
-                                item.skuPictures._image = false;
-                            }
-                            // item.skuLabelPics._image = false;
-                            item.skuPkgMethodPic._image = false;
-                            item.skuInnerCartonPic._image = false;
-                            item.skuOuterCartonPic._image = false;
-                            item.skuAdditionalOne._image = false;
-                            item.skuAdditionalTwo._image = false;
-                            item.skuAdditionalThree._image = false;
-                            item.skuAdditionalFour._image = false;
                         }
                         else {
                             item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
                             item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                             item.skuSample.value = item.skuSample.value ? "1" : "0";
-                            item.skuUnit._value = item.skuUnit ? this.$change(this.skuUnitOption, "skuUnit", item, true).name : "";
-                            item.skuUnitWeight._value = item.skuUnitWeight ? this.$change(this.weightOption, "skuUnitWeight", item, true).name : "";
-                            item.skuUnitLength._value = item.skuUnitLength ? this.$change(this.lengthOption, "skuUnitLength", item, true).name : "";
-                            item.skuExpireUnit._value = item.skuExpireUnit ? this.$change(this.expirationDateOption, "skuExpireUnit", item, true).name : "";
-                            item.skuStatus._value = item.skuStatus ? _.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }).name : "";
-                            item.skuUnitVolume._value = item.skuUnitVolume ? this.$change(this.volumeOption, "skuUnitVolume", item, true).name : "";
-                            item.skuSaleStatus._value = item.skuSaleStatus ? this.$change(this.skuSaleStatusOption, "skuSaleStatus", item, true).name : "";
-
-                            // if (item.skuCategoryId.value) {
-                            //     item.skuCategoryId._value = _.findWhere(this.category, { id: item.skuCategoryId.value }).name;
-                            // }
-                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory ? this.$change(this.quarantineTypeOption, "skuInspectQuarantineCategory", item, true).name : "";
-                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
+                            item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
+                            item.skuUnitWeight._value = (_.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }) || {}).name;
+                            item.skuUnitLength._value = (_.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }) || {}).name;
+                            item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
+                            item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
+                            item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
+                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
+                            item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
+                            item.skuCategoryId._value = item.skuCategoryName.value;
                         }
                     });
 
@@ -1977,7 +1929,7 @@
                 if (this.productTableData.length > 0) {
                     _.map(this.productTableData, v => {
                         if (!v._remark) {
-                            this.disableProductLine.push(v.id.value);
+                            this.disableProductLine.push(v.skuId.value);
                         }
                     });
                 }
@@ -1995,7 +1947,6 @@
                     type: "warning"
                 }).then(() => {
                     let sysCodes = _.uniq(_.pluck(_.pluck(this.selectProductInfoTable, "skuSysCode"), "value"));
-                    console.log(this.selectProductInfoTable, "this.selectProductInfoTable");
                     let arr = [];
                     _.map(this.productTableData, v => {
                         _.map(sysCodes, m => {
@@ -2024,7 +1975,8 @@
             handleProductOk(e) {
                 this.loadingProductTable = true;
                 this.productTableDialogVisible = false;
-                this.$ajax.post(this.$apis.ORDER_SKUS, e).then(res => {
+                let ids = _.pluck(_.pluck(e, 'id'), "value");
+                this.$ajax.post(this.$apis.ORDER_SKUS, ids).then(res => {
                     _.map(res, v => {
                         v.skuStatus = "TBC";
                     });
@@ -2032,39 +1984,25 @@
                         item._isNew = true;
                         if (item._remark) {
                             item.label.value = this.$i.order.remarks;
-                            if (item.skuPictures) {
-                                item.skuPictures._image = false;
-                            }
-                            item.skuLabelPic._image = false;
-                            item.skuPkgMethodPic._image = false;
-                            item.skuInnerCartonPic._image = false;
-                            item.skuOuterCartonPic._image = false;
-                            item.skuAdditionalOne._image = false;
-                            item.skuAdditionalTwo._image = false;
-                            item.skuAdditionalThree._image = false;
-                            item.skuAdditionalFour._image = false;
                         }
                         else {
                             item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
                             item.skuSample._value = item.skuSample.value ? "YES" : "NO";
                             item.skuSample.value = item.skuSample.value ? "1" : "0";
-                            item.skuUnit._value = item.skuUnit ? this.$change(this.skuUnitOption, "skuUnit", item, true).name : "";
-                            item.skuUnitWeight._value = item.skuUnitWeight ? this.$change(this.weightOption, "skuUnitWeight", item, true).name : "";
-                            item.skuUnitLength._value = item.skuUnitLength ? this.$change(this.lengthOption, "skuUnitLength", item, true).name : "";
-                            item.skuExpireUnit._value = item.skuExpireUnit ? this.$change(this.expirationDateOption, "skuExpireUnit", item, true).name : "";
-                            item.skuStatus._value = item.skuStatus ? _.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }).name : "";
-                            item.skuUnitVolume._value = item.skuUnitVolume ? this.$change(this.volumeOption, "skuUnitVolume", item, true).name : "";
-                            item.skuSaleStatus._value = item.skuSaleStatus ? this.$change(this.skuSaleStatusOption, "skuSaleStatus", item, true).name : "";
-                            if (item.skuCategoryId.value) {
-                                item.skuCategoryId._value = _.findWhere(this.category, { id: item.skuCategoryId.value }).name;
-                            }
-                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
+                            item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
+                            item.skuUnitWeight._value = (_.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }) || {}).name;
+                            item.skuUnitLength._value = (_.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }) || {}).name;
+                            item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
+                            item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
+                            item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
+                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
+                            item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
+                            item.skuCategoryId._value = item.skuCategoryName.value;
                         }
                     });
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
-                    console.log(this.productTableData, "this.productTableData");
                 }).finally(err => {
                     this.loadingProductTable = false;
                 });
@@ -2128,15 +2066,15 @@
                                     } else if (item[k].key === "skuUnitWeight") {
                                         json[k] = (_.findWhere(this.weightOption, { name: item[k]._value }) || {}).code;
                                     } else if (item[k].key === "skuUnitLength") {
-                                        json[k] =(_.findWhere(this.lengthOption, { name: item[k]._value }) || {}).code;
+                                        json[k] = (_.findWhere(this.lengthOption, { name: item[k]._value }) || {}).code;
                                     } else if (item[k].key === "skuUnitVolume") {
-                                        json[k] =( _.findWhere(this.volumeOption, { name: item[k]._value }) || {}).code;
+                                        json[k] = (_.findWhere(this.volumeOption, { name: item[k]._value }) || {}).code;
                                     } else if (item[k].key === "skuExpireUnit") {
                                         json[k] = (_.findWhere(this.expirationDateOption, { name: item[k]._value }) || {}).code;
                                     } else if (item[k].key === "skuStatus") {
-                                        json[k] =  (_.findWhere(this.skuStatusTotalOption, { name: item[k]._value }) || {}).code;
+                                        json[k] = (_.findWhere(this.skuStatusTotalOption, { name: item[k]._value }) || {}).code;
                                     } else if (item[k].key === "skuSample") {
-                                        json[k] =  (_.findWhere(this.isNeedSampleOption, { code: item[k].value }) || {}).code;
+                                        json[k] = (_.findWhere(this.isNeedSampleOption, { code: item[k].value }) || {}).code;
                                     } else if (item[k].key === "skuInspectQuarantineCategory") {
                                         json[k] = (_.findWhere(this.quarantineTypeOption, { name: item[k]._value }) || {}).code;
                                     } else {
@@ -2219,7 +2157,11 @@
                             sums[index] = "-";
                         }
                         else {
-                            const values = data.map(item => Number(item[column.property]));
+                            const values = data.map(item => {
+                                if(item.status===40){
+                                    return Number(item[column.property])
+                                }
+                            });
                             if (!values.every(value => isNaN(value))) {
                                 sums[index] = values.reduce((prev, curr) => {
                                     const value = Number(curr);
@@ -2549,10 +2491,6 @@
                     type: "warning"
                 }).then(() => {
                     this.disableClickRefuse = true;
-                    // return console.log({
-                    //     ids:[this.orderForm.id],
-                    //     orderNos:[this.orderForm.orderNo],
-                    // })
                     this.$ajax.post(this.$apis.ORDER_REFUSE, {
                         ids: [this.orderForm.id],
                         orderNos: [this.orderForm.orderNo]
@@ -2592,7 +2530,7 @@
                     if (v.skuInspectQuarantineCategory) {
                         v.skuInspectQuarantineCategory = _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code;
                     }
-                    let picKey = ["skuLabelPic", "skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
+                    let picKey = ["skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
                     _.map(picKey, item => {
                         if (_.isArray(v[item])) {
                             v[item] = (v[item][0] ? v[item][0] : null);
@@ -2606,38 +2544,9 @@
                 });
             },
 
-            /**
-             * 搜索框事件
-             * */
-            inputEnter(e) {
-                console.log(e);
-            }
-
         },
         created() {
-            let category = [];
-            this.category = [];
-            this.loadingPage = true;
-            this.$ajax.get(this.$apis.CATEGORY_SYSTEM, {}).then(res => {
-                _.map(res, v => {
-                    category.push(v);
-                });
-                this.$ajax.get(this.$apis.CATEGORY_MINE, {}).then(data => {
-                    _.map(data, v => {
-                        category.push(v);
-                    });
-                    _.map(category, data => {
-                        _.map(data.children, ele => {
-                            this.category.push(ele);
-                        });
-                    });
-                    this.getOrderNo();
-                }).catch(err => {
-                    this.loadingPage = false;
-                });
-            }).catch(err => {
-                this.loadingPage = false;
-            });
+            this.getSupplier();
         },
         mounted() {
             this.setMenuLink({

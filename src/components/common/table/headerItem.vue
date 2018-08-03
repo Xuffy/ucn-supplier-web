@@ -10,7 +10,7 @@
       <i slot="reference" class="el-icon-question"></i>
     </el-popover>
 
-    <div class="sort-box" v-if="!disabledSort || item._sort" @click="item._sort && changeSort(item.key)">
+    <div class="sort-box" v-if="!disabledSort && item._sort" @click="item._sort && changeSort(item.key)">
       <i class="el-icon-caret-top"
          :class="{active:currentSort.orderType === 'asc' && currentSort.orderBy === item.key}"
          @click.stop="changeSort(item.key,'asc')"></i>
