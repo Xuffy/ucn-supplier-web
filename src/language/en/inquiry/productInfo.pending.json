@@ -118,5 +118,8 @@
   "otherPackingInformationEn": "Other Packing Information EN",
   "adjustSkuAndPackageOrNot": "Adjust SKU and package or not",
   "updateDt": "time",
-  "cifCurrency": "CIF Currency"
+  "cifCurrency": "CIF Currency",
+  "skuRefFobPriceNote": "Reference FOB price=(EXW+$985/68*CTN volume/Product QTY per CTN)*1.05",
+  "skuRefCifPriceNote": "Reference CIF price= FOB+( Ocean freight_USD（40HC）+ Insurance expenses_USD （40HC））/68*CTN volume/ Product QTY per CTN",
+  "skuRefDduPriceNote": "Reference DDU price= CIF+ Price of port to warehouse_domestic currency（40HC）/68* CTN volume / Product QTY per CTN /Exchange rate"
 }

@@ -376,6 +376,11 @@ export default {
         if (!field) continue;
         let key = db[field].key || field;
         db[field]._mustChecked = keys.has(key);
+
+        let note = db[field]._i_note;
+        if (note) {
+          db[field]._note = this.$i.inquiry[note];
+        }
       }
 
       this.productTabData = this.newProductTabData = this.$getDB(
