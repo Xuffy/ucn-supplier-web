@@ -581,7 +581,7 @@
              * 页面表格事件
              * */
             handleBlur(e, index) {
-                if (e === "inboundOutCartonTotalQty") {
+                if (e === "inboundOutCartonTotalQty" || e === 'outerCartonSkuQty') {
                     //处理入库产品总箱数输入框
                     if (!this.productData[index][e].value || !this.productData[index]["outerCartonSkuQty"].value) {
                         this.productData[index].inboundSkuTotalQty.value = "";

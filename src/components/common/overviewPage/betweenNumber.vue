@@ -1,22 +1,28 @@
 <template>
     <div class="between">
         <i class="between-range_icon"></i>
-        <el-input-number
+        <v-input-number
                 class="between-range_input"
                 v-model="form[betweenKey[0]]"
-                :controls="false"></el-input-number>
+                :controls="false"></v-input-number>
         <span class="between-separator">-</span>
-        <el-input-number
+        <v-input-number
                 class="between-range_input"
                 v-model="form[betweenKey[1]]"
-                :controls="false"></el-input-number>
+                :controls="false"></v-input-number>
         <i class="between-range_close-icon"></i>
     </div>
 </template>
 
 <script>
+
+    import VInputNumber from '../inputNumber/index'
+    
     export default {
         name: "betweenNumber",
+        components:{
+            VInputNumber
+        },
         props:{
             form:{
                 type:Object,
