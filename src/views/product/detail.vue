@@ -42,23 +42,30 @@
                     </el-col>
                 </el-row>
                 <div class="btns">
-                    <el-button @click="editProduct">{{$i.product.edit}}</el-button>
+                    <el-button
+                            :disabled="productForm.recycle"
+                            @click="editProduct">{{$i.product.edit}}</el-button>
                     <el-button
                             v-authorize="'PRODUCT:DETAIL:SET_SALE'"
                             :loading="disabledSetupBtn"
+                            :disabled="productForm.recycle"
                             @click="setUpDown">{{btnInfo}}</el-button>
                     <el-button
                             v-authorize="'PRODUCT:DETAIL:ADD_PRODUCT'"
+                            :disabled="productForm.recycle"
                             @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
                     <el-button
                             v-authorize="'PRODUCT:DETAIL:UPLOAD_PRODUCT'"
+                            :disabled="productForm.recycle"
                             @click="()=>$refs.importCategory.show()">{{$i.product.upload}}</el-button>
                     <el-button
                             v-authorize="'PRODUCT:DETAIL:DOWNLOAD'"
+                            :disabled="productForm.recycle"
                             @click="download">{{$i.product.download}}</el-button>
                     <el-button
                             v-authorize="'PRODUCT:DETAIL:ARCHIVE'"
                             :loading="disabledDeleteBtn"
+                            :disabled="productForm.recycle"
                             type="danger"
                             @click="deleteProduct">{{$i.product.delete}}
                     </el-button>
@@ -221,7 +228,7 @@
                     otherPackInfoEn: "",
                     adjustPackage: 2,
                     lengthWidthHeight: "",
-                    recycle: 2,
+                    recycle: false,
                     categoryId: "",                      //类型id
                     rateValueAddedTax: 1,               //增值税率
                     taxRefundRate: 1,
@@ -365,6 +372,7 @@
                 this.loadingTable = true;
                 this.$ajax.get(this.$apis.get_productDetail, { id: this.$route.query.id }).then(res => {
                     this.productForm = res;
+                    console.log(this.$depthClone(this.productForm.recycle),'this.productForm')
 
                     //处理国家显示
                     if (this.productForm.noneSellCountry) {
