@@ -329,7 +329,7 @@ const Util = {
       _.map(data, value => {
         if (!ignore || _.isEmpty(value[ignore])) {
           _.mapObject(value, (val, key) => {
-            if (type === 'same' && first[key]) {
+            if (type === 'same' && first[key] && (_.isUndefined(keyData[key]) || !keyData[key] === false)) {
               keyData[key] = first[key].value === val.value;
             } else if (type === 'def' && first[key] && first[key].value !== val.value) {
               keyData[key] = true;
@@ -343,14 +343,7 @@ const Util = {
       let keyData = this.contrast(data, 'def', ignore)
         , len = _.values(keyData).length
         , i = 0;
-      keyData = _.mapObject(keyData, (val) => {
-        // let z = 200 - ((255 / len) * i);
-        // val = `rgba(${z},81,10,1)`;
-        // val =  '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).substr(-6);
-        val = `#f3510a`;
-        // i++;
-        return val
-      });
+      keyData = _.mapObject(keyData, (val) => val = `#ec743b`);
 
       return _.map(data, value => {
         return _.mapObject(value, (val, key) => {
@@ -365,6 +358,7 @@ const Util = {
     },
     setHideSame(data, ignore) {
       let keyData = this.contrast(data, 'same', ignore);
+      console.log(keyData, data)
       return _.map(data, value => {
         return _.mapObject(value, (val, key) => {
           if (keyData[key] && _.isObject(val)) {
@@ -376,7 +370,6 @@ const Util = {
       });
     },
     revertHideSame(data) {
-      console.log(data)
       return _.map(data, value => {
         return _.mapObject(value, (val, key) => {
           if (_.isObject(val) && val._hideSame) {

@@ -6,8 +6,8 @@
 
     <div style="display: flex;">
       <div class="data-box" v-for="(item,index) in dataList" :key="index">
-        <p v-text="item.title">purchase order</p>
-        <p v-text="item.name">purchase order</p>
+        <p v-text="item.title"></p>
+        <p v-text="item.name"></p>
         <ul>
           <li v-for="uItem in item.list"
               v-text="uItem.value + ' ' + uItem.unit"></li>

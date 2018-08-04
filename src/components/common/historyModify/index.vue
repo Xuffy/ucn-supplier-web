@@ -8,7 +8,9 @@
       :visible.sync="showDialog">
 
       <div class="table-header">
-        <el-checkbox v-model="hideSameChecked" @change="changeTbaleData">{{$i.common.hideTheSame}}</el-checkbox>
+        <div>
+          <el-checkbox v-if="!isModify" v-model="hideSameChecked" @change="changeTbaleData">{{$i.common.hideTheSame}}</el-checkbox>
+        </div>
 
         <v-filter-column v-if="code" ref="filterColumn" :code="code"
                          :table-ref="() => $refs.tableBox"
@@ -94,6 +96,7 @@
                 <el-select
                   v-else-if="row[item.key].type === 'Select' && row[item.key]._option"
                   clearable
+                  filterable
                   v-model="row[item.key].value"
                   @change="val => {changeSelect(val,row[item.key],row)}"
                   :placeholder="$i.order.pleaseChoose">
@@ -307,11 +310,9 @@
         this.$emit('change', item, row);
       },
       changeTbaleData(type) {
-        if (type) {
-          this.dataList = this.$table.setHideSame(this.dataList, '_remark');
-        } else {
-          this.dataList = this.$table.revertHideSame(this.dataList);
-        }
+        this.dataList = this.$depthClone(type
+          ? this.$table.setHideSame(this.dataList, '_remark')
+          : this.$table.revertHideSame(this.dataList));
       }
     },
   }

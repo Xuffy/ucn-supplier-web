@@ -35,16 +35,18 @@
             <el-input :placeholder="$i.common.inputkeyWordToSearch" v-model="myCategoryKeyWord"
                       suffix-icon="el-icon-search"/>
           </div>
+          <!--
+            draggable
+            :allow-drop="allowDrop"
+            @node-drop="categoryDrop"
+          -->
           <el-tree
             class="filter-tree"
             :data="myCategoryData"
             :props="defaultProps"
             highlight-current
             default-expand-all
-            draggable
             node-key="id"
-            :allow-drop="allowDrop"
-            @node-drop="categoryDrop"
             :filter-node-method="filterNode"
             :expand-on-click-node="false"
             @node-click="myCategoryChange"

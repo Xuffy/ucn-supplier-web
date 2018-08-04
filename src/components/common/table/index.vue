@@ -10,7 +10,7 @@
                         @change="val => {$emit('filter-value',val)}"></v-filter-value>-->
 
         <v-filter-column v-if="!hideFilterColumn && code" ref="filterColumn" :code="code"
-                         :table-ref="() => $refs.tableBox"
+                         :table-ref="() => $refs.tableContainer"
                          @change="val => setDataList(dataList)"></v-filter-column>
       </div>
     </div>
@@ -27,7 +27,8 @@
 
         <div class="fixed-left-header-item"
              v-for="item in dataColumn"
-             v-if="!item._hide && !item._hidden && item.key && item._fixed === 'left'">
+             v-if="!item._hide && !item._hidden && item.key && item._fixed === 'left'"
+             :class="['location-' + item.key]">
           <v-header-item :item="item"
                          :change-sort="changeSort"
                          :current-sort="currentSort"
@@ -44,7 +45,7 @@
 
       <!--表格 渲染-->
       <div class="table-box" id="table-box" ref="tableBox" :style="{'max-height':height + 'px'}">
-        <table v-if="dataList.length" ref="table">
+        <table v-if="dataList.length">
           <thead ref="tableTitle">
           <tr>
             <td ref="tableCheckbox" v-if="selection" class="checkbox">
@@ -85,7 +86,7 @@
 
             <!--序号 渲染-->
             <td v-if="index % newRowspan === 0" :rowspan="newRowspan" class="fixed-left">
-              <div v-text="(index / newRowspan) + 1"></div>
+              <div v-text="(index / rowspan) + 1"></div>
             </td>
 
             <!--数据内容 渲染-->
@@ -224,7 +225,11 @@
         type: Boolean,
         default: false,
       },
-      newRowspan: { // 原 rowspan
+      rowspan: { // 原 rowspan
+        type: Number,
+        default: 1,
+      },
+      newRowspan: {
         type: Number,
         default: 1,
       },

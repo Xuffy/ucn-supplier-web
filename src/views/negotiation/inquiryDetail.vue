@@ -54,7 +54,7 @@
             <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue !== 21" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
             <el-button @click="exportDatas">{{ $i.common.download }}</el-button>
             <el-button type="warning" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="![21, 22].includes(tabData[0].status.originValue)">{{ $i.common.cancel }}</el-button>
-            <el-button type="danger" @click="ajaxInqueryAction('delete')" :disabled="tabData[0].status.originValue !== 1">{{ $i.common.archive }}</el-button>
+            <el-button type="danger" @click="ajaxInqueryAction('delete')" :disabled="![1, 99].includes(tabData[0].status.originValue)">{{ $i.common.archive }}</el-button>
           </div>
           <div class="bom-btn-wrap" v-show="statusModify">
             <el-button @click="modify">{{ $i.common.send }}</el-button>
@@ -81,7 +81,7 @@
           :isInquiry="true">
       </v-product>
     </el-dialog>
-    <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @save="save" :beforeSave="beforeSave" ref="HM"></v-history-modify>
+    <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @save="save" ref="HM"></v-history-modify>
     <v-message-board v-if="chatParams" module="INQUIRY" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
   </div>
 </template>

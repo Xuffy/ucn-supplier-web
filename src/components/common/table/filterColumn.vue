@@ -166,24 +166,32 @@
       locationField(item) {
         let pe = this.tableRef()
           , key = item.property
-          , timeout = null
-          , be = pe
+          ,timeout = null
+          , be
           , e;
 
-        if (_.isUndefined(pe.scrollLeft)) {
+        if (pe.$el) {
           pe = pe.$el;
           be = pe.querySelector('.el-table__body-wrapper');
+          e = pe.querySelector(`.el-table__fixed th.location-${key}:not(.is-hidden)`);
+          if (!e){
+            e = pe.querySelector(`.el-table__header .location-${key}`);
+          }
+        }else{
+          e = pe.querySelector(`.fixed-left-header .location-${key}`);
+          be = pe.querySelector('.table-box');
+          if (!e){
+            e = pe.querySelector(`.table-box .location-${key}`);
+          }
         }
-
-        e = pe.querySelector(`.location-${key}`);
 
         if (!_.isEmpty(e)) {
           be.scrollLeft = e.offsetLeft - (pe.offsetWidth / 2);
-          e.setAttribute('ucn-flicker', 'true');
+          e.setAttribute('ucn-table-flicker', 'true');
           this.cancel();
           timeout = setTimeout(() => {
             clearTimeout(timeout);
-            e.removeAttribute('ucn-flicker');
+            e.removeAttribute('ucn-table-flicker');
           }, 4000)
         }
       }
@@ -254,7 +262,7 @@
     }
   }
 
-  [ucn-flicker='true'] {
+  [ucn-table-flicker='true'] {
     animation: ucn-flicker-fade 1s infinite;
     -webkit-animation: ucn-flicker-fade 1s infinite;
   }

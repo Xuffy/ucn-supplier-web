@@ -179,6 +179,7 @@
                                         :controls="false"
                                         v-model="scope.row[v.key].value"
                                         :mark="v.label"
+                                        @blur="inputBlur(scope.row, v.key)"
                                         :accuracy="v.accuracy ? v.accuracy : null"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='input'">
@@ -544,7 +545,8 @@
                         || column.property === 'unqualifiedSkuNetWeight'
                         || column.property === 'qualifiedSkuGrossWeight'
                         || column.property === 'unqualifiedSkuGrossWeight'
-
+                        || column.property === 'actSkuCartonTotalQty'
+                        || column.property === 'actSkuQty'
                         ) {
                             const values = data.map(item => {
                                 if (item[column.property] !== null) {
@@ -604,7 +606,40 @@
                 });
                 return sums;
             },
+            inputBlur (row, k) {
+                // 计算实际产品总箱数
+                row.actSkuCartonTotalQty.value = row.qualifiedSkuCartonTotalQty.value + row.unqualifiedSkuCartonTotalQty.value
+                
+                // 实际产品数量
+                row.actSkuQty.value = row.qualifiedSkuQty.value + row.unqualifiedSkuQty.value
 
+                // 合格产品数量
+                row.qualifiedSkuQty.value = row.actOuterCartonSkuQty.value * row.qualifiedSkuCartonTotalQty.value
+
+                // 不合格产品数量
+                row.unqualifiedSkuQty.value = row.actOuterCartonSkuQty.value * row.unqualifiedSkuCartonTotalQty.value
+
+                // 合格产品总净重
+                row.qualifiedSkuNetWeight.value = row.qualifiedSkuCartonTotalQty.value * row.outerCartonNetWeight.value
+
+                // 不合格产品总净重
+                row.unqualifiedSkuNetWeight.value = row.unqualifiedSkuCartonTotalQty.value * row.outerCartonNetWeight.value
+
+                // 合格产品总体积
+                row.qualifiedSkuVolume.value = row.qualifiedSkuCartonTotalQty.value * row.outerCartonVolume.value
+
+                // 不合格产品总体积
+                row.unqualifiedSkuVolume.value = row.unqualifiedSkuCartonTotalQty.value * row.outerCartonVolume.value
+
+                // 合格产品总毛重
+                row.qualifiedSkuGrossWeight.value = row.qualifiedSkuCartonTotalQty.value * row.outerCartonGrossWeight.value
+
+                // 不合格产品总毛重
+                row.unqualifiedSkuGrossWeight.value = row.unqualifiedSkuCartonTotalQty.value * row.outerCartonGrossWeight.value
+
+                // 外箱体积
+                row.outerCartonVolume.value = (row.outerCartonLength.value * row.outerCartonWidth.value * row.outerCartonHeight.value) / 1000000
+            },
             submit() {
                 if (this.$validateForm(this.qcDetail, this.$db.warehouse.qcOrderDetailBasicInfo)) {
                     return false;
