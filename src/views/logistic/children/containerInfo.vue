@@ -7,7 +7,7 @@
         @selection-change="handleSelectionChange" 
         :row-class-name="tableRowClassName">
         <!-- <el-table-column type="selection" width="100" align="center" class-name="checkbox-no-margin" v-if="edit"/> -->
-        <el-table-column type="index" width="50" align="center"/>
+        <el-table-column type="index" width="100" align="center"/>
         <el-table-column :label="$i.logistic.containerNo" width="140" align="center" prop='{"key":"containerNo","total":false}'>
           <template slot-scope="scope">
             <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.containerNo" v-if="edit" @change="ContainerInfoLight('containerNo',scope.row.containerNo,scope.$index,scope)"></el-input>

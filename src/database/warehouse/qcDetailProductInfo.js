@@ -135,13 +135,13 @@ export default {
       type: 'Number',
       required: true
     },
-    accuracy: 2
+    accuracy: 1
   },
   unqualifiedSkuCartonTotalQty: {
     key: 'unqualifiedSkuCartonTotalQty',
     type: 'Number',
     showType: 'number',
-    accuracy: 2,
+    accuracy: 1,
     _rules: {
       type: 'Number',
       required: true

@@ -565,7 +565,8 @@
                 }).then(() => {
                     this.$ajax.post(this.$apis.PAYMENT_ACCEPT, {
                         id: data.id,
-                        version: data.version
+                        version: data.version,
+                        moduleCode: 'WAREHOUSE'
                     }).then(res => {
                         this.$message({
                             message: this.$i.warehouse.confirmSuccess,

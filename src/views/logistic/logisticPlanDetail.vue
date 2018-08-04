@@ -172,6 +172,7 @@
         containerInfo: [],
         mediatorDate: [],
         containerinfoMatch: [],
+        ProductFromOrderChecked: [],
         paymentSum: {},
         selectArr: {
           containerType: [],
@@ -275,6 +276,9 @@
       pageTypeCurr() {
         return this.$route.name;
       },
+      orderType(){
+        return this.pageTypeCurr== 'loadingListDetail' ? 37 : 30;
+      }, 
       isParams() {
         return _.isEmpty(this.$route.query)
       },
@@ -412,7 +416,15 @@
         this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res=>{
           this.showAddProductDialog = true;
           this.ProductFromOrderRes = res.datas;
-          this.ProductFromOrder = this.$getDB(this.$db.logistic.dbBasicInfoObj,res.datas);
+          this.ProductFromOrder = this.$getDB(this.$db.logistic.dbBasicInfoObj,res.datas,el => {          
+              this.productList.forEach(item=>{
+                if(el.skuId.value==item.skuId.value) {
+                  el._disabled = true;
+                  el._checked = true;
+                }
+              })
+              return el;
+            });
           this.$nextTick(()=>{
             this.$set(this.pageParams,'pn',res.pn);
             this.$set(this.pageParams,'ps',res.ps);
@@ -434,7 +446,7 @@
           this.matchRate(res.currencyExchangeRate);
           this.attachmentList = res.attachment;
           this.fieldDisplay = res.fieldDisplay;
-          this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30?moduleCode=LOGISTIC`).then(res => {
+          this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/${this.orderType}?moduleCode=LOGISTIC`).then(res => {
             this.createdPaymentData(res)
           })
           this.getSupplier(res.logisticsNo)
@@ -565,14 +577,18 @@
             clearInterval(this.CutDown)
           }
         }, 1000)
-        this.$ajax.post(`${this.$apis.logistics_payment_batchDunning}/${this.logisticsNo}/30?moduleCode=LOGISTIC`, argArr).then(res => {
+        this.$ajax.post(`${this.$apis.logistics_payment_batchDunning}/${this.logisticsNo}/${this.orderType}?moduleCode=LOGISTIC`).then(res => {
           this.$message({
             type: 'success',
             message: this.$i.logistic.operationSuccess
           })
-          this.$ajax.post(`${this.$apis.get_payment_list}${this.logisticsNo}/30?moduleCode=LOGISTIC`).then(res => {
+          this.$ajax.post(`${this.$apis.get_payment_list}${this.logisticsNo}/${this.orderType}?moduleCode=LOGISTIC`).then(res => {
             this.createdPaymentData(res, 'dunning')
           })
+        }).catch(res=> {
+          this.batchDunningCutDown = '';
+          this.dunningDisabled = false;
+          clearInterval(this.CutDown)
         })
       },
       createdPaymentData(res = this.oldPaymentObject, dunning) {
@@ -581,6 +597,7 @@
         // if (!dunning) {
         //   this.dunningDisabled = !this.paymentList.some((item) => item.planPayAmount > item.actualPayAmount);
         // } 暂定功能
+        this.dunningDisabled = false;
         this.paymentSum = res.statisticsDatas[0]
       },
       getNewLogisticsNo() {
@@ -735,7 +752,7 @@
           currency: this.selectArr.exchangeCurrency.find(a => a.code === currencyCode).id,
           currencyCode,
           orderNo: this.oldPlanObject.logisticsNo,
-          orderType: 30,
+          orderType: this.orderType,
           payToCompanyId,
           payToCompanyName: skuSupplierObj ? skuSupplierObj.skuSupplierName : null,
           type: 10
@@ -768,11 +785,17 @@
         this.ProductFromOrderChecked = arr;
       },
       closeAddProduct() {
-        let CheckedIdArr =  this.ProductFromOrderChecked.map(el => {
+        let CheckedIdArr =  this.ProductFromOrderChecked ? this.ProductFromOrderChecked.map(el => {
           return el.id.value;
-        })
-        let arr = CheckedIdArr.map(el=>{
+        }) : []
+        let arr = CheckedIdArr ? CheckedIdArr.map(el=>{
           return _.findWhere(this.ProductFromOrderRes,{id:el})
+        }) : [];
+        this.showAddProductDialog = false
+        this.ProductFromOrderChecked.forEach((el,index) => {          
+          if(el._disabled) {
+            arr.splice(index,1);
+          }
         });
         this.showAddProductDialog = false
         const selectArrData = this.$depthClone(arr);
@@ -803,6 +826,7 @@
           !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
         })
         this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList]
+        this.ProductFromOrderChecked= [];
       },
 
       selectProduct(arr) {
@@ -1015,6 +1039,10 @@
         this.transportInfoArr.forEach(a => {
           this.$set(this.transportInfoObj, a.key, a.value)
         })
+
+        _.mapObject(this.mediatorDate[0], (value, key) => {
+          this.oldPlanObject[key] = value.value
+        })
          //判断 ContainerInfo 是否修改过高亮 以便不传后台返回的修改值
         this.oldPlanObject.containerDetail =   this.oldPlanObject.containerDetail&&this.$depthClone(this.oldPlanObject.containerDetail).map(el=>{
           if(!el.isModify&&'fieldDisplay' in el){
@@ -1153,6 +1181,8 @@
         text-align: right;
         padding-right: 10px;
         box-sizing: border-box;
+        font-weight: bold;
+        color: #777;
       } // .el-select, .el-input {
       //   flex:1;
       // }
