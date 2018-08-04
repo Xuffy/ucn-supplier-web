@@ -164,7 +164,7 @@ export default {
       // 删除恢复
       switch (this.$route.params.type) {
         case 'inquiry':
-          this.actionInquiry('restore');
+          this.actionInquiry('revert');
           break;
       }
     },
