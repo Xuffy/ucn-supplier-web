@@ -456,7 +456,7 @@ export default {
     key: 'skuInnerCartonVolume',
     type: 'Number',
     _total: true,
-    _toFixed: 6
+    _toFixed: 3
   },
   descriptionOfInnerCarton: {
     key: 'skuInnerCartonDesc',
@@ -527,7 +527,7 @@ export default {
     key: 'skuOuterCartonVolume',
     type: 'Number',
     _total: true,
-    _toFixed: 6
+    _toFixed: 3
   },
   packingMethodOfOuterCartonCn: {
     key: 'skuOuterCartonMethodCn',
