@@ -34,6 +34,7 @@ export default {
     country:{
         type:'select',
         selectCode:'country',
+        multipleSelect:true,
         _filterable:true,
         _multiple:true,
     },

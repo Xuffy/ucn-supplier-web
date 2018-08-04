@@ -29,12 +29,9 @@ export default {
         _hide:true
     },
     skuPic:{
-        _slot:'skuPictures',
-        type:'pic',
         _image:true,
         key:'skuPictures',
         _upload:{
-            ref:'uploadSkuPictures',
             limit:1,
             readonly:true
         }
