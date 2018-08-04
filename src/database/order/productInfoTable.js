@@ -50,13 +50,19 @@ export default {
         _disabled:true
     },
     skuDescCustomer:{
-        _disabled:true
+        _rules:{
+            required:true
+        }
     },
     skuNameCustomer:{
-        _disabled:true
+        _rules:{
+            required:true
+        }
     },
     skuCustomerSkuCode:{
-        _disabled:true
+        _rules:{
+            required:true
+        }
     },
     skuCode:{
         _disabled:true
