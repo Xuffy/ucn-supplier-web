@@ -156,7 +156,6 @@
                         e.unitLength.value = this.$change(this.lengthOption, "unitLength", e, true).name;
                         e.unitVolume.value = this.$change(this.volumeOption, "unitVolume", e, true).name;
                         e.unitWeight.value = this.$change(this.weightOption, "unitWeight", e, true).name;
-
                         if (e.noneSellCountry.value) {
                             let noneSellCountry = e.noneSellCountry.value.split(",");
                             e.noneSellCountry._value = "";
@@ -173,9 +172,9 @@
                             });
                             e.mainSaleCountry._value = e.mainSaleCountry._value.slice(0, e.mainSaleCountry._value.length - 1);
                         }
-
                         e.yearListed.value = this.$dateFormat(e.yearListed.value, "yyyy-mm");
                         e.inspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, {code:e.inspectQuarantineCategory.value}) || {}).name;
+                        console.log(e,'e')
                         return e;
                     });
                     this.pageData = res;

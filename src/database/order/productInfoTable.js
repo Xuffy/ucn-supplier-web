@@ -29,12 +29,9 @@ export default {
         _hide:true
     },
     skuPic:{
-        _slot:'skuPictures',
-        type:'pic',
         _image:true,
         key:'skuPictures',
         _upload:{
-            ref:'uploadSkuPictures',
             limit:1,
             readonly:true
         }
@@ -53,13 +50,19 @@ export default {
         _disabled:true
     },
     skuDescCustomer:{
-        _disabled:true
+        _rules:{
+            required:true
+        }
     },
     skuNameCustomer:{
-        _disabled:true
+        _rules:{
+            required:true
+        }
     },
     skuCustomerSkuCode:{
-        _disabled:true
+        _rules:{
+            required:true
+        }
     },
     skuCode:{
         _disabled:true

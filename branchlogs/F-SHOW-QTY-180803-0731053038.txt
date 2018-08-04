@@ -1,3 +1,0 @@
-1.Inquiry detail的product info中增加SKU采购数量字段; 
-2.Inquiry overview 的 view by sku的字段中增加SKU采购数量字段 
-3.inquiry compare的 view by sku的字段中增加SKU采购数量字段

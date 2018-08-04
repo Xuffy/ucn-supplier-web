@@ -543,8 +543,6 @@
             </div>
         </div>
 
-
-
         <div class="title">
             {{$i.order.productInfoBig}}
         </div>
@@ -719,8 +717,10 @@
         </el-dialog>
 
         <v-history-modify
+                @closed="$refs.table.update()"
                 code="uorder_sku_list"
                 @save="saveNegotiate"
+                :beforeSave="beforeSave"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
             <!--<v-upload :limit="20" readonly></v-upload>-->
@@ -1166,8 +1166,12 @@
                     v-model="data.value"></el-input-number>
         </v-history-modify>
 
-        <v-message-board @send="afterSend" :readonly="orderForm.status==='5'" module="order" code="detail"
-                         :id="$route.query.orderId"></v-message-board>
+        <v-message-board
+                @send="afterSend"
+                :readonly="orderForm.status==='5'"
+                module="order"
+                code="detail"
+                :id="$route.query.orderId"></v-message-board>
     </div>
 </template>
 
@@ -1721,6 +1725,15 @@
                 params.orderSkuUpdateList = orderSkuUpdateList;
                 params.skuList = this.dataFilter(this.productTableData);
 
+                /**
+                 * 判断是否产品客户语言描述，产品客户语言品名和客户货号填了
+                 * */
+                for(let val in params.skuList){
+                    if(this.$validateForm(params.skuList[val], this.$db.order.productInfoTable)){
+                        return;
+                    }
+                }
+
                 _.map(params.skuList, v => {
                     v.skuSample = v.skuSample === "1" ? true : false;
                     if (v.skuInspectQuarantineCategory) {
@@ -1736,7 +1749,6 @@
                         }
                     });
                 });
-                // return console.log(this.$depthClone(params.skuList),'params.responsibilityList')
                 params.attachments = this.$refs.upload[0].getFiles();
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
@@ -1891,9 +1903,11 @@
                 };
 
                 this.$ajax.post(this.$apis.ORDER_HISTORY, param).then(res => {
-                    let arr = [];
+                    let arr = [],obj={};
                     _.map(res.datas, v => {
-                        arr.push(JSON.parse(v.history));
+                        obj=JSON.parse(v.history);
+                        obj.fieldRemark=JSON.parse(v.fieldsRemark);
+                        arr.push(obj);
                     });
 
                     let history = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(arr, "skuSysCode"), item => {
@@ -2009,6 +2023,15 @@
             },
             handleCancel() {
                 this.productTableDialogVisible = false;
+            },
+            beforeSave(data){
+                let obj={};
+                _.map(data[0],(val,key)=>{
+                    obj[key]=val.value;
+                });
+                if(this.$validateForm(obj, this.$db.order.productInfoTable)){
+                    return false;
+                }
             },
             saveNegotiate(e) {
                 if (!this.orderForm.orderSkuUpdateList || this.orderForm.orderSkuUpdateList.length === 0) {
@@ -2514,18 +2537,55 @@
             afterSend() {
                 let params = Object.assign({}, this.orderForm);
                 _.map(this.supplierOption, v => {
-                    if (params.supplierName === v.id) {
+                    if (params.supplierCode === v.code) {
                         params.supplierName = v.name;
                         params.supplierCode = v.code;
                         params.supplierId = v.id;
                         params.supplierCompanyId = v.companyId;
                     }
                 });
+                let orderSkuUpdateList = [];
+                _.map(this.productTableData, item => {
+                    let isModify = false, isModifyStatus = false;
+                    _.map(item, (val, index) => {
+                        if (val._isModified) {
+                            isModify = true;
+                        }
+                        if (val._isModifyStatus) {
+                            isModifyStatus = true;
+                        }
+                    });
+                    if (isModify || isModifyStatus) {
+                        let isIn = false;
+                        _.map(orderSkuUpdateList, data => {
+                            if (data.skuId === item.skuId.value) {
+                                data.skuInfo = isModify;
+                                data.skuStatus = isModifyStatus;
+                                isIn = true;
+                            }
+                        });
+                        if (!isIn) {
+                            orderSkuUpdateList.push({
+                                skuId: item.skuId.value,
+                                skuInfo: isModify,
+                                skuStatus: isModifyStatus
+                            });
+                        }
+                    }
+                    if (!item._remark) {
+                        _.map(item, (v, k) => {
+                            if (v._isModified || v._isModifyStatus) {
+                                if (!item.fieldUpdate.value) {
+                                    item.fieldUpdate.value = {};
+                                }
+                                item.fieldUpdate.value[k] = "";
+                            }
+                        });
+                    }
+                });
+                params.orderSkuUpdateList = orderSkuUpdateList;
                 params.skuList = this.dataFilter(this.productTableData);
                 _.map(params.skuList, v => {
-                    if (_.isArray(v.skuLabelPic)) {
-                        v.skuLabelPic = (v.skuLabelPic[0] ? v.skuLabelPic[0] : null);
-                    }
                     v.skuSample = v.skuSample === "1" ? true : false;
                     if (v.skuInspectQuarantineCategory) {
                         v.skuInspectQuarantineCategory = _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code;
@@ -2534,6 +2594,9 @@
                     _.map(picKey, item => {
                         if (_.isArray(v[item])) {
                             v[item] = (v[item][0] ? v[item][0] : null);
+                        } else if (_.isString(v[item])) {
+                            let key = this.$getOssKey(v[item], true);
+                            v[item] = key[0];
                         }
                     });
                 });
