@@ -120,7 +120,6 @@ body {
 
 .el-message {
   padding: 10px 15px 10px 10px;
-  //opacity: .9;
   min-width: 230px;
 }
 
@@ -155,26 +154,26 @@ body {
 
 .el-dialog__wrapper {
   text-align: center;
-}
+  &:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
 
-.el-dialog__wrapper:before {
-  content: '';
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
-}
+  .el-dialog:not(.ucn-dialog-center) {
+    vertical-align: top;
+    display: inline-block;
+    text-align: left;
+  }
 
-.el-dialog__wrapper .el-dialog:not(.ucn-dialog-center) {
-  vertical-align: top;
-  display: inline-block;
-  text-align: left;
-}
+  .ucn-dialog-center {
+    vertical-align: middle;
+    display: inline-block;
+    margin: 0 auto !important;
+    text-align: left;
+  }
 
-.el-dialog__wrapper .ucn-dialog-center {
-  vertical-align: middle;
-  display: inline-block;
-  margin: 0 auto !important;
-  text-align: left;
 }
 
 .el-badge__content.is-fixed {
@@ -195,4 +194,14 @@ th.ucn-table-required .cell:before {
 .el-form-item__label {
   font-weight: 600;
   color: #777777;
+}
+
+.ucn-app {
+  &:not(.ucn-language-zh) {
+    .el-pagination__total:after {
+      content: 'recordes';
+      display: inline-block;
+      margin-left: 5px;
+    }
+  }
 }

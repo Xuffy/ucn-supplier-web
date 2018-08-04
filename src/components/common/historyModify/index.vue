@@ -9,7 +9,8 @@
 
       <div class="table-header">
         <div>
-          <el-checkbox v-if="!isModify" v-model="hideSameChecked" @change="changeTbaleData">{{$i.common.hideTheSame}}</el-checkbox>
+          <el-checkbox v-if="!isModify" v-model="hideSameChecked" @change="changeTbaleData">{{$i.common.hideTheSame}}
+          </el-checkbox>
         </div>
 
         <v-filter-column v-if="code" ref="filterColumn" :code="code"
@@ -40,8 +41,10 @@
 
             <div v-else>
               <span
-                v-if="(row[item.key]._disabled && !row._remark) || (!isModify && !row[item.key]._upload) || (!isModify && row._remark)"
-                v-text="row[item.key]._value || row[item.key].value">
+                v-if="(row[item.key]._disabled && !row._remark)
+                || (!isModify && !row[item.key]._upload)
+                || (!isModify && row._remark)"
+                v-text="setDataFilter(row[item.key])">
               </span>
 
               <!--附件上传-->
@@ -207,6 +210,7 @@
         if (isModify && (_.isEmpty(editData) || !_.isArray(editData))) {
           return false
         }
+        this.hideSameChecked = false;
         this.dataList = [];
         this.defaultData = [];
         this.dataColumn = [];
@@ -310,9 +314,21 @@
         this.$emit('change', item, row);
       },
       changeTbaleData(type) {
-        this.dataList = this.$depthClone(type
+        this.dataList = type
           ? this.$table.setHideSame(this.dataList, '_remark')
-          : this.$table.revertHideSame(this.dataList));
+          : this.$table.revertHideSame(this.dataList);
+      },
+      setDataFilter(item) {
+        let value = '';
+        value = item._value || item.value;
+        if (item._toFixed) {
+          value = this.$toFixed(value, item._toFixed);
+        }
+
+        if (value !== 0 && !value) {
+          value = '--';
+        }
+        return value;
       }
     },
   }
