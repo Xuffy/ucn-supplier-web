@@ -40,7 +40,7 @@
                        @node-drop="departmentDrop"
                        :expand-on-click-node="false"
                        :filter-node-method="filterDepartment"
-                       @node-click="departmentClick">
+                       @node-click="data => departmentClick(data)">
                 <div class="custom-tree-node" slot-scope="{ node, data }"
                      :class="{isAction:node.data.deptId === userData.deptId}">
                   <div v-if="!data.children">
@@ -385,11 +385,7 @@
         checkedRole: [],
         selectList: [],
         languageOption: [],
-        genderOption: [
-          {code: 0, name: $i.setting.man},
-          {code: 1, name: $i.setting.woman},
-          {code: 2, name: $i.setting.unknown},
-        ],
+        genderOption: [],
         roleOption: [],
         departmentData: [],
         departmentUserTotal: 0,          //department总人数
@@ -420,7 +416,7 @@
           userName: '',
           lang: '',
           tel: '',
-          gender: 0,
+          gender: '2',
           birthday: '',
           remark: ''
         },
@@ -428,6 +424,7 @@
       }
     },
     created() {
+      this.getPart();
       this.getDepartmentData();
       this.getUnit();
     },
@@ -502,7 +499,8 @@
             if (item.status.value !== 0) {
               item._disabledCheckbox = true;
             }
-            item.birthday.value = this.$dateFormat(item.birthday.value, 'dd-mmm-yyyy');
+            item.birthday.value = this.$dateFormat(item.birthday.value, 'yyyy-mm-dd');
+            item.gender.value = item.gender.value.toString();
             gender = _.findWhere(this.genderOption, {code: item.gender.value}) || {};
             status = _.findWhere(this.actionOption, {code: item.status.value}) || {};
             lang = _.findWhere(this.languageOption, {code: item.lang.value}) || {};
@@ -527,13 +525,13 @@
         this.roleOption = _.isEmpty(deps) ? [] : deps.deptRoles;
         this.addUser.roleId = '';
       },
-      departmentClick(data) {
+      departmentClick(data, checked) {
         this.userData = this.$options.data().userData;
         this.userData.deptId = data.deptId;
         this.roleData = this.$depthClone(data.deptRoles || []);
         this.searchRole = '';
         this.$nextTick(() => {
-          this.$refs.roleTree.setCheckedNodes(this.roleData);
+          this.$refs.roleTree.setCheckedNodes(checked || this.roleData);
           this.roleCheckClick();
         });
       },
@@ -732,20 +730,19 @@
 
         this.$ajax.post(this.$apis.add_departmentUser, params)
           .then(res => {
-            this.getDepartmentData().then(depRes => {
-              let roles = _.findWhere(depRes, {deptId: this.userData.deptId});
+            !params.id && this.getDepartmentData().then(depRes => {
+              let roles = _.findWhere(depRes, {deptId: this.userData.deptId})
+                , userData = this.$depthClone(this.userData);
 
-              this.roleData = roles ? roles.deptRoles : [];
+              userData.deptRoles = roles ? roles.deptRoles : [];
+              this.departmentClick(userData, this.$refs.roleTree.getCheckedNodes(true));
+              this.getPrivilege();
             });
             this.getDepartmentUser();
             this.editUserdialog.show = false;
             this.addUser = this.$options.data().addUser;
             this.$message.success(this.$i.setting.successfulOperation);
-          }).finally(err => {
-            this.addUserLoading = false;
-          }
-        )
-
+          }).finally(err => this.addUserLoading = false);
       },
       disabledUser(userId, type = true) {
         this.$confirm(type ? this.$i.setting.disabledUser : this.$i.setting.enabledUser, this.$i.hintMessage.systemHints, {
@@ -824,7 +821,10 @@
             this.getPrivilegeData()
           ]).then(() => {
             let checked = []
-              , resourceCodeStr = res.selectedResourceCodes.join(',');
+              , resourceCodeStr;
+            res.selectedResourceCodes = res.selectedResourceCodes || [];
+
+            resourceCodeStr = res.selectedResourceCodes.join(',');
 
             !_.isEmpty(res.selectedDomainUserIds)
             && _.mapObject(res.selectedDomainUserIds, (val, key) => _.map(val, v => checked.push(`${key}_${v}`)));
@@ -881,6 +881,11 @@
 
 
         this.$ajax.post(this.$apis.ROLE_UPDATESORT, {deptId: this.userData.deptId, sorts});
+      },
+      getPart() {
+        this.$ajax.post(this.$apis.CODE_PART, ['SEX'], {cache: true}).then(res => {
+          this.genderOption = res[0].codes;
+        });
       }
     },
   }

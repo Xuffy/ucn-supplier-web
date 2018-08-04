@@ -699,7 +699,6 @@
                             <div v-if="v.key==='lengthWidthHeight'">
                                 <v-input-number
                                         class="speNum"
-                                        size="mini"
                                         :accuracy="2"
                                         v-model="boxSize.length"
                                         :min="0">
@@ -707,7 +706,6 @@
                                 <div class="speIcon">*</div>
                                 <v-input-number
                                         class="speNum"
-                                        size="mini"
                                         :accuracy="2"
                                         v-model="boxSize.width"
                                         :min="0">
@@ -715,7 +713,6 @@
                                 <div class="speIcon">*</div>
                                 <v-input-number
                                         class="speNum"
-                                        size="mini"
                                         :accuracy="2"
                                         v-model="boxSize.height"
                                         :min="0">
