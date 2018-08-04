@@ -1,4 +1,7 @@
 export default {
+    id:{
+        _hide: true
+    },
     skuQcResultDictCode:{},
     skuInventoryStatusDictCode:{},
     skuCode:{},

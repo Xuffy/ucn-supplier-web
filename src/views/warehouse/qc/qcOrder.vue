@@ -649,7 +649,7 @@
             acceptRework(){
                 let ids=[];
                 _.map(this.selectSecond,v=>{
-                    ids.push(v.id);
+                    ids.push(v.id.value);
                 });
                 this.$ajax.post(this.$apis.REWORK_HANDLE,{
                     accept: true,
@@ -673,7 +673,7 @@
                 }).then(() => {
                     let ids=[];
                     _.map(this.selectThird,v=>{
-                        ids.push(v.id);
+                        ids.push(v.id.value);
                     });
                     this.$ajax.post(this.$apis.RETURN_HANDLE,ids)
                       .then(res=>{
@@ -747,7 +747,7 @@
             },
             saveAccept(){
                 this.selectFirst.forEach(v=>{
-                    this.acceptConfig.qcOrderDetailIds.push(v.id);
+                    this.acceptConfig.qcOrderDetailIds.push(v.id.value);
                 });
                 this.disableClickSave=true;
                 this.$ajax.post(this.$apis.accept_qcResult,this.acceptConfig).then(res=>{
