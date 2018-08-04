@@ -86,12 +86,21 @@
                         :disabled="selectFirst.length===0"
                         type="primary"
                         @click="accept">{{$i.warehouse.accept}}</el-button>
+                <div class="gear">
+                    <v-filter-column
+                        ref="filterColumn"
+                        code="uwarehouse_qc_order_detail"
+                        :table-ref="() => $refs.tableBox"
+                        @change="changeColumn">
+                    </v-filter-column>
+                </div>
                 <el-table
                         v-loading="loadingProductTable"
                         class="speTable"
                         :data="productTable"
                         style="width: 100%;margin-top: 10px"
                         border
+                        ref="tableBox"
                         :summary-method="getSummaries"
                         show-summary
                         @selection-change="handleFirstTable">
@@ -102,17 +111,19 @@
                             width="55">
                     </el-table-column>
                     <el-table-column
-                            v-for="v in $db.warehouse.qcOrderTable"
+                            v-for="v in columnConfig"
+                            v-if="!v._hidden && !v._hide"
                             :label="$i.warehouse[v.key]"
                             :key="v.key"
+                            :label-class-name="'location-' + v.key"
                             :prop="v.key"
                             width="160">
-                        <template slot-scope="scope">
+                        <template slot-scope="scope" v-if="scope.row[v.key]">
                             <div v-if="v.key==='qcPics' && scope.row[v.key]">
-                                <v-image :src="scope.row[v.key][0]" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key])"></v-image>
+                                <v-image :src="scope.row[v.key].value" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key].value)"></v-image>
                             </div>
                             <div v-else>
-                                {{ scope.row[v.key] }}
+                                {{ scope.row[v.key].value }}
                             </div>
                         </template>
                     </el-table-column>
@@ -133,12 +144,21 @@
                         :disabled="selectSecond.length===0"
                         @click="acceptRework"
                         type="primary">{{$i.warehouse.acceptRework}}</el-button>
+                <div class="gear">
+                    <v-filter-column
+                        ref="filterColumn2"
+                        code="uwarehouse_qc_order_detail"
+                        :table-ref="() => $refs.tableBox2"
+                        @change="changeColumn2">
+                    </v-filter-column>
+                </div>
                 <el-table
                         v-loading="loadingProductTable"
                         class="speTable"
                         :data="productTable1"
                         style="width: 100%;margin-top: 10px"
                         border
+                        ref="tableBox2"
                         :summary-method="getSummaries"
                         show-summary
                         @selection-change="handleSecondTable">
@@ -149,17 +169,19 @@
                             width="55">
                     </el-table-column>
                     <el-table-column
-                            v-for="v in $db.warehouse.qcOrderTable"
+                            v-for="v in columnConfig2"
                             :label="$i.warehouse[v.key]"
+                            v-if="!v._hidden && !v._hide"
                             :key="v.key"
+                            :label-class-name="'location-' + v.key"
                             :prop="v.key"
                             width="160">
-                        <template slot-scope="scope">
+                        <template slot-scope="scope"  v-if="scope.row[v.key]">
                           <div v-if="v.key==='qcPics' && scope.row[v.key]">
-                                <v-image :src="scope.row[v.key][0]" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key])"></v-image>
+                                <v-image :src="scope.row[v.key].value" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key].vlaue)"></v-image>
                             </div>
                             <div v-else>
-                                {{ scope.row[v.key] }}
+                                {{ scope.row[v.key].value }}
                             </div>
                         </template>
                     </el-table-column>
@@ -180,6 +202,14 @@
                         :disabled="selectThird.length===0"
                         @click="acceptReturn"
                         type="primary">{{$i.warehouse.acceptReturn}}</el-button>
+                <div class="gear">
+                    <v-filter-column
+                        ref="filterColumn3"
+                        code="uwarehouse_qc_order_detail"
+                        :table-ref="() => $refs.tableBox3"
+                        @change="changeColumn3">
+                    </v-filter-column>
+                </div>
                 <el-table
                         v-loading="loadingProductTable"
                         class="speTable"
@@ -188,6 +218,7 @@
                         :summary-method="getSummaries"
                         show-summary
                         border
+                        ref="tableBox3"
                         @selection-change="handleThirdTable">
                     <el-table-column
                             align="center"
@@ -196,17 +227,19 @@
                             width="55">
                     </el-table-column>
                     <el-table-column
-                            v-for="v in $db.warehouse.qcOrderTable"
+                            v-for="v in columnConfig3"
                             :label="$i.warehouse[v.key]"
+                            v-if="!v._hidden && !v._hide"
                             :key="v.key"
                             :prop="v.key"
+                            :label-class-name="'location-' + v.key"
                             width="160">
-                        <template slot-scope="scope">
+                        <template slot-scope="scope"  v-if="scope.row[v.key]">
                             <div v-if="v.key==='qcPics' && scope.row[v.key]">
-                                <v-image :src="scope.row[v.key][0]" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key])"></v-image>
+                                <v-image :src="scope.row[v.key].value" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key].value)"></v-image>
                             </div>
                             <div v-else>
-                                {{ scope.row[v.key] }}
+                                {{ scope.row[v.key].value }}
                             </div>
                         </template>
                     </el-table-column>
@@ -381,7 +414,7 @@
 
 <script>
 
-    import {VTimeZone,VTable,VMessageBoard,VUpload,VImage,VViewPicture} from '@/components/index'
+    import {VTimeZone,VTable,VMessageBoard,VUpload,VImage,VViewPicture,VFilterColumn} from '@/components/index'
     import {mapActions} from 'vuex'
 
     export default {
@@ -392,10 +425,14 @@
             VMessageBoard,
             VUpload,
             VImage,
-            VViewPicture
+            VViewPicture,
+            VFilterColumn
         },
         data(){
             return{
+                columnConfig: '',
+                columnConfig2: '',
+                columnConfig3: '',
                 checkList:[],
                 /**
                  * 页面基础配置
@@ -470,6 +507,18 @@
         },
         methods:{
             ...mapActions(['setMenuLink']),
+            changeColumn (val) {
+                this.productTable = this.$refs.filterColumn.getFilterData(this.productTable, val);
+                this.columnConfig = this.productTable[0];
+            },
+             changeColumn2 (val) {
+                this.productTable1 = this.$refs.filterColumn2.getFilterData(this.productTable1, val);
+                this.columnConfig2 = this.productTable1[0];
+            },
+             changeColumn3 (val) {
+                this.productTable2 = this.$refs.filterColumn3.getFilterData(this.productTable2, val);
+                this.columnConfig3 = this.productTable2[0];
+            },
             getData(){
                 this.$ajax.get(`${this.$apis.get_qcOrderDetail}?id=${this.$route.query.id}`).then(res=>{
                     this.qcOrderData=res;
@@ -496,6 +545,15 @@
                         });
                         this.summaryData.skuQuantity=_.uniq(diffData).length;
                         this.tableConfig.skuInventoryStatusDictCode='APPLY_FOR_REWORK';
+
+                        let arr1 = this.$copyArr(this.productTable)
+                        arr1 = this.$getDB(this.$db.warehouse.qcOrderTable, arr1);
+                        this.$refs.filterColumn.update(false, arr1).then(data => {
+                            this.productTable = this.$refs.filterColumn.getFilterData(arr1, data);
+                            this.columnConfig = this.productTable[0];
+                        });
+
+
                         this.$ajax.post(this.$apis.get_qcOrderProductData,this.tableConfig).then(res=>{
                             this.productTable1=res.datas;
                             _.map(this.productTable1,v=>{
@@ -506,6 +564,16 @@
                                 v.lengthUnitDictCode=_.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name;
                             });
                             this.tableConfig.skuInventoryStatusDictCode='APPLY_FOR_RETURN';
+
+                            let arr2 = this.$copyArr(this.productTable1)
+                            arr2 = this.$getDB(this.$db.warehouse.qcOrderTable, arr2);
+                            this.$refs.filterColumn2.update(false, arr2).then(data2 => {
+                                this.productTable1 = this.$refs.filterColumn2.getFilterData(arr2, data2);
+                                if (this.productTable1.length > 0) {
+                                    this.columnConfig2 = this.productTable1[0];
+                                }
+                            });
+
                             this.$ajax.post(this.$apis.get_qcOrderProductData,this.tableConfig).then(res=>{
                                 this.productTable2=res.datas;
                                 _.map(this.productTable2,v=>{
@@ -517,6 +585,14 @@
                                     v.lengthUnitDictCode=_.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name;
                                 });
                                 this.loadingProductTable=false;
+                                let arr3 = this.$copyArr(this.productTable2)
+                                arr3 = this.$getDB(this.$db.warehouse.qcOrderTable, arr3);
+                                this.$refs.filterColumn3.update(false, arr3).then(data3 => {
+                                    this.productTable2 = this.$refs.filterColumn3.getFilterData(arr3, data3);
+                                    if (this.productTable2.length > 0) {
+                                        this.columnConfig3 = this.productTable2[0];
+                                    }
+                                });
                             }).catch(err=>{
                                 this.loadingProductTable=false;
                             })
@@ -730,6 +806,9 @@
                 auth:'QC:LOG',
                 label: this.$i.common.log
             });
+            this.columnConfig = this.$db.warehouse.qcOrderTable;
+            this.columnConfig2 = this.$db.warehouse.qcOrderTable;
+            this.columnConfig3 = this.$db.warehouse.qcOrderTable;
         },
         watch:{
             dialogFormVisible(n){
@@ -781,5 +860,10 @@
         bottom: 0;
         width: 100%;
         z-index:5;
+    }
+    .gear{
+        float: right;
+        margin-right: 5px;
+        margin-bottom: 5px;
     }
 </style>
