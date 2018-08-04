@@ -717,8 +717,10 @@
         </el-dialog>
 
         <v-history-modify
+                @closed="$refs.table.update()"
                 code="uorder_sku_list"
                 @save="saveNegotiate"
+                :beforeSave="beforeSave"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
             <!--<v-upload :limit="20" readonly></v-upload>-->
@@ -1722,6 +1724,16 @@
                 });
                 params.orderSkuUpdateList = orderSkuUpdateList;
                 params.skuList = this.dataFilter(this.productTableData);
+
+                /**
+                 * 判断是否产品客户语言描述，产品客户语言品名和客户货号填了
+                 * */
+                for(let val in params.skuList){
+                    if(this.$validateForm(params.skuList[val], this.$db.order.productInfoTable)){
+                        return;
+                    }
+                }
+
                 _.map(params.skuList, v => {
                     v.skuSample = v.skuSample === "1" ? true : false;
                     if (v.skuInspectQuarantineCategory) {
@@ -2011,6 +2023,15 @@
             },
             handleCancel() {
                 this.productTableDialogVisible = false;
+            },
+            beforeSave(data){
+                let obj={};
+                _.map(data[0],(val,key)=>{
+                    obj[key]=val.value;
+                });
+                if(this.$validateForm(obj, this.$db.order.productInfoTable)){
+                    return false;
+                }
             },
             saveNegotiate(e) {
                 if (!this.orderForm.orderSkuUpdateList || this.orderForm.orderSkuUpdateList.length === 0) {
