@@ -567,8 +567,14 @@
                             sums[index] = values.reduce((prev, curr) => {
                                 const value = Number(curr);
                                 if (!isNaN(value)) {
+                                    if (column.property === 'outboundSkuTotalQty') {
+                                        this.outboundData.outboundSkuTotalQty = this.jia(prev,curr)
+                                    }
                                     return this.jia(prev,curr);
                                 } else {
+                                    if (column.property === 'outboundSkuTotalQty') {
+                                        this.outboundData.outboundSkuTotalQty = prev
+                                    }
                                     return prev;
                                 }
                             }, 0);
