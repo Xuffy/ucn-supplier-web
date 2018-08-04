@@ -81,7 +81,7 @@
           :isInquiry="true">
       </v-product>
     </el-dialog>
-    <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @save="save" :beforeSave="beforeSave" ref="HM"></v-history-modify>
+    <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @save="save" ref="HM"></v-history-modify>
     <v-message-board v-if="chatParams" module="INQUIRY" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
   </div>
 </template>
