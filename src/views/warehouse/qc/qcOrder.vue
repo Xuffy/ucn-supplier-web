@@ -538,10 +538,10 @@
                         _.map(this.productTable,v=>{
                             diffData.push(v.skuId+v.orderNo);
                             v.deliveryDate=this.$dateFormat(v.deliveryDate,'yyyy-mm-dd');
-                            v.skuUnitDictCode=_.findWhere(this.skuUnitOption,{code:v.skuUnitDictCode}).name;
-                            v.volumeUnitDictCode=_.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name;
-                            v.weightUnitDictCode=_.findWhere(this.weightOption,{code:v.weightUnitDictCode}).name;
-                            v.lengthUnitDictCode=_.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name;
+                            v.skuUnitDictCode= v.skuUnitDictCode ? _.findWhere(this.skuUnitOption,{code:v.skuUnitDictCode}).name : '';
+                            v.volumeUnitDictCode= v.volumeUnitDictCode ? _.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name : '';
+                            v.weightUnitDictCode= v.weightUnitDictCode ? _.findWhere(this.weightOption,{code:v.weightUnitDictCode}).name : '';
+                            v.lengthUnitDictCode= v.lengthUnitDictCode ? _.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name : '';
                         });
                         this.summaryData.skuQuantity=_.uniq(diffData).length;
                         this.tableConfig.skuInventoryStatusDictCode='APPLY_FOR_REWORK';
@@ -558,10 +558,10 @@
                             this.productTable1=res.datas;
                             _.map(this.productTable1,v=>{
                                 v.deliveryDate=this.$dateFormat(v.deliveryDate,'yyyy-mm-dd');
-                                v.skuUnitDictCode=_.findWhere(this.skuUnitOption,{code:v.skuUnitDictCode}).name;
-                                v.volumeUnitDictCode=_.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name;
-                                v.weightUnitDictCode=_.findWhere(this.weightOption,{code:v.weightUnitDictCode}).name;
-                                v.lengthUnitDictCode=_.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name;
+                                v.skuUnitDictCode= v.skuUnitDictCode ? _.findWhere(this.skuUnitOption,{code:v.skuUnitDictCode}).name : '';
+                                v.volumeUnitDictCode= v.volumeUnitDictCode ? _.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name : '';
+                                v.weightUnitDictCode= v.weightUnitDictCode ? _.findWhere(this.weightOption,{code:v.weightUnitDictCode}).name : '';
+                                v.lengthUnitDictCode= v.lengthUnitDictCode ? _.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name : '';
                             });
                             this.tableConfig.skuInventoryStatusDictCode='APPLY_FOR_RETURN';
 
@@ -579,10 +579,10 @@
                                 _.map(this.productTable2,v=>{
                                     console.log('====',v)
                                     v.deliveryDate=this.$dateFormat(v.deliveryDate,'yyyy-mm-dd');
-                                    v.skuUnitDictCode=_.findWhere(this.skuUnitOption,{code:v.skuUnitDictCode}).name;
-                                    v.volumeUnitDictCode=_.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name;
-                                    v.weightUnitDictCode=_.findWhere(this.weightOption,{code:v.weightUnitDictCode}).name;
-                                    v.lengthUnitDictCode=_.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name;
+                                    v.skuUnitDictCode= v.skuUnitDictCode ? _.findWhere(this.skuUnitOption,{code:v.skuUnitDictCode}).name : '';
+                                    v.volumeUnitDictCode= v.volumeUnitDictCode ? _.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name : '';
+                                    v.weightUnitDictCode= v.weightUnitDictCode ? _.findWhere(this.weightOption,{code:v.weightUnitDictCode}).name : '';
+                                    v.lengthUnitDictCode= v.lengthUnitDictCode ? _.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name : '';
                                 });
                                 this.loadingProductTable=false;
                                 let arr3 = this.$copyArr(this.productTable2)
