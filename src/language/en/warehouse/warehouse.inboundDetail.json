@@ -40,7 +40,7 @@
   "skuLength": "SKU Length(cm)",
   "skuWidth": "SKU Width(cm)",
   "skuHeight": "SKU Height(cm)",
-  "skuNetWeight": "SKU N.W.(kg)",
+  "skuNetWeight": "SKU N.W.(g)",
   "innerCartonLength": "Length of inner carton(cm)",
   "innerCartonWidth": "Width of inner carton(cm)",
   "innerCartonHeight": "Height of inner carton(cm)",

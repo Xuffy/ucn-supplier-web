@@ -48,7 +48,8 @@ export default {
     attachment:{
         key:'attachments',
         belong:'basicInfo',
-        isAttachment:true
+        isAttachment:true,
+        fullLine:true
     },
 
 
