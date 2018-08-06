@@ -1486,16 +1486,7 @@
                 country = this.$ajax.get(this.$apis.COUNTRY_ALL, {}, { cache: true });
                 exchangeRate = this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY, {});
                 unit = this.$ajax.post(this.$apis.get_partUnit, ["PMT", "ITM", "MD_TN", "SKU_UNIT", "LH_UNIT", "VE_UNIT", "WT_UNIT", "ED_UNIT", "NS_IS", "QUARANTINE_TYPE", "ORDER_STATUS", "SKU_SALE_STATUS", "SKU_STATUS", "PAYMENT_ITEM_NAME"], { cache: true });
-                this.skuStatusOption = [
-                    {
-                        code: "PROCESS",
-                        name: "已确认"
-                    },
-                    {
-                        code: "CANCELED",
-                        name: "已取消"
-                    }
-                ];
+                this.skuStatusOption = [];
                 this.$ajax.all([currency, country, exchangeRate, unit]).then(res => {
                     this.currencyOption = res[0];
                     this.countryOption = res[1];
@@ -1533,6 +1524,11 @@
                             this.skuSaleStatusOption = v.codes;
                         } else if (v.code === "SKU_STATUS") {
                             this.skuStatusTotalOption = v.codes;
+                            _.map(this.skuStatusTotalOption,(v,k)=>{
+                                if(k===1 || k===3){
+                                    this.skuStatusOption.push(v);
+                                }
+                            });
                         } else if (v.code === "PAYMENT_ITEM_NAME") {
                             this.paymentItemOption = v.codes;
                         }
@@ -1874,8 +1870,9 @@
                             arr.push(v);
                         }
                     });
-                    console.log(this.$depthClone(arr), "arr");
-                    this.chooseProduct = this.getHistory(e, arr, true);
+                    this.getHistory(e, arr, true).then(data=>{
+                         this.chooseProduct =data;
+                    });
                 }
                 else if (type === "detail") {
                     this.$windowOpen({
@@ -2124,31 +2121,32 @@
                 }
                 let obj;
                 obj = item ? item : this.chooseProduct[0];
+                console.log(obj,'obj')
                 if (this.orderForm.incoterm === "1") {
                     //fob
                     if (obj.skuFobPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = this.$toFixed(Number(obj.skuFobPrice.value * obj.skuQty.value), 4);
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuFobPrice.value,obj.skuQty.value), 4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
                 } else if (this.orderForm.incoterm === "2") {
                     //exw
                     if (obj.skuExwPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = this.$toFixed(Number(obj.skuExwPrice.value * obj.skuQty.value), 4);
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuExwPrice.value,obj.skuQty.value), 4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
                 } else if (this.orderForm.incoterm === "3") {
                     //cif
                     if (obj.skuCifPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = this.$toFixed(Number(obj.skuCifPrice.value * obj.skuQty.value),4);
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuCifPrice.value,obj.skuQty.value),4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
                 } else if (this.orderForm.incoterm === "4") {
                     //ddu
                     if (obj.skuDduPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = this.$toFixed(Number(obj.skuDduPrice.value * obj.skuQty.value),4);
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuDduPrice.value,obj.skuQty.value),4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
