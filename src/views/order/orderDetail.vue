@@ -1220,7 +1220,6 @@
                 orderStatusOption: [],
                 countryOption: [],
                 quarantineTypeOption: [],
-                skuSaleStatusOption: [],
                 skuStatusTotalOption: [],
                 paymentItemOption: [],
 
@@ -1519,8 +1518,6 @@
                             this.orderStatusOption = v.codes;
                         } else if (v.code === "QUARANTINE_TYPE") {
                             this.quarantineTypeOption = v.codes;
-                        } else if (v.code === "SKU_SALE_STATUS") {
-                            this.skuSaleStatusOption = v.codes;
                         } else if (v.code === "SKU_STATUS") {
                             this.skuStatusTotalOption = v.codes;
                             _.map(this.skuStatusTotalOption,(v,k)=>{
@@ -1586,7 +1583,6 @@
                             item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
                             item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
                             item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
-                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
                             item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
                             item.skuCategoryId._value = item.skuCategoryName.value;
                         }
@@ -1920,7 +1916,6 @@
                             item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
                             item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
                             item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
-                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
                             item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
                             item.skuCategoryId._value = item.skuCategoryName.value;
                         }
@@ -2005,7 +2000,6 @@
                             item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
                             item.skuStatus._value = (_.findWhere(this.skuStatusTotalOption, { code: item.skuStatus.value }) || {}).name;
                             item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
-                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
                             item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
                             item.skuCategoryId._value = item.skuCategoryName.value;
                         }

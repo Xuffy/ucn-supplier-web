@@ -2,9 +2,7 @@ export default {
     id:{
         _hide:true
     },
-    importantSupplier:{},
     attachment:{},
-    remind:{},      //是否有提醒
     archive:{},
     orderNo:{},
     entryDt:{},
@@ -26,7 +24,6 @@ export default {
     totalSkuPrice:{},
     // paidAmount:{},
     // unpaidAmount:{},
-    inboundQty:{},
     deliveredQty:{},
     updateDt:{},
     quotationNo:{},
