@@ -132,14 +132,10 @@
                     if(!query.categoryId){
                         query.categoryId = null;
                     }
-                    if(!query.readilyAvailable){
+                    if(query.readilyAvailable==='1'){
+                        query.readilyAvailable=true;
+                    }else if(query.readilyAvailable==='0'){
                         query.readilyAvailable=false;
-                    }else{
-                        if(query.readilyAvailable==='1'){
-                            query.readilyAvailable=true;
-                        }else if(query.readilyAvailable==='0'){
-                            query.readilyAvailable=false;
-                        }
                     }
                 }
                 Object.assign(this.queryConfig, query);
