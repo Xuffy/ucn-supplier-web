@@ -153,7 +153,6 @@ export default {
   qty: {
     key: 'qty',
     type: 'Number',
-    _disabled: true,
     _toFixed: 1
   },
   restrictedSellingCountry: {
