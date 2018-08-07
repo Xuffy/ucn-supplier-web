@@ -317,11 +317,11 @@
                     outboundTypeDictCode: "",
                     remark: "",
                     shipmentInvoiceNo: "",
-                    outboundCtnQty: '',
-                    outboundGw: '',
-                    outboundCbm: '',
-                    outboundNw: '',
-                    skuStyleQty: ''
+                    outboundCtnQty: 0,
+                    outboundGw: 0,
+                    outboundCbm: 0,
+                    outboundNw: 0,
+                    skuStyleQty: 0
                     // timeZone: "",
                 },
                 //inbound总计
@@ -575,10 +575,35 @@
                                     if (column.property === 'outboundSkuTotalQty') {
                                         this.outboundData.outboundSkuTotalQty = this.jia(prev,curr)
                                     }
+                                    if (column.property === 'outboundOutCartonTotalQty') {
+                                        this.outboundData.outboundCtnQty = this.jia(prev,curr)
+                                    }
+                                    if (column.property === 'outboundSkuTotalNetWeight') {
+                                        this.outboundData.outboundNw = this.jia(prev,curr)
+                                    }
+                                    if (column.property === 'outboundSkuTotalVolume') {
+                                        this.outboundData.outboundCbm = this.jia(prev,curr)
+                                    }
+                                    if (column.property === 'outboundSkuTotalGrossWeight') {
+                                        this.outboundData.outboundGw = this.jia(prev,curr)
+                                    }
+                                    
                                     return this.jia(prev,curr);
                                 } else {
                                     if (column.property === 'outboundSkuTotalQty') {
                                         this.outboundData.outboundSkuTotalQty = prev
+                                    }
+                                    if (column.property === 'outboundOutCartonTotalQty') {
+                                        this.outboundData.outboundCtnQty = prev
+                                    }
+                                     if (column.property === 'outboundSkuTotalNetWeight') {
+                                        this.outboundData.outboundNw = prev
+                                    }
+                                    if (column.property === 'outboundSkuTotalVolume') {
+                                        this.outboundData.outboundCbm = prev
+                                    }
+                                     if (column.property === 'outboundSkuTotalGrossWeight') {
+                                        this.outboundData.outboundGw = prev
                                     }
                                     return prev;
                                 }

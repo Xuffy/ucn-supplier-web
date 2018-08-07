@@ -22,7 +22,7 @@
   "customerSkuCode": "Customer SKU Code",
   "skuUnitDictCode": "SKU Unit",
   "orderSkuQty": "Order QTY",
-  "inboundSkuTotalQty": "QTY",
+  "inboundSkuTotalQty": "Inbound QTY",
   "inboundOutCartonTotalQty": "Inbound CTN QTY",
   "inboundSkuTotalVolume": "Inbound Total CTN CBM(m³)",
   "inboundSkuTotalNetWeight": "Inbound Total CTN N.W.(kg)",
