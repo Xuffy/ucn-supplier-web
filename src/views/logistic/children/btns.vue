@@ -14,7 +14,7 @@
           @click.stop="$emit('switchEdit','DeliveredEdit')">{{ $i.logistic.modify }}</el-button>
         <el-button size="mini" v-authorize="auth[pageType]&&auth[pageType].Confirm||''" type="primary" v-if="pageType!='loadingListDetail'&&logisticsStatus.status==1&&logisticsStatus.recived!=0"
           @click.stop="$emit('switchEdit','confirm')">{{ $i.logistic.confirm }}</el-button>
-        <el-button size="mini" type="primary" v-if="!DeliveredEdit && logisticsStatus.status==3&&pageType!='loadingListDetail'&&logisticsStatus.recived!=0"
+        <el-button size="mini" type="primary" v-if="!DeliveredEdit && logisticsStatus.status==3&&pageType!='loadingListDetail'&&logisticsStatus.recived!=0&&beShipper==1"
           :disabled="logisticsStatus.recived==0" @click.stop="$emit('switchEdit','generateList')">{{ $i.logistic.generateList }}</el-button>
 
         <el-button size="mini" type="danger" v-if="logisticsStatus.status==2&&DeliveredEdit" @click.stop="$emit('switchEdit','DeliveredEditExit')">{{ $i.logistic.cancelModify }}</el-button>
@@ -42,6 +42,7 @@
       isCopy: [String, Number],
       logisticsStatus: [Object],
       DeliveredEdit: [Boolean],
+      beShipper: [Boolean,Number],
       basicInfoArr: [Array],
       listData: Array,
       selectArr: [Array, Object],

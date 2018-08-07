@@ -544,7 +544,17 @@ export const dbProductInfo = {
 }
 
 export const dbcontainerInfo = {
-  containerType: {
+  containerNo: {
+    _rules:{
+      required:true
+    }
+  },
+  sealNo: {
+    _rules:{
+      required:true
+    }
+  },
+  containerWeight: {
     _rules:{
       required:true
     }

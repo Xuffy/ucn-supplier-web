@@ -106,7 +106,7 @@
       </overviewPage>
     </el-dialog>
     <messageBoard v-if="!isParams" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
-    <btns :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus"
+    <btns :beShipper="beShipper" :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus"
       @sendData="sendData" :btnModifyTime="btnModifyTime" :basicInfoArr="basicInfoArr" :listData="mediatorDate" :selectArr="selectArr" :shipmentStatus="shipmentStatus" @shipmentStatus="changeShipmentStatus"/>
     <v-history-modify 
     :code="configUrl[pageName]&&configUrl[pageName].setTheField" 
@@ -152,6 +152,7 @@
           ps: 10
         },
         DeliveredEdit: false,
+        beShipper: 0,
         dunningDisabled: false,
         modefiyProductIndex: 0,
         modefiyProductIndexArr: [],
@@ -549,10 +550,11 @@
           }
           this.$set(this.selectArr,'shipmentStatus',arr);
         }
-        this.logisticsNo = res.logisticsNo
-        this.exchangeRateList = res.currencyExchangeRate || []
+        this.logisticsNo = res.logisticsNo;
+        this.exchangeRateList = res.currencyExchangeRate || [];
         this.remark = res.remark;
         //处理 shiper
+        this.beShipper = res.beShipper;
         this.ShipperName = res.shipper;
         this.shipperObj = {
           id : res.shipperCompanyId+'-'+res.shipperTelnetId,
@@ -833,18 +835,19 @@
       },
       closeAddProduct() {
         let CheckedIdArr =  this.ProductFromOrderChecked ? this.ProductFromOrderChecked.map(el => {
-          return el.id.value;
-        }) : []
-        let arr = CheckedIdArr ? CheckedIdArr.map(el=>{
-          return _.findWhere(this.ProductFromOrderRes,{id:el})
+          return {id:el.id.value,_disabled:el._disabled};
         }) : [];
+        let arr = CheckedIdArr ? CheckedIdArr.map(el=>{
+          let obj = _.findWhere(this.ProductFromOrderRes,{id:el.id});
+          obj._disabled = el._disabled;
+          return obj;
+        }) : [];
+
         this.showAddProductDialog = false
-        this.ProductFromOrderChecked.forEach((el,index) => {          
-          if(el._disabled) {
-            arr.splice(index,1);
-          }
-        });
-        this.showAddProductDialog = false
+        arr = _.filter(arr,el=>{
+          return !el._disabled;
+        })
+
         const selectArrData = this.$depthClone(arr);
         if (!arr.length || !selectArrData.length) return
         selectArrData.forEach(a => {
@@ -1024,6 +1027,13 @@
         })
       },
       generateList() {
+        
+        if(this.oldPlanObject.containerDetail&&this.oldPlanObject.containerDetail.map(el => {
+          return this.$validateForm(el, this.$db.logistic.dbcontainerInfo);
+        }).some(el=> el)){
+          return
+        }
+        
         this.$ajax.post(this.$apis.logistics_plan_postLoadingList, {
           id: this.planId
         }).then(res => {

@@ -22,7 +22,16 @@
         </el-table-column>
         <el-table-column :label="$i.logistic.containerWeight" width="140" prop='{"key":"containerWeight","total":true}' align="center">
           <template slot-scope="scope">
-            <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.containerWeight" v-if="edit" @change="ContainerInfoLight('containerWeight',scope.row.containerWeight,scope.$index,scope)"></el-input>
+            <v-input-number
+              v-model="scope.row.containerWeight"
+              :min="0"
+              :controls="false"
+              :accuracy="2"
+              :mark="$i.logistic.containerWeight"
+              :placeholder="$i.logistic.placeholder"
+              @change="ContainerInfoLight('containerWeight',scope.row.containerWeight,scope.$index,scope)"
+              v-if="edit"></v-input-number>
+            <!-- <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.containerWeight" v-if="edit" @change="ContainerInfoLight('containerWeight',scope.row.containerWeight,scope.$index,scope)"></el-input> -->
             <span v-else>{{ scope.row.containerWeight }}</span>
           </template>
         </el-table-column>
@@ -79,7 +88,11 @@
   </div>
 </template>
 <script>
+import {VInputNumber} from '@/components/index';
 export default {
+  components:{
+    VInputNumber
+  },
   data () {
     return {
       containerNo: '',
