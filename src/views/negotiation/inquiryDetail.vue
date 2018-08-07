@@ -50,11 +50,10 @@
               :hideFilterColumn="statusModify"/>
           <div class="bom-btn-wrap" v-show="!statusModify" v-if="tabData[0]">
             <el-button type="primary" @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.originValue !== 21" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
-            <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.originValue + ''!=='99'||tabData[0].status.originValue+''!=='1'" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.archive }}</el-button> -->
             <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue !== 21" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
-            <el-button @click="exportDatas">{{ $i.common.download }}</el-button>
-            <el-button type="warning" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="![21, 22].includes(tabData[0].status.originValue)">{{ $i.common.cancel }}</el-button>
-            <el-button type="danger" @click="ajaxInqueryAction('delete')" :disabled="![1, 99].includes(tabData[0].status.originValue)">{{ $i.common.archive }}</el-button>
+            <el-button @click="exportDatas" v-authorize="'INQUIRY:DETAIL:DOWNLOAD'">{{ $i.common.download }}</el-button>
+            <el-button type="warning" v-authorize="'INQUIRY:DETAIL:CANCEL'" @click="ajaxInqueryAction('cancel')" :disabled="![21, 22].includes(tabData[0].status.originValue)">{{ $i.common.cancel }}</el-button>
+            <el-button type="danger" v-authorize="'INQUIRY:DETAIL:DOWNLOAD'" @click="ajaxInqueryAction('delete')" :disabled="![1, 99].includes(tabData[0].status.originValue)">{{ $i.common.archive }}</el-button>
           </div>
           <div class="bom-btn-wrap" v-show="statusModify">
             <el-button @click="modify">{{ $i.common.send }}</el-button>
@@ -81,8 +80,8 @@
           :isInquiry="true">
       </v-product>
     </el-dialog>
-    <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @save="save" ref="HM"></v-history-modify>
-    <v-message-board v-if="chatParams" module="INQUIRY" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
+    <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @change="computePrice" @save="save" ref="HM"></v-history-modify>
+    <v-message-board v-if="chatParams" v-authorize="'INQUIRY:DETAIL:MESSAGE_BOARD'" module="INQUIRY" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
   </div>
 </template>
 <script>
@@ -148,7 +147,9 @@ export default {
         operatorFilters: [],
         sorts: []
       },
-      chatParams: null
+      chatParams: null,
+      custom: null,
+      exchangeRates: []
     };
   },
   components: {
@@ -354,6 +355,11 @@ export default {
         }]
       };
       this.tableLoad = false;
+
+      this.$ajax.post(this.$apis.GET_CUSTOMER_EXCHANGE_RATE_FEE, {tenantId: res.tenantId, companyId: res.companyId}).then(res2 => {
+        this.custom = res2.custom;
+        this.exchangeRates = res2.exchangeRates;
+      });
       // Basic Info
       this.tabData = this.newTabData = this.$getDB(
         this.$db.inquiry.basicInfo,
@@ -509,6 +515,47 @@ export default {
       this.historyColumn = this.$db.inquiry.productInfo;
       this.fnBasicInfoHistoty(data, 'productInfo', {type, data: data.skuId.value});
       if (type === 'modify') this.onSwitch = true;
+    },
+    // 计算指定货币到美元的价格
+    toUSDCurrency(price, fromCurrency) {
+      if (fromCurrency === 'USD') return price;
+      if (isNaN(price) || !Array.isArray(this.exchangeRates) || !this.exchangeRates.length) return null;
+      let symbol = fromCurrency + 'USD';
+      let rate = this.exchangeRates.filter(i => i.symbol === symbol)[0] || null;
+      return rate && rate * price;
+    },
+    computePrice(col, item) {
+      let field = col.key;
+      if (item._remark || !this.custom || !['skuExwPrice', 'skuFobPrice', 'skuCifPrice', 'skuOuterCartonQty', 'skuOuterCartonVolume'].includes(field)) {
+        return;
+      }
+
+      let outerCartonQty = item.skuOuterCartonQty.value; // 外箱产品数量
+      let outerCartonVolume = item.skuOuterCartonVolume.value; // 外箱体积
+      if (field === 'skuExwPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
+        let exwPrice = this.toUSDCurrency(item.skuExwPrice.value, item.skuExwCurrency.value);
+        if (codeUtils.isNumber(exwPrice, outerCartonVolume, outerCartonQty)) {
+          let fob = (exwPrice + 985 / 68 * outerCartonVolume / outerCartonQty) * 1.05;
+          item.skuRefFobPrice.value = Number(fob.toFixed(item.skuRefFobPrice._toFixed || 4));
+        }
+      }
+      if (field === 'skuFobPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
+        let oceanFreight = this.custom.oceanFreightUSD40HC; // 海运费
+        let insuranceExpenses = this.custom.insuranceExpensesUSD40HC; // 保险费
+        let fobPrice = this.toUSDCurrency(item.skuFobPrice.value, item.skuFobCurrency) || item.skuRefFobPrice.value;
+        if (codeUtils.isNumber(fobPrice, outerCartonQty, outerCartonVolume, oceanFreight, insuranceExpenses)) {
+          let cif = fobPrice + (oceanFreight + insuranceExpenses) / 68 * outerCartonVolume / outerCartonQty;
+          item.skuRefCifPrice.value = Number(cif.toFixed(item.skuRefCifPrice._toFixed || 4));
+        }
+      }
+      if (field === 'skuCifPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
+        let portWarehouse = this.custom.portWarehousePrice40HC; // 港口到仓库运费
+        let cifPrice = this.toUSDCurrency(item.skuCifPrice.value, item.skuCifCurrency.value) || item.skuRefCifPrice;
+        if (codeUtils.isNumber(cifPrice, outerCartonQty, outerCartonVolume, portWarehouse)) {
+          let ddu = cifPrice + portWarehouse / 68 * outerCartonVolume / outerCartonQty;
+          item.skuRefDduPrice.value = Number(ddu.toFixed(item.skuRefDduPrice._toFixed || 4));
+        }
+      }
     },
     // 获取选中的单 集合
     changeChecked(item) {

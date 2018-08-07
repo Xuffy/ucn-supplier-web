@@ -11,6 +11,7 @@ export default {
     GET_ADD_APPING_CATEGORY: ['/category/mapping/{id}', 'USUPPLY_URL', 'USUPPLY_URL'], // 添加我的分类
     POST_CATEGORY_DELETE: ['/category/delete', 'USUPPLY_URL', 'USUPPLY_URL'], //删除我的分类
     POST_UPDATE_CATEGORY: ['/category/{id}', 'USUPPLY_URL', 'USUPPLY_URL'], //更新我的分类
+    GET_CUSTOMER_EXCHANGE_RATE_FEE: ['/customer/rate/exchangeFee', 'BASE_URL'],
     //采购端
     GET_PURCHASE_SYS_CATEGORY: ['/purchase/sys/category', 'UPURCHASE_URL', 'UPURCHASE_URL'], // 获取系统分类
     GET_PURCHASE_CATEGORY: ['/purchase/category', 'UPURCHASE_URL', 'UPURCHASE_URL'], // 获取我的分类
