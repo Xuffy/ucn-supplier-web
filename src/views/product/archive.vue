@@ -113,6 +113,7 @@
 
                         e.recycle._value=e.recycle.value?this.$i.product.invalid:this.$i.product.valid;
 
+                        
                         if (e.noneSellCountry.value) {
                             let noneSellCountry = e.noneSellCountry.value.split(",");
                             e.noneSellCountry._value = "";
