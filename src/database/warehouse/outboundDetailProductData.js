@@ -38,7 +38,7 @@ export default {
     outerCartonNetWeight:{},
     inboundNo:{},
     skuDescEn:{},
-    skuDescCn:{},
+    // skuDescCn:{},
     // skuDescCustomer:{},
     // skuLabel:{},
     orderNo:{},

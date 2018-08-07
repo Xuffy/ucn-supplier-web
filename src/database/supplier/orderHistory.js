@@ -1,10 +1,10 @@
 'use strict';
 export default {
   //order
-  orderNumber: {
-    key: 'orderNo',
-    belong: "order"
-  },
+  // orderNumber: {
+  //   key: 'orderNo',
+  //   belong: "order"
+  // },
   orderDate: {
     key: 'entryDt',
     belong: "order",
@@ -13,11 +13,6 @@ export default {
   orderStatus: {
     key: 'status',
     belong: "order"
-  },
-  actDeliveryDate: {
-    key: 'deliveryDt',
-    belong: "order",
-    type: "textDate"
   },
   quantityOfSKU: {
     key: 'skuQty',
@@ -48,4 +43,10 @@ export default {
     key: '',
     belong: "order"
   },
+  skuQty: {
+    key:''
+  },
+  amount: {
+    key:''
+  }
 }

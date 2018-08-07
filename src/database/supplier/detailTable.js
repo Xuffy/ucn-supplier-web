@@ -57,26 +57,4 @@ export default {
       },
 
 
-    //       document
-    documentRequired:{
-        key:"document"
-    },
-    factoryInspectionReport:{
-        key:"factoryInspectionReport"
-    },
-    invoice:{
-        key:'invoice'
-    },
-    examiningReport:{
-        key:'examiningReport'
-    },
-    packingList:{
-        key:"packingList"
-    },
-    examiningReport:{
-        key:"examiningReport"
-    },
-
-
-
 }

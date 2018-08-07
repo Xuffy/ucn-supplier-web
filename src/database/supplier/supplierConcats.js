@@ -37,10 +37,6 @@ export default {
     key: 'skype',
     belong: "concats"
   },
-  qq: {
-    key: 'qq',
-    belong: "concats"
-  },
   remark: {
     key: 'remark',
     belong: "concats"

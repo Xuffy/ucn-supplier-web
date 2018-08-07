@@ -14,7 +14,6 @@ export default {
     mobileNumber:{
         key: 'cellphone',
         _rules:{
-            required:true,
             type:'Number',
           }
     },
