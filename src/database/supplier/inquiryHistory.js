@@ -27,4 +27,10 @@ export default {
   totalVolum: {
     key: '', //  产品总体积
   },
+  status: {
+    key:''
+  },
+  relatedOrderNO: {
+    key: ''
+  }
 }

@@ -19,6 +19,9 @@ export default {
     },
     beneficiaryBankSWIFT: {
         key: 'beneficiaryBankSwift',
+        _rules:{
+          required:true,
+        }
     },
     accountType:{
         key: 'accountType',

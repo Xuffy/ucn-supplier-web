@@ -47,14 +47,14 @@ export const routerMap = [
       noDropdown: true,
       component: Layout,
       redirect: '/negotiation/inquiry',
-      meta: {name: $i.router.negotiation},
+      meta: {name: $i.router.negotiation, auth: 'INQUIRY'},
       children: [
         {
           path: 'inquiry',
           name: 'inquiry',
           meta: {
             name: $i.router.negotiationInquiryOverview,
-            recycleBin: 'INQUIRY:OVERVIEW:RECYCLE_BIN'
+            auth: 'INQUIRY:OVERVIEW'
           },
           component: () => import('../views/negotiation/inquiryOverview')
         },
@@ -64,8 +64,7 @@ export const routerMap = [
           hidden: true,
           meta: {
             name: $i.router.negotiationInquiryDetail,
-            recycleBin: 'INQUIRY:DETAIL:RECYCLE_BIN',
-            messageBoard: 'INQUIRY:DETAIL:MESSAGE_BOARD'
+            auth: 'INQUIRY:DETAIL'
           },
           component: () => import('../views/negotiation/inquiryDetail')
         },
