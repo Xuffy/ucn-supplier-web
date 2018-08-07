@@ -86,9 +86,9 @@ export default {
         key:'skuNameEn',
         sortable: true
     },
-    skuNameCustomer: {
-        sortable: true
-    },
+    // skuNameCustomer: {
+    //     sortable: true
+    // },
     skuMaterialCn:{
         key:'skuMaterialCn',
         sortable: true
@@ -97,9 +97,9 @@ export default {
         key:'skuMaterialEn',
         sortable: true
     },
-    factorySkuCode:{
-        key:'factorySkuCode',
-    },
+    // factorySkuCode:{
+    //     key:'factorySkuCode',
+    // },
     customerSkuCode:{
         key:'customerSkuCode',
         sortable: true
@@ -144,20 +144,20 @@ export default {
     skuDescCn:{
         key:'skuDescCn',
     },
-    skuDescCustomer:{
-        key:'skuDescCustomer',
-    },
-    skuLabel:{
-        key:'skuLabel',
-    },
+    // skuDescCustomer:{
+    //     key:'skuDescCustomer',
+    // },
+    // skuLabel:{
+    //     key:'skuLabel',
+    // },
     orderNo:{
         key:'orderNo',
         sortable: true,
     },
-    warehouseNo:{
-        key:'warehouseNo',
-        sortable: true,
-    },
+    // warehouseNo:{
+    //     key:'warehouseNo',
+    //     sortable: true,
+    // },
     warehouseName:{
         key:'warehouseName',
         sortable: true,

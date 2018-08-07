@@ -297,6 +297,7 @@ export default {
         _rules:{
             required:true
         },
+        accuracy: 1
     },
     outerCartonNetWeight:{
         showType:'number',

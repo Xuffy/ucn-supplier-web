@@ -28,7 +28,7 @@
   "inboundSkuTotalNetWeight": "Inbound Total CTN N.W.(kg)",
   "inboundSkuTotalGrossWeight": "Inbound Total CTN G.W.(kg)",
   "outerCartonSkuQty": "QTY/CTN",
-  "outerCartonVolume": "CBM/CTN",
+  "outerCartonVolume": "CBM/CTN(m³)",
   "outerCartonGrossWeight": "G.W./CTN(kg)",
   "outerCartonNetWeight": "N.W./CTN(kg)",
   "unqualifiedType": "Unqualified Type",
@@ -81,5 +81,6 @@
   "supplierCode":"Supplier Code",
   "skuUnitLength":"unit of length",
   "skuUnitVolume":"unit of volume",
-  "skuUnitWeight":"unit of weight"
+  "skuUnitWeight":"unit of weight",
+  "skuQtyNum": "SKU QTY"
 }
