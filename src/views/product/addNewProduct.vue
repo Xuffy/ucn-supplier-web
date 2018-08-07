@@ -1132,7 +1132,6 @@
                 param.attachments = this.$refs.uploadAttachment.getFiles();
                 param.designs=this.$refs.designs[0].getFiles();
                 param.notes=this.$refs.notes[0].getFiles();
-                // return console.log(this.$depthClone(param),'param')
 
                 this.disabledSubmit = true;
                 if (this.$route.query.id && this.$route.query.isEdit) {
