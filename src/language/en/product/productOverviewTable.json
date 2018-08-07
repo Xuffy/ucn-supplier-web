@@ -116,5 +116,7 @@
   "otherPackInfoCn": "Other packing information(CN)",
   "otherPackInfoEn": "Other packing information",
   "adjustPackage": "Adjust SKU and package or not",
-  "pictures": "Picture"
+  "pictures": "Picture",
+  "designs":"Product design",
+  "notes":"Instruction note"
 }

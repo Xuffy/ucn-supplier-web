@@ -98,12 +98,6 @@ export default {
         showType:'number',
         belongTab:'basicInfo',
     },
-    design:{
-        key:'design',
-        type: 'String',
-        showType:'input',
-        belongTab:'basicInfo',
-    },
     categoryId:{            //分类名称
         key:'categoryName',
         type: 'String',
@@ -156,12 +150,15 @@ export default {
         belongTab:'basicInfo',
         isDateUnit:true,
     },
-    comments:{
-        key:'comments',
-        type: 'String',
-        showType:'textarea',
+    designs:{
+        key:'designs',
         belongTab:'basicInfo',
-        fullLine:true
+        showType:'attachment'
+    },
+    notes:{
+        key:'notes',
+        belongTab:'basicInfo',
+        showType:'attachment'
     },
 
     /**

@@ -116,5 +116,7 @@
   "otherPackInfoCn": "其他包装信息CN",
   "otherPackInfoEn": "其他包装信息",
   "adjustPackage": "产品或包装可否调整",
-  "pictures": "图片"
+  "pictures": "图片",
+  "designs":"产品设计",
+  "notes":"产品说明书"
 }

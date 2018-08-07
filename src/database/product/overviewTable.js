@@ -23,54 +23,25 @@ export default {
     skuSaleStatus: {
         key:'status'
     },
-    recycle:{
-
-    },
-    nameCn:{
-        
-    },
+    recycle:{},
+    nameCn:{},
     descCn:{
         _sort:false
     },
-    nameEn:{
-        
-    },
+    nameEn:{},
     descEn:{
         _sort:false
     },
-    nameCustomer:{
-        
-    },
-    supplierCode:{
-        
-    },
-    unit:{
-        
-    },
-    formation:{
-        
-    },
-    materialEn:{
-        
-    },
-    materialCn:{
-        
-    },
-    colourEn:{
-        
-    },
-    colourCn:{
-        
-    },
-    minOrderQty:{
-        
-    },
-    deliveryDates:{
-        
-    },
-    design:{
-        _sort:false
-    },
+    nameCustomer:{},
+    supplierCode:{},
+    unit:{},
+    formation:{},
+    materialEn:{},
+    materialCn:{},
+    colourEn:{},
+    colourCn:{},
+    minOrderQty:{},
+    deliveryDates:{},
     categoryId:{
         key:'categoryName',
         _sort:false
@@ -81,24 +52,23 @@ export default {
     readilyAvailable:{
         
     },
-    availableQty:{
-        
+    availableQty:{},
+    noneSellCountry:{},
+    applicableAge:{},
+    expireDates:{},
+    expireUnit:{},
+    designs:{
+        _upload:{
+            readonly:true
+        }
     },
-    noneSellCountry:{
-        
+    notes:{
+        _upload:{
+            readonly:true
+        }
     },
-    applicableAge:{
-        
-    },
-    expireDates:{
-        
-    },
-    expireUnit:{
-        
-    },
-    comments:{
-        _sort:false
-    },
+
+
     fobCurrency:{
         
     },

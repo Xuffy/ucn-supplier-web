@@ -44,24 +44,29 @@
                 <div class="btns">
                     <el-button
                             :disabled="productForm.recycle"
-                            @click="editProduct">{{$i.product.edit}}</el-button>
+                            @click="editProduct">{{$i.product.edit}}
+                    </el-button>
                     <el-button
                             v-authorize="'PRODUCT:DETAIL:SET_SALE'"
                             :loading="disabledSetupBtn"
                             :disabled="productForm.recycle"
-                            @click="setUpDown">{{btnInfo}}</el-button>
+                            @click="setUpDown">{{btnInfo}}
+                    </el-button>
                     <el-button
                             v-authorize="'PRODUCT:DETAIL:ADD_PRODUCT'"
                             :disabled="productForm.recycle"
-                            @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
+                            @click="addNewProduct">{{$i.product.addNewProduct}}
+                    </el-button>
                     <el-button
                             v-authorize="'PRODUCT:DETAIL:UPLOAD_PRODUCT'"
                             :disabled="productForm.recycle"
-                            @click="()=>$refs.importCategory.show()">{{$i.product.upload}}</el-button>
+                            @click="()=>$refs.importCategory.show()">{{$i.product.upload}}
+                    </el-button>
                     <el-button
                             v-authorize="'PRODUCT:DETAIL:DOWNLOAD'"
                             :disabled="productForm.recycle"
-                            @click="download">{{$i.product.download}}</el-button>
+                            @click="download">{{$i.product.download}}
+                    </el-button>
                     <el-button
                             v-authorize="'PRODUCT:DETAIL:ARCHIVE'"
                             :loading="disabledDeleteBtn"
@@ -75,13 +80,31 @@
         <div class="body">
             <el-tabs v-model="tabName" type="border-card">
                 <el-tab-pane :label="$i.product.basicInformation" name="Basic Info">
-                    <el-form class="speForm" label-width="300px" :label-position="labelPosition">
+                    <el-form
+                            class="speForm"
+                            label-width="300px"
+                            :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailNewTab" :key="v.key"
-                                    class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12"
+                            <el-col
+                                    v-if="v.belongTab==='basicInfo'"
+                                    v-for="v in $db.product.detailNewTab"
+                                    :key="v.key"
+                                    class="list"
+                                    :xs="24"
+                                    :sm="24"
+                                    :md="v.fullLine?24:12"
+                                    :lg="v.fullLine?24:12"
                                     :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+' :'">
-                                    {{productForm[v.key]}}
+                                    <div v-if="v.showType==='attachment'">
+                                        <v-upload
+                                                readonly
+                                                :list="productForm[v.key]"
+                                                :limit="20"></v-upload>
+                                    </div>
+                                    <div v-else>
+                                        {{productForm[v.key]}}
+                                    </div>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -204,12 +227,10 @@
                     colourCn: "",
                     minOrderQty: 1,
                     deliveryDates: 1,               //交期(做完需要多少天)
-                    design: "",
                     noneSellCountry: 1,             //禁售国家，暂时传1
                     applicableAge: 1,
                     expireDates: 1,
                     expireUnit: 1,                  //保质期单位，暂时传1
-                    comments: "",
                     readilyAvailable: 1,
                     availableQty: 1,
                     mainSaleCountry: 1,
@@ -357,17 +378,17 @@
                 skuPkgOption: [],
                 countryOption: [],
                 readilyOption: [],
-                skuSaleStatusOption: []
+                skuSaleStatusOption: [],
+                formationOption: []
             };
         },
         methods: {
             ...mapActions(["setMenuLink"]),
-            //获取产品详情
             getGoodsData() {
                 this.loadingTable = true;
                 this.$ajax.get(this.$apis.get_productDetail, { id: this.$route.query.id }).then(res => {
                     this.productForm = res;
-                    console.log(this.$depthClone(this.productForm.recycle),'this.productForm')
+                    console.log(this.$depthClone(this.productForm.recycle), "this.productForm");
 
                     //处理国家显示
                     if (this.productForm.noneSellCountry) {
@@ -400,6 +421,7 @@
                     this.productForm.adjustPackage = (_.findWhere(this.skuPkgOption, { code: String(Number(this.productForm.adjustPackage)) }) || {}).name;
                     this.productForm.readilyAvailable = (_.findWhere(this.readilyOption, { code: String(Number(this.productForm.readilyAvailable)) }) || {}).name;
                     this.productForm.status = (_.findWhere(this.skuSaleStatusOption, { code: String(this.productForm.status) }) || {}).name;
+                    this.productForm.formation=(_.findWhere(this.formationOption, { code: String(this.productForm.formation) }) || {}).name;
 
                     this.productForm.price.forEach(v => {
                         if (v.status === 2) {
@@ -436,8 +458,6 @@
                     this.loadingTable = false;
                 });
             },
-
-            //编辑产品
             editProduct() {
                 this.$windowOpen({
                     url: "/product/addNewProduct",
@@ -448,14 +468,14 @@
                 });
             },
             setUpDown() {
-                let info, status, successInfo, url,productStatus;
-                productStatus=_.findWhere(this.skuSaleStatusOption,{name:this.productForm.status}).code;
-                if (productStatus === '1') {
+                let info, status, successInfo, url, productStatus;
+                productStatus = _.findWhere(this.skuSaleStatusOption, { name: this.productForm.status }).code;
+                if (productStatus === "1") {
                     info = this.$i.product.sureSetDown;
                     successInfo = this.$i.product.setDownSuccess;
                     status = 0;
                     url = this.$apis.set_sellerProductPutDown;
-                } else if (productStatus === '0') {
+                } else if (productStatus === "0") {
                     info = this.$i.product.sureSetUp;
                     successInfo = this.$i.product.setUpSuccess;
                     status = 1;
@@ -520,7 +540,7 @@
         },
         created() {
             this.loadingTable = true;
-            const unit = this.$ajax.post(this.$apis.get_partUnit, ["ITM", "SKU_UNIT", "ED_UNIT", "QUARANTINE_TYPE", "WT_UNIT", "VE_UNIT", "LH_UNIT", "OEM_IS", "UDB_IS", "SKU_PG_IS", "RA_IS", "SKU_SALE_STATUS"], { cache: true });
+            const unit = this.$ajax.post(this.$apis.get_partUnit, ["ITM", "SKU_UNIT", "ED_UNIT", "QUARANTINE_TYPE", "WT_UNIT", "VE_UNIT", "LH_UNIT", "OEM_IS", "UDB_IS", "SKU_PG_IS", "RA_IS", "SKU_SALE_STATUS","SKU_FORMATION"], { cache: true });
             const country = this.$ajax.get(this.$apis.get_country, {}, { cache: true });
             this.$ajax.all([unit, country]).then(res => {
                 res[0].forEach(v => {
@@ -548,6 +568,8 @@
                         this.readilyOption = v.codes;
                     } else if (v.code === "SKU_SALE_STATUS") {
                         this.skuSaleStatusOption = v.codes;
+                    } else if (v.code === "SKU_FORMATION") {
+                        this.formationOption = v.codes;
                     }
                 });
                 this.countryOption = res[1];
@@ -651,7 +673,7 @@
     .Details .body .list {
         line-height: 35px;
         font-size: 13px;
-        height: 35px;
+        min-height: 35px;
     }
 
     .Details .body .list >>> label {

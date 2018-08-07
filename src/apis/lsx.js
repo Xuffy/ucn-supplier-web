@@ -6,10 +6,10 @@ export default {
 
 
   get_productCategory: ['/purchase/sys/category', 'UPURCHASE_URL'],
-  get_productDetail: ['/sku/{id}','USUPPLY_URL'],
+  get_productDetail: ['/sku/{id}','BASE_CS','USUPPLY_URL'],
   delete_product: ['/sku/{id}/delete', 'USUPPLY_URL'],
   change_productStatus: ['/sku/{id}/status', 'USUPPLY_URL'],
-  get_productList: ['/sku/listSkuByParams', 'USUPPLY_URL'],
+  get_productList: ['/sku/listSkuByParams','BASE_CS', 'USUPPLY_URL'],
   get_supplierWhole: ['/supplierWhole', 'USUPPLY_URL'],
   add_address: ['/supplier/address', 'USUPPLY_URL'],
   delete_address: ['/supplier/delAddress/{id}', 'USUPPLY_URL'],

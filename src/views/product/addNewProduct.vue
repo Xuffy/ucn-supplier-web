@@ -83,6 +83,19 @@
                                     </el-option>
                                 </el-select>
                             </div>
+                            <div v-else-if="v.isFormation">
+                                <el-select
+                                        class="speSelect"
+                                        v-model="productForm[v.key]"
+                                        :placeholder="$i.product.pleaseChoose">
+                                    <el-option
+                                            v-for="item in formationOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
                             <div v-else>
                                 <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
                                            :placeholder="$i.product.pleaseChoose">
@@ -95,7 +108,7 @@
                                 </el-select>
                             </div>
                         </div>
-                        <div v-if="v.showType==='input'">
+                        <div v-else-if="v.showType==='input'">
                             <el-input
                                     :disabled="v.disabledInput"
                                     size="mini"
@@ -104,7 +117,7 @@
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
-                        <div v-if="v.showType==='textarea'">
+                        <div v-else-if="v.showType==='textarea'">
                             <el-input
                                     class="speTextarea"
                                     size="mini"
@@ -114,7 +127,7 @@
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
-                        <div v-if="v.showType==='number'">
+                        <div v-else-if="v.showType==='number'">
                             <div v-if="v.isAvailableQty">
                                 <v-input-number
                                         class="speInputNumber"
@@ -137,13 +150,19 @@
                                 </v-input-number>
                             </div>
                         </div>
-                        <div v-if="v.showType==='dropdown'">
+                        <div v-else-if="v.showType==='dropdown'">
                             <drop-down
                                     class="speSelect"
                                     v-model="productForm[v.key]"
                                     :list="categoryList"
                                     :defaultProps="defaultProps"
                                     ref="dropDown"></drop-down>
+                        </div>
+                        <div v-else-if="v.showType==='attachment'">
+                            <v-upload
+                                    :list="productForm[v.key]"
+                                    :limit="20"
+                                    :ref="v.key"></v-upload>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -870,6 +889,7 @@
                 skuUnitOption: [],       //计量单位
                 quarantineTypeOption: [],//检疫类别单位
                 customerTypeOption: [],  //客户类型
+                formationOption:[],      //产品组成
 
                 loadingData: true,
                 labelPosition: "left",
@@ -901,6 +921,8 @@
                 },
                 productForm: {
                     attachments: [],
+                    designs:[],                 //产品设计
+                    notes:[],                   //产品说明书
                     id: "",                         //新增传空
                     ids: [],                         //选择的可见
                     pictures: [],
@@ -920,12 +942,10 @@
                     colourCn: "",
                     minOrderQty: null,
                     deliveryDates: null,               //交期(做完需要多少天)
-                    design: "",
                     noneSellCountry: "",             //禁售国家
                     applicableAge: null,
                     expireDates: null,
                     expireUnit: "3",                  //保质期单位
-                    comments: "",
                     readilyAvailable: "0",
                     availableQty: null,
                     mainSaleCountry: "",
@@ -1105,11 +1125,18 @@
 
                 let size = this.boxSize.length + "*" + this.boxSize.width + "*" + this.boxSize.height;
                 this.$set(this.productForm, "lengthWidthHeight", size);
+
+                //处理附件
+                let param = Object.assign({}, this.productForm);
+                param.pictures = this.$refs.upload.getFiles();
+                param.attachments = this.$refs.uploadAttachment.getFiles();
+                param.designs=this.$refs.designs[0].getFiles();
+                param.notes=this.$refs.notes[0].getFiles();
+                // return console.log(this.$depthClone(param),'param')
+
                 this.disabledSubmit = true;
                 if (this.$route.query.id && this.$route.query.isEdit) {
                     //代表是编辑
-                    let param = Object.assign({}, this.productForm);
-
                     _.mapObject(param, (e, k) => {
                         if (k === "status" || k === "unit" || k === "readilyAvailable" || k === "expireUnit" || k === "unitLength" || k === "unitVolume" || k === "unitWeight" || k === "oem" || k === "useDisplayBox") {
                             param[k] = parseInt(param[k]);
@@ -1142,8 +1169,6 @@
                             param.ids.push(v.customerId);
                         });
                     }
-                    param.pictures = this.$refs.upload.getFiles();
-                    param.attachments = this.$refs.uploadAttachment.getFiles();
                     this.$ajax.post(this.$apis.update_buyerProductDetail, param).then(res => {
                         this.$message({
                             message: this.$i.product.modifySuccess,
@@ -1162,7 +1187,6 @@
                 }
                 else {
                     //代表是新增
-                    let param = Object.assign({}, this.productForm);
                     _.mapObject(param, (e, k) => {
                         if (k === "status" || k === "unit" || k === "readilyAvailable" || k === "expireUnit" || k === "unitLength" || k === "unitVolume" || k === "unitWeight" || k === "oem" || k === "useDisplayBox") {
                             param[k] = parseInt(param[k]);
@@ -1196,9 +1220,6 @@
                             param.ids.push(v.customerId);
                         });
                     }
-                    param.pictures = this.$refs.upload.getFiles();
-                    param.attachments = this.$refs.uploadAttachment.getFiles();
-                    // return console.log(this.$depthClone(param.price),'params')
                     this.$ajax.post(this.$apis.add_newSKU, param).then(res => {
                         this.$message({
                             message: this.$i.product.successfullyAdd,
@@ -1251,7 +1272,8 @@
                                 status: 2
                             }
                         ]
-                    } else if(this.productForm.price.length===1){
+                    }
+                    else if(this.productForm.price.length===1){
                         if(this.productForm.price[0].status===1){
                             this.productForm.price.push({
                                 cifArea: "",
@@ -1376,7 +1398,7 @@
             getUnit() {
                 const currencyAjax = this.$ajax.get(this.$apis.get_currencyUnit, {}, { cache: true });
                 const countryAjax = this.$ajax.get(this.$apis.get_country, {}, { cache: true });
-                const codeAjax = this.$ajax.post(this.$apis.get_partUnit, ["SKU_SALE_STATUS", "SKU_READILY_AVAIALBLE", "ED_UNIT", "WT_UNIT", "VE_UNIT", "LH_UNIT", "OEM_IS", "UDB_IS", "SKU_PG_IS", "RA_IS", "SKU_UNIT", "QUARANTINE_TYPE", "CUSTOMER_TYPE"], { cache: true });
+                const codeAjax = this.$ajax.post(this.$apis.get_partUnit, ["SKU_SALE_STATUS", "SKU_READILY_AVAIALBLE", "ED_UNIT", "WT_UNIT", "VE_UNIT", "LH_UNIT", "OEM_IS", "UDB_IS", "SKU_PG_IS", "RA_IS", "SKU_UNIT", "QUARANTINE_TYPE", "CUSTOMER_TYPE",'SKU_FORMATION'], { cache: true });
                 this.loadingData = true;
                 this.$ajax.all([currencyAjax, countryAjax, codeAjax]).then(res => {
                     this.currencyOption = res[0];
@@ -1406,6 +1428,8 @@
                             this.quarantineTypeOption = v.codes;
                         } else if (v.code === "CUSTOMER_TYPE") {
                             this.customerTypeOption = v.codes;
+                        } else if (v.code === "SKU_FORMATION") {
+                            this.formationOption = v.codes;
                         }
                     });
                     if (this.$route.query.isEdit) {

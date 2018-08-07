@@ -123,6 +123,7 @@
                 skuUnitOption: [],
                 countryOption: [],
                 quarantineTypeOption:[],
+                formationOption:[],
 
             };
         },
@@ -157,23 +158,19 @@
                         e.unitVolume._value=(_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}) || {}).name;
                         e.unitWeight._value=(_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}) || {}).name;
                         e.recycle._value=e.recycle.value?this.$i.product.invalid:this.$i.product.valid;
+                        e.formation._value=(_.findWhere(this.formationOption,{code:e.formation.value}) || {}).name;
 
-                        if (e.noneSellCountry.value) {
-                            let noneSellCountry = e.noneSellCountry.value.split(",");
-                            e.noneSellCountry._value = "";
-                            _.map(noneSellCountry, v => {
-                                e.noneSellCountry._value += (_.findWhere(this.countryOption, { code: v }).name + ",");
-                            });
-                            e.noneSellCountry._value = e.noneSellCountry._value.slice(0, e.noneSellCountry._value.length - 1);
+                        if(e.noneSellCountry.value){
+                            e.noneSellCountry._value=_.map(e.noneSellCountry.value.split(","),item=>{
+                                return _.findWhere(this.countryOption,{code:item}).name;
+                            }).join(',');
                         }
-                        if (e.mainSaleCountry.value) {
-                            let mainSaleCountry = e.mainSaleCountry.value.split(",");
-                            e.mainSaleCountry._value = "";
-                            _.map(mainSaleCountry, v => {
-                                e.mainSaleCountry._value += (_.findWhere(this.countryOption, { code: v }).name + ",");
-                            });
-                            e.mainSaleCountry._value = e.mainSaleCountry._value.slice(0, e.mainSaleCountry._value.length - 1);
+                        if(e.mainSaleCountry.value){
+                            e.mainSaleCountry._value=_.map(e.mainSaleCountry.value.split(","),item=>{
+                                return _.findWhere(this.countryOption,{code:item}).name;
+                            }).join(',');
                         }
+
                         e.yearListed.value = this.$dateFormat(e.yearListed.value, "yyyy-mm");
                         e.inspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, {code:e.inspectQuarantineCategory.value}) || {}).name;
                         return e;
@@ -294,7 +291,7 @@
             },
         },
         created() {
-            const partUnit = this.$ajax.post(this.$apis.get_partUnit, ["SKU_SALE_STATUS", "WT_UNIT", "ED_UNIT", "VE_UNIT", "LH_UNIT", "SKU_UNIT", "QUARANTINE_TYPE"], { cache: true });
+            const partUnit = this.$ajax.post(this.$apis.get_partUnit, ["SKU_SALE_STATUS", "WT_UNIT", "ED_UNIT", "VE_UNIT", "LH_UNIT", "SKU_UNIT", "QUARANTINE_TYPE","SKU_FORMATION"], { cache: true });
             const countryAjax = this.$ajax.get(this.$apis.get_country, {}, { cache: true });
             this.$ajax.all([partUnit, countryAjax]).then(res => {
                 res[0].forEach(v => {
@@ -312,6 +309,8 @@
                         this.skuUnitOption = v.codes;
                     } else if (v.code === "QUARANTINE_TYPE") {
                         this.quarantineTypeOption = v.codes;
+                    } else if (v.code === "SKU_FORMATION") {
+                        this.formationOption = v.codes;
                     }
                 });
                 this.countryOption = res[1];
