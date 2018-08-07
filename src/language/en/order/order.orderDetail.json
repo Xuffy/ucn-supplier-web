@@ -99,7 +99,7 @@
   "skuOuterCartonLength": "Outer Carton Length(cm)",
   "skuOuterCartonWidth": "Outer Carton Width(cm)",
   "skuOuterCartonHeight": "Outer Carton Height(cm)",
-  "skuOuterCartonNetWeight": "N.W. of Outer Carton(g)",
+  "skuOuterCartonNetWeight": "N.W. of Outer Carton(kg)",
   "skuOuterCartonRoughWeight": "G.W of Outer Carton.(kg)",
   "skuOuterCartonVolume": "Outer Carton Volume(m³)",
   "skuOuterCartonMethodEn": "Packing Method Of Outer Carton ( En)",

@@ -174,7 +174,7 @@
                             </div>
                         </div>
                         <div v-else-if="v.type==='number'">
-                            <el-input-number
+                            <v-input-number
                                     @change="handleChange(v.key)"
                                     :placeholder="isModify?$i.order.pleaseInput:''"
                                     :disabled="v.disabled || !isModify"
@@ -182,7 +182,7 @@
                                     v-model="orderForm[v.key]"
                                     :controls="false">
 
-                            </el-input-number>
+                            </v-input-number>
                         </div>
                         <div v-else-if="v.type==='textarea'">
                             <el-input
@@ -207,25 +207,6 @@
             </el-row>
         </el-form>
 
-        <!--<div class="title">-->
-        <!--{{$i.order.exchangeRate}}-->
-        <!--</div>-->
-        <!--<el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">-->
-        <!--<el-row>-->
-        <!--<el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-        <!--<el-form-item :label="$i.order[v.currency]">-->
-        <!--<el-input-number-->
-        <!--:disabled="true"-->
-        <!--:placeholder="$i.order.pleaseInput"-->
-        <!--class="speInput speNumber"-->
-        <!--v-model="v.exchangeRate"-->
-        <!--:controls="false">-->
-        <!--</el-input-number>-->
-        <!--</el-form-item>-->
-        <!--</el-col>-->
-        <!--</el-row>-->
-        <!--</el-form>-->
-
         <div v-authorize="'ORDER:DETAIL:RESPONSIBILITY'">
             <div class="title">
                 {{$i.order.responsibility}}
@@ -245,6 +226,8 @@
                         :label="$i.order.type">
                     <template slot-scope="scope">
                         <el-input
+                                :class="{'high-light':scope.row && scope.row.fieldUpdates && scope.row.fieldUpdates.type===''}"
+                                @change="handleResponsibilityChange(scope.row,'type')"
                                 :disabled="!isModify"
                                 :placeholder="isModify?$i.order.pleaseInput:''"
                                 v-model="scope.row.type"
@@ -425,12 +408,12 @@
                             :label="$i.order.planRefundAmount"
                             width="160">
                         <template slot-scope="scope">
-                            <el-input-number
+                            <v-input-number
                                     v-if="scope.row.isNew || scope.row.isModify"
                                     class="speNumber"
                                     v-model="scope.row.planRefundAmount"
                                     :controls="false"
-                                    :min="0"></el-input-number>
+                                    :min="0"></v-input-number>
                             <span v-else>{{scope.row.planRefundAmount}}</span>
                         </template>
                     </el-table-column>
@@ -455,12 +438,12 @@
                             :label="$i.order.actualRefundAmount"
                             width="160">
                         <template slot-scope="scope">
-                            <el-input-number
+                            <v-input-number
                                     v-if="scope.row.isNew || scope.row.isModify"
                                     class="speNumber"
                                     v-model="scope.row.actualRefundAmount"
                                     :controls="false"
-                                    :min="0"></el-input-number>
+                                    :min="0"></v-input-number>
                             <span v-else>{{scope.row.actualRefundAmount}}</span>
                         </template>
                     </el-table-column>
@@ -722,9 +705,6 @@
                 @save="saveNegotiate"
                 :beforeSave="beforeSave"
                 ref="HM">
-            <!--<div slot="skuPic" slot-scope="{data}">-->
-            <!--<v-upload :limit="20" readonly></v-upload>-->
-            <!--</div>-->
             <el-select
                     slot="skuFobCurrency"
                     v-model="data.value"
@@ -898,272 +878,271 @@
                 </el-option>
             </el-select>
 
-            <el-input-number
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuFobPrice"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="4"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuExwPrice"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="4"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuCifPrice"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="4"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuDduPrice"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="4"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuQty"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
                     @blur="handlePriceBlur(data)"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="1"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuPrice"
                     slot-scope="{data}"
                     :disabled="true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="4"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     :max="1"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuRateValueAddedTax"
                     slot-scope="{data}"
+                    :accuracy="2"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     :max="1"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuTaxRefundRate"
                     slot-scope="{data}"
+                    :accuracy="2"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuLength"
                     slot-scope="{data}"
+                    :accuracy="2"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuWidth"
                     slot-scope="{data}"
+                    :accuracy="2"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuHeight"
                     slot-scope="{data}"
+                    :accuracy="2"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuNetWeight"
+                    :accuracy="2"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuVolume"
                     slot-scope="{data}"
+                    :accuracy="6"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonQty"
                     slot-scope="{data}"
+                    :accuracy="1"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuInnerCartonLength"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="2"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuInnerCartonWidth"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="2"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuInnerCartonHeight"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuInnerCartonWeightNet"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuInnerCartonRoughWeight"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonVolume"
                     slot-scope="{data}"
+                    :accuracy="3"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuInnerCartonOuterNum"
+                    :accuracy="1"
                     slot-scope="{data}"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     slot="skuOuterCartonQty"
                     slot-scope="{data}"
+                    :accuracy="1"
                     @change="val => data._isModified=true"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonLength"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    :accuracy="2"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonWidth"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonHeight"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonNetWeight"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonRoughWeight"
+                    :accuracy="2"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonVolume"
+                    :accuracy="3"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuApplicableAge"
+                    :accuracy="0"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuExpireDates"
+                    :accuracy="0"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuSampleQty"
+                    :accuracy="1"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuSamplePrice"
+                    :accuracy="4"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
-            <el-input-number
+                    v-model="data.value"></v-input-number>
+            <v-input-number
                     :min="0"
                     class="speNumber spx"
-                    :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuDeliveryDates"
-                    :precision="0"
+                    :accuracy="0"
                     slot-scope="{data}"
-                    v-model="data.value"></el-input-number>
+                    v-model="data.value"></v-input-number>
         </v-history-modify>
 
         <v-message-board
@@ -1184,7 +1163,8 @@
         VUpload,
         VHistoryModify,
         VMessageBoard,
-        VProduct
+        VProduct,
+        VInputNumber
     } from "@/components/index";
     import { mapActions } from "vuex";
 
@@ -1197,7 +1177,8 @@
             VUpload,
             VProduct,
             VHistoryModify,
-            VMessageBoard
+            VMessageBoard,
+            VInputNumber
         },
         data() {
             return {
@@ -1475,9 +1456,6 @@
         },
         methods: {
             ...mapActions(["setMenuLink"]),
-            /**
-             * 获取页面数据
-             * */
             getUnit() {
                 let currency, country, exchangeRate, unit;
                 currency = this.$ajax.get(this.$apis.CURRENCY_ALL, {});

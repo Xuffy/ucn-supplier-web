@@ -70,8 +70,11 @@
             </span>
         </el-dialog>
 
-        <v-import-template ref="importCategory" code="BIZ_SKU_SUPPLIER_IMPORT" :tips="$i.product.uploadTips"
-                           biz-code="BIZ_SKU_SUPPLIER_IMPORT"></v-import-template>
+        <v-import-template
+                ref="importCategory"
+                code="BIZ_SKU_SUPPLIER_IMPORT"
+                :tips="$i.product.uploadTips"
+                biz-code="BIZ_SKU_SUPPLIER_IMPORT"></v-import-template>
     </div>
 </template>
 
@@ -119,7 +122,8 @@
                 lengthOption: [],
                 skuUnitOption: [],
                 countryOption: [],
-                quarantineTypeOption:[]
+                quarantineTypeOption:[],
+
             };
         },
         methods: {
@@ -146,12 +150,14 @@
                 this.loadingTable = true;
                 this.$ajax.post(this.$apis.get_productList, params).then(res => {
                     this.productData = this.$getDB(this.$db.product.overviewTable, res.datas, e => {
-                        e.status.value = this.$change(this.statusOption, "status", e, true).name;
-                        e.expireUnit.value = this.$change(this.dateOption, "expireUnit", e, true).name;
-                        e.unit.value = this.$change(this.skuUnitOption, "unit", e, true).name;
-                        e.unitLength.value = this.$change(this.lengthOption, "unitLength", e, true).name;
-                        e.unitVolume.value = this.$change(this.volumeOption, "unitVolume", e, true).name;
-                        e.unitWeight.value = this.$change(this.weightOption, "unitWeight", e, true).name;
+                        e.status._value=(_.findWhere(this.statusOption,{code:String(e.status.value)}) || {}).name;
+                        e.expireUnit._value=(_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}) || {}).name;
+                        e.unit._value=(_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}) || {}).name;
+                        e.unitLength._value=(_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}) || {}).name;
+                        e.unitVolume._value=(_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}) || {}).name;
+                        e.unitWeight._value=(_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}) || {}).name;
+                        e.recycle._value=e.recycle.value?this.$i.product.invalid:this.$i.product.valid;
+
                         if (e.noneSellCountry.value) {
                             let noneSellCountry = e.noneSellCountry.value.split(",");
                             e.noneSellCountry._value = "";
@@ -170,7 +176,6 @@
                         }
                         e.yearListed.value = this.$dateFormat(e.yearListed.value, "yyyy-mm");
                         e.inspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, {code:e.inspectQuarantineCategory.value}) || {}).name;
-                        console.log(e,'e')
                         return e;
                     });
                     this.pageData = res;
@@ -287,18 +292,6 @@
                     url: "/product/addNewProduct"
                 });
             },
-
-            /**
-             * 分页操作
-             * */
-            changePage(e) {
-                this.productForm.pn = e;
-                this.getData();
-            },
-            changeSize(e) {
-                this.productForm.ps = e;
-                this.getData();
-            }
         },
         created() {
             const partUnit = this.$ajax.post(this.$apis.get_partUnit, ["SKU_SALE_STATUS", "WT_UNIT", "ED_UNIT", "VE_UNIT", "LH_UNIT", "SKU_UNIT", "QUARANTINE_TYPE"], { cache: true });

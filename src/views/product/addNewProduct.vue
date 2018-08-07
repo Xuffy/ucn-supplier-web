@@ -46,8 +46,11 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isReadily">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
-                                           :placeholder="$i.product.pleaseChoose">
+                                <el-select
+                                        class="speSelect"
+                                        clearable
+                                        v-model="productForm[v.key]"
+                                        :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in readilyOption"
                                             :key="item.id"
@@ -506,7 +509,11 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isOem">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select
+                                        class="speSelect"
+                                        clearable
+                                        v-model="productForm[v.key]"
+                                        :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in oemOption"
                                             :key="item.id"
@@ -642,7 +649,7 @@
                             <div v-else-if="v.isUDB">
                                 <el-select
                                         class="speSelect"
-                                        size="mini"
+                                        clearable
                                         v-model="productForm[v.key]"
                                         :placeholder="$i.product.pleaseChoose">
                                     <el-option
@@ -654,8 +661,11 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isSkuPkg">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
-                                           :placeholder="$i.product.pleaseChoose">
+                                <el-select
+                                        class="speSelect"
+                                        clearable
+                                        v-model="productForm[v.key]"
+                                        :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in skuPkgOption"
                                             :key="item.id"
@@ -1173,7 +1183,7 @@
                                         item += (v + ",");
                                     }
                                 });
-                                param[k] = item;
+                                param[qk] = item;
                             }
                         } else if (k === "adjustPackage") {
                             param[k] = param[k] === "1" ? true : false;

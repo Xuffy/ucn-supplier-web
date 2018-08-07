@@ -99,7 +99,7 @@
   "skuOuterCartonLength": "外箱长度(cm)",
   "skuOuterCartonWidth": "外箱宽度(cm)",
   "skuOuterCartonHeight": "外箱高度(cm)",
-  "skuOuterCartonNetWeight": "外箱净重(g)",
+  "skuOuterCartonNetWeight": "外箱净重(kg)",
   "skuOuterCartonRoughWeight": "外箱毛重(kg)",
   "skuOuterCartonVolume": "外箱体积(m³)",
   "skuOuterCartonMethodEn": "外箱包装方式(英文)",
