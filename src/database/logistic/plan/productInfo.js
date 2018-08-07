@@ -23,8 +23,14 @@ export default {
     typeSlef: 'text',
     _hide: true
   },
-  "entryDt": {
+  "skuSupplierName": {
     type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
+  },
+  "entryDt": {
+    type: 'Date',
     _disabled: true,
     typeSlef: 'text',
     _hide: true
@@ -35,17 +41,22 @@ export default {
     typeSlef: 'text',
     _hide: true
   },
-  "orderNo": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
   "skuPictures":{
     type: 'String',
     _image:true,
     _upload:{
       readonly:true
     },
+    typeSlef: 'text'
+  },
+  "orderNo": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuCode": {
+    type: 'String',
+    _disabled: true,
     typeSlef: 'text'
   },
   "orderId": {
@@ -60,28 +71,11 @@ export default {
     typeSlef: 'text',
     _hide: true
   },
-  "toShipCartonQty": {
-    type: 'String',
-    typeSlef: 'text',
-    _disabled: true,
-    _important: true
-  },
   "fieldDisplay": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text',
     _hide: true
-  },
-  "toShipQty": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text',
-    _important: true
-  },
-  "skuCode": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
   },
   "skuNameEn": {
     type: 'String',
@@ -93,7 +87,7 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "skuNameCustomer": {
+  "productDescription": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -103,12 +97,12 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "skuCustomsNameCn": {
+  "customsDeclarationNameCn": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
   },
-  "skuCustomsNameEn": {
+  "customsDeclarationNameEn": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -123,7 +117,23 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "skuSupplierName": {
+  "skuOuterCartonQty": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _important: true
+  },
+  "skuNameCustomer": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuCustomsNameCn": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuCustomsNameEn": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -134,11 +144,6 @@ export default {
     typeSlef: 'text'
   },
   "skuCustomerSkuCode": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
-  "factorySkuCode": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -176,11 +181,8 @@ export default {
     typeSlef: 'text'
   },
   "containerNo": {
-    type: 'Select',
-    correlationKey:"containerType",
-    _optionLabel:'containerNo',
-    _optionValue:'containerNo',
-    _option:[],
+    type: 'String',
+    _disabled: true,
     typeSlef: 'text'
   },
   "containerId": {
@@ -194,10 +196,16 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
+  "totalContainerGrossWeight": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
   "totalQuantityInContainer": {
     key: 'totalContainerQty',
     _filed: 'totalContainerQty',
     type: 'String',
+    _disabled: true,
     typeSlef: 'text',
     _important: true
   },
@@ -205,6 +213,7 @@ export default {
     key: 'totalContainerVolume',
     _filed: 'totalContainerVolume',
     type: 'String',
+    _disabled: true,
     typeSlef: 'text',
     _important: true
   },
@@ -212,6 +221,7 @@ export default {
     key: 'totalContainerNetWeight',
     _filed: 'totalContainerNetWeight',
     type: 'String',
+    _disabled: true,
     typeSlef: 'text',
     _important: true
   },
@@ -219,13 +229,9 @@ export default {
     key: 'totalContainerOuterCartonsQty',
     _filed: 'totalContainerOuterCartonsQty',
     type: 'String',
+    _disabled: true,
     typeSlef: 'text',
     _important: true
-  },
-  "skuOuterCartonQty": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
   },
   "skuOuterCartonLength": {
     type: 'String',

@@ -562,3 +562,12 @@ export const addProductFromOrderFilter = {
     _isDefaultShow:true
   }
 }
+
+//验证shipper必填
+export const validateShipperObj = {
+  "name":{
+    _rules:{
+      required:true
+    }
+  }
+}
