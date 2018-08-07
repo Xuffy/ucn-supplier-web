@@ -228,9 +228,7 @@ export default {
     methodPkgEn:{
         _sort:false
     },
-    innerCartonUnit:{
-        
-    },
+
     innerCartonQty:{
         
     },
@@ -260,9 +258,6 @@ export default {
     },
     innerCartonMethodEn:{
         _sort:false
-    },
-    outerCartonUnit:{
-        
     },
     outerCartonDesc:{
         _sort:false
@@ -318,29 +313,11 @@ export default {
     specialTransportRequire:{
         _sort:false
     },
-    inventoryCostMethod:{
-        _sort:false
-    },
-    warehourceDefault:{
-        _sort:false
-    },
-    inventory:{        //自有库存?????不知道对不对
-        
-    },
-    safeInventory:{
-        
-    },
-    minInventory:{
-        
-    },
     mainSaleCountry:{
         _sort:false
     },
     mainSaleArea:{
         _sort:false
-    },
-    productionDates:{
-        
     },
     qualityStander:{
         _sort:false

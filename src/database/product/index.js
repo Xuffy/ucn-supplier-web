@@ -14,6 +14,7 @@ import overviewTable from './overviewTable';
 import addProductCustomer from './addProductCustomer';
 import addProductTable from './addProductTable';
 import detailNewTab from './detailNewTab';
+import tradeHistory from './tradeHistory';
 
 
 
@@ -33,5 +34,6 @@ export default {
     detailTop,
     addProductCustomer,
     addProductTable,
-    detailNewTab
+    detailNewTab,
+    tradeHistory
 }

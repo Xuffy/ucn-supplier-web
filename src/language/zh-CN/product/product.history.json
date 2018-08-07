@@ -8,5 +8,9 @@
   "confirmQcDt": "验货日期",
   "actDepartureDt": "发运日期",
   "totalContainerQty": "发运数量",
-  "skuQty": "产品采购数量"
+  "skuQty": "产品采购数量",
+  "salesOrderNo":"外销订单号",
+  "purchaseOrderNo":"采购订单号",
+  "totalCTN":"订单箱数",
+  "orderCreateDt":"订单创建日期"
 }

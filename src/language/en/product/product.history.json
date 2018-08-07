@@ -8,5 +8,9 @@
   "confirmQcDt": "QC date",
   "actDepartureDt": "Shipped date",
   "totalContainerQty": "Shipped SKU quantity",
-  "skuQty": "Order SKU quantity"
+  "skuQty": "Order SKU quantity",
+  "salesOrderNo":"Sales Order No",
+  "purchaseOrderNo":"Purchase Order No",
+  "totalCTN":"Total CTN",
+  "orderCreateDt":"Create Date"
 }

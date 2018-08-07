@@ -440,12 +440,6 @@ export default {
         showType:'input',
         belongTab:'packingInfo',
     },
-    innerCartonUnit:{
-        key:'innerCartonUnit',
-        type: 'String',
-        showType:'input',
-        belongTab:'packingInfo',
-    },
     innerCartonQty:{
         key:'innerCartonQty',
         type: 'String',
@@ -510,12 +504,6 @@ export default {
     },
     innerCartonMethodEn:{
         key:'innerCartonMethodEn',
-        type: 'String',
-        showType:'input',
-        belongTab:'packingInfo',
-    },
-    outerCartonUnit:{
-        key:'outerCartonUnit',
         type: 'String',
         showType:'input',
         belongTab:'packingInfo',
@@ -646,39 +634,6 @@ export default {
         showType:'input',
         belongTab:'logisticInfo',
     },
-    inventoryCostMethod:{
-        key:'inventoryCostMethod',
-        type: 'String',
-        showType:'input',
-        belongTab:'logisticInfo',
-    },
-    warehourceDefault:{
-        key:'warehourceDefault',
-        type: 'String',
-        showType:'input',
-        belongTab:'logisticInfo',
-    },
-    inventory:{
-        key:'inventory',
-        type: 'String',
-        showType:'number',
-        belongTab:'logisticInfo',
-        accuracy:1
-    },
-    safeInventory:{
-        key:'safeInventory',
-        type: 'String',
-        showType:'number',
-        belongTab:'logisticInfo',
-        accuracy:1
-    },
-    minInventory:{
-        key:'minInventory',
-        type: 'String',
-        showType:'number',
-        belongTab:'logisticInfo',
-        accuracy:1
-    },
 
     /**
      * Other Info
@@ -695,13 +650,6 @@ export default {
         type: 'String',
         showType:'input',
         belongTab:'otherInfo',
-    },
-    productionDates:{
-        key:'productionDates',
-        type: 'String',
-        showType:'number',
-        belongTab:'otherInfo',
-        accuracy:0
     },
     qualityStander:{
         key:'qualityStander',

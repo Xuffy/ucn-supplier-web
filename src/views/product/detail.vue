@@ -429,8 +429,8 @@
                             this.historyData = this.$getDB(this.$db.product.tradeHistory, res.datas, e => {
                                 e.incoterm._value = (_.findWhere(this.incotermOption, { code: e.incoterm.value }) || {}).name;
                                 e.actDeliveryDt._value = this.$dateFormat(e.actDeliveryDt.value, "yyyy-mm-dd");
-                                e.confirmQcDt._value = this.$dateFormat(e.confirmQcDt.value, "yyyy-mm-dd");
-                                e.actDepartureDt._value = this.$dateFormat(e.actDepartureDt.value, "yyyy-mm-dd");
+                                // e.confirmQcDt._value = this.$dateFormat(e.confirmQcDt.value, "yyyy-mm-dd");
+                                // e.actDepartureDt._value = this.$dateFormat(e.actDepartureDt.value, "yyyy-mm-dd");
                             });
                         }
                     }).finally(() => {

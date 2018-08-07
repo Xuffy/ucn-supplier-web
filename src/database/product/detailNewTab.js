@@ -10,16 +10,6 @@ export default {
         showType:'select',
         belongTab:'basicInfo',
         isSaleStatus:true,
-        options:[
-            {
-                code:0,
-                label:'下架'
-            },
-            {
-                code:1,
-                label:'上架'
-            }
-        ]
     },
     code:{
         key:'code',
@@ -316,20 +306,6 @@ export default {
         key:'fobCurrency',
         showType:'select',
         belongTab:'priceInfo',
-        options:[
-            {
-                label:'USD',
-                value:0,
-            },
-            {
-                label:'CNY',
-                value:1,
-            },
-            {
-                label:'EUR',
-                value:2,
-            },
-        ],
     },
     fobPrice:{
         key:'fobPrice',
@@ -356,20 +332,6 @@ export default {
         key:'exwCurrency',
         showType:'select',
         belongTab:'priceInfo',
-        options:[
-            {
-                label:'USD',
-                value:0,
-            },
-            {
-                label:'CNY',
-                value:1,
-            },
-            {
-                label:'EUR',
-                value:2,
-            },
-        ],
     },
 
 
@@ -382,20 +344,6 @@ export default {
         key:'cifCurrency',
         showType:'select',
         belongTab:'priceInfo',
-        options:[
-            {
-                label:'USD',
-                value:0,
-            },
-            {
-                label:'CNY',
-                value:1,
-            },
-            {
-                label:'EUR',
-                value:2,
-            },
-        ],
     },
     cifArea:{
         key:'cifArea',
@@ -411,29 +359,12 @@ export default {
         key:'dduCurrency',
         showType:'select',
         belongTab:'priceInfo',
-        options:[
-            {
-                label:'USD',
-                value:0,
-            },
-            {
-                label:'CNY',
-                value:1,
-            },
-            {
-                label:'EUR',
-                value:2,
-            },
-        ],
     },
     dduArea:{
         key:'dduArea',
         showType:'input',
         belongTab:'priceInfo',
     },
-
-
-
 
     /**
      * Packing Info
@@ -501,12 +432,7 @@ export default {
         showType:'input',
         belongTab:'packingInfo',
     },
-    innerCartonUnit:{
-        key:'innerCartonUnit',
-        type: 'String',
-        showType:'input',
-        belongTab:'packingInfo',
-    },
+
     innerCartonQty:{
         key:'innerCartonQty',
         type: 'String',
@@ -564,12 +490,6 @@ export default {
     },
     innerCartonMethodEn:{
         key:'innerCartonMethodEn',
-        type: 'String',
-        showType:'input',
-        belongTab:'packingInfo',
-    },
-    outerCartonUnit:{
-        key:'outerCartonUnit',
         type: 'String',
         showType:'input',
         belongTab:'packingInfo',
@@ -688,36 +608,6 @@ export default {
         showType:'input',
         belongTab:'logisticInfo',
     },
-    inventoryCostMethod:{
-        key:'inventoryCostMethod',
-        type: 'String',
-        showType:'input',
-        belongTab:'logisticInfo',
-    },
-    warehourceDefault:{
-        key:'warehourceDefault',
-        type: 'String',
-        showType:'input',
-        belongTab:'logisticInfo',
-    },
-    inventory:{
-        key:'inventory',
-        type: 'String',
-        showType:'number',
-        belongTab:'logisticInfo',
-    },
-    safeInventory:{
-        key:'safeInventory',
-        type: 'String',
-        showType:'number',
-        belongTab:'logisticInfo',
-    },
-    minInventory:{
-        key:'minInventory',
-        type: 'String',
-        showType:'number',
-        belongTab:'logisticInfo',
-    },
 
     /**
      * Other Info
@@ -733,12 +623,6 @@ export default {
         key:'mainSaleArea',
         type: 'String',
         showType:'input',
-        belongTab:'otherInfo',
-    },
-    productionDates:{
-        key:'productionDates',
-        type: 'String',
-        showType:'number',
         belongTab:'otherInfo',
     },
     qualityStander:{
@@ -791,7 +675,4 @@ export default {
         belongTab:'otherInfo',
         isSkuPkg:true,
     },
-
-
-
 }
