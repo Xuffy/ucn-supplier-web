@@ -11,9 +11,9 @@ export default {
     skuNameCn:{
         key:'skuNameCn',
     },
-    skuNameCustomer:{
-        key:'skuNameCustomer',
-    },
+    // skuNameCustomer:{
+    //     key:'skuNameCustomer',
+    // },
     skuNameEn:{
         key:'skuNameEn',
     },
@@ -23,9 +23,9 @@ export default {
     skuMaterialEn:{
         key:'skuMaterialEn'
     },
-    factorySkuCode:{
-        key:'factorySkuCode',
-    },
+    // factorySkuCode:{
+    //     key:'factorySkuCode',
+    // },
     customerSkuCode:{
         key:'customerSkuCode'
     },
@@ -89,21 +89,21 @@ export default {
     skuDescEn:{
         key:'skuDescEn'
     },
-    skuDescCn:{
-        key:'skuDescCn'
-    },
-    skuDescCustomer:{
-        key:'skuDescCustomer'
-    },
-    skuLength:{
-        key:'skuLength'
-    },
-    skuWidth:{
-        key:'skuWidth'
-    },
-    skuHeight:{
-        key:'skuHeight'
-    },
+    // skuDescCn:{
+    //     key:'skuDescCn'
+    // },
+    // skuDescCustomer:{
+    //     key:'skuDescCustomer'
+    // },
+    // skuLength:{
+    //     key:'skuLength'
+    // },
+    // skuWidth:{
+    //     key:'skuWidth'
+    // },
+    // skuHeight:{
+    //     key:'skuHeight'
+    // },
     skuNetWeight:{
         key:'skuNetWeight'
     },
@@ -128,9 +128,9 @@ export default {
     innerCartonVolume:{
         key:'innerCartonVolume'
     },
-    skuLabel:{
-        key:'skuLabel'
-    },
+    // skuLabel:{
+    //     key:'skuLabel'
+    // },
     orderNo:{
         key:'orderNo'
     },
