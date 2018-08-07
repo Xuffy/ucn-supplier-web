@@ -13,11 +13,11 @@ export default {
             required:true
         }
     },
-    warehouseNo:{
-        key:'warehouseNo',
-        belong:'basicInfo',
-        showType:'input',
-    },
+    // warehouseNo:{
+    //     key:'warehouseNo',
+    //     belong:'basicInfo',
+    //     showType:'input',
+    // },
     warehouseName:{
         key:'warehouseName',
         belong:'basicInfo',

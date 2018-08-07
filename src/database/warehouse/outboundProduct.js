@@ -141,9 +141,9 @@ export default {
     skuDescEn:{
         key:'skuDescEn',
     },
-    skuDescCn:{
-        key:'skuDescCn',
-    },
+    // skuDescCn:{
+    //     key:'skuDescCn',
+    // },
     // skuDescCustomer:{
     //     key:'skuDescCustomer',
     // },
