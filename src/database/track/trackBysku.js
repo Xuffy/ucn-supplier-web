@@ -79,15 +79,6 @@ export default {
   packingMethodOfOuterCartonEn: {
     key: 'skuOuterCartonMethodEn'
   },
-  unitOfWeight: {
-    key: 'skuUnitWeight'
-  },
-  unitOfLength: {
-    key: 'skuUnitLength'
-  },
-  unitOfVolume: {
-    key: 'skuUnitVolume'
-  },
   outerCartonLength: {
     key: 'skuOuterCartonLength'
   },
@@ -112,9 +103,6 @@ export default {
   // skuGrossWeight: {
   //   key: 'skuGrossWeight'
   // },
-  skuVolume: {
-    key: 'skuVolume'
-  },
   skuBarCode: {
     key: 'skuBarCode'
   },
@@ -142,26 +130,6 @@ export default {
   skuStatus: {
     key: 'skuStatus'
   },
-  sampleProvideDate: {
-    key: 'sampleReceiveDt',
-    type: 'textDate'
-  },
-  sampleNeedConfirmDate: {
-    key: 'sampleComfirmDt',
-    type: 'textDate'
-  },
-  needLabel: {
-    key: 'needLableDt',
-    type: 'textDate'
-  },
-  lableOrDesignDate: {
-    key: 'lableDt',
-    type: 'textDate'
-  },
-  designNeedConfirmDate: {
-    key: 'designConfirmDt',
-    type: 'textDate'
-  },
   qCDateA: {
     key: 'firstQcDt',
     type: 'textDate'
@@ -176,22 +144,6 @@ export default {
   },
   confirmQcDate: {
     key: 'confirmQcDt',
-    type: 'textDate'
-  },
-  estDeliveryDate: {
-    key: 'estDeliveryDt',
-    type: 'textDate'
-  },
-  actDeliveryDate: {
-    key: 'actDeliveryDt',
-    type: 'textDate'
-  },
-  estDepartureDate: {
-    key: 'estDeliveryDt' ,        //预计发运日期
-    type: 'textDate'
-  },
-  actDepartureDate: {
-    key: 'actDepartureDt',
     type: 'textDate'
   },
   bookingDate: {
@@ -228,10 +180,6 @@ export default {
   },
   actArrivalDate: {
     key: 'actArrivalDt',
-    type: 'textDate'
-  },
-  estReleaseDate: {
-    key: 'estReleaseDt',
     type: 'textDate'
   },
   actReleaseDate: {
@@ -295,7 +243,7 @@ export default {
     key: 'logisticsNo'
   },
   category: {
-    key: 'category',
+    key: 'skuCategoryName',
     // _important:true,
   },
   categoryLevel1: {
@@ -323,12 +271,6 @@ export default {
   FLCorLCL: {
     key: 'isFullContainerLoad'
   },
-  truck: {
-    key: 'truck'
-  },
-  pallet: {
-    key: 'pallet'
-  },
   commercialInvoiceNumber: {
     key: 'commercialInvoiceNo'
   },
@@ -344,20 +286,8 @@ export default {
     key: 'orderAcceptedDt',
     type: 'textDate'
   },
-  freightToCountryUah: {
-    key: 'freightToCountryUah'
-  },
-  freightInlandUah: {
-    key: 'freightInlandUah'
-  },
-  insuranseUah: {
-    key: 'insuranseUah'
-  },
   container: {
     key: 'containerNo'
-  },
-  truckNumber: {
-    key: 'truckNo'
   },
   shipServiceProvider: {
     key: 'shipServiceProvider'
@@ -376,5 +306,8 @@ export default {
     key: 'qcId',
     _important:true,
     _hide:true
+  },
+  customerAbbr: {
+    key: ''
   }
 }
