@@ -14,7 +14,7 @@
                         :md="v.fullLine?24:8"
                         :lg="v.fullLine?24:8"
                         :xl="v.fullLine?24:8">
-                    <el-form-item :label="v.label" :required="v._rules?v._rules.required:false">
+                    <el-form-item :label="v.key === 'outboundSkuTotalQty' ? $i.warehouse.lcOutboundSkuTotalQty : v.label" :required="v._rules?v._rules.required:false">
                         <div v-if="v.showType==='input'">
                             <el-input
                                     class="speInput"
@@ -316,7 +316,12 @@
                     outboundSkuTotalQty: 0,
                     outboundTypeDictCode: "",
                     remark: "",
-                    shipmentInvoiceNo: ""
+                    shipmentInvoiceNo: "",
+                    outboundCtnQty: '',
+                    outboundGw: '',
+                    outboundCbm: '',
+                    outboundNw: '',
+                    skuStyleQty: ''
                     // timeZone: "",
                 },
                 //inbound总计
@@ -688,6 +693,7 @@
         },
         mounted () {
             this.columnConfig = this.$db.warehouse.outboundProduct;
+            console.log(this.$db.warehouse.outbound)
         }
     };
 </script>

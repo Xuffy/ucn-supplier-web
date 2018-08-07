@@ -142,6 +142,15 @@
                         </el-input>
                     </el-form-item>
                 </el-col>
+                <el-col class="speCol" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item prop="v" :label="$i.warehouse.skuQtyNum">
+                        <el-input
+                                size="mini"
+                                :disabled="true">
+                                <!-- v-model="inboundData.skuTotalQty" -->
+                        </el-input>
+                    </el-form-item>
+                </el-col>
             </el-row>
         </el-form>
 

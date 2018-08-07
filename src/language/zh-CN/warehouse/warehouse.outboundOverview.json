@@ -4,9 +4,10 @@
   "outboundTypeDictCode": "出库类型",
   "outboundDate": "出库日期",
   "outboundOperator": "出库人员",
-  "outboundSkuTotalQty": "出库产品总数量",
+  "outboundSkuTotalQty": "数量",
   "remark": "备注",
   "updateName": "操作人",
   "updateDt": "修改时间",
-  "entryDt": "创建时间"
+  "entryDt": "创建时间",
+  "lcOutboundSkuTotalQty": "出库单产品数"
 }

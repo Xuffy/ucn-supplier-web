@@ -6,7 +6,7 @@
         <el-form :modal="outboundData" ref="basicInfo" class="speForm" label-width="200px" :label-position="labelPosition">
             <el-row>
                 <el-col class="speCol" v-for="v in $db.warehouse.outbound" v-if="v.belong==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:8" :md="v.fullLine?24:8" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
-                    <el-form-item :prop="v.key" :label="v.label">
+                    <el-form-item :prop="v.key" :label="v.key === 'outboundSkuTotalQty' ? $i.warehouse.lcOutboundSkuTotalQty : v.label">
                         <div v-if="v.showType==='input'">
                             <el-input
                                     class="speInput"
@@ -127,6 +127,11 @@
                     carrier:'',
                     carrierPhone:'',
                     timeZone:'',
+                    outboundCtnQty: 0,
+                    outboundGw: 0,
+                    outboundCbm: 0,
+                    outboundNw: 0,
+                    skuStyleQty: 0
                 },
 
                 /**

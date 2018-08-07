@@ -104,6 +104,9 @@ const json = {
     require(`./${lang}/warehouse/warehouse.outboundOverview`),
     require(`./${lang}/warehouse/warehouse.outboundDetail`),
     require(`./${lang}/warehouse/warehouse.qcOverview`),
+
+    // 新加
+    require(`./${lang}/warehouse/warehouse.createOutbound`),
   ),
   workbench: _.extend({},
     require(`./${lang}/workbench/page`),

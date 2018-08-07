@@ -4,9 +4,10 @@
   "outboundTypeDictCode": "Outbound Type",
   "outboundDate": "Outbound Date",
   "outboundOperator": "Outbound Operator",
-  "outboundSkuTotalQty": "Total quantity of outbound",
+  "outboundSkuTotalQty": "QTY",
   "remark": "Remark",
   "updateName": "Updated Name",
   "updateDt": "Updated Date",
-  "entryDt": "Create Date"
+  "entryDt": "Create Date",
+  "lcOutboundSkuTotalQty": "Outbound QTY"
 }

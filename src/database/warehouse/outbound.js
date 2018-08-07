@@ -34,6 +34,36 @@ export default {
         showType:'input',
         disabled:true
     },
+    outboundCtnQty:{
+        key:'outboundCtnQty',
+        belong:'basicInfo',
+        showType:'input',
+        disabled:true
+    },
+    outboundGw:{
+        key:'outboundGw',
+        belong:'basicInfo',
+        showType:'input',
+        disabled:true
+    },
+    outboundCbm:{
+        key:'outboundCbm',
+        belong:'basicInfo',
+        showType:'input',
+        disabled:true
+    },
+    outboundNw:{
+        key:'outboundNw',
+        belong:'basicInfo',
+        showType:'input',
+        disabled:true
+    },
+    skuStyleQty:{
+        key:'skuStyleQty',
+        belong:'basicInfo',
+        showType:'input',
+        disabled:true
+    },
     // timeZone:{
     //     key:'timeZone',
     //     belong:'basicInfo',
