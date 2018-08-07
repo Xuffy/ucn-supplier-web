@@ -24,6 +24,7 @@
 import { mapActions } from 'vuex';
 import codeUtils from '@/lib/code-utils';
 import { VTable, selectSearch } from '@/components/index';
+import thisTool from './index';
 export default {
   name: 'recycleBin',
   data() {
@@ -72,6 +73,18 @@ export default {
   components: {
     'select-search': selectSearch,
     'v-table': VTable
+  },
+  created() {
+    switch (this.$route.params.type) {
+      case 'inquiry':
+        this.title = this.$i.common.archive;
+        this.bodyData.recycleSupplier = 1;
+        break;
+    }
+    thisTool.setMenuLinks(this, ['INQUIRY:LOG']);
+    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
+      .then(data => this.setDic(codeUtils.convertDicValueType(data)))
+      .then(this.getInquiryList);
   },
   methods: {
     ...mapActions(['setMenuLink', 'setDic']),
@@ -180,18 +193,6 @@ export default {
           this.checkedData = [];
         });
     }
-  },
-  created() {
-    switch (this.$route.params.type) {
-      case 'inquiry':
-        this.title = this.$i.common.archive;
-        this.bodyData.recycleSupplier = 1;
-        break;
-    }
-    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
-    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
-      .then(data => this.setDic(codeUtils.convertDicValueType(data)))
-      .then(this.getInquiryList);
   }
 };
 </script>

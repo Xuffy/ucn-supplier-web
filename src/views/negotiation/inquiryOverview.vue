@@ -60,189 +60,185 @@
   </div>
 </template>
 <script>
-  /**
-   * @param selectChange 下拉框 值发生变更触发
-   * @param options 下拉框 原始数据
-   */
-  import {selectSearch, VTable, VPagination} from '@/components/index';
-  import {mapActions} from 'vuex';
-  import codeUtils from '@/lib/code-utils';
+/**
+ * @param selectChange 下拉框 值发生变更触发
+ * @param options 下拉框 原始数据
+ */
+import {selectSearch, VTable, VPagination} from '@/components/index';
+import {mapActions} from 'vuex';
+import codeUtils from '@/lib/code-utils';
+import thisTool from './index';
 
-  export default {
-    name: '',
-    data() {
-      return {
-        checkedData: [],
-        searchLoad: false,
-        options: [{
-          id: 'supplierName',
-          label: this.$i.inquiry.supplierName,
-          operator: 'like'
-        }, {
-          id: 'inquiryNo',
-          label: this.$i.inquiry.InquiryNo,
-          operator: 'like'
-        }, {
-          id: 'quotationNo',
-          label: this.$i.inquiry.quotationNo,
-          operator: 'like'
-        }],
+export default {
+  name: '',
+  data() {
+    return {
+      checkedData: [],
+      searchLoad: false,
+      options: [{
+        id: 'supplierName',
+        label: this.$i.inquiry.supplierName,
+        operator: 'like'
+      }, {
+        id: 'inquiryNo',
+        label: this.$i.inquiry.InquiryNo,
+        operator: 'like'
+      }, {
+        id: 'quotationNo',
+        label: this.$i.inquiry.quotationNo,
+        operator: 'like'
+      }],
 
-        tabData: [],
-        viewByStatus: 0,
-        params: {
-          status: null,
-          ps: 50,
-          pn: 1,
-          tc: 0,
-          draft: 0,
-          recycleSupplier: false,
-          operatorFilters: []
-        },
-        tabLoad: false,
-        actionBtns: []
-      };
+      tabData: [],
+      viewByStatus: 0,
+      params: {
+        status: null,
+        ps: 50,
+        pn: 1,
+        tc: 0,
+        draft: 0,
+        recycleSupplier: false,
+        operatorFilters: []
+      },
+      tabLoad: false,
+      actionBtns: []
+    };
+  },
+  components: {
+    'select-search': selectSearch,
+    'v-table': VTable,
+    'v-pagination': VPagination
+  },
+  computed: {
+    checkedIds() {
+      return Array.from(new Set(this.checkedData.map(i => i[i.inquiryId ? 'inquiryId' : 'id'].value)));
     },
-    components: {
-      'select-search': selectSearch,
-      'v-table': VTable,
-      'v-pagination': VPagination
+    acceptAble() {
+      return new Set(this.checkedData.map(i => i.status.value).filter(i => i !== 21)).size === 0;
     },
-    computed: {
-      checkedIds() {
-        return Array.from(new Set(this.checkedData.map(i => i[i.inquiryId ? 'inquiryId' : 'id'].value)));
-      },
-      acceptAble() {
-        return new Set(this.checkedData.map(i => i.status.value).filter(i => i !== 21)).size === 0;
-      },
-      cancelAble() {
-        return new Set(this.checkedData.map(i => i.status.value).filter(i => ![21, 22].includes(i))).size === 0;
-      },
-      deleteAble() {
-        return new Set(this.checkedData.map(i => i.status.value).filter(i => ![1, 11, 99].includes(i))).size === 0;
-      }
+    cancelAble() {
+      return new Set(this.checkedData.map(i => i.status.value).filter(i => ![21, 22].includes(i))).size === 0;
     },
-    created() {
-      if (this.$auth('INQUIRY:DETAIL')) {
-        this.actionBtns.push({label: this.$i.common.detail, type: 'detail'});
-      }
-      if (this.$auth('INQUIRY:ARCHIVE')) {
-        this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
-      }
-      if (this.$auth('INQUIRY:LOG')) {
-        this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
-      }
-      this.getDirCodes().then(this.gettabData, this.gettabData);
-    },
-    methods: {
-      ...mapActions([
-        'setMenuLink',
-        'setDic'
-      ]),
-      inputEnter(val, operatorFilters) {
-        this.params.operatorFilters = operatorFilters;
-        this.gettabData();
-        this.searchLoad = true;
-      },
-      getDirCodes() {
-        return this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], {cache: true}).then(data => {
-          this.setDic(codeUtils.convertDicValueType(data));
-          return data;
-        });
-      },
-      gettabData() {
-        let url, column;
-        this.tabLoad = true;
-        if (this.viewByStatus === 0) {
-          url = this.$apis.BUYER_POST_INQIIRY_LIST;
-          column = this.$db.inquiry.viewByInqury;
-        } else {
-          url = this.$apis.BUYER_POST_INQIIRY_LIST_SKU;
-          column = this.$db.inquiry.overviewBySKU;
-        }
-        this.$ajax.post(url, this.params).then(res => {
-          this.params.tc = res.tc;
-          this.tabData = this.$getDB(column, res.datas, item => this.$filterDic(item));
-          this.tabLoad = false;
-          this.searchLoad = false;
-          this.checkedData = [];
-        }, () => {
-          this.searchLoad = false;
-          this.tabLoad = false;
-        });
-      },
-      onListSortChange(args) {
-        this.params.sorts = args.sorts;
-        this.gettabData();
-      },
-      viewByChange() {
-        this.params.sorts = null;
-        this.params.pn = 1;
-        this.gettabData();
-      },
-      exportDatas() {
-        let params = this.$depthClone(this.params);
-        if (this.checkedIds.length) {
-          params.ids = this.checkedIds;
-        } else {
-          delete params.ids;
-        }
-        this.$fetch.export_task('INQUIRY_ORDER', params);
-      },
-      cancelInquiry() { // 取消询价单
-        this.ajaxInqueryAction('cancel');
-      },
-      deleteInquiry() { // 删除询价单
-        this.$confirm('确认删除?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.ajaxInqueryAction('delete');
-        })['catch'](() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-      },
-      ajaxInqueryAction(type) {
-        this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
-          action: type,
-          ids: this.checkedIds
-        }).then(() => {
-          this.gettabData();
-          this.checkedData = [];
-        });
-      },
-      action(item, type) {
-        switch (type) {
-          case 'detail':
-            this.detail(item);
-            break;
-        }
-      },
-      detail(item) {
-        let id = _.findWhere(item, {'key': 'inquiryId'}) ? _.findWhere(item, {'key': 'inquiryId'}).value : _.findWhere(item, {'key': 'id'}).value;
-        this.$router.push({
-          path: '/negotiation/inquiryDetail',
-          query: {id}
-        });
-      },
-      pageSizeChange(no) {
-        this.params.pn = no;
-        this.gettabData();
-      },
-      handleSizeChange(val) {
-        this.params.pn = 1;
-        this.params.ps = val;
-        this.gettabData();
-      },
-      changeChecked(item) { // tab 勾选
-        this.checkedData = item;
-      }
+    deleteAble() {
+      return new Set(this.checkedData.map(i => i.status.value).filter(i => ![1, 11, 99].includes(i))).size === 0;
     }
-  };
+  },
+  created() {
+    if (this.$auth('INQUIRY:DETAIL')) {
+      this.actionBtns.push({label: this.$i.common.detail, type: 'detail'});
+    }
+    thisTool.setMenuLinks(this, ['INQUIRY:ARCHIVE', 'INQUIRY:LOG']);
+    this.getDirCodes().then(this.gettabData, this.gettabData);
+  },
+  methods: {
+    ...mapActions([
+      'setMenuLink',
+      'setDic'
+    ]),
+    inputEnter(val, operatorFilters) {
+      this.params.operatorFilters = operatorFilters;
+      this.gettabData();
+      this.searchLoad = true;
+    },
+    getDirCodes() {
+      return this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], {cache: true}).then(data => {
+        this.setDic(codeUtils.convertDicValueType(data));
+        return data;
+      });
+    },
+    gettabData() {
+      let url, column;
+      this.tabLoad = true;
+      if (this.viewByStatus === 0) {
+        url = this.$apis.BUYER_POST_INQIIRY_LIST;
+        column = this.$db.inquiry.viewByInqury;
+      } else {
+        url = this.$apis.BUYER_POST_INQIIRY_LIST_SKU;
+        column = this.$db.inquiry.overviewBySKU;
+      }
+      this.$ajax.post(url, this.params).then(res => {
+        this.params.tc = res.tc;
+        this.tabData = this.$getDB(column, res.datas, item => this.$filterDic(item));
+        this.tabLoad = false;
+        this.searchLoad = false;
+        this.checkedData = [];
+      }, () => {
+        this.searchLoad = false;
+        this.tabLoad = false;
+      });
+    },
+    onListSortChange(args) {
+      this.params.sorts = args.sorts;
+      this.gettabData();
+    },
+    viewByChange() {
+      this.params.sorts = null;
+      this.params.pn = 1;
+      this.gettabData();
+    },
+    exportDatas() {
+      let params = this.$depthClone(this.params);
+      if (this.checkedIds.length) {
+        params.ids = this.checkedIds;
+      } else {
+        delete params.ids;
+      }
+      this.$fetch.export_task('INQUIRY_ORDER', params);
+    },
+    cancelInquiry() { // 取消询价单
+      this.ajaxInqueryAction('cancel');
+    },
+    deleteInquiry() { // 删除询价单
+      this.$confirm('确认删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.ajaxInqueryAction('delete');
+      })['catch'](() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    ajaxInqueryAction(type) {
+      this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
+        action: type,
+        ids: this.checkedIds
+      }).then(() => {
+        this.gettabData();
+        this.checkedData = [];
+      });
+    },
+    action(item, type) {
+      switch (type) {
+        case 'detail':
+          this.detail(item);
+          break;
+      }
+    },
+    detail(item) {
+      let id = _.findWhere(item, {'key': 'inquiryId'}) ? _.findWhere(item, {'key': 'inquiryId'}).value : _.findWhere(item, {'key': 'id'}).value;
+      this.$router.push({
+        path: '/negotiation/inquiryDetail',
+        query: {id}
+      });
+    },
+    pageSizeChange(no) {
+      this.params.pn = no;
+      this.gettabData();
+    },
+    handleSizeChange(val) {
+      this.params.pn = 1;
+      this.params.ps = val;
+      this.gettabData();
+    },
+    changeChecked(item) { // tab 勾选
+      this.checkedData = item;
+    }
+  }
+};
 </script>
 <style lang="less" scoped>
   .inquiry {

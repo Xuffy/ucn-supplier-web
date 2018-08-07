@@ -106,6 +106,7 @@ import { getData } from '@/service/base';
 import product from '@/views/product/addProduct';
 import { mapActions, mapState } from 'vuex';
 import codeUtils from '@/lib/code-utils';
+import thisTool from './index';
 
 export default {
   name: 'inquiryDetail',
@@ -211,7 +212,7 @@ export default {
     }
   },
   created() {
-    this.setMenuLink([{path: '/negotiation/recycleBin/inquiry', label: this.$i.common.recycleBin}, {path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log}]);
+    thisTool.setMenuLinks(this, ['INQUIRY:ARCHIVE', 'INQUIRY:LOG']);
 
     if (this.$localStore.get('$in_quiryCompare')) {
       this.compareConfig = this.$localStore.get('$in_quiryCompare');
