@@ -3,7 +3,7 @@
   "inboundDate": "Inbound Date",
   "warehouseNo": "Warehouse No.",
   "warehouseName": "Warehouse Name",
-  "purchaser": "Purchaser",
+  "purchaser": "Purchaser Operator",
   "storageType": "Inbound Type",
   "skuTotalQty": "Total Inbound QTY",
   "remark": "Remark",
