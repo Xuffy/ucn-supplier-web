@@ -272,19 +272,6 @@
                             if (e.payment) {
                                 e.payment.value = this.$change(this.paymentOption, "payment", e, true).name;
                             }
-                            if (e.importantSupplier) {
-                                e.importantSupplier.value = (e.importantSupplier.value ? "YES" : "NO");
-                            }
-                            if (e.attachment) {
-                                e.attachment.value = (e.attachment.value ? "YES" : "NO");
-                            }
-                            if (e.remind) {
-                                e.remind.value = (e.remind.value ? "YES" : "NO");
-                            }
-                            if (e.archive) {
-                                e.archive.value = (e.archive.value ? "YES" : "NO");
-                            }
-
                         });
                         this.pageData = res;
                     })
