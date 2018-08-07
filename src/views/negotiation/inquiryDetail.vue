@@ -50,11 +50,10 @@
               :hideFilterColumn="statusModify"/>
           <div class="bom-btn-wrap" v-show="!statusModify" v-if="tabData[0]">
             <el-button type="primary" @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.originValue !== 21" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
-            <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.originValue + ''!=='99'||tabData[0].status.originValue+''!=='1'" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.archive }}</el-button> -->
             <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue !== 21" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
-            <el-button @click="exportDatas">{{ $i.common.download }}</el-button>
-            <el-button type="warning" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="![21, 22].includes(tabData[0].status.originValue)">{{ $i.common.cancel }}</el-button>
-            <el-button type="danger" @click="ajaxInqueryAction('delete')" :disabled="![1, 99].includes(tabData[0].status.originValue)">{{ $i.common.archive }}</el-button>
+            <el-button @click="exportDatas" v-authorize="'INQUIRY:DETAIL:DOWNLOAD'">{{ $i.common.download }}</el-button>
+            <el-button type="warning" v-authorize="'INQUIRY:DETAIL:CANCEL'" @click="ajaxInqueryAction('cancel')" :disabled="![21, 22].includes(tabData[0].status.originValue)">{{ $i.common.cancel }}</el-button>
+            <el-button type="danger" v-authorize="'INQUIRY:DETAIL:DOWNLOAD'" @click="ajaxInqueryAction('delete')" :disabled="![1, 99].includes(tabData[0].status.originValue)">{{ $i.common.archive }}</el-button>
           </div>
           <div class="bom-btn-wrap" v-show="statusModify">
             <el-button @click="modify">{{ $i.common.send }}</el-button>
@@ -82,7 +81,7 @@
       </v-product>
     </el-dialog>
     <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @change="computePrice" @save="save" ref="HM"></v-history-modify>
-    <v-message-board v-if="chatParams" module="INQUIRY" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
+    <v-message-board v-if="chatParams" v-authorize="'INQUIRY:DETAIL:MESSAGE_BOARD'" module="INQUIRY" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
   </div>
 </template>
 <script>
