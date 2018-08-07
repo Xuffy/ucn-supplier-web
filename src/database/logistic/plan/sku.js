@@ -24,16 +24,17 @@ export default {
   skuBarCode: {
     type: 'text'
   },
-  skuNameCN: {
+  skuNameCn: {
     type: 'text'
   },
-  skuNameEN: {
+  skuNameEn: {
     type: 'text'
   },
   productDescription: {
+    key:'skuNameCustomer',
     type: 'text'
   },
-  skuDescriptionCN: {
+  skuDescriptionCn: {
     type: 'text'
   },
   skuDescriptionEN: {
@@ -43,6 +44,7 @@ export default {
     type: 'text'
   },
   supplierSerialNumber: {
+    key:'supplierSerialNo',
     type: 'text'
   },
   customerSkuCode: {
@@ -60,7 +62,11 @@ export default {
   totalPrice: {
     type: 'text'
   },
+  unit: {
+    type: 'text'
+  },
   skuQuantityOfOuterCarton: {
+    key:'outerCartonQty',
     type: 'text'
   },
   outerCartonVolume: {
@@ -69,7 +75,7 @@ export default {
   outerCartonNetWeight: {
     type: 'text'
   },
-  outerCartonGrossWeight: {
+  outerCartonGrossWeight: {  
     type: 'text'
   },
   inboundDate: {
@@ -84,10 +90,14 @@ export default {
   warehouseNo: {
     type: 'text'
   },
-  ate: {
-    type: 'text'
+  estDelivaryDate: {
+    type: 'textDate'
+  },
+  actDeliveryDate: {
+    type: 'textDate'
   },
   departurePort: {
+    key:'deliveryPort',
     type: 'text'
   },
   destinationPort: {

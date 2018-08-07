@@ -1,3 +1,4 @@
+// 22个 业务展现有效字段
 export default {
   id: {
     type: 'text',
@@ -6,40 +7,67 @@ export default {
   transportationWay: {
     type: 'text'
   },
-  containerNo:{
-    type: 'number'
-  },
   loadingType:{
-    type: 'number'
+    type: 'text'
   },
   logisticsNo:{
     type: 'text'
   },
   estContainerStuffingDate: {
-    type: 'textDate',
-    disabled: true
-  },
-  estCustomsCleanceDate: {
-    type: 'textDate',
-    disabled: true
+    type: 'text'
   },
   estDepartureDate: {
-    type: 'textDate',
-    disabled: true
+    type: 'textDate'
   },
   estArrivalDate: {
-    type: 'textDate',
-    disabled: true
+    type: 'textDate'
   },
   estDelivaryDate: {
-    type: 'textDate',
-    disabled: true
+    type: 'textDate'
+  },
+  actDeliveryDate: {
+    type: 'textDate'
+  },
+  actContainerStuffingDate: {
+    type: 'textDate'
+  },
+  actCustomsCleanceDate: {
+    type: 'textDate'
+  },
+  actDepartureDate: {
+    type: 'textDate'
+  },
+  actArrivalDate: {
+    type: 'textDate'
+  },
+  containerNo:{
+    type: 'text'
+  },
+  sealNo:{
+    type: 'text'
+  },
+  containerWeight:{
+    type: 'text'
   },
   containerType: {
-    type: 'select'
+    type: 'text'
   },
-  logisticsStatus: {
-    type: 'text',
-    _hide:true
+  vgm: {
+    type: 'text'
+  },
+  totalQuantityInContainer: {
+    type: 'text'
+  },
+  totalVolumeInContainer: {
+    type: 'text'
+  },
+  totalNetWeightInContainer: {
+    type: 'text'
+  },
+  totalQuantityOfOuterCartonsInContainer: {
+    type: 'text'
+  },
+  totalSkuPriceInContainer: {
+    type: 'text'
   }
 }

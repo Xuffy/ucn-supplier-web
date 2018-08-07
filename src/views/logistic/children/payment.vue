@@ -8,10 +8,29 @@
           <span>{{ scope.row.no }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.paymentItem" align="center" width="140">
+      <el-table-column :label="$i.logistic.paymentItem" align="center" width="150">
         <template slot-scope="scope">
-          <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.name" v-if="scope.row.edit"></el-input>
-          <span v-else>{{ scope.row.name }}</span>
+          <div v-if="scope.row.edit" style="display:flex;">
+            <label class="reqiuredStar"></label>
+            <el-select v-model="scope.row.name" :placeholder="$i.logistic.placeholder">
+              <el-option
+                v-for="(item,index) in selectArr.paymentItem"
+                :key="index"
+                :label="item.name"
+                :value="item.code">
+              </el-option>
+            </el-select>
+            <!-- <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.name" v-if="scope.row.edit"></el-input> -->
+          </div>
+          <span v-else>{{ textFilter(scope.row.name,'paymentItem') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$i.logistic.remark" align="center" width="180">
+        <template slot-scope="scope">
+          <div v-if="scope.row.edit" style="display:flex;">
+            <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.remark" v-if="scope.row.edit"></el-input>
+          </div>
+          <span v-else>{{ scope.row.remark }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.supplierName" align="center" width="140">
@@ -261,6 +280,10 @@ export default {
         })
       })    
     },
+    textFilter(code,key) {
+      let obj = this.selectArr[key].find(item => item.code == code);
+      return obj ? obj.name : null;
+    } 
   }
 }
 </script>

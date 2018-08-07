@@ -1,15 +1,9 @@
 export default {
     factoryName: {
         key: 'name',
-        _rules:{
-            required:true,
-          }
     },
     factoryAddress:{
         key: 'address',
-        _rules:{
-            required:true,
-          }
     },
     exportPort: {
         key: 'exportPort',
@@ -42,5 +36,23 @@ export default {
     },
     defaultAddress: {
       key: 'def'
-    }
+    },
+    receiveCountry: {
+      key: '',
+      _hide:true
+    },
+    receiveProvince: {
+      key: '',
+      _hide:true
+    },
+    receiveCity: {
+      key: '',
+    },
+    receiverAddress1: {
+      key: '',
+  },
+  receiverAddress:{
+    key: '',
+    _important:true,
+  }
 }

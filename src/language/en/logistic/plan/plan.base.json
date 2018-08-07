@@ -39,7 +39,6 @@
   "estDepartureDate": "Est. Departure Date",
   "estArrivalDate": "Est. Arrival Date",
   "estReleaseDate": "Est. Release Date",
-  "estDeliveryDate": "Est. Delivary Date",
   "estDelivaryDate": "Est. Delivary Date",
   "logisticsStatus": "Logistics Status",
   "createDate": "Create Date",
@@ -124,7 +123,7 @@
   "customsDeclarationNameCn": "Customs Declaration Name(CN)",
   "customsDeclarationNameEn": "Customs Declaration Name(EN)",
   "hsCode": "HS Code",
-  "reportElement": "Declare elements",
+  "reportElement": "Report Elements",
   "supplierName": "Supplier Name",
   "supplierNo": "Supplier No.",
   "customerSkuCode": "Customer SKU Code",
@@ -195,6 +194,9 @@
   "EURCNY": "EUR-CNY",
   "USDEUR": "USD-EUR",
   "EURUSD": "EUR-USD",
+  "USD": "USD",
+  "CNY": "CNY",
+  "EUR": "EUR",
   "transportationWayVal": "BY SEA",
   "loadingTypeVal": "Container",
   "confirmModify": "Confirm Modify",
@@ -247,5 +249,7 @@
   "shipped" : "shipped",
   "cleance" : "cleance",
   "release" : "release",
-  "arrival" : "arrival"
+  "arrival" : "arrival",
+  "skuDescriptionCn" : "skuDescriptionCn",
+  "supplierSerialNumber" : "supplierSerialNumber"
 }

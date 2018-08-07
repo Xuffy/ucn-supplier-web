@@ -51,5 +51,8 @@ export default {
     TaxpayerQualification:{
       key:'taxpayer',
       ullLine:false,
+    },
+    shipAgent: {
+      key: ''
     }
 }
