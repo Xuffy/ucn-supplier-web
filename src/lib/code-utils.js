@@ -52,6 +52,14 @@ const codeUtils = {
   isUndefinedOrNull(value) {
     return typeof value === 'undefined' || value === null;
   },
+  isNumber() {
+    for (let arg of arguments) {
+      if (!Number.isFinite(arg)) {
+        return false;
+      }
+    }
+    return true;
+  },
   getInquiryDicCodes(vm) {
     const postCodes = vm.$ajax.post(
       vm.$apis.POST_CODE_PART,

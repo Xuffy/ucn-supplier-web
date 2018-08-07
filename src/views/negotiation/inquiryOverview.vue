@@ -22,16 +22,13 @@
     </div>
     <div class="fn">
       <div class="btn-wrap">
-        <el-button @click="ajaxInqueryAction('accept')" v-authorize="'INQUIRY:OVERVIEW:ACCEPT'"
-                   :disabled="!checkedData.length||params.status+''==='22'||params.status+''==='99'||params.status+''==='1'||params.status === null">
+        <el-button @click="ajaxInqueryAction('accept')" v-authorize="'INQUIRY:DETAIL:ACCEPT'" :disabled="!acceptAble">
           {{ $i.common.accept }}<span>({{ checkedIds.length }})</span></el-button>
-        <el-button @click="cancelInquiry"
-                   :disabled="!cancelAble"
-                   v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'">{{ $i.common.cancelTheInquiry }}<span>({{ checkedIds.length }})</span>
+        <el-button @click="cancelInquiry" :disabled="!cancelAble"
+                   v-authorize="'INQUIRY:OVERVIEW:CANCEL'">{{ $i.common.cancelTheInquiry }}<span>({{ checkedIds.length }})</span>
         </el-button>
-        <el-button @click="deleteInquiry" type="danger"
-                   :disabled="!deleteAble"
-                   v-authorize="'INQUIRY:OVERVIEW:DELETE'">{{ $i.common.archive }}<span>({{ checkedIds.length }})</span>
+        <el-button @click="deleteInquiry" type="danger" :disabled="!deleteAble"
+                   v-authorize="'INQUIRY:OVERVIEW:ARCHIVE'">{{ $i.common.archive }}<span>({{ checkedIds.length }})</span>
         </el-button>
         <el-button @click="exportDatas" :disabled="!tabData.length" v-authorize="'INQUIRY:OVERVIEW:DOWNLOAD'">{{
           `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}
@@ -48,7 +45,7 @@
     <v-table
       :code="viewByStatus ? 'inquiry': 'inquiry_list'"
       :data="tabData"
-      :buttons="[{label: $i.common.detail, type: 'detail'}]"
+      :buttons="actionBtns"
       :height="450"
       @action="action"
       @change-sort="onListSortChange"
@@ -102,7 +99,8 @@
           recycleSupplier: false,
           operatorFilters: []
         },
-        tabLoad: false
+        tabLoad: false,
+        actionBtns: []
       };
     },
     components: {
@@ -114,6 +112,9 @@
       checkedIds() {
         return Array.from(new Set(this.checkedData.map(i => i[i.inquiryId ? 'inquiryId' : 'id'].value)));
       },
+      acceptAble() {
+        return new Set(this.checkedData.map(i => i.status.value).filter(i => i !== 21)).size === 0;
+      },
       cancelAble() {
         return new Set(this.checkedData.map(i => i.status.value).filter(i => ![21, 22].includes(i))).size === 0;
       },
@@ -122,11 +123,15 @@
       }
     },
     created() {
-      this.setMenuLink([{path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive}, {
-        path: '/logs/index',
-        query: {code: 'inquiry'},
-        label: this.$i.common.log
-      }]);
+      if (this.$auth('INQUIRY:DETAIL')) {
+        this.actionBtns.push({label: this.$i.common.detail, type: 'detail'});
+      }
+      if (this.$auth('INQUIRY:ARCHIVE')) {
+        this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
+      }
+      if (this.$auth('INQUIRY:LOG')) {
+        this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+      }
       this.getDirCodes().then(this.gettabData, this.gettabData);
     },
     methods: {

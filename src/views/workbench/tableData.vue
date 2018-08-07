@@ -122,7 +122,7 @@
             label: this.$i.workbench.qc,
             loading: false,
             search: {},
-            type: 'WAREHOUSE',
+            type: 'QC',
             url: '/warehouse/qcDetail'
           },
           {
