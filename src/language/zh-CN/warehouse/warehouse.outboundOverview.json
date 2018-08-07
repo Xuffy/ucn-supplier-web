@@ -4,7 +4,7 @@
   "outboundTypeDictCode": "出库类型",
   "outboundDate": "出库日期",
   "outboundOperator": "出库人员",
-  "outboundSkuTotalQty": "数量",
+  "outboundSkuTotalQty": "出库数量",
   "remark": "备注",
   "updateName": "操作人",
   "updateDt": "修改时间",

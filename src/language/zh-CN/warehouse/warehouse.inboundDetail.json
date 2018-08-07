@@ -22,7 +22,7 @@
   "customerSkuCode": "客户货号",
   "skuUnitDictCode": "计量单位",
   "orderSkuQty": "订单产品数",
-  "inboundSkuTotalQty": "数量",
+  "inboundSkuTotalQty": "入库数量",
   "inboundOutCartonTotalQty": "入库产品箱数",
   "inboundSkuTotalVolume": "入库外箱总体积(m³)",
   "inboundSkuTotalNetWeight": "入库外箱总净重(kg)",
