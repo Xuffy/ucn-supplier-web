@@ -110,12 +110,6 @@
         <div class="table-cell" v-else>{{ scope.row.otherChargesRemark2 }}</div>
       </template>
     </el-table-column>
-    <el-table-column :label="$i.logistic.commissionCharges" align="center" width="180" prop="commissionCharges">
-      <template slot-scope="scope">
-        <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.commissionCharges" v-if="edit" @change="feeInfoLight('commissionCharges',scope.row.commissionCharges,scope.$index)"></el-input>
-        <div class="table-cell" v-else>{{ scope.row.commissionCharges }}</div>
-      </template>
-    </el-table-column>
   </el-table>
 </template>
 <script>
