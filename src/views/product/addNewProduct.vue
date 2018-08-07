@@ -911,11 +911,6 @@
                     nameCn: "",
                     descEn: "",
                     descCn: "",
-                    descCustomer: "",
-                    nameCustomer: "",
-                    customerSkuCode: "",
-                    // supplierCode: "",
-                    // supplierName: "",
                     code: "",                       //新增时请填写，传空
                     unit: "1",
                     formation: "",

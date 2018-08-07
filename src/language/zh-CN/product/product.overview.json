@@ -9,8 +9,8 @@
   "fobPrice": "FOB价格",
   "materialEnLike": "产品英文材质",
   "supplierNameLike": "供应商名称",
-  "outerCartonMethodEnLike": "外包装方式EN",
-  "methodPkgEnLike": "产品包装方式EN",
+  "outerCartonMethodEnLike": "外箱包装方式",
+  "methodPkgEnLike": "产品包装方式",
   "deliveryDates": "交期",
   "descEnLike": "产品英文描述",
   "descCnLike": "产品中文描述"

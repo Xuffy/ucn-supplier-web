@@ -41,15 +41,6 @@ export default {
     nameCustomer:{
         
     },
-    descCustomer:{
-        _sort:false
-    },
-    customerSkuCode:{
-        
-    },
-    supplierName:{
-        
-    },
     supplierCode:{
         
     },

@@ -3,7 +3,9 @@ export default {
     orderNo:{},
     incoterm:{},
     incotermArea:{},
-    currency:{},
+    currencyTrade:{
+        key:'currency'
+    },
     unitPrice:{},
     skuPrice:{},
     totalQty:{},

@@ -195,11 +195,6 @@
                     nameCn: "",
                     descEn: "",
                     descCn: "",
-                    descCustomer: "",
-                    nameCustomer: "",
-                    customerSkuCode: "",
-                    supplierCode: "",
-                    supplierName: "",
                     code: "",                       //新增时系统生成，传空
                     unit: "2",
                     formation: "",

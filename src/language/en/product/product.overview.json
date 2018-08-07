@@ -7,10 +7,10 @@
   "codeLike": "Supplier SKU code",
   "nameEnLike": "SKU name(EN)",
   "fobPrice": "FOB price",
-  "materialEnLike": "SKU material (EN)",
+  "materialEnLike": "SKU material",
   "supplierNameLike": "Supplier name",
-  "outerCartonMethodEnLike": "Outer packaging method(EN)",
-  "methodPkgEnLike": "SKU packaging method(EN)",
+  "outerCartonMethodEnLike": "Packing method of CTN",
+  "methodPkgEnLike": "Packing method",
   "deliveryDates": "Delivery date",
   "descEnLike": "Description (EN)",
   "descCnLike": "Description (CN)"

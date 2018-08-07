@@ -48,39 +48,6 @@ export default {
         belongTab:'basicInfo',          //特别用于
         fullLine:true
     },
-    nameCustomer:{
-        key:'nameCustomer',
-        type: 'String',
-        showType:'input',
-        belongTab:'basicInfo',
-    },
-    descCustomer:{
-        key:'descCustomer',
-        type: 'String',
-        showType:'textarea',
-        belongTab:'basicInfo',
-        fullLine:true
-    },
-    customerSkuCode:{
-        key:'customerSkuCode',
-        type: 'String',
-        showType:'input',
-        belongTab:'basicInfo',
-    },
-    // supplierName:{
-    //     key:'supplierName',
-    //     type: 'String',
-    //     showType:'input',
-    //     belongTab:'basicInfo',
-    //     isHide:true
-    // },
-    // supplierNo:{
-    //     key:'supplierCode',
-    //     type: 'String',
-    //     showType:'input',
-    //     belongTab:'basicInfo',
-    //     isHide:true
-    // },
     unit:{
         key:'unit',
         type: 'String',
@@ -593,7 +560,7 @@ export default {
     tryDimension:{
         key:'tryDimension',
         type: 'String',
-        showType:'number',
+        showType:'input',
         belongTab:'logisticInfo',
     },
     skuQtyPerTray:{
