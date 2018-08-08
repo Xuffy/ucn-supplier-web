@@ -267,6 +267,14 @@ export default {
     key: 'innerCartonPackingMethodCn',
     type: 'String'
   },
+  skuMethodPkgEn:{
+    key: 'skuMethodPkgEn',
+    type: 'String'
+  },
+  skuInnerCartonMethodEn:{
+    key: 'skuInnerCartonMethodEn',
+    type: 'String'
+  },
   deliveryDate: {
     key: 'deliveryDate',
     type: 'String'
