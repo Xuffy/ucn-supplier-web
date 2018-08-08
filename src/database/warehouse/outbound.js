@@ -34,32 +34,32 @@ export default {
         showType:'input',
         disabled:true
     },
-    outboundCtnQty:{
-        key:'outboundCtnQty',
+    outboundCTNQTY:{
+        key:'outboundCTNQTY',
         belong:'basicInfo',
         showType:'input',
         disabled:true
     },
-    outboundGw:{
-        key:'outboundGw',
+    outboundGW:{
+        key:'outboundGW',
         belong:'basicInfo',
         showType:'input',
         disabled:true
     },
-    outboundCbm:{
-        key:'outboundCbm',
+    outboundCBM:{
+        key:'outboundCBM',
         belong:'basicInfo',
         showType:'input',
         disabled:true
     },
-    outboundNw:{
-        key:'outboundNw',
+    outboundNW:{
+        key:'outboundNW',
         belong:'basicInfo',
         showType:'input',
         disabled:true
     },
-    skuStyleQty:{
-        key:'skuStyleQty',
+    skuStyleQTY:{
+        key:'skuStyleQTY',
         belong:'basicInfo',
         showType:'input',
         disabled:true

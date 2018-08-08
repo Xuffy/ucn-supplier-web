@@ -37,7 +37,7 @@ export default {
     }
   },
   surveyor: {
-    type: 'select',
+    type: 'input',
     isSurveyor: true
   },
   serviceFee: {

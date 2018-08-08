@@ -127,11 +127,11 @@
                     carrier:'',
                     carrierPhone:'',
                     timeZone:'',
-                    outboundCtnQty: 0,
-                    outboundGw: 0,
-                    outboundCbm: 0,
-                    outboundNw: 0,
-                    skuStyleQty: 0
+                    outboundCTNQTY: 0,
+                    outboundGW: 0,
+                    outboundCBM: 0,
+                    outboundNW: 0,
+                    skuStyleQTY: 0
                 },
 
                 /**
@@ -223,10 +223,8 @@
             closeWindow(){
                 window.close();
             },
-
             getDataDicts(){
                 this.$ajax.post(this.$apis.get_partUnit,['OBD_STATUS','SKU_UNIT','WT_UNIT','LH_UNIT','VE_UNIT'],{cache:true}).then(res=>{
-                  console.log(res,"getDataDicts");
                   this.dataDicts={};
                   res.forEach(v => {
                     this.dataDicts[v.code]=v.codes;

@@ -317,11 +317,11 @@
                     outboundTypeDictCode: "",
                     remark: "",
                     shipmentInvoiceNo: "",
-                    outboundCtnQty: 0,
-                    outboundGw: 0,
-                    outboundCbm: 0,
-                    outboundNw: 0,
-                    skuStyleQty: 0
+                    outboundCTNQTY: 0,
+                    outboundGW: 0,
+                    outboundCBM: 0,
+                    outboundNW: 0,
+                    skuStyleQTY: 0
                     // timeZone: "",
                 },
                 //inbound总计
@@ -576,16 +576,16 @@
                                         this.outboundData.outboundSkuTotalQty = this.jia(prev,curr)
                                     }
                                     if (column.property === 'outboundOutCartonTotalQty') {
-                                        this.outboundData.outboundCtnQty = this.jia(prev,curr)
+                                        this.outboundData.outboundCTNQTY = this.jia(prev,curr)
                                     }
                                     if (column.property === 'outboundSkuTotalNetWeight') {
-                                        this.outboundData.outboundNw = this.jia(prev,curr)
+                                        this.outboundData.outboundNW = this.jia(prev,curr)
                                     }
                                     if (column.property === 'outboundSkuTotalVolume') {
-                                        this.outboundData.outboundCbm = this.jia(prev,curr)
+                                        this.outboundData.outboundCBM = this.jia(prev,curr)
                                     }
                                     if (column.property === 'outboundSkuTotalGrossWeight') {
-                                        this.outboundData.outboundGw = this.jia(prev,curr)
+                                        this.outboundData.outboundGW = this.jia(prev,curr)
                                     }
                                     
                                     return this.jia(prev,curr);
@@ -594,16 +594,16 @@
                                         this.outboundData.outboundSkuTotalQty = prev
                                     }
                                     if (column.property === 'outboundOutCartonTotalQty') {
-                                        this.outboundData.outboundCtnQty = prev
+                                        this.outboundData.outboundCTNQTY = prev
                                     }
                                      if (column.property === 'outboundSkuTotalNetWeight') {
-                                        this.outboundData.outboundNw = prev
+                                        this.outboundData.outboundNW = prev
                                     }
                                     if (column.property === 'outboundSkuTotalVolume') {
-                                        this.outboundData.outboundCbm = prev
+                                        this.outboundData.outboundCBM = prev
                                     }
                                      if (column.property === 'outboundSkuTotalGrossWeight') {
-                                        this.outboundData.outboundGw = prev
+                                        this.outboundData.outboundGW = prev
                                     }
                                     return prev;
                                 }
@@ -714,11 +714,21 @@
                 } else {
                     this.disableRemoveProduct = true;
                 }
+            },
+            productData(data) {
+                let arr = []
+                _.each(data, e => {
+                    if (typeof e.skuCode === 'object') {
+                        if (arr.indexOf(e.skuCode.value) < 0) {
+                            arr.push(e.skuCode.value)
+                        }
+                    }
+                })
+                this.outboundData.skuStyleQTY = arr.length
             }
         },
         mounted () {
             this.columnConfig = this.$db.warehouse.outboundProduct;
-            console.log(this.$db.warehouse.outbound)
         }
     };
 </script>
