@@ -33,5 +33,6 @@
   "totalGrossWeight": "总毛重",
   "totalNetWeight": "总净重",
   "totalVolume": "总体积",
-  "skuQty": "SKU 款式数"
+  "skuQty": "SKU 款式数",
+  "skuCartonQty":"产品箱数"
 }

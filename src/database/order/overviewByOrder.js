@@ -2,8 +2,6 @@ export default {
     id:{
         _hide:true
     },
-    attachment:{},
-    archive:{},
     orderNo:{},
     entryDt:{},
     status:{},      //订单状态
@@ -22,16 +20,11 @@ export default {
     customerAgreementDt:{},
     remark:{},
     totalSkuPrice:{},
-    // paidAmount:{},
-    // unpaidAmount:{},
     deliveredQty:{},
     updateDt:{},
     quotationNo:{},
     totalQty:{},
     totalOuterCartonQty:{},
-    // totalGrossWeight:{},
-    // totalNetWeight:{},
-    // totalVolume:{},
     skuQuantity:{
         key:'skuQty'
     },

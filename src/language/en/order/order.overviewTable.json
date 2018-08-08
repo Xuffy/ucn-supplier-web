@@ -33,5 +33,6 @@
   "totalGrossWeight": "Total G.W.",
   "totalNetWeight": "Total N.W.",
   "totalVolume": "Total Volume",
-  "skuQty": "SKU QTY"
+  "skuQty": "SKU QTY",
+  "skuCartonQty":"SKU Carton Qty"
 }
