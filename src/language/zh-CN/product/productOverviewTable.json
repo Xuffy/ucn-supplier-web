@@ -118,5 +118,6 @@
   "adjustPackage": "产品或包装可否调整",
   "pictures": "图片",
   "designs":"产品设计",
-  "notes":"产品说明书"
+  "notes":"产品说明书",
+  "oemQty":"贴牌起订量"
 }

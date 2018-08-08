@@ -118,5 +118,6 @@
   "adjustPackage": "Adjust SKU and package or not",
   "pictures": "Picture",
   "designs":"Product design",
-  "notes":"Instruction note"
+  "notes":"Instruction note",
+  "oemQty":"OEM MOQ"
 }
