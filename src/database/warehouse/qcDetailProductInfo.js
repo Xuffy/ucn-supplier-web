@@ -243,10 +243,10 @@ export default {
     key: 'customerSkuCode',
     type: 'String'
   },
-  factorySkuCode: {
-    key: 'factorySkuCode',
-    type: 'String'
-  },
+  // factorySkuCode: {
+  //   key: 'factorySkuCode',
+  //   type: 'String'
+  // },
   skuNameCn: {
     key: 'skuNameCn',
     type: 'String'
@@ -265,6 +265,14 @@ export default {
   },
   innerCartonPackingMethodCn: {
     key: 'innerCartonPackingMethodCn',
+    type: 'String'
+  },
+  skuMethodPkgEn:{
+    key: 'skuMethodPkgEn',
+    type: 'String'
+  },
+  skuInnerCartonMethodEn:{
+    key: 'skuInnerCartonMethodEn',
     type: 'String'
   },
   deliveryDate: {

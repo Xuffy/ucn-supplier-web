@@ -162,12 +162,12 @@
 
                         if(e.noneSellCountry.value){
                             e.noneSellCountry._value=_.map(e.noneSellCountry.value.split(","),item=>{
-                                return _.findWhere(this.countryOption,{code:item}).name;
+                                return (_.findWhere(this.countryOption,{code:item}) || {}).name;
                             }).join(',');
                         }
                         if(e.mainSaleCountry.value){
                             e.mainSaleCountry._value=_.map(e.mainSaleCountry.value.split(","),item=>{
-                                return _.findWhere(this.countryOption,{code:item}).name;
+                                return (_.findWhere(this.countryOption,{code:item}) || {}).name;
                             }).join(',');
                         }
 

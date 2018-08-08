@@ -391,21 +391,15 @@
                     console.log(this.$depthClone(this.productForm.recycle), "this.productForm");
 
                     //处理国家显示
-                    if (this.productForm.noneSellCountry) {
-                        let noneSellCountry = this.productForm.noneSellCountry.split(",");
-                        this.productForm.noneSellCountry = "";
-                        _.map(noneSellCountry, v => {
-                            this.productForm.noneSellCountry += (_.findWhere(this.countryOption, { code: v }).name + ",");
-                        });
-                        this.productForm.noneSellCountry = this.productForm.noneSellCountry.slice(0, this.productForm.noneSellCountry.length - 1);
+                    if(this.productForm.noneSellCountry){
+                        this.productForm.noneSellCountry=_.map(this.productForm.noneSellCountry.split(","),item=>{
+                            return (_.findWhere(this.countryOption,{code:item}) || {}).name;
+                        }).join(',');
                     }
-                    if (this.productForm.mainSaleCountry) {
-                        let mainSaleCountry = this.productForm.mainSaleCountry.split(",");
-                        this.productForm.mainSaleCountry = "";
-                        _.map(mainSaleCountry, v => {
-                            this.productForm.mainSaleCountry += (_.findWhere(this.countryOption, { code: v }).name + ",");
-                        });
-                        this.productForm.mainSaleCountry = this.productForm.mainSaleCountry.slice(0, this.productForm.mainSaleCountry.length - 1);
+                    if(this.productForm.mainSaleCountry){
+                        this.productForm.mainSaleCountry=_.map(this.productForm.mainSaleCountry.split(","),item=>{
+                            return (_.findWhere(this.countryOption,{code:item}) || {}).name;
+                        }).join(',');
                     }
 
                     //字典转换

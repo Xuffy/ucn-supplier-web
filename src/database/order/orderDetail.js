@@ -23,12 +23,6 @@ export default {
         createHide:true,
         disableDetail:true
     },
-    // customerNo:{
-    //     type:'input',
-    //     belong:'basicInfo',
-    //     createHide:true,
-    //     disableDetail:true
-    // },
     supplierOrderNo:{
         type:'input',
         belong:'basicInfo'
@@ -74,7 +68,7 @@ export default {
     //     type:'input',
     //     belong:'basicInfo',
     // },
-    payment:{
+    paymentTerm:{
         type:'select',
         belong:'basicInfo',
         isPayment:true

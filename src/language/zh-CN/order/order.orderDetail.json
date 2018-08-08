@@ -36,7 +36,7 @@
   "skuExwPrice": "EXW 单价",
   "skuCifCurrency": "CIF 货币",
   "skuCifPrice": "CIF 单价",
-  "skuCifPort": "CIF 地区",
+  "skuCifPort": "CIF 港口",
   "skuDduCurrency": "DDU 货币",
   "skuDduPrice": "DDU 单价",
   "skuDduPort": "DDU 地区",

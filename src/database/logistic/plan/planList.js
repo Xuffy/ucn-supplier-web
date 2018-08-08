@@ -3,13 +3,13 @@ export default {
     type: 'text',
     _hide: true
   },
+  orderNo: {
+    type: 'text'
+  },
   logisticsNo: {
     type: 'text'
   },
   estContainerStuffingDate: {
-    type: 'textDate'
-  },
-  estCustomsCleanceDate: {
     type: 'textDate'
   },
   estDepartureDate: {
@@ -18,10 +18,25 @@ export default {
   estArrivalDate: {
     type: 'textDate'
   },
-  estReleaseDate: {
+  estDelivaryDate: {
     type: 'textDate'
   },
-  estDelivaryDate: {
+  actDeliveryDate: {
+    type: 'textDate'
+  },
+  actContainerStuffingDate: {
+    type: 'textDate'
+  },
+  actCustomsCleanceDate: {
+    type: 'textDate'
+  },
+  actDepartureDate: {
+    type: 'textDate'
+  },
+  actArrivalDate: {
+    type: 'textDate'
+  },
+  actReleaseDate: {
     type: 'textDate'
   },
   blNo: {

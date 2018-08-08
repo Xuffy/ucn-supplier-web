@@ -532,6 +532,11 @@ export default {
         belongTab:'packingInfo',
         isOem:true,
     },
+    oemQty:{
+        showType:'number',
+        belongTab:'packingInfo',
+        accuracy:1
+    },
 
     /**
      * Logistic Info

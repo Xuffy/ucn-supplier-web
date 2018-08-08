@@ -1,7 +1,9 @@
 {
-    "outboundCtnQty": "出库单总箱数",
-    "outboundGw": "出库单总毛重",
-    "outboundCbm": "出库单总体积",
-    "outboundNw": "出库单总净重",
-    "skuStyleQty": "产品款式数"
+    "outboundCTNQTY": "Outbound CTN QTY",
+    "outboundGW": "Outbound G.W.",
+    "outboundCBM": "Outbound CBM",
+    "outboundNW": "Outbound N.W.",
+    "skuStyleQTY": "SKU QTY",
+    "skuInnerCartonMethodEn": "Packing method of inner carton(EN)",
+    "skuMethodPkgEn": "Packing method(EN)"
 }

@@ -5,6 +5,19 @@
     <form-list :DeliveredEdit="DeliveredEdit" name="BasicInfo" :fieldDisplay="fieldDisplay" :showHd="false" @selectChange="formListSelectChange"
       @hightLightModifyFun="hightLightModifyFun" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"
     />
+    <!-- shiper 有点特殊 单独放出来处理 -->
+    <el-form label-width="300px" label-position="right" class="form">
+      <el-form-item :required="edit" :show-message="false" :label="$i.logistic.shipper+'：'">
+        <!-- 绑定对象时 用一个唯一value-key的值 去对应key -->
+        <el-select v-if="edit" value-key="id" v-model="shipperObj" :placeholder="$i.logistic.placeholder">
+          <el-option :label="item.name" :value="item" v-for="item of shipperArr" :key="item.id"/>
+        </el-select>
+        <p v-else :style="fieldDisplay&&fieldDisplay.hasOwnProperty('skuSupplierName') ? {
+            'background': 'yellow',
+            'padding':'5px'
+          } : ''">{{ ShipperName }}</p>
+      </el-form-item>
+    </el-form>
     <el-row :gutter="10">
       <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
       <div class="input-item">
@@ -33,10 +46,10 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
-      <container-info :matchData="containerinfoMatch" :tableData.sync="containerInfo" :currencyCode="oldPlanObject.currency" :ExchangeRateInfoArr="ExchangeRateInfoArr"
+      <containerInfo :matchData="containerinfoMatch" :tableData="containerInfo" :currencyCode="oldPlanObject.currency" :ExchangeRateInfoArr="ExchangeRateInfoArr"
         @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit"
         :containerType="selectArr.containerType" 
-        @ContainerInfoLight="ContainerInfoLight"/>
+        @ContainerInfoLight="ContainerInfoLight"></containerInfo>
     </div>
 
     <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
@@ -79,7 +92,7 @@
         :title="$i.logistic.addProductFromOrder"
         :tableData="ProductFromOrder"
         :form-column="$db.logistic.addProductFromOrderFilter"
-        :tableButtons="[{label: 'Detail', type: 1}]"
+        :tableButtons="null"
         @change-checked="changeChecked"
         @tableBtnClick="ProductFromOrderDetail"
         @search="getSupplierIds"
@@ -93,7 +106,7 @@
       </overviewPage>
     </el-dialog>
     <messageBoard v-if="!isParams" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
-    <btns :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus"
+    <btns :beShipper="beShipper" :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus"
       @sendData="sendData" :btnModifyTime="btnModifyTime" :basicInfoArr="basicInfoArr" :listData="mediatorDate" :selectArr="selectArr" :shipmentStatus="shipmentStatus" @shipmentStatus="changeShipmentStatus"/>
     <v-history-modify 
     :code="configUrl[pageName]&&configUrl[pageName].setTheField" 
@@ -107,7 +120,6 @@
 </template>
 <script>
   import {
-    containerInfo,
     selectSearch,
     VTable,
     VHistoryModify,
@@ -118,6 +130,7 @@
     mapActions,
     mapState
   } from 'vuex';
+  import containerInfo from '@/views/logistic/children/containerInfo';
   import attachment from '@/components/common/upload/index';
   import messageBoard from '@/components/common/messageBoard/index';
   import formList from '@/views/logistic/children/formList'
@@ -139,6 +152,7 @@
           ps: 10
         },
         DeliveredEdit: false,
+        beShipper: 0,
         dunningDisabled: false,
         modefiyProductIndex: 0,
         modefiyProductIndexArr: [],
@@ -149,6 +163,7 @@
         hightLightObj: {},
         logisticsNo: '',
         remark: '',
+        ShipperName: '',
         showProductDialog: false,
         showAddProductDialog: false,
         selectionContainer: [],
@@ -173,6 +188,7 @@
         mediatorDate: [],
         containerinfoMatch: [],
         ProductFromOrderChecked: [],
+        shipperObj:{},
         paymentSum: {},
         selectArr: {
           containerType: [],
@@ -204,7 +220,8 @@
           transportationWay: 'MD_TN',
           payment: 'PMT',
           skuIncoterm: 'ITM',
-          shipmentStatus: 'LOGISTICS_SHIP_STATUS'
+          shipmentStatus: 'LOGISTICS_SHIP_STATUS',
+          paymentItem: 'PAYMENT_ITEM_NAME'
         },
         configUrl: {
           placeLogisticPlan: {
@@ -250,6 +267,33 @@
       VPagination
     },
     computed: {
+      //处理 动态增加 产品时 的下拉取值 skuSupplierName只是暂时取值真的值为supplierAbbr(等发布版本在加)
+      shipperArr(){
+        let arr = [];
+        this.productList.forEach(item=>{
+          arr.push({
+            id : item.skuSupplierCompanyId.value+'-'+item.skuSupplierTenantId.value,
+            name:item.skuSupplierName.value,
+            shipperCompanyId : item.skuSupplierCompanyId.value,
+            shipperTelnetId  : item.skuSupplierTenantId.value,
+          })
+        });
+
+        //利用对象属性唯一性 去除 相同的供应商 让下拉只会存在唯一的供应商
+        var obj = {};
+        arr = arr.reduce(function(item, next) {
+          obj[next.id] ? '' : obj[next.id] = true && item.push(next);
+          return item;
+        }, []);
+
+        //处理如果删掉下拉已选中的选项是默认选择第一个
+        this.shipperObj = arr.length ? arr[0] : {
+          name:null,
+          shipperCompanyId:null,
+          shipperTelnetId:null
+        };
+        return arr;
+      },
       productListTotal() {
         let obj = {};
         if (this.productList.length <= 0) {
@@ -292,10 +336,6 @@
             label:  this.$i.logistic.Copy,
             type: 4,
             disabled: !this.edit
-          },
-          {
-            label:  this.$i.logistic.Detail,
-            type: 3
           }
         ]
         this.$route.name == 'placeLogisticPlan' ? aArr : aArr.splice(1, 0, {
@@ -510,9 +550,18 @@
           }
           this.$set(this.selectArr,'shipmentStatus',arr);
         }
-        this.logisticsNo = res.logisticsNo
-        this.exchangeRateList = res.currencyExchangeRate || []
-        this.remark = res.remark
+        this.logisticsNo = res.logisticsNo;
+        this.exchangeRateList = res.currencyExchangeRate || [];
+        this.remark = res.remark;
+        //处理 shiper
+        this.beShipper = res.beShipper;
+        this.ShipperName = res.shipper;
+        this.shipperObj = {
+          id : res.shipperCompanyId+'-'+res.shipperTelnetId,
+          name: this.ShipperName,
+          shipperCompanyId : res.shipperCompanyId,
+          shipperTelnetId  : res.shipperTelnetId
+        }
         this.containerInfo = (res.containerDetail || []).map(el=>{el.isModify=false;return el});
         this.containerinfoMatch = this.$depthClone(res.containerDetail || []).map(el=>{el.isModify=false;return el});
         this.feeList = (res.fee ? [res.fee] :[]).map(el=>{el.isModify=false;return el});
@@ -786,18 +835,19 @@
       },
       closeAddProduct() {
         let CheckedIdArr =  this.ProductFromOrderChecked ? this.ProductFromOrderChecked.map(el => {
-          return el.id.value;
-        }) : []
-        let arr = CheckedIdArr ? CheckedIdArr.map(el=>{
-          return _.findWhere(this.ProductFromOrderRes,{id:el})
+          return {id:el.id.value,_disabled:el._disabled};
         }) : [];
+        let arr = CheckedIdArr ? CheckedIdArr.map(el=>{
+          let obj = _.findWhere(this.ProductFromOrderRes,{id:el.id});
+          obj._disabled = el._disabled;
+          return obj;
+        }) : [];
+
         this.showAddProductDialog = false
-        this.ProductFromOrderChecked.forEach((el,index) => {          
-          if(el._disabled) {
-            arr.splice(index,1);
-          }
-        });
-        this.showAddProductDialog = false
+        arr = _.filter(arr,el=>{
+          return !el._disabled;
+        })
+
         const selectArrData = this.$depthClone(arr);
         if (!arr.length || !selectArrData.length) return
         selectArrData.forEach(a => {
@@ -977,6 +1027,13 @@
         })
       },
       generateList() {
+        
+        if(this.oldPlanObject.containerDetail&&this.oldPlanObject.containerDetail.map(el => {
+          return this.$validateForm(el, this.$db.logistic.dbcontainerInfo);
+        }).some(el=> el)){
+          return
+        }
+        
         this.$ajax.post(this.$apis.logistics_plan_postLoadingList, {
           id: this.planId
         }).then(res => {
@@ -1107,6 +1164,14 @@
         if (this.$validateForm(this.oldPlanObject, this.$db.logistic.transportInfoObj)) {
           return;
         }
+        if (this.$validateForm(this.shipperObj, this.$db.logistic.validateShipperObj)) {
+          return;
+        }
+        //为了做shiper 的特殊处理
+        this.oldPlanObject.shipper = this.shipperObj.name;
+        this.oldPlanObject.shipperCompanyId = this.shipperObj.shipperCompanyId;
+        this.oldPlanObject.shipperTelnetId = this.shipperObj.shipperTelnetId;
+
         this.$ajax.post(url, this.oldPlanObject).then(res => {
           this.$message({
             message: this.$i.logistic.operationSuccess,

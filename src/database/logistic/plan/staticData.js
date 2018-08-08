@@ -544,7 +544,17 @@ export const dbProductInfo = {
 }
 
 export const dbcontainerInfo = {
-  containerType: {
+  containerNo: {
+    _rules:{
+      required:true
+    }
+  },
+  sealNo: {
+    _rules:{
+      required:true
+    }
+  },
+  containerWeight: {
     _rules:{
       required:true
     }
@@ -560,5 +570,14 @@ export const addProductFromOrderFilter = {
   },
   "skuNameEn": {
     _isDefaultShow:true
+  }
+}
+
+//验证shipper必填
+export const validateShipperObj = {
+  "name":{
+    _rules:{
+      required:true
+    }
   }
 }

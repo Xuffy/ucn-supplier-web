@@ -22,7 +22,15 @@
         </el-table-column>
         <el-table-column :label="$i.logistic.containerWeight" width="140" prop='{"key":"containerWeight","total":true}' align="center">
           <template slot-scope="scope">
-            <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.containerWeight" v-if="edit" @change="ContainerInfoLight('containerWeight',scope.row.containerWeight,scope.$index,scope)"></el-input>
+            <v-input-number
+              v-model="scope.row.containerWeight"
+              :min="0"
+              :controls="false"
+              :accuracy="4"
+              :mark="$i.logistic.containerWeight"
+              :placeholder="$i.logistic.placeholder"
+              @change="ContainerInfoLight('containerWeight',scope.row.containerWeight,scope.$index,scope)"
+              v-if="edit"></v-input-number>
             <span v-else>{{ scope.row.containerWeight }}</span>
           </template>
         </el-table-column>
@@ -56,15 +64,22 @@
             <span>{{ scope.row.totalContainerOuterCartonsQty }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.totalSkuPriceInContainer" width="200" prop='{"key":"totalContainerSkuPrice","total":true}' align="center">
+        <el-table-column :label="$i.logistic.USD" width="100" prop='{"key":"USD","total":true}' align="center">
           <template slot-scope="scope">
-            <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input>
-            <span v-else>{{ scope.row.totalContainerSkuPrice }}</span>
+            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input> -->
+            <span>{{ scope.row.USD }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.exchangeCurrency" width="180" align="center">
+        <el-table-column :label="$i.logistic.CNY" width="100" prop='{"key":"CNY","total":true}' align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.exchangeCurrency }}</span>
+            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input> -->
+            <span>{{ scope.row.CNY }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$i.logistic.EUR" width="100" prop='{"key":"EUR","total":true}' align="center">
+          <template slot-scope="scope">
+            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input> -->
+            <span>{{ scope.row.EUR }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -72,12 +87,10 @@
   </div>
 </template>
 <script>
+import  VInputNumber  from '../../../components/common/inputNumber/index.vue';
 export default {
-  data () {
-    return {
-      containerNo: '',
-      containerSelect: ''
-    }
+  components:{
+    VInputNumber
   },
   props: {
     currencyCode:[String,Number],
@@ -103,6 +116,12 @@ export default {
       default: () => {
         return []
       }
+    }
+  },
+  data () {
+    return {
+      containerNo: '',
+      containerSelect: ''
     }
   },
   computed:{

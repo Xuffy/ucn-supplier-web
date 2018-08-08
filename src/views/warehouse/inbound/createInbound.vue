@@ -257,7 +257,7 @@
                 inboundData: {
                     inboundNo: "",       //新建的时候不传
                     inboundDate: "",
-                    warehouseNo: "",
+                    // warehouseNo: "",
                     warehouseName: "",
                     inboundTypeDictCode: "",
                     warehouseManager: "",
