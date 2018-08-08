@@ -36,6 +36,7 @@ export default {
     supplierCode:{},
     unit:{},
     formation:{},
+    oemQty:{},
     materialEn:{},
     materialCn:{},
     colourEn:{},
