@@ -17,7 +17,7 @@
   "orderNumber": "Company Order Code",
   "companyAddress": "Company address",
   "receiverAddress1": "Receiver address1",
-  "receiverAddress": "Receiver address",
+  "receiverAddress": "Express address",
   "country": "Country",
   "city": "City",
   "province": "Province",
@@ -83,5 +83,14 @@
   "numberLetter": "Only letters and Numbers are available",
   "shortNameLength": "No more than 6 bits",
   "abbreviationOnly" : "This abbreviation has been used",
-  "abbreviationAllowed": "I, O and Z letters are not allowed"
+  "abbreviationAllowed": "I, O and Z letters are not allowed",
+  "shipper": "Shipper",
+  "factoryCountry": "Factory Country",
+  "factoryProvince": "Factory Province",
+  "factorycity": "Factory City",
+  "isDefaultAddress": "YES",
+  "beneficiaryBankAddress": "Beneficiary bank address",
+  "intermediaryBankName": "Intermediary Bank Name",
+  "intermBankAddress": "Interm. Bank Address",
+  "intermBankSWIFTCode": "Interm. Bank SWIFT-code"
 }

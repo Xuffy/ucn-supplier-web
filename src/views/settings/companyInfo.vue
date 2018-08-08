@@ -165,7 +165,7 @@
             <el-form label-width="200px" :model="addressData">
                 <el-row>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.factoryName+':'" required>
+                    <el-form-item  :label="$i.setting.factoryName+':'" >
                       <el-input
                         size="mini"
                         v-model="addressData.name"
@@ -174,14 +174,63 @@
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                  <el-form-item  :label="$i.setting.factoryAddress+':'" required>
-                     <el-input
-                       size="mini"
-                       v-model="addressData.address"
-                       :placeholder="$i.common.inputkeyWordToSearch"
-                       required="required"></el-input>
-                  </el-form-item>
+                      <el-form-item  :label="$i.setting.factoryCountry+'：'" >
+                        <el-select  v-model="addressData.country" :placeholder="$i.common.inputSearch" style="width:100%">
+                          <el-option
+                            v-for="item in options.country"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.code"
+                            style="width:100%">
+                          </el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item  :label="$i.setting.factoryProvince +'：'" >
+                        <el-input size="mini" v-model="addressData.province" :placeholder="$i.common.inputkeyWordToSearch" ></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                      <el-form-item  :label="$i.setting.factorycity +'：'" >
+                        <el-input size="mini" v-model="addressData.city" :placeholder="$i.common.inputkeyWordToSearch" ></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                      <el-form-item  :label="$i.setting.factoryAddress +'：'" >
+                        <el-input size="mini" v-model="addressData.address" :placeholder="$i.common.inputkeyWordToSearch" ></el-input>
+                      </el-form-item>
+                    </el-col>
                 </el-col>
+                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item  :label="$i.setting.receiveCountry+'：'" >
+                      <el-select  v-model="addressData.recvCountry" :placeholder="$i.common.inputSearch" style="width:100%">
+                        <el-option
+                          v-for="item in options.country"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.code"
+                          style="width:100%">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item  :label="$i.setting.receiveProvince +'：'" >
+                      <el-input size="mini" v-model="addressData.recvProvince" :placeholder="$i.common.inputkeyWordToSearch" ></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item  :label="$i.setting.receiveCity +'：'" >
+                      <el-input size="mini" v-model="addressData.recvCity" :placeholder="$i.common.inputkeyWordToSearch" ></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item  :label="$i.setting.receiverAddress +'：'" >
+                      <el-input size="mini" v-model="addressData.recvAddr" :placeholder="$i.common.inputkeyWordToSearch" ></el-input>
+                    </el-form-item>
+                  </el-col>
+                  </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                     <el-form-item  :label="$i.setting.exportPort+':'">
                       <el-input
@@ -225,6 +274,14 @@
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item  :label="$i.setting.shipper+':'">
+                      <el-input
+                        size="mini"
+                        v-model="addressData.shipper"
+                        :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                     <el-form-item>
                       <el-checkbox-group v-model="addressData.def" size="medium">
                         <el-checkbox :label="$i.setting.setDefaultAddress" @change="setAddress"></el-checkbox>
@@ -240,7 +297,7 @@
         </el-dialog>
 
         <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="accountDialogVisible">
-            <el-form label-width="200px" :model="accountData">
+            <el-form label-width="240px" :model="accountData">
                 <el-row>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item  :label="$i.setting.beneficiaryName+':'" required>
@@ -266,8 +323,8 @@
                               :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item  :label="$i.setting.beneficiaryBankName+':'">
+                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8" >
+                        <el-form-item  :label="$i.setting.beneficiaryBankName+':'" required>
                             <el-input
                               size="mini"
                               v-model="accountData.beneficiaryBankName"
@@ -301,6 +358,38 @@
                           style="width: 100%">
                         </el-option>
                       </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item  :label="$i.setting.beneficiaryBankAddress+':'">
+                      <el-input
+                        size="mini"
+                        v-model="accountData.beneficiaryBankAddress"
+                        :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item  :label="$i.setting.intermediaryBankName+':'">
+                      <el-input
+                        size="mini"
+                        v-model="accountData.intermBankName"
+                        :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item  :label="$i.setting.intermBankAddress+':'">
+                      <el-input
+                        size="mini"
+                        v-model="accountData.intermBankAddress"
+                        :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-form-item  :label="$i.setting.intermBankSWIFTCode+':'">
+                      <el-input
+                        size="mini"
+                        v-model="accountData.intermBankCode"
+                        :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -349,7 +438,7 @@
                 </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item  :label="$i.setting.mobileNumber+':'" required>
+                <el-form-item  :label="$i.setting.mobileNumber+':'" >
                   <el-input
                     size="mini"
                     v-model="contactData.cellphone"
@@ -446,50 +535,62 @@
                 },
                 //弹出框data
                 addressData:{
-                    address: "",
-                    companyId: "",
-                    concatPhone1: "",
-                    contactPerson1: "",
-                    contactPerson2: "",
-                    contactPhone2: "",
-                    exportPort:"",
-                    id: "",
-                    name: "",
-                    ownerId: "",
-                    status: "",
-                    supplierId: "",
-                    tenantId: "",
-                    version: "",
-                    def: false
+                    country:'',
+                    province:'',
+                    city:'',
+                    address: '',
+                    recvCountry:'',
+                    recvProvince: '',
+                    recvCity: '',
+                    recvAddr:'',
+                    companyId: '',
+                    concatPhone1: '',
+                    contactPerson1: '',
+                    contactPerson2: '',
+                    contactPhone2: '',
+                    exportPort:'',
+                    id: '',
+                    name: '',
+                    ownerId: '',
+                    status: '',
+                    supplierId: '',
+                    tenantId: '',
+                    version: '',
+                    def: false,
+                    shipper:''
                 },
                 contactData:{
-                  cellphone: "",
-                  customerId: "",
-                  deptId: "",
-                  deptName: "",
-                  email: "",
-                  fax: "",
-                  gender: "",
-                  id: "",
-                  name: "",
-                  position: "",
-                  qq: "",
-                  skype: "",
-                  status: "",
-                  telphone: "",
-                  version: ""
+                  cellphone: '',
+                  customerId: '',
+                  deptId: '',
+                  deptName: '',
+                  email: '',
+                  fax: '',
+                  gender: '',
+                  id: '',
+                  name: '',
+                  position: '',
+                  qq: '',
+                  skype: '',
+                  status: '',
+                  telphone: '',
+                  version: '',
                 },
               accountData:{
-                    accountType: "",
-                    beneficiaryAccount: "",
-                    beneficiaryAddress: "",
-                    beneficiaryBankName: "",
-                    beneficiaryBankSwift: "",
-                    beneficiaryName: "",
-                    currency: "",
-                    id: "",
-                    supplierId: "",
-                    version: ""
+                    accountType: '',
+                    beneficiaryAccount: '',
+                    beneficiaryAddress: '',
+                    beneficiaryBankName: '',
+                    beneficiaryBankSwift: '',
+                    beneficiaryName: '',
+                    beneficiaryBankAddress: '',
+                    intermBankAddress: '',
+                    intermBankCode: '',
+                    intermBankName: '',
+                    currency: '',
+                    id: '',
+                    supplierId: '',
+                    version: ''
                 },
                logoParmas:{
                 id: '',
@@ -531,8 +632,21 @@
                        return e;
                      });
                      this.addressDatas = this.$getDB(this.$db.setting.supplierAddress, res.address, e=>{
-                       e.def.value ? e.def._value = '是' : e.def._value = '';
-                       return e
+                       let country,recvCountry;
+                       country = _.findWhere(this.options.country, {code: e.country.value}) || {};
+                       recvCountry = _.findWhere(this.options.country, {code: e.recvCountry.value}) || {};
+                       e.country._value = country.name || '';
+                       e.recvCountry._value = recvCountry.name || '';
+                       const province = e.province.value || '';
+                       const city = e.city.value || '';
+                       const address = e.address.value || ''
+                       const recvProvince = e.recvProvince.value || '';
+                       const recvCity = e.recvCity.value || '';
+                       const recvAddr = e.recvAddr.value || '';
+                       e.factoryAddress.value = e.country._value +' '+province+' '+city+' '+address;
+                       e.receiverAddress.value = e.recvCountry._value +' '+recvProvince+' '+recvCity+' '+recvAddr
+                       e.def.value ? e.def._value = this.$i.setting.isDefaultAddress : e.def._value = ''
+                       return e;
                      } );
                      res.exportLicense ? res.exportLicense = this.$i.setting.exportLicenseYes : res.exportLicense = this.$i.setting.exportLicenseNo
                      this.companyInfo=res;
