@@ -4,8 +4,8 @@
   "remind": "Responsibility",
   "archive": "Archive",
   "orderNo": "Order No.",
-  "entryDt": "Order Date",
-  "status": "Order Status",
+  "entryDt": "Create Date",
+  "status": "Status",
   "customerName": "Customer Short Name",
   "customerOrderNo": "Customer Order No.",
   "supplierName": "supplier name",
@@ -14,7 +14,7 @@
   "incotermArea": "incoterm area",
   "lcNo": "LC No.",
   "payment": "Payment",
-  "currency": "Exchange Currency",
+  "currency": "Currency",
   "deliveryDt": "Delivery Date",
   "departureCountry": "Country of Shipment Origin",
   "destCountry": "Destination Country",
@@ -34,5 +34,6 @@
   "totalNetWeight": "Total N.W.",
   "totalVolume": "Total Volume",
   "skuQty": "SKU QTY",
-  "skuCartonQty":"SKU Carton Qty"
+  "skuCartonQty":"SKU Carton Qty",
+  "paymentTerm":"Payment term"
 }

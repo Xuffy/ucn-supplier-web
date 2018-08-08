@@ -140,7 +140,8 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
-        accuracy:0
+        accuracy:0,
+        isApplicableAge:true
     },
     expireDates:{
         key:'expireDates',

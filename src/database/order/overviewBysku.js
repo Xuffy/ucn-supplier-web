@@ -3,6 +3,8 @@ export default {
         _hide:true,
     },
     orderNo:{},
+    customerOrderNo:{},
+    supplierOrderNo:{},
     skuCustomerSkuCode:{},
     skuCode:{},
     skuSupplierName:{},
@@ -28,7 +30,9 @@ export default {
         key:'skuIncoterm'
     },
     skuQty:{},
-    skuPrice:{},
+    skuPrice:{
+        key:'skuAmount'
+    },
     entryDt:{},
     deliveryDt:{},
     skuDeliveredQty:{},

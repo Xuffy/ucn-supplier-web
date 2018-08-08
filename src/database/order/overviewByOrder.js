@@ -11,7 +11,7 @@ export default {
     supplierOrderNo:{},
     incoterm:{},
     lcNo:{},
-    payment:{},
+    paymentTerm:{},
     currency:{},
     deliveryDt:{},
     departureCountry:{},    //发运国

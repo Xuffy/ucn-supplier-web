@@ -68,7 +68,7 @@ export default {
     //     type:'input',
     //     belong:'basicInfo',
     // },
-    payment:{
+    paymentTerm:{
         type:'select',
         belong:'basicInfo',
         isPayment:true

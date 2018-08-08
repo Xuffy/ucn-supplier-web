@@ -34,5 +34,6 @@
   "totalNetWeight": "总净重",
   "totalVolume": "总体积",
   "skuQty": "SKU 款式数",
-  "skuCartonQty":"产品箱数"
+  "skuCartonQty":"产品箱数",
+  "paymentTerm":"付款方式"
 }
