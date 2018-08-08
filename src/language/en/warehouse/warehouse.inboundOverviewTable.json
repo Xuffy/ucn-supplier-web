@@ -5,16 +5,18 @@
   "warehouseName": "Warehouse Name",
   "purchaser": "Purchaser Operator",
   "storageType": "Inbound Type",
-  "skuTotalQty": "Total Inbound QTY",
+  "skuTotalQty": "Inbound QTY",
+  "skuTotalCartonQty": "Inbound CTN QTY",
   "remark": "Remark",
   "operator": "Operator",
   "updateDt": "Modify Date",
   "createDt": "Create Date",
   "carrier": "Carrier",
   "carrierPhone": "Carrier Phone",
-  "skuTotalVolume": "Total volume of Inbound(m³)",
-  "skuTotalNetWeight": "Total N.W. of Inbound(kg)",
-  "skuTotalGrossWeight": "Total G.W. of Inbound(kg)",
+  "skuTotalVolume": "Inbound CBM(m³)",
+  "skuTotalNetWeight": "Inbound N.W.(kg)",
+  "skuTotalGrossWeight": "Inbound G.W.(kg)",
   "updateName": "Operator",
-  "entryDt": "Create Time"
+  "entryDt": "Create Time",
+  "skuStyleQty": "SKU QTY"
 }

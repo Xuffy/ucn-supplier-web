@@ -111,10 +111,10 @@
                 </el-row>
             </el-form>
         </div>
-        <div class="second-title">
+        <!-- <div class="second-title">
             {{$i.warehouse.payment}}
-        </div>
-        <div class="payment-table">
+        </div> -->
+        <!-- <div class="payment-table">
             <el-button
                     v-authorize="'QC:DETAIL:PRESS_FOR_PAYMENT'"
                     class="payment-btn"
@@ -202,7 +202,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-        </div>
+        </div> -->
         <div class="product-info">
             <v-table
                     :height="500"
@@ -436,7 +436,7 @@
                 this.$ajax.get(`${this.$apis.get_serviceOrderDetail}?id=${this.$route.query.id}`)
                     .then(res => {
                         this.qcDetail = res;
-                        this.getPaymentInfo();
+                        // this.getPaymentInfo();
                     }).finally(err => {
                         this.loadingData = false;
                     }
@@ -484,18 +484,18 @@
                     this.loadingProductInfoTable = false;
                 });
             },
-            getPaymentInfo() {
-                this.loadingPaymentTable = true;
-                this.$ajax.post(this.$apis.PAYMENT_LIST, {
-                    orderNo: this.qcDetail.qcOrderNo,
-                    orderType: 20,
-                    moduleCode: 'WAREHOUSE'
-                }).then(res => {
-                    this.paymentData = res.datas;
-                }).finally(() => {
-                    this.loadingPaymentTable = false;
-                });
-            },
+            // getPaymentInfo() {
+            //     this.loadingPaymentTable = true;
+            //     this.$ajax.post(this.$apis.PAYMENT_LIST, {
+            //         orderNo: this.qcDetail.qcOrderNo,
+            //         orderType: 20,
+            //         moduleCode: 'WAREHOUSE'
+            //     }).then(res => {
+            //         this.paymentData = res.datas;
+            //     }).finally(() => {
+            //         this.loadingPaymentTable = false;
+            //     });
+            // },
 
             /**
              * product info表格事件
@@ -557,29 +557,29 @@
                     this.disableDunning = false;
                 });
             },
-            confirmPay(data) {
-                this.$confirm(this.$i.warehouse.sureConfirm, this.$i.warehouse.prompt, {
-                    confirmButtonText: this.$i.warehouse.sure,
-                    cancelButtonText: this.$i.warehouse.cancel,
-                    type: "warning"
-                }).then(() => {
-                    this.$ajax.post(this.$apis.PAYMENT_ACCEPT, {
-                        id: data.id,
-                        version: data.version,
-                        moduleCode: 'WAREHOUSE'
-                    }).then(res => {
-                        this.$message({
-                            message: this.$i.warehouse.confirmSuccess,
-                            type: "success"
-                        });
-                        this.getPaymentInfo();
-                    }).finally(() => {
+            // confirmPay(data) {
+            //     this.$confirm(this.$i.warehouse.sureConfirm, this.$i.warehouse.prompt, {
+            //         confirmButtonText: this.$i.warehouse.sure,
+            //         cancelButtonText: this.$i.warehouse.cancel,
+            //         type: "warning"
+            //     }).then(() => {
+            //         this.$ajax.post(this.$apis.PAYMENT_ACCEPT, {
+            //             id: data.id,
+            //             version: data.version,
+            //             moduleCode: 'WAREHOUSE'
+            //         }).then(res => {
+            //             this.$message({
+            //                 message: this.$i.warehouse.confirmSuccess,
+            //                 type: "success"
+            //             });
+            //             this.getPaymentInfo();
+            //         }).finally(() => {
 
-                    });
-                }).catch(() => {
+            //         });
+            //     }).catch(() => {
 
-                });
-            },
+            //     });
+            // },
             getSummaries(param) {
                 const { columns, data } = param;
                 const sums = [];

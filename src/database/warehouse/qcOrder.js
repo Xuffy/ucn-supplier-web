@@ -26,7 +26,7 @@ export default {
     },
     surveyor:{
         key:'surveyor',
-        showType:'select'
+        showType:'input'
     },
     exchangeCurrencyDictCode:{
         key:'exchangeCurrencyDictCode',
