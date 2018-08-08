@@ -35,6 +35,7 @@ export default {
     innerCartonNetWeight:{},
     innerCartonGrossWeight:{},
     innerCartonVolume:{},
+    customerAbbr:{},
     // skuLength:{},
     // skuWidth:{},
     // skuHeight:{},
