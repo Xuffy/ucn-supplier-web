@@ -2,7 +2,15 @@
   <el-table :data="tableData" :cell-class-name="lightHight" border style="width: 100%; margin-top: 20px" tooltip-effect="dark" class="fee-info">
     <el-table-column :label="$i.logistic.fclTransportCharge" align="center" width="180" prop="fclTransportCharge">
       <template slot-scope="scope">
-        <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.fclTransportCharge" v-if="edit" @change="feeInfoLight('fclTransportCharge',scope.row.fclTransportCharge,scope.$index)"></el-input>
+        <v-input-number
+          v-model="scope.row.fclTransportCharge"
+          :min="0"
+          :controls="false"
+          :accuracy="4"
+          :mark="$i.logistic.fclTransportCharge"
+          :placeholder="$i.logistic.placeholder"
+          @change="feeInfoLight('fclTransportCharge',scope.row.fclTransportCharge,scope.$index)"
+          v-if="edit"></v-input-number>
         <div class="table-cell" v-else>{{ scope.row.fclTransportCharge }}</div>
       </template>
     </el-table-column>
@@ -16,7 +24,15 @@
     </el-table-column>
     <el-table-column :label="$i.logistic.handlingCharges" align="center" width="180" prop="handlingCharge">
       <template slot-scope="scope">
-        <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.handlingCharge" v-if="edit" @change="feeInfoLight('handlingCharge',scope.row.handlingCharge,scope.$index)"></el-input>
+        <v-input-number
+          v-model="scope.row.handlingCharge"
+          :min="0"
+          :controls="false"
+          :accuracy="4"
+          :mark="$i.logistic.handlingCharges"
+          :placeholder="$i.logistic.placeholder"
+          @change="feeInfoLight('handlingCharge',scope.row.handlingCharge,scope.$index)"
+          v-if="edit"></v-input-number>
         <div class="table-cell" v-else>{{ scope.row.handlingCharge }}</div>
       </template>
     </el-table-column>
@@ -30,7 +46,15 @@
     </el-table-column>
     <el-table-column :label="$i.logistic.otherPortCharges" align="center" width="180" prop="otherPortCharge">
       <template slot-scope="scope">
-        <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.otherPortCharge" v-if="edit"  @change="feeInfoLight('otherPortCharge',scope.row.otherPortCharge,scope.$index)"></el-input>
+        <v-input-number
+          v-model="scope.row.otherPortCharge"
+          :min="0"
+          :controls="false"
+          :accuracy="4"
+          :mark="$i.logistic.otherPortCharges"
+          :placeholder="$i.logistic.placeholder"
+          @change="feeInfoLight('otherPortCharge',scope.row.otherPortCharge,scope.$index)"
+          v-if="edit"></v-input-number>
         <div class="table-cell" v-else>{{ scope.row.otherPortCharge }}</div>
       </template>
     </el-table-column>
@@ -44,7 +68,15 @@
     </el-table-column>
     <el-table-column :label="$i.logistic.oceanFreight" align="center" width="180" prop="oceanFreight">
       <template slot-scope="scope">
-        <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.oceanFreight" v-if="edit" @change="feeInfoLight('oceanFreight',scope.row.oceanFreight,scope.$index)"></el-input>
+        <v-input-number
+          v-model="scope.row.oceanFreight"
+          :min="0"
+          :controls="false"
+          :accuracy="4"
+          :mark="$i.logistic.oceanFreight"
+          :placeholder="$i.logistic.placeholder"
+          @change="feeInfoLight('oceanFreight',scope.row.oceanFreight,scope.$index)"
+          v-if="edit"></v-input-number>
         <span v-else>{{ scope.row.oceanFreight }}</span>
       </template>
     </el-table-column>
@@ -58,7 +90,15 @@
     </el-table-column>
     <el-table-column :label="$i.logistic.insuranceCharges" align="center" width="180" prop="insuranceCharge">
       <template slot-scope="scope">
-        <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.insuranceCharge" v-if="edit" @change="feeInfoLight('insuranceCharge',scope.row.insuranceCharge,scope.$index)"></el-input>
+        <v-input-number
+          v-model="scope.row.insuranceCharge"
+          :min="0"
+          :controls="false"
+          :accuracy="4"
+          :mark="$i.logistic.insuranceCharges"
+          :placeholder="$i.logistic.placeholder"
+          @change="feeInfoLight('insuranceCharge',scope.row.insuranceCharge,scope.$index)"
+          v-if="edit"></v-input-number>
         <div class="table-cell" v-else>{{ scope.row.insuranceCharge }}</div>
       </template>
     </el-table-column>
@@ -72,7 +112,15 @@
     </el-table-column>
     <el-table-column :label="$i.logistic.otherCharges1" align="center" width="180" prop="otherCharges1">
       <template slot-scope="scope">
-        <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.otherCharges1" v-if="edit"  @change="feeInfoLight('otherCharges1',scope.row.otherCharges1,scope.$index)"></el-input>
+        <v-input-number
+          v-model="scope.row.otherCharges1"
+          :min="0"
+          :controls="false"
+          :accuracy="4"
+          :mark="$i.logistic.otherCharges1"
+          :placeholder="$i.logistic.placeholder"
+          @change="feeInfoLight('otherCharges1',scope.row.otherCharges1,scope.$index)"
+          v-if="edit"></v-input-number>
         <div class="table-cell" v-else>{{ scope.row.otherCharges1 }}</div>
       </template>
     </el-table-column>
@@ -113,11 +161,15 @@
   </el-table>
 </template>
 <script>
+import  VInputNumber  from '../../../components/common/inputNumber/index.vue';
 export default {
   data(){
     return {
      
     }
+  },
+  components:{
+    VInputNumber
   },
   props: {
     tableData: {
