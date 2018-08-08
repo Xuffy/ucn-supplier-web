@@ -46,10 +46,10 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
-      <container-info :matchData="containerinfoMatch" :tableData.sync="containerInfo" :currencyCode="oldPlanObject.currency" :ExchangeRateInfoArr="ExchangeRateInfoArr"
+      <containerInfo :matchData="containerinfoMatch" :tableData="containerInfo" :currencyCode="oldPlanObject.currency" :ExchangeRateInfoArr="ExchangeRateInfoArr"
         @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit"
         :containerType="selectArr.containerType" 
-        @ContainerInfoLight="ContainerInfoLight"/>
+        @ContainerInfoLight="ContainerInfoLight"></containerInfo>
     </div>
 
     <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
@@ -120,7 +120,6 @@
 </template>
 <script>
   import {
-    containerInfo,
     selectSearch,
     VTable,
     VHistoryModify,
@@ -131,6 +130,7 @@
     mapActions,
     mapState
   } from 'vuex';
+  import containerInfo from '@/views/logistic/children/containerInfo';
   import attachment from '@/components/common/upload/index';
   import messageBoard from '@/components/common/messageBoard/index';
   import formList from '@/views/logistic/children/formList'
