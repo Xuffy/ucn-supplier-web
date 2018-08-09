@@ -33,9 +33,9 @@ export default {
         key:'skuCustomerSkuCode'
     },
     skuCode:{},
-    skuDescCn:{
-        key:'skuDescCn'
-    },
+    // skuDescCn:{
+    //     key:'skuDescCn'
+    // },
     skuDescEn:{
         key:'skuDescEn'
     },

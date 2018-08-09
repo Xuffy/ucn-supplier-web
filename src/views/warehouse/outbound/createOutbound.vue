@@ -516,16 +516,15 @@
                         ids: id
                     }).then(res => {
                         let arr = []
-                        this.productData = []
                         res.datas.forEach(v => {
                             v.outboundOutCartonTotalQty = 0;
                             v.outboundSkuTotalGrossWeight = 0;
                             v.outboundSkuTotalNetWeight = 0;
                             v.outboundSkuTotalQty = 0;
                             v.outboundSkuTotalVolume = 0;
-                            this.productData.push(v);
+                            // this.productData.push(v);
                         });
-                        this.productData.forEach(v => {
+                        res.datas.forEach(v => {
                             let obj = {}
                             v.inboundVo.inboundDate = this.$dateFormat(v.inboundVo.inboundDate, "yyyy-mm-dd");
                             v.skuUnitDictCode = v.skuUnitDictCode ? _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }).name : "";
