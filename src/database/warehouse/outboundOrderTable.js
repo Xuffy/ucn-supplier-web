@@ -44,9 +44,9 @@ export default {
     skuDescEn:{
         key:'skuDescEn'
     },
-    skuDescCn:{
-        key:'skuDescCn'
-    },
+    // skuDescCn:{
+    //     key:'skuDescCn'
+    // },
     skuBrand:{
         key:'skuBrand'
     },
@@ -63,8 +63,8 @@ export default {
         key:'skuCustomsCode',
         _hide:true
     },
-    customerOrderNo:{
-        key:''
-    },
+    // customerOrderNo:{
+    //     key:''
+    // },
 
 }

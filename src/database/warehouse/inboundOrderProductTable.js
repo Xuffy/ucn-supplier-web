@@ -343,7 +343,7 @@ export default {
     packingMethodCn:{},
     // skuWidth:{},
     skuBarCode:{},
-    skuLabel:{},
+    // skuLabel:{},
     skuDescEn:{},
     // skuLength:{},
     volumeUnitDictCode:{},
