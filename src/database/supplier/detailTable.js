@@ -39,10 +39,6 @@ export default {
         belong: "address",
         _hide:true
       },
-      notify: {
-          key: "notify",
-          belong: "address"
-      },
       id: {
           _hide: true,
           key: "id",
@@ -55,6 +51,16 @@ export default {
         key: '',
         _important:true,
       },
+      notify: {
+        key: "notify",
+        belong: "address"
+      },
+      consignee:{
+          key:'consignee'
+      },
+      destinationPort: {
+          key:'destPort'
+      }
 
 
 }
