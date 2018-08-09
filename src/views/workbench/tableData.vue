@@ -228,6 +228,7 @@
                   this.$windowOpen({url, params});
                 });
             }
+            break;
           case 'PAYMENT':
             return this.$ajax.post(this.$apis.PAYMENT_GETORDERBYPAYMENTNOS, [item.bizNo.value])
               .then(res => {

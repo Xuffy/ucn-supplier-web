@@ -9,7 +9,7 @@
     <br>
     <el-tabs type="card" v-model="tabActive" @tab-click="changeTab()">
       <!--导入任务-->
-      <el-tab-pane label="导入任务" name="import">
+      <el-tab-pane :label="$i.logs.importTask" name="import">
         <el-table
           :data="importParams.data.datas"
           :max-height="500"
@@ -88,7 +88,7 @@
       </el-tab-pane>
 
       <!--导出任务-->
-      <el-tab-pane label="导出任务" name="export">
+      <el-tab-pane :label="$i.logs.exportTask" name="export">
         <el-table
           :data="exportParams.data.datas"
           :max-height="500"
