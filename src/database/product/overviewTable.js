@@ -20,41 +20,54 @@ export default {
     code:{
         _fixed:'left'
     },
-    skuSaleStatus: {
-        key:'status'
-    },
-    recycle:{},
-    nameCn:{},
+    nameEn:{},
     descCn:{
         _sort:false
     },
-    nameEn:{},
+    unit:{},
+    fobCurrency:{},
+    fobPrice:{},
+    exwCurrency:{},
+    exwPrice:{},
+    availableQty:{},
+    outerCartonQty:{},
+    materialCn:{},
+    innerCartonQty:{},
+    innerCartonMethodCn:{
+        _sort:false
+    },
+    methodPkgCn:{
+        _sort:false
+    },
+    skuSaleStatus: {
+        key:'status'
+    },
     descEn:{
         _sort:false
     },
-    nameCustomer:{},
-    supplierCode:{},
-    unit:{},
-    formation:{},
-    oemQty:{},
-    materialEn:{},
-    materialCn:{},
-    colourEn:{},
-    colourCn:{},
     minOrderQty:{},
     deliveryDates:{},
     categoryId:{
         key:'categoryName',
         _sort:false
     },
+    readilyAvailable:{},
+    noneSellCountry:{},
+    outerCartonNetWeight:{},
+    outerCartonRoughWeight:{},
+    outerCartonVolume:{},
+    recycle:{},
+    nameCn:{},
+    nameCustomer:{},
+    supplierCode:{},
+    formation:{},
+    oemQty:{},
+    materialEn:{},
+    colourEn:{},
+    colourCn:{},
     barcode:{
         _sort:false
     },
-    readilyAvailable:{
-        
-    },
-    availableQty:{},
-    noneSellCountry:{},
     applicableAge:{},
     expireDates:{},
     expireUnit:{},
@@ -68,86 +81,33 @@ export default {
             readonly:true
         }
     },
-
-
-    fobCurrency:{
-        
-    },
-    fobPrice:{
-        
-    },
-    // refFobPrice:{
-    //
-    // },
     fobPort:{
         _sort:false
     },
-    exwPrice:{
-        
-    },
-    exwCurrency:{
-        
-    },
-    cifPrice:{
-
-    },
-    // refCifPrice:{
-    //
-    // },
-    cifCurrency:{
-
-    },
+    cifPrice:{},
+    cifCurrency:{},
     cifArea:{
         _sort:false
     },
-    dduPrice:{
-
-    },
-    // refDduPrice:{
-    //
-    // },
-    dduCurrency:{
-
-    },
+    dduPrice:{},
+    dduCurrency:{},
     dduArea:{
         _sort:false
     },
-    rateValueAddedTax:{
-        
-    },
-    taxRefundRate:{
-        
-    },
-    customsCode:{
-        
-    },
-    customsNameCn:{
-        
-    },
-    customsNameEn:{
-        
-    },
-    tradeMarkCn:{
-        
-    },
-    tradeMarkEn:{
-        
-    },
-    commodityInspectionCn:{
-        
-    },
-    commodityInspectionEn:{
-        
-    },
+    rateValueAddedTax:{},
+    taxRefundRate:{},
+    customsCode:{},
+    customsNameCn:{},
+    customsNameEn:{},
+    tradeMarkCn:{},
+    tradeMarkEn:{},
+    commodityInspectionCn:{},
+    commodityInspectionEn:{},
     declareElement:{
         _sort:false
     },
-    origin:{
-        
-    },
-    inspectQuarantineCategory:{
-        
-    },
+    origin:{},
+    inspectQuarantineCategory:{},
     brand:{
         _sort:false
     },
@@ -169,53 +129,21 @@ export default {
     unitVolume:{
         _sort:false
     },
-    length:{
-        
-    },
-    width:{
-        
-    },
-    height:{
-        
-    },
-    netWeight:{
-        
-    },
-    volume:{
-        
-    },
-    methodPkgCn:{
-        _sort:false
-    },
+    length:{},
+    width:{},
+    height:{},
+    netWeight:{},
+    volume:{},
     methodPkgEn:{
         _sort:false
     },
-
-    innerCartonQty:{
-        
-    },
-    innerCartonLength:{
-        
-    },
-    innerCartonWidth:{
-        
-    },
-    innerCartonHeight:{
-        
-    },
-    innerCartonWeightNet:{
-        
-    },
-    innerCartonRoughWeight:{
-        
-    },
-    innerCartonVolume:{
-        
-    },
+    innerCartonLength:{},
+    innerCartonWidth:{},
+    innerCartonHeight:{},
+    innerCartonWeightNet:{},
+    innerCartonRoughWeight:{},
+    innerCartonVolume:{},
     innerCartonDesc:{
-        _sort:false
-    },
-    innerCartonMethodCn:{
         _sort:false
     },
     innerCartonMethodEn:{
@@ -224,54 +152,22 @@ export default {
     outerCartonDesc:{
         _sort:false
     },
-    innerCartonOuterNum:{
-        
-    },
-    outerCartonQty:{
-        
-    },
-    outerCartonLength:{
-        
-    },
-    outerCartonWidth:{
-        
-    },
-    outerCartonHeight:{
-        
-    },
-    outerCartonNetWeight:{
-        
-    },
-    outerCartonRoughWeight:{
-        
-    },
-    outerCartonVolume:{
-        
-    },
+    innerCartonOuterNum:{},
+    outerCartonLength:{},
+    outerCartonWidth:{},
+    outerCartonHeight:{},
     outerCartonMethodCn:{
         _sort:false
     },
     outerCartonMethodEn:{
         _sort:false
     },
-    oem:{
-        
-    },
-    gp20SkuQty:{
-        
-    },
-    gp40SkuQty:{
-        
-    },
-    hq40SkuQty:{
-        
-    },
-    tryDimension:{
-        
-    },
-    skuQtyPerTray:{
-        
-    },
+    oem:{},
+    gp20SkuQty:{},
+    gp40SkuQty:{},
+    hq40SkuQty:{},
+    tryDimension:{},
+    skuQtyPerTray:{},
     specialTransportRequire:{
         _sort:false
     },
@@ -284,25 +180,15 @@ export default {
     qualityStander:{
         _sort:false
     },
-    yearListed:{
-        
-    },
-    useDisplayBox:{
-        
-    },
-    displayBoxQty:{
-        
-    },
-    lengthWidthHeight:{
-        
-    },
+    yearListed:{},
+    useDisplayBox:{},
+    displayBoxQty:{},
+    lengthWidthHeight:{},
     otherPackInfoCn:{
         _sort:false
     },
     otherPackInfoEn:{
         _sort:false
     },
-    adjustPackage:{
-
-    },
+    adjustPackage:{},
 }
