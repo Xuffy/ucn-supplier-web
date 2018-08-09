@@ -32,7 +32,9 @@ export default {
         sortable: true,
         accuracy: 4
     },
-    
+    exchangeCurrencyDictCode:{
+        showType:'select'
+    },
     outboundSkuTotalQty:{   //出库产品总数量
         key:'outboundSkuTotalQty',
         showType:'number',
@@ -72,6 +74,7 @@ export default {
             }
         ]
     },
+    
     skuBarCode:{
     },
     skuCode:{

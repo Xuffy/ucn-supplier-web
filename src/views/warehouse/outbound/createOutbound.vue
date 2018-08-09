@@ -148,6 +148,18 @@
                             :accuracy="v.accuracy ? v.accuracy : null"
                             :controls="false"></v-input-number>
                     </div>
+                    <div v-else-if="v.showType === 'select'">
+                        <div v-if="v.key === 'exchangeCurrencyDictCode'">
+                            <el-select v-model="scope.row[v.key].value" placeholder="请选择">
+                                <el-option
+                                v-for="item in exchangeCurrencyDictCode"
+                                :key="item.id"
+                                :label="item.code"
+                                :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </div>
+                    </div>
                     <!-- <div v-else-if="v.key==='inboundDate' || v.key==='warehouseName' || v.key==='warehouseNo'">
                         {{scope.row.inboundVo[v.key].value}}
                     </div> -->
@@ -360,6 +372,7 @@
               lengthUnitOption:[],
               volumeUnitOption:[],
               weightUnitOption:[],
+              exchangeCurrencyDictCode: [],
               columnConfig: ''
             };
         },
@@ -455,7 +468,8 @@
                         inboundSkuId: v.id.value,
                         inventoryServiceFee: v.inventoryServiceFee.value ? v.inventoryServiceFee.value : 0,
                         inventorySkuPrice: v.inventorySkuPrice.value ? v.inventorySkuPrice.value : 0,
-                        outboundOutCartonTotalQty: v.outboundOutCartonTotalQty.value ? v.outboundOutCartonTotalQty.value : 0
+                        outboundOutCartonTotalQty: v.outboundOutCartonTotalQty.value ? v.outboundOutCartonTotalQty.value : 0,
+                        exchangeCurrencyDictCode: v.exchangeCurrencyDictCode.value
                     });
                 });
                 this.outboundData.attachments = this.$refs.attachmentUpload[0].getFiles();
@@ -537,6 +551,7 @@
                             obj.inventorySkuPrice = '';
                             obj.inventoryDays = '';
                             obj.inventoryServiceFee = '';
+                            obj.exchangeCurrencyDictCode = '';
                             arr.push(Object.assign(obj, v))
                         });
                         this.loadingProductTable = false;
@@ -700,11 +715,16 @@
             changeSize(e) {
                 this.orderProduct.ps = e;
                 this.getProductData();
+            },
+            getExchangeCurrencyDictCode () { // 获取交易币种字典
+                this.$ajax.get(this.$apis.CURRENCY_ALL, {cache:true}).then(res => {
+                    this.exchangeCurrencyDictCode = res
+                })
             }
-
         },
         created() {
             this.getOutboundNo();
+            this.getExchangeCurrencyDictCode()
         },
         watch: {
             selectProductList(n) {
