@@ -16,6 +16,9 @@ export default {
     },
     beneficiaryBankName:{
         key: 'beneficiaryBankName',
+      _rules:{
+        required:true,
+      }
     },
     beneficiaryBankSWIFT: {
         key: 'beneficiaryBankSwift',
@@ -29,6 +32,18 @@ export default {
     currency: {
         key: 'currency',
     },
+  beneficiaryBankAddress: {
+    key: 'beneficiaryBankAddress',
+  },
+  intermediaryBankName: {
+    key: 'intermBankName',
+  },
+  intermBankAddress: {
+    key: 'intermBankAddress',
+  },
+  intermBankSWIFTCode: {
+    key: 'intermBankCode',
+  },
     id:{
         key: 'id',
         _hide:true,

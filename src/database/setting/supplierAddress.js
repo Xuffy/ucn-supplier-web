@@ -2,8 +2,43 @@ export default {
     factoryName: {
         key: 'name',
     },
+    factoryCountry: {
+      key: 'country',
+      _hide:true,
+    },
+    factoryProvince: {
+      key: 'province',
+      _hide:true,
+    },
+    factorycity: {
+      key: 'city',
+      _hide:true,
+    },
+    address:{
+       key: 'address',
+      _hide:true,
+    },
     factoryAddress:{
-        key: 'address',
+      _important:true
+    },
+    receiveCountry: {
+      key: 'recvCountry',
+      _hide:true,
+    },
+   receiveProvince: {
+      key: 'recvProvince',
+      _hide:true,
+    },
+    receiveCity: {
+      key: 'recvCity',
+      _hide:true,
+    },
+   receiverAddress1:{
+      key: 'recvAddr',
+      _hide:true,
+    },
+   receiverAddress:{
+       _important:true
     },
     exportPort: {
         key: 'exportPort',
@@ -22,7 +57,7 @@ export default {
           }
     },
     contacctPerson2:{
-        key: 'contacctPerson2',
+        key: 'contactPerson2',
     },
     contactPhoneNo2: {
         key: 'contactPhone2',
@@ -30,29 +65,14 @@ export default {
             type:'Number',
           }
     },
-    id:{
-        key: 'id',
-        _hide:true,
+    shipper: {
+      key:'shipper'
     },
     defaultAddress: {
       key: 'def'
     },
-    receiveCountry: {
-      key: '',
-      _hide:true
-    },
-    receiveProvince: {
-      key: '',
-      _hide:true
-    },
-    receiveCity: {
-      key: '',
-    },
-    receiverAddress1: {
-      key: '',
-  },
-  receiverAddress:{
-    key: '',
-    _important:true,
-  }
+    id:{
+      key: 'id',
+      _hide:true,
+    }
 }
