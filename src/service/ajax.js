@@ -49,7 +49,13 @@ const validate_error = (res) => {
       break;
   }
 
-  Message.warning(res.errorMsg || res.errorMsgs || $i.hintMessage.networkException);
+  Message({
+    message: res.errorMsg || res.errorMsgs || $i.hintMessage.networkException,
+    dangerouslyUseHTMLString: true,
+    showClose: true,
+    type: 'warning'
+  });
+  // Message.warning();
   throw new Error(`${res.errorMsg || res.errorMsgs || $i.hintMessage.networkException} \n
   [requestUid] - ${res.requestUid}`);
 }
@@ -226,6 +232,8 @@ axios.interceptors.request.use(config => {
   if (!config.headers['U-Session-Token'] && !config.noAuth && _config.AUTH) {
     Message({
       message: $i.hintMessage.loginExpired,
+      dangerouslyUseHTMLString: true,
+      showClose: true,
       type: 'warning',
       customClass: 'set-top',
       duration: 2000,
@@ -239,7 +247,13 @@ axios.interceptors.request.use(config => {
   return config
 }, error => {
   NProgress.done();
-  Message.warning($i.hintMessage.requestException);
+  Message({
+    message: $i.hintMessage.requestException,
+    dangerouslyUseHTMLString: true,
+    showClose: true,
+    type: 'warning'
+  });
+  // Message.warning();
   Promise.reject(error);
 });
 

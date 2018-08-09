@@ -12,7 +12,7 @@
   "qualifiedSkuNetWeight": "Total N.W. of Qualified SKU(kg)",
   "qualifiedSkuGrossWeight": "Total G.W. of Qualified SKU(kg)",
   "unqualifiedSkuQty": "Unqualified Products Total QTY",
-  "unqualifiedSkuCartonTotalQty": "Unqualified Products Total QTY",
+  "unqualifiedSkuCartonTotalQty": "Unqualified Products Total CTNS",
   "unqualifiedSkuNetWeight": "Total N.W. of Unqualified SKU(kg)",
   "unqualifiedSkuVolume": "Total Volume of Unqualified SKU(m³)",
   "unqualifiedSkuGrossWeight": "Total G.W. of Unqualified SKU(kg)",

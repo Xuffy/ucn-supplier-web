@@ -102,8 +102,10 @@
                 @node-drop="roleDrop"
                 :expand-on-click-node="false"
                 :filter-node-method="filterRole"
+                @node-click="roleNodeClick"
                 @check="roleCheckClick">
-                <div class="custom-tree-node" slot-scope="{ node, data }">
+                <div class="custom-tree-node" slot-scope="{ node, data }"
+                     :class="{isAction:node.data.roleId === selectRole}">
                   <div v-if="!data.children">
                     <span class="name-title" v-text="node.label + '(' + data.roleUserCount + ')'"></span>
                     <div class="action">
@@ -133,7 +135,7 @@
             <div class="handler">
               <el-row>
                 <el-col :span="8">
-                  <el-button :disabled="checkedRole.length !== 1" @click="savePrivilege" size="small"
+                  <el-button :disabled="!selectRole" @click="savePrivilege" size="small"
                              type="primary">{{$i.setting.save}}
                   </el-button>
                 </el-col>
@@ -244,7 +246,7 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-            <el-form-item :label="$i.setting.userName" :label-width="formLabelWidth" required>
+            <el-form-item :label="$i.setting.userName" :label-width="formLabelWidth">
               <el-input
                 class="speInput"
                 v-model="addUser.userName"
@@ -253,7 +255,7 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-            <el-form-item :label="$i.setting.lang" :label-width="formLabelWidth" required>
+            <el-form-item :label="$i.setting.lang" :label-width="formLabelWidth">
               <el-select class="speInput" v-model="addUser.lang" :placeholder="$i.setting.pleaseChoose">
                 <el-option
                   v-for="item in languageOption"
@@ -265,13 +267,13 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-            <el-form-item :label="$i.setting.tel" :label-width="formLabelWidth" required>
+            <el-form-item :label="$i.setting.tel" :label-width="formLabelWidth">
               <el-input class="speInput" v-model="addUser.tel" auto-complete="off"
                         :placeholder="$i.setting.pleaseInput"></el-input>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-            <el-form-item :label="$i.setting.gender" :label-width="formLabelWidth" required>
+            <el-form-item :label="$i.setting.gender" :label-width="formLabelWidth">
               <el-select class="speInput" v-model="addUser.gender" :placeholder="$i.setting.pleaseChoose">
                 <el-option
                   v-for="item in genderOption"
@@ -398,6 +400,7 @@
         searchDepartment: '',            //搜索的部门名称
         searchRole: '',                  //搜索的role名称
         searchPrivilege: '',                //搜索的priv的名称
+        selectRole: null,
         userData: {
           email: '',
           userName: '',
@@ -445,6 +448,12 @@
       searchPrivilege(val) {
         this.$refs.privilegeTree.filter(val);
       },
+      selectRole(val) {
+        if (!val) {
+          this.privilegeData = this.$options.data().privilegeData;
+        }
+        this.getPrivilege();
+      }
     },
     methods: {
       ...mapActions(['setMenuLink']),
@@ -530,17 +539,21 @@
         this.userData.deptId = data.deptId;
         this.roleData = this.$depthClone(data.deptRoles || []);
         this.searchRole = '';
+        this.selectRole = null;
         this.$nextTick(() => {
           this.$refs.roleTree.setCheckedNodes(checked || this.roleData);
           this.roleCheckClick();
         });
+      },
+      roleNodeClick(data) {
+        this.selectRole = data.roleId;
       },
       roleCheckClick() {
         this.checkedRole = _.compact(this.$refs.roleTree.getCheckedKeys(true));
         // 更新部门信息
         this.getDepartmentUser();
         // 显示权限列表
-        this.getPrivilege();
+        // this.getPrivilege();
       },
       addDepartment(item) {
         this.$prompt(this.$i.setting.pleaseInputDepartment,
@@ -797,7 +810,7 @@
         });
 
         params.deptId = this.userData.deptId;
-        params.roleId = this.checkedRole[0];
+        params.roleId = this.selectRole;
 
         this.$ajax.post(this.$apis.ROLE_PRIVILEGE, {datas: [params]})
           .then(res => {
@@ -807,14 +820,10 @@
           .finally(() => this.loadingPrivilege = false);
       },
       getPrivilege() {
-        if (this.checkedRole.length !== 1) {
-          this.privilegeData = this.$options.data().privilegeData;
-          return false;
-        }
-
+        this.userData.deptId && this.selectRole &&
         this.$ajax.post(this.$apis.PRIVILEGE_PRIVILEGE_SELECT, {
           deptId: this.userData.deptId,
-          roleId: this.checkedRole[0]
+          roleId: this.selectRole
         }).then(res => {
           this.$ajax.all([
             this.getPrivilegeResource(),
@@ -956,8 +965,9 @@
     padding-left: 20px;
   }
 
+  .speTree /deep/ .isAction,
   .departmentTree /deep/ .isAction {
-    background-color: #f5f7fa;
+    color: #037dfb;
   }
 
   /deep/ .custom-tree-node {

@@ -8,28 +8,15 @@ export default {
   },
   userName: {
     key: 'userName',
-    _rules: {
-      required: true
-    }
   },
   lang: {
     key: 'lang',
-    _rules: {
-      required: true
-    }
   },
   tel: {
     key: 'tel',
-    _rules: {
-      type: 'Number',
-      required: true
-    }
   },
   gender: {
     key: 'gender',
-    _rules: {
-      required: true
-    }
   },
   department: {
     key: 'deptId',
