@@ -15,11 +15,10 @@ export default {
     key: 'skuQty',
   },
   quantityOfCarton: {
-    key: 'updateDt',
-    type: "textDate"
+    key: '',    //产品箱数  春春说这几个值需要计算，需要延后
   },
   totalNetWeight: {
-    key: '', //  产品总净重   春春说这几个值需要计算，需要延后
+    key: '', //  产品总净重
   },
   totalRoughWeight: {
     key: '',  //  产品总毛重
@@ -28,9 +27,9 @@ export default {
     key: '', //  产品总体积
   },
   status: {
-    key:''
+    key:'status'   //询价状态
   },
   relatedOrderNO: {
-    key: ''
+    key: ''       //关联订单号
   }
 }
