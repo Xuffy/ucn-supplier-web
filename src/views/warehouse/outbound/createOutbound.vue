@@ -517,7 +517,7 @@
                     }).then(res => {
                         let arr = []
                         res.datas.forEach(v => {
-                            v.outboundOutCartonTotalQty = 0;
+                            v.outboundOutCartonTotalQty = "";
                             v.outboundSkuTotalGrossWeight = 0;
                             v.outboundSkuTotalNetWeight = 0;
                             v.outboundSkuTotalQty = 0;
@@ -534,9 +534,9 @@
                             obj.warehouseNo = v.inboundVo.warehouseNo;
                             obj.warehouseName = v.inboundVo.warehouseName;
                             obj.inboundDate = v.inboundVo.inboundDate;
-                            obj.inventorySkuPrice = 0;
-                            obj.inventoryDays = 0;
-                            obj.inventoryServiceFee = 0;
+                            obj.inventorySkuPrice = '';
+                            obj.inventoryDays = '';
+                            obj.inventoryServiceFee = '';
                             arr.push(Object.assign(obj, v))
                         });
                         this.loadingProductTable = false;
