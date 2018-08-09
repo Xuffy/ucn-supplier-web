@@ -28,7 +28,7 @@
   "skuNameCustomer": "SKU 客户语言名称",
   "skuCustomerSkuCode": "客户货号",
   "skuCode": "供应商货号",
-  "skuSupplierName": "SKU供应商品名",
+  "skuSupplierName": "供应商名称",
   "skuFobCurrency": "FOB 货币",
   "skuFobPrice": "FOB 单价",
   "skuFobPort": "FOB 港口",
