@@ -131,7 +131,11 @@
         return _.map(data, val => {
           return _.mapObject(val, v => {
             if (_.isObject(v)) {
-              v._hidden = checkList.indexOf(v._filed || v.key) === -1;
+                if(v.mustShowColumn){
+                    v._hidden=false;
+                }else{
+                    v._hidden = checkList.indexOf(v._filed || v.key) === -1;
+                }
             }
             return v;
           });

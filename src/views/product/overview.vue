@@ -8,7 +8,7 @@
                 :pageData="pageData"
                 :tableButtons="[{label: $i.product.detailBig, type: 1}]"
                 :loadingTable="loadingTable"
-                tableCode="udata_purchase_sku_overview"
+                tableCode="udata_supply_sku_overview"
                 @search="getData"
                 @tableBtnClick="btnClick"
                 @change-sort="val=>{getData(val)}"

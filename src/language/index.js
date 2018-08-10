@@ -44,7 +44,6 @@ const json = {
     require(`./${lang}/message/tabs`)
   ),
   order: _.extend({},
-    require(`./${lang}/order/basicinfo.pending`),
     require(`./${lang}/order/overview`),
     require(`./${lang}/order/payment`),
 

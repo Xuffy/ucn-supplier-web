@@ -6,15 +6,15 @@
       <el-form label-width="300px" label-position="right" class="form" >
         <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
           
-          <el-form-item v-if="!edit&&!($route.name =='logisticDraftDetail' && a.key =='logisticsStatus')" :label="a.label+'：'">
+          <el-form-item v-if="!isShow" :label="a.label+'：'">
             <p class="textFilter" :style="fieldDisplay&&fieldDisplay.hasOwnProperty(a.key) ? definedStyle : ''">{{ textFilter(a) }}</p>
           </el-form-item>
-          <div v-else>
+          <div v-if="isShow">
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'input'">
               <el-input maxlength="500" :placeholder="$i.logistic.placeholder" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" v-model="a.value" :disabled="a.disabled" @change="selectChange(a.value,a.key)"/>
             </el-form-item>
             
-            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'selector'&&!($route.name =='logisticDraftDetail' && a.key =='logisticsStatus')">
+            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'selector'">
               <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.placeholder" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
                 <el-option :disabled="item.disabled" :label="a.key=='exchangeCurrency' ? item.code : item.name" :value="isNaN(item.code) ? item.code : Number(item.code)" v-for="item of selectArr[a.key]" :key="item.id"/>
               </el-select>
@@ -40,6 +40,7 @@
   export default {
     props: {
       DeliveredEdit:[Boolean,String],
+      beShipper:[Boolean,String,Number],
       name:String,
       definedStyle:{
         type:Object,
@@ -76,6 +77,7 @@
     },
     data() {
       return {
+        isShow:false,
         paymentList: [],
         hightLightModify:{},
         pickerOptions: {
@@ -125,6 +127,23 @@
           return obj ? obj.name : null
         }
       } 
+    },
+    watch:{
+      edit(v){
+        if(v){
+          if(this.beShipper==1){
+            if(this.$route.name=='loadingListDetail'){
+              this.isShow = false;
+            }else{
+              this.isShow = true;
+            }
+          }else{
+            this.isShow = false;
+          }
+        }else{
+          this.isShow = false;
+        }
+      }
     }
   }
 

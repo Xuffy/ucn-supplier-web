@@ -32,5 +32,7 @@ export default {
         key:'skuQty'
     },
     customerAbbr:{},
-    supplierAbbr:{}
+    supplierAbbr:{
+        mustShowColumn:true
+    }
 }

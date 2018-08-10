@@ -6,31 +6,31 @@
         :summary-method="summaryMethod"
         @selection-change="handleSelectionChange" 
         :row-class-name="tableRowClassName">
-        <!-- <el-table-column type="selection" width="100" align="center" class-name="checkbox-no-margin" v-if="edit"/> -->
+        <!-- <el-table-column type="selection" width="100" align="center" class-name="checkbox-no-margin" v-if="isShow"/> -->
         <el-table-column type="index" width="100" align="center"/>
         <el-table-column :label="$i.logistic.containerNo" width="140" align="center" prop='{"key":"containerNo","total":false}'>
           <template slot-scope="scope">
-            <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.containerNo" v-if="edit" @change="ContainerInfoLight('containerNo',scope.row.containerNo,scope.$index,scope)"></el-input>
+            <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.containerNo" v-if="isShow" @change="ContainerInfoLight('containerNo',scope.row.containerNo,scope.$index,scope)"></el-input>
             <span v-else>{{ scope.row.containerNo }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.sealNo" width="120" align="center" prop='{"key":"sealNo","total":false}'>
           <template slot-scope="scope">
-            <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.sealNo" v-if="edit" @change="ContainerInfoLight('sealNo',scope.row.sealNo,scope.$index,scope)"></el-input>
+            <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.sealNo" v-if="isShow" @change="ContainerInfoLight('sealNo',scope.row.sealNo,scope.$index,scope)"></el-input>
             <span v-else>{{ scope.row.sealNo }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.containerWeight" width="140" prop='{"key":"containerWeight","total":true}' align="center">
+        <el-table-column :label="$i.logistic.containerWeight" width="150" prop='{"key":"containerWeight","total":true}' align="center">
           <template slot-scope="scope">
             <v-input-number
               v-model="scope.row.containerWeight"
               :min="0"
               :controls="false"
-              :accuracy="4"
+              :accuracy="2"
               :mark="$i.logistic.containerWeight"
               :placeholder="$i.logistic.placeholder"
               @change="ContainerInfoLight('containerWeight',scope.row.containerWeight,scope.$index,scope)"
-              v-if="edit"></v-input-number>
+              v-if="isShow"></v-input-number>
             <span v-else>{{ scope.row.containerWeight }}</span>
           </template>
         </el-table-column>
@@ -66,19 +66,19 @@
         </el-table-column>
         <el-table-column :label="$i.logistic.USD" width="100" prop='{"key":"USD","total":true}' align="center">
           <template slot-scope="scope">
-            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input> -->
+            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="isShow"></el-input> -->
             <span>{{ scope.row.USD }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.CNY" width="100" prop='{"key":"CNY","total":true}' align="center">
           <template slot-scope="scope">
-            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input> -->
+            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="isShow"></el-input> -->
             <span>{{ scope.row.CNY }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.EUR" width="100" prop='{"key":"EUR","total":true}' align="center">
           <template slot-scope="scope">
-            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input> -->
+            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="isShow"></el-input> -->
             <span>{{ scope.row.EUR }}</span>
           </template>
         </el-table-column>
@@ -94,6 +94,7 @@ export default {
   },
   props: {
     currencyCode:[String,Number],
+    beShipper:[String,Number,Boolean],
     ExchangeRateInfoArr:[Array,Object],
     edit: {
       type: Boolean,
@@ -120,6 +121,7 @@ export default {
   },
   data () {
     return {
+      isShow:false,
       containerNo: '',
       containerSelect: ''
     }
@@ -228,6 +230,23 @@ export default {
 
         return sums;
     },
+  },
+  watch:{
+    edit(v){
+      if(v){
+        if(this.beShipper==1){
+          if(this.$route.name=='loadingListDetail'){
+            this.isShow = false;
+          }else{
+            this.isShow = true;
+          }
+        }else{
+          this.isShow = false;
+        }
+      }else{
+        this.isShow = false;
+      }
+    }
   }
 }
 </script>

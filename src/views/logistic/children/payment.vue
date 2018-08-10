@@ -2,7 +2,7 @@
   <div class="payment">
     <!-- <el-button type="primary" size="mini" @click.stop="$emit('addPayment')">{{ $i.logistic.applyForPayment }}</el-button> -->
     <el-table ref="table" :row-class-name="tableRowClassName" :data="tableData" border style="width: 100%; margin-top: 20px" show-summary :summary-method="summaryMethod">
-      <el-table-column type="index" width="50" align="center"/>
+      <el-table-column type="index" width="100" align="center"/>
       <el-table-column :label="$i.logistic.paymentNo" align="center" width="140">
         <template slot-scope="scope">
           <span>{{ scope.row.no }}</span>
@@ -90,7 +90,7 @@
       <el-table-column :label="$i.logistic.operation" align="center" width="200" fixed="right">
         <template slot-scope="scope">
           <div>
-            <el-button v-authorize="auth[pageTypeCurr]&&auth[pageTypeCurr].CONFIRM_PAYMENT||''" :disabled="scope.row.status==40||scope.row.status==-1" size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.logistics_accept_payment,$i.logistic.confirm)">{{ $i.logistic.confirm }}</el-button>
+            <el-button v-authorize="auth[pageTypeCurr]&&auth[pageTypeCurr].CONFIRM_PAYMENT||''" :disabled="scope.row.status==40||scope.row.status==-1||dunningDisabled" size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.logistics_accept_payment,$i.logistic.confirm)">{{ $i.logistic.confirm }}</el-button>
           </div>
         </template>
       </el-table-column>
@@ -116,6 +116,7 @@ export default {
       type: Object,
       default: () => {}
     },
+    beShipper: [Boolean,Number],
     edit: {
       type: Boolean,
       default: false
@@ -123,6 +124,7 @@ export default {
   },
   data () {
     return {
+      isShow:false,
       copyPaymentObj: {},
       paymentDec: [
         {
@@ -185,6 +187,19 @@ export default {
     }
   },
   computed:{
+    dunningDisabled(){
+      let flag = false;
+      if(this.beShipper==1){
+        if(this.$route.name=='loadingListDetail'){
+          flag = true;
+        }else{
+          flag = false;  
+        }
+      }else{
+        flag = true;
+      }
+      return flag;
+    },
     restaurants(){
       return this.selectArr.supplier;
     },
