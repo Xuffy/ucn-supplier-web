@@ -9,6 +9,13 @@ export default {
     supplierOrderNo:{
         mustShowColumn:true
     },
+    skuPictures:{
+        mustShowColumn:true,
+        _image:true,
+        _upload: {
+            readonly:true,
+        }
+    },
     skuCustomerSkuCode:{},
     skuCode:{},
     skuSupplierName:{},
@@ -23,8 +30,12 @@ export default {
     skuOuterCartonQty:{
         mustShowColumn:true
     },
-    skuUndeliveredQty:{},
-    skuUntestedQty:{},
+    skuUndeliveredQty:{
+        mustShowColumn:true
+    },
+    skuUntestedQty:{
+        mustShowColumn:true
+    },
     skuMaterialCn:{},
     skuMaterialEn:{},
     skuMethodPkgCn:{
