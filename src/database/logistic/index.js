@@ -9,10 +9,10 @@ import {
   transportInfoObj,
   ExchangeRateInfo,
   payMentInfo,
-  dbBasicInfoObj,
   addProductFromOrderFilter,
   dbProductInfo,
   dbcontainerInfo,
+  LLBasicInfoObj,
   validateShipperObj
 } from './plan/staticData'
 import sku from './plan/sku'
@@ -33,9 +33,9 @@ export default {
   transportInfoObj,
   ExchangeRateInfo,
   payMentInfo,
-  dbBasicInfoObj,
   dbProductInfo,
   dbcontainerInfo,
+  LLBasicInfoObj,
   addProductFromOrderFilter,
   validateShipperObj
 }

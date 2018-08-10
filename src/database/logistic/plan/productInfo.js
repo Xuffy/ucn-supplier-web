@@ -23,14 +23,14 @@ export default {
     typeSlef: 'text',
     _hide: true
   },
-  "skuSupplierName": {
+  "skuSupplierAbbr": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text',
     _hide: true
   },
   "entryDt": {
-    type: 'Date',
+    type: 'String',
     _disabled: true,
     typeSlef: 'text',
     _hide: true
@@ -181,8 +181,11 @@ export default {
     typeSlef: 'text'
   },
   "containerNo": {
-    type: 'String',
-    _disabled: true,
+    type: 'Select',
+    correlationKey:"containerType",
+    _optionLabel:'containerNo',
+    _optionValue:'containerNo',
+    _option:[],
     typeSlef: 'text'
   },
   "containerId": {
@@ -198,14 +201,15 @@ export default {
   },
   "totalContainerGrossWeight": {
     type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
+    _toFixed:2,
+    typeSlef: 'text',
+    _important: true
   },
   "totalQuantityInContainer": {
     key: 'totalContainerQty',
     _filed: 'totalContainerQty',
+    _toFixed:1,
     type: 'String',
-    _disabled: true,
     typeSlef: 'text',
     _important: true
   },
@@ -213,7 +217,7 @@ export default {
     key: 'totalContainerVolume',
     _filed: 'totalContainerVolume',
     type: 'String',
-    _disabled: true,
+    _toFixed:3,
     typeSlef: 'text',
     _important: true
   },
@@ -221,7 +225,7 @@ export default {
     key: 'totalContainerNetWeight',
     _filed: 'totalContainerNetWeight',
     type: 'String',
-    _disabled: true,
+    _toFixed:2,
     typeSlef: 'text',
     _important: true
   },
@@ -229,7 +233,7 @@ export default {
     key: 'totalContainerOuterCartonsQty',
     _filed: 'totalContainerOuterCartonsQty',
     type: 'String',
-    _disabled: true,
+    _toFixed:1,
     typeSlef: 'text',
     _important: true
   },

@@ -163,7 +163,7 @@
                 :title="$i.warehouse.addProduct"
                 :visible.sync="addOrderDialogVisible"
                 width="70%">
-            <el-form :modal="orderProduct" ref="orderProduct" label-width="200px" :label-position="labelPosition">
+            <el-form :modal="orderProduct" ref="orderProduct" label-width="95px" :label-position="labelPosition">
                 <el-row>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="orderNo" :label="$i.warehouse.orderNo">
@@ -183,12 +183,12 @@
                                       v-model="orderProduct.skuNameCn"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                    <!-- <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="skuBarCode" :label="$i.warehouse.skuBarCode">
                             <el-input :placeholder="$i.warehouse.pleaseInput" size="mini" class="speInput"
                                       v-model="orderProduct.skuBarCode"></el-input>
                         </el-form-item>
-                    </el-col>
+                    </el-col> -->
                 </el-row>
             </el-form>
             <div class="search-btn">
@@ -337,7 +337,12 @@
                             label: v
                         });
                     });
-                    this.tableDataList = this.$getDB(this.$db.warehouse.inboundOrderTable, res.datas);
+                    let arr = []
+                    _.each(res.datas, v => {
+                        v.customerSkuCode = v.skuCustomerSkuCode
+                        arr.push(v)
+                    })
+                    this.tableDataList = this.$getDB(this.$db.warehouse.inboundOrderTable, arr);
                     /**
                      * 每次打开弹窗时进行置灰判断
                      * */
@@ -346,7 +351,7 @@
                             this.$set(v, "_disabled", true);
                         } else {
                             this.productData.forEach(m => {
-                                if (v.skuId.value === m.skuId && m.orderNo === v.orderNo.value) {
+                                if (v.skuId.value === m.skuId.value && m.orderNo.value === v.orderNo.value) {
                                     this.$set(v, "_disabled", true);
                                     this.$set(v, "_checked", true);
                                 }
@@ -439,7 +444,7 @@
             getSummaries(param) {
                 const { columns, data } = param;
                 let obj = {};
-                let keys = [, "inboundSkuTotalQty", "inboundOutCartonTotalQty", "inboundSkuTotalVolume", "inboundSkuTotalNetWeight", "inboundSkuTotalGrossWeight"];
+                let keys = ["inboundSkuTotalQty", "inboundOutCartonTotalQty", "inboundSkuTotalVolume", "inboundSkuTotalNetWeight", "inboundSkuTotalGrossWeight"];
                 _.map(keys, val => {
                     let a = _.pluck(_.pluck(data, val), "value");
                     obj[val] = _.reduce(_.compact(a), (memo, num) => Number(memo) + Number(num), 0);
