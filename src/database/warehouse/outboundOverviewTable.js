@@ -7,7 +7,9 @@ export default {
     outboundTypeDictCode:{},
     outboundDate:{},
     outboundOperator:{},
-    // outboundSkuTotalQty:{},
+    lcOutboundSkuTotalQty:{
+        key: 'outboundSkuTotalQty'
+    },
     remark:{},
     updateName:{},
     updateDt:{},
