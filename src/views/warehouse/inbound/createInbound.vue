@@ -163,7 +163,7 @@
                 :title="$i.warehouse.addProduct"
                 :visible.sync="addOrderDialogVisible"
                 width="70%">
-            <el-form :modal="orderProduct" ref="orderProduct" label-width="200px" :label-position="labelPosition">
+            <el-form :modal="orderProduct" ref="orderProduct" label-width="100px" :label-position="labelPosition">
                 <el-row>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="orderNo" :label="$i.warehouse.orderNo">
@@ -439,7 +439,7 @@
             getSummaries(param) {
                 const { columns, data } = param;
                 let obj = {};
-                let keys = [, "inboundSkuTotalQty", "inboundOutCartonTotalQty", "inboundSkuTotalVolume", "inboundSkuTotalNetWeight", "inboundSkuTotalGrossWeight"];
+                let keys = ["inboundSkuTotalQty", "inboundOutCartonTotalQty", "inboundSkuTotalVolume", "inboundSkuTotalNetWeight", "inboundSkuTotalGrossWeight"];
                 _.map(keys, val => {
                     let a = _.pluck(_.pluck(data, val), "value");
                     obj[val] = _.reduce(_.compact(a), (memo, num) => Number(memo) + Number(num), 0);
