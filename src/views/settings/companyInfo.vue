@@ -524,6 +524,7 @@
                     payment: '',
                     shortName: "",
                     version:'',
+                    type:''
                 },
                 accountsData:[],
                 contactDatas:[],
@@ -729,7 +730,8 @@
                     name: this.companyInfo.name,
                     payment: this.companyInfo.payment,
                     shortName: this.companyInfo.shortName,
-                    version: this.companyInfo.version
+                    version: this.companyInfo.version,
+                    type: Number(this.companyInfo.type)
                 };
                 this.allowModifySummary=true;
                 this.$ajax.post(`${this.$apis.post_supplierWhile}/${this.companyInfo.id}`,params).then(res=>{

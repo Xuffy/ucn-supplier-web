@@ -7,7 +7,8 @@ import compareView from './compareView';
 import compareDetail from './compareDetail';
 import inquiryHistory from './inquiryHistory';
 import supplierConcats from './supplierConcats';
-import orderHistory from './orderHistory'
+import orderHistory from './orderHistory';
+import accounts from  './accounts';
 export default {
     overview,
     overviewtable,
@@ -18,5 +19,6 @@ export default {
     compareDetail,
     inquiryHistory,
     supplierConcats,
-    orderHistory
+    orderHistory,
+    accounts
 }
