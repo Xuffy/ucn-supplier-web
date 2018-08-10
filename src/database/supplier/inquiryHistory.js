@@ -15,21 +15,21 @@ export default {
     key: 'skuQty',
   },
   quantityOfCarton: {
-    key: '',    //产品箱数  春春说这几个值需要计算，需要延后
+    key: 'totalCtn',                //产品箱数
   },
   totalNetWeight: {
-    key: '', //  产品总净重
+    key: 'totalNetWeight',          //产品总净重
   },
   totalRoughWeight: {
-    key: '',  //  产品总毛重
+    key: 'totalGrossWeight',        //产品总毛重
   },
   totalVolum: {
-    key: '', //  产品总体积
+    key: 'totalVolume',             //产品总体积
   },
   status: {
-    key:'status'   //询价状态
+    key:'status'                    //询价状态
   },
   relatedOrderNO: {
-    key: ''       //关联订单号
+    key: 'orderNo'                  //关联订单号
   }
 }
