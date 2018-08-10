@@ -4,7 +4,7 @@
   "customerShortName": "客户简称",
   "customerType": "客户类型",
   "provideIncoterm": "可提供价格条款",
-  "exportLicense": "是否有进出口权",
+  "exportLicense": "出口资质",
   "currency": "货币",
   "paymentTerm": "付款方式",
   "shipAgent": "船代公司",
@@ -83,5 +83,17 @@
   "numberLetter": "简称仅可使用字母和数字",
   "shortNameLength": "简称不可超出6位",
   "abbreviationOnly" : "此简称已被使用",
-  "abbreviationAllowed": "简称不可出现 I O Z字母"
+  "abbreviationAllowed": "简称不可出现 I O Z字母",
+  "shipper": "发货人",
+  "factoryCountry": "工厂国家",
+  "factoryProvince": "工厂省份",
+  "factorycity": "工厂城市",
+  "isDefaultAddress": "是",
+  "beneficiaryBankAddress": "收款银行地址",
+  "intermediaryBankName": "中间行名称",
+  "intermBankAddress": "中间行地址",
+  "intermBankSWIFTCode": "中间行代码",
+  "destinationPort": "目的港",
+  "consignee": "收货人",
+  "notify": "通知人"
 }

@@ -879,7 +879,6 @@
                   });
                 }
               }).catch(() => {
-                console.log(this.addressData.def)
                 if (this.addressData.def){
                   this.addressData.def = false;
                   this.$message({
@@ -1148,11 +1147,12 @@
                 shortName: this.companyInfo.shortName
               }).then(res=>{
                 if (res){
-                  this.showNameBox = false;
                   this.$message({
                     message: this.$i.setting.abbreviationOnly,
                     type: 'warning'
                   });
+                }else{
+                  this.showNameBox = false;
                 }
               })
             }

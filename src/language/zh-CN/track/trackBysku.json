@@ -18,12 +18,12 @@
   "quantity": "数量",
   "outerCartonQuant ity": "外箱数",
   "skuQuantityOfInnerCarton": "中包产品数",
-  "packingMethodEn": "产品包装方式 (EN)",
+  "packingMethodEn": "产品包装方式",
   "packingMethodCn": "产品包装方式 (CN)",
-  "packingMethodOfInnerCartonEn": "中包包装方式EN",
+  "packingMethodOfInnerCartonEn": "中包包装方式",
   "packingMethodOfInnerCartonCn": "中包包装方式CN",
   "packingMethodOfOuterCartonCn": "外包装方式CN",
-  "packingMethodOfOuterCartonEn": "外包装方式EN",
+  "packingMethodOfOuterCartonEn": "外包装方式",
   "unitOfWeight": "重量单位",
   "unitOfLength": "长度单位",
   "unitOfVolume": "体积单位",
@@ -114,5 +114,10 @@
   "emailOfBuyer": "采购商联系人邮箱",
   "phoneOfBuyer": "采购商联系人电话",
   "emailOfSeller": "供应商联系人邮箱",
-  "phoneOfSeller": "供应商联系人电话"
+  "phoneOfSeller": "供应商联系人电话",
+  "orderId": "orderId",
+  "logisticsId": "logisticsId",
+  "qcId": "qcId",
+  "supplierAbbr": "供应商简称",
+  "customerAbbr": "采购商简称"
 }
