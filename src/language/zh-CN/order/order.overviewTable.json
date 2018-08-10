@@ -25,7 +25,7 @@
   "paidAmount": "已付金额",
   "unpaidAmount": "未付款金额",
   "inboundQty": "入库数量",
-  "deliveredQty": "已发货数量",
+  "deliveredQty": "发运数量",
   "updateDt": "修改日期",
   "quotationNo": "报价单号",
   "totalQty": "订单产品数",
@@ -33,7 +33,7 @@
   "totalGrossWeight": "订单总毛重(kg)",
   "totalNetWeight": "订单总净重(kg)",
   "totalVolume": "订单总体积(m³)",
-  "skuQty": "SKU 款式数",
+  "skuQty": "数量",
   "skuCartonQty":"产品箱数",
   "paymentTerm":"付款方式"
 }

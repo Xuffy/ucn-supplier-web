@@ -3,8 +3,12 @@ export default {
         _hide:true,
     },
     orderNo:{},
-    customerOrderNo:{},
-    supplierOrderNo:{},
+    customerOrderNo:{
+        mustShowColumn:true
+    },
+    supplierOrderNo:{
+        mustShowColumn:true
+    },
     skuCustomerSkuCode:{},
     skuCode:{},
     skuSupplierName:{},
@@ -16,14 +20,22 @@ export default {
     skuRemarkTwo:{},        //??
     skuRemarkThree:{},      //??
     skuUnit:{},
-    skuOuterCartonQty:{},
+    skuOuterCartonQty:{
+        mustShowColumn:true
+    },
     skuUndeliveredQty:{},
     skuUntestedQty:{},
     skuMaterialCn:{},
     skuMaterialEn:{},
-    skuMethodPkgCn:{},
-    skuMethodPkgEn:{},
-    skuCartonQty:{},
+    skuMethodPkgCn:{
+        mustShowColumn:true
+    },
+    skuMethodPkgEn:{
+        mustShowColumn:true
+    },
+    skuCartonQty:{
+        mustShowColumn:true
+    },
     skuFobCurrency:{},
     skuFobPrice:{},
     skuFobPort:{},
@@ -39,12 +51,16 @@ export default {
         key:'skuIncoterm'
     },
     skuQty:{},
-    skuInnerCartonQty:{},
+    skuInnerCartonQty:{
+        mustShowColumn:true
+    },
     skuPrice:{},
     entryDt:{},
     deliveryDt:{},
     skuDeliveredQty:{},
     skuStatus:{},
     updateDt:{},
-    supplierAbbr:{},
+    supplierAbbr:{
+        mustShowColumn:true
+    },
 }

@@ -33,7 +33,7 @@
   "totalGrossWeight": "Order G.W.(kg)",
   "totalNetWeight": "Order N.W.(kg)",
   "totalVolume": "Order CBM(m³)",
-  "skuQty": "SKU QTY",
-  "skuCartonQty":"SKU Carton Qty",
+  "skuQty": "QTY",
+  "skuCartonQty":"CTN QTY",
   "paymentTerm":"Payment term"
 }

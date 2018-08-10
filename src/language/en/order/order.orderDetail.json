@@ -111,7 +111,7 @@
   "skuComments": "Comments",
   "skuStatus": "SKU Status",
   "skuSaleStatus": "SKU Sales Status",
-  "skuLabel": "SKU Label",
+  "skuLabel": "Product Label",
   "skuBarCode": "SKU Bar-Code",
   "skuInnerPackBarCode": "Inner Packing Bar-Code",
   "skuInnerPackLabel": "Inner Packing Marks",
@@ -120,7 +120,7 @@
   "skuOuterCartonBarCode": "CTN Bar-Code",
   "skuOuterCartonCode": "Outer Carton SKU Code",
   "skuLabelPic": "SKU Label Pic",
-  "skuLabelDesc": "SKU Label Description",
+  "skuLabelDesc": "Product Label Description",
   "skuPkgMethodPic": "Packing Method Pic",
   "skuInnerCartonPic": "Inner Packing Pic",
   "skuOuterCartonPic": "Outer Packing Pic",
@@ -144,7 +144,6 @@
   "EURUSD": "exchange rate(€--$)",
   "skuCategoryId": "Category",
   "totalQty": "Total QTY",
-  "skuQtys": "SKU QTY",
   "totalSkuPrice": "Total SKU Price",
   "totalOuterCartonQty": "Order CTN QTY",
   "totalGrossWeight": "Order G.W.(kg)",
@@ -156,6 +155,6 @@
   "orderTotalGrossWeight":"Order Total Gross Weight(kg)",
   "orderTotalVolume":"Order Total Volume(m³)",
   "inquiryNo":"Inquiry No",
-  "skuLabelPics": "SKU Label Pics",
+  "skuLabelPics": "Product Label Pic",
   "skuNotes":"Instruction note"
 }

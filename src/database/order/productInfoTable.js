@@ -36,6 +36,12 @@ export default {
             readonly:true
         }
     },
+    skuNotes:{
+        mustShowColumn:true,
+        _upload:{
+            limit:20
+        }
+    },
     skuNameEn:{
         _disabled:true
     },
@@ -136,10 +142,9 @@ export default {
     skuCategoryName:{
         _hide:true
     },
-    // skuCategoryOne:{},
-    // skuCategoryTwo:{},
-    // skuCategoryThree:{},
-    // skuCategoryFour:{},
+    skuCartonQty:{
+        mustShowColumn:true
+    },
     skuCustomsCode:{
         _disabled:true
     },

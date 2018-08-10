@@ -34,7 +34,7 @@
   "totalOuterCartonQty": "订单总箱数",
   "totalNetWeight": "订单总净重(kg)",
   "totalVolume": "订单总体积(m³)",
-  "skuQty": "SKU款式数",
+  "skuQty": "数量",
   "customerSKUCode": "客户货号",
   "SKUBarCode": "产品条码",
   "SKUcode": "供应商货号",
