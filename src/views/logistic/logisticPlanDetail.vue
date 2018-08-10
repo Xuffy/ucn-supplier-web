@@ -3,16 +3,16 @@
     <div class="hd-top" v-if="pageTypeCurr=='logisticPlanDetail'">{{ $i.logistic.logisticPlan + ' ' + logisticsNo}}</div>
     <div class="hd-top" v-if="pageTypeCurr=='loadingListDetail'">{{ $i.logistic.loadingList + ' ' + logisticsNo}}</div>
     <form-list :DeliveredEdit="DeliveredEdit" name="BasicInfo" :fieldDisplay="fieldDisplay" :showHd="false" @selectChange="formListSelectChange"
-      @hightLightModifyFun="hightLightModifyFun" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"
+      @hightLightModifyFun="hightLightModifyFun" :edit="edit" :beShipper="beShipper" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"
     />
     <!-- shiper 有点特殊 单独放出来处理 -->
     <el-form label-width="300px" label-position="right" class="form">
-      <el-form-item :required="edit" :show-message="false" :label="$i.logistic.shipper+'：'">
+      <el-form-item :required="isShow" :show-message="false" :label="$i.logistic.shipper+'：'">
         <!-- 绑定对象时 用一个唯一value-key的值 去对应key -->
-        <el-select v-if="edit" value-key="id" v-model="shipperObj" :placeholder="$i.logistic.placeholder">
-          <el-option :label="item.name" :value="item" v-for="item of shipperArr" :key="item.id"/>
+        <el-select v-if="isShow" value-key="id" v-model="shipperObj" :placeholder="$i.logistic.placeholder">
+          <el-option :label="item.name" :value="item" v-for="item of shipperArr" :key="item.id" />
         </el-select>
-        <p v-else :style="fieldDisplay&&fieldDisplay.hasOwnProperty('skuSupplierName') ? {
+        <p v-if="!isShow" :style="fieldDisplay&&fieldDisplay.hasOwnProperty('skuSupplierAbbr') ? {
             'background': 'yellow',
             'padding':'5px'
           } : ''">{{ ShipperName }}</p>
@@ -23,7 +23,8 @@
       <div class="input-item">
         <span>{{ $i.logistic.remark }}:</span>
         <el-input @change="hightLightModifyFun({remark:remark},'remark')" :class="[{definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('remark')},'el-input']"
-          type="textarea" resize="none" :autosize="{ minRows: 3 }" :placeholder="$i.logistic.pleaseChoose" v-model="remark" v-if="edit"></el-input>
+          type="textarea" resize="none" :autosize="{ minRows: 3 }" :placeholder="$i.logistic.pleaseChoose" v-model="remark"
+          v-if="isShow"></el-input>
         <p v-else :style="fieldDisplay&&fieldDisplay.hasOwnProperty('remark') ? {
             'background': 'yellow',
             'padding':'5px'
@@ -32,73 +33,66 @@
       <!-- </el-col> -->
       <div class="input-item">
         <span>{{ $i.logistic.attachment }}:</span>
-        <attachment accept="all" ref="attachment" :readonly="attachmentReadonly" :list="attachmentList" :title="$i.logistic.attachment"
-          :limit="20" :edit="edit" />
+        <attachment accept="all" ref="attachment" :readonly="!isShow" :list="attachmentList" :title="$i.logistic.attachment"
+          :limit="20"/>
       </div>
     </el-row>
     <!-- <form-list :DeliveredEdit="DeliveredEdit" :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/> -->
     <form-list :DeliveredEdit="DeliveredEdit" name="TransportInfo" :fieldDisplay="fieldDisplay" @hightLightModifyFun="hightLightModifyFun"
-      :listData="transportInfoArr" :selectArr="selectArr" :edit="edit" :title="$i.logistic.transportInfoTitle" />
+      :listData="transportInfoArr" :selectArr="selectArr" :edit="edit" :beShipper="beShipper" :title="$i.logistic.transportInfoTitle" />
 
     <!-- 日期列表 -->
-    <dateInfo :listData="mediatorDate" :selectArr="selectArr" :basicInfoArr="basicInfoArr" :shipmentStatus="shipmentStatus" :edit="edit" :title="$i.logistic.dateInfo" @modifyTime="modifyTimeData" @shipmentStatus="changeShipmentStatus"></dateInfo>  
+    <dateInfo :beShipper="beShipper" :listData="mediatorDate" :selectArr="selectArr" :basicInfoArr="basicInfoArr" :shipmentStatus="shipmentStatus" :edit="edit"
+      :title="$i.logistic.dateInfo" @modifyTime="modifyTimeData" @shipmentStatus="changeShipmentStatus"></dateInfo>
 
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
-      <containerInfo :matchData="containerinfoMatch" :tableData="containerInfo" :currencyCode="oldPlanObject.currency" :ExchangeRateInfoArr="ExchangeRateInfoArr"
+      <containerInfo :beShipper="beShipper" :matchData="containerinfoMatch" :tableData="containerInfo" :currencyCode="oldPlanObject.currency" :ExchangeRateInfoArr="ExchangeRateInfoArr"
         @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit"
-        :containerType="selectArr.containerType" 
-        @ContainerInfoLight="ContainerInfoLight"></containerInfo>
+        :containerType="selectArr.containerType" @ContainerInfoLight="ContainerInfoLight"></containerInfo>
     </div>
 
     <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.feeInfoTitle }}</div>
-      <fee-info :edit="edit" :matchData="feeListMatch" :tableData.sync="feeList" :selectArr="selectArr" @feeInfoLight="feeInfoLight"></fee-info>
+      <fee-info :beShipper="beShipper" :edit="edit" :matchData="feeListMatch" :tableData.sync="feeList" :selectArr="selectArr" @feeInfoLight="feeInfoLight"></fee-info>
     </div>
 
     <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
       <div class="hd active">
-        <el-button v-authorize="auth[pageTypeCurr]&&auth[pageTypeCurr].PRESS_FOR_PAYMENT||''" type="primary" size="mini" :disabled="dunningDisabled" @click.stop="batchDunning">{{ batchDunningCutDown + $i.logistic.Dept }}</el-button>
+        <el-button v-authorize="auth[pageTypeCurr]&&auth[pageTypeCurr].PRESS_FOR_PAYMENT||''" type="primary" size="mini" :disabled="dunningDisabled"
+          @click.stop="batchDunning">{{ batchDunningCutDown + $i.logistic.Dept }}</el-button>
       </div>
-      <payment ref="payment" v-authorize="auth[pageTypeCurr]&&auth[pageTypeCurr].payment||''" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum"
-        @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView"
+      <payment ref="payment" :beShipper="beShipper" v-authorize="auth[pageTypeCurr]&&auth[pageTypeCurr].payment||''" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr"
+        :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView"
         :currencyCode="oldPlanObject.currency" />
     </div>
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
-      <v-table ref="productInfo" :code="configUrl[pageName]&&configUrl[pageName].setTheField" :totalRow="productListTotal" :data="productList" @action="action" :buttons="productbButtons"
-        @change-checked="selectProduct"
-        native-sort="vId"
-        @change-sort="$refs.productInfo.setSort(productList)">
+      <v-table ref="productInfo" :code="configUrl[pageName]&&configUrl[pageName].setTheField" :totalRow="productListTotal" :data="productList"
+        @action="action" :buttons="productbButtons" @change-checked="selectProduct" native-sort="vId" @change-sort="$refs.productInfo.setSort(productList)">
         <div slot="header" class="product-header">
           <el-button v-if="edit" type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
-          <el-button v-if="edit" v-authorize="auth[pageTypeCurr]&&auth[pageTypeCurr].PRODUCT_INFO_DELETE||''" type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
-          <label v-if="(edit||DeliveredEdit)&&pageTypeCurr=='loadingListDetail'">{{ $i.logistic.shipmentStatus}} :</label>
+          <el-button v-if="edit" v-authorize="auth[pageTypeCurr]&&auth[pageTypeCurr].PRODUCT_INFO_DELETE||''" type="danger" size="mini"
+            @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
+          <!-- <label v-if="(edit||DeliveredEdit)&&pageTypeCurr=='loadingListDetail'">{{ $i.logistic.shipmentStatus}} :</label> -->
           <!-- <el-select v-if="(edit||DeliveredEdit)&&pageTypeCurr=='loadingListDetail'" v-model="ShipmentStatusCode" placeholder="请选择"
             @change="ShipmentStatusChange">
             <el-option v-for="item in selectArr.shipmentStatus" :key="item.code" :label="item.name" :value="item.code">
             </el-option>
-          </el-select> 留着--> 
+          </el-select> 留着-->
         </div>
       </v-table>
     </div>
-    <el-dialog  width="70%" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false">
-      <overviewPage
-        :title="$i.logistic.addProductFromOrder"
-        :tableData="ProductFromOrder"
-        :form-column="$db.logistic.addProductFromOrderFilter"
-        :tableButtons="null"
-        @change-checked="changeChecked"
-        @tableBtnClick="ProductFromOrderDetail"
-        @search="getSupplierIds"
-        :tableCode="configUrl[pageName]&&configUrl[pageName].setTheField"
-        @change-sort="changeSort">
-        <v-pagination slot="pagination" :page-data="pageParams"/>
+    <el-dialog width="70%" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false">
+      <overviewPage :title="$i.logistic.addProductFromOrder" :tableData="ProductFromOrder" :form-column="$db.logistic.addProductFromOrderFilter"
+        :tableButtons="null" @change-checked="changeChecked" @tableBtnClick="ProductFromOrderDetail" @search="getSupplierIds"
+        :tableCode="configUrl[pageName]&&configUrl[pageName].setTheField" @change-sort="changeSort">
+        <v-pagination slot="pagination" :page-data="pageParams" />
         <div slot=footerBtn>
           <el-button @click="showAddProductDialog = false">{{ $i.logistic.cancel }}</el-button>
           <el-button type="primary" @click="closeAddProduct">{{ $i.logistic.confirm }}</el-button>
@@ -107,15 +101,10 @@
     </el-dialog>
     <messageBoard v-if="!isParams" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :beShipper="beShipper" :DeliveredEdit="DeliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus"
-      @sendData="sendData" :btnModifyTime="btnModifyTime" :basicInfoArr="basicInfoArr" :listData="mediatorDate" :selectArr="selectArr" :shipmentStatus="shipmentStatus" @shipmentStatus="changeShipmentStatus"/>
-    <v-history-modify 
-    :code="configUrl[pageName]&&configUrl[pageName].setTheField" 
-    ref="HM" disabled-remark 
-    :beforeSave="closeModify" 
-    @save="closeModifyNext" 
-    @select-change="historymodify"
-    @closed="$refs.productInfo.update()"
-    ></v-history-modify>
+      @sendData="sendData" :btnModifyTime="btnModifyTime" :basicInfoArr="basicInfoArr" :listData="mediatorDate" :selectArr="selectArr"
+      :shipmentStatus="shipmentStatus" @shipmentStatus="changeShipmentStatus" />
+    <v-history-modify :code="configUrl[pageName]&&configUrl[pageName].setTheField" ref="HM" disabled-remark :beforeSave="closeModify"
+      @save="closeModifyNext" @select-change="historymodify" @closed="$refs.productInfo.update()"></v-history-modify>
   </div>
 </template>
 <script>
@@ -143,8 +132,9 @@
     name: 'logisticPlanDetail',
     data() {
       return {
-        btnModifyTime:{},
-        shipmentStatus:0,
+        isShow:false,
+        btnModifyTime: {},
+        shipmentStatus: 0,
         planId: '',
         ShipmentStatusCode: '',
         pageParams: {
@@ -152,8 +142,7 @@
           ps: 10
         },
         DeliveredEdit: false,
-        beShipper: 0,
-        dunningDisabled: false,
+        beShipper: null,
         modefiyProductIndex: 0,
         modefiyProductIndexArr: [],
         selectProductArr: [],
@@ -188,7 +177,8 @@
         mediatorDate: [],
         containerinfoMatch: [],
         ProductFromOrderChecked: [],
-        shipperObj:{},
+        shipperArr: [],
+        shipperObj: {},
         paymentSum: {},
         selectArr: {
           containerType: [],
@@ -202,15 +192,15 @@
             }
           ]
         },
-        auth:{
+        auth: {
           logisticPlanDetail: {
-            payment:'LOGISTICS:PLAN_DETAIL:PAYMENT',
-            PRESS_FOR_PAYMENT:'LOGISTICS:PLAN_DETAIL:PRESS_FOR_PAYMENT',
-            PRODUCT_INFO_DELETE:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_DELETE'
+            payment: 'LOGISTICS:PLAN_DETAIL:PAYMENT',
+            PRESS_FOR_PAYMENT: 'LOGISTICS:PLAN_DETAIL:PRESS_FOR_PAYMENT',
+            PRODUCT_INFO_DELETE: 'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_DELETE'
           },
           loadingListDetail: {
-            PRESS_FOR_PAYMENT:'LLOADING_LIST:DETAIL:PRESS_FOR_PAYMENT',
-            payment:'LOADING_LIST:DETAIL:PAYMENT'
+            PRESS_FOR_PAYMENT: 'LLOADING_LIST:DETAIL:PRESS_FOR_PAYMENT',
+            payment: 'LOADING_LIST:DETAIL:PAYMENT'
           }
         },
         dictionaryPart: {
@@ -247,9 +237,10 @@
         prodFieldDisplay: {},
         batchDunningCutDown: '',
         CutDown: null,
-        ProductFromOrder:[],
-        ProductFromOrderRes:[],
-        initData:null
+        ProductFromOrder: [],
+        ProductFromOrderRes: [],
+        initData: null,
+        dunningDisabled:false
       }
     },
     components: {
@@ -267,33 +258,6 @@
       VPagination
     },
     computed: {
-      //处理 动态增加 产品时 的下拉取值 skuSupplierName只是暂时取值真的值为supplierAbbr(等发布版本在加)
-      shipperArr(){
-        let arr = [];
-        this.productList.forEach(item=>{
-          arr.push({
-            id : item.skuSupplierCompanyId.value+'-'+item.skuSupplierTenantId.value,
-            name:item.skuSupplierName.value,
-            shipperCompanyId : item.skuSupplierCompanyId.value,
-            shipperTelnetId  : item.skuSupplierTenantId.value,
-          })
-        });
-
-        //利用对象属性唯一性 去除 相同的供应商 让下拉只会存在唯一的供应商
-        var obj = {};
-        arr = arr.reduce(function(item, next) {
-          obj[next.id] ? '' : obj[next.id] = true && item.push(next);
-          return item;
-        }, []);
-
-        //处理如果删掉下拉已选中的选项是默认选择第一个
-        this.shipperObj = arr.length ? arr[0] : {
-          name:null,
-          shipperCompanyId:null,
-          shipperTelnetId:null
-        };
-        return arr;
-      },
       productListTotal() {
         let obj = {};
         if (this.productList.length <= 0) {
@@ -314,15 +278,12 @@
         });
         return [obj];
       },
-      attachmentReadonly() {
-        return !this.edit;
-      },
       pageTypeCurr() {
         return this.$route.name;
       },
-      orderType(){
-        return this.pageTypeCurr== 'loadingListDetail' ? 37 : 30;
-      }, 
+      orderType() {
+        return this.pageTypeCurr == 'loadingListDetail' ? 37 : 30;
+      },
       isParams() {
         return _.isEmpty(this.$route.query)
       },
@@ -333,13 +294,13 @@
             disabled: !this.edit
           },
           {
-            label:  this.$i.logistic.Copy,
+            label: this.$i.logistic.Copy,
             type: 4,
             disabled: !this.edit
           }
         ]
         this.$route.name == 'placeLogisticPlan' ? aArr : aArr.splice(1, 0, {
-          label:  this.$i.logistic.History,
+          label: this.$i.logistic.History,
           type: 2,
           disabled: !this.edit
         })
@@ -349,41 +310,48 @@
     mounted() {
       let menuList = [{
         path: '',
-        query: {code: this.pageTypeCurr&&this.pageTypeCurr=="loadingListDetail" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
+        query: {
+          code: this.pageTypeCurr && this.pageTypeCurr == "loadingListDetail" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'
+        },
         type: 100,
-        auth: (()=>{ 
+        auth: (() => {
           let code = null;
-          if(this.pageTypeCurr=="logisticPlanDetail"){
+          if (this.pageTypeCurr == "logisticPlanDetail") {
             code = 'LOGISTICS:LOG';
-          }else if(this.pageTypeCurr=="loadingListDetail"){
+          } else if (this.pageTypeCurr == "loadingListDetail") {
             code = 'LOADING_LIST:LOG';
           }
           return code
         })(),
         label: this.$i.common.log
       }];
-      if(this.pageTypeCurr=="logisticPlanDetail"){
-        menuList.push(
-          {
-            path: '/logistic/archivePlan',
-            auth: 'LOGISTICS:PLAN_DETAIL:ARCHIVE',
-            label: this.$i.logistic.archivePlan
-          }
-        )
-      }else if(this.pageTypeCurr=="loadingListDetail"){
-        menuList.push(
-          {
-            path: '/logistic/archiveLoadingList',
-            auth: 'LOADING_LIST:DETAIL:ARCHIVE',
-            label: this.$i.logistic.archiveLoadingList
-          }
-        )
+      if (this.pageTypeCurr == "logisticPlanDetail") {
+        menuList.push({
+          path: '/logistic/archivePlan',
+          auth: 'LOGISTICS:PLAN_DETAIL:ARCHIVE',
+          label: this.$i.logistic.archivePlan
+        })
+      } else if (this.pageTypeCurr == "loadingListDetail") {
+        menuList.push({
+          path: '/logistic/archiveLoadingList',
+          auth: 'LOADING_LIST:DETAIL:ARCHIVE',
+          label: this.$i.logistic.archiveLoadingList
+        })
       }
       this.setMenuLink(menuList);
       const arr = this.$route.fullPath.split('/')
       this.pageName = arr[arr.length - 1].split('?')[0]
       this.getDictionary()
-      this.basicInfoArr = _.map(this.$db.logistic.basicInfoObj, (value, key) => {
+      let obj;
+      switch(this.pageTypeCurr){
+        case 'logisticPlanDetail' : obj = this.$db.logistic.basicInfoObj;
+        break;
+        case 'loadingListDetail' : obj = this.$db.logistic.LLBasicInfoObj;
+        break;
+        default:
+        break;
+      }
+      this.basicInfoArr = _.map(this.$depthClone(obj), (value, key) => {
         return value;
       })
       this.ExchangeRateInfoArr = _.map(this.$db.logistic.ExchangeRateInfo, (value, key) => {
@@ -398,7 +366,7 @@
       this.countryAll();
     },
     methods: {
-      modifyTimeData(arg){
+      modifyTimeData(arg) {
         this.btnModifyTime = arg;
       },
       ...mapActions(['setMenuLink']),
@@ -436,39 +404,49 @@
           })
         })
       },
-      changeSort(arr){
-        this.$set(this.pageParams,'sorts',arr.sorts);
+      changeSort(arr) {
+        this.$set(this.pageParams, 'sorts', arr.sorts);
         this.getSupplierIds();
       },
       getSupplierIds(arg) {
-        this.pageParams = {...this.pageParams, ...arg}
-        let url = this.$route.name == 'loadingListDetail' ? 'logistics_order_getSupplierIds' : 'logistics_plan_getSupplierIds';
-        this.$ajax.get(this.$apis[url],{logisticsNo:this.basicInfoArr[0].value}).then(res => {
+        this.pageParams = { ...this.pageParams,
+          ...arg
+        }
+        let url = this.$route.name == 'loadingListDetail' ? 'logistics_order_getSupplierIds' :
+          'logistics_plan_getSupplierIds';
+        this.$ajax.get(this.$apis[url], {
+          logisticsNo: this.basicInfoArr[0].value
+        }).then(res => {
           this.pageParams.skuSupplierIds = res.supplierIds;
           this.pageParams.customerId = res.customerId;
           this.addProductFromOrder();
         })
       },
-      ProductFromOrderDetail(e){
-        this.$windowOpen({url:'/product/detail',params:{id:e.skuId.value}})
+      ProductFromOrderDetail(e) {
+        this.$windowOpen({
+          url: '/product/detail',
+          params: {
+            id: e.skuId.value
+          }
+        })
       },
-      addProductFromOrder(){
-        this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res=>{
+      addProductFromOrder() {
+        this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res => {
           this.showAddProductDialog = true;
           this.ProductFromOrderRes = res.datas;
-          this.ProductFromOrder = this.$getDB(this.$db.logistic.dbBasicInfoObj,res.datas,el => {          
-              this.productList.forEach(item=>{
-                if(el.skuId.value==item.skuId.value) {
-                  el._disabled = true;
-                  el._checked = true;
-                }
-              })
-              return el;
-            });
-          this.$nextTick(()=>{
-            this.$set(this.pageParams,'pn',res.pn);
-            this.$set(this.pageParams,'ps',res.ps);
-            this.$set(this.pageParams,'tc',res.tc);
+          this.ProductFromOrder = this.$getDB(this.$db.logistic.productInfo, res.datas, el => {
+            this.productList.forEach(item => {
+              if (el.skuId.value == item.skuId.value) {
+                el._disabled = true;
+                el._checked = true;
+              }
+            })
+            return el;
+          });
+          this.$nextTick(() => {
+            this.$set(this.pageParams, 'pn', res.pn);
+            this.$set(this.pageParams, 'ps', res.ps);
+            this.$set(this.pageParams, 'tc', res.tc);
           })
         })
       },
@@ -481,14 +459,15 @@
           this.logisticsStatus = {
             recived: res.recived,
             supplierRecived: res.supplierRecived,
-            status: res.logisticsStatus
+            status: this.pageTypeCurr == "loadingListDetail" ? res.shipmentStatus : res.logisticsStatus
           };
           this.matchRate(res.currencyExchangeRate);
           this.attachmentList = res.attachment;
           this.fieldDisplay = res.fieldDisplay;
-          this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/${this.orderType}?moduleCode=LOGISTIC`).then(res => {
-            this.createdPaymentData(res)
-          })
+          this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/${this.orderType}?moduleCode=LOGISTIC`)
+            .then(res => {
+              this.createdPaymentData(res)
+            })
           this.getSupplier(res.logisticsNo)
         })
       },
@@ -498,9 +477,9 @@
         })
       },
       //获取国家信息
-      countryAll(){
+      countryAll() {
         this.$ajax.get(`${this.$apis.country_all}`).then(res => {
-          this.$set(this.selectArr,'country',res);
+          this.$set(this.selectArr, 'country', res);
         })
       },
       createdPlanData(res = this.initData, qrg) {
@@ -516,39 +495,39 @@
         this.transportInfoArr.forEach(a => {
           a.value = res[a.key]
         })
-        this.shipmentStatus = this.basicInfoArr.find(el=> el.key == 'shipmentStatus').value
+        this.shipmentStatus = this.basicInfoArr.find(el => el.key == 'shipmentStatus').value
         //日期信息  
-        this.mediatorDate = this.$getDB(this.$db.logistic.dateInfo,[res])
+        this.mediatorDate = this.$getDB(this.$db.logistic.dateInfo, [res])
         // 未开船：Undepartured（初始状态，未到实际订舱日期时默认未开船状态）、
         // 已放舱：Release Space，当前置状态是已订舱，发运状态可下拉选择已放舱或已提柜、
         // 已提柜：Pick-up the Empty，当前置状态是已订舱或已放舱，发运状态可下拉选择已提柜、
         // 在传入时  改变某些状态
-        let currObj = this.basicInfoArr.find(el=> el.key == 'shipmentStatus');
-        if(currObj){
+        let currObj = this.basicInfoArr.find(el => el.key == 'shipmentStatus');
+        if (currObj) {
           //初始先禁用 下拉 根据条件 选择性的开启
-          this.basicInfoArr.find(el=> el.key=='shipmentStatus').disabled = true;
-          let arr = this.$depthClone(this.selectArr.shipmentStatus).map(el=> {
+          currObj.disabled = true;
+          let arr = this.$depthClone(this.selectArr.shipmentStatus).map(el => {
             el.disabled = true;
             return el;
           });
-          if(currObj.value==0||currObj.value==1){
-            this.basicInfoArr.find(el=> el.key=='shipmentStatus').disabled = false;
-            arr = this.$depthClone(arr).map(el=> {
-              if(el.code==2||el.code==3){
+          if (currObj.value == 0 || currObj.value == 1) {
+            currObj.disabled = false;
+            arr = this.$depthClone(arr).map(el => {
+              if (el.code == 2 || el.code == 3) {
                 el.disabled = false;
               }
               return el;
             });
-          }else if(currObj.value==0||currObj.value==1||currObj.value==2){
-            this.basicInfoArr.find(el=> el.key=='shipmentStatus').disabled = false;
-            arr = this.$depthClone(arr).map(el=> {
-              if(el.code==3){
+          } else if (currObj.value == 0 || currObj.value == 1 || currObj.value == 2) {
+            currObj.disabled = false;
+            arr = this.$depthClone(arr).map(el => {
+              if (el.code == 3) {
                 el.disabled = false;
               }
               return el;
             });
           }
-          this.$set(this.selectArr,'shipmentStatus',arr);
+          this.$set(this.selectArr, 'shipmentStatus', arr);
         }
         this.logisticsNo = res.logisticsNo;
         this.exchangeRateList = res.currencyExchangeRate || [];
@@ -557,32 +536,47 @@
         this.beShipper = res.beShipper;
         this.ShipperName = res.shipper;
         this.shipperObj = {
-          id : res.shipperCompanyId+'-'+res.shipperTelnetId,
+          id: res.shipperCompanyId + '-' + res.shipperTelnetId,
           name: this.ShipperName,
-          shipperCompanyId : res.shipperCompanyId,
-          shipperTelnetId  : res.shipperTelnetId
+          shipperCompanyId: res.shipperCompanyId,
+          shipperTelnetId: res.shipperTelnetId
         }
-        this.containerInfo = (res.containerDetail || []).map(el=>{el.isModify=false;return el});
-        this.containerinfoMatch = this.$depthClone(res.containerDetail || []).map(el=>{el.isModify=false;return el});
-        this.feeList = (res.fee ? [res.fee] :[]).map(el=>{el.isModify=false;return el});
-        this.feeListMatch = this.$depthClone(res.fee ? [res.fee] :[]).map(el=>{el.isModify=false;return el});
+        this.containerInfo = (res.containerDetail || []).map(el => {
+          el.isModify = false;
+          return el
+        });
+        this.containerinfoMatch = this.$depthClone(res.containerDetail || []).map(el => {
+          el.isModify = false;
+          return el
+        });
+        this.feeList = (res.fee ? [res.fee] : []).map(el => {
+          el.isModify = false;
+          return el
+        });
+        this.feeListMatch = this.$depthClone(res.fee ? [res.fee] : []).map(el => {
+          el.isModify = false;
+          return el
+        });
         res.product = res.product.map((item, i) => {
           item.vId = this.$getUUID();
           return item;
         });
-        this.productList = this.$getDB(this.$db.logistic.productInfo, res.product.map(el => {
-          let ShipmentStatusItem = this.selectArr.shipmentStatus && this.selectArr.shipmentStatus.find(item =>
-            item.code == el.shipmentStatus)
-          el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-          return el;
-        }))
+        this.productList = this.$getDB(this.$db.logistic.productInfo, res.product, (item) => {
+          this.shipperArr.push({
+            id: item.skuSupplierCompanyId.value + '-' + item.skuSupplierTenantId.value,
+            name: item.skuSupplierAbbr.value,
+            shipperCompanyId: item.skuSupplierCompanyId.value,
+            shipperTelnetId: item.skuSupplierTenantId.value,
+          })
+        });
+        this.shipperArrFun();
         this.productList.forEach((item) => {
           if (item.fieldDisplay.value) {
             _.mapObject(item.fieldDisplay.value, (v, k) => {
               item[k]._style = {
                 background: 'yellow'
               };
-              item[k]._mustChecked=true;
+              item[k]._mustChecked = true;
             })
             item.fieldDisplay.value = null;
           }
@@ -603,7 +597,7 @@
       batchDunning() {
         let argArr = [];
         this.paymentList.forEach((item) => {
-           argArr.push({
+          argArr.push({
             'id': item.id,
             'version': item.version
           })
@@ -626,15 +620,18 @@
             clearInterval(this.CutDown)
           }
         }, 1000)
-        this.$ajax.post(`${this.$apis.logistics_payment_batchDunning}/${this.logisticsNo}/${this.orderType}?moduleCode=LOGISTIC`).then(res => {
-          this.$message({
-            type: 'success',
-            message: this.$i.logistic.operationSuccess
-          })
-          this.$ajax.post(`${this.$apis.get_payment_list}${this.logisticsNo}/${this.orderType}?moduleCode=LOGISTIC`).then(res => {
-            this.createdPaymentData(res, 'dunning')
-          })
-        }).catch(res=> {
+        this.$ajax.post(
+          `${this.$apis.logistics_payment_batchDunning}/${this.logisticsNo}/${this.orderType}?moduleCode=LOGISTIC`).then(
+          res => {
+            this.$message({
+              type: 'success',
+              message: this.$i.logistic.operationSuccess
+            })
+            this.$ajax.post(`${this.$apis.get_payment_list}${this.logisticsNo}/${this.orderType}?moduleCode=LOGISTIC`)
+              .then(res => {
+                this.createdPaymentData(res, 'dunning')
+              })
+          }).catch(res => {
           this.batchDunningCutDown = '';
           this.dunningDisabled = false;
           clearInterval(this.CutDown)
@@ -646,7 +643,7 @@
         // if (!dunning) {
         //   this.dunningDisabled = !this.paymentList.some((item) => item.planPayAmount > item.actualPayAmount);
         // } 暂定功能
-        this.dunningDisabled = false;
+        // this.dunningDisabled = false;
         this.paymentSum = res.statisticsDatas[0]
       },
       getNewLogisticsNo() {
@@ -666,8 +663,8 @@
         this.getDictionaryPart()
       },
       getDictionaryPart() {
-        this.$set(this.dictionaryPart, 'logisticsStatus', this.pageTypeCurr == "loadingListDetail" ? 'LS_STATUS' :
-          'LS_PLAN')
+        this.$set(this.dictionaryPart, 'logisticsStatus', this.pageTypeCurr == "loadingListDetail" ? 'LS_STATUS' :'LS_PLAN');
+        this.$set(this.dictionaryPart, 'shipmentStatus', this.pageTypeCurr == "loadingListDetail" ? 'LS_ORDER_SHIP_STATUS' :'LOGISTICS_SHIP_STATUS');
         const params = _.map(this.dictionaryPart, v => v)
         this.$ajax.post(this.$apis.get_dictionary, params).then(res => {
           _.mapObject(this.dictionaryPart, (v, k) => {
@@ -710,14 +707,19 @@
       },
       action(e, status, i) {
         if (status == 3) {
-          return this.$windowOpen({url:'/product/detail',params:{id:e.skuId.value}})
+          return this.$windowOpen({
+            url: '/product/detail',
+            params: {
+              id: e.skuId.value
+            }
+          })
         } else if (status == 4) {
           let newAddArr = this.$depthClone(this.productList[i]);
           newAddArr.id.value = null;
-          newAddArr.fieldDisplay.value=null;
+          newAddArr.fieldDisplay.value = null;
           newAddArr.vId.value = this.$getUUID();
-          newAddArr = _.mapObject(newAddArr,(v,k)=>{
-            if(v._style){
+          newAddArr = _.mapObject(newAddArr, (v, k) => {
+            if (v._style) {
               delete v._style
             }
             return v;
@@ -731,45 +733,45 @@
         this.modefiyProductIndexArr.push(i);
         this.getProductHistory(e.id ? (e.argID ? e.argID.value : e.id.value) : null, status, i)
       },
-      historymodify(currData,row){
-        if('correlationKey' in currData){
-          let obj = currData._option.find(el=> el.containerNo ==currData.value);
-          row.containerId.value = obj ? obj.id : ''; 
+      historymodify(currData, row) {
+        if ('correlationKey' in currData) {
+          let obj = currData._option.find(el => el.containerNo == currData.value);
+          row.containerId.value = obj ? obj.id : '';
           row[currData.correlationKey].value = obj ? obj[currData.correlationKey] : '';
         }
       },
       getProductHistory(productId, status, i) {
         let currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
-        currentProduct = _.mapObject(currentProduct,(v,k)=>{
-          if('_option' in v){
-            switch(k){
-              case 'shipmentStatus' :
+        currentProduct = _.mapObject(currentProduct, (v, k) => {
+          if ('_option' in v) {
+            switch (k) {
+              case 'shipmentStatus':
                 v._option = this.selectArr.shipmentStatus;
-                if(this.pageTypeCurr=='loadingListDetail'){
+                if (this.pageTypeCurr == 'loadingListDetail') {
                   delete v._disabled;
                 }
                 break;
-              case 'containerNo' :
+              case 'containerNo':
                 v._option = this.containerInfo;
                 break;
               default:
                 break;
-            }           
+            }
           }
           return v;
         });
         let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
         if (productId) {
-          if(status==1){
+          if (status == 1) {
             this.productModifyList = [currentProduct];
-            this.$refs.HM.init(this.productModifyList,[]);
-          }else{
+            this.$refs.HM.init(this.productModifyList, []);
+          } else {
             this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
-              this.productModifyList = this.$getDB(this.$db.logistic.productModify,res.history.map(el => {
-                el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm:ss') 
+              this.productModifyList = this.$getDB(this.$db.logistic.productModify, res.history.map(el => {
+                el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm:ss')
                 return el;
               }));
-              this.$refs.HM.init(this.productModifyList,[],false);
+              this.$refs.HM.init(this.productModifyList, [], false);
             })
           }
         } else {
@@ -830,21 +832,55 @@
         }
         this.$set(this.paymentList, i, obj)
       },
-      changeChecked(arr){
+      changeChecked(arr) {
         this.ProductFromOrderChecked = arr;
       },
+      //处理 动态增加 产品时 的下拉取值 
+      shipperArrFun(arg) {
+        let arr = [];
+        this.productList.forEach(item => {
+          arr.push({
+            id: item.skuSupplierCompanyId.value + '-' + item.skuSupplierTenantId.value,
+            name: item.skuSupplierAbbr.value,
+            shipperCompanyId: item.skuSupplierCompanyId.value,
+            shipperTelnetId: item.skuSupplierTenantId.value,
+          })
+        });
+
+        //利用对象属性唯一性 去除 相同的供应商 让下拉只会存在唯一的供应商
+        var obj = {};
+        arr = arr.reduce(function (item, next) {
+          obj[next.id] ? '' : obj[next.id] = true && item.push(next);
+          return item;
+        }, []);
+
+        //处理如果删掉下拉已选中的选项是默认选择第一个
+        if(arg=='remove'){
+          this.shipperObj = arr.length ? arr[0] : {
+            name: null,
+            shipperCompanyId: null,
+            shipperTelnetId: null
+          };
+        }
+        this.shipperArr = arr;
+      },
       closeAddProduct() {
-        let CheckedIdArr =  this.ProductFromOrderChecked ? this.ProductFromOrderChecked.map(el => {
-          return {id:el.id.value,_disabled:el._disabled};
+        let CheckedIdArr = this.ProductFromOrderChecked ? this.ProductFromOrderChecked.map(el => {
+          return {
+            id: el.id.value,
+            _disabled: el._disabled
+          };
         }) : [];
-        let arr = CheckedIdArr ? CheckedIdArr.map(el=>{
-          let obj = _.findWhere(this.ProductFromOrderRes,{id:el.id});
+        let arr = CheckedIdArr ? CheckedIdArr.map(el => {
+          let obj = _.findWhere(this.ProductFromOrderRes, {
+            id: el.id
+          });
           obj._disabled = el._disabled;
           return obj;
         }) : [];
 
         this.showAddProductDialog = false
-        arr = _.filter(arr,el=>{
+        arr = _.filter(arr, el => {
           return !el._disabled;
         })
 
@@ -875,8 +911,9 @@
           a.totalContainerOuterCartonsQty = null;
           !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
         })
-        this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList]
-        this.ProductFromOrderChecked= [];
+        this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList];
+        this.shipperArrFun();
+        this.ProductFromOrderChecked = [];
       },
 
       selectProduct(arr) {
@@ -891,6 +928,7 @@
             }
           })
         })
+        this.shipperArrFun('remove');
       },
       productModifyfun(obj) {
         if (this.pageTypeCurr.slice(-6) == 'Detail') {
@@ -913,7 +951,7 @@
         if (!data.length) {
           this.productModifyList = [];
           this.showProductDialog = false;
-          return 
+          return
         };
         const currrentProduct = data[0]
         this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
@@ -922,12 +960,12 @@
         })
         this.modefiyProductIndexArr.forEach((item) => {
           let fieldDisplayObj = {};
-          _.mapObject(data[0],(v,k)=>{
-            if(v._isModified&&v.key!='skuPictures'){
+          _.mapObject(data[0], (v, k) => {
+            if (v._isModified && v.key != 'skuPictures') {
               fieldDisplayObj[v.key] = v.value;
             }
           })
-          this.$set(this.productList[item].fieldDisplay, 'value',fieldDisplayObj);
+          this.$set(this.productList[item].fieldDisplay, 'value', fieldDisplayObj);
         })
         const id = currrentProduct.id.value
         const vId = this.$getUUID();
@@ -980,14 +1018,17 @@
             break;
         }
       },
-      download(){
+      download() {
         let code;
-        if(this.pageTypeCurr=="loadingListDetail"){
-          code = 'LOGISTICS_ORDER';         
-        }else{
+        if (this.pageTypeCurr == "loadingListDetail") {
+          code = 'LOGISTICS_ORDER';
+        } else {
           code = 'LOGISTICS_PLAN';
         }
-        this.$fetch.export_task(code,{ids:[this.planId],planStatus:this.planStatus})
+        this.$fetch.export_task(code, {
+          ids: [this.planId],
+          planStatus: this.planStatus
+        })
       },
       refuse() {
         this.$ajax.post(this.$apis.logistics_plan_cancelByIds, {
@@ -1027,18 +1068,23 @@
         })
       },
       generateList() {
-        
-        if(this.oldPlanObject.containerDetail&&this.oldPlanObject.containerDetail.map(el => {
-          return this.$validateForm(el, this.$db.logistic.dbcontainerInfo);
-        }).some(el=> el)){
+
+        if (this.oldPlanObject.containerDetail && this.oldPlanObject.containerDetail.map(el => {
+            return this.$validateForm(el, this.$db.logistic.dbcontainerInfo);
+          }).some(el => el)) {
           return
         }
-        
+
         this.$ajax.post(this.$apis.logistics_plan_postLoadingList, {
           id: this.planId
         }).then(res => {
           this.getDetails();
-          this.$windowOpen({url:'/logistic/loadingListDetail',params:{code:this.logisticsNo}});
+          this.$windowOpen({
+            url: '/logistic/loadingListDetail',
+            params: {
+              code: this.logisticsNo
+            }
+          });
         })
       },
       conformPlan() {
@@ -1077,124 +1123,133 @@
         })
         this.oldPlanObject.fieldDisplay = obj;
       },
-      feeInfoLight(data){
-        this.oldPlanObject.fee  = data[0];
+      feeInfoLight(data) {
+        this.oldPlanObject.fee = data[0];
       },
-      ContainerInfoLight(data){
+      ContainerInfoLight(data) {
         this.oldPlanObject.containerDetail = data;
       },
-      changeShipmentStatus(status){
-        this.basicInfoArr.find(el=> el.key == 'shipmentStatus').value = status
+      changeShipmentStatus(status) {
+        this.basicInfoArr.find(el => el.key == 'shipmentStatus').value = status
       },
       sendData(keyString) {
-        let url = this.pageTypeCurr == "loadingListDetail" ? this.$apis.update_logistic_order : this.configUrl[this.pageName]
-          [keyString];
-        this.basicInfoArr.forEach(a => {
-          this.$set(this.basicInfoObj, a.key, a.value)
-        })
-
-        this.transportInfoArr.forEach(a => {
-          this.$set(this.transportInfoObj, a.key, a.value)
-        })
-
-        _.mapObject(this.mediatorDate[0], (value, key) => {
-          this.oldPlanObject[key] = value.value
-        })
-         //判断 ContainerInfo 是否修改过高亮 以便不传后台返回的修改值
-        this.oldPlanObject.containerDetail =   this.oldPlanObject.containerDetail&&this.$depthClone(this.oldPlanObject.containerDetail).map(el=>{
-          if(!el.isModify&&'fieldDisplay' in el){
-            el.fieldDisplay = null;
-          }
-          return el;
-        });
-
-        //判断 feeInfo 是否修改过高亮 以便不传后台返回的修改值
-        this.oldPlanObject.fee =  this.oldPlanObject.fee&&this.$depthClone([this.oldPlanObject.fee]).map(el=>{
-          if(!el.isModify&&'fieldDisplay' in el){
-            el.fieldDisplay = null;
-          }
-          return el;
-        })[0];
-
-        this.basicInfoObj.remark = this.remark
-        _.mapObject(this.basicInfoObj, (value, key) => {
-          this.oldPlanObject[key] = value
-        })
-        _.mapObject(this.transportInfoObj, (value, key) => {
-          this.oldPlanObject[key] = value
-        })
-        this.oldPlanObject.attachment = this.$refs.attachment.getFiles();
-        this.oldPlanObject.product = this.modifyProductArray;
-        this.oldPlanObject.currencyExchangeRate = _.map(this.$depthClone(this.ExchangeRateInfoArr), (item) => {
-          item['price'] = item['value'];
-          delete item['value'];
-          delete item['key'];
-          delete item['label'];
-          return item;
-        });
-        this.oldPlanObject.rmProduct = this.removeProductList.map(a => {
-          const obj = {}
-          _.mapObject(a, (value, key) => {
-            obj[key] = value.value
+        this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
+          confirmButtonText: this.$i.logistic.confirm,
+          cancelButtonText: this.$i.logistic.cancel,
+          type: 'warning'
+        }).then(() => {
+          let url = this.pageTypeCurr == "loadingListDetail" ? this.$apis.update_logistic_order : this.configUrl[
+              this.pageName]
+            [keyString];
+          this.basicInfoArr.forEach(a => {
+            this.$set(this.basicInfoObj, a.key, a.value)
           })
-          return obj
-        })
-        // this.oldPlanObject.product = this.restoreArr(this.removeProductList)
-        this.oldPlanObject.product = this.productList.map((item, i) => {
-          return _.mapObject(item, (v, k) => {
-            if (v.typeSlef == 'text') {
-              let ShipmentStatusItem = this.selectArr.shipmentStatus && this.selectArr.shipmentStatus.find(el =>
-                el.name == v.value)
-              if (ShipmentStatusItem) {
-                return ShipmentStatusItem.code;
+
+          this.transportInfoArr.forEach(a => {
+            this.$set(this.transportInfoObj, a.key, a.value)
+          })
+
+          _.mapObject(this.mediatorDate[0], (value, key) => {
+            this.oldPlanObject[key] = value.value
+          })
+          //判断 ContainerInfo 是否修改过高亮 以便不传后台返回的修改值
+          this.oldPlanObject.containerDetail = this.oldPlanObject.containerDetail && this.$depthClone(this.oldPlanObject
+            .containerDetail).map(el => {
+            if (!el.isModify && 'fieldDisplay' in el) {
+              el.fieldDisplay = null;
+            }
+            return el;
+          });
+
+          //判断 feeInfo 是否修改过高亮 以便不传后台返回的修改值
+          this.oldPlanObject.fee = this.oldPlanObject.fee && this.$depthClone([this.oldPlanObject.fee]).map(el => {
+            if (!el.isModify && 'fieldDisplay' in el) {
+              el.fieldDisplay = null;
+            }
+            return el;
+          })[0];
+
+          this.basicInfoObj.remark = this.remark
+          _.mapObject(this.basicInfoObj, (value, key) => {
+            this.oldPlanObject[key] = value
+          })
+          _.mapObject(this.transportInfoObj, (value, key) => {
+            this.oldPlanObject[key] = value
+          })
+          this.oldPlanObject.attachment = this.$refs.attachment.getFiles();
+          this.oldPlanObject.product = this.modifyProductArray;
+          this.oldPlanObject.currencyExchangeRate = _.map(this.$depthClone(this.ExchangeRateInfoArr), (item) => {
+            item['price'] = item['value'];
+            delete item['value'];
+            delete item['key'];
+            delete item['label'];
+            return item;
+          });
+          this.oldPlanObject.rmProduct = this.removeProductList.map(a => {
+            const obj = {}
+            _.mapObject(a, (value, key) => {
+              obj[key] = value.value
+            })
+            return obj
+          })
+          // this.oldPlanObject.product = this.restoreArr(this.removeProductList)
+          this.oldPlanObject.product = this.productList.map((item, i) => {
+            return _.mapObject(item, (v, k) => {
+              if (v.typeSlef == 'text') {
+                let ShipmentStatusItem = this.selectArr.shipmentStatus && this.selectArr.shipmentStatus.find(
+                  el =>
+                  el.name == v.value)
+                if (ShipmentStatusItem) {
+                  return ShipmentStatusItem.code;
+                } else {
+                  return v.value;
+                }
               } else {
-                return v.value;
+                return null;
               }
-            } else {
-              return null;
-            }
-          })
-        });
-        if (this.isParams) {
-          this.oldPlanObject.fieldDisplay = null;
-        }
-        if (this.$validateForm(this.oldPlanObject, this.$db.logistic.basicInfoObj)) {
-          return;
-        }
-        if (this.$validateForm(this.oldPlanObject, this.$db.logistic.transportInfoObj)) {
-          return;
-        }
-        if (this.$validateForm(this.shipperObj, this.$db.logistic.validateShipperObj)) {
-          return;
-        }
-        //为了做shiper 的特殊处理
-        this.oldPlanObject.shipper = this.shipperObj.name;
-        this.oldPlanObject.shipperCompanyId = this.shipperObj.shipperCompanyId;
-        this.oldPlanObject.shipperTelnetId = this.shipperObj.shipperTelnetId;
+            })
+          });
+          if (this.isParams) {
+            this.oldPlanObject.fieldDisplay = null;
+          }
+          if (this.$validateForm(this.oldPlanObject, this.$db.logistic.basicInfoObj)) {
+            return;
+          }
+          if (this.$validateForm(this.oldPlanObject, this.$db.logistic.transportInfoObj)) {
+            return;
+          }
+          // if (this.$validateForm(this.shipperObj, this.$db.logistic.validateShipperObj)) {
+          //   return;
+          // }
+          //为了做shiper 的特殊处理
+          this.oldPlanObject.shipper = this.shipperObj.name;
+          this.oldPlanObject.shipperCompanyId = this.shipperObj.shipperCompanyId;
+          this.oldPlanObject.shipperTelnetId = this.shipperObj.shipperTelnetId;
 
-        this.$ajax.post(url, this.oldPlanObject).then(res => {
-          this.$message({
-            message: this.$i.logistic.operationSuccess,
-            type: 'success',
-            duration: 3000,
-            onClose: () => {
-              this.edit = false;
-              this.DeliveredEdit = false;
-              this.getDetails();
-              // this.$router.push('/logistic/' + (this.pageTypeCurr == "loadingListDetail" ? 'loadingList' : ''));
-            }
+          this.$ajax.post(url, this.oldPlanObject).then(res => {
+            this.$message({
+              message: this.$i.logistic.operationSuccess,
+              type: 'success',
+              duration: 3000,
+              onClose: () => {
+                this.edit = false;
+                this.DeliveredEdit = false;
+                this.getDetails();
+                // this.$router.push('/logistic/' + (this.pageTypeCurr == "loadingListDetail" ? 'loadingList' : ''));
+              }
+            })
           })
         })
       },
       formListSelectChange(v) {
         this.$set(this.oldPlanObject, 'currency', v);
-      }
+      },
     },
     watch: {
       containerinfoMatch: {
         handler: function (val) {
           val.forEach(el => {
-            this.productList = this.productList.map((item,i) => {
+            this.productList = this.productList.map((item, i) => {
               if (el.id == item.containerId.value) {
                 item.containerNo._value = el.containerNo;
                 item.containerNo.value = el.containerNo;
@@ -1204,6 +1259,53 @@
           })
         },
         deep: true
+      },
+      edit(v){
+        if(v){
+          this.productList = this.productList.map(el=>{
+            el._disabled = true;
+            return el;
+          })
+          if(this.beShipper==1){
+            if(this.$route.name=='loadingListDetail'){
+              this.isShow = false;
+            }else{
+              //当供应商为shiper时 可以看到全部产品 但是只能改自己的产品
+              this.productList = this.productList.map(el=>{
+                if(el.skuSupplierCompanyId.value == this.oldPlanObject.shipperCompanyId && el.skuSupplierTenantId.value == this.oldPlanObject.shipperTelnetId){
+                  delete el._disabled;
+                }
+                return el;
+              })
+              this.isShow = true;  
+            }
+          }else{
+            //当供应商不为shiper时 只能看到且只能改自己的产品
+            this.productList = this.productList.map(el=>{
+              delete el._disabled;
+              return el;
+            })
+            this.isShow = false;
+          }
+        }else{
+          this.isShow = false;
+        }
+      },
+      beShipper(v){
+        let flag = false;
+        if(v==1){
+          if(this.$route.name=='loadingListDetail'){
+            flag = true;
+          }else{
+           flag = false;  
+          }
+        }else{
+          flag = true;
+        }
+        if(this.paymentList.length<=0){
+          flag = true;
+        }
+        this.dunningDisabled = flag;
       }
     },
     destroyed() {
