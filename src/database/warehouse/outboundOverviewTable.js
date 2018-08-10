@@ -7,9 +7,14 @@ export default {
     outboundTypeDictCode:{},
     outboundDate:{},
     outboundOperator:{},
-    outboundSkuTotalQty:{},
+    // outboundSkuTotalQty:{},
     remark:{},
     updateName:{},
     updateDt:{},
     entryDt:{},
+    outboundCBM:{},
+    outboundCTNQTY:{},
+    outboundGW:{},
+    outboundNW:{},
+    skuStyleQTY:{}
 }

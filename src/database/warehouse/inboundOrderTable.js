@@ -20,9 +20,9 @@ export default {
     skuNameEn:{
         key:'skuNameEn'
     },
-    skuCustomsNameCn:{
-        key:'skuNameCustomer'
-    },
+    // skuCustomsNameCn:{
+    //     key:'skuNameCustomer'
+    // },
     skuMaterialCn:{
         key:'skuMaterialCn'
     },
@@ -33,9 +33,9 @@ export default {
         key:'skuCustomerSkuCode'
     },
     skuCode:{},
-    skuDescCn:{
-        key:'skuDescCn'
-    },
+    // skuDescCn:{
+    //     key:'skuDescCn'
+    // },
     skuDescEn:{
         key:'skuDescEn'
     },

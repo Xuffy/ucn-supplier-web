@@ -1,6 +1,5 @@
 {
   "orderNo": "订单号",
-  "orderDate": "订单日期",
   "customerOrderNo": "客户订单号",
   "customerName": "客户名称",
   "customerNo": "客户编号",

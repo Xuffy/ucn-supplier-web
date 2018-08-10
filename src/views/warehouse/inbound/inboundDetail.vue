@@ -146,8 +146,8 @@
                     <el-form-item prop="v" :label="$i.warehouse.skuQtyNum">
                         <el-input
                                 size="mini"
+                                v-model="inboundData.skuStyleQty"
                                 :disabled="true">
-                                <!-- v-model="inboundData.skuTotalQty" -->
                         </el-input>
                     </el-form-item>
                 </el-col>
@@ -202,6 +202,7 @@
                     carrier:'',
                     carrierPhone:'',
                     timeZone:'',
+                    skuStyleQty: null,
                     skuTotalCartonQty: null,
                     skuTotalGrossWeight: null,
                     skuTotalNetWeight: null,
@@ -251,6 +252,7 @@
             getData(){
                 this.loadingTable=true;
                 this.$ajax.get(`${this.$apis.get_inboundDetail}?id=${this.$route.query.id}`).then(res=>{
+                    console.log(res)
                     this.inboundData=res;
                     this.$ajax.post(this.$apis.get_inboundSku,{
                         inboundId: this.$route.query.id,

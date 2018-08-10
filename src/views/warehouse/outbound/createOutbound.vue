@@ -148,6 +148,18 @@
                             :accuracy="v.accuracy ? v.accuracy : null"
                             :controls="false"></v-input-number>
                     </div>
+                    <div v-else-if="v.showType === 'select'">
+                        <div v-if="v.key === 'exchangeCurrencyDictCode'">
+                            <el-select v-model="scope.row[v.key].value" placeholder="请选择">
+                                <el-option
+                                v-for="item in exchangeCurrencyDictCode"
+                                :key="item.id"
+                                :label="item.code"
+                                :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </div>
+                    </div>
                     <!-- <div v-else-if="v.key==='inboundDate' || v.key==='warehouseName' || v.key==='warehouseNo'">
                         {{scope.row.inboundVo[v.key].value}}
                     </div> -->
@@ -317,11 +329,11 @@
                     outboundTypeDictCode: "",
                     remark: "",
                     shipmentInvoiceNo: "",
-                    outboundCtnQty: 0,
-                    outboundGw: 0,
-                    outboundCbm: 0,
-                    outboundNw: 0,
-                    skuStyleQty: 0
+                    outboundCTNQTY: 0,
+                    outboundGW: 0,
+                    outboundCBM: 0,
+                    outboundNW: 0,
+                    skuStyleQTY: 0
                     // timeZone: "",
                 },
                 //inbound总计
@@ -360,6 +372,7 @@
               lengthUnitOption:[],
               volumeUnitOption:[],
               weightUnitOption:[],
+              exchangeCurrencyDictCode: [],
               columnConfig: ''
             };
         },
@@ -455,7 +468,8 @@
                         inboundSkuId: v.id.value,
                         inventoryServiceFee: v.inventoryServiceFee.value ? v.inventoryServiceFee.value : 0,
                         inventorySkuPrice: v.inventorySkuPrice.value ? v.inventorySkuPrice.value : 0,
-                        outboundOutCartonTotalQty: v.outboundOutCartonTotalQty.value ? v.outboundOutCartonTotalQty.value : 0
+                        outboundOutCartonTotalQty: v.outboundOutCartonTotalQty.value ? v.outboundOutCartonTotalQty.value : 0,
+                        exchangeCurrencyDictCode: v.exchangeCurrencyDictCode.value
                     });
                 });
                 this.outboundData.attachments = this.$refs.attachmentUpload[0].getFiles();
@@ -516,16 +530,15 @@
                         ids: id
                     }).then(res => {
                         let arr = []
-                        this.productData = []
                         res.datas.forEach(v => {
-                            v.outboundOutCartonTotalQty = 0;
+                            v.outboundOutCartonTotalQty = "";
                             v.outboundSkuTotalGrossWeight = 0;
                             v.outboundSkuTotalNetWeight = 0;
                             v.outboundSkuTotalQty = 0;
                             v.outboundSkuTotalVolume = 0;
-                            this.productData.push(v);
+                            // this.productData.push(v);
                         });
-                        this.productData.forEach(v => {
+                        res.datas.forEach(v => {
                             let obj = {}
                             v.inboundVo.inboundDate = this.$dateFormat(v.inboundVo.inboundDate, "yyyy-mm-dd");
                             v.skuUnitDictCode = v.skuUnitDictCode ? _.findWhere(this.skuUnitOption, { code: v.skuUnitDictCode }).name : "";
@@ -535,9 +548,10 @@
                             obj.warehouseNo = v.inboundVo.warehouseNo;
                             obj.warehouseName = v.inboundVo.warehouseName;
                             obj.inboundDate = v.inboundVo.inboundDate;
-                            obj.inventorySkuPrice = 0;
-                            obj.inventoryDays = 0;
-                            obj.inventoryServiceFee = 0;
+                            obj.inventorySkuPrice = '';
+                            obj.inventoryDays = '';
+                            obj.inventoryServiceFee = '';
+                            obj.exchangeCurrencyDictCode = '';
                             arr.push(Object.assign(obj, v))
                         });
                         this.loadingProductTable = false;
@@ -576,16 +590,16 @@
                                         this.outboundData.outboundSkuTotalQty = this.jia(prev,curr)
                                     }
                                     if (column.property === 'outboundOutCartonTotalQty') {
-                                        this.outboundData.outboundCtnQty = this.jia(prev,curr)
+                                        this.outboundData.outboundCTNQTY = this.jia(prev,curr)
                                     }
                                     if (column.property === 'outboundSkuTotalNetWeight') {
-                                        this.outboundData.outboundNw = this.jia(prev,curr)
+                                        this.outboundData.outboundNW = this.jia(prev,curr)
                                     }
                                     if (column.property === 'outboundSkuTotalVolume') {
-                                        this.outboundData.outboundCbm = this.jia(prev,curr)
+                                        this.outboundData.outboundCBM = this.jia(prev,curr)
                                     }
                                     if (column.property === 'outboundSkuTotalGrossWeight') {
-                                        this.outboundData.outboundGw = this.jia(prev,curr)
+                                        this.outboundData.outboundGW = this.jia(prev,curr)
                                     }
                                     
                                     return this.jia(prev,curr);
@@ -594,16 +608,16 @@
                                         this.outboundData.outboundSkuTotalQty = prev
                                     }
                                     if (column.property === 'outboundOutCartonTotalQty') {
-                                        this.outboundData.outboundCtnQty = prev
+                                        this.outboundData.outboundCTNQTY = prev
                                     }
                                      if (column.property === 'outboundSkuTotalNetWeight') {
-                                        this.outboundData.outboundNw = prev
+                                        this.outboundData.outboundNW = prev
                                     }
                                     if (column.property === 'outboundSkuTotalVolume') {
-                                        this.outboundData.outboundCbm = prev
+                                        this.outboundData.outboundCBM = prev
                                     }
                                      if (column.property === 'outboundSkuTotalGrossWeight') {
-                                        this.outboundData.outboundGw = prev
+                                        this.outboundData.outboundGW = prev
                                     }
                                     return prev;
                                 }
@@ -701,11 +715,16 @@
             changeSize(e) {
                 this.orderProduct.ps = e;
                 this.getProductData();
+            },
+            getExchangeCurrencyDictCode () { // 获取交易币种字典
+                this.$ajax.get(this.$apis.CURRENCY_ALL, {cache:true}).then(res => {
+                    this.exchangeCurrencyDictCode = res
+                })
             }
-
         },
         created() {
             this.getOutboundNo();
+            this.getExchangeCurrencyDictCode()
         },
         watch: {
             selectProductList(n) {
@@ -714,11 +733,21 @@
                 } else {
                     this.disableRemoveProduct = true;
                 }
+            },
+            productData(data) {
+                let arr = []
+                _.each(data, e => {
+                    if (typeof e.skuCode === 'object') {
+                        if (arr.indexOf(e.skuCode.value) < 0) {
+                            arr.push(e.skuCode.value)
+                        }
+                    }
+                })
+                this.outboundData.skuStyleQTY = arr.length
             }
         },
         mounted () {
             this.columnConfig = this.$db.warehouse.outboundProduct;
-            console.log(this.$db.warehouse.outbound)
         }
     };
 </script>

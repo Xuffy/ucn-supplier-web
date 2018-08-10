@@ -49,16 +49,6 @@ export default {
     skuDescEn:{
         _disabled:true
     },
-    skuDescCustomer:{
-        _rules:{
-            required:true
-        }
-    },
-    skuNameCustomer:{
-        _rules:{
-            required:true
-        }
-    },
     skuCustomerSkuCode:{
         _rules:{
             required:true
@@ -193,7 +183,6 @@ export default {
     skuMethodPkgCn:{},
     skuInnerCartonQty:{
         _slot:'skuInnerCartonQty',
-        _calculate:true
     },
     skuInnerCartonLength:{
         _slot:'skuInnerCartonLength',
@@ -219,11 +208,9 @@ export default {
     skuOuterCartonDesc:{},
     skuInnerCartonOuterNum:{
         _slot:'skuInnerCartonOuterNum',
-        _calculate:true
     },
     skuOuterCartonQty:{
         _slot:'skuOuterCartonQty',
-        _calculate:true
     },
     skuOuterCartonLength:{
         _slot:'skuOuterCartonLength',

@@ -29,9 +29,11 @@
   "updateDt": "修改日期",
   "quotationNo": "报价单号",
   "totalQty": "订单产品数",
-  "totalOuterCartonQty": "外箱数合计",
-  "totalGrossWeight": "总毛重",
-  "totalNetWeight": "总净重",
-  "totalVolume": "总体积",
-  "skuQty": "SKU 款式数"
+  "totalOuterCartonQty": "订单总箱数",
+  "totalGrossWeight": "订单总毛重(kg)",
+  "totalNetWeight": "订单总净重(kg)",
+  "totalVolume": "订单总体积(m³)",
+  "skuQty": "SKU 款式数",
+  "skuCartonQty":"产品箱数",
+  "paymentTerm":"付款方式"
 }

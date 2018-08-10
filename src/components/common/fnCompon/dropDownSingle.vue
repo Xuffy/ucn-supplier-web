@@ -128,6 +128,12 @@
             list(n){
                 this.copyList=this.$depthClone(n);
             },
+            'val.id'(){
+                if(this.expandOnClickNode && this.val[this.defaultProps.children] && this.val[this.defaultProps.children].length || this.val._disableClick){
+                    return;
+                }
+                this.selectedList = this.$depthClone(this.val);
+            },
         },
         mounted() {
             this.setInput(this.list, this.value);
@@ -153,6 +159,9 @@
             clearData(){
                 this.selectedList=[];
                 this.val[this.defaultProps.label]='';
+                this.$nextTick(()=>{
+                    this.visible = false;
+                })
             },
             handleMouseover(){
                 this.showIcon=false;

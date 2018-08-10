@@ -144,6 +144,7 @@
                                         class="speInputNumber"
                                         v-model="productForm[v.key]"
                                         :min="0"
+                                        :max="v.key==='applicableAge'?127:null"
                                         :mark="v.label"
                                         :accuracy="v.accuracy"
                                         :placeholder="$i.product.pleaseInput">

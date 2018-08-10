@@ -140,7 +140,8 @@ export default {
         type: 'String',
         showType:'number',
         belongTab:'basicInfo',
-        accuracy:0
+        accuracy:0,
+        isApplicableAge:true
     },
     expireDates:{
         key:'expireDates',
@@ -554,6 +555,11 @@ export default {
         showType:'select',
         belongTab:'packingInfo',
         isOem:true,
+    },
+    oemQty:{
+        showType:'number',
+        belongTab:'packingInfo',
+        accuracy:1
     },
 
     /**

@@ -207,7 +207,7 @@ export default {
     key: 'shippingAgent'
   },
   contactPersonOfBuyer: {
-    key: 'customerCompanyId'
+    key: 'supplierCompanyName'
   },
   emailOfBuyer: {
     key: 'customerEmail'
@@ -308,6 +308,6 @@ export default {
     _hide:true
   },
   customerAbbr: {
-    key: ''
+    key: 'customerAbbr'
   }
 }

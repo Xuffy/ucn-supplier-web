@@ -74,20 +74,20 @@
                     ps: 50,
                     skuCode: "",
                     skuInventoryStatusDictCode: '',
-                    sorts:[{orderBy:"entryDt",orderType:"desc"}]
+                    sorts:[{orderBy:"updateDt",orderType:"asc"}]
                 },
                 searchId:1,
                 searchOptions:[
                     {
-                        label:'订单号',
+                        label:this.$i.warehouse.orderNo,
                         id:1
                     },
                     {
-                        label:'供应商货号',
+                        label:this.$i.warehouse.skuCode,
                         id:2
                     },
                     {
-                        label:'入库单号',
+                        label:this.$i.warehouse.inboundNo,
                         id:3
                     },
                 ],

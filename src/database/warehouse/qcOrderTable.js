@@ -6,7 +6,7 @@ export default {
     skuInventoryStatusDictCode:{},
     skuCode:{},
     customerSkuCode:{},
-    factorySkuCode:{},
+    // factorySkuCode:{},
     skuNameCn:{},
     skuBrand:{},
     skuDesign:{},

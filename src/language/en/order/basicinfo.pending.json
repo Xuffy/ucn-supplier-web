@@ -1,6 +1,5 @@
 {
   "orderNo": "Order No.",
-  "orderDate": "Order Date",
   "customerOrderNo": "Customer Order No.",
   "customerName": "Customer Name",
   "customerNo": "Customer No.",
@@ -8,7 +7,7 @@
   "supplierName": "Supplier Name",
   "supplierNo": "Supplier No.",
   "quotationNo": "Quotation No.",
-  "orderStatus": "Order Status",
+  "orderStatus": "Status",
   "deliveryDate": "Delivery Date",
   "incoterm": "Incoterm",
   "incortermAea": "Incoterm Area",

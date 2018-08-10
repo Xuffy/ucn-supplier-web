@@ -83,7 +83,6 @@
   "skuLabel": "产品标签",
   "skuBarCode": "产品条码",
   "skuInnerPackBarCode": "中包条码",
-  "skuInnerPackLabe": "中包标签",
   "skuInnerPackCode": "中包货号",
   "skuShippingMarks": "外箱唛头",
   "skuOuterCartonBarCode": "外箱条码",
@@ -106,7 +105,7 @@
   "skuAdditionalTwo": "附图2",
   "skuAdditionalThree": "附图3",
   "skuAdditionalFour": "附图4",
-  "skuUntestedQty": "合格产品数",
+  "skuUntestedQty": "未验货数量",
   "skuQualifiedQty": "未验货数量",
   "skuDeliveredDate": "交货日期"
 }
