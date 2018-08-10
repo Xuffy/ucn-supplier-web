@@ -15,6 +15,7 @@ export default {
   lengthUnitDictCode:{
     key:'lengthUnitDictCode',
   },
+  inventoryDays:{},
   exchangeCurrencyDictCode: {},
   volumeUnitDictCode:{},
   weightUnitDictCode:{},
