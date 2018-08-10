@@ -37,5 +37,6 @@
   "attachment": "附件",
   "customerNo": "客户编号",
   "recentTransactionDate": "最近交易日期",
-  "noAttachment": "无附件"
+  "noAttachment": "无附件",
+  "supplierAbbr": "供应商简称"
 }

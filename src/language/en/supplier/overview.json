@@ -37,5 +37,6 @@
   "attachment": "Attachment",
   "customerNo": "Customer No",
   "recentTransactionDate": "Recent transaction date",
-  "noAttachment": "NO Attachment"
+  "noAttachment": "NO Attachment",
+  "supplierAbbr": "Supplier Abbr."
 }

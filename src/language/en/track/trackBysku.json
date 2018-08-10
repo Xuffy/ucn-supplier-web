@@ -117,5 +117,7 @@
   "phoneOfSeller": "Phone Of Seller",
   "orderId": "orderId",
   "logisticsId": "logisticsId",
-  "qcId": "qcId"
+  "qcId": "qcId",
+  "supplierAbbr": "Supplier abbr.",
+  "customerAbbr": "customer abbr."
 }
