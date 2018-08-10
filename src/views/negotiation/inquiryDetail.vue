@@ -65,20 +65,18 @@
     </div>
     <v-compare-list :data="compareConfig" @clearData="clerCompare" @closeTag="handleClose" @goCompare="startCompare" v-if="compareLists" />
     <el-dialog
-          :title="$i.common.addProduct"
-          :visible.sync="newSearchDialogVisible"
-          width="70%"
-          lock-scroll>
+            custom-class="ucn-dialog-center"
+            :title="$i.common.addProduct"
+            :close-on-click-modal="false"
+            :visible.sync="newSearchDialogVisible"
+            width="70%">
       <v-product
-          :hideBtns="true"
-          :hideBtn="true"
-          :disabledLine="disabledLine"
-          @handleOK="queryAndAddProduction"
-          @handleCancel="newSearchDialogVisible = false"
-          :forceUpdateNumber="trig"
-          :type="radio"
-          :isInquiry="true">
-      </v-product>
+              ref="addProduct"
+              queryType="product"
+              :form-column="$db.product.overview"
+              :disabledLine="disabledLine"
+              @sure="handleSure"
+              @cancel="newSearchDialogVisible = false"></v-product>
     </el-dialog>
     <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @change="computePrice" @save="save" ref="HM"></v-history-modify>
     <v-message-board v-if="chatParams" v-authorize="'INQUIRY:DETAIL:MESSAGE_BOARD'" module="INQUIRY" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
@@ -99,11 +97,10 @@ import {
   VMessageBoard,
   selectSearch,
   VTable,
+  VProduct,
   compareList,
   VHistoryModify
 } from '@/components/index';
-import { getData } from '@/service/base';
-import product from '@/views/product/addProduct';
 import { mapActions, mapState } from 'vuex';
 import codeUtils from '@/lib/code-utils';
 import thisTool from './index';
@@ -115,7 +112,6 @@ export default {
       fromArg: {},
       loading: false,
       disabledLine: [],
-      trig: 0,
       disabledTabData: [],
       id: null,
       compareLists: false,
@@ -154,11 +150,11 @@ export default {
     };
   },
   components: {
-    'v-message-board': VMessageBoard,
-    'select-search': selectSearch,
-    'v-table': VTable,
-    'v-product': product,
-    'v-compare-list': compareList,
+    VMessageBoard,
+    selectSearch,
+    VTable,
+    VProduct,
+    compareList,
     VHistoryModify
   },
   computed: {
@@ -257,7 +253,6 @@ export default {
     },
     addProduct() {
       this.disabledLine = this.newProductTabData.filter(item => !item._disabled);
-      this.trig = new Date().getTime();
       this.newSearchDialogVisible = true;
     },
     startCompare() {
@@ -411,11 +406,12 @@ export default {
       this.params.sorts = args.sorts;
       this.getInquiryDetailList();
     },
-    queryAndAddProduction(ids) {
-      if (!Array.isArray(ids) || !ids.length) {
-        this.$message.warning(this.$i.inquiry.skuRequired);
+    handleSure(skus) {
+      if (!Array.isArray(skus) || !skus.length) {
+        this.$message.warning(this.$i.inquiry.noItemSelected);
         return;
       }
+      let ids = skus.map(i => i.id.value);
       this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SKUS, ids).then(res => {
         let arr = this.$getDB(
           this.$db.inquiry.productInfo,
