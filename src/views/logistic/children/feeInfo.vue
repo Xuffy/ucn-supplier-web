@@ -10,13 +10,13 @@
           :mark="$i.logistic.fclTransportCharge"
           :placeholder="$i.logistic.placeholder"
           @change="feeInfoLight('fclTransportCharge',scope.row.fclTransportCharge,scope.$index)"
-          v-if="edit"></v-input-number>
+          v-if="isShow"></v-input-number>
         <div class="table-cell" v-else>{{ scope.row.fclTransportCharge }}</div>
       </template>
     </el-table-column>
     <el-table-column :label="$i.logistic.fclTransportChargeCurrency" align="center" width="220" prop="fclTransportChargeCurrency">
       <template slot-scope="scope">
-        <el-select v-model="scope.row.fclTransportChargeCurrency" :placeholder="$i.logistic.pleaseChoose" v-if="edit" @change="feeInfoLight('fclTransportChargeCurrency',scope.row.fclTransportChargeCurrency,scope.$index)">
+        <el-select v-model="scope.row.fclTransportChargeCurrency" :placeholder="$i.logistic.pleaseChoose" v-if="isShow" @change="feeInfoLight('fclTransportChargeCurrency',scope.row.fclTransportChargeCurrency,scope.$index)">
           <el-option :label="item.name" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
         </el-select>
         <div class="table-cell" v-else>{{ Currency(scope.row.fclTransportChargeCurrency) }}</div>
@@ -32,13 +32,13 @@
           :mark="$i.logistic.handlingCharges"
           :placeholder="$i.logistic.placeholder"
           @change="feeInfoLight('handlingCharge',scope.row.handlingCharge,scope.$index)"
-          v-if="edit"></v-input-number>
+          v-if="isShow"></v-input-number>
         <div class="table-cell" v-else>{{ scope.row.handlingCharge }}</div>
       </template>
     </el-table-column>
     <el-table-column :label="$i.logistic.handlingChargesCurrency" align="center" width="220" prop="handlingChargesCurrency">
       <template slot-scope="scope">
-        <el-select v-model="scope.row.handlingChargesCurrency" :placeholder="$i.logistic.pleaseChoose" v-if="edit"  @change="feeInfoLight('handlingChargesCurrency',scope.row.handlingChargesCurrency,scope.$index)">
+        <el-select v-model="scope.row.handlingChargesCurrency" :placeholder="$i.logistic.pleaseChoose" v-if="isShow"  @change="feeInfoLight('handlingChargesCurrency',scope.row.handlingChargesCurrency,scope.$index)">
           <el-option :label="item.name" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
         </el-select>
         <div class="table-cell" v-else>{{ Currency(scope.row.handlingChargesCurrency) }}</div>
@@ -54,13 +54,13 @@
           :mark="$i.logistic.otherPortCharges"
           :placeholder="$i.logistic.placeholder"
           @change="feeInfoLight('otherPortCharge',scope.row.otherPortCharge,scope.$index)"
-          v-if="edit"></v-input-number>
+          v-if="isShow"></v-input-number>
         <div class="table-cell" v-else>{{ scope.row.otherPortCharge }}</div>
       </template>
     </el-table-column>
     <el-table-column :label="$i.logistic.otherPortChargesCurrency" align="center" width="240" prop="otherPortChargeCurrency">
       <template slot-scope="scope">
-        <el-select v-model="scope.row.otherPortChargeCurrency" :placeholder="$i.logistic.pleaseChoose" v-if="edit" @change="feeInfoLight('otherPortChargeCurrency',scope.row.otherPortChargeCurrency,scope.$index)">
+        <el-select v-model="scope.row.otherPortChargeCurrency" :placeholder="$i.logistic.pleaseChoose" v-if="isShow" @change="feeInfoLight('otherPortChargeCurrency',scope.row.otherPortChargeCurrency,scope.$index)">
           <el-option :label="item.name" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
         </el-select>
         <div class="table-cell" v-else>{{ Currency(scope.row.otherPortChargeCurrency) }}</div>
@@ -76,13 +76,13 @@
           :mark="$i.logistic.oceanFreight"
           :placeholder="$i.logistic.placeholder"
           @change="feeInfoLight('oceanFreight',scope.row.oceanFreight,scope.$index)"
-          v-if="edit"></v-input-number>
+          v-if="isShow"></v-input-number>
         <span v-else>{{ scope.row.oceanFreight }}</span>
       </template>
     </el-table-column>
     <el-table-column :label="$i.logistic.oceanFreightCurrency" align="center" width="180" prop="oceanFreightCurrency">
       <template slot-scope="scope">
-        <el-select v-model="scope.row.oceanFreightCurrency" :placeholder="$i.logistic.pleaseChoose" v-if="edit" @change="feeInfoLight('oceanFreightCurrency',scope.row.oceanFreightCurrency,scope.$index)">
+        <el-select v-model="scope.row.oceanFreightCurrency" :placeholder="$i.logistic.pleaseChoose" v-if="isShow" @change="feeInfoLight('oceanFreightCurrency',scope.row.oceanFreightCurrency,scope.$index)">
           <el-option :label="item.name" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
         </el-select>
         <div class="table-cell" v-else>{{ Currency(scope.row.oceanFreightCurrency) }}</div>
@@ -98,13 +98,13 @@
           :mark="$i.logistic.insuranceCharges"
           :placeholder="$i.logistic.placeholder"
           @change="feeInfoLight('insuranceCharge',scope.row.insuranceCharge,scope.$index)"
-          v-if="edit"></v-input-number>
+          v-if="isShow"></v-input-number>
         <div class="table-cell" v-else>{{ scope.row.insuranceCharge }}</div>
       </template>
     </el-table-column>
     <el-table-column :label="$i.logistic.insuranceChargesCurrency" align="center" width="240" prop="insuranceChargeCurrency">
       <template slot-scope="scope">
-        <el-select v-model="scope.row.insuranceChargeCurrency" :placeholder="$i.logistic.pleaseChoose" v-if="edit" @change="feeInfoLight('insuranceChargeCurrency',scope.row.insuranceChargeCurrency,scope.$index)">
+        <el-select v-model="scope.row.insuranceChargeCurrency" :placeholder="$i.logistic.pleaseChoose" v-if="isShow" @change="feeInfoLight('insuranceChargeCurrency',scope.row.insuranceChargeCurrency,scope.$index)">
           <el-option :label="item.name" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
         </el-select>
         <div class="table-cell" v-else>{{ Currency(scope.row.insuranceChargeCurrency) }}</div>
@@ -120,13 +120,13 @@
           :mark="$i.logistic.otherCharges1"
           :placeholder="$i.logistic.placeholder"
           @change="feeInfoLight('otherCharges1',scope.row.otherCharges1,scope.$index)"
-          v-if="edit"></v-input-number>
+          v-if="isShow"></v-input-number>
         <div class="table-cell" v-else>{{ scope.row.otherCharges1 }}</div>
       </template>
     </el-table-column>
     <el-table-column :label="$i.logistic.otherChargesCurrency1" align="center" width="180" prop="otherChargesCurrency1">
       <template slot-scope="scope">
-        <el-select v-model="scope.row.otherChargesCurrency1" :placeholder="$i.logistic.pleaseChoose" v-if="edit" @change="feeInfoLight('otherChargesCurrency1',scope.row.otherChargesCurrency1,scope.$index)">
+        <el-select v-model="scope.row.otherChargesCurrency1" :placeholder="$i.logistic.pleaseChoose" v-if="isShow" @change="feeInfoLight('otherChargesCurrency1',scope.row.otherChargesCurrency1,scope.$index)">
           <el-option :label="item.name" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
         </el-select>
         <div class="table-cell" v-else>{{ Currency(scope.row.otherChargesCurrency1) }}</div>
@@ -134,19 +134,19 @@
     </el-table-column>
     <el-table-column :label="$i.logistic.otherChargesRemark1" align="center" width="180" prop="otherChargesRemark1">
       <template slot-scope="scope">
-        <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.otherChargesRemark1" v-if="edit" @change="feeInfoLight('otherChargesRemark1',scope.row.otherChargesRemark1,scope.$index)"></el-input>
+        <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.otherChargesRemark1" v-if="isShow" @change="feeInfoLight('otherChargesRemark1',scope.row.otherChargesRemark1,scope.$index)"></el-input>
         <div class="table-cell" v-else>{{ scope.row.otherChargesRemark1 }}</div>
       </template>
     </el-table-column>
     <el-table-column :label="$i.logistic.otherCharges2" align="center" width="180" prop="otherCharges2">
       <template slot-scope="scope">
-        <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.otherCharges2" v-if="edit" @change="feeInfoLight('otherCharges2',scope.row.otherCharges2,scope.$index)"></el-input>
+        <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.otherCharges2" v-if="isShow" @change="feeInfoLight('otherCharges2',scope.row.otherCharges2,scope.$index)"></el-input>
         <div class="table-cell" v-else>{{ scope.row.otherCharges2 }}</div>
       </template>
     </el-table-column>
     <el-table-column :label="$i.logistic.otherChargesCurrency2" align="center" width="180" prop="otherChargesCurrency2">
       <template slot-scope="scope">
-        <el-select v-model="scope.row.otherChargesCurrency2" :placeholder="$i.logistic.pleaseChoose" v-if="edit" @change="feeInfoLight('otherChargesCurrency2',scope.row.otherChargesCurrency2,scope.$index)">
+        <el-select v-model="scope.row.otherChargesCurrency2" :placeholder="$i.logistic.pleaseChoose" v-if="isShow" @change="feeInfoLight('otherChargesCurrency2',scope.row.otherChargesCurrency2,scope.$index)">
           <el-option :label="item.name" :value="item.code" v-for="item of selectArr.exchangeCurrency" :key="'el-option-' + item.code" />
         </el-select>
         <div class="table-cell" v-else>{{ Currency(scope.row.otherChargesCurrency2) }}</div>
@@ -154,7 +154,7 @@
     </el-table-column>
     <el-table-column :label="$i.logistic.otherChargesRemark2" align="center" width="180" prop="otherChargesRemark2">
       <template slot-scope="scope">
-        <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.otherChargesRemark2" v-if="edit" @change="feeInfoLight('otherChargesRemark2',scope.row.otherChargesRemark2,scope.$index)"></el-input>
+        <el-input :placeholder="$i.logistic.pleaseChoose" v-model="scope.row.otherChargesRemark2" v-if="isShow" @change="feeInfoLight('otherChargesRemark2',scope.row.otherChargesRemark2,scope.$index)"></el-input>
         <div class="table-cell" v-else>{{ scope.row.otherChargesRemark2 }}</div>
       </template>
     </el-table-column>
@@ -165,7 +165,7 @@ import  VInputNumber  from '../../../components/common/inputNumber/index.vue';
 export default {
   data(){
     return {
-     
+      isShow:false
     }
   },
   components:{
@@ -188,6 +188,7 @@ export default {
       type: Boolean,
       default: false
     },
+    beShipper:[Boolean,String,Number],
     selectArr:[Array,Object]
   },
   computed:{
@@ -225,6 +226,23 @@ export default {
     //币种 code name 转换
     Currency(code){
       return this.selectArr.exchangeCurrency&&this.selectArr.exchangeCurrency.find(el=> el.code == code )&&this.selectArr.exchangeCurrency.find(el=> el.code == code ).name;
+    }
+  },
+  watch:{
+    edit(v){
+      if(v){
+        if(this.beShipper==1){
+          if(this.$route.name=='loadingListDetail'){
+            this.isShow = false;
+          }else{
+            this.isShow = true;
+          }
+        }else{
+          this.isShow = false;
+        }
+      }else{
+        this.isShow = false;
+      }
     }
   }
 }
