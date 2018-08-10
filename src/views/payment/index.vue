@@ -327,7 +327,6 @@
       },
       downloadPayment(){
         let params=this.$depthClone(this.params);
-        cosnole.log(params)
         this.$fetch.export_task('EXPORT_LEDGER',params);
       },
     },
