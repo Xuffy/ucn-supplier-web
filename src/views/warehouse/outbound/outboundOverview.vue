@@ -74,7 +74,7 @@
                     pn: 1,
                     ps: 50,
                     outboundTypeDictCode: '',
-                    sorts:[{orderBy:"entryDt",orderType:"desc"}]
+                    sorts:[{orderBy:"updateDt",orderType:"desc"}]
                 },
                 searchId:1,
                 searchOptions:[
