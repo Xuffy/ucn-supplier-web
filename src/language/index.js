@@ -44,6 +44,7 @@ const json = {
     require(`./${lang}/message/tabs`)
   ),
   order: _.extend({},
+    require(`./${lang}/order/basicinfo.pending`),
     require(`./${lang}/order/overview`),
     require(`./${lang}/order/payment`),
 
@@ -103,7 +104,7 @@ const json = {
     require(`./${lang}/warehouse/warehouse.outboundOverview`),
     require(`./${lang}/warehouse/warehouse.outboundDetail`),
     require(`./${lang}/warehouse/warehouse.qcOverview`),
-
+    
     // 新加
     require(`./${lang}/warehouse/warehouse.createOutbound`),
   ),

@@ -39,7 +39,8 @@
   "deleteProduct": "确定删除选中商品",
   "searchType": "please choose a type",
   "sureDeleteAccount": "确定删除该账户信息",
-  "inputCompareName": "Please Input Compare Name"
+  "inputCompareName": "Please Input Compare Name",
+  "sureToDeleteAccount": "Are you sure to delete the account?"
 
 
 }

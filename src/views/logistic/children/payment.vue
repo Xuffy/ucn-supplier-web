@@ -33,7 +33,7 @@
           <span v-else>{{ scope.row.remark }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.supplierName" align="center" width="140">
+      <el-table-column :label="$i.logistic.skuSupplierName" align="center" width="140">
         <template slot-scope="scope">
           <el-col v-if="scope.row.edit">
             <el-select v-model="scope.row.payToCompanyId" filterable placeholder="请选择">

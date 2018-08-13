@@ -42,7 +42,7 @@
   "skuNameCn": "产品中文品名",
   "skuCode": "供应商货号",
   "custormerNoCn": "客户编号",
-  "orderSkuQuantity": "订单数量",
+  "orderSkuQuantity": "订单产品数",
   "skuInventoryStatus": "产品库存状态",
   "skuQcResults": "产品验货状态",
   "custermerSkuCode": "客户货号",
@@ -71,5 +71,6 @@
   "skuNameCN": "中文品名",
   "skuPic": "图片",
   "skuPics":"图片",
-  "customerAbbr": "客户简称"
+  "customerAbbr": "客户简称",
+  "supplierAbbr": "服务商简称"
 }

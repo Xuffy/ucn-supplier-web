@@ -44,6 +44,11 @@
             <span>{{ scope.row.vgm }}</span>
           </template>
         </el-table-column>
+        <el-table-column :label="$i.logistic.totalQuantityOfOuterCartonsInContainer" width="300" prop='{"key":"totalContainerOuterCartonsQty","total":true}' align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.totalContainerOuterCartonsQty || 0 }}</span>
+          </template>
+        </el-table-column>
         <el-table-column :label="$i.logistic.totalQuantityInContainer" width="200" prop='{"key":"totalContainerQty","total":true}' align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.totalContainerQty }}</span>
@@ -51,35 +56,35 @@
         </el-table-column>
         <el-table-column :label="$i.logistic.totalVolumeInContainer" width="200" prop='{"key":"totalContainerVolume","total":true}' align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.totalContainerVolume }}</span>
+            <span>{{ scope.row.totalContainerVolume || 0 }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.totalNetWeightInContainer" width="200" prop='{"key":"totalContainerNetWeight","total":true}' align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.totalContainerNetWeight }}</span>
+            <span>{{ scope.row.totalContainerNetWeight || 0 }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.totalQuantityOfOuterCartonsInContainer" width="300" prop='{"key":"totalContainerOuterCartonsQty","total":true}' align="center">
+        <el-table-column :label="$i.logistic.totalContainerGrossWeight" width="200" prop='{"key":"totalContainerGrossWeight","total":true}' align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.totalContainerOuterCartonsQty }}</span>
+            <span>{{ scope.row.totalContainerGrossWeight || 0 }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.USD" width="100" prop='{"key":"USD","total":true}' align="center">
+        <el-table-column :label="$i.logistic.USD" width="100" prop='{"key":"valueUsd","total":true}' align="center">
           <template slot-scope="scope">
-            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="isShow"></el-input> -->
-            <span>{{ scope.row.USD }}</span>
+            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input> -->
+            <span>{{ scope.row.valueUsd || 0 }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.CNY" width="100" prop='{"key":"CNY","total":true}' align="center">
+        <el-table-column :label="$i.logistic.CNY" width="100" prop='{"key":"valueRmb","total":true}' align="center">
           <template slot-scope="scope">
-            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="isShow"></el-input> -->
-            <span>{{ scope.row.CNY }}</span>
+            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input> -->
+            <span>{{ scope.row.valueRmb || 0 }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.EUR" width="100" prop='{"key":"EUR","total":true}' align="center">
+        <el-table-column :label="$i.logistic.EUR" width="100" prop='{"key":"valueEur","total":true}' align="center">
           <template slot-scope="scope">
-            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="isShow"></el-input> -->
-            <span>{{ scope.row.EUR }}</span>
+            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input> -->
+            <span>{{ scope.row.valueEur || 0 }}</span>
           </template>
         </el-table-column>
       </el-table>
