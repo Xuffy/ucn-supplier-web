@@ -75,7 +75,7 @@
   "innerCartonLength": "中包长(cm)",
   "innerCartonWidth": "中包宽(cm)",
   "innerCartonHeight": "中包高(cm)",
-  "innerCartonWeightNet": "中包净重(g)",
+  "innerCartonWeightNet": "中包净重(kg)",
   "innerCartonRoughWeight": "中包毛重(kg)",
   "innerCartonVolume": "中包体积(m³)",
   "innerCartonDesc": "中包描述",
@@ -88,7 +88,7 @@
   "outerCartonLength": "外箱长(cm)",
   "outerCartonWidth": "外箱宽(cm)",
   "outerCartonHeight": "外箱高(cm)",
-  "outerCartonNetWeight": "外箱净重(g)",
+  "outerCartonNetWeight": "外箱净重(kg)",
   "outerCartonRoughWeight": "外箱毛重(kg)",
   "outerCartonVolume": "外箱体积(m³)",
   "outerCartonMethodCn": "外包装方式CN",
@@ -119,5 +119,6 @@
   "pictures": "图片",
   "designs":"产品设计",
   "notes":"产品说明书",
+  "supplierAbbr":"供应商简称",
   "oemQty":"贴牌起订量"
 }

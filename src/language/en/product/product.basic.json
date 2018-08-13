@@ -106,6 +106,10 @@
   "dduFormula":"Reference DDU price= CIF+ Price of port to warehouse_domestic currency（40HC）/68* CTN volume / Product QTY per CTN /Exchange rate",
   "deleteProduct":"Delete",
   "noAttachments":"No Attachments",
+  "goCompare":"Go Compare",
+  "clearData":"Clear",
+  "compareName":"Compare Name",
+  "compareItem":"Compare Item",
   "picture":"Picture",
   "invalid":"Invalid",
   "valid":"Valid"

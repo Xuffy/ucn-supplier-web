@@ -120,12 +120,12 @@
   "intermBankSWIFTCode": "中间行代码",
   "status": "询价状态",
   "totalAmount": "订单总金额",
-  "skuQty": "款式数",
+  "skuQty": "订单款式数",
   "totalCtn": "总箱数",
   "totalNW": "总净重",
   "totalGW": "总毛重",
   "relatedOrderNO": "关联订单号",
   "shipAgent": "货代公司",
-  "amount": "Amount",
+  "amount": "订单总数量",
   "expressAddress": "收货地址"
 }

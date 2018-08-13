@@ -140,7 +140,7 @@ const Util = {
 
     value = _.isString(value) ? Number(value) : value;
 
-    if (!_.isNumber(value)) {
+    if (!_.isNumber(value) || _.isNaN(value)) {
       return '';
     }
 

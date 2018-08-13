@@ -23,5 +23,7 @@
   "retry": "重试",
   "exportDownload": "导出下载",
   "refreshTask": "刷新任务",
-  "exportSuccess": "导出任务正在执行，是否到任务中心查看？"
+  "exportSuccess": "导出任务正在执行，是否到任务中心查看？",
+  "importTask":"导入任务",
+  "exportTask":"导出任务"
 }

@@ -75,7 +75,7 @@
   "innerCartonLength": "Inner pack length(cm)",
   "innerCartonWidth": "Inner pack width(cm)",
   "innerCartonHeight": "Inner pack height(cm)",
-  "innerCartonWeightNet": "N.W. of inner pack(g)",
+  "innerCartonWeightNet": "N.W. of inner pack(kg)",
   "innerCartonRoughWeight": "G.W. of inner pack(kg)",
   "innerCartonVolume": "Volume of inner pack(m³)",
   "innerCartonDesc": "Description of inner pack",
@@ -88,7 +88,7 @@
   "outerCartonLength": "Outer pack length(cm)",
   "outerCartonWidth": "Outer pack width(cm)",
   "outerCartonHeight": "Outer pack height(cm)",
-  "outerCartonNetWeight": "N.W. of outer pack(g)",
+  "outerCartonNetWeight": "N.W. of outer pack(kg)",
   "outerCartonRoughWeight": "G.W. of outer pack(kg)",
   "outerCartonVolume": "Volume of outer pack(m³)",
   "outerCartonMethodCn": "Packing method of CTN (CN)",
@@ -119,5 +119,6 @@
   "pictures": "Picture",
   "designs":"Product design",
   "notes":"Instruction note",
+  "supplierAbbr":"Supplier Abbr",
   "oemQty":"OEM MOQ"
 }

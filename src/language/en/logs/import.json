@@ -23,5 +23,7 @@
   "retry": "Retry",
   "exportDownload": "Download",
   "refreshTask": "Refresh the task",
-  "exportSuccess": "The export task is executing. Do you want to see it in the task center?"
+  "exportSuccess": "The export task is executing. Do you want to see it in the task center?",
+  "importTask":"Import task",
+  "exportTask":"Export task"
 }

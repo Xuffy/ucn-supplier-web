@@ -9,6 +9,8 @@ import _config from './config';
 import $i from '../language/index';
 import md5 from 'blueimp-md5';
 import {localStore, sessionStore} from 'service/store';
+import dateFormat from 'dateformat';
+
 
 /**
  * axios配置
@@ -18,6 +20,7 @@ const axios = Axios.create({
   // baseURL: mock ? _config.ENV.mock : '',
   timeout: _config.TIMEOUT,
   headers: {
+    'U-TIME-ZONE': dateFormat(new Date(), 'Z'),
     'Content-Type': 'application/json;charset=utf-8',
     'Accept-Language': localStore.get('language') || _config.LANGUAGE,
   },
