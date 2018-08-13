@@ -153,7 +153,8 @@ export default {
         mustShowColumn:true
     },
     skuCartonQty:{
-        mustShowColumn:true
+        mustShowColumn:true,
+        _slot:'skuCartonQty'
     },
     skuCustomsCode:{
         _disabled:true
