@@ -3,6 +3,7 @@ export default {
     key: 'pics',
     _filed:'pic',
     _image:true,
+    _sort:false
   },
   orderNo: {
     key: 'orderNo'
@@ -208,23 +209,29 @@ export default {
   },
   contactPersonOfBuyer: {
     key: 'customerCompanyName',
-    mustShowColumn: true
+    mustShowColumn: true,
+    _sort:false
   },
   emailOfBuyer: {
-    key: 'customerEmail'
+    key: 'customerEmail',
+    _sort:false
   },
   phoneOfBuyer: {
-    key: 'customerCellphone'
+    key: 'customerCellphone',
+    _sort:false
   },
   emailOfSeller: {
-    key: 'supplierEmail'
+    key: 'supplierEmail',
+    _sort:false
   },
   phoneOfSeller: {
-    key: 'supplierCellphone'
+    key: 'supplierCellphone',
+    _sort:false
   },
   contactPersonOfSeller: {
     key: 'supplierCompanyName',
-    mustShowColumn: true
+    mustShowColumn: true,
+    _sort:false
   },
   sealine: {
     key: 'transportCompany'
