@@ -104,7 +104,7 @@
       @sendData="sendData" :btnModifyTime="btnModifyTime" :basicInfoArr="basicInfoArr" :listData="mediatorDate" :selectArr="selectArr"
       :shipmentStatus="shipmentStatus" @shipmentStatus="changeShipmentStatus" />
     <v-history-modify :code="configUrl[pageName]&&configUrl[pageName].setTheField" ref="HM" disabled-remark :beforeSave="closeModify"
-      @save="closeModifyNext" @select-change="historymodify" @closed="$refs.productInfo.update()"></v-history-modify>
+      @save="closeModifyNext" @select-change="historymodify" @closed="$refs.productInfo.update()" @change="autoComputed"></v-history-modify>
   </div>
 </template>
 <script>
@@ -368,6 +368,14 @@
     methods: {
       modifyTimeData(arg) {
         this.btnModifyTime = arg;
+      },
+      autoComputed(data, row) {
+        if (data.hasOwnProperty('computed')) {
+          data.computed.forEach(el=>{
+            row[el.computedResKey].value = this.$calc.multiply(data.value || 0, row[el.computedKey].value || 0);
+            el._isModified = row[el.computedResKey]._isModified = true;
+          })
+        }
       },
       ...mapActions(['setMenuLink']),
       //初始页面数据
