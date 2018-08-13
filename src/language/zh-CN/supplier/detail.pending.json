@@ -127,5 +127,6 @@
   "relatedOrderNO": "关联订单号",
   "shipAgent": "货代公司",
   "amount": "订单总数量",
-  "expressAddress": "收货地址"
+  "expressAddress": "收货地址",
+  "consignee": "收货人"
 }
