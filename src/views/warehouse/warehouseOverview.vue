@@ -74,7 +74,7 @@
                     ps: 50,
                     skuCode: "",
                     skuInventoryStatusDictCode: '',
-                    sorts:[{orderBy:"updateDt",orderType:"asc"}]
+                    sorts:[{orderBy:"updateDt",orderType:"desc"}]
                 },
                 searchId:1,
                 searchOptions:[
