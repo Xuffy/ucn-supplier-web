@@ -2,9 +2,10 @@
   <div>
     <div class="hd" v-if="showHd"></div>
     <div class="hd active">{{ title }}</div>
-    <el-row :gutter="10">
+    <!-- <el-row :gutter="10"> -->
       <el-form label-width="300px" label-position="right" class="form" >
-        <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
+        <!-- <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label"> -->
+        <div v-for="a of listData" :key="'el-col-' + a.label">
           
           <el-form-item v-if="!isShow" :label="a.label+'：'">
             <p class="textFilter" :style="fieldDisplay&&fieldDisplay.hasOwnProperty(a.key) ? definedStyle : ''">{{ textFilter(a) }}</p>
@@ -31,9 +32,9 @@
               <el-date-picker :disabled="a.disabled" format="yyyy-MM-dd" v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" :placeholder="$i.logistic.placeholder" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
             </el-form-item>
           </div>
-        </el-col>
+        </div>
       </el-form>
-    </el-row>
+    <!-- </el-row> -->
   </div>
 </template>
 <script>
@@ -169,11 +170,14 @@
     }
   }
   .form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     /deep/.el-form-item__label{
       font-weight: bold;
     }
     /deep/.el-form-item p{
-      min-width: 150px;
+      min-width: 220px;
     }
     /deep/.el-input,
     /deep/.el-input__inner {
@@ -186,6 +190,9 @@
     }
     /deep/.definedStyleClass input{
       background:yellow;
+    }
+    .formWarp{
+      min-width: 33.3%;
     }
   }
   .el-select-dropdown__item.is-disabled{

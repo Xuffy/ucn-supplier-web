@@ -281,7 +281,7 @@
         this.pageType === 'draft' && (this.pageParams.planStatus = 1)
         this.pageType === 'plan' && (this.pageParams.planStatus = 2)
         let code = this.pageType=="loadingList" ? 'LOGISTICS_ORDER' : 'LOGISTICS_PLAN'
-        this.$fetch.export_task(code,{lgStatus, ...this.pageParams,ids:this.downloadIds})
+        this.$fetch.export_task(code,{lgStatus, ...this.pageParams,ids:this.downloadIds,archive:0})
       },
       sendArchive(){
         let url = this.pageType=="loadingList" ? this.$apis.logistics_order_archive : this.$apis.logistics_plan_archive;

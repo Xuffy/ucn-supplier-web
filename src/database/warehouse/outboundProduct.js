@@ -2,7 +2,14 @@ export default {
     id: {
         _hide:true
     },
-    
+    orderNo:{
+        key:'orderNo',
+        sortable: true,
+    },
+    warehouseName:{
+        key:'warehouseName',
+        sortable: true,
+    },
     outboundOutCartonTotalQty:{
         key:'outboundOutCartonTotalQty',        //需要传的参数
         showType:'number',
@@ -153,18 +160,12 @@ export default {
     // skuLabel:{
     //     key:'skuLabel',
     // },
-    orderNo:{
-        key:'orderNo',
-        sortable: true,
-    },
+    
     // warehouseNo:{
     //     key:'warehouseNo',
     //     sortable: true,
     // },
-    warehouseName:{
-        key:'warehouseName',
-        sortable: true,
-    },
+   
     inboundDate:{
         key:'inboundDate',
         sortable: true
