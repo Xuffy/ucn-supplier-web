@@ -2,15 +2,28 @@ export default {
     skuId:{
         _hide:true
     },
-    skuBarCode:{
-        key:'skuBarCode',
-    },
     skuCode:{
         key:'skuCode',
     },
     skuNameCn:{
         key:'skuNameCn',
     },
+    orderNo:{
+        key:'orderNo'
+    },
+    supplierOrderNo:{
+        key:'supplierOrderNo'
+    },
+    supplierName:{
+        key:"supplierName"
+    },
+    supplierNo:{
+        key:'supplierNo'
+    },
+    skuBarCode:{
+        key:'skuBarCode',
+    },
+    
     // skuNameCustomer:{
     //     key:'skuNameCustomer',
     // },
@@ -131,9 +144,7 @@ export default {
     // skuLabel:{
     //     key:'skuLabel'
     // },
-    orderNo:{
-        key:'orderNo'
-    },
+    
     customerOrderNo:{
         key:'customerOrderNo'
     },
@@ -143,13 +154,6 @@ export default {
     customerName:{
         key:'customerName'
     },
-    supplierName:{
-        key:"supplierName"
-    },
-    supplierNo:{
-        key:'supplierNo'
-    },
-    supplierOrderNo:{
-        key:'supplierOrderNo'
-    },
+    
+    
 }
