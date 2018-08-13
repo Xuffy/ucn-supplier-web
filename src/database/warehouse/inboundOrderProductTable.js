@@ -233,6 +233,12 @@ export default {
     orderId:{
         _hide:true
     },
+    skuCode:{},
+    skuNameCn:{},
+    orderNo:{},
+    supplierOrderNo:{},
+    supplierName:{},
+    supplierNo:{},
 
     innerCartonVolume:{
         showType:'number',
@@ -337,7 +343,6 @@ export default {
     },
     unqualifiedType:{},
     innerCartonPackingMethodCn:{},
-    skuNameCn:{},
     skuMaterialCn:{},
     // skuDescCn:{},
     packingMethodCn:{},
@@ -347,10 +352,6 @@ export default {
     skuDescEn:{},
     // skuLength:{},
     volumeUnitDictCode:{},
-    supplierName:{},
-    supplierNo:{},
-    supplierOrderNo:{},
-    skuCode:{},
     
     orderSkuQty:{},
     skuBrand:{},
@@ -365,7 +366,6 @@ export default {
     skuNameEn:{},
     skuMaterialEn:{},
     skuUnitDictCode:{},
-    orderNo:{},
     weightUnitDictCode:{},
     lengthUnitDictCode:{},
 }

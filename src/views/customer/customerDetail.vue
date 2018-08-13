@@ -198,6 +198,8 @@
                 isModifyAddress:false,
                 formLabelWidth:'80px',
                 disableClickDeleteBtn: false,
+                orderStatus:[],
+                inquiryStatus:[]
             }
         },
         methods: {
@@ -348,12 +350,14 @@
             },
             //获取字典
             getCodePart(){
-              this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS","SEX","DOCUMENT_TYPE"]).then(res=>{
+              this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS","SEX","DOCUMENT_TYPE","ORDER_STATUS","INQUIRY_STATUS"],{cache:true}).then(res=>{
                 this.payment = _.findWhere(res, {'code': 'PMT'}).codes;
                 this.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
                 this.type = _.findWhere(res, {'code': 'CUSTOMER_TYPE'}).codes;
                 this.sex = _.findWhere(res, {'code': 'SEX'}).codes;
                 this.documentType = _.findWhere(res, {'code': 'DOCUMENT_TYPE'}).codes;
+                this.orderStatus = _.findWhere(res, {'code': 'ORDER_STATUS'}).codes;
+                this.inquiryStatus = _.findWhere(res, {'code': 'INQUIRY_STATUS'}).codes;
               }).catch(err=>{
                 console.log(err)
               });
@@ -422,10 +426,13 @@
                 this.orderHistoryData.customerCompanyId = Number(this.$route.query.companyId);
                 this.$ajax.post(this.$apis.post_supply_supplier_orderHistory,this.orderHistoryData).then(res=>{
                     this.tradeHistory = this.$getDB(this.$db.supplier.orderHistory, res.datas, item =>{
-                         _.mapObject(item, val => {
-                            val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
-                            return val
-                        })
+                      let orderStatus;
+                      orderStatus = _.findWhere(this.orderStatus, {code: item.status.value}) || {};
+                      item.status._value = orderStatus.name || '';
+                       _.mapObject(item, val => {
+                          val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                          return val
+                      })
                     });
                    this.loading = false
                 })
@@ -439,10 +446,15 @@
                 this.loading = true;
                 this.$ajax.post(this.$apis.post_supply_supplier_getInquiryHistory,this.inquiryHistoryData).then(res=>{
                    this.inquiryData = this.$getDB(this.$db.supplier.inquiryHistory, res.datas, item => {
-                        _.mapObject(item, val => {
-                            val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
-                            return val
-                        })
+                     let inquiryStatus,incoterm;
+                     inquiryStatus = _.findWhere(this.inquiryStatus, {code: item.status.value}+'') || {};
+                     incoterm = _.findWhere(this.incoterm, {code: item.incoterm.value}) || {};
+                     item.status._value = inquiryStatus.name || '';
+                     item.incoterm._value = incoterm.name || '';
+                      _.mapObject(item, val => {
+                          val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                          return val
+                      })
                    });
                    this.loading = false
                 })
