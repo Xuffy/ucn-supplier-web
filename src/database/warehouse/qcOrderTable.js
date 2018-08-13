@@ -15,6 +15,8 @@ export default {
     deliveryDate:{
 
     },
+    skuMethodPkgEn:{},
+    skuInnerCartonMethodEn:{},
     skuUnitDictCode:{},
     lengthUnitDictCode:{},
     volumeUnitDictCode:{},

@@ -61,7 +61,9 @@ export default {
     nameCustomer:{},
     supplierCode:{},
     formation:{},
-    oemQty:{},
+    oemQty:{
+        mustShowColumn:true
+    },
     materialEn:{},
     colourEn:{},
     colourCn:{},
@@ -77,6 +79,7 @@ export default {
         }
     },
     notes:{
+        mustShowColumn:true,
         _upload:{
             readonly:true
         }

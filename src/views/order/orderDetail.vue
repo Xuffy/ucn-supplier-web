@@ -560,21 +560,11 @@
             <el-form label-width="280px">
                 <el-row class="speZone">
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.totalQty">
+                        <el-form-item :label="$i.order.totalOuterCartonQty">
                             <el-input
                                     class="summaryInput"
                                     size="mini"
-                                    v-model="orderForm.totalQty"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.skuQtys">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.skuQty"
+                                    v-model="orderForm.totalOuterCartonQty"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
@@ -590,17 +580,27 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.totalOuterCartonQty">
+                        <el-form-item :label="$i.order.orderSkuQty">
                             <el-input
                                     class="summaryInput"
                                     size="mini"
-                                    v-model="orderForm.totalOuterCartonQty"
+                                    v-model="orderForm.skuQty"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.orderTotalNetWeight">
+                        <el-form-item :label="$i.order.totalQty">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalQty"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalNetWeight">
                             <el-input
                                     class="summaryInput"
                                     size="mini"
@@ -610,7 +610,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.orderTotalGrossWeight">
+                        <el-form-item :label="$i.order.totalGrossWeight">
                             <el-input
                                     class="summaryInput"
                                     size="mini"
@@ -620,7 +620,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.orderTotalVolume">
+                        <el-form-item :label="$i.order.totalVolume">
                             <el-input
                                     class="summaryInput"
                                     size="mini"
@@ -671,9 +671,9 @@
                             :loading="disableClickCancel"
                             type="danger">{{$i.order.cancelOrder}}
                     </el-button>
-                    <el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant"
-                                 @change="changeMarkImportant">{{$i.order.markAsImportant}}
-                    </el-checkbox>
+                    <!--<el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant"-->
+                                 <!--@change="changeMarkImportant">{{$i.order.markAsImportant}}-->
+                    <!--</el-checkbox>-->
                 </div>
             </div>
             <div v-else>

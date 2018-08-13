@@ -29,9 +29,10 @@ export default {
     skuMaterialEn:{
         key:'skuMaterialEn'
     },
-    skuCustomerSkuCode:{
-        key:'skuCustomerSkuCode'
+    customerSkuCode:{
+        key:'customerSkuCode'
     },
+    customerSkuCode:{},
     skuCode:{},
     // skuDescCn:{
     //     key:'skuDescCn'
