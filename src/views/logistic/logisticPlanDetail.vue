@@ -503,7 +503,7 @@
         this.transportInfoArr.forEach(a => {
           a.value = res[a.key]
         })
-        this.shipmentStatus = this.basicInfoArr.find(el => el.key == 'shipmentStatus').value
+        this.shipmentStatus = this.basicInfoArr.find(el => el.key == 'shipmentStatus')&&this.basicInfoArr.find(el => el.key == 'shipmentStatus').value
         //日期信息  
         this.mediatorDate = this.$getDB(this.$db.logistic.dateInfo, [res])
         // 未开船：Undepartured（初始状态，未到实际订舱日期时默认未开船状态）、
@@ -1035,7 +1035,8 @@
         }
         this.$fetch.export_task(code, {
           ids: [this.planId],
-          planStatus: this.planStatus
+          planStatus: this.planStatus,
+          archive:0
         })
       },
       refuse() {
