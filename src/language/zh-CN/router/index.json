@@ -71,5 +71,7 @@
   "outboundDetail":"出库单详情",
   "qcOverview":"货单预览",
   "qcOrderDetail":"货单详情",
-  "productArchive":"产品归档"
+  "productArchive":"产品归档",
+  "customerDetail": "客户详情",
+  "customerArchive": "客户归档"
 }
