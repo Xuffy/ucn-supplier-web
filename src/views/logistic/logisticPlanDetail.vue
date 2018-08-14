@@ -91,7 +91,7 @@
     <el-dialog width="70%" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false">
       <overviewPage :title="$i.logistic.addProductFromOrder" :tableData="ProductFromOrder" :form-column="$db.logistic.addProductFromOrderFilter"
         :tableButtons="null" @change-checked="changeChecked" @tableBtnClick="ProductFromOrderDetail" @search="getSupplierIds"
-        :tableCode="configUrl[pageName]&&configUrl[pageName].setTheField" @change-sort="changeSort">
+        :tableCode="configUrl[pageName]&&configUrl[pageName].addproduct" @change-sort="changeSort">
         <v-pagination slot="pagination" :page-data="pageParams" />
         <div slot=footerBtn>
           <el-button @click="showAddProductDialog = false">{{ $i.logistic.cancel }}</el-button>
@@ -217,20 +217,24 @@
           placeLogisticPlan: {
             saveAsDraft: this.$apis.save_draft_logistic_plan,
             send: this.$apis.send_logistic_plan,
-            setTheField: 'ulogistics_PlanDetail'
+            setTheField: 'ulogistics_PlanDetail',
+            addproduct:"ulogistics_PlanDetail_AddProduct"
           },
           loadingListDetail: {
             send: this.$apis.update_logistic_plan,
-            setTheField: 'ulogistics_OrderDetail'
+            setTheField: 'ulogistics_OrderDetail',
+            addproduct:"ulogistics_OrderDetail_AddProduct"
           },
           planDetail: {
             send: this.$apis.update_logistic_plan,
-            setTheField: 'ulogistics_PlanDetail'
+            setTheField: 'ulogistics_PlanDetail',
+            addproduct:"ulogistics_PlanDetail_AddProduct"
           },
           planDraftDetail: {
             saveAsDraft: this.$apis.save_draft_logistic_plan,
             send: this.$apis.send_draft_logistic_plan,
-            setTheField: 'ulogistics_PlanDetail'
+            setTheField: 'ulogistics_PlanDetail',
+            addproduct:"ulogistics_PlanDetail_AddProduct"
           }
         },
         pageName: '',
@@ -442,7 +446,12 @@
         this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res => {
           this.showAddProductDialog = true;
           this.ProductFromOrderRes = res.datas;
-          this.ProductFromOrder = this.$getDB(this.$db.logistic.productInfo, res.datas, el => {
+          this.ProductFromOrder = this.$getDB(this.$db.logistic.addProduct, res.datas.map(el=>{
+            let sliceStr = this.selectArr.skuIncoterm.find(item => item.code == el.skuIncoterm).name;
+            sliceStr = sliceStr.slice(0, 1) + sliceStr.slice(1 - sliceStr.length).toLowerCase();
+            el.currency = el['sku' + sliceStr + 'Currency'];
+            return el;
+          }), el => {
             this.productList.forEach(item => {
               if (el.skuId.value == item.skuId.value) {
                 el._disabled = true;
@@ -503,7 +512,7 @@
         this.transportInfoArr.forEach(a => {
           a.value = res[a.key]
         })
-        this.shipmentStatus = this.basicInfoArr.find(el => el.key == 'shipmentStatus').value
+        this.shipmentStatus = this.basicInfoArr.find(el => el.key == 'shipmentStatus')&&this.basicInfoArr.find(el => el.key == 'shipmentStatus').value
         //日期信息  
         this.mediatorDate = this.$getDB(this.$db.logistic.dateInfo, [res])
         // 未开船：Undepartured（初始状态，未到实际订舱日期时默认未开船状态）、
@@ -901,7 +910,6 @@
           a.vId = this.$getUUID();
           a.blSkuName = null
           a.hsCode = null
-          a.currency = null
           a.toShipCartonQty = null
           a.toShipQty = null
           a.reportElement = null
@@ -1035,7 +1043,8 @@
         }
         this.$fetch.export_task(code, {
           ids: [this.planId],
-          planStatus: this.planStatus
+          planStatus: this.planStatus,
+          archive:0
         })
       },
       refuse() {
@@ -1226,9 +1235,9 @@
           if (this.$validateForm(this.oldPlanObject, this.$db.logistic.transportInfoObj)) {
             return;
           }
-          // if (this.$validateForm(this.shipperObj, this.$db.logistic.validateShipperObj)) {
-          //   return;
-          // }
+          if (this.$validateForm(this.shipperObj, this.$db.logistic.validateShipperObj)) {
+            return;
+          }
           //为了做shiper 的特殊处理
           this.oldPlanObject.shipper = this.shipperObj.name;
           this.oldPlanObject.shipperCompanyId = this.shipperObj.shipperCompanyId;

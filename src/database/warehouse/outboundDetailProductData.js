@@ -2,6 +2,8 @@ export default {
     skuId:{
         _hide:true
     },
+    orderNo:{},
+    warehouseName:{},
     skuBarCode:{},
     skuCode:{},
     skuNameCn:{},
@@ -43,9 +45,7 @@ export default {
     // skuDescCn:{},
     // skuDescCustomer:{},
     // skuLabel:{},
-    orderNo:{},
     // warehouseNo:{},
-    warehouseName:{},
     inboundDate:{},
     inventorySkuPrice:{},
     //仓储天数

@@ -309,7 +309,8 @@
                 {{$i.order.payment}}
             </div>
             <div class="payment-table">
-                <el-button :loading="disableClickPayback" :disabled="!hasHandleOrder" @click="applyPayback" type="primary">
+                <el-button :loading="disableClickPayback" :disabled="!hasHandleOrder" @click="applyPayback"
+                           type="primary">
                     {{$i.order.applyRefund}}
                 </el-button>
                 <el-button :disabled="!hasHandleOrder" :loading="disableRemind" @click="remindPay">
@@ -492,7 +493,8 @@
                             </div>
                             <div v-else>
                                 <div v-if="scope.row.isNew">
-                                    <el-button :disabled="false" @click="saveNewPay(scope.row)" type="text" size="small">
+                                    <el-button :disabled="false" @click="saveNewPay(scope.row)" type="text"
+                                               size="small">
                                         {{$i.order.save}}
                                     </el-button>
                                     <el-button :disabled="false" @click="cancelSaveNewPay(scope.row)" type="text"
@@ -501,7 +503,8 @@
                                 </div>
                                 <div v-else>
                                     <div v-if="scope.row.status===-1">
-                                        <el-button v-if="scope.row.planRefundDt" @click="restorePay(scope.row)" type="text">
+                                        <el-button v-if="scope.row.planRefundDt" @click="restorePay(scope.row)"
+                                                   type="text">
                                             {{$i.order.restore}}
                                         </el-button>
                                     </div>
@@ -514,7 +517,8 @@
                                         </el-button>
                                     </div>
                                     <div v-else>
-                                        <el-button @click="modifyPay(scope.row)" type="text">{{$i.order.modify}}</el-button>
+                                        <el-button @click="modifyPay(scope.row)" type="text">{{$i.order.modify}}
+                                        </el-button>
                                         <el-button @click="abandonPay(scope.row)" type="text">{{$i.order.abandon}}
                                         </el-button>
                                     </div>
@@ -672,7 +676,7 @@
                             type="danger">{{$i.order.cancelOrder}}
                     </el-button>
                     <!--<el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant"-->
-                                 <!--@change="changeMarkImportant">{{$i.order.markAsImportant}}-->
+                    <!--@change="changeMarkImportant">{{$i.order.markAsImportant}}-->
                     <!--</el-checkbox>-->
                 </div>
             </div>
@@ -1051,6 +1055,7 @@
                     :min="0"
                     class="speNumber spx"
                     slot="skuOuterCartonQty"
+                    @blur="handlePriceBlur"
                     slot-scope="{data}"
                     :accuracy="1"
                     @change="val => data._isModified=true"
@@ -1084,6 +1089,7 @@
                     class="speNumber spx"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonNetWeight"
+                    @blur="handlePriceBlur"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -1092,6 +1098,7 @@
                     :controls="false"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonRoughWeight"
+                    @blur="handlePriceBlur"
                     :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -1100,6 +1107,7 @@
                     class="speNumber spx"
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonVolume"
+                    @blur="handlePriceBlur"
                     :accuracy="3"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
@@ -1142,6 +1150,16 @@
                     slot="skuDeliveryDates"
                     :accuracy="0"
                     slot-scope="{data}"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="skuCartonQty"
+                    @blur="handlePriceBlur"
+                    :accuracy="0"
+                    slot-scope="{data}"
+                    :disabled="true"
                     v-model="data.value"></v-input-number>
         </v-history-modify>
 
@@ -1498,8 +1516,8 @@
                             this.quarantineTypeOption = v.codes;
                         } else if (v.code === "SKU_STATUS") {
                             this.skuStatusTotalOption = v.codes;
-                            _.map(this.skuStatusTotalOption,(v,k)=>{
-                                if(k===1 || k===3){
+                            _.map(this.skuStatusTotalOption, (v, k) => {
+                                if (k === 1 || k === 3) {
                                     this.skuStatusOption.push(v);
                                 }
                             });
@@ -1507,14 +1525,12 @@
                             this.paymentItemOption = v.codes;
                         }
                     });
-
                     this.getDetail();
-                }).finally(() => {
+                }).catch(() => {
                     this.loadingPage = false;
                 });
             },
             getDetail(e, isTrue) {
-                this.loadingPage = true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL, {
                     orderId: this.$route.query.orderId,
                     orderNo: this.$route.query.orderNo || this.$route.query.code
@@ -1563,6 +1579,10 @@
                             item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
                             item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: String(item.skuInspectQuarantineCategory.value) }) || {}).name;
                             item.skuCategoryId._value = item.skuCategoryName.value;
+                            if (item.skuCartonQty.value !== Math.ceil(item.skuCartonQty.value)) {
+                                item.skuCartonQty._style = { "backgroundColor": "yellow" };
+                            }
+
                         }
                     });
                     this.productTableData = [];
@@ -1573,7 +1593,7 @@
                         _.map(this.productTableData, v => {
                             if (v.fieldUpdate.value) {
                                 _.map(v.fieldUpdate.value, (value, key) => {
-                                    if (key !== "skuPictures") {
+                                    if (key !== "skuPictures" && key !== "skuDescCustomer" && key !== "skuNameCustomer") {
                                         v[key]._style = { "backgroundColor": "yellow" };
                                     }
                                 });
@@ -1616,11 +1636,10 @@
                      * 获取payment数据
                      * */
                     this.getPaymentData();
-                }).finally(err => {
+                }).finally(() => {
                     this.$nextTick(() => {
                         this.loadingPage = false;
                     });
-
                     this.disableClickCancelModify = false;
                     if (e) {
                         this.isModify = false;
@@ -1638,7 +1657,7 @@
                         v.name = (_.findWhere(this.paymentItemOption, { code: v.name }) || {}).name;
                     });
                     this.paymentData = res.datas;
-                }).finally(err => {
+                }).finally(() => {
                     this.loadingPaymentTable = false;
                 });
             },
@@ -1697,13 +1716,17 @@
                 /**
                  * 判断是否产品客户语言描述，产品客户语言品名和客户货号填了
                  * */
-                for(let val in params.skuList){
-                    if(this.$validateForm(params.skuList[val], this.$db.order.productInfoTable)){
+                for (let val in params.skuList) {
+                    if (this.$validateForm(params.skuList[val], this.$db.order.productInfoTable)) {
                         return;
                     }
                 }
 
+                let rightCode = true;
                 _.map(params.skuList, v => {
+                    if (v.skuSupplierCode !== params.supplierCode) {
+                        rightCode = false;
+                    }
                     v.skuSample = v.skuSample === "1" ? true : false;
                     if (v.skuInspectQuarantineCategory) {
                         v.skuInspectQuarantineCategory = _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code;
@@ -1718,6 +1741,13 @@
                         }
                     });
                 });
+                //如果选的产品和上面选的供应商不一致，要给出提示
+                if (!rightCode) {
+                    return this.$message({
+                        message: this.$i.order.supplierNotTheSame,
+                        type: "warning"
+                    });
+                }
                 params.attachments = this.$refs.upload[0].getFiles();
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
@@ -1741,8 +1771,8 @@
                         });
                     }
                     this.getUnit();
-                }).catch(err => {
-                    // this.loadingPage=false;
+                }).catch(() => {
+                    this.loadingPage=false;
                 });
             },
             changePayment(e, key) {
@@ -1843,8 +1873,8 @@
                             arr.push(v);
                         }
                     });
-                    this.getHistory(e, arr, true).then(data=>{
-                         this.chooseProduct =data;
+                    this.getHistory(e, arr, true).then(data => {
+                        this.chooseProduct = data;
                     });
                 }
                 else if (type === "detail") {
@@ -1873,10 +1903,10 @@
                 };
 
                 return this.$ajax.post(this.$apis.ORDER_HISTORY, param).then(res => {
-                    let arr = [],obj={};
+                    let arr = [], obj = {};
                     _.map(res.datas, v => {
-                        obj=JSON.parse(v.history);
-                        obj.fieldRemark=JSON.parse(v.fieldsRemark);
+                        obj = JSON.parse(v.history);
+                        obj.fieldRemark = JSON.parse(v.fieldsRemark);
                         arr.push(obj);
                     });
 
@@ -1958,7 +1988,7 @@
             handleProductOk(e) {
                 this.loadingProductTable = true;
                 this.productTableDialogVisible = false;
-                let ids = _.pluck(_.pluck(e, 'id'), "value");
+                let ids = _.pluck(_.pluck(e, "id"), "value");
                 this.$ajax.post(this.$apis.ORDER_SKUS, ids).then(res => {
                     _.map(res, v => {
                         v.skuStatus = "TBC";
@@ -1992,12 +2022,12 @@
             handleCancel() {
                 this.productTableDialogVisible = false;
             },
-            beforeSave(data){
-                let obj={};
-                _.map(data[0],(val,key)=>{
-                    obj[key]=val.value;
+            beforeSave(data) {
+                let obj = {};
+                _.map(data[0], (val, key) => {
+                    obj[key] = val.value;
                 });
-                if(this.$validateForm(obj, this.$db.order.productInfoTable)){
+                if (this.$validateForm(obj, this.$db.order.productInfoTable)) {
                     return false;
                 }
             },
@@ -2087,37 +2117,98 @@
              * history部分事件
              * */
             handlePriceBlur(e, item) {
+                let obj;
+                obj = item ? item : this.chooseProduct[0];
+                if(obj.skuOuterCartonQty.value && obj.skuQty.value){
+                    obj.skuCartonQty.value=this.$calc.divide(obj.skuQty.value,obj.skuOuterCartonQty.value);
+                    //联动totalCtnGw
+                    if(obj.skuCartonQty.value && obj.skuOuterCartonRoughWeight.value){
+                        obj.totalCtnGw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonRoughWeight.value),2);
+                    }
+                    else{
+                        obj.totalCtnGw.value=null;
+                    }
+
+                    //联动totalCtnNw
+                    if(obj.skuCartonQty.value && obj.skuOuterCartonNetWeight.value){
+                        obj.totalCtnNw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonNetWeight.value),2);
+                    }
+                    else{
+                        obj.totalCtnNw.value=null;
+                    }
+
+                    //联动totalCtnCbm
+                    if(obj.skuCartonQty.value && obj.skuOuterCartonVolume.value){
+                        obj.totalCtnCbm.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonVolume.value),3);
+                    }
+                    else{
+                        obj.totalCtnCbm.value=null;
+                    }
+
+                    if(obj.skuCartonQty.value!==Math.ceil(obj.skuCartonQty.value)){
+                        obj.skuCartonQty._style={ "backgroundColor": "yellow" };
+                    }else{
+                        obj.skuCartonQty._style={};
+                    }
+                }else{
+                    obj.skuCartonQty.value=null;
+                    obj.totalCtnGw.value=null;
+                    obj.totalCtnNw.value=null;
+                    obj.totalCtnCbm.value=null;
+                }
+
+                //处理totalCtnGw
+                if(obj.skuCartonQty.value && obj.skuOuterCartonRoughWeight.value){
+                    obj.totalCtnGw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonRoughWeight.value),2);
+                }else{
+                    obj.totalCtnGw.value=null;
+                }
+
+                //处理totalCtnNw
+                if(obj.skuCartonQty.value && obj.skuOuterCartonNetWeight.value){
+                    obj.totalCtnNw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonNetWeight.value),2);
+                }else{
+                    obj.totalCtnNw.value=null;
+                }
+
+                //处理totalCtnCbm
+                if(obj.skuCartonQty.value && obj.skuOuterCartonVolume.value){
+                    obj.totalCtnCbm.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonVolume.value),3);
+                }else{
+                    obj.totalCtnCbm.value=null;
+                }
+
+
+
                 if (!this.orderForm.incoterm) {
                     return;
                 }
-                let obj;
-                obj = item ? item : this.chooseProduct[0];
-                console.log(obj,'obj')
+
                 if (this.orderForm.incoterm === "1") {
                     //fob
                     if (obj.skuFobPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuFobPrice.value,obj.skuQty.value), 4);
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuFobPrice.value, obj.skuQty.value), 4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
                 } else if (this.orderForm.incoterm === "2") {
                     //exw
                     if (obj.skuExwPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuExwPrice.value,obj.skuQty.value), 4);
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuExwPrice.value, obj.skuQty.value), 4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
                 } else if (this.orderForm.incoterm === "3") {
                     //cif
                     if (obj.skuCifPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuCifPrice.value,obj.skuQty.value),4);
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuCifPrice.value, obj.skuQty.value), 4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
                 } else if (this.orderForm.incoterm === "4") {
                     //ddu
                     if (obj.skuDduPrice.value && obj.skuQty.value) {
-                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuDduPrice.value,obj.skuQty.value),4);
+                        obj.skuPrice.value = this.$toFixed(this.$calc.multiply(obj.skuDduPrice.value, obj.skuQty.value), 4);
                     } else {
                         obj.skuPrice.value = 0;
                     }
@@ -2150,8 +2241,8 @@
                         }
                         else {
                             const values = data.map(item => {
-                                if(item.status===40){
-                                    return Number(item[column.property])
+                                if (item.status === 40) {
+                                    return Number(item[column.property]);
                                 }
                             });
                             if (!values.every(value => isNaN(value))) {
@@ -2574,7 +2665,7 @@
                 this.$ajax.post(this.$apis.ORDER_MESSAGE_TALK, params).then(res => {
 
                 });
-            },
+            }
 
         },
         created() {

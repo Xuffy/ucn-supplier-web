@@ -2,13 +2,6 @@ export default {
     id:{
         _hide:true,
     },
-    orderNo:{},
-    customerOrderNo:{
-        mustShowColumn:true
-    },
-    supplierOrderNo:{
-        mustShowColumn:true
-    },
     skuPictures:{
         mustShowColumn:true,
         _image:true,
@@ -16,8 +9,17 @@ export default {
             readonly:true,
         }
     },
-    skuCustomerSkuCode:{},
+    skuStatus:{},
     skuCode:{},
+    skuCustomerSkuCode:{},
+
+    orderNo:{},
+    customerOrderNo:{
+        mustShowColumn:true
+    },
+    supplierOrderNo:{
+        mustShowColumn:true
+    },
     skuSupplierName:{},
     skuNameCn:{},
     skuNameEn:{},
@@ -69,7 +71,6 @@ export default {
     entryDt:{},
     deliveryDt:{},
     skuDeliveredQty:{},
-    skuStatus:{},
     updateDt:{},
     supplierAbbr:{
         mustShowColumn:true
