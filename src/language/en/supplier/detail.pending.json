@@ -125,7 +125,7 @@
   "totalGW": "Total G.W.",
   "relatedOrderNO": "Related order NO.",
   "shipAgent": "Ship agent",
-  "amount": "Amount",
+  "amount": "Total QTY",
   "expressAddress": "Express address",
   "consignee": "Consignee",
   "destinationPort": "Destination port"

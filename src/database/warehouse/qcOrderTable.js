@@ -2,10 +2,12 @@ export default {
     id:{
         _hide: true
     },
-    skuQcResultDictCode:{},
-    skuInventoryStatusDictCode:{},
     skuCode:{},
     customerSkuCode:{},
+    orderSkuQty:{},
+    expectQcQty:{},
+    skuQcResultDictCode:{},
+    skuInventoryStatusDictCode:{},
     // factorySkuCode:{},
     skuNameCn:{},
     skuBrand:{},
@@ -18,13 +20,10 @@ export default {
     skuMethodPkgEn:{},
     skuInnerCartonMethodEn:{},
     skuUnitDictCode:{},
-    lengthUnitDictCode:{},
-    volumeUnitDictCode:{},
-    weightUnitDictCode:{},
+   
     inboundNo:{},
-    orderSkuQty:{},
-    expectQcQty:{},
     samplingRate:{},
+    checkOuterCartonQty:{},
     unqualifiedProcessingMode:{},
     skuLength:{},
     skuWidth:{},
@@ -70,11 +69,13 @@ export default {
     outerCartonBarCodeResultDictCode:{},
     shippingMark:{},
     shippingMarkResultDictCode:{},
+    actSkuQty:{},
     qcPic:{
         key:'qcPics'
     },
-    checkOuterCartonQty:{},
     remark:{},
-
+    lengthUnitDictCode:{},
+    volumeUnitDictCode:{},
+    weightUnitDictCode:{},
 
 }
