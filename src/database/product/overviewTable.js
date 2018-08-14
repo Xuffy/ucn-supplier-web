@@ -62,7 +62,8 @@ export default {
     supplierCode:{},
     formation:{},
     oemQty:{
-        mustShowColumn:true
+        mustShowColumn:true,
+        _sort:true
     },
     materialEn:{},
     colourEn:{},

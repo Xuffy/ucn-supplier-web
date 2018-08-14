@@ -1525,14 +1525,12 @@
                             this.paymentItemOption = v.codes;
                         }
                     });
-
                     this.getDetail();
-                }).finally(() => {
+                }).catch(() => {
                     this.loadingPage = false;
                 });
             },
             getDetail(e, isTrue) {
-                this.loadingPage = true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL, {
                     orderId: this.$route.query.orderId,
                     orderNo: this.$route.query.orderNo || this.$route.query.code
@@ -1638,11 +1636,10 @@
                      * 获取payment数据
                      * */
                     this.getPaymentData();
-                }).finally(err => {
+                }).finally(() => {
                     this.$nextTick(() => {
                         this.loadingPage = false;
                     });
-
                     this.disableClickCancelModify = false;
                     if (e) {
                         this.isModify = false;
@@ -1660,7 +1657,7 @@
                         v.name = (_.findWhere(this.paymentItemOption, { code: v.name }) || {}).name;
                     });
                     this.paymentData = res.datas;
-                }).finally(err => {
+                }).finally(() => {
                     this.loadingPaymentTable = false;
                 });
             },
@@ -1725,7 +1722,11 @@
                     }
                 }
 
+                let rightCode = true;
                 _.map(params.skuList, v => {
+                    if (v.skuSupplierCode !== params.supplierCode) {
+                        rightCode = false;
+                    }
                     v.skuSample = v.skuSample === "1" ? true : false;
                     if (v.skuInspectQuarantineCategory) {
                         v.skuInspectQuarantineCategory = _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code;
@@ -1740,6 +1741,13 @@
                         }
                     });
                 });
+                //如果选的产品和上面选的供应商不一致，要给出提示
+                if (!rightCode) {
+                    return this.$message({
+                        message: this.$i.order.supplierNotTheSame,
+                        type: "warning"
+                    });
+                }
                 params.attachments = this.$refs.upload[0].getFiles();
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
@@ -1763,8 +1771,8 @@
                         });
                     }
                     this.getUnit();
-                }).catch(err => {
-                    // this.loadingPage=false;
+                }).catch(() => {
+                    this.loadingPage=false;
                 });
             },
             changePayment(e, key) {
