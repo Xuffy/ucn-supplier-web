@@ -1164,10 +1164,11 @@
         </v-history-modify>
 
         <v-message-board
-                @send="afterSend"
+                v-if="chatParams"
                 :readonly="orderForm.status==='5'"
-                module="order"
+                module="ORDER"
                 code="detail"
+                :arguments="chatParams"
                 :id="$route.query.orderId"></v-message-board>
     </div>
 </template>
@@ -1298,6 +1299,7 @@
                 disableChangeSkuStatus: false,
                 initialData: {},
                 disableProductLine: [],
+                chatParams:{},
 
 
                 /**
@@ -1525,19 +1527,27 @@
                             this.paymentItemOption = v.codes;
                         }
                     });
-
                     this.getDetail();
-                }).finally(() => {
+                }).catch(() => {
                     this.loadingPage = false;
                 });
             },
             getDetail(e, isTrue) {
-                this.loadingPage = true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL, {
                     orderId: this.$route.query.orderId,
                     orderNo: this.$route.query.orderNo || this.$route.query.code
                 }).then(res => {
                     this.orderForm = res;
+                    this.chatParams={
+                        bizNo:res.quotationNo,
+                        dataAuthCode:'BIZ_ORDER',
+                        funcAuthCode:'',            //功能权限
+                        suppliers:[{
+                            userId:res.supplierUserId,
+                            companyId:res.supplierCompanyId,
+                            tenantId:res.supplierTenantId
+                        }]
+                    };
                     _.map(this.$db.order.orderDetail, v => {
                         v._isModified = false;
                     });
@@ -1638,11 +1648,10 @@
                      * 获取payment数据
                      * */
                     this.getPaymentData();
-                }).finally(err => {
+                }).finally(() => {
                     this.$nextTick(() => {
                         this.loadingPage = false;
                     });
-
                     this.disableClickCancelModify = false;
                     if (e) {
                         this.isModify = false;
@@ -1660,7 +1669,7 @@
                         v.name = (_.findWhere(this.paymentItemOption, { code: v.name }) || {}).name;
                     });
                     this.paymentData = res.datas;
-                }).finally(err => {
+                }).finally(() => {
                     this.loadingPaymentTable = false;
                 });
             },
@@ -1725,7 +1734,11 @@
                     }
                 }
 
+                let rightCode = true;
                 _.map(params.skuList, v => {
+                    if (v.skuSupplierCode !== params.supplierCode) {
+                        rightCode = false;
+                    }
                     v.skuSample = v.skuSample === "1" ? true : false;
                     if (v.skuInspectQuarantineCategory) {
                         v.skuInspectQuarantineCategory = _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code;
@@ -1740,6 +1753,13 @@
                         }
                     });
                 });
+                //如果选的产品和上面选的供应商不一致，要给出提示
+                if (!rightCode) {
+                    return this.$message({
+                        message: this.$i.order.supplierNotTheSame,
+                        type: "warning"
+                    });
+                }
                 params.attachments = this.$refs.upload[0].getFiles();
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
@@ -1763,8 +1783,8 @@
                         });
                     }
                     this.getUnit();
-                }).catch(err => {
-                    // this.loadingPage=false;
+                }).catch(() => {
+                    this.loadingPage=false;
                 });
             },
             changePayment(e, key) {
@@ -2582,82 +2602,6 @@
 
                 });
             },
-
-            /**
-             * message board事件
-             * */
-            afterSend() {
-                let params = Object.assign({}, this.orderForm);
-                _.map(this.supplierOption, v => {
-                    if (params.supplierCode === v.code) {
-                        params.supplierName = v.name;
-                        params.supplierCode = v.code;
-                        params.supplierId = v.id;
-                        params.supplierCompanyId = v.companyId;
-                    }
-                });
-                let orderSkuUpdateList = [];
-                _.map(this.productTableData, item => {
-                    let isModify = false, isModifyStatus = false;
-                    _.map(item, (val, index) => {
-                        if (val._isModified) {
-                            isModify = true;
-                        }
-                        if (val._isModifyStatus) {
-                            isModifyStatus = true;
-                        }
-                    });
-                    if (isModify || isModifyStatus) {
-                        let isIn = false;
-                        _.map(orderSkuUpdateList, data => {
-                            if (data.skuId === item.skuId.value) {
-                                data.skuInfo = isModify;
-                                data.skuStatus = isModifyStatus;
-                                isIn = true;
-                            }
-                        });
-                        if (!isIn) {
-                            orderSkuUpdateList.push({
-                                skuId: item.skuId.value,
-                                skuInfo: isModify,
-                                skuStatus: isModifyStatus
-                            });
-                        }
-                    }
-                    if (!item._remark) {
-                        _.map(item, (v, k) => {
-                            if (v._isModified || v._isModifyStatus) {
-                                if (!item.fieldUpdate.value) {
-                                    item.fieldUpdate.value = {};
-                                }
-                                item.fieldUpdate.value[k] = "";
-                            }
-                        });
-                    }
-                });
-                params.orderSkuUpdateList = orderSkuUpdateList;
-                params.skuList = this.dataFilter(this.productTableData);
-                _.map(params.skuList, v => {
-                    v.skuSample = v.skuSample === "1" ? true : false;
-                    if (v.skuInspectQuarantineCategory) {
-                        v.skuInspectQuarantineCategory = _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code;
-                    }
-                    let picKey = ["skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
-                    _.map(picKey, item => {
-                        if (_.isArray(v[item])) {
-                            v[item] = (v[item][0] ? v[item][0] : null);
-                        } else if (_.isString(v[item])) {
-                            let key = this.$getOssKey(v[item], true);
-                            v[item] = key[0];
-                        }
-                    });
-                });
-                params.attachments = this.$refs.upload[0].getFiles();
-
-                this.$ajax.post(this.$apis.ORDER_MESSAGE_TALK, params).then(res => {
-
-                });
-            }
 
         },
         created() {

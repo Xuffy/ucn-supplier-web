@@ -404,6 +404,7 @@
     line-height: 50px;
     border-bottom: 1px solid #ccc;
     padding: 0 15px;
+    margin-bottom: 20px;
   }
 
   .btn-wrap {

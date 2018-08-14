@@ -138,6 +138,7 @@ export default {
     typeSlef: 'text'
   },
   "skuCustomerSkuCode": {
+    _filed:'customerSkuCode',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -175,14 +176,6 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "containerNo": {
-    type: 'Select',
-    correlationKey:"containerType",
-    _optionLabel:'containerNo',
-    _optionValue:'containerNo',
-    _option:[],
-    typeSlef: 'text'
-  },
   "containerId": {
     type: 'String',
     _disabled: true,
@@ -194,33 +187,9 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "totalQuantityOfOuterCartonsInContainer": {
-    key: 'totalContainerOuterCartonsQty',
-    _filed: 'totalContainerOuterCartonsQty',
-    // computedKey 计算要使用的key 的联动值
-    // computedResKey 计算的结果显示的key 的联动值
-    computed : [
-      {computedKey:'skuOuterCartonQty',computedResKey:'totalContainerQty'},
-      {computedKey:'skuOuterCartonVolume',computedResKey:'totalCtnCbm'},
-      {computedKey:'skuOuterCartonNetWeight',computedResKey:'totalCtnNw'},
-      {computedKey:'skuOuterCartonRoughWeight',computedResKey:'totalCtnGw'}
-    ],
-    type: 'String',
-    _toFixed:1,
-    typeSlef: 'text',
-    _important: true
-  },
   "skuOuterCartonQty": {
     type: 'String',
     _disabled: true,
-    typeSlef: 'text',
-    _important: true
-  },
-  "totalQuantityInContainer": {
-    key: 'totalContainerQty',
-    _filed: 'totalContainerQty',
-    _disabled: true,
-    type: 'String',
     typeSlef: 'text',
     _important: true
   },
@@ -230,35 +199,13 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "totalVolumeInContainer": {
-    key: 'totalCtnCbm',
-    _filed: 'totalContainerVolume',
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text',
-    _important: true
-  },
   "skuOuterCartonNetWeight": {
     _filed:'outerCartonNetWeight',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
   },
-  "totalNetWeightInContainer": {
-    key: 'totalCtnNw',
-    _filed: 'totalContainerNetWeight',
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text',
-    _important: true
-  },
   "skuOuterCartonRoughWeight": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
-  "totalContainerGrossWeight": {
-    key:'totalCtnGw',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'

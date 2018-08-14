@@ -9,6 +9,45 @@ export default {
   orderNo: {
     type: 'text'
   },
+  containerNo: {
+    type: 'String'
+  },
+  totalQuantityOfOuterCartonsInContainer: {
+    key: 'totalContainerOuterCartonsQty',
+    _filed: 'totalContainerOuterCartonsQty',
+    type: 'String',
+  },
+  totalQuantityInContainer: {
+    key: 'totalContainerQty',
+    _filed: 'totalContainerQty',
+    type: 'String',
+  },
+  totalVolumeInContainer: {
+    key: 'totalCtnCbm',
+    _filed: 'totalContainerVolume',
+    type: 'String'
+  },
+  totalNetWeightInContainer: {
+    key: 'totalCtnNw',
+    _filed: 'totalContainerNetWeight',
+    type: 'String'
+  },
+  totalContainerGrossWeight: {
+    key:'totalCtnGw',
+    type: 'String'
+  },
+  unitExportPrice: {
+    type: 'String'
+  },
+  totalExportPrice: {
+    type: 'String'
+  },
+  currency: {
+    type: 'String'
+  },
+  skuQty: {
+    type: 'String'
+  },
   lcNo: {
     type: 'text'
   },
@@ -30,17 +69,10 @@ export default {
   skuNameEn: {
     type: 'text'
   },
-  productDescription: {
-    key:'skuNameCustomer',
-    type: 'text'
-  },
   skuDescriptionCn: {
     type: 'text'
   },
   skuDescriptionEN: {
-    type: 'text'
-  },
-  supplierName: {
     type: 'text'
   },
   supplierSerialNumber: {
@@ -55,6 +87,17 @@ export default {
   },
   blSkuName: {
     type: 'text'
+  },
+  customsDeclarationNameCn: {
+    key:'customDeclarationNameCn',
+    type: 'text'
+  },
+  customsDeclarationNameEn: {
+    key:'customDeclarationNameEn',
+    type: 'String'
+  },
+  hsCode: {
+    type: 'String'
   },
   unitPrice: {
     type: 'text'

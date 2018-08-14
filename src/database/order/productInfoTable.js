@@ -1,10 +1,7 @@
 export default {
     label:{
         _important:true,
-        _title:'Remark'
-    },
-    skuStatus:{
-        _slot:'skuStatus',
+        _title:'Remark',
         _fixed:'left'
     },
     _remark:{
@@ -34,8 +31,22 @@ export default {
         _upload:{
             limit:1,
             readonly:true
+        },
+        _fixed:'left'
+    },
+    skuStatus:{
+        _slot:'skuStatus',
+        _fixed:'left'
+    },
+    skuCode:{
+        _disabled:true
+    },
+    skuCustomerSkuCode:{
+        _rules:{
+            required:true
         }
     },
+
     skuNotes:{
         mustShowColumn:true,
         _upload:{
@@ -54,14 +65,6 @@ export default {
         _disabled:true
     },
     skuDescEn:{
-        _disabled:true
-    },
-    skuCustomerSkuCode:{
-        _rules:{
-            required:true
-        }
-    },
-    skuCode:{
         _disabled:true
     },
     skuSupplierName:{

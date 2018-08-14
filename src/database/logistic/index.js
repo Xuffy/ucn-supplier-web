@@ -4,6 +4,7 @@ import transportationList from './plan/transportationList'
 import containerInfo from './plan/containerInfo'
 import productInfo from './plan/productInfo'
 import productModify from './plan/productModify'
+import addProduct from './plan/addProduct'
 import {
   basicInfoObj,
   transportInfoObj,
@@ -37,5 +38,6 @@ export default {
   dbcontainerInfo,
   LLBasicInfoObj,
   addProductFromOrderFilter,
-  validateShipperObj
+  validateShipperObj,
+  addProduct
 }
