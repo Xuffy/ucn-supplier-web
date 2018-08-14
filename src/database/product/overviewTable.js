@@ -58,8 +58,6 @@ export default {
     outerCartonVolume:{},
     recycle:{},
     nameCn:{},
-    nameCustomer:{},
-    supplierCode:{},
     formation:{},
     oemQty:{
         mustShowColumn:true,
@@ -77,7 +75,8 @@ export default {
     designs:{
         _upload:{
             readonly:true
-        }
+        },
+        mustShowColumn:true,
     },
     notes:{
         mustShowColumn:true,
@@ -161,7 +160,7 @@ export default {
     outerCartonWidth:{},
     outerCartonHeight:{},
     outerCartonMethodCn:{
-        _sort:false
+        _sort:false,
     },
     outerCartonMethodEn:{
         _sort:false

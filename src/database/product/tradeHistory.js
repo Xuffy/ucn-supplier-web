@@ -13,9 +13,6 @@ export default {
     salesOrderNo:{
         key:'customerOrderNo'
     },
-    purchaseOrderNo:{
-        key:'supplierOrderNo'
-    },
     totalCTN:{
         key:'totalOuterCartonQty'
     },
