@@ -82,7 +82,7 @@ export default {
         break;
     }
     thisTool.setMenuLinks(this, ['INQUIRY:LOG']);
-    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
+    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM', 'OEM_IS'], 'cache')
       .then(data => this.setDic(codeUtils.convertDicValueType(data)))
       .then(this.getInquiryList);
   },

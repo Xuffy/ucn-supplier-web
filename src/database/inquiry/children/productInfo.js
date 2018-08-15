@@ -74,23 +74,6 @@ export default {
     key: 'skuDescEn',
     _disabled: true
   },
-  skuNameInCustomerLanguage: {
-    key: 'skuNameCustomer'
-  },
-  skuDescriptionInCustomerLanguage: {
-    key: 'skuDescCustomer'
-  },
-  customerSkuCode: {
-    key: 'skuCustomerSkuCode'
-  },
-  supplierName: {
-    key: 'skuSupplierName',
-    _disabled: true
-  },
-  supplierNo: {
-    key: 'skuSupplierCode',
-    _disabled: true
-  },
   unit: {
     key: 'skuUnit',
     type: 'Select',
@@ -98,7 +81,8 @@ export default {
   },
   productFormation: {
     key: 'skuFormation',
-    type: 'String'
+    type: 'Select',
+    transForm: 'SKU_FORMATION'
   },
   martialEn: {
     key: 'skuMaterialEn',

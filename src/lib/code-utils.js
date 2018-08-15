@@ -80,7 +80,8 @@ const codeUtils = {
         'VE_UNIT',
         'OEM_IS',
         'UDB_IS',
-        'SKU_PG_IS'
+        'SKU_PG_IS',
+        'SKU_FORMATION'
       ],
       { cache: true }
     );

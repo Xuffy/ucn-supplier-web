@@ -43,7 +43,7 @@
       </div>
     </div>
     <v-table
-      :code="viewByStatus ? 'inquiry': 'inquiry_list'"
+      :code="viewByStatus ? 'VIEW_BY_SKU': 'VIEW_BY_INQUIRY'"
       :data="tabData"
       :buttons="actionBtns"
       :height="450"
@@ -141,7 +141,7 @@ export default {
       this.searchLoad = true;
     },
     getDirCodes() {
-      return this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], {cache: true}).then(data => {
+      return this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM', 'OEM_IS'], {cache: true}).then(data => {
         this.setDic(codeUtils.convertDicValueType(data));
         return data;
       });
