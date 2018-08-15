@@ -58,5 +58,7 @@
   "attachments": "Attachment",
   "qcPics": "QC Pic",
   "qcUpload": "upload",
-  "ContinueQcUpload": "Continue uploading"
+  "ContinueQcUpload": "Continue uploading",
+  "innerCartonMark": "Inner Carton Mark",
+  "innerCartonMarkResultDictCode": "Inner Carton Mark Results"
 }

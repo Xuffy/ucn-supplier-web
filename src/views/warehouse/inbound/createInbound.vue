@@ -202,7 +202,8 @@
                     :height="500"
                     v-loading="loadingTable"
                     :data="tableDataList"
-                    @change-checked="changeChecked"></v-table>
+                    @change-checked="changeChecked"
+                    @change-sort="val=>{getProductData(val)}"></v-table>
             <v-pagination
                     :page-sizes="[50,100,200,500]"
                     @size-change="changeSize"
@@ -323,7 +324,8 @@
                 this.addOrderDialogVisible = true;
                 this.getProductData();
             },
-            getProductData() {
+            getProductData(e) {
+                Object.assign(this.orderProduct, e)
                 this.loadingTable = true;
                 this.disabledSearch = true;
                 this.disabledCancelSearch = true;

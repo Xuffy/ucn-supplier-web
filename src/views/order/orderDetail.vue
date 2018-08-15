@@ -1170,6 +1170,16 @@
                 code="detail"
                 :arguments="chatParams"
                 :id="$route.query.orderId"></v-message-board>
+
+        <el-dialog
+                title="提示"
+                :visible.sync="addToMyProductVisible"
+                :fullscreen="true"
+                :append-to-body="true"
+                width="100%">
+            <add-product></add-product>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -1185,6 +1195,9 @@
         VProduct,
         VInputNumber
     } from "@/components/index";
+
+    import AddProduct from '../product/addNewProduct';
+
     import { mapActions } from "vuex";
 
     export default {
@@ -1197,7 +1210,8 @@
             VProduct,
             VHistoryModify,
             VMessageBoard,
-            VInputNumber
+            VInputNumber,
+            AddProduct
         },
         data() {
             return {
@@ -1240,6 +1254,7 @@
                  * */
                 hasHandleOrder: false,       //该订单是否接单,默认为false
                 hasCancelOrder: false,
+                addToMyProductVisible:false,
                 isModify: false,     //是否在modify状态
                 disabledLcNo: true,
                 allowQuery: 0,
@@ -1279,6 +1294,16 @@
                         type: "detail"
                     }
                 ],
+                productNotMineBtn:[
+                    {
+                        label: this.$i.order.addToMyProduct,
+                        type: "addToProduct"
+                    },
+                    {
+                        label: this.$i.order.detail,
+                        type: "detail"
+                    }
+                ],
                 loadingProductTable: false,
                 tableTotal: [],
                 activeTab: "product",
@@ -1300,7 +1325,6 @@
                 initialData: {},
                 disableProductLine: [],
                 chatParams:{},
-
 
                 /**
                  * payment 配置
@@ -1575,9 +1599,14 @@
                         }
                     });
                     this.changePayment(res.payment);
+                    let skuSupplierCode;
                     let data = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(res.skuList, "skuSysCode"), item => {
+                        if(item.skuSupplierCode.value){
+                            skuSupplierCode=item.skuSupplierCode.value;
+                        }
                         if (item._remark) {
                             item.label.value = this.$i.order.remarks;
+                            item.skuSupplierCode.value=skuSupplierCode;
                         }
                         else {
                             item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
@@ -1606,7 +1635,9 @@
                             if (v.fieldUpdate.value) {
                                 _.map(v.fieldUpdate.value, (value, key) => {
                                     if (key !== "skuPictures" && key !== "skuDescCustomer" && key !== "skuNameCustomer") {
-                                        v[key]._style = { "backgroundColor": "yellow" };
+                                        if(v[key]){
+                                            v[key]._style = { "backgroundColor": "yellow" };
+                                        }
                                     }
                                 });
                                 v.fieldUpdate.value = {};
@@ -1861,13 +1892,17 @@
              * */
             handleShowBtn(item) {
                 let config;
-                if (this.isModify) {
+                if(item.skuSupplierCode.value!==this.orderForm.supplierCode){
+                    config=this.productNotMineBtn;
+                }
+                else if (this.isModify) {
                     if (item.skuStatus.value === "SHIPPED") {
                         config = this.productNotModifyBtn;
                     } else {
                         config = this.productInfoBtn;
                     }
-                } else {
+                }
+                else {
                     config = this.productNotModifyBtn;
                 }
                 return config;
@@ -1902,6 +1937,9 @@
                         m.skuSysCode.value === e.skuSysCode.value
                     );
                     this.getHistory(e, []);
+                }
+                else if(type==='addToProduct'){
+                    this.addToMyProductVisible=true;
                 }
             },
             getHistory(e, data, isTrue) {
@@ -2570,14 +2608,39 @@
                 this.$fetch.export_task("EXPORT_ORDER", { ids: [this.orderForm.id] });
             },
             acceptOrder() {
-                this.disableClickAccept = true;
-                this.$ajax.post(this.$apis.ORDER_ACCEPT, {
-                    ids: [this.orderForm.id]
-                }).then(res => {
-                    this.getDetail();
-                }).finally(err => {
-                    this.disableClickAccept = false;
+                let allProductIsMine=true,newArray=[];
+                _.map(this.productTableData,v=>{
+                    if(!v._remark && v.skuSupplierCode.value!==this.orderForm.supplierCode){
+                        allProductIsMine=false;
+                    }
                 });
+                if(!allProductIsMine){
+                    this.$confirm(this.$i.order.productWillBeRemoved, this.$i.order.prompt, {
+                        confirmButtonText: this.$i.order.sure,
+                        cancelButtonText: this.$i.order.cancel,
+                        type: 'warning'
+                    }).then(() => {
+                        let productTableData=this.$depthClone(this.productTableData);
+                        _.map(productTableData,v=>{
+                            if(v.skuSupplierCode.value===this.orderForm.supplierCode){
+                                newArray.push(v);
+                            }
+                        })
+                        this.productTableData=newArray;
+                        // this.send(true);
+                    }).catch(() => {
+
+                    });
+                }else{
+                    this.disableClickAccept = true;
+                    this.$ajax.post(this.$apis.ORDER_ACCEPT, {
+                        ids: [this.orderForm.id]
+                    }).then(() => {
+                        this.getDetail();
+                    }).finally(() => {
+                        this.disableClickAccept = false;
+                    });
+                }
             },
             refuseOrder() {
                 this.$confirm(this.$i.order.sureRefuse, this.$i.order.prompt, {
