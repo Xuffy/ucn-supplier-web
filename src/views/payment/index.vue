@@ -38,6 +38,7 @@
                  :rowspan="1"
                  :height="500"
                  @filter-value="onFilterValue"
+                 @change-checked='checked'
         >
           <template slot="header">
             <div style="overflow: hidden">
@@ -148,6 +149,7 @@
         tableDataList:[],
         totalRow: [],
         currency:[],
+        selectedData:[],
         moduleCode:''
       }
     },
@@ -185,6 +187,10 @@
       pageSizeChange(val) {
         this.params.ps = val;
         this.getList();
+      },
+      //.........checked
+      checked(item) {
+        this.selectedData = item
       },
       getList(){
         this.tabLoad = true;
@@ -340,8 +346,13 @@
         this.getList();
       },
       downloadPayment(){
-        let params=this.$depthClone(this.params);
-        this.$fetch.export_task('EXPORT_LEDGER',params);
+        let ids=_.pluck(_.pluck(this.selectedData,"id"),'value');
+        if(ids.length>0){
+          this.$fetch.export_task('EXPORT_LEDGER',{ids:ids});
+        }else{
+          let params=this.$depthClone(this.params);
+          this.$fetch.export_task('EXPORT_LEDGER',params);
+        }
       },
     },
     mounted(){
