@@ -17,9 +17,6 @@ export default {
         selectCode:'RA_IS',
         _isDefaultShow:true
     },
-    customerSkuCodeLike:{
-
-    },
     exwPrice:{
         type:'between',
         betweenKey:['minExwPrice','maxExwPrice'],
@@ -31,21 +28,11 @@ export default {
         betweenKey:['minFobPrice','maxFobPrice'],
     },
     materialEnLike:{},
-    country:{
-        type:'select',
-        selectCode:'country',
-        multipleSelect:true,
-        _filterable:true,
-        _multiple:true,
-    },
-    supplierNameLike:{},
     outerCartonMethodEnLike:{},
     methodPkgEnLike:{},
     deliveryDates:{
         type:'number'
     },
     descEnLike:{},
-    descCnLike:{
-
-    },
+    descCnLike:{},
 }

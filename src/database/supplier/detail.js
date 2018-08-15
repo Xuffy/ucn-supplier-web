@@ -53,6 +53,6 @@ export default {
       ullLine:false,
     },
     shipAgent: {
-      key: ''
+      key: 'shipAgent'
     }
 }
