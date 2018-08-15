@@ -18,5 +18,6 @@
   "supplierNotTheSame": "你选择的产品与所选供应商不一致",
   "nothingToDun":"Nothing to dun",
   "dunSuccess":"Dun success",
-  "orderHasBeenSent":"This order has been sent"
+  "orderHasBeenSent":"This order has been sent",
+  "productWillBeRemoved":"The product which doesn't belong to your company will be removed"
 }
