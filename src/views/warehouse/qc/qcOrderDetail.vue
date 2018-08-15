@@ -212,6 +212,7 @@
                     :buttons="[{'label': $i.warehouse.detail, type: 1}]"
                     @action="btnClick"
                     @change-checked="changeChecked"
+                     @change-sort="val=>{getProductInfo(val)}"
                     :totalRow="totalRow">
                 <template slot="header">
                     <div class="second-title">
@@ -442,7 +443,8 @@
                     }
                 );
             },
-            getProductInfo() {
+            getProductInfo(e) {
+                Object.assign(this.productInfoConfig, e)
                 this.loadingProductInfoTable = true;
                 this.$ajax.post(this.$apis.get_serviceQcOrderProduct, this.productInfoConfig).then(res => {
                     this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas, e => {
