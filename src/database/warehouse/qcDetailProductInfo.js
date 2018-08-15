@@ -241,6 +241,7 @@ export default {
     key: 'qcPics',
     type: 'String',
     showType: 'attachment',
+    _sort:false,
     _image: true,
     _rules: {
       // required: true
@@ -255,6 +256,7 @@ export default {
   },
   skuInventoryStatusDictCode: {
     key: 'skuInventoryStatusDictCode',
+    _sort:false,
     type: 'String'
   },
   innerCartonMark:{
@@ -290,10 +292,12 @@ export default {
   },
   skuMethodPkgEn:{
     key: 'skuMethodPkgEn',
+    _sort:false,
     type: 'String'
   },
   skuInnerCartonMethodEn:{
     key: 'skuInnerCartonMethodEn',
+    _sort:false,
     type: 'String'
   },
   deliveryDate: {

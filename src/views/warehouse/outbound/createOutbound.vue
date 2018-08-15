@@ -403,6 +403,9 @@
                 this.getProductData();
             },
             getProductData(e) {
+                this.loadingTable = true;
+                this.disabledSearch = true;
+                this.disabledCancelSearch = true;
                 Object.assign(this.orderProduct, e)
                 this.$ajax.post(this.$apis.get_inboundSku, this.orderProduct).then(res => {
                     this.orderNoOption = [];
