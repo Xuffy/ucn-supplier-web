@@ -613,7 +613,7 @@ export const routerMap = [
       path: '/customer',
       component: Layout,
       meta: {
-        name: 'customer',
+        name: $i.router.customer,
         auth: ['CUSTOMER']
       },
       redirect: '/customer/overview',
@@ -640,7 +640,8 @@ export const routerMap = [
             draft: false,
             recycleBin: false,
             log: false,
-            auth: ['CUSTOMER:DETAIL']
+            auth: ['CUSTOMER:DETAIL'],
+            name: $i.router.customerDetail
           },
           component: () => import('../views/customer/customerDetail.vue')
         },
@@ -652,7 +653,8 @@ export const routerMap = [
             draft: false,
             recycleBin: false,
             log: false,
-            auth: ['CUSTOMER:ARCHIVE']
+            auth: ['CUSTOMER:ARCHIVE'],
+            name: $i.router.customerArchive
           },
           component: () => import('../views/customer/archive.vue')
         }

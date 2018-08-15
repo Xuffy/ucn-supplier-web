@@ -782,12 +782,12 @@
                         break;
                 }
             },
-            sureAddAddress(){
-                this.allowAddAddress=true;
+          sureAddAddress(){
                 this.addressData.supplierId=this.companyInfo.id;
                 if (this.$validateForm(this.addressData, this.$db.setting.supplierAddress)) {
                   return false;
                 }
+                this.allowAddAddress=true;
                 if(this.isModifyAddress){
                     //表示是在修改地址
                     this.$ajax.post(`${this.$apis.post_supplier_address_id}/${this.addressData.id}`,this.addressData).then(res=>{
@@ -912,11 +912,11 @@
                 this.accountDialogVisible=true;
             },
             sureAddAccount(){
-                this.allowAddAccount=true;
                 this.accountData.supplierId=this.companyInfo.id;
                 if (this.$validateForm(this.accountData, this.$db.setting.supplierAccount)) {
                   return false;
                 }
+                this.allowAddAccount=true;
                 if(this.isModifyContact){
                     //表示是在修改account
                     this.$ajax.post(`${this.$apis.post_supplier_account_id}/${this.accountData.id}`,this.accountData).then(res=>{
@@ -1000,11 +1000,11 @@
                 }
             },
             sureAddContact(){
-                this.allowAddContact=true;
                 this.contactData.supplierId=this.companyInfo.id;
                 if (this.$validateForm(this.contactData, this.$db.setting.supplierContact)) {
                   return false;
                 }
+                this.allowAddContact=true;
                 if(this.isModifyContact){
                     //表示是在修改account
                     this.$ajax.post(`${this.$apis.post_supplier_contact_id}/${this.contactData.id}`,this.contactData).then(res=>{

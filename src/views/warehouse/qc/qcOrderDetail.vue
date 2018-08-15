@@ -447,10 +447,10 @@
                 this.$ajax.post(this.$apis.get_serviceQcOrderProduct, this.productInfoConfig).then(res => {
                     this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas, e => {
                         e.deliveryDate._value = this.$dateFormat(e.deliveryDate.value, "yyyy-mm-dd");
-                        e.skuUnitDictCode._value = e.skuUnitDictCode._value ? (_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}) || {}).name : '';
-                        e.volumeUnitDictCode._value = e.volumeUnitDictCode._value ? (_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}) || {}).name: '';
-                        e.weightUnitDictCode._value= e.weightUnitDictCode._value ? (_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}) || {}).name : '';
-                        e.lengthUnitDictCode._value= e.lengthUnitDictCode._value ? (_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}) || {}).name : '';
+                        e.skuUnitDictCode.value = e.skuUnitDictCode.value ? (_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}) || {}).name : '';
+                        e.volumeUnitDictCode.value = e.volumeUnitDictCode.value ? (_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}) || {}).name: '';
+                        e.weightUnitDictCode.value= e.weightUnitDictCode.value ? (_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}) || {}).name : '';
+                        e.lengthUnitDictCode.value= e.lengthUnitDictCode.value ? (_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}) || {}).name : '';
                     });
                     let diffData = [];
                     _.map(this.productInfoData, v => {

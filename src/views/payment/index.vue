@@ -55,6 +55,7 @@
                   :start-placeholder="$i.element.startDate"
                   :end-placeholder="$i.element.endDate"
                   value-format="timestamp"
+                  :default-time="['00:00:00','23:59:59']"
                   :picker-options="dateOptions">
                 </el-date-picker>
               </div>
@@ -146,7 +147,8 @@
         //底部table数据
         tableDataList:[],
         totalRow: [],
-        currency:[]
+        currency:[],
+        moduleCode:''
       }
     },
     watch: {
@@ -295,6 +297,17 @@
       urgingPayment(item) {
         // ① 催款，此操作会给对应付款人发一条提示付款的信息，在对方的workbench显示；
         // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
+        switch(item.orderType.value) {
+          case 10:
+            this.moduleCode = 'ORDER';
+            break;
+          case 20:
+            this.moduleCode = 'WAREHOUSE';
+            break;
+          case 30:
+            this.moduleCode = 'LOGISTIC';
+            break;
+        }
         if(item.timestamp.value === ''){
           item.paymentNumber.value = true;
           item.timestamp.value = new Date().getTime();
@@ -305,7 +318,8 @@
           });
           return false
         }
-        this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}`)
+        this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}&moduleCode
+=${this.moduleCode}`)
           .then(res => {
             this.$message({
               type: 'success',
