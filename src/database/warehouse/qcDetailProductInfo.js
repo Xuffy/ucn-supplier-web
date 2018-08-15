@@ -236,6 +236,7 @@ export default {
     showType: 'select',
     isBarCodeResult: true
   },
+  
   qcPic: {             //服务商上传
     key: 'qcPics',
     type: 'String',
@@ -256,7 +257,12 @@ export default {
     key: 'skuInventoryStatusDictCode',
     type: 'String'
   },
-  
+  innerCartonMark:{
+    key:'innerCartonMark'
+  },
+  innerCartonMarkResultDictCode:{
+      key:'innerCartonMarkResultDictCode'
+  },
   
   // factorySkuCode: {
   //   key: 'factorySkuCode',

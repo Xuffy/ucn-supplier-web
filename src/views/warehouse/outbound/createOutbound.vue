@@ -254,7 +254,8 @@
                     code="uwarehouse_outbound_sku"
                     v-loading="loadingTable"
                     :data="tableDataList"
-                    @change-checked="changeChecked"></v-table>
+                    @change-checked="changeChecked"
+                    @change-sort="val=>{getProductData(val)}"></v-table>
             <page
                     @size-change="changeSize"
                     @change="changePage"
@@ -401,10 +402,10 @@
                 this.disabledCancelSearch = true;
                 this.getProductData();
             },
-            getProductData() {
+            getProductData(e) {
+                Object.assign(this.orderProduct, e)
                 this.$ajax.post(this.$apis.get_inboundSku, this.orderProduct).then(res => {
                     this.orderNoOption = [];
-                    // console.log(res.datas)
                     _.uniq(_.pluck(res.datas, "orderNo")).forEach((v, k) => {
                         this.orderNoOption.push({
                             id: k + 1,
