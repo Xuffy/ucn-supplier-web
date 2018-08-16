@@ -42,8 +42,8 @@
       :listData="transportInfoArr" :selectArr="selectArr" :edit="edit" :beShipper="beShipper" :title="$i.logistic.transportInfoTitle" />
 
     <!-- 日期列表 -->
-    <dateInfo :beShipper="beShipper" :listData="mediatorDate" :selectArr="selectArr" :basicInfoArr="basicInfoArr" :shipmentStatus="shipmentStatus" :edit="edit"
-      :title="$i.logistic.dateInfo" @modifyTime="modifyTimeData" @shipmentStatus="changeShipmentStatus"></dateInfo>
+    <dateInfo :beShipper="beShipper" :fieldDisplay="fieldDisplay" :listData="mediatorDate" :selectArr="selectArr" :basicInfoArr="basicInfoArr" :shipmentStatus="shipmentStatus" :edit="edit"
+      :title="$i.logistic.dateInfo" @modifyTime="modifyTimeData" @shipmentStatus="changeShipmentStatus" @hightLightModifyFun="hightLightModifyFun"></dateInfo>
 
     <div>
       <div class="hd"></div>
@@ -92,7 +92,7 @@
       <overviewPage :title="$i.logistic.addProductFromOrder" :tableData="ProductFromOrder" :form-column="$db.logistic.addProductFromOrderFilter"
         :tableButtons="null" @change-checked="changeChecked" @tableBtnClick="ProductFromOrderDetail" @search="getSupplierIds"
         :tableCode="configUrl[pageName]&&configUrl[pageName].addproduct" @change-sort="changeSort">
-        <v-pagination slot="pagination" :page-data="pageParams" />
+        <v-pagination slot="pagination" :page-data="pageParams" @size-change="sizeChange" @change="pageChange"/>
         <div slot=footerBtn>
           <el-button @click="showAddProductDialog = false">{{ $i.logistic.cancel }}</el-button>
           <el-button type="primary" @click="closeAddProduct">{{ $i.logistic.confirm }}</el-button>
@@ -104,7 +104,7 @@
       @sendData="sendData" :btnModifyTime="btnModifyTime" :basicInfoArr="basicInfoArr" :listData="mediatorDate" :selectArr="selectArr"
       :shipmentStatus="shipmentStatus" @shipmentStatus="changeShipmentStatus" />
     <v-history-modify :code="configUrl[pageName]&&configUrl[pageName].setTheField" ref="HM" disabled-remark :beforeSave="closeModify"
-      @save="closeModifyNext" @select-change="historymodify" @closed="$refs.productInfo.update()" @change="autoComputed"></v-history-modify>
+      @save="closeModifyNext"  @closed="$refs.productInfo.update()" @change="autoComputed"></v-history-modify>
   </div>
 </template>
 <script>
@@ -374,6 +374,14 @@
         this.btnModifyTime = arg;
       },
       autoComputed(data, row) {
+        if(data.type=='Select'){
+          if ('correlationKey' in data) {
+            let obj = data._option.find(el => el.containerNo == data.value);
+            row.containerId.value = obj ? obj.id : '';
+            row[data.correlationKey].value = obj ? obj[data.correlationKey] : '';
+            row[data.correlationKey]._isModified = true;
+          }
+        }
         if (data.hasOwnProperty('computed')) {
           data.computed.forEach(el=>{
             row[el.computedResKey].value = this.$calc.multiply(data.value || 0, row[el.computedKey].value || 0);
@@ -416,6 +424,14 @@
           })
         })
       },
+      sizeChange(e) {
+        this.pageParams.ps = e
+        this.getSupplierIds()
+      },
+      pageChange(e) {
+        this.pageParams.pn = e
+        this.getSupplierIds()
+      },
       changeSort(arr) {
         this.$set(this.pageParams, 'sorts', arr.sorts);
         this.getSupplierIds();
@@ -453,7 +469,8 @@
             return el;
           }), el => {
             this.productList.forEach(item => {
-              if (el.skuId.value == item.skuId.value) {
+              //两个字段拼接确定唯一
+              if (el.skuId.value+'-'+el.orderId.value == item.skuId.value+'-'+item.orderId.value) {
                 el._disabled = true;
                 el._checked = true;
               }
@@ -750,13 +767,6 @@
         this.modefiyProductIndexArr.push(i);
         this.getProductHistory(e.id ? (e.argID ? e.argID.value : e.id.value) : null, status, i)
       },
-      historymodify(currData, row) {
-        if ('correlationKey' in currData) {
-          let obj = currData._option.find(el => el.containerNo == currData.value);
-          row.containerId.value = obj ? obj.id : '';
-          row[currData.correlationKey].value = obj ? obj[currData.correlationKey] : '';
-        }
-      },
       getProductHistory(productId, status, i) {
         let currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
         currentProduct = _.mapObject(currentProduct, (v, k) => {
@@ -925,7 +935,12 @@
           a.totalContainerVolume = null;
           a.totalContainerNetWeight = null;
           a.totalContainerOuterCartonsQty = null;
-          !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
+          a.customDeclarationNameCn = a.skuCustomsNameCn;
+          a.customDeclarationNameEn = a.skuCustomsNameEn;
+          a.supplierCode = a.skuSupplierCode;
+          a.outerCartonBarCode = a.skuOuterCartonBarCode;
+          a.shippingMarks = a.skuShippingMarks;
+          // !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
         })
         this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList];
         this.shipperArrFun();
@@ -985,9 +1000,9 @@
         })
         const id = currrentProduct.id.value
         const vId = this.$getUUID();
-        const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
-        index === -1 ? this.modifyProductArray.push(this.restoreObj(currrentProduct)) : (this.modifyProductArray[index] =
-          this.restoreObj(currrentProduct))
+        // const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
+        // index === -1 ? this.modifyProductArray.push(this.restoreObj(currrentProduct)) : (this.modifyProductArray[index] =
+        //   this.restoreObj(currrentProduct))
       },
       switchEdit(arg) {
         switch (arg) {
@@ -1138,7 +1153,7 @@
         _.mapObject(this.hightLightObj, (v, k) => {
           Object.assign(obj, v);
         })
-        this.oldPlanObject.fieldDisplay = obj;
+        this.oldPlanObject.fieldDisplay = {...obj,...this.oldPlanObject.fieldDisplay};
       },
       feeInfoLight(data) {
         this.oldPlanObject.fee = data[0];
@@ -1147,7 +1162,10 @@
         this.oldPlanObject.containerDetail = data;
       },
       changeShipmentStatus(status) {
-        this.basicInfoArr.find(el => el.key == 'shipmentStatus').value = status
+        if(status!=this.shipmentStatus){
+          this.oldPlanObject.fieldDisplay = {...{shipmentStatus:status},...this.oldPlanObject.fieldDisplay};
+        }
+        this.basicInfoArr.find(el => el.key == 'shipmentStatus').value = status;
       },
       sendData(keyString) {
         this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
@@ -1194,7 +1212,7 @@
             this.oldPlanObject[key] = value
           })
           this.oldPlanObject.attachment = this.$refs.attachment.getFiles();
-          this.oldPlanObject.product = this.modifyProductArray;
+          // this.oldPlanObject.product = this.modifyProductArray;
           this.oldPlanObject.currencyExchangeRate = _.map(this.$depthClone(this.ExchangeRateInfoArr), (item) => {
             item['price'] = item['value'];
             delete item['value'];

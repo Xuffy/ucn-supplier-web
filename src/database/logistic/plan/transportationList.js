@@ -10,8 +10,25 @@ export default {
   loadingType:{
     type: 'text'
   },
+  blType:{
+    type: 'text'
+  },
+  blNo:{
+    type: 'text'
+  },
+  shipServiceProvider:{
+    type: 'text'
+  },
+  shippingAgent: {
+    type: 'text'
+  },
   logisticsNo:{
     type: 'text'
+  },
+  bookingDate:{
+    key:'actBookingDate',
+    _filed:'actBookingDate',
+    type: 'String'
   },
   estContainerStuffingDate: {
     type: 'text'
@@ -22,10 +39,8 @@ export default {
   estArrivalDate: {
     type: 'textDate'
   },
-  estDelivaryDate: {
-    type: 'textDate'
-  },
-  actDeliveryDate: {
+  declareDate: {
+    key:'actDeclareDate',
     type: 'textDate'
   },
   actContainerStuffingDate: {
@@ -38,6 +53,9 @@ export default {
     type: 'textDate'
   },
   actArrivalDate: {
+    type: 'textDate'
+  },
+  actReleaseDate: {
     type: 'textDate'
   },
   containerNo:{
@@ -55,19 +73,39 @@ export default {
   vgm: {
     type: 'text'
   },
-  totalQuantityInContainer: {
-    type: 'text'
-  },
-  totalVolumeInContainer: {
-    type: 'text'
-  },
-  totalNetWeightInContainer: {
-    type: 'text'
-  },
   totalQuantityOfOuterCartonsInContainer: {
+    key:'totalContainerCartonQty',
     type: 'text'
   },
   totalSkuPriceInContainer: {
     type: 'text'
+  },
+  totalQuantityInContainer: {
+    key: 'totalContainerQty',
+    type: 'String'
+  },
+  totalVolumeInContainer: {
+    key: 'totalContainerVolume',
+    type: 'String'
+  },
+  totalNetWeightInContainer: {
+    key: 'totalContainerNetWeight',
+    type: 'String'
+  },
+  totalContainerGrossWeight: {
+    key:'totalCtnGw',
+    type: 'String'
+  },
+  createDate:{
+    type: 'String'
+  },
+  customerName:{
+    type: 'String'
+  },
+  currency:{
+    type: 'String'
+  },
+  payment:{
+    type: 'String'
   }
 }
