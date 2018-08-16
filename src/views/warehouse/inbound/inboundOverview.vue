@@ -31,10 +31,10 @@
                     <template slot="header">
                         <div class="btns">
                             <el-button
-                                    v-authorize="'WAREHOUSE:DOWNLOAD'"
+                                    v-authorize="'WAREHOUSE:INBOUND:CREATE'"
                                     @click="createInbound">{{$i.warehouse.create}}</el-button>
                             <el-button
-                                    v-authorize="'WAREHOUSE:DOWNLOAD'"
+                                    v-authorize="'WAREHOUSE:INBOUND:DOWNLOAD'"
                                     @click="download">{{$i.warehouse.download}}({{selectList.length===0?$i.warehouse.all:selectList.length}})</el-button>
                         </div>
                     </template>

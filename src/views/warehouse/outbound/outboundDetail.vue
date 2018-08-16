@@ -74,21 +74,20 @@
         <div class="title">
             {{$i.warehouse.productInfo}}
         </div>
-
         <v-table
-                :height="500"
-                code="uwarehouse_outbound_sku"
-                v-loading="loadProductTable"
-                class="speTable"
-                :data="productTable"
-                :buttons="[{label:'Detail',type:1}]"
-                @action="btnClick"
-                :totalRow="totalRow"
-                @change-checked="changeChecked"
-                @change-sort="val=>{getData(val)}"></v-table>
-
+            :height="500"
+            code="uwarehouse_outbound_sku"
+            v-loading="loadProductTable"
+            class="speTable"
+            :data="productTable"
+            :buttons="[{label:'Detail',type:1, auth: 'PRODUCT:DETAIL'}]"
+            @action="btnClick"
+            :totalRow="totalRow"
+            @change-checked="changeChecked"
+            @change-sort="val=>{getData(val)}">
+        </v-table>
         <div class="footBtn">
-            <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
+            <el-button @click="download" v-authorize="'WAREHOUSE:OUTBOUND:DOWNLOAD'" type="primary">{{$i.warehouse.download}}</el-button>
             <el-button @click="closeWindow" type="primary">{{$i.warehouse.close}}</el-button>
         </div>
 
