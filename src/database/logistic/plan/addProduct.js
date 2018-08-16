@@ -17,10 +17,57 @@ export default {
     typeSlef: 'text',
     _hide: true
   },
+  "skuPictures":{
+    type: 'String',
+    _image:true,
+    _upload:{
+      readonly:true
+    },
+    typeSlef: 'text'
+  },
+  "skuCode": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuCustomerSkuCode": {
+    _filed:'customerSkuCode',
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuNameCn": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
   "skuSupplierAbbr": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text',
+  },
+  "orderNo": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "unitExportPrice": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _important: true
+  },
+  "totalPriceOfExport": {
+    key:'totalExportPrice',
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _important: true
+  },
+  "currency": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
   },
   "skuSupplierId": {
     type: 'String',
@@ -39,24 +86,6 @@ export default {
     _disabled: true,
     typeSlef: 'text',
     _hide: true
-  },
-  "skuPictures":{
-    type: 'String',
-    _image:true,
-    _upload:{
-      readonly:true
-    },
-    typeSlef: 'text'
-  },
-  "orderNo": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
-  "skuCode": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
   },
   "orderId": {
     type: 'String',
@@ -81,10 +110,9 @@ export default {
     _disabled: true,
     typeSlef: 'text',
   },
-  "skuNameCn": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
+  "ProductDescriptionCustomer": {
+    key:'skuDescCustomer',
+    type: 'text'
   },
   "blSkuName": {
     type: 'String',
@@ -137,31 +165,8 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
-  "skuCustomerSkuCode": {
-    _filed:'customerSkuCode',
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
   "skuUnit": {
     _filed:'unit',
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
-  "unitExportPrice": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text',
-    _important: true
-  },
-  "totalExportPrice": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text',
-    _important: true
-  },
-  "currency": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -234,11 +239,13 @@ export default {
     typeSlef: 'text'
   },
   "skuShippingMarks": {
+    _filed:'shippingMarks',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
   },
   "skuOuterCartonBarCode": {
+    _filed:'outerCartonBarCode',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'

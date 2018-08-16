@@ -1,15 +1,15 @@
 <template>
   <div class="logistic-plan-overview">
     <div class="hd-top">{{ headerText[pageType] }}</div>
-    <div class="status" v-if="pageType === 'plan' || pageType === 'loadingList'">
+    <div class="status">
       <div class="btn-wrap">
         <div>
-          <div class="ls_plan">
+          <div class="ls_plan" v-if="pageType === 'plan' || pageType === 'loadingList'">
             <span v-if="pageType === 'loadingList'">{{ $i.logistic.shipmentStatus}}:</span>
             <span v-if="pageType === 'plan'">{{ $i.logistic.status}}:</span>
             <el-radio-group v-model="fillterVal" size="mini" @change="fetchDataList('elRadioGroup')">
               <el-radio-button label="all">{{ $i.logistic.all }}</el-radio-button>
-              <el-radio-button :label="+a.code" v-for="a of ls_plan[pageType === 'plan' ? 'LS_PLAN' : 'LS_STATUS']" :key="'status-' + a.code">{{a.name}}
+              <el-radio-button :label="+a.code" v-for="a of ls_plan[pageType == 'plan' ? 'LS_PLAN' : 'LS_STATUS']" :key="'status-' + a.code">{{a.name}}
               </el-radio-button>
             </el-radio-group>
           </div>
@@ -404,7 +404,6 @@
     line-height: 50px;
     border-bottom: 1px solid #ccc;
     padding: 0 15px;
-    margin-bottom: 20px;
   }
 
   .btn-wrap {
