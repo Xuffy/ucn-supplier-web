@@ -22,23 +22,25 @@
                         :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
-                        :buttons="[{label: $i.warehouse.detail, type: 1}]"
+                        :buttons="[{label: $i.warehouse.detail, type: 1, auth: 'PRODUCT:DETAIL'}]"
                         @change-checked="changeChecked"
                         @change-sort="val=>{getWarehouseData(val)}"
                         @action="btnClick">
                     <template slot="header">
                         <div class="btns">
                             <el-button
-                                    v-authorize="'WAREHOUSE:DOWNLOAD'"
-                                    @click="download">{{$i.warehouse.download}}({{selectList.length?selectList.length:$i.warehouse.all}})</el-button>
+                                v-authorize="'WAREHOUSE:OVERVIEW:DOWNLOAD'"
+                                @click="download">{{$i.warehouse.download}}({{selectList.length?selectList.length:$i.warehouse.all}})
+                            </el-button>
                         </div>
                     </template>
                 </v-table>
                 <page
-                        :page-sizes="[50,100,200,500]"
-                        @size-change="changeSize"
-                        @change="changePage"
-                        :page-data="pageData"></page>
+                    :page-sizes="[50,100,200,500]"
+                    @size-change="changeSize"
+                    @change="changePage"
+                    :page-data="pageData">
+                </page>
             </div>
         </div>
     </div>

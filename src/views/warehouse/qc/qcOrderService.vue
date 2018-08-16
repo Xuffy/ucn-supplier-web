@@ -183,12 +183,13 @@
                                         :accuracy="v.accuracy ? v.accuracy : null"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='input'">
-                            <v-input-number
+                            <el-input v-model="scope.row[v.key].value" :placeholder="$i.warehouse.pleaseInput"></el-input>
+                            <!-- <v-input-number
                                 :controls="false"
                                 :placeholder="$i.warehouse.pleaseInput"
                                 v-model="scope.row[v.key].value"
                                 :mark="v.label"
-                                :accuracy="v.accuracy ? v.accuracy : null"></v-input-number>
+                                :accuracy="v.accuracy ? v.accuracy : null"></v-input-number>11 -->
                         </div>
                         <div v-else-if="v.showType==='attachment'">
                             <el-popover
@@ -216,7 +217,7 @@
                         :label="$i.warehouse.detail"
                         width="100">
                     <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}
+                        <el-button @click="handleClick(scope.row)" v-authorize="'PRODUCT:DETAIL'"  type="text" size="small">{{$i.warehouse.detail}}
                         </el-button>
                     </template>
                 </el-table-column>
@@ -347,7 +348,7 @@
 
         <div class="footBtn">
             <el-button
-                    v-authorize="'QC:ORDER_DETAIL:PRODUCT_RETURN'"
+                    v-authorize="'QC:ORDER_DETAIL:SEND'"
                     :disabled="loadingData"
                     :loading="disableClickSubmit"
                     @click="submit" type="primary">
@@ -358,10 +359,12 @@
                     type="danger"
                     @click="cancel">{{$i.warehouse.cancel}}</el-button>
             <el-button
-
-                    :disabled="loadingData"
-                    @click="download"
-                    type="primary">{{$i.warehouse.download}}</el-button>
+                :disabled="loadingData"
+                @click="download"
+                v-authorize="'QC:ORDER_DETAIL:DOWNLOAD'"
+                type="primary">
+                {{$i.warehouse.download}}
+            </el-button>
         </div>
 
         <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
@@ -522,7 +525,7 @@
                 this.$windowOpen({
                     url: "/product/detail",
                     params: {
-                        id: data.skuId
+                        id: data.skuId.value
                     }
                 });
             },
@@ -687,7 +690,8 @@
                         skuLabelResultDictCode: v.skuLabelResultDictCode.value,
                         skuQcResultDictCode: skuQcResultDictCode,
                         unqualifiedSkuCartonTotalQty: v.unqualifiedSkuCartonTotalQty.value,
-                        unqualifiedType: v.unqualifiedType.value
+                        unqualifiedType: v.unqualifiedType.value,
+                        innerCartonMarkResultDictCode: v.innerCartonMarkResultDictCode.value
                     });
                 });
                 _.map(this.qcOrderConfig.qcResultDetailParams, (v, k) => {

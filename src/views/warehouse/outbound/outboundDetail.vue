@@ -74,20 +74,20 @@
         <div class="title">
             {{$i.warehouse.productInfo}}
         </div>
-
         <v-table
-                :height="500"
-                code="uwarehouse_outbound_sku"
-                v-loading="loadProductTable"
-                class="speTable"
-                :data="productTable"
-                :buttons="[{label:'Detail',type:1}]"
-                @action="btnClick"
-                :totalRow="totalRow"
-                @change-checked="changeChecked"></v-table>
-
+            :height="500"
+            code="uwarehouse_outbound_sku"
+            v-loading="loadProductTable"
+            class="speTable"
+            :data="productTable"
+            :buttons="[{label:'Detail',type:1, auth: 'PRODUCT:DETAIL'}]"
+            @action="btnClick"
+            :totalRow="totalRow"
+            @change-checked="changeChecked"
+            @change-sort="val=>{getData(val)}">
+        </v-table>
         <div class="footBtn">
-            <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
+            <el-button @click="download" v-authorize="'WAREHOUSE:OUTBOUND:DOWNLOAD'" type="primary">{{$i.warehouse.download}}</el-button>
             <el-button @click="closeWindow" type="primary">{{$i.warehouse.close}}</el-button>
         </div>
 
@@ -167,15 +167,16 @@
         },
         methods:{
             ...mapActions(['setMenuLink']),
-            getData(){
+            getData(e){
                 this.loadingTable=true;
                 this.$ajax.get(`${this.$apis.get_outBoundDetail}?id=${this.$route.query.id}`).then(res=>{
                     this.outboundData=res;
-                    this.$ajax.post(this.$apis.get_outboundDetailProductData,{
+                    let par = Object.assign({
                         outboundId: this.$route.query.id,
                         pn: 1,
-                        ps: 50,
-                    }).then(res=>{
+                        ps: 50
+                    }, e)
+                    this.$ajax.post(this.$apis.get_outboundDetailProductData, par).then(res=>{
                         this.productTable = this.$getDB(this.$db.warehouse.outboundDetailProductData, res.datas,e=>{
                           e.skuUnitDictCode._value=e.skuUnitDictCode.value?_.findWhere(this.getDict('SKU_UNIT'),{code:e.skuUnitDictCode.value}).name:'';
                           e.lengthUnitDictCode._value=e.lengthUnitDictCode.value?_.findWhere(this.getDict('LH_UNIT'),{code:e.lengthUnitDictCode.value}).name:'';

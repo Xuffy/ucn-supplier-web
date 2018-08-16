@@ -499,7 +499,8 @@
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
                             <div v-if="v.isWeight">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
+                                           :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in weightOption"
                                             :key="item.id"
@@ -509,7 +510,8 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isLength">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
+                                           :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in lengthOption"
                                             :key="item.id"
@@ -519,7 +521,8 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isVolume">
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
+                                           :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in volumeOption"
                                             :key="item.id"
@@ -543,7 +546,8 @@
                                 </el-select>
                             </div>
                             <div v-else>
-                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
+                                           :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in skuStatusOption"
                                             :key="item.value"
@@ -597,7 +601,8 @@
                         :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='select'">
-                            <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                            <el-select class="speSelect" size="mini" v-model="productForm[v.key]"
+                                       :placeholder="$i.product.pleaseChoose">
                                 <el-option
                                         v-for="item in skuStatusOption"
                                         :key="item.value"
@@ -859,7 +864,7 @@
 
 <script>
     import imgHandler from "../product/imgHandler";
-    import { dropDownSingle, VTable, VUpload ,VInputNumber} from "@/components/index";
+    import { dropDownSingle, VTable, VUpload, VInputNumber } from "@/components/index";
 
     export default {
         name: "addNewProduct",
@@ -890,7 +895,7 @@
                 skuUnitOption: [],       //计量单位
                 quarantineTypeOption: [],//检疫类别单位
                 customerTypeOption: [],  //客户类型
-                formationOption:[],      //产品组成
+                formationOption: [],      //产品组成
 
                 loadingData: true,
                 labelPosition: "left",
@@ -922,13 +927,13 @@
                 },
                 productForm: {
                     attachments: [],
-                    designs:[],                 //产品设计
-                    notes:[],                   //产品说明书
+                    designs: [],                 //产品设计
+                    notes: [],                   //产品说明书
                     id: "",                         //新增传空
                     ids: [],                         //选择的可见
                     pictures: [],
                     visibility: true,                //全网可见为true,否则false
-                    status: '1',                      //0下架 1上架
+                    status: "1",                      //0下架 1上架
                     nameEn: "",
                     barcode: "",                    //产品条码
                     nameCn: "",
@@ -1061,6 +1066,7 @@
                     children: "children"
                 },
                 options: [],
+                isOrderCreate:false,
 
                 /**
                  * 弹出框data
@@ -1072,9 +1078,9 @@
         },
         methods: {
             getCategoryId() {
-                const sys=this.$ajax.get(this.$apis.CATEGORY_SYSTEM, {});
-                const mine=this.$ajax.get(this.$apis.CATEGORY_MINE, {});
-                let category=[
+                const sys = this.$ajax.get(this.$apis.CATEGORY_SYSTEM, {});
+                const mine = this.$ajax.get(this.$apis.CATEGORY_MINE, {});
+                let category = [
                     {
                         id: 5125124,
                         name: this.$i.product.myCategory,
@@ -1088,17 +1094,17 @@
                         _disableClick: true
                     }
                 ];
-                this.$ajax.all([sys,mine]).then(res=>{
+                this.$ajax.all([sys, mine]).then(res => {
                     category[1].children = res[0];
                     category[0].children = res[1];
-                    this.categoryList=category;
+                    this.categoryList = category;
                 });
             },
             addCustomer() {
-                this.customerQuery.name='';
-                this.customerQuery.type=null;
-                this.customerQuery.country='';
-                this.customerQuery.city='';
+                this.customerQuery.name = "";
+                this.customerQuery.type = null;
+                this.customerQuery.country = "";
+                this.customerQuery.city = "";
                 this.addCustomerDialogVisible = true;
                 this.loadingTable = true;
                 this.$ajax.post(this.$apis.get_sellerCustomer, this.customerQuery).then(res => {
@@ -1131,8 +1137,8 @@
                 let param = Object.assign({}, this.productForm);
                 param.pictures = this.$refs.upload.getFiles();
                 param.attachments = this.$refs.uploadAttachment.getFiles();
-                param.designs=this.$refs.designs[0].getFiles();
-                param.notes=this.$refs.notes[0].getFiles();
+                param.designs = this.$refs.designs[0].getFiles();
+                param.notes = this.$refs.notes[0].getFiles();
 
                 this.disabledSubmit = true;
                 if (this.$route.query.id && this.$route.query.isEdit) {
@@ -1202,7 +1208,7 @@
                                         item += (v + ",");
                                     }
                                 });
-                                param[qk] = item;
+                                param[k] = item;
                             }
                         } else if (k === "adjustPackage") {
                             param[k] = param[k] === "1" ? true : false;
@@ -1226,12 +1232,17 @@
                             type: "success"
                         });
                         this.disabledSubmit = false;
-                        this.$router.push({
-                            path: "/product/detail",
-                            query: {
-                                id: res
-                            }
-                        });
+                        if(this.isOrderCreate){
+                            //如果是从order的product info里创建的，则需要进行其他处理
+                            this.$emit('postId',res)
+                        }else{
+                            this.$router.push({
+                                path: "/product/detail",
+                                query: {
+                                    id: res
+                                }
+                            });
+                        }
                     }).catch(err => {
                         this.disabledSubmit = false;
                     });
@@ -1241,8 +1252,8 @@
                 this.loadingData = true;
                 this.$ajax.get(this.$apis.get_productDetail, { id: this.$route.query.id }).then(res => {
                     this.productForm = res;
-                    if(!this.productForm.price || this.productForm.price.length===0){
-                        this.productForm.price=[
+                    if (!this.productForm.price || this.productForm.price.length === 0) {
+                        this.productForm.price = [
                             {
                                 cifArea: "",
                                 cifCurrency: "USD",
@@ -1271,10 +1282,10 @@
                                 exwCurrency: "USD",
                                 status: 2
                             }
-                        ]
+                        ];
                     }
-                    else if(this.productForm.price.length===1){
-                        if(this.productForm.price[0].status===1){
+                    else if (this.productForm.price.length === 1) {
+                        if (this.productForm.price[0].status === 1) {
                             this.productForm.price.push({
                                 cifArea: "",
                                 cifCurrency: "USD",
@@ -1289,7 +1300,7 @@
                                 exwCurrency: "USD",
                                 status: 2
                             });
-                        }else if(this.productForm.price[0].status===1){
+                        } else if (this.productForm.price[0].status === 1) {
                             this.productForm.price.push({
                                 cifArea: "",
                                 cifCurrency: "USD",
@@ -1336,6 +1347,67 @@
                 }).catch(err => {
                     this.loadingData = false;
                 });
+            },
+            init(e){
+                this.loadingData = true;
+                this.$ajax.get(this.$apis.get_buyerProductDetail,{
+                    id:e
+                }).
+                then(res=>{
+                    this.productForm = res;
+                    this.productForm.id='';
+                    this.productForm.visibility=true;
+                    let lengthWidthHeight = this.productForm.lengthWidthHeight.split("*");
+                    this.boxSize.length = lengthWidthHeight[0];
+                    this.boxSize.width = lengthWidthHeight[1];
+                    this.boxSize.height = lengthWidthHeight[2];
+                    this.productForm.price = [
+                        {
+                            cifArea: "",
+                            cifCurrency: "USD",
+                            cifPrice: null,
+                            dduArea: "",
+                            dduCurrency: "USD",
+                            dduPrice: null,
+                            fobCurrency: "USD",
+                            fobPrice: null,                    //价格起始是多少
+                            fobPort: "",
+                            exwPrice: null,                    //价格起始是多少
+                            exwCurrency: "USD",
+                            status: 1                       //1成本价，2基础报价
+                        },
+                        {
+                            cifArea: res.cifArea,
+                            cifCurrency: res.cifCurrency,
+                            cifPrice: res.cifPrice,
+                            dduArea: res.dduArea,
+                            dduCurrency: res.dduCurrency,
+                            dduPrice: res.dduPrice,
+                            fobCurrency: res.fobCurrency,
+                            fobPrice: res.fobPrice,
+                            fobPort: res.fobPort,
+                            exwPrice: res.exwPrice,
+                            exwCurrency: res.exwCurrency,
+                            status: 2
+                        }
+                    ];
+                    _.mapObject(this.productForm, (e, k) => {
+                        if (k === "unit" || k === "readilyAvailable" || k === "expireUnit" || k === "unitLength" || k === "unitVolume" || k === "unitWeight") {
+                            this.productForm[k] = String(this.productForm[k]);
+                        } else if (k === "noneSellCountry" || k === "mainSaleCountry") {
+                            if (this.productForm[k]) {
+                                this.productForm[k] = this.productForm[k].split(",");
+                            } else {
+                                this.productForm[k] = [];
+                            }
+                        } else if (k === "adjustPackage" || k === "oem" || k === "useDisplayBox") {
+                            this.productForm[k] = this.productForm[k] ? "1" : "0";
+                        }
+                    });
+                    this.isOrderCreate=true;
+                }).finally(()=>{
+                    this.loadingData = false;
+                })
             },
 
             /**
@@ -1398,7 +1470,7 @@
             getUnit() {
                 const currencyAjax = this.$ajax.get(this.$apis.get_currencyUnit, {}, { cache: true });
                 const countryAjax = this.$ajax.get(this.$apis.get_country, {}, { cache: true });
-                const codeAjax = this.$ajax.post(this.$apis.get_partUnit, ["SKU_SALE_STATUS", "SKU_READILY_AVAIALBLE", "ED_UNIT", "WT_UNIT", "VE_UNIT", "LH_UNIT", "OEM_IS", "UDB_IS", "SKU_PG_IS", "RA_IS", "SKU_UNIT", "QUARANTINE_TYPE", "CUSTOMER_TYPE",'SKU_FORMATION'], { cache: true });
+                const codeAjax = this.$ajax.post(this.$apis.get_partUnit, ["SKU_SALE_STATUS", "SKU_READILY_AVAIALBLE", "ED_UNIT", "WT_UNIT", "VE_UNIT", "LH_UNIT", "OEM_IS", "UDB_IS", "SKU_PG_IS", "RA_IS", "SKU_UNIT", "QUARANTINE_TYPE", "CUSTOMER_TYPE", "SKU_FORMATION"], { cache: true });
                 this.loadingData = true;
                 this.$ajax.all([currencyAjax, countryAjax, codeAjax]).then(res => {
                     this.currencyOption = res[0];
@@ -1443,7 +1515,7 @@
         created() {
             this.getCategoryId();
             this.getUnit();
-        },
+        }
     };
 </script>
 
@@ -1503,7 +1575,8 @@
     .tableList >>> .el-form-item__content {
         margin-left: 0 !important;
     }
-    .tableList{
+
+    .tableList {
         margin: 5px 0;
     }
 

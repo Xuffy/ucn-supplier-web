@@ -2,29 +2,25 @@ export default {
     id:{
         _hide: true
     },
-    skuQcResultDictCode:{},
-    skuInventoryStatusDictCode:{},
     skuCode:{},
     customerSkuCode:{},
+    orderSkuQty:{},
+    expectQcQty:{},
+    skuQcResultDictCode:{},
+    skuInventoryStatusDictCode:{},
     // factorySkuCode:{},
     skuNameCn:{},
     skuBrand:{},
     skuDesign:{},
     packingMethodCn:{},
     innerCartonPackingMethodCn:{},
-    deliveryDate:{
-
-    },
+    deliveryDate:{},
     skuMethodPkgEn:{},
     skuInnerCartonMethodEn:{},
     skuUnitDictCode:{},
-    lengthUnitDictCode:{},
-    volumeUnitDictCode:{},
-    weightUnitDictCode:{},
     inboundNo:{},
-    orderSkuQty:{},
-    expectQcQty:{},
     samplingRate:{},
+    checkOuterCartonQty:{},
     unqualifiedProcessingMode:{},
     skuLength:{},
     skuWidth:{},
@@ -54,11 +50,17 @@ export default {
     qualifiedSkuQty:{},
     unqualifiedSkuQty:{},
     qualifiedSkuNetWeight:{},
-    unqualifiedSkuNetWeight:{},
+    unqualifiedSkuNetWeight:{
+        width: '200'
+    },
     qualifiedSkuVolume:{},
-    unqualifiedSkuVolume:{},
+    unqualifiedSkuVolume:{
+        width: '200'
+    },
     qualifiedSkuGrossWeight:{},
-    unqualifiedSkuGrossWeight:{},
+    unqualifiedSkuGrossWeight:{
+        width: '200'
+    },
     unqualifiedType:{},
     skuBarCode:{},
     skuBarCodeResultDictCode:{},
@@ -66,15 +68,20 @@ export default {
     skuLabelResultDictCode:{},
     innerPackingBarCode:{},
     innerPackingBarCodeResultDictCode:{},
+    innerCartonMark:{},
+    innerCartonMarkResultDictCode:{},
     outerCartonBarCode:{},
     outerCartonBarCodeResultDictCode:{},
     shippingMark:{},
     shippingMarkResultDictCode:{},
+    actSkuQty:{},
     qcPic:{
-        key:'qcPics'
+        key:'qcPics',
+        sortable: false
     },
-    checkOuterCartonQty:{},
     remark:{},
-
+    lengthUnitDictCode:{},
+    volumeUnitDictCode:{},
+    weightUnitDictCode:{},
 
 }

@@ -94,15 +94,18 @@
                         @change="changeColumn">
                     </v-filter-column>
                 </div>
+                <br>
+                <br>
                 <el-table
                         v-loading="loadingProductTable"
                         class="speTable"
                         :data="productTable"
-                        style="width: 100%;margin-top: 10px"
+                        style="width: 100%"
                         border
                         ref="tableBox"
                         :summary-method="getSummaries"
                         show-summary
+                        @sort-change="sortChange"
                         @selection-change="handleFirstTable">
                     <el-table-column
                             align="center"
@@ -117,7 +120,8 @@
                             :key="v.key"
                             :label-class-name="'location-' + v.key"
                             :prop="v.key"
-                            width="160">
+                            :sortable="v.sortable === false ? false : 'custom'"
+                            :width="v.width ? v.width : '160px'">
                         <template slot-scope="scope" v-if="scope.row[v.key]">
                             <div v-if="v.key==='qcPics' && scope.row[v.key]">
                                 <v-image :src="scope.row[v.key].value" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key].value)"></v-image>
@@ -133,7 +137,11 @@
                             :label="$i.warehouse.detail"
                             width="100">
                         <template slot-scope="scope">
-                            <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                            <el-button 
+                            @click="handleClick(scope.row)"
+                            type="text"
+                            size="small"
+                            v-authorize="'PRODUCT:DETAIL'">{{$i.warehouse.detail}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -152,12 +160,15 @@
                         @change="changeColumn2">
                     </v-filter-column>
                 </div>
+                <br>
+                <br>
                 <el-table
                         v-loading="loadingProductTable"
                         class="speTable"
                         :data="productTable1"
-                        style="width: 100%;margin-top: 10px"
+                        style="width: 100%"
                         border
+                        @sort-change="sortChange"
                         ref="tableBox2"
                         :summary-method="getSummaries"
                         show-summary
@@ -175,7 +186,8 @@
                             :key="v.key"
                             :label-class-name="'location-' + v.key"
                             :prop="v.key"
-                            width="160">
+                            :sortable="v.sortable === false ? false : 'custom'"
+                            :width="v.width ? v.width : '160px'">
                         <template slot-scope="scope"  v-if="scope.row[v.key]">
                           <div v-if="v.key==='qcPics' && scope.row[v.key]">
                                 <v-image :src="scope.row[v.key].value" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key].vlaue)"></v-image>
@@ -191,7 +203,7 @@
                             :label="$i.warehouse.detail"
                             width="100">
                         <template slot-scope="scope">
-                            <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                            <el-button @click="handleClick(scope.row)" v-authorize="'PRODUCT:DETAIL'" type="text" size="small">{{$i.warehouse.detail}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -210,14 +222,17 @@
                         @change="changeColumn3">
                     </v-filter-column>
                 </div>
+                <br>
+                <br>
                 <el-table
                         v-loading="loadingProductTable"
                         class="speTable"
                         :data="productTable2"
-                        style="width: 100%;margin-top: 10px"
+                        style="width: 100%;"
                         :summary-method="getSummaries"
                         show-summary
                         border
+                        @sort-change="sortChange"
                         ref="tableBox3"
                         @selection-change="handleThirdTable">
                     <el-table-column
@@ -233,7 +248,8 @@
                             :key="v.key"
                             :prop="v.key"
                             :label-class-name="'location-' + v.key"
-                            width="160">
+                            :sortable="v.sortable === false ? false : 'custom'"
+                            :width="v.width ? v.width : '160px'">
                         <template slot-scope="scope"  v-if="scope.row[v.key]">
                             <div v-if="v.key==='qcPics' && scope.row[v.key]">
                                 <v-image :src="scope.row[v.key].value" height="60px" width="80px"  @click="$refs.pics.show(scope.row[v.key].value)"></v-image>
@@ -249,7 +265,7 @@
                             :label="$i.warehouse.detail"
                             width="100">
                         <template slot-scope="scope">
-                            <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                            <el-button @click="handleClick(scope.row)" v-authorize="'PRODUCT:DETAIL'" type="text" size="small">{{$i.warehouse.detail}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -377,7 +393,7 @@
         </div>
 
         <div class="footBtn">
-            <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
+            <el-button @click="download" v-authorize="'QC:ORDER_DETAIL:DOWNLOAD'" type="primary">{{$i.warehouse.download}}</el-button>
             <el-button :disabled="loadingTable" type="danger" @click="cancel">{{$i.warehouse.exit}}</el-button>
         </div>
 
@@ -456,13 +472,7 @@
                     ps: 100,
                     qcOrderId: this.$route.query.id,
                     skuInventoryStatusDictCode: "",
-
-                    // "sorts": [
-                    //     {
-                    //         "orderBy": "string",
-                    //         "orderType": "string",
-                    //     }
-                    // ],
+                    sorts: [{orderBy: "updateDt",orderType: "desc"}],
                 },
                 productTable:[],
                 productTable1:[],
@@ -527,12 +537,12 @@
                     this.loadingTable=false;
                 });
             },
-            getTableData(){
+            getTableData(e){
+                console.log(Object.assign(this.tableConfig, e))
                 this.loadingProductTable=true;
                 this.tableConfig.skuInventoryStatusDictCode='';
-                this.$ajax.post(this.$apis.get_qcOrderProductData,this.tableConfig)
+                this.$ajax.post(this.$apis.get_qcOrderProductData,Object.assign(this.tableConfig, e))
                     .then(res=>{
-                        console.log(res.datas,'????')
                         this.productTable=res.datas;
                         let diffData=[];
                         _.map(this.productTable,v=>{
@@ -577,7 +587,6 @@
                             this.$ajax.post(this.$apis.get_qcOrderProductData,this.tableConfig).then(res=>{
                                 this.productTable2=res.datas;
                                 _.map(this.productTable2,v=>{
-                                    console.log('====',v)
                                     v.deliveryDate=this.$dateFormat(v.deliveryDate,'yyyy-mm-dd');
                                     v.skuUnitDictCode= v.skuUnitDictCode ? _.findWhere(this.skuUnitOption,{code:v.skuUnitDictCode}).name : '';
                                     v.volumeUnitDictCode= v.volumeUnitDictCode ? _.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name : '';
@@ -627,7 +636,15 @@
             cancel(){
                 window.close();
             },
-
+            sortChange (column) {
+                let obj = {
+                    sorts: [{
+                        orderBy: column.prop,
+                        orderType: column.order === 'descending' ? 'desc' : 'asc'
+                    }]
+                }
+                this.getTableData(obj)
+            },
 
             /**
              * product table事件
@@ -692,16 +709,12 @@
                 }).catch(() => {
 
                 });
-
-
-
-
             },
             handleClick(data){
                 this.$windowOpen({
                     url:'/product/detail',
                     params:{
-                        id:data.skuId
+                        id:data.id.value
                     }
                 });
             },

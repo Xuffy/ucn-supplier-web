@@ -109,7 +109,11 @@
                     },
                     {
                         id: 2,
-                        label: 'SKU货号'
+                        label: this.$i.order.skuNo
+                    },
+                    {
+                        id: 3,
+                        label: this.$i.order.customerAbbr
                     }
                 ],
                 keyType: '',
@@ -170,15 +174,21 @@
                 if (!val.id) return this.$message(this.$i.order.pleaseChooseType);
                 if (val.id === 1) {
                     this.params.orderNo = val.value;
-                    this.params.skuCode = '';
-                    this.view='1';
-                    this.getData()
-                } else {
-                    this.params.orderNo = '';
+                    this.params.skuCode = "";
+                    this.params.customerAbbr = "";
+                    this.view = "1";
+                } else if (val.id === 2) {
+                    this.params.orderNo = "";
                     this.params.skuCode = val.value;
-                    this.view='2';
-                    this.getData()
+                    this.params.customerAbbr = "";
+                    this.view = "2";
+                } else if (val.id === 3) {
+                    this.params.orderNo = "";
+                    this.params.skuCode = "";
+                    this.params.customerAbbr = val.value;
+                    this.view = "1";
                 }
+                this.getData();
             },
             recover() {
                 let ids=[];

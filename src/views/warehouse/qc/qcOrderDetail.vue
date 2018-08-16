@@ -209,9 +209,10 @@
                     code="uwarehouse_qc_order_detail"
                     :loading="loadingProductInfoTable"
                     :data="productInfoData"
-                    :buttons="[{'label': $i.warehouse.detail, type: 1}]"
+                    :buttons="[{'label': $i.warehouse.detail, type: 1, auth: 'PRODUCT:DETAIL'}]"
                     @action="btnClick"
                     @change-checked="changeChecked"
+                     @change-sort="val=>{getProductInfo(val)}"
                     :totalRow="totalRow">
                 <template slot="header">
                     <div class="second-title">
@@ -351,7 +352,7 @@
             <el-button type="danger" @click="cancel" v-if="qcDetail.qcStatusDictCode!=='WAITING_QC'">
                 {{$i.warehouse.exit}}
             </el-button>
-            <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
+            <el-button @click="download" v-authorize="'QC:ORDER_DETAIL:DOWNLOAD'" type="primary">{{$i.warehouse.download}}</el-button>
         </div>
         <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
     </div>
@@ -442,15 +443,17 @@
                     }
                 );
             },
-            getProductInfo() {
+            getProductInfo(e) {
+                Object.assign(this.productInfoConfig, e)
                 this.loadingProductInfoTable = true;
                 this.$ajax.post(this.$apis.get_serviceQcOrderProduct, this.productInfoConfig).then(res => {
                     this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas, e => {
                         e.deliveryDate._value = this.$dateFormat(e.deliveryDate.value, "yyyy-mm-dd");
-                        e.skuUnitDictCode._value = e.skuUnitDictCode._value ? (_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}) || {}).name : '';
-                        e.volumeUnitDictCode._value = e.volumeUnitDictCode._value ? (_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}) || {}).name: '';
-                        e.weightUnitDictCode._value= e.weightUnitDictCode._value ? (_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}) || {}).name : '';
-                        e.lengthUnitDictCode._value= e.lengthUnitDictCode._value ? (_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}) || {}).name : '';
+                        e.skuUnitDictCode.value = e.skuUnitDictCode.value ? (_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}) || {}).name : '';
+                        e.volumeUnitDictCode.value = e.volumeUnitDictCode.value ? (_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}) || {}).name: '';
+                        e.weightUnitDictCode.value= e.weightUnitDictCode.value ? (_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}) || {}).name : '';
+                        e.lengthUnitDictCode.value= e.lengthUnitDictCode.value ? (_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}) || {}).name : '';
+                        e.innerCartonMarkResultDictCode.value = e.innerCartonMarkResultDictCode.value ? (_.findWhere(this.barCodeResult,{code:e.innerCartonMarkResultDictCode.value}) || {}).name : '';
                     });
                     let diffData = [];
                     _.map(this.productInfoData, v => {

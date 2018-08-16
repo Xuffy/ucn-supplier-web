@@ -128,8 +128,7 @@
                     align="center"
                     :label-class-name="'location-' + v.key"
                     v-if="!v._hidden && !v._hide"
-                    :width="v.key === 'skuNameCustomer' ? '250' : '180'"
-                    :sortable="v.sortable">
+                    :width="v.key === 'skuNameCustomer' ? '250' : '180'">
                 <template slot-scope="scope" v-if="scope.row[v.key]">
                     <div v-if="v.showType==='number'">
                         <!-- <el-input-number
@@ -254,7 +253,8 @@
                     code="uwarehouse_outbound_sku"
                     v-loading="loadingTable"
                     :data="tableDataList"
-                    @change-checked="changeChecked"></v-table>
+                    @change-checked="changeChecked"
+                    @change-sort="val=>{getProductData(val)}"></v-table>
             <page
                     @size-change="changeSize"
                     @change="changePage"
@@ -401,10 +401,13 @@
                 this.disabledCancelSearch = true;
                 this.getProductData();
             },
-            getProductData() {
+            getProductData(e) {
+                this.loadingTable = true;
+                this.disabledSearch = true;
+                this.disabledCancelSearch = true;
+                Object.assign(this.orderProduct, e)
                 this.$ajax.post(this.$apis.get_inboundSku, this.orderProduct).then(res => {
                     this.orderNoOption = [];
-                    // console.log(res.datas)
                     _.uniq(_.pluck(res.datas, "orderNo")).forEach((v, k) => {
                         this.orderNoOption.push({
                             id: k + 1,

@@ -6,6 +6,7 @@ export default {
         _hide:true
     },
     qcOrderNo:{},
+    orderNo:{},
     qcStatusDictCode:{},
     qcMethodDictCode:{},
     surveyor:{},

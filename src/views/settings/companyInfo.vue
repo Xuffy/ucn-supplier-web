@@ -161,10 +161,10 @@
             </el-tabs>
         </div>
 
-        <el-dialog width="70%" :title="$i.setting.address" :visible.sync="addressDialogVisible">
+        <el-dialog width="50%" :title="$i.setting.address" :visible.sync="addressDialogVisible">
             <el-form label-width="200px" :model="addressData">
                 <el-row>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                  <el-col :span="12">
                     <el-form-item  :label="$i.setting.factoryName+':'" >
                       <el-input
                         size="mini"
@@ -173,9 +173,17 @@
                         required="required"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                      <el-form-item  :label="$i.setting.factoryCountry+'：'" >
-                        <el-select  v-model="addressData.country" :placeholder="$i.common.inputSearch" style="width:100%">
+                  <el-col :span="12">
+                    <el-form-item  :label="$i.setting.exportPort+':'">
+                      <el-input
+                        size="mini"
+                        v-model="addressData.exportPort"
+                        :placeholder="$i.common.inputkeyWordToSearch"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                      <el-form-item  :label="$i.setting.factoryAddress+'：'" >
+                        <el-select  v-model="addressData.country" :placeholder="$i.setting.selectCountry" style="width:100%">
                           <el-option
                             v-for="item in options.country"
                             :key="item.id"
@@ -186,25 +194,25 @@
                         </el-select>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="8">
-                      <el-form-item  :label="$i.setting.factoryProvince +'：'" >
-                        <el-input size="mini" v-model="addressData.province" :placeholder="$i.common.inputkeyWordToSearch" ></el-input>
+                    <el-col :span="12">
+                      <el-form-item  >
+                        <el-input size="mini" v-model="addressData.province" :placeholder="$i.setting.inputProvince" ></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                      <el-form-item  :label="$i.setting.factorycity +'：'" >
-                        <el-input size="mini" v-model="addressData.city" :placeholder="$i.common.inputkeyWordToSearch" ></el-input>
+                    <el-col :span="12">
+                      <el-form-item  >
+                        <el-input size="mini" v-model="addressData.city" :placeholder="$i.setting.inputCity" ></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                      <el-form-item  :label="$i.setting.factoryAddress +'：'" >
-                        <el-input size="mini" v-model="addressData.address" :placeholder="$i.common.inputkeyWordToSearch" ></el-input>
+                    <el-col :span="12">
+                      <el-form-item >
+                        <el-input size="mini" v-model="addressData.address" :placeholder="$i.setting.inputAddress" ></el-input>
                       </el-form-item>
                     </el-col>
                 </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.receiveCountry+'：'" >
-                      <el-select  v-model="addressData.recvCountry" :placeholder="$i.common.inputSearch" style="width:100%">
+                  <el-col :span="12">
+                    <el-form-item  :label="$i.setting.receiverAddress+'：'" >
+                      <el-select  v-model="addressData.recvCountry" :placeholder="$i.setting.selectCountry" style="width:100%">
                         <el-option
                           v-for="item in options.country"
                           :key="item.id"
@@ -215,31 +223,23 @@
                       </el-select>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="8">
-                    <el-form-item  :label="$i.setting.receiveProvince +'：'" >
-                      <el-input size="mini" v-model="addressData.recvProvince" :placeholder="$i.common.inputkeyWordToSearch" ></el-input>
+                  <el-col :span="12">
+                    <el-form-item>
+                      <el-input size="mini" v-model="addressData.recvProvince" :placeholder="$i.setting.inputProvince" ></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.receiveCity +'：'" >
-                      <el-input size="mini" v-model="addressData.recvCity" :placeholder="$i.common.inputkeyWordToSearch" ></el-input>
+                  <el-col :span="12">
+                    <el-form-item >
+                      <el-input size="mini" v-model="addressData.recvCity" :placeholder="$i.setting.inputCity" ></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.receiverAddress +'：'" >
-                      <el-input size="mini" v-model="addressData.recvAddr" :placeholder="$i.common.inputkeyWordToSearch" ></el-input>
+                  <el-col :span="12">
+                    <el-form-item >
+                      <el-input size="mini" v-model="addressData.recvAddr" :placeholder="$i.setting.inputAddress" ></el-input>
                     </el-form-item>
                   </el-col>
                   </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item  :label="$i.setting.exportPort+':'">
-                      <el-input
-                        size="mini"
-                        v-model="addressData.exportPort"
-                        :placeholder="$i.common.inputkeyWordToSearch"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                  <el-col :span="12">
                     <el-form-item  :label="$i.setting.ContacctPerson1+':'" required>
                       <el-input
                         size="mini"
@@ -248,7 +248,7 @@
                         required="required"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                  <el-col :span="12">
                     <el-form-item  :label="$i.setting.contactPhoneNo1+':'" required>
                       <el-input
                         size="mini"
@@ -257,7 +257,7 @@
                         required="required"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                  <el-col :span="12">
                     <el-form-item  :label="$i.setting.contacctPerson2+':'">
                         <el-input
                           size="mini"
@@ -265,7 +265,7 @@
                           :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                  <el-col :span="12">
                     <el-form-item  :label="$i.setting.contactPhoneNo2+':'">
                       <el-input
                         size="mini"
@@ -273,7 +273,7 @@
                         :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                  <el-col :span="12">
                     <el-form-item  :label="$i.setting.shipper+':'">
                       <el-input
                         size="mini"
@@ -281,7 +281,7 @@
                         :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                  <el-col :span="12">
                     <el-form-item>
                       <el-checkbox-group v-model="addressData.def" size="medium">
                         <el-checkbox :label="$i.setting.setDefaultAddress" @change="setAddress"></el-checkbox>
@@ -296,10 +296,10 @@
             </div>
         </el-dialog>
 
-        <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="accountDialogVisible">
+        <el-dialog width="50%" :title="$i.setting.accountInfo" :visible.sync="accountDialogVisible">
             <el-form label-width="240px" :model="accountData">
                 <el-row>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-col :span="12">
                         <el-form-item  :label="$i.setting.beneficiaryName+':'" required>
                             <el-input
                               size="mini"
@@ -307,7 +307,7 @@
                               :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-col :span="12">
                         <el-form-item  :label="$i.setting.beneficiaryAccount+':'" required>
                             <el-input
                               size="mini"
@@ -315,7 +315,7 @@
                               :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-col :span="12">
                         <el-form-item  :label="$i.setting.beneficiaryAddress+':'">
                             <el-input
                               size="mini"
@@ -323,7 +323,7 @@
                               :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8" >
+                    <el-col :span="12">
                         <el-form-item  :label="$i.setting.beneficiaryBankName+':'" required>
                             <el-input
                               size="mini"
@@ -331,7 +331,7 @@
                               :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                    <el-col :span="12">
                         <el-form-item  :label="$i.setting.beneficiaryBankSWIFT+':'">
                             <el-input
                               size="mini"
@@ -339,7 +339,7 @@
                               :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                         </el-form-item>
                     </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                  <el-col :span="12">
                     <el-form-item  :label="$i.setting.accountType+':'">
                       <el-input
                         size="mini"
@@ -347,7 +347,7 @@
                         :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                  <el-col :span="12">
                     <el-form-item  :label="$i.setting.currency+':'">
                       <el-select  v-model="accountData.currency" :placeholder="$i.common.inputSearch"  style="width: 100%">
                         <el-option
@@ -360,7 +360,7 @@
                       </el-select>
                     </el-form-item>
                   </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                  <el-col :span="12">
                     <el-form-item  :label="$i.setting.beneficiaryBankAddress+':'">
                       <el-input
                         size="mini"
@@ -368,7 +368,7 @@
                         :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                  <el-col :span="12">
                     <el-form-item  :label="$i.setting.intermediaryBankName+':'">
                       <el-input
                         size="mini"
@@ -376,7 +376,7 @@
                         :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                  <el-col :span="12">
                     <el-form-item  :label="$i.setting.intermBankAddress+':'">
                       <el-input
                         size="mini"
@@ -384,7 +384,7 @@
                         :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                  <el-col :span="12">
                     <el-form-item  :label="$i.setting.intermBankSWIFTCode+':'">
                       <el-input
                         size="mini"
@@ -400,10 +400,10 @@
             </div>
         </el-dialog>
 
-      <el-dialog width="70%" :title="$i.setting.contactInfo" :visible.sync="contactDialogVisible">
+      <el-dialog width="50%" :title="$i.setting.contactInfo" :visible.sync="contactDialogVisible">
         <el-form label-width="200px" :model="contactData">
           <el-row>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-col :span="12">
               <el-form-item  :label="$i.setting.name+':'" required>
                 <el-input
                   size="mini"
@@ -411,7 +411,7 @@
                   :placeholder="$i.common.inputkeyWordToSearch"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-col :span="12">
               <el-form-item :label="$i.setting.department+':'">
                   <el-select  v-model="contactData.deptId" :placeholder="$i.common.inputSearch" style="width:100%" >
                     <el-option
@@ -424,7 +424,7 @@
                   </el-select>
               </el-form-item>
             </el-col>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-col :span="12">
                 <el-form-item  :label="$i.setting.gender+':'">
                   <el-select v-model="contactData.gender" :placeholder="$i.common.inputSearch" style="width: 100%">
                     <el-option
@@ -437,7 +437,7 @@
                   </el-select>
                 </el-form-item>
             </el-col>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-col :span="12">
                 <el-form-item  :label="$i.setting.mobileNumber+':'" >
                   <el-input
                     size="mini"
@@ -445,7 +445,7 @@
                     :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                 </el-form-item>
             </el-col>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-col :span="12">
                 <el-form-item  :label="$i.setting.telNumber+':'">
                   <el-input
                     size="mini"
@@ -453,7 +453,7 @@
                     :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                 </el-form-item>
             </el-col>
-             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+             <el-col :span="12">
                 <el-form-item  :label="$i.setting.faxNumber+':'">
                   <el-input
                     size="mini"
@@ -461,7 +461,7 @@
                     :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                 </el-form-item>
             </el-col>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-col :span="12">
                 <el-form-item  :label="$i.setting.emailAddress+':'">
                   <el-input
                     size="mini"
@@ -469,7 +469,7 @@
                     :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                 </el-form-item>
             </el-col>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-col :span="12">
                 <el-form-item  :label="$i.setting.skype+':'">
                     <el-input
                       size="mini"
@@ -477,7 +477,7 @@
                       :placeholder="$i.common.inputkeyWordToSearch"></el-input>
                 </el-form-item>
             </el-col>
-            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-col :span="12">
                 <el-form-item  :label="$i.setting.qq+':'">
                     <el-input
                       ize="mini"
@@ -782,12 +782,12 @@
                         break;
                 }
             },
-            sureAddAddress(){
-                this.allowAddAddress=true;
+          sureAddAddress(){
                 this.addressData.supplierId=this.companyInfo.id;
                 if (this.$validateForm(this.addressData, this.$db.setting.supplierAddress)) {
                   return false;
                 }
+                this.allowAddAddress=true;
                 if(this.isModifyAddress){
                     //表示是在修改地址
                     this.$ajax.post(`${this.$apis.post_supplier_address_id}/${this.addressData.id}`,this.addressData).then(res=>{
@@ -912,11 +912,11 @@
                 this.accountDialogVisible=true;
             },
             sureAddAccount(){
-                this.allowAddAccount=true;
                 this.accountData.supplierId=this.companyInfo.id;
                 if (this.$validateForm(this.accountData, this.$db.setting.supplierAccount)) {
                   return false;
                 }
+                this.allowAddAccount=true;
                 if(this.isModifyContact){
                     //表示是在修改account
                     this.$ajax.post(`${this.$apis.post_supplier_account_id}/${this.accountData.id}`,this.accountData).then(res=>{
@@ -1000,11 +1000,11 @@
                 }
             },
             sureAddContact(){
-                this.allowAddContact=true;
                 this.contactData.supplierId=this.companyInfo.id;
                 if (this.$validateForm(this.contactData, this.$db.setting.supplierContact)) {
                   return false;
                 }
+                this.allowAddContact=true;
                 if(this.isModifyContact){
                     //表示是在修改account
                     this.$ajax.post(`${this.$apis.post_supplier_contact_id}/${this.contactData.id}`,this.contactData).then(res=>{

@@ -13,10 +13,10 @@ export default {
     key: 'gender',
     belong: "concats"
   },
-  position: {
-    key: 'position',
-    belong: "concats"
-  },
+  // position: {
+  //   key: 'position',
+  //   belong: "concats"
+  // },
   mobileNo: {
     key: 'cellphone',
     belong: "concats"

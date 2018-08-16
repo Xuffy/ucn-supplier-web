@@ -1164,11 +1164,22 @@
         </v-history-modify>
 
         <v-message-board
-                @send="afterSend"
+                v-if="chatParams"
                 :readonly="orderForm.status==='5'"
-                module="order"
+                module="ORDER"
                 code="detail"
+                :arguments="chatParams"
                 :id="$route.query.orderId"></v-message-board>
+
+        <el-dialog
+                class="speDialog"
+                :title="$i.order.addToMyProduct"
+                :visible.sync="addToMyProductVisible"
+                :fullscreen="true"
+                :append-to-body="true"
+                width="100%">
+            <add-product ref="addToProduct" @postId="getId"></add-product>
+        </el-dialog>
     </div>
 </template>
 
@@ -1184,6 +1195,9 @@
         VProduct,
         VInputNumber
     } from "@/components/index";
+
+    import AddProduct from '../product/addNewProduct';
+
     import { mapActions } from "vuex";
 
     export default {
@@ -1196,7 +1210,8 @@
             VProduct,
             VHistoryModify,
             VMessageBoard,
-            VInputNumber
+            VInputNumber,
+            AddProduct
         },
         data() {
             return {
@@ -1239,6 +1254,7 @@
                  * */
                 hasHandleOrder: false,       //该订单是否接单,默认为false
                 hasCancelOrder: false,
+                addToMyProductVisible:false,
                 isModify: false,     //是否在modify状态
                 disabledLcNo: true,
                 allowQuery: 0,
@@ -1278,6 +1294,16 @@
                         type: "detail"
                     }
                 ],
+                productNotMineBtn:[
+                    {
+                        label: this.$i.order.addToMyProduct,
+                        type: "addToProduct"
+                    },
+                    {
+                        label: this.$i.order.detail,
+                        type: "detail"
+                    }
+                ],
                 loadingProductTable: false,
                 tableTotal: [],
                 activeTab: "product",
@@ -1298,7 +1324,8 @@
                 disableChangeSkuStatus: false,
                 initialData: {},
                 disableProductLine: [],
-
+                chatParams:{},
+                oldSkuId:'',
 
                 /**
                  * payment 配置
@@ -1525,19 +1552,27 @@
                             this.paymentItemOption = v.codes;
                         }
                     });
-
                     this.getDetail();
-                }).finally(() => {
+                }).catch(() => {
                     this.loadingPage = false;
                 });
             },
             getDetail(e, isTrue) {
-                this.loadingPage = true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL, {
                     orderId: this.$route.query.orderId,
                     orderNo: this.$route.query.orderNo || this.$route.query.code
                 }).then(res => {
                     this.orderForm = res;
+                    this.chatParams={
+                        bizNo:res.quotationNo,
+                        dataAuthCode:'BIZ_ORDER',
+                        funcAuthCode:'',            //功能权限
+                        suppliers:[{
+                            userId:res.supplierUserId,
+                            companyId:res.supplierCompanyId,
+                            tenantId:res.supplierTenantId
+                        }]
+                    };
                     _.map(this.$db.order.orderDetail, v => {
                         v._isModified = false;
                     });
@@ -1565,9 +1600,14 @@
                         }
                     });
                     this.changePayment(res.payment);
+                    let skuSupplierCode;
                     let data = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(res.skuList, "skuSysCode"), item => {
+                        if(item.skuSupplierCode.value){
+                            skuSupplierCode=item.skuSupplierCode.value;
+                        }
                         if (item._remark) {
                             item.label.value = this.$i.order.remarks;
+                            item.skuSupplierCode.value=skuSupplierCode;
                         }
                         else {
                             item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
@@ -1596,7 +1636,9 @@
                             if (v.fieldUpdate.value) {
                                 _.map(v.fieldUpdate.value, (value, key) => {
                                     if (key !== "skuPictures" && key !== "skuDescCustomer" && key !== "skuNameCustomer") {
-                                        v[key]._style = { "backgroundColor": "yellow" };
+                                        if(v[key]){
+                                            v[key]._style = { "backgroundColor": "yellow" };
+                                        }
                                     }
                                 });
                                 v.fieldUpdate.value = {};
@@ -1638,11 +1680,10 @@
                      * 获取payment数据
                      * */
                     this.getPaymentData();
-                }).finally(err => {
+                }).finally(() => {
                     this.$nextTick(() => {
                         this.loadingPage = false;
                     });
-
                     this.disableClickCancelModify = false;
                     if (e) {
                         this.isModify = false;
@@ -1660,11 +1701,24 @@
                         v.name = (_.findWhere(this.paymentItemOption, { code: v.name }) || {}).name;
                     });
                     this.paymentData = res.datas;
-                }).finally(err => {
+                }).finally(() => {
                     this.loadingPaymentTable = false;
                 });
             },
             send() {
+                let allProductIsMine=true,newArray=[];
+                _.map(this.productTableData,v=>{
+                    if(!v._remark && v.skuSupplierCode.value!==this.orderForm.supplierCode){
+                        allProductIsMine=false;
+                    }
+                });
+                if(!allProductIsMine){
+                    return this.$message({
+                        message: this.$i.order.hasNotMineProduct,
+                        type: 'warning'
+                    });
+                }
+
                 let params = Object.assign({}, this.orderForm);
                 _.map(this.supplierOption, v => {
                     if (params.supplierCode === v.code) {
@@ -1725,7 +1779,11 @@
                     }
                 }
 
+                let rightCode = true;
                 _.map(params.skuList, v => {
+                    if (v.skuSupplierCode !== params.supplierCode) {
+                        rightCode = false;
+                    }
                     v.skuSample = v.skuSample === "1" ? true : false;
                     if (v.skuInspectQuarantineCategory) {
                         v.skuInspectQuarantineCategory = _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code;
@@ -1740,6 +1798,13 @@
                         }
                     });
                 });
+                //如果选的产品和上面选的供应商不一致，要给出提示
+                if (!rightCode) {
+                    return this.$message({
+                        message: this.$i.order.supplierNotTheSame,
+                        type: "warning"
+                    });
+                }
                 params.attachments = this.$refs.upload[0].getFiles();
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
@@ -1763,8 +1828,8 @@
                         });
                     }
                     this.getUnit();
-                }).catch(err => {
-                    // this.loadingPage=false;
+                }).catch(() => {
+                    this.loadingPage=false;
                 });
             },
             changePayment(e, key) {
@@ -1844,10 +1909,13 @@
                 if (this.isModify) {
                     if (item.skuStatus.value === "SHIPPED") {
                         config = this.productNotModifyBtn;
-                    } else {
+                    } else if(item.skuSupplierCode.value!==this.orderForm.supplierCode){
+                        config=this.productNotMineBtn;
+                    }else{
                         config = this.productInfoBtn;
                     }
-                } else {
+                }
+                else {
                     config = this.productNotModifyBtn;
                 }
                 return config;
@@ -1882,6 +1950,13 @@
                         m.skuSysCode.value === e.skuSysCode.value
                     );
                     this.getHistory(e, []);
+                }
+                else if(type==='addToProduct'){
+                    this.addToMyProductVisible=true;
+                    this.oldSkuId=e.skuId.value;
+                    this.$nextTick(()=>{
+                        this.$refs.addToProduct.init(e.skuId.value);
+                    });
                 }
             },
             getHistory(e, data, isTrue) {
@@ -2488,6 +2563,25 @@
             },
 
             /**
+             * 添加产品到自己的产品库事件
+             * */
+            getId(e){
+                this.addToMyProductVisible=false;
+                let id=[{
+                    id:{ value:e }
+                }];
+                let array=[];
+                _.map(this.productTableData, v => {
+                    if(v.skuId.value===this.oldSkuId){
+                        array.push(v);
+                    }
+                });
+                this.productTableData = _.difference(this.productTableData, array);
+                this.handleProductOk(id);
+            },
+
+
+            /**
              * 底部按钮事件
              * */
             modifyOrder() {
@@ -2553,9 +2647,9 @@
                 this.disableClickAccept = true;
                 this.$ajax.post(this.$apis.ORDER_ACCEPT, {
                     ids: [this.orderForm.id]
-                }).then(res => {
+                }).then(() => {
                     this.getDetail();
-                }).finally(err => {
+                }).finally(() => {
                     this.disableClickAccept = false;
                 });
             },
@@ -2582,82 +2676,6 @@
 
                 });
             },
-
-            /**
-             * message board事件
-             * */
-            afterSend() {
-                let params = Object.assign({}, this.orderForm);
-                _.map(this.supplierOption, v => {
-                    if (params.supplierCode === v.code) {
-                        params.supplierName = v.name;
-                        params.supplierCode = v.code;
-                        params.supplierId = v.id;
-                        params.supplierCompanyId = v.companyId;
-                    }
-                });
-                let orderSkuUpdateList = [];
-                _.map(this.productTableData, item => {
-                    let isModify = false, isModifyStatus = false;
-                    _.map(item, (val, index) => {
-                        if (val._isModified) {
-                            isModify = true;
-                        }
-                        if (val._isModifyStatus) {
-                            isModifyStatus = true;
-                        }
-                    });
-                    if (isModify || isModifyStatus) {
-                        let isIn = false;
-                        _.map(orderSkuUpdateList, data => {
-                            if (data.skuId === item.skuId.value) {
-                                data.skuInfo = isModify;
-                                data.skuStatus = isModifyStatus;
-                                isIn = true;
-                            }
-                        });
-                        if (!isIn) {
-                            orderSkuUpdateList.push({
-                                skuId: item.skuId.value,
-                                skuInfo: isModify,
-                                skuStatus: isModifyStatus
-                            });
-                        }
-                    }
-                    if (!item._remark) {
-                        _.map(item, (v, k) => {
-                            if (v._isModified || v._isModifyStatus) {
-                                if (!item.fieldUpdate.value) {
-                                    item.fieldUpdate.value = {};
-                                }
-                                item.fieldUpdate.value[k] = "";
-                            }
-                        });
-                    }
-                });
-                params.orderSkuUpdateList = orderSkuUpdateList;
-                params.skuList = this.dataFilter(this.productTableData);
-                _.map(params.skuList, v => {
-                    v.skuSample = v.skuSample === "1" ? true : false;
-                    if (v.skuInspectQuarantineCategory) {
-                        v.skuInspectQuarantineCategory = _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code;
-                    }
-                    let picKey = ["skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
-                    _.map(picKey, item => {
-                        if (_.isArray(v[item])) {
-                            v[item] = (v[item][0] ? v[item][0] : null);
-                        } else if (_.isString(v[item])) {
-                            let key = this.$getOssKey(v[item], true);
-                            v[item] = key[0];
-                        }
-                    });
-                });
-                params.attachments = this.$refs.upload[0].getFiles();
-
-                this.$ajax.post(this.$apis.ORDER_MESSAGE_TALK, params).then(res => {
-
-                });
-            }
 
         },
         created() {
@@ -2776,5 +2794,12 @@
         width: 100%;
         text-align: left;
         z-index: 5;
+    }
+    .speDialog >>> .el-dialog__header{
+        text-align: center;
+    }
+    .speDialog >>> .el-dialog__header .el-dialog__title{
+        font-size: 16px;
+        font-weight: bold;
     }
 </style>
