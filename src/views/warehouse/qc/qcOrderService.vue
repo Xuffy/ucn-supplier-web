@@ -183,12 +183,13 @@
                                         :accuracy="v.accuracy ? v.accuracy : null"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='input'">
-                            <v-input-number
+                            <el-input v-model="scope.row[v.key].value" :placeholder="$i.warehouse.pleaseInput"></el-input>
+                            <!-- <v-input-number
                                 :controls="false"
                                 :placeholder="$i.warehouse.pleaseInput"
                                 v-model="scope.row[v.key].value"
                                 :mark="v.label"
-                                :accuracy="v.accuracy ? v.accuracy : null"></v-input-number>
+                                :accuracy="v.accuracy ? v.accuracy : null"></v-input-number>11 -->
                         </div>
                         <div v-else-if="v.showType==='attachment'">
                             <el-popover
@@ -689,7 +690,9 @@
                         skuLabelResultDictCode: v.skuLabelResultDictCode.value,
                         skuQcResultDictCode: skuQcResultDictCode,
                         unqualifiedSkuCartonTotalQty: v.unqualifiedSkuCartonTotalQty.value,
-                        unqualifiedType: v.unqualifiedType.value
+                        unqualifiedType: v.unqualifiedType.value,
+                        innerCartonMark: v.innerCartonMark.value,
+                        innerCartonMarkResultDictCode: v.innerCartonMarkResultDictCode.value
                     });
                 });
                 _.map(this.qcOrderConfig.qcResultDetailParams, (v, k) => {
