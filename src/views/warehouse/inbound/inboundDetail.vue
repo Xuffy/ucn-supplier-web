@@ -82,7 +82,7 @@
                 class="speTable"
                 :data="productTable"
                 :totalRow="totalRow"
-                :buttons="[{label:$i.warehouse.detail,type:1}]"
+                :buttons="[{label:$i.warehouse.detail,type:1, auth: 'PRODUCT:DETAIL'}]"
                 @action="btnClick"
                 @change-checked="changeChecked"
                 @change-sort="val=>{getData(val)}">
@@ -157,7 +157,7 @@
 
 
         <div class="footBtn">
-            <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
+            <el-button @click="download" v-authorize="'WAREHOUSE:INBOUND:DOWNLOAD'" type="primary">{{$i.warehouse.download}}</el-button>
             <el-button @click="closeWindow" type="primary">{{$i.warehouse.close}}</el-button>
         </div>
 

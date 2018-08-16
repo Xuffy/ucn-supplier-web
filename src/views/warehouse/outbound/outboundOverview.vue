@@ -30,16 +30,25 @@
                         @action="btnClick">
                     <template slot="header">
                         <div class="btns">
-                            <el-button @click="createOutbound">{{$i.warehouse.create}}</el-button>
-                            <el-button @click="download">{{$i.warehouse.download}}({{selectList.length?selectList.length:$i.warehouse.all}})</el-button>
+                            <el-button
+                                @click="createOutbound"
+                                v-authorize="'WAREHOUSE:OUTBOUND:CREATE'">
+                                {{$i.warehouse.create}}
+                            </el-button>
+                            <el-button
+                                @click="download"
+                                v-authorize="'WAREHOUSE:OUTBOUND:DOWNLOAD'">
+                                {{$i.warehouse.download}}({{selectList.length?selectList.length:$i.warehouse.all}})
+                            </el-button>
                         </div>
                     </template>
                 </v-table>
                 <page
-                        :page-sizes="[50,100,200,500]"
-                        @size-change="changeSize"
-                        @change="changePage"
-                        :page-data="pageData"></page>
+                    :page-sizes="[50,100,200,500]"
+                    @size-change="changeSize"
+                    @change="changePage"
+                    :page-data="pageData">
+                </page>
             </div>
         </div>
     </div>

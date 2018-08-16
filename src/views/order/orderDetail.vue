@@ -1172,14 +1172,14 @@
                 :id="$route.query.orderId"></v-message-board>
 
         <el-dialog
-                title="提示"
+                class="speDialog"
+                :title="$i.order.addToMyProduct"
                 :visible.sync="addToMyProductVisible"
                 :fullscreen="true"
                 :append-to-body="true"
                 width="100%">
-            <add-product></add-product>
+            <add-product ref="addToProduct" @postId="getId"></add-product>
         </el-dialog>
-
     </div>
 </template>
 
@@ -1325,6 +1325,7 @@
                 initialData: {},
                 disableProductLine: [],
                 chatParams:{},
+                oldSkuId:'',
 
                 /**
                  * payment 配置
@@ -1705,6 +1706,19 @@
                 });
             },
             send() {
+                let allProductIsMine=true,newArray=[];
+                _.map(this.productTableData,v=>{
+                    if(!v._remark && v.skuSupplierCode.value!==this.orderForm.supplierCode){
+                        allProductIsMine=false;
+                    }
+                });
+                if(!allProductIsMine){
+                    return this.$message({
+                        message: this.$i.order.hasNotMineProduct,
+                        type: 'warning'
+                    });
+                }
+
                 let params = Object.assign({}, this.orderForm);
                 _.map(this.supplierOption, v => {
                     if (params.supplierCode === v.code) {
@@ -1892,13 +1906,12 @@
              * */
             handleShowBtn(item) {
                 let config;
-                if(item.skuSupplierCode.value!==this.orderForm.supplierCode){
-                    config=this.productNotMineBtn;
-                }
-                else if (this.isModify) {
+                if (this.isModify) {
                     if (item.skuStatus.value === "SHIPPED") {
                         config = this.productNotModifyBtn;
-                    } else {
+                    } else if(item.skuSupplierCode.value!==this.orderForm.supplierCode){
+                        config=this.productNotMineBtn;
+                    }else{
                         config = this.productInfoBtn;
                     }
                 }
@@ -1940,6 +1953,10 @@
                 }
                 else if(type==='addToProduct'){
                     this.addToMyProductVisible=true;
+                    this.oldSkuId=e.skuId.value;
+                    this.$nextTick(()=>{
+                        this.$refs.addToProduct.init(e.skuId.value);
+                    });
                 }
             },
             getHistory(e, data, isTrue) {
@@ -2546,6 +2563,25 @@
             },
 
             /**
+             * 添加产品到自己的产品库事件
+             * */
+            getId(e){
+                this.addToMyProductVisible=false;
+                let id=[{
+                    id:{ value:e }
+                }];
+                let array=[];
+                _.map(this.productTableData, v => {
+                    if(v.skuId.value===this.oldSkuId){
+                        array.push(v);
+                    }
+                });
+                this.productTableData = _.difference(this.productTableData, array);
+                this.handleProductOk(id);
+            },
+
+
+            /**
              * 底部按钮事件
              * */
             modifyOrder() {
@@ -2608,39 +2644,14 @@
                 this.$fetch.export_task("EXPORT_ORDER", { ids: [this.orderForm.id] });
             },
             acceptOrder() {
-                let allProductIsMine=true,newArray=[];
-                _.map(this.productTableData,v=>{
-                    if(!v._remark && v.skuSupplierCode.value!==this.orderForm.supplierCode){
-                        allProductIsMine=false;
-                    }
+                this.disableClickAccept = true;
+                this.$ajax.post(this.$apis.ORDER_ACCEPT, {
+                    ids: [this.orderForm.id]
+                }).then(() => {
+                    this.getDetail();
+                }).finally(() => {
+                    this.disableClickAccept = false;
                 });
-                if(!allProductIsMine){
-                    this.$confirm(this.$i.order.productWillBeRemoved, this.$i.order.prompt, {
-                        confirmButtonText: this.$i.order.sure,
-                        cancelButtonText: this.$i.order.cancel,
-                        type: 'warning'
-                    }).then(() => {
-                        let productTableData=this.$depthClone(this.productTableData);
-                        _.map(productTableData,v=>{
-                            if(v.skuSupplierCode.value===this.orderForm.supplierCode){
-                                newArray.push(v);
-                            }
-                        })
-                        this.productTableData=newArray;
-                        // this.send(true);
-                    }).catch(() => {
-
-                    });
-                }else{
-                    this.disableClickAccept = true;
-                    this.$ajax.post(this.$apis.ORDER_ACCEPT, {
-                        ids: [this.orderForm.id]
-                    }).then(() => {
-                        this.getDetail();
-                    }).finally(() => {
-                        this.disableClickAccept = false;
-                    });
-                }
             },
             refuseOrder() {
                 this.$confirm(this.$i.order.sureRefuse, this.$i.order.prompt, {
@@ -2783,5 +2794,12 @@
         width: 100%;
         text-align: left;
         z-index: 5;
+    }
+    .speDialog >>> .el-dialog__header{
+        text-align: center;
+    }
+    .speDialog >>> .el-dialog__header .el-dialog__title{
+        font-size: 16px;
+        font-weight: bold;
     }
 </style>

@@ -19,5 +19,6 @@
   "nothingToDun":"Nothing to dun",
   "dunSuccess":"Dun success",
   "orderHasBeenSent":"This order has been sent",
-  "productWillBeRemoved":"The product which doesn't belong to your company will be removed"
+  "productWillBeRemoved":"The product which doesn't belong to your company will be removed",
+  "hasNotMineProduct":"Has not mine product"
 }
