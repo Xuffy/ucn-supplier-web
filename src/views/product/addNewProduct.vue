@@ -1066,6 +1066,7 @@
                     children: "children"
                 },
                 options: [],
+                isOrderCreate:false,
 
                 /**
                  * 弹出框data
@@ -1231,12 +1232,17 @@
                             type: "success"
                         });
                         this.disabledSubmit = false;
-                        this.$router.push({
-                            path: "/product/detail",
-                            query: {
-                                id: res
-                            }
-                        });
+                        if(this.isOrderCreate){
+                            //如果是从order的product info里创建的，则需要进行其他处理
+                            this.$emit('postId',res)
+                        }else{
+                            this.$router.push({
+                                path: "/product/detail",
+                                query: {
+                                    id: res
+                                }
+                            });
+                        }
                     }).catch(err => {
                         this.disabledSubmit = false;
                     });
@@ -1311,6 +1317,7 @@
                             });
                         }
                     }
+
                     let lengthWidthHeight = this.productForm.lengthWidthHeight.split("*");
                     this.boxSize.length = lengthWidthHeight[0];
                     this.boxSize.width = lengthWidthHeight[1];
@@ -1340,6 +1347,67 @@
                 }).catch(err => {
                     this.loadingData = false;
                 });
+            },
+            init(e){
+                this.loadingData = true;
+                this.$ajax.get(this.$apis.get_buyerProductDetail,{
+                    id:e
+                }).
+                then(res=>{
+                    this.productForm = res;
+                    this.productForm.id='';
+                    this.productForm.visibility=true;
+                    let lengthWidthHeight = this.productForm.lengthWidthHeight.split("*");
+                    this.boxSize.length = lengthWidthHeight[0];
+                    this.boxSize.width = lengthWidthHeight[1];
+                    this.boxSize.height = lengthWidthHeight[2];
+                    this.productForm.price = [
+                        {
+                            cifArea: "",
+                            cifCurrency: "USD",
+                            cifPrice: null,
+                            dduArea: "",
+                            dduCurrency: "USD",
+                            dduPrice: null,
+                            fobCurrency: "USD",
+                            fobPrice: null,                    //价格起始是多少
+                            fobPort: "",
+                            exwPrice: null,                    //价格起始是多少
+                            exwCurrency: "USD",
+                            status: 1                       //1成本价，2基础报价
+                        },
+                        {
+                            cifArea: res.cifArea,
+                            cifCurrency: res.cifCurrency,
+                            cifPrice: res.cifPrice,
+                            dduArea: res.dduArea,
+                            dduCurrency: res.dduCurrency,
+                            dduPrice: res.dduPrice,
+                            fobCurrency: res.fobCurrency,
+                            fobPrice: res.fobPrice,
+                            fobPort: res.fobPort,
+                            exwPrice: res.exwPrice,
+                            exwCurrency: res.exwCurrency,
+                            status: 2
+                        }
+                    ];
+                    _.mapObject(this.productForm, (e, k) => {
+                        if (k === "unit" || k === "readilyAvailable" || k === "expireUnit" || k === "unitLength" || k === "unitVolume" || k === "unitWeight") {
+                            this.productForm[k] = String(this.productForm[k]);
+                        } else if (k === "noneSellCountry" || k === "mainSaleCountry") {
+                            if (this.productForm[k]) {
+                                this.productForm[k] = this.productForm[k].split(",");
+                            } else {
+                                this.productForm[k] = [];
+                            }
+                        } else if (k === "adjustPackage" || k === "oem" || k === "useDisplayBox") {
+                            this.productForm[k] = this.productForm[k] ? "1" : "0";
+                        }
+                    });
+                    this.isOrderCreate=true;
+                }).finally(()=>{
+                    this.loadingData = false;
+                })
             },
 
             /**
