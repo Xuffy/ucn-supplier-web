@@ -4,7 +4,7 @@
       {{$i.logs.logs}}
     </div>
     <div>
-      <el-form label-width="130px" class="searchCondition" ref="params" :model="params">
+      <el-form label-width="190px" class="searchCondition" ref="params" :model="params">
         <el-row>
           <!-- <el-col :span="2">
               <el-button type="primary">Download (ALL)</el-button>

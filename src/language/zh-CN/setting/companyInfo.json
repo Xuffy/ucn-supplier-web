@@ -95,5 +95,9 @@
   "intermBankSWIFTCode": "中间行代码",
   "destinationPort": "目的港",
   "consignee": "收货人",
-  "notify": "通知人"
+  "notify": "通知人",
+  "selectCountry": "请选择国家",
+  "inputProvince": "请输入省份",
+  "inputCity": "请输入城市",
+  "inputAddress": "请输入详细地址"
 }

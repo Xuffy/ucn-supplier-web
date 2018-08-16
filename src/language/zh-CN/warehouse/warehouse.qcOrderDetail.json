@@ -58,5 +58,7 @@
   "attachments": "附件",
   "qcPics": "验货照片",
   "qcUpload": "上传图片",
-  "ContinueQcUpload": "继续上传图片"
+  "ContinueQcUpload": "继续上传图片",
+  "innerCartonMark": "中包唛头",
+  "innerCartonMarkResultDictCode": "中包唛头结果"
 }

@@ -79,5 +79,6 @@
   "addResponsibility":"Add Responsibility",
   "type":"Type",
   "customer":"Customer",
-  "supplier":"Supplier"
+  "supplier":"Supplier",
+  "addToMyProduct":"Add to My Product"
 }

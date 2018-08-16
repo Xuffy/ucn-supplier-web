@@ -209,9 +209,10 @@
                     code="uwarehouse_qc_order_detail"
                     :loading="loadingProductInfoTable"
                     :data="productInfoData"
-                    :buttons="[{'label': $i.warehouse.detail, type: 1}]"
+                    :buttons="[{'label': $i.warehouse.detail, type: 1, auth: 'PRODUCT:DETAIL'}]"
                     @action="btnClick"
                     @change-checked="changeChecked"
+                     @change-sort="val=>{getProductInfo(val)}"
                     :totalRow="totalRow">
                 <template slot="header">
                     <div class="second-title">
@@ -351,7 +352,7 @@
             <el-button type="danger" @click="cancel" v-if="qcDetail.qcStatusDictCode!=='WAITING_QC'">
                 {{$i.warehouse.exit}}
             </el-button>
-            <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
+            <el-button @click="download" v-authorize="'QC:ORDER_DETAIL:DOWNLOAD'" type="primary">{{$i.warehouse.download}}</el-button>
         </div>
         <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
     </div>
@@ -442,7 +443,8 @@
                     }
                 );
             },
-            getProductInfo() {
+            getProductInfo(e) {
+                Object.assign(this.productInfoConfig, e)
                 this.loadingProductInfoTable = true;
                 this.$ajax.post(this.$apis.get_serviceQcOrderProduct, this.productInfoConfig).then(res => {
                     this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas, e => {

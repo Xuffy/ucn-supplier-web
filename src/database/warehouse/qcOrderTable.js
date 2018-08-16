@@ -14,13 +14,10 @@ export default {
     skuDesign:{},
     packingMethodCn:{},
     innerCartonPackingMethodCn:{},
-    deliveryDate:{
-
-    },
+    deliveryDate:{},
     skuMethodPkgEn:{},
     skuInnerCartonMethodEn:{},
     skuUnitDictCode:{},
-   
     inboundNo:{},
     samplingRate:{},
     checkOuterCartonQty:{},
@@ -53,11 +50,17 @@ export default {
     qualifiedSkuQty:{},
     unqualifiedSkuQty:{},
     qualifiedSkuNetWeight:{},
-    unqualifiedSkuNetWeight:{},
+    unqualifiedSkuNetWeight:{
+        width: '200'
+    },
     qualifiedSkuVolume:{},
-    unqualifiedSkuVolume:{},
+    unqualifiedSkuVolume:{
+        width: '200'
+    },
     qualifiedSkuGrossWeight:{},
-    unqualifiedSkuGrossWeight:{},
+    unqualifiedSkuGrossWeight:{
+        width: '200'
+    },
     unqualifiedType:{},
     skuBarCode:{},
     skuBarCodeResultDictCode:{},
@@ -69,9 +72,12 @@ export default {
     outerCartonBarCodeResultDictCode:{},
     shippingMark:{},
     shippingMarkResultDictCode:{},
+    innerCartonMark:{},
+    innerCartonMarkResultDictCode:{},
     actSkuQty:{},
     qcPic:{
-        key:'qcPics'
+        key:'qcPics',
+        sortable: false
     },
     remark:{},
     lengthUnitDictCode:{},

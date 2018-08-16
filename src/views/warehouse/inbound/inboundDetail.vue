@@ -82,9 +82,10 @@
                 class="speTable"
                 :data="productTable"
                 :totalRow="totalRow"
-                :buttons="[{label:$i.warehouse.detail,type:1}]"
+                :buttons="[{label:$i.warehouse.detail,type:1, auth: 'PRODUCT:DETAIL'}]"
                 @action="btnClick"
-                @change-checked="changeChecked">
+                @change-checked="changeChecked"
+                @change-sort="val=>{getData(val)}">
             <template slot="header">
                 <div class="title" style="display: inline">
                     {{$i.warehouse.productInfo}}
@@ -156,7 +157,7 @@
 
 
         <div class="footBtn">
-            <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
+            <el-button @click="download" v-authorize="'WAREHOUSE:INBOUND:DOWNLOAD'" type="primary">{{$i.warehouse.download}}</el-button>
             <el-button @click="closeWindow" type="primary">{{$i.warehouse.close}}</el-button>
         </div>
 
@@ -249,16 +250,17 @@
         },
         methods:{
             ...mapActions(['setMenuLink']),
-            getData(){
+            getData(e){
                 this.loadingTable=true;
                 this.$ajax.get(`${this.$apis.get_inboundDetail}?id=${this.$route.query.id}`).then(res=>{
-                    console.log(res)
                     this.inboundData=res;
-                    this.$ajax.post(this.$apis.get_inboundSku,{
+                    let par = Object.assign({
                         inboundId: this.$route.query.id,
                         pn: 1,
                         ps: 50,
-                    }).then(res=>{
+                    }, e)
+                    console.log(par)
+                    this.$ajax.post(this.$apis.get_inboundSku, par).then(res=>{
                         this.productTable = this.$getDB(this.$db.warehouse.inboundDetailProductTable, res.datas,(e)=>{
                             e.skuUnitDictCode._value=e.skuUnitDictCode.value?_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}).name:'';
                             e.lengthUnitDictCode._value=e.lengthUnitDictCode.value?_.findWhere(this.lengthUnitOption,{code:e.lengthUnitDictCode.value}).name:'';

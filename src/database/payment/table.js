@@ -6,7 +6,8 @@ export default {
       key: 'orderType'
   },
   orderStatus: {
-      key: 'orderStatus'
+    key: 'orderStatus',
+    _sort:false
   },
   orderCreateDate: {
     key: 'orderEntryDt',

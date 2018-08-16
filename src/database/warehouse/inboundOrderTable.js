@@ -13,6 +13,7 @@ export default {
     },
     skuBarCode:{
         key:'skuBarCode',
+        _sort:false
     },
     skuNameCn:{
         key:'skuNameCn'
@@ -30,9 +31,9 @@ export default {
         key:'skuMaterialEn'
     },
     customerSkuCode:{
-        key:'customerSkuCode'
+        key:'customerSkuCode',
+        _sort:false
     },
-    customerSkuCode:{},
     skuCode:{},
     // skuDescCn:{
     //     key:'skuDescCn'
