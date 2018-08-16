@@ -137,7 +137,11 @@
                             :label="$i.warehouse.detail"
                             width="100">
                         <template slot-scope="scope">
-                            <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                            <el-button 
+                            @click="handleClick(scope.row)"
+                            type="text"
+                            size="small"
+                            v-authorize="'PRODUCT:DETAIL'">{{$i.warehouse.detail}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -199,7 +203,7 @@
                             :label="$i.warehouse.detail"
                             width="100">
                         <template slot-scope="scope">
-                            <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                            <el-button @click="handleClick(scope.row)" v-authorize="'PRODUCT:DETAIL'" type="text" size="small">{{$i.warehouse.detail}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -261,7 +265,7 @@
                             :label="$i.warehouse.detail"
                             width="100">
                         <template slot-scope="scope">
-                            <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
+                            <el-button @click="handleClick(scope.row)" v-authorize="'PRODUCT:DETAIL'" type="text" size="small">{{$i.warehouse.detail}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -389,7 +393,7 @@
         </div>
 
         <div class="footBtn">
-            <el-button @click="download" type="primary">{{$i.warehouse.download}}</el-button>
+            <el-button @click="download" v-authorize="'QC:ORDER_DETAIL:DOWNLOAD'" type="primary">{{$i.warehouse.download}}</el-button>
             <el-button :disabled="loadingTable" type="danger" @click="cancel">{{$i.warehouse.exit}}</el-button>
         </div>
 
@@ -705,16 +709,12 @@
                 }).catch(() => {
 
                 });
-
-
-
-
             },
             handleClick(data){
                 this.$windowOpen({
                     url:'/product/detail',
                     params:{
-                        id:data.skuId
+                        id:data.id.value
                     }
                 });
             },

@@ -74,7 +74,7 @@
   "yes": "有",
   "no": "无",
   "defaultAddress": "默认地址",
-  "setDefaultAddress": "设为默认地址",
+  "setDefaultAddress": "Set as default address",
   "def" : "def",
   "isReplace": "确认替换默认地址?",
   "replaceSuccess": "替换成功",
@@ -95,6 +95,10 @@
   "intermBankSWIFTCode": "Interm. Bank SWIFT-code",
   "destinationPort": "Destination port",
   "consignee": "Consignee",
-  "notify": "Notify"
+  "notify": "Notify",
+  "selectCountry": "Please select country",
+  "inputProvince": "Please input procince",
+  "inputCity": "Please input city",
+  "inputAddress": "Please input detailed address"
 
 }
