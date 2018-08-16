@@ -128,8 +128,7 @@
                     align="center"
                     :label-class-name="'location-' + v.key"
                     v-if="!v._hidden && !v._hide"
-                    :width="v.key === 'skuNameCustomer' ? '250' : '180'"
-                    :sortable="v.sortable">
+                    :width="v.key === 'skuNameCustomer' ? '250' : '180'">
                 <template slot-scope="scope" v-if="scope.row[v.key]">
                     <div v-if="v.showType==='number'">
                         <!-- <el-input-number
