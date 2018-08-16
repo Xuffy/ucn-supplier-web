@@ -691,7 +691,6 @@
                         skuQcResultDictCode: skuQcResultDictCode,
                         unqualifiedSkuCartonTotalQty: v.unqualifiedSkuCartonTotalQty.value,
                         unqualifiedType: v.unqualifiedType.value,
-                        innerCartonMark: v.innerCartonMark.value,
                         innerCartonMarkResultDictCode: v.innerCartonMarkResultDictCode.value
                     });
                 });

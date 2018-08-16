@@ -224,13 +224,10 @@ export default {
     showType: 'select',
     isBarCodeResult: true
   },
-  innerCartonMark:{
-    key:'innerCartonMark',
-    showType: 'input'
-  },
   innerCartonMarkResultDictCode:{
     key:'innerCartonMarkResultDictCode',
-    showType: 'input'
+    showType: 'select',
+    isBarCodeResult: true
   },
   outerCartonBarCodeResultDictCode: {
     key: 'outerCartonBarCodeResultDictCode',
@@ -422,6 +419,7 @@ export default {
     key: 'shippingMark',
     type: 'String'
   },
+  innerCartonMark:{},
   lengthUnitDictCode: {
     key: 'lengthUnitDictCode',
     type: 'String'
