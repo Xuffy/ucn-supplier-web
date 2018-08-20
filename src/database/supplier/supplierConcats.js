@@ -6,22 +6,22 @@ export default {
     belong: "concats"
   },
   department: {
-    key: 'deptName',
+    key: 'deptId',
     belong: "concats"
   },
   gender: {
     key: 'gender',
     belong: "concats"
   },
-  position: {
-    key: 'position',
-    belong: "concats"
-  },
+  // position: {
+  //   key: 'position',
+  //   belong: "concats"
+  // },
   mobileNo: {
     key: 'cellphone',
     belong: "concats"
   },
-  tel: {
+  telNumber: {
     key: 'telphone',
     belong: "concats"
   },

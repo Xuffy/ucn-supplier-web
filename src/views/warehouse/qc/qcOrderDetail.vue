@@ -453,6 +453,7 @@
                         e.volumeUnitDictCode.value = e.volumeUnitDictCode.value ? (_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}) || {}).name: '';
                         e.weightUnitDictCode.value= e.weightUnitDictCode.value ? (_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}) || {}).name : '';
                         e.lengthUnitDictCode.value= e.lengthUnitDictCode.value ? (_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}) || {}).name : '';
+                        e.innerCartonMarkResultDictCode.value = e.innerCartonMarkResultDictCode.value ? (_.findWhere(this.barCodeResult,{code:e.innerCartonMarkResultDictCode.value}) || {}).name : '';
                     });
                     let diffData = [];
                     _.map(this.productInfoData, v => {

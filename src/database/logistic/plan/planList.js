@@ -3,11 +3,26 @@ export default {
     type: 'text',
     _hide: true
   },
-  orderNo: {
+  departureCountry: {
+    type: 'text'
+  },
+  departurePort: {
+    key:'deliveryPort',
+    type: 'text'
+  },
+  destinationCountry: {
+    type: 'text'
+  },
+  destinationPort: {
     type: 'text'
   },
   logisticsNo: {
     type: 'text'
+  },
+  bookingDate:{
+    key:'actBookingDate',
+    _filed:'actBookingDate',
+    type: 'String'
   },
   estContainerStuffingDate: {
     type: 'textDate'
@@ -18,10 +33,8 @@ export default {
   estArrivalDate: {
     type: 'textDate'
   },
-  estDelivaryDate: {
-    type: 'textDate'
-  },
-  actDeliveryDate: {
+  declareDate: {
+    key:'actDeclareDate',
     type: 'textDate'
   },
   actContainerStuffingDate: {
@@ -42,8 +55,28 @@ export default {
   blNo: {
     type: 'text'
   },
-  logisticsStatus: {
-    type: 'text',
-    _hide:true
+  transportCompany: {
+    type: 'text'
+  },
+  contractNo: {
+    type: 'text'
+  },
+  commercialInvoiceNo: {
+    type: 'text'
+  },
+  commercialInvoiceDate: {
+    type: 'text'
+  },
+  shippingAgent: {
+    type: 'text'
+  },
+  hq40qty: {
+    type: 'text'
+  },
+  gp40qty: {
+    type: 'text'
+  },
+  gp20qty: {
+    type: 'text'
   }
 }
