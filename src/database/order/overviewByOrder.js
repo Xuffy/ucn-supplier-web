@@ -4,7 +4,9 @@ export default {
     },
     supplierOrderNo:{},
     status:{},      //订单状态
-    entryDt:{},
+    orderDt:{
+        key:'entryDt'
+    },
     customerAbbr:{},
     incoterm:{},
     currency:{},
@@ -20,13 +22,14 @@ export default {
     customerOrderNo:{},
     supplierName:{},
     lcNo:{},
-    payment:{},
+    paymentTerm:{
+        key:'payment'
+    },
     deliveryDt:{},
     departureCountry:{},    //发运国
     destCountry:{},
     customerAgreementNo:{},
     customerAgreementDt:{},
-    remark:{},
     deliveredQty:{},
     updateDt:{},
     quotationNo:{},
