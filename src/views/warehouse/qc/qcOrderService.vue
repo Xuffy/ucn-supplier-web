@@ -163,24 +163,87 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isBarCodeResult">
-                                <el-select clearable v-model="scope.row[v.key].value"
-                                           :placeholder="$i.warehouse.pleaseChoose">
-                                    <el-option
+                                <div v-if="v.key === 'skuBarCodeResultDictCode'">
+                                    <el-select 
+                                        clearable v-model="scope.row[v.key].value"
+                                        :placeholder="$i.warehouse.pleaseChoose">
+                                        <el-option
                                             v-for="item in barCodeResult"
                                             :key="item.id"
                                             :label="item.name"
                                             :value="item.value">
-                                    </el-option>
-                                </el-select>
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                                <div v-else-if="v.key === 'skuLabelResultDictCode'">
+                                    <el-select 
+                                        clearable v-model="scope.row[v.key].value"
+                                        :placeholder="$i.warehouse.pleaseChoose">
+                                        <el-option
+                                            v-for="item in labelResultOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                                <div v-else-if="v.key === 'innerPackingBarCodeResultDictCode'">
+                                    <el-select 
+                                        clearable v-model="scope.row[v.key].value"
+                                        :placeholder="$i.warehouse.pleaseChoose">
+                                        <el-option
+                                            v-for="item in innerPackingBarCodeResultOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                                <div v-else-if="v.key === 'outerCartonBarCodeResultDictCode'">
+                                    <el-select 
+                                        clearable v-model="scope.row[v.key].value"
+                                        :placeholder="$i.warehouse.pleaseChoose">
+                                        <el-option
+                                            v-for="item in outerCartonBarCodeResultOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                                <div v-else-if="v.key === 'shippingMarkResultDictCode'">
+                                    <el-select 
+                                        clearable v-model="scope.row[v.key].value"
+                                        :placeholder="$i.warehouse.pleaseChoose">
+                                        <el-option
+                                            v-for="item in shippingMarkResultOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                                <div v-else>
+                                    <el-select 
+                                        clearable v-model="scope.row[v.key].value"
+                                        :placeholder="$i.warehouse.pleaseChoose">
+                                        <el-option
+                                            v-for="item in barCodeResult"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </div>
                             </div>
                         </div>
                         <div v-else-if="v.showType==='number'">
-                                    <v-input-number
-                                        :controls="false"
-                                        v-model="scope.row[v.key].value"
-                                        :mark="v.label"
-                                        @blur="inputBlur(scope.row, v.key)"
-                                        :accuracy="v.accuracy ? v.accuracy : null"></v-input-number>
+                            <v-input-number
+                                :controls="false"
+                                v-model="scope.row[v.key].value"
+                                :mark="v.label"
+                                @blur="inputBlur(scope.row, v.key)"
+                                :accuracy="v.accuracy ? v.accuracy : null"></v-input-number>
                         </div>
                         <div v-else-if="v.showType==='input'">
                             <el-input v-model="scope.row[v.key].value" :placeholder="$i.warehouse.pleaseInput"></el-input>
@@ -402,7 +465,11 @@
                 qcMethodOption: [],
                 surveyorOption: [],
                 qcResultOption: [],
-                barCodeResult: [],
+                barCodeResult: [], // 产品条码结果下拉
+                labelResultOption: [], // 产品标签结果下拉
+                innerPackingBarCodeResultOption: [], // 中包条码结果
+                outerCartonBarCodeResultOption: [], // 外箱条码结果
+                shippingMarkResultOption: [], // 外箱唛头结果
                 qcStatusOption: [],
                 currencyOptions: [],
                 skuUnitOption: [],       //计量单位
@@ -750,7 +817,7 @@
              * 获取字典
              * */
             getUnit() {
-                this.$ajax.post(this.$apis.get_partUnit, ["QC_TYPE", "QC_MD", "SKU_QC_RS", "PB_CODE", "QC_STATUS", "SKU_UNIT", "LH_UNIT", "VE_UNIT", "WT_UNIT"], { cache: true }).then(res => {
+                this.$ajax.post(this.$apis.get_partUnit, ["QC_TYPE", "QC_MD", "SKU_QC_RS", "PB_CODE", "QC_STATUS", "SKU_UNIT", "LH_UNIT", "VE_UNIT", "WT_UNIT", "PL_RS", "IPB_CODE", "QCB_CODE", "QCM_RS"], { cache: true }).then(res => {
                     res.forEach(v => {
                         if (v.code === "QC_TYPE") {
                             this.qcTypeOption = v.codes;
@@ -763,6 +830,7 @@
                             this.qcResultOption = v.codes;
                         } else if (v.code === "PB_CODE") {
                             this.barCodeResult = v.codes;
+                            console.log(v.codes)
                         } else if (v.code === "QC_STATUS") {
                             this.qcStatusOption = v.codes;
                         } else if (v.code === "SKU_UNIT") {
@@ -773,6 +841,15 @@
                             this.volumeOption = v.codes;
                         } else if (v.code === "WT_UNIT") {
                             this.weightOption = v.codes;
+                        } else if (v.code === "PL_RS") {
+                            this.labelResultOption = v.codes
+                        } else if (v.code === "IPB_CODE") {
+                            this.innerPackingBarCodeResultOption = v.codes
+                        } else if (v.code === "QCB_CODE") {
+                            this.outerCartonBarCodeResultOption = v.codes
+                        } else if (v.code === "QCM_RS") {
+                            console.log(v.codes)
+                            this.shippingMarkResultOption = v.codes
                         }
                     });
                     this.getProductInfo();
