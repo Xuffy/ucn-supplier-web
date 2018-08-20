@@ -170,7 +170,7 @@ export default {
   checkOuterCartonQty: {
     key: 'checkOuterCartonQty',
     type: 'Number',
-    showType: 'input',
+    showType: 'number',
     _rules: {
       type: 'Number',
       required: true
@@ -224,6 +224,11 @@ export default {
     showType: 'select',
     isBarCodeResult: true
   },
+  innerCartonMarkResultDictCode:{
+    key:'innerCartonMarkResultDictCode',
+    showType: 'select',
+    isBarCodeResult: true
+  },
   outerCartonBarCodeResultDictCode: {
     key: 'outerCartonBarCodeResultDictCode',
     type: 'String',
@@ -236,7 +241,6 @@ export default {
     showType: 'select',
     isBarCodeResult: true
   },
-  
   qcPic: {             //服务商上传
     key: 'qcPics',
     type: 'String',
@@ -259,17 +263,6 @@ export default {
     _sort:false,
     type: 'String'
   },
-  innerCartonMark:{
-    key:'innerCartonMark'
-  },
-  innerCartonMarkResultDictCode:{
-      key:'innerCartonMarkResultDictCode'
-  },
-  
-  // factorySkuCode: {
-  //   key: 'factorySkuCode',
-  //   type: 'String'
-  // },
   skuNameCn: {
     key: 'skuNameCn',
     type: 'String'
@@ -426,6 +419,7 @@ export default {
     key: 'shippingMark',
     type: 'String'
   },
+  innerCartonMark:{},
   lengthUnitDictCode: {
     key: 'lengthUnitDictCode',
     type: 'String'

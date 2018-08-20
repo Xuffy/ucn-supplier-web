@@ -63,13 +63,13 @@
         </div>
 <!--        表格-->
              <v-table
-                    :height=360
+                    :height=500
                     :loading='loading'
                     :data="tabData"
                     :buttons="[{label: 'detail', type: 1}]"
                     @action="detail"
                     @change-checked='checked'
-                    style='marginTop:10px'/>      
+                    style='marginTop:10px'/>
             <div v-show='!isButton'  style='display:flex; justify-content: center'>
                 <el-button @click='emitData'>{{$i.common.ok}}</el-button>
                 <el-button type="primary">{{$i.common.cancel}}</el-button>
