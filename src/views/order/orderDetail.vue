@@ -313,9 +313,15 @@
                            type="primary">
                     {{$i.order.applyRefund}}
                 </el-button>
-                <el-button :disabled="!hasHandleOrder" :loading="disableRemind" @click="remindPay">
-                    {{$i.order.remindCustomerPay}}
-                </el-button>
+
+                <v-button
+                        v-authorize="'ORDER:DETAIL:PRESS_FOR_PAYMENT'"
+                        moduleCode="ORDER"
+                        :orderNo="orderForm.orderNo"
+                        :orderType="10"
+                        :disabled="!hasHandleOrder">
+                    {{$i.order.remindCustomerPay}}</v-button>
+
                 <el-table
                         v-loading="loadingPaymentTable"
                         class="payTable"
@@ -1193,7 +1199,8 @@
         VHistoryModify,
         VMessageBoard,
         VProduct,
-        VInputNumber
+        VInputNumber,
+        VButton
     } from "@/components/index";
 
     import AddProduct from '../product/addNewProduct';
@@ -1211,7 +1218,8 @@
             VHistoryModify,
             VMessageBoard,
             VInputNumber,
-            AddProduct
+            AddProduct,
+            VButton
         },
         data() {
             return {
@@ -2372,34 +2380,6 @@
                 }).finally(() => {
                     this.disableClickPayback = false;
                 });
-            },
-            remindPay() {
-                let params = [];
-                _.map(this.paymentData, v => {
-                    if (v.status === 40 && v.planPayDt && v.planPayAmount > v.actualPayAmount) {
-                        params.push({
-                            id: v.id,
-                            version: v.version
-                        });
-                    }
-                });
-                if (params.length === 0) {
-                    return this.$message({
-                        message: this.$i.order.nothingToDun,
-                        type: "warning"
-                    });
-                }
-                this.disableRemind = true;
-                this.$ajax.post(`${this.$apis.PAYMENT_DUNNING}?moduleCode=ORDER`, params).then(res => {
-                    this.getPaymentData();
-                    this.$message({
-                        message: this.$i.order.dunSuccess,
-                        type: "success"
-                    });
-                }).finally(() => {
-                    this.disableRemind = false;
-                });
-
             },
             saveNewPay(data) {
                 let param = {
