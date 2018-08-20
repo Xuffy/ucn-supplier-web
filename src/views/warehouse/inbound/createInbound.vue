@@ -543,11 +543,10 @@
                                 e.customerOrderNo=v.customerOrderNo;
                                 e.customerSkuCode=e.skuCustomerSkuCode;
                                 e.factorySkuCode='';        //填写
-                                e.volumeUnitDictCode=e.volumeUnitDictCode?(_.findWhere(this.volumeUnitOption, { code: String(e.skuUnitVolume) }) || {}).name:'';
-                                e.skuUnitDictCode=e.skuUnitDictCode?(_.findWhere(this.skuUnitOption, { code: String(e.skuUnit) }) || {}).name:'';
-                                e.weightUnitDictCode=e.weightUnitDictCode?(_.findWhere(this.weightUnitOption, { code: String(e.skuUnitWeight) }) || {}).name:'';
-                                e.lengthUnitDictCode=e.lengthUnitDictCode?(_.findWhere(this.lengthUnitOption, { code: String(e.skuUnitLength) }) || {}).name:'';
-
+                                e.volumeUnitDictCode=e.skuUnitVolume?(_.findWhere(this.volumeUnitOption, { code: String(e.skuUnitVolume) }) || {}).name:'';
+                                e.skuUnitDictCode=e.skuUnit?(_.findWhere(this.skuUnitOption, { code: String(e.skuUnit) }) || {}).name:'';
+                                e.weightUnitDictCode=e.skuUnitWeight?(_.findWhere(this.weightUnitOption, { code: String(e.skuUnitWeight) }) || {}).name:'';
+                                e.lengthUnitDictCode=e.skuUnitLength?(_.findWhere(this.lengthUnitOption, { code: String(e.skuUnitLength) }) || {}).name:'';
                                 arr.push(e);
                             });
                         });

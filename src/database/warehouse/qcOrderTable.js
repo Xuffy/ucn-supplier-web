@@ -75,11 +75,21 @@ export default {
     shippingMark:{},
     shippingMarkResultDictCode:{},
     actSkuQty:{},
+    outerCartonTotalQty: {},
     qcPic:{
         key:'qcPics',
         sortable: false
     },
     remark:{},
+    skuMaterialCn:{
+        key: 'skuMaterialCn'
+    },
+    skuMaterialEn: {
+        key: 'skuMaterialEn'
+    },
+    skuNameEn: {
+        key: 'skuNameEn'
+    },
     lengthUnitDictCode:{},
     volumeUnitDictCode:{},
     weightUnitDictCode:{},

@@ -3,7 +3,6 @@ export default {
     CATEGORY_MINE: ["/category", "USUPPLY_URL"],
     CATEGORY_SYSTEM: ["/sys/category", "USUPPLY_URL"],
 
-
     get_productCategory: ["/purchase/sys/category", "UPURCHASE_URL"],
     get_productDetail: ["/sku/{id}", "USUPPLY_URL"],
     delete_product: ["/sku/{id}/delete", "USUPPLY_URL"],
@@ -39,14 +38,14 @@ export default {
     /**
      * seller product
      * */
-    add_newSKU: ["/supplier/sku/setting/addSku",'TEST_CS', "USUPPLY_URL"],
+    add_newSKU: ["/supplier/sku/setting/addSku", "USUPPLY_URL"],
     set_sellerProductPutAway: ["/sku/putaway", "USUPPLY_URL"],
     set_sellerProductPutDown: ["/sku/soldout", "USUPPLY_URL"],
     delete_sellerProduct: ["/sku/deleteAll", "USUPPLY_URL"],
     get_sellerCustomer: ["/supplier/sku/setting/listCustomers", "USUPPLY_URL"],
     get_sellerCustomerList: ["/supplier/sku/setting/listCustomers/{id}", "USUPPLY_URL"],
     get_sellerCustomerGroup: ["/supplier/sku/setting/getCustomerByIds", "USUPPLY_URL"],
-    update_buyerProductDetail: ["/supplier/sku/setting/updateSku/{id}", "USUPPLY_URL"],
+    update_buyerProductDetail: ["/supplier/sku/setting/updateSku/{id}","USUPPLY_URL"],
     get_sellerProductList: ["/sku/listSkuByParams", "USUPPLY_URL"],
 
     //product buyer
@@ -99,7 +98,6 @@ export default {
     RETURN_HANDLE: ["/qc/return/handle", "USUPPLY_URL"],
     GET_WAREHOUSE_NO: ["/warehouse/noGenerate/{type}", "USUPPLY_URL"],
 
-
     /**
      * buyer Warehouse
      * */
@@ -125,7 +123,6 @@ export default {
     get_serviceQcOrderProduct: ["/qc/detail/page", "USUPPLY_URL"],
     get_serviceQcSurveyor: ["/user/list", "UUSER_URL"],
     save_serviceQcOrder: ["/qc/result/save", "USUPPLY_URL"],
-
 
     /**
      * 字典获取

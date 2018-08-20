@@ -670,5 +670,8 @@
     .uploadBox{
       padding-top: 10px;
     }
+   .img-box{
+    height: 184px;background-color: #f9f9f9;
+  }
 
 </style>

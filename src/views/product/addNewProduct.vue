@@ -86,6 +86,7 @@
                             <div v-else-if="v.isFormation">
                                 <el-select
                                         class="speSelect"
+                                        clearable
                                         v-model="productForm[v.key]"
                                         :placeholder="$i.product.pleaseChoose">
                                     <el-option
@@ -144,7 +145,7 @@
                                         class="speInputNumber"
                                         v-model="productForm[v.key]"
                                         :min="0"
-                                        :max="v.key==='applicableAge'?127:null"
+                                        :max="v.key==='applicableAge'?127:Infinity"
                                         :mark="v.label"
                                         :accuracy="v.accuracy"
                                         :placeholder="$i.product.pleaseInput">
@@ -1094,10 +1095,14 @@
                         _disableClick: true
                     }
                 ];
+                this.loadingData=true;
                 this.$ajax.all([sys, mine]).then(res => {
                     category[1].children = res[0];
                     category[0].children = res[1];
                     this.categoryList = category;
+                    this.getUnit();
+                }).catch(()=>{
+                    this.loadingData=false;
                 });
             },
             addCustomer() {
@@ -1249,7 +1254,6 @@
                 }
             },
             getGoodsData() {
-                this.loadingData = true;
                 this.$ajax.get(this.$apis.get_productDetail, { id: this.$route.query.id }).then(res => {
                     this.productForm = res;
                     if (!this.productForm.price || this.productForm.price.length === 0) {
@@ -1323,7 +1327,7 @@
                     this.boxSize.width = lengthWidthHeight[1];
                     this.boxSize.height = lengthWidthHeight[2];
                     _.mapObject(this.productForm, (e, k) => {
-                        if (k === "unit" || k === "readilyAvailable" || k === "expireUnit" || k === "unitLength" || k === "unitVolume" || k === "unitWeight") {
+                        if (k === "unit" || k === "expireUnit" || k === "unitLength" || k === "unitVolume" || k === "unitWeight") {
                             this.productForm[k] = String(this.productForm[k]);
                         } else if (k === "noneSellCountry" || k === "mainSaleCountry") {
                             if (this.productForm[k]) {
@@ -1331,7 +1335,7 @@
                             } else {
                                 this.productForm[k] = [];
                             }
-                        } else if (k === "adjustPackage" || k === "oem" || k === "useDisplayBox") {
+                        } else if (k === "adjustPackage" || k === "oem" || k === "useDisplayBox" || k==='readilyAvailable' || k==='status') {
                             this.productForm[k] = this.productForm[k] ? "1" : "0";
                         }
                     });
@@ -1341,10 +1345,10 @@
                         ps: 1000
                     }).then(res => {
                         this.tableData = res.datas;
-                    }).finally(err => {
+                    }).finally(() => {
                         this.loadingData = false;
                     });
-                }).catch(err => {
+                }).catch(() => {
                     this.loadingData = false;
                 });
             },
@@ -1392,7 +1396,7 @@
                         }
                     ];
                     _.mapObject(this.productForm, (e, k) => {
-                        if (k === "unit" || k === "readilyAvailable" || k === "expireUnit" || k === "unitLength" || k === "unitVolume" || k === "unitWeight") {
+                        if (k === "unit" || k === "expireUnit" || k === "unitLength" || k === "unitVolume" || k === "unitWeight") {
                             this.productForm[k] = String(this.productForm[k]);
                         } else if (k === "noneSellCountry" || k === "mainSaleCountry") {
                             if (this.productForm[k]) {
@@ -1400,7 +1404,7 @@
                             } else {
                                 this.productForm[k] = [];
                             }
-                        } else if (k === "adjustPackage" || k === "oem" || k === "useDisplayBox") {
+                        } else if (k === "adjustPackage" || k === "oem" || k === "useDisplayBox" || k==='status' || k==='readilyAvailable') {
                             this.productForm[k] = this.productForm[k] ? "1" : "0";
                         }
                     });
@@ -1471,7 +1475,6 @@
                 const currencyAjax = this.$ajax.get(this.$apis.get_currencyUnit, {}, { cache: true });
                 const countryAjax = this.$ajax.get(this.$apis.get_country, {}, { cache: true });
                 const codeAjax = this.$ajax.post(this.$apis.get_partUnit, ["SKU_SALE_STATUS", "SKU_READILY_AVAIALBLE", "ED_UNIT", "WT_UNIT", "VE_UNIT", "LH_UNIT", "OEM_IS", "UDB_IS", "SKU_PG_IS", "RA_IS", "SKU_UNIT", "QUARANTINE_TYPE", "CUSTOMER_TYPE", "SKU_FORMATION"], { cache: true });
-                this.loadingData = true;
                 this.$ajax.all([currencyAjax, countryAjax, codeAjax]).then(res => {
                     this.currencyOption = res[0];
                     this.countryOption = res[1];
@@ -1507,14 +1510,13 @@
                     if (this.$route.query.isEdit) {
                         this.getGoodsData();
                     }
-                }).finally(() => {
+                }).catch(() => {
                     this.loadingData = false;
                 });
             }
         },
         created() {
             this.getCategoryId();
-            this.getUnit();
         }
     };
 </script>

@@ -34,7 +34,7 @@
   "totalOuterCartonQty": "Order CTN QTY",
   "totalNetWeight": "Order N.W.(kg)",
   "totalVolume": "Order CBM(m³)",
-  "skuQty": "SKU QTY",
+  "skuQty": "QTY",
   "customerSKUCode": "Customer SKU Code",
   "SKUBarCode": "Product Bar-Code",
   "SKUcode": "SKU Code",

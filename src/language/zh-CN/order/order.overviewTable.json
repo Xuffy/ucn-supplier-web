@@ -15,7 +15,7 @@
   "lcNo": "信用证号",
   "payment": "付款",
   "currency": "交易币种",
-  "deliveryDt": "交货日期",
+  "deliveryDt": "订单交货日期",
   "departureCountry": "发运国",
   "destCountry": "目的国",
   "customerAgreementNo": "客户协议号",
