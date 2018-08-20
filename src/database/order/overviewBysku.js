@@ -20,7 +20,6 @@ export default {
     supplierOrderNo:{
         mustShowColumn:true
     },
-    skuSupplierName:{},
     skuNameCn:{},
     skuNameEn:{},
     skuDescEn:{},
@@ -68,7 +67,9 @@ export default {
         mustShowColumn:true
     },
     skuPrice:{},
-    entryDt:{},
+    orderDt:{
+        key:'entryDt'
+    },
     deliveryDt:{},
     skuDeliveredQty:{},
     updateDt:{},
