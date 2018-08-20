@@ -1,6 +1,6 @@
 export default {
     compareTime: {
-        key: "updateDt"
+        key: "entryDt"
     },
     compareName: {
         key: "name"

@@ -86,7 +86,7 @@
   "skuInnerCartonLength": "Inner CTN Length(cm)",
   "skuInnerCartonWidth": "Inner CTN Width(cm)",
   "skuInnerCartonHeight": "Inner CTN Height(cm)",
-  "skuInnerCartonWeightNet": "N.W./Inner(g)",
+  "skuInnerCartonWeightNet": "N.W./Inner(kg)",
   "skuInnerCartonRoughWeight": "G.W./Inner(kg)",
   "skuInnerCartonVolume": "CBM/Inner(m³)",
   "skuInnerCartonDesc": "Inner CTN Description",
