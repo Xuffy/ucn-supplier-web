@@ -80,5 +80,6 @@
   "type":"Type",
   "customer":"Customer",
   "supplier":"Supplier",
-  "addToMyProduct":"Add to My Product"
+  "addToMyProduct":"Add to My Product",
+  "orderDt":"Order Date"
 }

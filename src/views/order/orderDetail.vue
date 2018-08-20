@@ -1096,6 +1096,7 @@
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonNetWeight"
                     @blur="handlePriceBlur"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -1167,6 +1168,35 @@
                     slot-scope="{data}"
                     :disabled="true"
                     v-model="data.value"></v-input-number>
+
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="totalCtnCbm"
+                    :accuracy="3"
+                    slot-scope="{data}"
+                    :disabled="true"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="totalCtnGw"
+                    :accuracy="2"
+                    slot-scope="{data}"
+                    :disabled="true"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="totalCtnNw"
+                    :accuracy="2"
+                    slot-scope="{data}"
+                    :disabled="true"
+                    v-model="data.value"></v-input-number>
+
         </v-history-modify>
 
         <v-message-board

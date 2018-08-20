@@ -79,5 +79,6 @@
   "type":"类型",
   "customer":"采购商",
   "supplier":"供应商",
-  "addToMyProduct":"创建到产品库"
+  "addToMyProduct":"创建到产品库",
+  "orderDt":"订单日期"
 }

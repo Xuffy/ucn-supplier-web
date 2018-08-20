@@ -38,7 +38,7 @@ export default {
     /**
      * seller product
      * */
-    add_newSKU: ["/supplier/sku/setting/addSku",'TEST_CS', "USUPPLY_URL"],
+    add_newSKU: ["/supplier/sku/setting/addSku", "USUPPLY_URL"],
     set_sellerProductPutAway: ["/sku/putaway", "USUPPLY_URL"],
     set_sellerProductPutDown: ["/sku/soldout", "USUPPLY_URL"],
     delete_sellerProduct: ["/sku/deleteAll", "USUPPLY_URL"],
