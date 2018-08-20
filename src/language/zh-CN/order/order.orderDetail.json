@@ -86,7 +86,7 @@
   "skuInnerCartonLength": "中包长(cm)",
   "skuInnerCartonWidth": "中包宽(cm)",
   "skuInnerCartonHeight": "中包高(cm)",
-  "skuInnerCartonWeightNet": "中包净重(g)",
+  "skuInnerCartonWeightNet": "中包净重(kg)",
   "skuInnerCartonRoughWeight": "中包毛重(kg)",
   "skuInnerCartonVolume": "中包体积(m³)",
   "skuInnerCartonDesc": "中包描述",

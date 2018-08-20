@@ -644,7 +644,7 @@
                         {{$i.order.send}}
                     </el-button>
                     <el-button :loading="disableClickCancelModify" @click="cancelModify" type="danger">
-                        {{$i.order.cancel}}
+                        {{$i.order.exit}}
                     </el-button>
                 </div>
                 <div v-else>
