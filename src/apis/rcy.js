@@ -44,7 +44,7 @@ export default {
     PAYMENT_UPDATE:['/payment/update?moduleCode={moduleCode}','BASE_URL'],
     PAYMENT_ABANDON:['/payment/abandon/{id}?version={version}&moduleCode={moduleCode}','BASE_URL'],
     PAYMENT_RESTORE:['/payment/recover/{id}?version={version}&moduleCode={moduleCode}','BASE_URL'],
-    PAYMENT_DUNNING:['/payment/batchDunning','BASE_URL'],
+    PAYMENT_DUNNING:['/payment/dunningByOrder/{orderNo}/{orderType}?moduleCode={moduleCode}','BASE_URL'],
 
 
 
