@@ -454,6 +454,11 @@
                         e.weightUnitDictCode.value= e.weightUnitDictCode.value ? (_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}) || {}).name : '';
                         e.lengthUnitDictCode.value= e.lengthUnitDictCode.value ? (_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}) || {}).name : '';
                         e.innerCartonMarkResultDictCode.value = e.innerCartonMarkResultDictCode.value ? (_.findWhere(this.barCodeResult,{code:e.innerCartonMarkResultDictCode.value}) || {}).name : '';
+                        e.skuBarCodeResultDictCode.value = e.skuBarCodeResultDictCode.value ? (_.findWhere(this.barCodeResult,{code:e.skuBarCodeResultDictCode.value}) || {}).name : '';
+                        e.skuLabelResultDictCode.value =  e.skuLabelResultDictCode.value ? (_.findWhere(this.barCodeResult,{code:e.skuLabelResultDictCode.value}) || {}).name : '';
+                        e.innerPackingBarCodeResultDictCode.value = e.innerPackingBarCodeResultDictCode.value ? (_.findWhere(this.barCodeResult,{code:e.innerPackingBarCodeResultDictCode.value}) || {}).name : '';
+                        e.outerCartonBarCodeResultDictCode.value = e.outerCartonBarCodeResultDictCode.value ? (_.findWhere(this.barCodeResult,{code:e.outerCartonBarCodeResultDictCode.value}) || {}).name : '';
+                        e.shippingMarkResultDictCode.value = e.shippingMarkResultDictCode.value ? (_.findWhere(this.barCodeResult,{code:e.shippingMarkResultDictCode.value}) || {}).name : '';
                     });
                     let diffData = [];
                     _.map(this.productInfoData, v => {
