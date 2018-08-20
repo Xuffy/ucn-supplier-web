@@ -62,7 +62,7 @@
                     this.disableClick=true;
                     this.timeInterval=setInterval(()=>{
                         this.countSeconds--;
-                    },100);
+                    },1000);
                 }).finally(()=>{
                     this.loadingBtn=false;
                 })
