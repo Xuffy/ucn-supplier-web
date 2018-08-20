@@ -346,13 +346,14 @@
         this.getList();
       },
       downloadPayment(){
-        let ids=_.pluck(_.pluck(this.selectedData,"id"),'value');
-        if(ids.length>0){
-          this.$fetch.export_task('EXPORT_LEDGER',{ids:ids});
-        }else{
-          let params=this.$depthClone(this.params);
-          this.$fetch.export_task('EXPORT_LEDGER',params);
-        }
+        let ids=_.pluck(_.pluck(this.selectedData,"paymentId"),'value');
+        console.log(ids)
+        // if(ids.length>0){
+        //   this.$fetch.export_task('EXPORT_LEDGER',{ids:ids});
+        // }else{
+        //   let params=this.$depthClone(this.params);
+        //   this.$fetch.export_task('EXPORT_LEDGER',params);
+        // }
       },
     },
     mounted(){
