@@ -22,7 +22,7 @@
   "expectQcQty": "Estimated QC QTY",
   "samplingRate": "Sampling Rate",
   "unqualifiedProcessingMode": "Unqualified Processing Mode",
-  "outerCartonTotalQty": "Total QTY of Outer Carton",
+  "outerCartonTotalQty": "Total CTN QTY",
   "actOuterCartonSkuQty": "Act. QTY/CTN",
   "outerCartonInnerBoxQty": "QTY of Inner Box /CTN",
   "actOuterCartonInnerBoxQty": "Act. QTY of Inner Box in Outer Carton",
