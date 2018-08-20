@@ -48,6 +48,14 @@ export default {
         showType:'select',
         isQcStatus:true,
     },
+    customerNo: {
+        disabled:true,
+        showType:'input'
+    },
+    customerName: {
+        disabled:true,
+        showType:'input'
+    },
     remark:{
         key:'remark',
         showType:'textarea',

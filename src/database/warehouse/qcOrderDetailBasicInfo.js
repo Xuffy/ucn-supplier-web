@@ -53,6 +53,14 @@ export default {
     isCurrency: true,
     disabled: true
   },
+  customerNo: {
+    disabled:true,
+    type:'input'
+},
+customerName: {
+    disabled:true,
+    type:'input'
+},
   remark: {
     type: 'textarea',
     fullLine: true,
