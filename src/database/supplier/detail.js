@@ -40,18 +40,18 @@ export default {
       ullLine:false,
       type:'textdate'
     },
-    factoryInspectionReport:{
-      key:'currentInquiryDate',
-      ullLine:false,
-    },
+    // factoryInspectionReport:{
+    //   key:'currentInquiryDate',
+    //   ullLine:false,
+    // },
     recentTransactionDate:{
       key:'recentDealDate',
       ullLine:false,
     },
-    TaxpayerQualification:{
-      key:'taxpayer',
-      ullLine:false,
-    },
+    // TaxpayerQualification:{
+    //   key:'taxpayer',
+    //   ullLine:false,
+    // },
     shipAgent: {
       key: 'shipAgent'
     }
