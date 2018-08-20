@@ -306,17 +306,14 @@ export default {
     key: 'inboundNo',
     type: 'String'
   },
-  
-  
-  
   unqualifiedProcessingMode: {
     key: 'unqualifiedProcessingMode',
     type: 'String'
   },
-  // outerCartonTotalQty: {
-  //   key: 'outerCartonTotalQty',
-  //   type: 'Number'
-  // },
+  outerCartonTotalQty: {
+    key: 'outerCartonTotalQty',
+    type: 'Number'
+  },
   skuLength: {
     key: 'skuLength',
     type: 'Number'
@@ -420,6 +417,15 @@ export default {
     type: 'String'
   },
   innerCartonMark:{},
+  skuMaterialCn:{
+    key: 'skuMaterialCn'
+  },
+  skuMaterialEn: {
+      key: 'skuMaterialEn'
+  },
+  skuNameEn: {
+      key: 'skuNameEn'
+  },
   lengthUnitDictCode: {
     key: 'lengthUnitDictCode',
     type: 'String'
