@@ -261,7 +261,6 @@ export default {
     skuExpireUnit:{
         _slot:'skuExpireUnit',
     },
-    skuComments:{},
     skuLabel:{},
     skuInnerPackBarCode:{},
     skuInnerPackLabel:{},
