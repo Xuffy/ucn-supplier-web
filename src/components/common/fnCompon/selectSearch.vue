@@ -1,7 +1,7 @@
 <template>
     <div class="select-wrap">
         <div class="select" v-if="selectHide">
-            <el-select v-model="keyObject" value-key="id" placeholder="select" :clearable="false">
+            <el-select v-model="keyObject" value-key="id" :placeholder="$i.common.inputSearch" :clearable="false">
                 <el-option
                     v-for="item in options"
                     :key="item.id"
@@ -20,7 +20,7 @@
             <el-input v-else
                 v-model="keyObject.value"
                 clearable
-                placeholder="search"
+                :placeholder="$i.common.inputkeyWordToSearch"
                 :style="{width:width+'px'}"
                 @keyup.enter.native="inputEnter"/>
             <el-button

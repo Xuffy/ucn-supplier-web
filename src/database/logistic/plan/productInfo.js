@@ -169,6 +169,7 @@ export default {
     type: 'text'
   },
   "blSkuName": {
+    key:'skuNameCustomer',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
@@ -195,11 +196,6 @@ export default {
   },
   "supplierNo": {
     key:'supplierCode',
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
-  "skuNameCustomer": {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'

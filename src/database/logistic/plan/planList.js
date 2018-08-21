@@ -4,14 +4,14 @@ export default {
     _hide: true
   },
   departureCountry: {
-    type: 'text'
+    type: 'country'
   },
   departurePort: {
     key:'deliveryPort',
     type: 'text'
   },
   destinationCountry: {
-    type: 'text'
+    type: 'country'
   },
   destinationPort: {
     type: 'text'
@@ -22,7 +22,7 @@ export default {
   bookingDate:{
     key:'actBookingDate',
     _filed:'actBookingDate',
-    type: 'String'
+    type: 'textDate'
   },
   estContainerStuffingDate: {
     type: 'textDate'
@@ -77,6 +77,10 @@ export default {
     type: 'text'
   },
   gp20qty: {
+    type: 'text'
+  },
+  logisticsStatus: {
+    _hide:true,
     type: 'text'
   }
 }
