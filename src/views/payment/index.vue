@@ -44,6 +44,7 @@
             <div style="overflow: hidden">
               <el-button style="float: left" @click="downloadPayment" v-authorize="'PAYMENT:DOWNLOAD'">
                 {{$i.common.download}}
+                ({{selectedData.length===0?$i.common.all:selectedData.length}})
               </el-button>
               <div class="Date">
                 <span class="text1" >{{$i.payment.orderCreateDate}} : </span>
