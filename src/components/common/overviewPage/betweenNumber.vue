@@ -3,13 +3,15 @@
         <i class="between-range_icon"></i>
         <v-input-number
                 class="between-range_input"
-                v-model="form[betweenKey[0]]"
-                :controls="false"></v-input-number>
-        <span class="between-separator">-</span>
+                :placeholder="$i.common.min"
+                @blur="check"
+                v-model="form[betweenKey[0]]"></v-input-number>
+        <span class="between-separator">~</span>
         <v-input-number
                 class="between-range_input"
-                v-model="form[betweenKey[1]]"
-                :controls="false"></v-input-number>
+                :placeholder="$i.common.max"
+                @blur="check"
+                v-model="form[betweenKey[1]]"></v-input-number>
         <i class="between-range_close-icon"></i>
     </div>
 </template>
@@ -17,7 +19,7 @@
 <script>
 
     import VInputNumber from '../inputNumber/index'
-    
+
     export default {
         name: "betweenNumber",
         components:{
@@ -38,7 +40,14 @@
             }
         },
         methods:{
-
+            check(){
+                if(this.form[this.betweenKey[0]]!==null && this.form[this.betweenKey[1]]!==null && this.form[this.betweenKey[0]]>this.form[this.betweenKey[1]]){
+                    this.$nextTick(()=>{
+                        this.form[this.betweenKey[0]]=null;
+                        this.form[this.betweenKey[1]]=null;
+                    })
+                }
+            },
         },
     }
 </script>
