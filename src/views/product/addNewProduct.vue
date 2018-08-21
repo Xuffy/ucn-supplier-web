@@ -158,6 +158,7 @@
                                     v-model="productForm[v.key]"
                                     :list="categoryList"
                                     :defaultProps="defaultProps"
+                                    :searchPlaceholder="$i.product.pleaseInput"
                                     ref="dropDown"></drop-down>
                         </div>
                         <div v-else-if="v.showType==='attachment'">
