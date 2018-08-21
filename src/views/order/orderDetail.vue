@@ -320,7 +320,8 @@
                         :orderNo="orderForm.orderNo"
                         :orderType="10"
                         :disabled="!hasHandleOrder">
-                    {{$i.order.remindCustomerPay}}</v-button>
+                    {{$i.order.remindCustomerPay}}
+                </v-button>
 
                 <el-table
                         v-loading="loadingPaymentTable"
@@ -1096,6 +1097,7 @@
                     @change="val => data._isModified=true"
                     slot="skuOuterCartonNetWeight"
                     @blur="handlePriceBlur"
+                    :accuracy="2"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -1123,6 +1125,7 @@
                     @change="val => data._isModified=true"
                     slot="skuApplicableAge"
                     :accuracy="0"
+                    :max="127"
                     slot-scope="{data}"
                     v-model="data.value"></v-input-number>
             <v-input-number
@@ -1167,6 +1170,35 @@
                     slot-scope="{data}"
                     :disabled="true"
                     v-model="data.value"></v-input-number>
+
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="totalCtnCbm"
+                    :accuracy="3"
+                    slot-scope="{data}"
+                    :disabled="true"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="totalCtnGw"
+                    :accuracy="2"
+                    slot-scope="{data}"
+                    :disabled="true"
+                    v-model="data.value"></v-input-number>
+            <v-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    @change="val => data._isModified=true"
+                    slot="totalCtnNw"
+                    :accuracy="2"
+                    slot-scope="{data}"
+                    :disabled="true"
+                    v-model="data.value"></v-input-number>
+
         </v-history-modify>
 
         <v-message-board
@@ -1203,7 +1235,7 @@
         VButton
     } from "@/components/index";
 
-    import AddProduct from '../product/addNewProduct';
+    import AddProduct from "../product/addNewProduct";
 
     import { mapActions } from "vuex";
 
@@ -1262,7 +1294,7 @@
                  * */
                 hasHandleOrder: false,       //该订单是否接单,默认为false
                 hasCancelOrder: false,
-                addToMyProductVisible:false,
+                addToMyProductVisible: false,
                 isModify: false,     //是否在modify状态
                 disabledLcNo: true,
                 allowQuery: 0,
@@ -1302,7 +1334,7 @@
                         type: "detail"
                     }
                 ],
-                productNotMineBtn:[
+                productNotMineBtn: [
                     {
                         label: this.$i.order.addToMyProduct,
                         type: "addToProduct"
@@ -1332,8 +1364,8 @@
                 disableChangeSkuStatus: false,
                 initialData: {},
                 disableProductLine: [],
-                chatParams:{},
-                oldSkuId:'',
+                chatParams: {},
+                oldSkuId: "",
 
                 /**
                  * payment 配置
@@ -1485,7 +1517,7 @@
                             if (key === "skuPrice") {
                                 if (sameCurrency) {
                                     obj[key] = {
-                                        value: Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0)
+                                        value: this.$calc.add(Number(item.value), (Number(obj[key] ? obj[key].value : 0) || 0))
                                     };
                                 } else {
                                     obj[key] = {
@@ -1494,7 +1526,7 @@
                                 }
                             } else {
                                 obj[key] = {
-                                    value: Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0)
+                                    value: this.$calc.add(Number(item.value), (Number(obj[key] ? obj[key].value : 0) || 0))
                                 };
                             }
                         } else {
@@ -1571,14 +1603,14 @@
                     orderNo: this.$route.query.orderNo || this.$route.query.code
                 }).then(res => {
                     this.orderForm = res;
-                    this.chatParams={
-                        bizNo:res.quotationNo,
-                        dataAuthCode:'BIZ_ORDER',
-                        funcAuthCode:'',            //功能权限
-                        suppliers:[{
-                            userId:res.supplierUserId,
-                            companyId:res.supplierCompanyId,
-                            tenantId:res.supplierTenantId
+                    this.chatParams = {
+                        bizNo: res.quotationNo,
+                        dataAuthCode: "BIZ_ORDER",
+                        funcAuthCode: "",            //功能权限
+                        suppliers: [{
+                            userId: res.supplierUserId,
+                            companyId: res.supplierCompanyId,
+                            tenantId: res.supplierTenantId
                         }]
                     };
                     _.map(this.$db.order.orderDetail, v => {
@@ -1610,12 +1642,12 @@
                     this.changePayment(res.payment);
                     let skuSupplierCode;
                     let data = this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(res.skuList, "skuSysCode"), item => {
-                        if(item.skuSupplierCode.value){
-                            skuSupplierCode=item.skuSupplierCode.value;
+                        if (item.skuSupplierCode.value) {
+                            skuSupplierCode = item.skuSupplierCode.value;
                         }
                         if (item._remark) {
                             item.label.value = this.$i.order.remarks;
-                            item.skuSupplierCode.value=skuSupplierCode;
+                            item.skuSupplierCode.value = skuSupplierCode;
                         }
                         else {
                             item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
@@ -1639,12 +1671,43 @@
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
+
+                    let incoterm,
+                        totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
+                        fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
+                        exw = ["skuExwCurrency", "skuExwPrice"],
+                        cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
+                        ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
+                    if (this.orderForm.incoterm === "1") {
+                        incoterm = fob;
+                    } else if (this.orderForm.incoterm === "2") {
+                        incoterm = exw;
+                    } else if (this.orderForm.incoterm === "3") {
+                        incoterm = cif;
+                    } else if (this.orderForm.incoterm === "4") {
+                        incoterm = ddu;
+                    }
+                    _.map(totalPrice, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = true;
+                            }
+                        });
+                    });
+                    _.map(incoterm, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = false;
+                            }
+                        });
+                    });
+
                     if (this.orderForm.status === "1" || this.orderForm.status === "2" && !isTrue) {
                         _.map(this.productTableData, v => {
                             if (v.fieldUpdate.value) {
                                 _.map(v.fieldUpdate.value, (value, key) => {
                                     if (key !== "skuPictures" && key !== "skuDescCustomer" && key !== "skuNameCustomer") {
-                                        if(v[key]){
+                                        if (v[key]) {
                                             v[key]._style = { "backgroundColor": "yellow" };
                                         }
                                     }
@@ -1714,16 +1777,16 @@
                 });
             },
             send() {
-                let allProductIsMine=true,newArray=[];
-                _.map(this.productTableData,v=>{
-                    if(!v._remark && v.skuSupplierCode.value!==this.orderForm.supplierCode){
-                        allProductIsMine=false;
+                let allProductIsMine = true, newArray = [];
+                _.map(this.productTableData, v => {
+                    if (!v._remark && v.skuSupplierCode.value !== this.orderForm.supplierCode) {
+                        allProductIsMine = false;
                     }
                 });
-                if(!allProductIsMine){
+                if (!allProductIsMine) {
                     return this.$message({
                         message: this.$i.order.hasNotMineProduct,
-                        type: 'warning'
+                        type: "warning"
                     });
                 }
 
@@ -1837,7 +1900,7 @@
                     }
                     this.getUnit();
                 }).catch(() => {
-                    this.loadingPage=false;
+                    this.loadingPage = false;
                 });
             },
             changePayment(e, key) {
@@ -1868,6 +1931,40 @@
                 }
                 this.orderForm.fieldUpdate[key] = "";
                 if (key === "incoterm") {
+
+                    let incoterm,
+                        totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
+                        fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
+                        exw = ["skuExwCurrency", "skuExwPrice"],
+                        cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
+                        ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
+                    if (this.orderForm[key] === "1") {
+                        incoterm = fob;
+                    } else if (this.orderForm[key] === "2") {
+                        incoterm = exw;
+                    } else if (this.orderForm[key] === "3") {
+                        incoterm = cif;
+                    } else if (this.orderForm[key] === "4") {
+                        incoterm = ddu;
+                    }
+                    _.map(totalPrice, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = true;
+                            }
+                        });
+                    });
+                    _.map(incoterm, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = false;
+                            }
+                        });
+                    });
+
+
+
+
                     _.map(this.productTableData, item => {
                         if (!item._remark) {
                             if (this.orderForm[key] === "1") {
@@ -1917,9 +2014,9 @@
                 if (this.isModify) {
                     if (item.skuStatus.value === "SHIPPED") {
                         config = this.productNotModifyBtn;
-                    } else if(item.skuSupplierCode.value!==this.orderForm.supplierCode){
-                        config=this.productNotMineBtn;
-                    }else{
+                    } else if (item.skuSupplierCode.value !== this.orderForm.supplierCode) {
+                        config = this.productNotMineBtn;
+                    } else {
                         config = this.productInfoBtn;
                     }
                 }
@@ -1959,10 +2056,10 @@
                     );
                     this.getHistory(e, []);
                 }
-                else if(type==='addToProduct'){
-                    this.addToMyProductVisible=true;
-                    this.oldSkuId=e.skuId.value;
-                    this.$nextTick(()=>{
+                else if (type === "addToProduct") {
+                    this.addToMyProductVisible = true;
+                    this.oldSkuId = e.skuId.value;
+                    this.$nextTick(() => {
                         this.$refs.addToProduct.init(e.skuId.value);
                     });
                 }
@@ -2090,6 +2187,37 @@
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
+
+                    let incoterm,
+                        totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
+                        fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
+                        exw = ["skuExwCurrency", "skuExwPrice"],
+                        cif = ["skuCifPrice", "skuCifCurrency", "skuCifPort"],
+                        ddu = ["skuDduCurrency", "skuDduPort", "skuDduPrice"];
+                    if (this.orderForm.incoterm === "1") {
+                        incoterm = fob;
+                    } else if (this.orderForm.incoterm === "2") {
+                        incoterm = exw;
+                    } else if (this.orderForm.incoterm === "3") {
+                        incoterm = cif;
+                    } else if (this.orderForm.incoterm === "4") {
+                        incoterm = ddu;
+                    }
+                    _.map(totalPrice, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = true;
+                            }
+                        });
+                    });
+                    _.map(incoterm, v => {
+                        _.map(this.productTableData, item => {
+                            if (!item._remark) {
+                                item[v]._hide = false;
+                            }
+                        });
+                    });
+
                 }).finally(err => {
                     this.loadingProductTable = false;
                 });
@@ -2194,65 +2322,64 @@
             handlePriceBlur(e, item) {
                 let obj;
                 obj = item ? item : this.chooseProduct[0];
-                if(obj.skuOuterCartonQty.value && obj.skuQty.value){
-                    obj.skuCartonQty.value=this.$calc.divide(obj.skuQty.value,obj.skuOuterCartonQty.value);
+                if (obj.skuOuterCartonQty.value && obj.skuQty.value) {
+                    obj.skuCartonQty.value = this.$calc.divide(obj.skuQty.value, obj.skuOuterCartonQty.value);
                     //联动totalCtnGw
-                    if(obj.skuCartonQty.value && obj.skuOuterCartonRoughWeight.value){
-                        obj.totalCtnGw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonRoughWeight.value),2);
+                    if (obj.skuCartonQty.value && obj.skuOuterCartonRoughWeight.value) {
+                        obj.totalCtnGw.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonRoughWeight.value), 2);
                     }
-                    else{
-                        obj.totalCtnGw.value=null;
+                    else {
+                        obj.totalCtnGw.value = null;
                     }
 
                     //联动totalCtnNw
-                    if(obj.skuCartonQty.value && obj.skuOuterCartonNetWeight.value){
-                        obj.totalCtnNw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonNetWeight.value),2);
+                    if (obj.skuCartonQty.value && obj.skuOuterCartonNetWeight.value) {
+                        obj.totalCtnNw.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonNetWeight.value), 2);
                     }
-                    else{
-                        obj.totalCtnNw.value=null;
+                    else {
+                        obj.totalCtnNw.value = null;
                     }
 
                     //联动totalCtnCbm
-                    if(obj.skuCartonQty.value && obj.skuOuterCartonVolume.value){
-                        obj.totalCtnCbm.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonVolume.value),3);
+                    if (obj.skuCartonQty.value && obj.skuOuterCartonVolume.value) {
+                        obj.totalCtnCbm.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonVolume.value), 3);
                     }
-                    else{
-                        obj.totalCtnCbm.value=null;
+                    else {
+                        obj.totalCtnCbm.value = null;
                     }
 
-                    if(obj.skuCartonQty.value!==Math.ceil(obj.skuCartonQty.value)){
-                        obj.skuCartonQty._style={ "backgroundColor": "yellow" };
-                    }else{
-                        obj.skuCartonQty._style={};
+                    if (obj.skuCartonQty.value !== Math.ceil(obj.skuCartonQty.value)) {
+                        obj.skuCartonQty._style = { "backgroundColor": "yellow" };
+                    } else {
+                        obj.skuCartonQty._style = {};
                     }
-                }else{
-                    obj.skuCartonQty.value=null;
-                    obj.totalCtnGw.value=null;
-                    obj.totalCtnNw.value=null;
-                    obj.totalCtnCbm.value=null;
+                } else {
+                    obj.skuCartonQty.value = null;
+                    obj.totalCtnGw.value = null;
+                    obj.totalCtnNw.value = null;
+                    obj.totalCtnCbm.value = null;
                 }
 
                 //处理totalCtnGw
-                if(obj.skuCartonQty.value && obj.skuOuterCartonRoughWeight.value){
-                    obj.totalCtnGw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonRoughWeight.value),2);
-                }else{
-                    obj.totalCtnGw.value=null;
+                if (obj.skuCartonQty.value && obj.skuOuterCartonRoughWeight.value) {
+                    obj.totalCtnGw.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonRoughWeight.value), 2);
+                } else {
+                    obj.totalCtnGw.value = null;
                 }
 
                 //处理totalCtnNw
-                if(obj.skuCartonQty.value && obj.skuOuterCartonNetWeight.value){
-                    obj.totalCtnNw.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonNetWeight.value),2);
-                }else{
-                    obj.totalCtnNw.value=null;
+                if (obj.skuCartonQty.value && obj.skuOuterCartonNetWeight.value) {
+                    obj.totalCtnNw.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonNetWeight.value), 2);
+                } else {
+                    obj.totalCtnNw.value = null;
                 }
 
                 //处理totalCtnCbm
-                if(obj.skuCartonQty.value && obj.skuOuterCartonVolume.value){
-                    obj.totalCtnCbm.value=this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value,obj.skuOuterCartonVolume.value),3);
-                }else{
-                    obj.totalCtnCbm.value=null;
+                if (obj.skuCartonQty.value && obj.skuOuterCartonVolume.value) {
+                    obj.totalCtnCbm.value = this.$toFixed(this.$calc.multiply(obj.skuCartonQty.value, obj.skuOuterCartonVolume.value), 3);
+                } else {
+                    obj.totalCtnCbm.value = null;
                 }
-
 
 
                 if (!this.orderForm.incoterm) {
@@ -2545,14 +2672,14 @@
             /**
              * 添加产品到自己的产品库事件
              * */
-            getId(e){
-                this.addToMyProductVisible=false;
-                let id=[{
-                    id:{ value:e }
+            getId(e) {
+                this.addToMyProductVisible = false;
+                let id = [{
+                    id: { value: e }
                 }];
-                let array=[];
+                let array = [];
                 _.map(this.productTableData, v => {
-                    if(v.skuId.value===this.oldSkuId){
+                    if (v.skuId.value === this.oldSkuId) {
                         array.push(v);
                     }
                 });
@@ -2655,7 +2782,7 @@
                 }).catch(() => {
 
                 });
-            },
+            }
 
         },
         created() {
@@ -2775,10 +2902,12 @@
         text-align: left;
         z-index: 5;
     }
-    .speDialog >>> .el-dialog__header{
+
+    .speDialog >>> .el-dialog__header {
         text-align: center;
     }
-    .speDialog >>> .el-dialog__header .el-dialog__title{
+
+    .speDialog >>> .el-dialog__header .el-dialog__title {
         font-size: 16px;
         font-weight: bold;
     }

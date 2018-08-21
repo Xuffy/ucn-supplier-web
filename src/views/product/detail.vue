@@ -143,11 +143,18 @@
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.logisticInfo" name="Logistic">
-                    <el-form class="speForm" label-width="260px" :label-position="labelPosition">
+                    <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailNewTab"
-                                    :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12"
-                                    :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                            <el-col
+                                    class="list"
+                                    v-if="v.belongTab==='logisticInfo'"
+                                    v-for="v in $db.product.detailNewTab"
+                                    :key="v.key"
+                                    :xs="24"
+                                    :sm="24"
+                                    :md="v.fullLine?24:12"
+                                    :lg="v.fullLine?24:12"
+                                    :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
                                     {{productForm[v.key]}}
                                 </el-form-item>
@@ -156,10 +163,17 @@
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.otherInfo" name="Other Info">
-                    <el-form class="speForm" label-width="250px" :label-position="labelPosition">
+                    <el-form class="speForm" label-width="350px" :label-position="labelPosition">
                         <el-row>
-                            <el-col v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailNewTab" :key="v.key"
-                                    class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12"
+                            <el-col
+                                    class="list"
+                                    v-if="v.belongTab==='otherInfo'"
+                                    v-for="v in $db.product.detailNewTab"
+                                    :key="v.key"
+                                    :xs="24"
+                                    :sm="24"
+                                    :md="v.fullLine?24:12"
+                                    :lg="v.fullLine?24:12"
                                     :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
                                     {{productForm[v.key]}}

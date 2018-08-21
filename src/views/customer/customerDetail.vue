@@ -58,14 +58,15 @@
                       <el-col :span="24">
                         <div class="documentBox">
                           <ul class="documentBoxCon">
-                            <li class="documentBoxCon1" v-for="(item,index) in documentTypeClone" >
-                              <el-checkbox
-                                disabled
-                                :checked="item.checked"
-                                @change="handleCheckedDocument(item,index)">
-                                {{item.name}}
-                              </el-checkbox>
-                              <div class="uploadBox" disabled="item.checked">
+                            <li class="documentBoxCon1" v-for="(item,index) in documentTypeClone" v-if="item.checked">
+                              <!--<el-checkbox-->
+                                <!--disabled-->
+                                <!--:checked="item.checked"-->
+                                <!--@change="handleCheckedDocument(item,index)">-->
+                                <!--{{item.name}}-->
+                              <!--</el-checkbox>-->
+                              <span style="font-weight: bold;font-size: 14px;" >{{item.name}}</span>
+                              <div class="uploadBox">
                                 <v-upload
                                   oss-private
                                   :ref="'uploadDocument'+item.code"
@@ -668,7 +669,10 @@
       width: 25%;
     }
     .uploadBox{
-      padding-top: 10px;
+      padding-top: 25px;
     }
+   .img-box{
+    height: 184px;background-color: #f9f9f9;
+  }
 
 </style>

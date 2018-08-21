@@ -59,7 +59,7 @@
   "summary": "合计",
   "baseSupplierName": "Base Supplier Name",
   "importantSupplier": "Important Supplier",
-  "skuQuantity": "SKU 款式数",
+  "skuQuantity": "产品款式数",
   "exit":"退出",
   "recover":"恢复",
   "archiveOrder":"归档订单",
@@ -79,5 +79,6 @@
   "type":"类型",
   "customer":"采购商",
   "supplier":"供应商",
-  "addToMyProduct":"创建到产品库"
+  "addToMyProduct":"创建到产品库",
+  "orderDt":"订单日期"
 }

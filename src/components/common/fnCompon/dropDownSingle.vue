@@ -70,7 +70,7 @@
             },
             searchPlaceholder: {
                 type: String,
-                default: 'Please be here to screen'
+                default: ''
             },
             checkInputBoxPl: {
                 type: String,
@@ -164,7 +164,9 @@
                 })
             },
             handleMouseover(){
-                this.showIcon=false;
+                if(this.val[this.defaultProps.label]){
+                    this.showIcon=false;
+                }
             },
             handleMouseLeave(){
                 this.showIcon=true;

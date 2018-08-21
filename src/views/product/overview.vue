@@ -145,9 +145,9 @@
                 }
                 Object.assign(this.queryConfig, query);
                 let params = this.$depthClone(this.queryConfig);
-                if (_.isArray(params.country)) {
-                    params.country = params.country.join(",");
-                }
+                // if (_.isArray(params.country)) {
+                //     params.country = params.country.join(",");
+                // }
                 this.loadingTable = true;
                 this.$ajax.post(this.$apis.get_productList, params).then(res => {
                     this.productData = this.$getDB(this.$db.product.overviewTable, res.datas, e => {

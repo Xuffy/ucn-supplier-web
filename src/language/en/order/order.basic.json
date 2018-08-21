@@ -60,7 +60,7 @@
   "summary": "Summary",
   "baseSupplierName": "Base Supplier Name",
   "importantSupplier": "Important Supplier",
-  "skuQuantity": "SKU Quantity",
+  "skuQuantity": "SKU QTY",
   "exit":"Exit",
   "recover":"Recover",
   "archiveOrder":"Archive Order",
@@ -80,5 +80,6 @@
   "type":"Type",
   "customer":"Customer",
   "supplier":"Supplier",
-  "addToMyProduct":"Add to My Product"
+  "addToMyProduct":"Add to My Product",
+  "orderDt":"Order Date"
 }

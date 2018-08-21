@@ -8,6 +8,7 @@ export default {
         disabled:true
     },
     entryDt:{
+        key:'entryDt',
         type:'date',
         belong:'basicInfo',
         createHide:true,
@@ -68,7 +69,8 @@ export default {
     //     type:'input',
     //     belong:'basicInfo',
     // },
-    payment:{
+    paymentTerm:{
+        key:'payment',
         type:'select',
         belong:'basicInfo',
         isPayment:true
