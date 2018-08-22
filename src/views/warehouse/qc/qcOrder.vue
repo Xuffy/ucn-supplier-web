@@ -513,6 +513,7 @@
                 lengthOption:[],
                 volumeOption:[],
                 weightOption:[],
+                pbCodeOption:[]
             }
         },
         methods:{
@@ -538,7 +539,6 @@
                 });
             },
             getTableData(e){
-                console.log(Object.assign(this.tableConfig, e))
                 this.loadingProductTable=true;
                 this.tableConfig.skuInventoryStatusDictCode='';
                 this.$ajax.post(this.$apis.get_qcOrderProductData,Object.assign(this.tableConfig, e))
@@ -552,6 +552,12 @@
                             v.volumeUnitDictCode= v.volumeUnitDictCode ? _.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name : '';
                             v.weightUnitDictCode= v.weightUnitDictCode ? _.findWhere(this.weightOption,{code:v.weightUnitDictCode}).name : '';
                             v.lengthUnitDictCode= v.lengthUnitDictCode ? _.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name : '';
+                            v.skuBarCodeResultDictCode=v.skuBarCodeResultDictCode?_.findWhere(this.pbCodeOption,{code:v.skuBarCodeResultDictCode}).name:'';
+                            v.skuLabelResultDictCode=v.skuLabelResultDictCode?_.findWhere(this.pbCodeOption,{code:v.skuLabelResultDictCode}).name:'';
+                            v.innerPackingBarCodeResultDictCode=v.innerPackingBarCodeResultDictCode?_.findWhere(this.pbCodeOption,{code:v.innerPackingBarCodeResultDictCode}).name:'';
+                            v.outerCartonBarCodeResultDictCode=v.outerCartonBarCodeResultDictCode?_.findWhere(this.pbCodeOption,{code:v.outerCartonBarCodeResultDictCode}).name:'';
+                            v.shippingMarkResultDictCode=v.shippingMarkResultDictCode?_.findWhere(this.pbCodeOption,{code:v.shippingMarkResultDictCode}).name:'';
+                            v.innerCartonMarkResultDictCode = v.innerCartonMarkResultDictCode?_.findWhere(this.pbCodeOption,{code:v.innerCartonMarkResultDictCode}).name:'';
                         });
                         this.summaryData.skuQuantity=_.uniq(diffData).length;
                         this.tableConfig.skuInventoryStatusDictCode='APPLY_FOR_REWORK';
@@ -572,6 +578,12 @@
                                 v.volumeUnitDictCode= v.volumeUnitDictCode ? _.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name : '';
                                 v.weightUnitDictCode= v.weightUnitDictCode ? _.findWhere(this.weightOption,{code:v.weightUnitDictCode}).name : '';
                                 v.lengthUnitDictCode= v.lengthUnitDictCode ? _.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name : '';
+                                v.skuBarCodeResultDictCode=v.skuBarCodeResultDictCode?_.findWhere(this.pbCodeOption,{code:v.skuBarCodeResultDictCode}).name:'';
+                                v.skuLabelResultDictCode=v.skuLabelResultDictCode?_.findWhere(this.pbCodeOption,{code:v.skuLabelResultDictCode}).name:'';
+                                v.innerPackingBarCodeResultDictCode=v.innerPackingBarCodeResultDictCode?_.findWhere(this.pbCodeOption,{code:v.innerPackingBarCodeResultDictCode}).name:'';
+                                v.outerCartonBarCodeResultDictCode=v.outerCartonBarCodeResultDictCode?_.findWhere(this.pbCodeOption,{code:v.outerCartonBarCodeResultDictCode}).name:'';
+                                v.shippingMarkResultDictCode=v.shippingMarkResultDictCode?_.findWhere(this.pbCodeOption,{code:v.shippingMarkResultDictCode}).name:'';
+                                v.innerCartonMarkResultDictCode = v.innerCartonMarkResultDictCode?_.findWhere(this.pbCodeOption,{code:v.innerCartonMarkResultDictCode}).name:'';
                             });
                             this.tableConfig.skuInventoryStatusDictCode='APPLY_FOR_RETURN';
 
@@ -592,6 +604,12 @@
                                     v.volumeUnitDictCode= v.volumeUnitDictCode ? _.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name : '';
                                     v.weightUnitDictCode= v.weightUnitDictCode ? _.findWhere(this.weightOption,{code:v.weightUnitDictCode}).name : '';
                                     v.lengthUnitDictCode= v.lengthUnitDictCode ? _.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name : '';
+                                    v.skuBarCodeResultDictCode=v.skuBarCodeResultDictCode?_.findWhere(this.pbCodeOption,{code:v.skuBarCodeResultDictCode}).name:'';
+                                    v.skuLabelResultDictCode=v.skuLabelResultDictCode?_.findWhere(this.pbCodeOption,{code:v.skuLabelResultDictCode}).name:'';
+                                    v.innerPackingBarCodeResultDictCode=v.innerPackingBarCodeResultDictCode?_.findWhere(this.pbCodeOption,{code:v.innerPackingBarCodeResultDictCode}).name:'';
+                                    v.outerCartonBarCodeResultDictCode=v.outerCartonBarCodeResultDictCode?_.findWhere(this.pbCodeOption,{code:v.outerCartonBarCodeResultDictCode}).name:'';
+                                    v.shippingMarkResultDictCode=v.shippingMarkResultDictCode?_.findWhere(this.pbCodeOption,{code:v.shippingMarkResultDictCode}).name:'';
+                                    v.innerCartonMarkResultDictCode = v.innerCartonMarkResultDictCode?_.findWhere(this.pbCodeOption,{code:v.innerCartonMarkResultDictCode}).name:'';
                                 });
                                 this.loadingProductTable=false;
                                 let arr3 = this.$copyArr(this.productTable2)
@@ -791,7 +809,7 @@
         },
         created(){
             this.loadingTable=true;
-            this.$ajax.post(this.$apis.get_partUnit,['QC_MD','QC_TYPE','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT'],{cache:true}).then(res=>{
+            this.$ajax.post(this.$apis.get_partUnit,['QC_MD','QC_TYPE','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','PB_CODE'],{cache:true}).then(res=>{
                 res.forEach(v=>{
                     if(v.code==='QC_MD'){
                         this.qcMethodOption=v.codes;
@@ -805,6 +823,8 @@
                         this.volumeOption=v.codes;
                     }else if(v.code==='WT_UNIT'){
                         this.weightOption=v.codes;
+                    }else if(v.code==='PB_CODE'){
+                        this.pbCodeOption = v.codes
                     }
                 });
                 this.getData();
