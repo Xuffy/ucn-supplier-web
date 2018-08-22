@@ -115,52 +115,42 @@ export default {
     type: 'text'
   },
   "blSkuName": {
+    key:'skuNameCustomer',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
   },
   "customsDeclarationNameCn": {
+    key:'skuCustomsNameCn',
+    _filed:'customDeclarationNameCn',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
   },
   "customsDeclarationNameEn": {
+    key:'skuCustomsNameEn',
+    _filed:'customDeclarationNameEn',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
   },
   "hsCode": {
+    key:'skuCustomsCode',
+    _filed:'hsCode',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
   },
   "reportElement": {
+    key:'skuDeclareElement',
+    _filed:'reportElement',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
   },
   "supplierNo": {
-    key:'supplierCode',
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
-  "skuNameCustomer": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
-  "skuCustomsNameCn": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
-  "skuCustomsNameEn": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text'
-  },
-  "skuSupplierCode": {
+    key:'skuSupplierCode',
+    _filed:'supplierCode',
     type: 'String',
     _disabled: true,
     typeSlef: 'text'

@@ -223,7 +223,9 @@ export default {
     //     key:'supplierOrderNo',
     // },
 
-
+    id:{
+        _hide:true
+    },
     skuId:{
         _hide:true
     },

@@ -40,7 +40,7 @@
               <el-option
                 v-for="item in selectArr.supplier"
                 :key="item.value"
-                :label="item.value"
+                :label="item.skuSupplierName"
                 :value="item.companyId">
               </el-option>
             </el-select>

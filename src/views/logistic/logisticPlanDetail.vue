@@ -92,7 +92,7 @@
       <overviewPage :title="$i.logistic.addProductFromOrder" :tableData="ProductFromOrder" :form-column="$db.logistic.addProductFromOrderFilter"
         :tableButtons="null" @change-checked="changeChecked" @tableBtnClick="ProductFromOrderDetail" @search="getSupplierIds"
         :tableCode="configUrl[pageName]&&configUrl[pageName].addproduct" @change-sort="changeSort">
-        <v-pagination slot="pagination" :page-data="pageParams" @size-change="sizeChange" @change="pageChange"/>
+        <v-pagination slot="pagination" :pageSizes="[50,100,200]" :page-data="pageParams" @size-change="sizeChange" @change="pageChange"/>
         <div slot=footerBtn>
           <el-button @click="showAddProductDialog = false">{{ $i.logistic.cancel }}</el-button>
           <el-button type="primary" @click="closeAddProduct">{{ $i.logistic.confirm }}</el-button>
@@ -397,10 +397,10 @@
         } else {
           this.edit = true
           this.basicInfoArr.forEach((item) => {
-            this.$set(item, 'value', item.defaultVal);
+            this.$set(item, 'value', this.$i.logistic[item.defaultVal]);
           })
           this.transportInfoArr.forEach((item) => {
-            this.$set(item, 'value', item.defaultVal);
+            this.$set(item, 'value', this.$i.logistic[item.defaultVal]);
           })
           this.getRate();
           this.getNewLogisticsNo()
@@ -489,6 +489,15 @@
         this.$ajax.get(`${url}?id=${this.$route.query.id || ''}&logisticsNo=${this.$route.query.code || '' }`).then(res => {
           this.planId = res.id;
           this.createdPlanData(res);
+          //处理 shiper
+          this.beShipper = res.beShipper;
+          this.ShipperName = res.shipper;
+          this.shipperObj = {
+            id: res.shipperCompanyId + '-' + res.shipperTelnetId,
+            name: this.ShipperName,
+            shipperCompanyId: res.shipperCompanyId,
+            shipperTelnetId: res.shipperTelnetId
+          }
           this.initData = res; //用来初始化数据
           this.logisticsStatus = {
             recived: res.recived,
@@ -497,7 +506,7 @@
           };
           this.matchRate(res.currencyExchangeRate);
           this.attachmentList = res.attachment;
-          this.fieldDisplay = res.fieldDisplay;
+          this.fieldDisplay = this.pageTypeCurr=='logisticDraftDetail' ? {} : res.fieldDisplay;
           this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/${this.orderType}?moduleCode=LOGISTIC`)
             .then(res => {
               this.createdPaymentData(res)
@@ -566,15 +575,6 @@
         this.logisticsNo = res.logisticsNo;
         this.exchangeRateList = res.currencyExchangeRate || [];
         this.remark = res.remark;
-        //处理 shiper
-        this.beShipper = res.beShipper;
-        this.ShipperName = res.shipper;
-        this.shipperObj = {
-          id: res.shipperCompanyId + '-' + res.shipperTelnetId,
-          name: this.ShipperName,
-          shipperCompanyId: res.shipperCompanyId,
-          shipperTelnetId: res.shipperTelnetId
-        }
         this.containerInfo = (res.containerDetail || []).map(el => {
           el.isModify = false;
           return el
@@ -606,12 +606,14 @@
         this.shipperArrFun();
         this.productList.forEach((item) => {
           if (item.fieldDisplay.value) {
-            _.mapObject(item.fieldDisplay.value, (v, k) => {
-              item[k]._style = {
-                background: 'yellow'
-              };
-              item[k]._mustChecked = true;
-            })
+            if(this.pageTypeCurr!='logisticDraftDetail'){
+              _.mapObject(item.fieldDisplay.value, (v, k) => {
+                item[k]._style = {
+                  background: 'yellow'
+                };
+                item[k]._mustChecked = true;
+              }) 
+            }
             item.fieldDisplay.value = null;
           }
         })
@@ -635,12 +637,6 @@
             'id': item.id,
             'version': item.version
           })
-          // if (item.planPayAmount > item.actualPayAmount) {
-          //   argArr.push({
-          //     'id': item.id,
-          //     'version': item.version
-          //   })
-          // } 暂定功能
         });
         let seconds = 60;
         this.dunningDisabled = true;
@@ -663,7 +659,7 @@
             })
             this.$ajax.post(`${this.$apis.get_payment_list}${this.logisticsNo}/${this.orderType}?moduleCode=LOGISTIC`)
               .then(res => {
-                this.createdPaymentData(res, 'dunning')
+                this.createdPaymentData(res)
               })
           }).catch(res => {
           this.batchDunningCutDown = '';
@@ -674,10 +670,10 @@
       createdPaymentData(res = this.oldPaymentObject, dunning) {
         this.oldPaymentObject = JSON.parse(JSON.stringify(res))
         this.paymentList = res.datas
-        // if (!dunning) {
-        //   this.dunningDisabled = !this.paymentList.some((item) => item.planPayAmount > item.actualPayAmount);
-        // } 暂定功能
-        // this.dunningDisabled = false;
+        this.dunningDisabled = true;
+        if(this.paymentList.length>0&&this.beShipper==1){
+          this.dunningDisabled = false;
+        }
         this.paymentSum = res.statisticsDatas[0]
       },
       getNewLogisticsNo() {
@@ -1204,7 +1200,7 @@
             return el;
           })[0];
 
-          this.basicInfoObj.remark = this.remark
+          this.oldPlanObject.remark = this.remark
           _.mapObject(this.basicInfoObj, (value, key) => {
             this.oldPlanObject[key] = value
           })
@@ -1335,9 +1331,6 @@
            flag = false;  
           }
         }else{
-          flag = true;
-        }
-        if(this.paymentList.length<=0){
           flag = true;
         }
         this.dunningDisabled = flag;
