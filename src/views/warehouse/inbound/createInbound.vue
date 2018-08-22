@@ -472,7 +472,7 @@
                             this.$set(v, "_disabled", true);
                         } else {
                             this.productData.forEach(m => {
-                                if (v.skuId.value === m.skuList[0].skuId) {
+                                if (v.skuId.value === m.skuId.value) {
                                     this.$set(v, "_disabled", true);
                                     this.$set(v, "_checked", true);
                                 }
@@ -513,6 +513,7 @@
                     this.loadingProductTable = true;
                     this.$ajax.post(this.$apis.get_orderSku, { ids: this.productIds }).then(res => {
                         let arr = [];
+                        let oldData = _.clone(this.productData)
                         _.map(res, v => {
                             _.map(v.skuList, e => {
                                 e.unqualifiedType='';
@@ -551,8 +552,20 @@
                             });
                         });
                         arr = this.$getDB(this.$db.warehouse.inboundOrderProductTable, arr);
-                        this.$refs.filterColumn.update(false, arr).then(data => {
-                            this.productData = this.$refs.filterColumn.getFilterData(arr, data);
+                        _.each(arr, e => {
+                            let flag = true
+                            _.each(oldData, v => {
+                                console.log(e)
+                                if (e.id.value === v.id.value) {
+                                    flag = false
+                                }
+                            })
+                            if (flag) {
+                                oldData.push(e)
+                            }
+                        })
+                        this.$refs.filterColumn.update(false, oldData).then(data => {
+                            this.productData = this.$refs.filterColumn.getFilterData(oldData, data);
                             this.columnConfig = this.productData[0];
                         });
                     }).finally(() => {
