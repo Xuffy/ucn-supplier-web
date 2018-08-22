@@ -28,10 +28,10 @@ export default {
   bookingDate:{
     key:'actBookingDate',
     _filed:'actBookingDate',
-    type: 'String'
+    type: 'textDate'
   },
   estContainerStuffingDate: {
-    type: 'text'
+    type: 'textDate'
   },
   estDepartureDate: {
     type: 'textDate'
@@ -68,7 +68,7 @@ export default {
     type: 'text'
   },
   containerType: {
-    type: 'text'
+    type: 'container'
   },
   vgm: {
     type: 'text'
@@ -107,5 +107,9 @@ export default {
   },
   payment:{
     type: 'String'
+  },
+  logisticsStatus: {
+    _hide:true,
+    type: 'text'
   }
 }
