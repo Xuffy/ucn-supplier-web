@@ -36,7 +36,7 @@
             </div>
           </div>
           <v-table
-              code="inquiry"
+              code="VIEW_BY_SKU"
               hide-filter-value
               :data.sync="newProductTabData"
               :buttons="productInfoBtn"
