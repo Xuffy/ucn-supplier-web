@@ -612,26 +612,36 @@
                 let outerCartonVolume = this.productData[index]["outerCartonVolume"].value ? this.productData[index]["outerCartonVolume"].value : 0
                 if (e === 'outerCartonSkuQty') {
                     // 计算入库数量
-                    this.productData[index].inboundSkuTotalQty.value = this.$calc.multiply(outerCartonSkuQty, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalQty.value = this.Intercept(this.$calc.multiply(outerCartonSkuQty, inboundOutCartonTotalQty), 1)
                 } else if (e === "inboundOutCartonTotalQty") {
                     // 计算入库数量
-                    this.productData[index].inboundSkuTotalQty.value = this.$calc.multiply(outerCartonSkuQty, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalQty.value = this.Intercept(this.$calc.multiply(outerCartonSkuQty, inboundOutCartonTotalQty), 1)
                     // 计算入库外箱总净重
-                    this.productData[index].inboundSkuTotalNetWeight.value = this.$calc.multiply(outerCartonNetWeight, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalNetWeight.value =  this.Intercept(this.$calc.multiply(outerCartonNetWeight, inboundOutCartonTotalQty), 2)
                     // 计算入库外箱总毛重
-                    this.productData[index].inboundSkuTotalGrossWeight.value = this.$calc.multiply(outerCartonGrossWeight, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalGrossWeight.value =  this.Intercept(this.$calc.multiply(outerCartonGrossWeight, inboundOutCartonTotalQty), 2)
                     // 计算入库外箱总体积
-                    this.productData[index].inboundSkuTotalVolume.value = this.$calc.multiply(outerCartonVolume, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalVolume.value =  this.Intercept(this.$calc.multiply(outerCartonVolume, inboundOutCartonTotalQty), 3)
                 } else if (e === "outerCartonVolume") {
                     // 计算入库外箱总体积
-                    this.productData[index].inboundSkuTotalVolume.value = this.$calc.multiply(outerCartonVolume, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalVolume.value =  this.Intercept(this.$calc.multiply(outerCartonVolume, inboundOutCartonTotalQty), 3)
                 } else if (e === "outerCartonGrossWeight") {
                     // 计算入库外箱总毛重
-                    this.productData[index].inboundSkuTotalGrossWeight.value = this.$calc.multiply(outerCartonGrossWeight, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalGrossWeight.value =  this.Intercept(this.$calc.multiply(outerCartonGrossWeight, inboundOutCartonTotalQty), 2)
                 } else if (e === "outerCartonNetWeight") {
                     // 计算入库外箱总净重
-                    this.productData[index].inboundSkuTotalNetWeight.value = this.$calc.multiply(outerCartonNetWeight, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalNetWeight.value =  this.Intercept(this.$calc.multiply(outerCartonNetWeight, inboundOutCartonTotalQty), 2)
                 }
+            },
+            Intercept (value, num) {
+                let n = '', b;
+                value = _.isString(value) ? Number(value) : value;
+                if (!_.isNumber(value) || _.isNaN(value)) {
+                    return '';
+                }
+                _.map(_.range(num), () => n += 0);
+                n = Number('1' + n);
+                return Math.floor(value * n) / n;
             },
             handleClick(e) {
                 console.log(e,'e')
