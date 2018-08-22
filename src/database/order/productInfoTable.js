@@ -4,6 +4,12 @@ export default {
         _title:'Remark',
         _fixed:'left'
     },
+    skuNameCustomer:{
+        _hide:true
+    },
+    skuDescCustomer:{
+        _hide:true
+    },
     _remark:{
         _hide:true
     },
