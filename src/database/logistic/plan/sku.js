@@ -133,9 +133,6 @@ export default {
   hsCode: {
     type: 'String'
   },
-  unitPrice: {
-    type: 'text'
-  },
   totalPrice: {
     type: 'text'
   },
@@ -162,13 +159,13 @@ export default {
     type: 'text'
   },
   destinationCountry: {
-    type: 'text'
+    type: 'country'
   },
   transportCompany: {
     type: 'text'
   },
   departureCountry: {
-    type: 'text'
+    type: 'country'
   },
   containerType: {
     type: 'text'
@@ -182,7 +179,7 @@ export default {
   bookingDate:{
     key:'actBookingDate',
     _filed:'actBookingDate',
-    type: 'String'
+    type: 'textDate'
   },
   estContainerStuffingDate: {
     type: 'textDate'
@@ -215,4 +212,8 @@ export default {
   skuCartonQty: {
     type: 'textDate'
   },
+  logisticsStatus: {
+    _hide:true,
+    type: 'text'
+  }
 }

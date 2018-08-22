@@ -78,6 +78,11 @@
                 }
             },
         },
+        destroyed(){
+            if(this.timeInterval){
+                clearInterval(this.timeInterval);
+            }
+        },
     };
 </script>
 

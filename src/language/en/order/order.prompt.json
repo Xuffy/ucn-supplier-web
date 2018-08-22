@@ -20,5 +20,5 @@
   "dunSuccess":"Dun success",
   "orderHasBeenSent":"This order has been sent",
   "productWillBeRemoved":"The product which doesn't belong to your company will be removed",
-  "hasNotMineProduct":"Has not mine product"
+  "hasNotMineProduct":"There is product which doesn't belong to your company"
 }

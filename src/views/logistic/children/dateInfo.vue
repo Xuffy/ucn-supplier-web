@@ -13,9 +13,9 @@
         <td>--</td>
         <td :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('bookingDate')}">
           <span v-if="!isShow||pageTypeCurr=='loadingListDetail'">{{$dateFormat(listData[0].bookingDate.value, 'yyyy-mm-dd')}}</span>
-          <el-date-picker @change="modifyTime(listData[0].bookingDate.value,listData[0].bookingDate._key)" v-if="isShow&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" format="yyyy-MM-dd" v-model="listData[0].bookingDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
+          <el-date-picker :picker-options="BookingTimeOptions" @change="modifyTime(listData[0].bookingDate.value,listData[0].bookingDate._key)" v-if="isShow&&(pageTypeCurr=='logisticPlanDetail'||pageTypeCurr=='placeLogisticPlan')" format="yyyy-MM-dd" v-model="listData[0].bookingDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
-      </tr>
+      </tr> 
       <tr v-if="listData[0].actContainerStuffingDate">
         <td>{{$i.logistic.Loading}}</td>
         <td :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('estContainerStuffingDate')}">
@@ -45,9 +45,9 @@
         </td>
         <td :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('actDepartureDate')}">
           <span v-if="!isShow||pageTypeCurr!='loadingListDetail'">{{$dateFormat(listData[0].actDepartureDate.value, 'yyyy-mm-dd')}}</span>
-          <el-date-picker v-else format="yyyy-MM-dd" @change="modifyTime(listData[0].actDepartureDate.value,listData[0].actDepartureDate._key)" v-model="listData[0].actDepartureDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
+          <el-date-picker v-else :picker-options="actDepartureDateTimeOptions" format="yyyy-MM-dd" @change="modifyTime(listData[0].actDepartureDate.value,listData[0].actDepartureDate._key)" v-model="listData[0].actDepartureDate.value" align="right" type="date" :placeholder="$i.logistic.placeholder"/>
         </td>
-      </tr>
+      </tr> 
       <tr v-if="listData[0].estCustomsCleanceDate">
         <td>{{$i.logistic.cleance}}</td>
         <td>
@@ -94,19 +94,32 @@
         shippedTime:null,
         arrivalTime:null,
         hightLightModify:{},
+        BookingTimeOptions: {
+          disabledDate:(time)=> {
+            //当 如果选择前置条件  这后置的会清空
+            this.listData[0].actContainerStuffingDate.value = '';  //实际装柜日期
+            this.listData[0].declareDate.value = '';  //实际报关日期
+          }
+        },
         LoadingTimeOptions: {
           disabledDate:(time)=> {
-            return time.getTime() <= this.listData[0].bookingDate.value;
+            this.listData[0].declareDate.value = '';  //实际报关日期
+            return this.$dateFormat(time.getTime(),'yyyy-mm-dd') < this.listData[0].bookingDate.value;
           }
         },
         cleanceTimeOptions: {
           disabledDate:(time)=> {
-            return time.getTime() <= this.listData[0].actContainerStuffingDate.value;
+            return this.$dateFormat(time.getTime(),'yyyy-mm-dd') < this.listData[0].actContainerStuffingDate.value;
+          }
+        },
+        actDepartureDateTimeOptions: {
+          disabledDate:(time)=> {
+             this.listData[0].actArrivalDate.value = '';  //实际到港日期
           }
         },
         arrivalTimeOptions: {
           disabledDate:(time)=> {
-            return time.getTime() <= this.listData[0].actDepartureDate.value;
+            return this.$dateFormat(time.getTime(),'yyyy-mm-dd') < this.listData[0].actDepartureDate.value;
           }
         }
       }
@@ -133,6 +146,7 @@
       },
       modifyTime(arg,key){
         //因为有些 日期不需要出发 业务逻辑  所以多加一个参数 区别
+        this.listData[0][key].value = this.$dateFormat(this.listData[0][key].value,'yyyy-mm-dd');
         this.$set(this.hightLightModify,key,arg);
         this.$emit('hightLightModifyFun',this.hightLightModify,this.name);
         if(arg){
