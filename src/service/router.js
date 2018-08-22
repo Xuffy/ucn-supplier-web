@@ -118,6 +118,7 @@ export const routerMap = [
           name: 'Archive',
           hidden: true,
           meta: {
+            auth: 'PRODUCT:ARCHIVE',
             name: $i.router.productArchive
           },
           component: () => import('../views/product/archive')

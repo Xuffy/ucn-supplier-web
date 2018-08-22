@@ -6,7 +6,7 @@
                 :form-column="$db.product.overview"
                 :tableData="productData"
                 :pageData="pageData"
-                :tableButtons="[{label: $i.product.detailBig, type: 1}]"
+                :tableButtons="[{label: $i.product.detailBig, type: 1,auth:'PRODUCT:DETAIL'}]"
                 :loadingTable="loadingTable"
                 tableCode="udata_supply_sku_overview"
                 @search="getData"
@@ -318,13 +318,14 @@
             });
         },
         mounted() {
-            this.setMenuLink([{
-                path: "/logs/index",
-                query: { code: "PRODUCT" },
-                type: 10,
-                auth: "PRODUCT:LOG",
-                label: this.$i.common.log
-            },
+            this.setMenuLink([
+                {
+                    path: "/logs/index",
+                    query: { code: "PRODUCT" },
+                    type: 10,
+                    auth: "PRODUCT:LOG",
+                    label: this.$i.common.log
+                },
                 {
                     path: "archive",
                     type: 20,

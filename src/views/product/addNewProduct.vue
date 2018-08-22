@@ -787,7 +787,11 @@
         </div>
 
         <div class="footBtn">
-            <el-button @click="finish" :disabled="loadingData" :loading="disabledSubmit" type="primary">
+            <el-button
+                    @click="finish"
+                    :disabled="loadingData"
+                    :loading="disabledSubmit"
+                    type="primary">
                 {{$i.product.finish}}
             </el-button>
         </div>
@@ -1510,6 +1514,8 @@
                     });
                     if (this.$route.query.isEdit) {
                         this.getGoodsData();
+                    }else{
+                        this.loadingData = false;
                     }
                 }).catch(() => {
                     this.loadingData = false;
