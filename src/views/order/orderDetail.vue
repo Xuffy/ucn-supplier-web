@@ -1631,7 +1631,7 @@
                 }).then(res => {
                     this.orderForm = res;
                     this.chatParams = {
-                        bizNo: res.quotationNo,
+                        bizNo: res.orderNo,
                         dataAuthCode: "BIZ_ORDER",
                         funcAuthCode: "",            //功能权限
                         suppliers: [{
@@ -2709,7 +2709,6 @@
                 this.productTableData = _.difference(this.productTableData, array);
                 this.handleProductOk(id);
             },
-
 
             /**
              * 底部按钮事件
