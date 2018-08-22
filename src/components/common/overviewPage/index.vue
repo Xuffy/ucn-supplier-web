@@ -207,10 +207,7 @@
                 default:''
             },
             tableButtons:{
-                type:Array,
-                default:function() {
-                    return []
-                }
+                type:[Array,Function],
             },
             pageData:{
                 type:Object
