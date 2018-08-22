@@ -600,57 +600,37 @@
              * 页面表格事件
              * */
             handleBlur(e, index) {
-                if (e === "inboundOutCartonTotalQty" || e === 'outerCartonSkuQty') {
-                    //处理入库产品总箱数输入框
-                    if (!this.productData[index][e].value || !this.productData[index]["outerCartonSkuQty"].value) {
-                        this.productData[index].inboundSkuTotalQty.value = "";
-                    }
-                    else {
-                        this.productData[index].inboundSkuTotalQty.value = this.productData[index][e].value * this.productData[index]["outerCartonSkuQty"].value;
-                    }
-                    //处理入库产品总净重
-                    if (!this.productData[index][e].value || !this.productData[index]["outerCartonNetWeight"].value) {
-                        this.productData[index].inboundSkuTotalNetWeight.value = "";
-                    } else {
-                        this.productData[index].inboundSkuTotalNetWeight.value = this.productData[index][e].value * this.productData[index]["outerCartonNetWeight"].value;
-                    }
-                    //处理入库产品总毛重
-                    if (!this.productData[index][e].value || !this.productData[index]["outerCartonGrossWeight"].value) {
-                        this.productData[index].inboundSkuTotalGrossWeight.value = "";
-                    } else {
-                        this.productData[index].inboundSkuTotalGrossWeight.value = this.productData[index][e].value * this.productData[index]["outerCartonGrossWeight"].value;
-                    }
-
-                    //处理入库产品总体积
-                    if (!this.productData[index][e].value || !this.productData[index]["outerCartonVolume"].value) {
-                        this.productData[index].inboundSkuTotalVolume.value = "";
-                    } else {
-                        this.productData[index].inboundSkuTotalVolume.value = this.productData[index][e].value * this.productData[index]["outerCartonVolume"].value;
-                    }
-                }
-                else if (e === "outerCartonVolume") {
-                    //处理外箱体积
-                    if (!this.productData[index]["inboundOutCartonTotalQty"].value || !this.productData[index]["outerCartonVolume"].value) {
-                        this.productData[index].inboundSkuTotalVolume.value = "";
-                    } else {
-                        this.productData[index].inboundSkuTotalVolume.value = this.productData[index]["inboundOutCartonTotalQty"].value * this.productData[index]["outerCartonVolume"].value;
-                    }
-                }
-                else if (e === "outerCartonGrossWeight") {
-                    //处理外箱毛重
-                    if (!this.productData[index]["inboundOutCartonTotalQty"].value || !this.productData[index]["outerCartonGrossWeight"].value) {
-                        this.productData[index].inboundSkuTotalGrossWeight.value = "";
-                    } else {
-                        this.productData[index].inboundSkuTotalGrossWeight.value = this.productData[index]["inboundOutCartonTotalQty"].value * this.productData[index]["outerCartonGrossWeight"].value;
-                    }
-                }
-                else if (e === "outerCartonNetWeight") {
-                    //处理外箱净重
-                    if (!this.productData[index]["inboundOutCartonTotalQty"].value || !this.productData[index]["outerCartonNetWeight"].value) {
-                        this.productData[index].inboundSkuTotalNetWeight.value = "";
-                    } else {
-                        this.productData[index].inboundSkuTotalNetWeight.value = this.productData[index]["inboundOutCartonTotalQty"].value * this.productData[index]["outerCartonNetWeight"].value;
-                    }
+                // 外箱产品数
+                let outerCartonSkuQty = this.productData[index]['outerCartonSkuQty'].value ? this.productData[index]['outerCartonSkuQty'].value : 0
+                // 入库箱数
+                let inboundOutCartonTotalQty = this.productData[index]['inboundOutCartonTotalQty'].value ? this.productData[index]['inboundOutCartonTotalQty'].value : 0
+                // 外箱净重
+                let outerCartonNetWeight = this.productData[index]["outerCartonNetWeight"].value ? this.productData[index]["outerCartonNetWeight"].value : 0
+                // 外箱毛重
+                let outerCartonGrossWeight = this.productData[index]["outerCartonGrossWeight"].value ? this.productData[index]["outerCartonGrossWeight"].value : 0
+                // 外箱体积
+                let outerCartonVolume = this.productData[index]["outerCartonVolume"].value ? this.productData[index]["outerCartonVolume"].value : 0
+                if (e === 'outerCartonSkuQty') {
+                    // 计算入库数量
+                    this.productData[index].inboundSkuTotalQty.value = this.$calc.multiply(outerCartonSkuQty, inboundOutCartonTotalQty)
+                } else if (e === "inboundOutCartonTotalQty") {
+                    // 计算入库数量
+                    this.productData[index].inboundSkuTotalQty.value = this.$calc.multiply(outerCartonSkuQty, inboundOutCartonTotalQty)
+                    // 计算入库外箱总净重
+                    this.productData[index].inboundSkuTotalNetWeight.value = this.$calc.multiply(outerCartonNetWeight, inboundOutCartonTotalQty)
+                    // 计算入库外箱总毛重
+                    this.productData[index].inboundSkuTotalGrossWeight.value = this.$calc.multiply(outerCartonGrossWeight, inboundOutCartonTotalQty)
+                    // 计算入库外箱总体积
+                    this.productData[index].inboundSkuTotalVolume.value = this.$calc.multiply(outerCartonVolume, inboundOutCartonTotalQty)
+                } else if (e === "outerCartonVolume") {
+                    // 计算入库外箱总体积
+                    this.productData[index].inboundSkuTotalVolume.value = this.$calc.multiply(outerCartonVolume, inboundOutCartonTotalQty)
+                } else if (e === "outerCartonGrossWeight") {
+                    // 计算入库外箱总毛重
+                    this.productData[index].inboundSkuTotalGrossWeight.value = this.$calc.multiply(outerCartonGrossWeight, inboundOutCartonTotalQty)
+                } else if (e === "outerCartonNetWeight") {
+                    // 计算入库外箱总净重
+                    this.productData[index].inboundSkuTotalNetWeight.value = this.$calc.multiply(outerCartonNetWeight, inboundOutCartonTotalQty)
                 }
             },
             handleClick(e) {
