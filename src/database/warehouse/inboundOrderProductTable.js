@@ -223,7 +223,9 @@ export default {
     //     key:'supplierOrderNo',
     // },
 
-
+    id:{
+        _hide:true
+    },
     skuId:{
         _hide:true
     },
@@ -315,6 +317,7 @@ export default {
     },
     outerCartonSkuQty:{
         showType:'number',
+        accuracy: 1
     },
     outerCartonVolume:{
         showType:'number',

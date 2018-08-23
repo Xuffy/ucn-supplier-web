@@ -206,8 +206,7 @@
                 </el-col>
             </el-row>
         </el-form>
-
-        <div v-authorize="'ORDER:DETAIL:RESPONSIBILITY'">
+        <div>
             <div class="title">
                 {{$i.order.responsibility}}
             </div>
@@ -309,13 +308,16 @@
                 {{$i.order.payment}}
             </div>
             <div class="payment-table">
-                <el-button :loading="disableClickPayback" :disabled="!hasHandleOrder" @click="applyPayback"
-                           type="primary">
+                <el-button
+                        v-authorize="'ORDER:DETAIL:PAYMENT:APPLY_FOR_REFUND'"
+                        :loading="disableClickPayback"
+                        :disabled="!hasHandleOrder"
+                        @click="applyPayback"
+                        type="primary">
                     {{$i.order.applyRefund}}
                 </el-button>
-
                 <v-button
-                        v-authorize="'ORDER:DETAIL:PRESS_FOR_PAYMENT'"
+                        v-authorize="'ORDER:DETAIL:PAYMENT:URGE_PAYMENT'"
                         moduleCode="ORDER"
                         :orderNo="orderForm.orderNo"
                         :orderType="10"
@@ -494,7 +496,10 @@
                             width="125">
                         <template slot-scope="scope">
                             <div v-if="scope.row.status===20">
-                                <el-button @click="confirmPay(scope.row)" type="text">{{$i.order.confirm}}</el-button>
+                                <el-button
+                                        v-authorize="'ORDER:DETAIL:PAYMENT:CONFIRM_PAYMENT'"
+                                        @click="confirmPay(scope.row)"
+                                        type="text">{{$i.order.confirm}}</el-button>
                             </div>
                             <div v-else-if="scope.row.status===40 && scope.row.planPayDt">
                             </div>
@@ -510,8 +515,11 @@
                                 </div>
                                 <div v-else>
                                     <div v-if="scope.row.status===-1">
-                                        <el-button v-if="scope.row.planRefundDt" @click="restorePay(scope.row)"
-                                                   type="text">
+                                        <el-button
+                                                v-authorize="'ORDER:DETAIL:PAYMENT:ORDER_REFUND_MODIFY_INVALID_RECOVER'"
+                                                v-if="scope.row.planRefundDt"
+                                                @click="restorePay(scope.row)"
+                                                type="text">
                                             {{$i.order.restore}}
                                         </el-button>
                                     </div>
@@ -524,9 +532,15 @@
                                         </el-button>
                                     </div>
                                     <div v-else>
-                                        <el-button @click="modifyPay(scope.row)" type="text">{{$i.order.modify}}
+                                        <el-button
+                                                v-authorize="'ORDER:DETAIL:PAYMENT:ORDER_REFUND_MODIFY_INVALID_RECOVER'"
+                                                @click="modifyPay(scope.row)"
+                                                type="text">{{$i.order.modify}}
                                         </el-button>
-                                        <el-button @click="abandonPay(scope.row)" type="text">{{$i.order.abandon}}
+                                        <el-button
+                                                v-authorize="'ORDER:DETAIL:PAYMENT:ORDER_REFUND_MODIFY_INVALID_RECOVER'"
+                                                @click="abandonPay(scope.row)"
+                                                type="text">{{$i.order.abandon}}
                                         </el-button>
                                     </div>
                                 </div>
@@ -556,9 +570,15 @@
                 :total-row="tableTotal">
             <template slot="header">
                 <div class="btns">
-                    <el-button :disabled="!isModify" @click="addProduct">{{$i.order.addProduct}}</el-button>
-                    <el-button @click="removeProduct" :disabled="selectProductInfoTable.length===0 || !isModify"
-                               type="danger">{{$i.order.remove}}
+                    <el-button
+                            :disabled="!isModify"
+                            @click="addProduct">
+                        {{$i.order.addProduct}}</el-button>
+                    <el-button
+                            @click="removeProduct"
+                            :disabled="selectProductInfoTable.length===0 || !isModify"
+                            type="danger">
+                        {{$i.order.remove}}
                     </el-button>
                 </div>
             </template>
@@ -682,16 +702,23 @@
                             :loading="disableClickCancel"
                             type="danger">{{$i.order.cancelOrder}}
                     </el-button>
-                    <!--<el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant"-->
-                    <!--@change="changeMarkImportant">{{$i.order.markAsImportant}}-->
-                    <!--</el-checkbox>-->
                 </div>
             </div>
             <div v-else>
-                <el-button :disabled="loadingPage" :loading="disableClickAccept" @click="acceptOrder" type="primary">
+                <el-button
+                        v-authorize="'ORDER:DETAIL:ACCEPT'"
+                        :disabled="loadingPage"
+                        :loading="disableClickAccept"
+                        @click="acceptOrder"
+                        type="primary">
                     {{$i.order.accept}}
                 </el-button>
-                <el-button :disabled="loadingPage" :loading="disableClickRefuse" @click="refuseOrder" type="danger">
+                <el-button
+                        v-authorize="'ORDER:DETAIL:REFUSE'"
+                        :disabled="loadingPage"
+                        :loading="disableClickRefuse"
+                        @click="refuseOrder"
+                        type="danger">
                     {{$i.order.refuse}}
                 </el-button>
             </div>
@@ -1604,7 +1631,7 @@
                 }).then(res => {
                     this.orderForm = res;
                     this.chatParams = {
-                        bizNo: res.quotationNo,
+                        bizNo: res.orderNo,
                         dataAuthCode: "BIZ_ORDER",
                         funcAuthCode: "",            //功能权限
                         suppliers: [{
@@ -1931,7 +1958,6 @@
                 }
                 this.orderForm.fieldUpdate[key] = "";
                 if (key === "incoterm") {
-
                     let incoterm,
                         totalPrice = ["skuFobCurrency", "skuFobPort", "skuFobPrice", "skuExwCurrency", "skuExwPrice", "skuCifPrice", "skuCifCurrency", "skuCifPort", "skuDduCurrency", "skuDduPort", "skuDduPrice"],
                         fob = ["skuFobCurrency", "skuFobPort", "skuFobPrice"],
@@ -1947,38 +1973,35 @@
                     } else if (this.orderForm[key] === "4") {
                         incoterm = ddu;
                     }
-                    _.map(totalPrice, v => {
-                        _.map(this.productTableData, item => {
-                            if (!item._remark) {
-                                item[v]._hide = true;
-                            }
-                        });
-                    });
-                    _.map(incoterm, v => {
-                        _.map(this.productTableData, item => {
-                            if (!item._remark) {
-                                item[v]._hide = false;
-                            }
-                        });
-                    });
-
-
-
+                    // _.map(totalPrice, v => {
+                    //     _.map(this.productTableData, item => {
+                    //         if (!item._remark) {
+                    //             item[v]._hide = true;
+                    //         }
+                    //     });
+                    // });
+                    // _.map(incoterm, v => {
+                    //     _.map(this.productTableData, item => {
+                    //         if (!item._remark) {
+                    //             item[v]._hide = false;
+                    //         }
+                    //     });
+                    // });
 
                     _.map(this.productTableData, item => {
                         if (!item._remark) {
                             if (this.orderForm[key] === "1") {
                                 //fob
-                                item.skuPrice.value = item.skuFobPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                                item.skuPrice.value = this.$toFixed(this.$calc.multiply(item.skuFobPrice.value, item.skuQty.value ? item.skuQty.value : 0), 4);
                             } else if (this.orderForm[key] === "2") {
                                 //exw
-                                item.skuPrice.value = item.skuExwPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                                item.skuPrice.value = this.$toFixed(this.$calc.multiply(item.skuExwPrice.value, item.skuQty.value ? item.skuQty.value : 0), 4);
                             } else if (this.orderForm[key] === "3") {
                                 //cif
-                                item.skuPrice.value = item.skuCifPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                                item.skuPrice.value = this.$toFixed(this.$calc.multiply(item.skuCifPrice.value, item.skuQty.value ? item.skuQty.value : 0), 4);
                             } else if (this.orderForm[key] === "4") {
                                 //ddu
-                                item.skuPrice.value = item.skuDduPrice.value * (item.skuQty.value ? item.skuQty.value : 0);
+                                item.skuPrice.value = this.$toFixed(this.$calc.multiply(item.skuDduPrice.value, item.skuQty.value ? item.skuQty.value : 0), 4);
                             }
                         }
                     });
@@ -2686,7 +2709,6 @@
                 this.productTableData = _.difference(this.productTableData, array);
                 this.handleProductOk(id);
             },
-
 
             /**
              * 底部按钮事件

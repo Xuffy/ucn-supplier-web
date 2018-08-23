@@ -27,7 +27,7 @@
                 :code="tableCode"
                 ref='vtable'
                 :data="tabData"
-                :buttons="[{label: $i.order.detail, type: 1}]"
+                :buttons="[{label: $i.order.detail, type: 1,auth:'ORDER:DETAIL'}]"
                 @action="onAction"
                 :loading='loading'
                 :pageTotal='pageTotal'
@@ -330,7 +330,7 @@
             this.setMenuLink({
                 path: "/order/archive",
                 type: 20,
-                auth: "ORDER:OVERVIEW:ARCHIVE",
+                auth: "ORDER:ARCHIVE",
                 label: this.$i.order.archive
             });
         },

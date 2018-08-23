@@ -2,6 +2,9 @@ export default {
     id: {
         _hide:true
     },
+    skuId:{
+        _hide:true
+    },
     orderNo:{
         key:'orderNo',
         sortable: true,
