@@ -445,14 +445,37 @@
             },
             getSummaries(param) {
                 const { columns, data } = param;
-                let obj = {};
-                let keys = ["inboundSkuTotalQty", "inboundOutCartonTotalQty", "inboundSkuTotalVolume", "inboundSkuTotalNetWeight", "inboundSkuTotalGrossWeight"];
-                _.map(keys, val => {
-                    let a = _.pluck(_.pluck(data, val), "value");
-                    obj[val] = _.reduce(_.compact(a), (memo, num) => Number(memo) + Number(num), 0);
+                let sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = this.$i.warehouse.totalMoney;
+                        return;
+                    } else if (
+                        column.property === 'inboundSkuTotalQty'
+                        || column.property === 'inboundOutCartonTotalQty'
+                        || column.property === 'inboundSkuTotalVolume'
+                        || column.property === 'inboundSkuTotalNetWeight'
+                        || column.property === 'inboundSkuTotalGrossWeight') {
+                        const values = data.map(item => {
+                            if (item[column.property] !== null) {
+                                return Number(item[column.property].value)
+                            }
+                        })
+                        if (!values.every(value => isNaN(value))) {
+                            sums[index] = values.reduce((prev, curr) => {
+                                const value = Number(curr);
+                                if (!isNaN(value)) {
+                                    return this.$calc.add(prev, curr);
+                                } else {
+                                    return prev;
+                                }
+                            }, 0);
+                        } else {
+                            sums[index] = 0;
+                        }
+                    }
                 });
-                let sums=_.map(_.pluck(columns, "property"), val => !_.isUndefined(obj[val]) ? obj[val] : '');
-                sums[0]= this.$i.warehouse.total;
+
                 return sums;
             },
 
