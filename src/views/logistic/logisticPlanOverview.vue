@@ -284,7 +284,7 @@
         const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
         this.pageType === 'draft' && (this.pageParams.planStatus = 1)
         this.pageType === 'plan' && (this.pageParams.planStatus = 2)
-        let code = this.pageType=="loadingList" ? 'LOGISTICS_ORDER' : 'LOGISTICS_PLAN'
+        let code = this.pageType=="loadingList" ? 'LOADING_LIST_CI_PL' : 'LOGISTICS_PLAN'
         this.$fetch.export_task(code,{lgStatus, ...this.pageParams,ids:this.downloadIds,archive:0})
       },
       sendArchive(){
