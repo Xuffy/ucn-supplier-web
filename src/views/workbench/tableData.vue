@@ -36,7 +36,7 @@
       <el-tab-pane style="height: 300px" v-for="item in dataList" :key="item.label"
                    v-loading="item.loading"
                    :label="item.label">
-        <v-table ref="pendingTable"
+        <v-table ref="taskTable"
                  :data="item.data"
                  :selection="false"
                  :buttons="['detail']"
@@ -151,7 +151,6 @@
         this.dataList = _.compact(this.dataList);
       }
       this.getData();
-      // this.getDataNumber();
     },
     watch: {
       'search.type'() {

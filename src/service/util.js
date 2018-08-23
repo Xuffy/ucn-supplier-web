@@ -167,7 +167,7 @@ const Util = {
       , auths = (user.userResourceCodes || []).concat(user.userType)
       , pass = false;
 
-    if (user.userType === 0 || !value === '') {
+    if (user.userType === 0 || !value) {
       return true;
     }
 

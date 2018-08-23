@@ -4,6 +4,7 @@
       v-model="visible"
       @after-leave="update()"
       placement="bottom-end"
+      popper-class="ucn-filter-column"
       trigger="click">
       <div slot="reference" class="icon-btn">
         <i class="iconfont icon-shezhi"></i>&nbsp;
@@ -73,6 +74,9 @@
     watch: {
       filterText(val) {
         this.$refs.columnTree.filter(val);
+      },
+      visible() {
+        this.$refs.columnTree.filter(this.filterText);
       }
     },
     created() {
@@ -131,11 +135,11 @@
         return _.map(data, val => {
           return _.mapObject(val, v => {
             if (_.isObject(v)) {
-                if(v.mustShowColumn){
-                    v._hidden=false;
-                }else{
-                    v._hidden = checkList.indexOf(v._filed || v.key) === -1;
-                }
+              if (v.mustShowColumn) {
+                v._hidden = false;
+              } else {
+                v._hidden = checkList.indexOf(v._filed || v.key) === -1;
+              }
             }
             return v;
           });
@@ -163,6 +167,12 @@
           })
           .finally(() => this.loading = false);
       },
+      setField(key, type) { // …Ë÷√◊÷∂Œ“˛≤ÿœ‘ æ
+        let keys = this.$refs.columnTree.getCheckedKeys();
+        type ? keys.push(key) : keys.splice(_.indexOf(keys, key), 1);
+        this.$refs.columnTree.setCheckedKeys(keys);
+        this.submitFilter();
+      },
       cancel() {
         this.visible = false;
         this.update();
@@ -170,7 +180,7 @@
       locationField(item) {
         let pe = this.tableRef()
           , key = item.property
-          ,timeout = null
+          , timeout = null
           , be
           , e;
 
@@ -178,13 +188,13 @@
           pe = pe.$el;
           be = pe.querySelector('.el-table__body-wrapper');
           e = pe.querySelector(`.el-table__fixed th.location-${key}:not(.is-hidden)`);
-          if (!e){
+          if (!e) {
             e = pe.querySelector(`.el-table__header .location-${key}`);
           }
-        }else{
+        } else {
           e = pe.querySelector(`.fixed-left-header .location-${key}`);
           be = pe.querySelector('.table-box');
-          if (!e){
+          if (!e) {
             e = pe.querySelector(`.table-box .location-${key}`);
           }
         }
@@ -229,9 +239,12 @@
     color: #3a8ee6;
   }
 
-
 </style>
 <style>
+  .ucn-filter-column .el-tree-node__expand-icon.expanded {
+    display: none;
+  }
+
   .ucn-table .ivu-poptip-body {
     padding: 0;
   }
