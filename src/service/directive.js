@@ -7,6 +7,7 @@ import Util from 'service/util';
 const authorize = {
   bind(el, binding) {
     if (!Util.$auth(binding.value)) {
+      el.style.display='none';
       el.remove();
     }
 

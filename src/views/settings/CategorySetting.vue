@@ -57,7 +57,7 @@
                 <div class="icon-wrap">
                   <i class="el-icon-edit" @click="edit(data)"></i>
                   <i class="el-icon-remove-outline" @click="remove(node, data)"></i>
-                  <i class="el-icon-circle-plus-outline" @click="add(data)"></i>
+                  <i class="el-icon-circle-plus-outline" v-if="node.level === 1" @click="add(data)"></i>
                 </div>
               </div>
             </div>
