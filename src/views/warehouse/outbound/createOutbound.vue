@@ -663,11 +663,10 @@
              * 页面表格事件
              * */
             handleClick(e) {
-                console.log(e);
                 this.$windowOpen({
                     url: "/product/detail",
                     params: {
-                        id: e.skuId
+                        id: e.skuId.value
                     }
                 });
             },

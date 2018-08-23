@@ -4,6 +4,12 @@ export default {
         _title:'Remark',
         _fixed:'left'
     },
+    skuNameCustomer:{
+        _hide:true
+    },
+    skuDescCustomer:{
+        _hide:true
+    },
     _remark:{
         _hide:true
     },
@@ -148,19 +154,23 @@ export default {
     },
     totalCtnCbm:{       //新增
         mustShowColumn:true,
-        _slot:'totalCtnCbm'
+        _slot:'totalCtnCbm',
+        _calculate:true
     },
     totalCtnGw:{        //新增
         mustShowColumn:true,
-        _slot:'totalCtnGw'
+        _slot:'totalCtnGw',
+        _calculate:true
     },
     totalCtnNw:{        //新增
         mustShowColumn:true,
-        _slot:'totalCtnNw'
+        _slot:'totalCtnNw',
+        _calculate:true
     },
     skuCartonQty:{
         mustShowColumn:true,
-        _slot:'skuCartonQty'
+        _slot:'skuCartonQty',
+        _calculate:true
     },
     skuCustomsCode:{
         _disabled:true

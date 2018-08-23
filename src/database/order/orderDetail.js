@@ -7,7 +7,7 @@ export default {
         belong:'basicInfo',
         disabled:true
     },
-    entryDt:{
+    orderDt:{
         key:'entryDt',
         type:'date',
         belong:'basicInfo',
