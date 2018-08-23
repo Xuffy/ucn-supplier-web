@@ -58,14 +58,14 @@
                                                 :value="item.code">
                                         </el-option>
                                     </div>
-                                    <div v-else-if="v.isServiceName">
+                                    <!-- <div v-else-if="v.isServiceName">
                                         <el-option
                                                 v-for="item in serviceList"
                                                 :key="item.id"
                                                 :label="item.name"
                                                 :value="item.name">
                                         </el-option>
-                                    </div>
+                                    </div> -->
                                     <div v-else-if="v.isCurrency">
                                         <el-option
                                                 v-for="item in currencyOptions"

@@ -48,7 +48,7 @@
               @change-sort="onListSortChange"
               :rowspan="2"
               :hideFilterColumn="statusModify"/>
-          <div class="bom-btn-wrap" v-show="!statusModify" v-if="tabData[0]">
+          <div class="bom-btn-wrap" v-show="!statusModify" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:READ_ONLY'">
             <el-button type="primary" @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.originValue !== 21" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
             <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue !== 21" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
             <el-button @click="exportDatas" v-authorize="'INQUIRY:DETAIL:DOWNLOAD'">{{ $i.common.download }}</el-button>
@@ -81,7 +81,7 @@
       </v-product>
     </el-dialog>
     <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @change="computePrice" @save="save" ref="HM"></v-history-modify>
-    <v-message-board v-if="chatParams" v-authorize="'INQUIRY:DETAIL:MESSAGE_BOARD'" module="INQUIRY" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
+    <v-message-board v-if="chatParams"  module="INQUIRY" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
   </div>
 </template>
 <script>
@@ -378,7 +378,7 @@ export default {
         }
       });
 
-      for (let field in db) { 
+      for (let field in db) {
         if (!field) continue;
         let key = db[field].key || field;
         db[field]._mustChecked = keys.has(key);

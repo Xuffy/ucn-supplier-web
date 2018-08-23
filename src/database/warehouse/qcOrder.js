@@ -20,10 +20,10 @@ export default {
         key:'factoryContactPhone',
         showType:'input'
     },
-    serviceName:{
-        key:'serviceName',
-        showType:'input'
-    },
+    // serviceName:{
+    //     key:'serviceName',
+    //     showType:'input'
+    // },
     surveyor:{
         key:'surveyor',
         showType:'input'
