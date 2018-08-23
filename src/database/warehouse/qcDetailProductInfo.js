@@ -175,7 +175,7 @@ export default {
       type: 'Number',
       required: true
     },
-    accuracy: 2
+    accuracy: 1
   },
   
   actOuterCartonSkuQty: {
@@ -192,13 +192,13 @@ export default {
     key: 'actOuterCartonInnerBoxQty',
     type: 'Number',
     showType: 'number',
-    accuracy: 2
+    accuracy: 1
   },
   actInnerCartonSkuQty: {
     key: 'actInnerCartonSkuQty',
     type: 'Number',
     showType: 'number',
-    accuracy: 2
+    accuracy: 1
   },
   
   unqualifiedType: {
