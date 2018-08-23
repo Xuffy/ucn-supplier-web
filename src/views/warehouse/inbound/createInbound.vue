@@ -445,14 +445,37 @@
             },
             getSummaries(param) {
                 const { columns, data } = param;
-                let obj = {};
-                let keys = ["inboundSkuTotalQty", "inboundOutCartonTotalQty", "inboundSkuTotalVolume", "inboundSkuTotalNetWeight", "inboundSkuTotalGrossWeight"];
-                _.map(keys, val => {
-                    let a = _.pluck(_.pluck(data, val), "value");
-                    obj[val] = _.reduce(_.compact(a), (memo, num) => Number(memo) + Number(num), 0);
+                let sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = this.$i.warehouse.totalMoney;
+                        return;
+                    } else if (
+                        column.property === 'inboundSkuTotalQty'
+                        || column.property === 'inboundOutCartonTotalQty'
+                        || column.property === 'inboundSkuTotalVolume'
+                        || column.property === 'inboundSkuTotalNetWeight'
+                        || column.property === 'inboundSkuTotalGrossWeight') {
+                        const values = data.map(item => {
+                            if (item[column.property] !== null) {
+                                return Number(item[column.property].value)
+                            }
+                        })
+                        if (!values.every(value => isNaN(value))) {
+                            sums[index] = values.reduce((prev, curr) => {
+                                const value = Number(curr);
+                                if (!isNaN(value)) {
+                                    return this.$calc.add(prev, curr);
+                                } else {
+                                    return prev;
+                                }
+                            }, 0);
+                        } else {
+                            sums[index] = 0;
+                        }
+                    }
                 });
-                let sums=_.map(_.pluck(columns, "property"), val => !_.isUndefined(obj[val]) ? obj[val] : '');
-                sums[0]= this.$i.warehouse.total;
+
                 return sums;
             },
 
@@ -612,26 +635,36 @@
                 let outerCartonVolume = this.productData[index]["outerCartonVolume"].value ? this.productData[index]["outerCartonVolume"].value : 0
                 if (e === 'outerCartonSkuQty') {
                     // 计算入库数量
-                    this.productData[index].inboundSkuTotalQty.value = this.$calc.multiply(outerCartonSkuQty, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalQty.value = this.Intercept(this.$calc.multiply(outerCartonSkuQty, inboundOutCartonTotalQty), 1)
                 } else if (e === "inboundOutCartonTotalQty") {
                     // 计算入库数量
-                    this.productData[index].inboundSkuTotalQty.value = this.$calc.multiply(outerCartonSkuQty, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalQty.value = this.Intercept(this.$calc.multiply(outerCartonSkuQty, inboundOutCartonTotalQty), 1)
                     // 计算入库外箱总净重
-                    this.productData[index].inboundSkuTotalNetWeight.value = this.$calc.multiply(outerCartonNetWeight, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalNetWeight.value =  this.Intercept(this.$calc.multiply(outerCartonNetWeight, inboundOutCartonTotalQty), 2)
                     // 计算入库外箱总毛重
-                    this.productData[index].inboundSkuTotalGrossWeight.value = this.$calc.multiply(outerCartonGrossWeight, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalGrossWeight.value =  this.Intercept(this.$calc.multiply(outerCartonGrossWeight, inboundOutCartonTotalQty), 2)
                     // 计算入库外箱总体积
-                    this.productData[index].inboundSkuTotalVolume.value = this.$calc.multiply(outerCartonVolume, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalVolume.value =  this.Intercept(this.$calc.multiply(outerCartonVolume, inboundOutCartonTotalQty), 3)
                 } else if (e === "outerCartonVolume") {
                     // 计算入库外箱总体积
-                    this.productData[index].inboundSkuTotalVolume.value = this.$calc.multiply(outerCartonVolume, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalVolume.value =  this.Intercept(this.$calc.multiply(outerCartonVolume, inboundOutCartonTotalQty), 3)
                 } else if (e === "outerCartonGrossWeight") {
                     // 计算入库外箱总毛重
-                    this.productData[index].inboundSkuTotalGrossWeight.value = this.$calc.multiply(outerCartonGrossWeight, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalGrossWeight.value =  this.Intercept(this.$calc.multiply(outerCartonGrossWeight, inboundOutCartonTotalQty), 2)
                 } else if (e === "outerCartonNetWeight") {
                     // 计算入库外箱总净重
-                    this.productData[index].inboundSkuTotalNetWeight.value = this.$calc.multiply(outerCartonNetWeight, inboundOutCartonTotalQty)
+                    this.productData[index].inboundSkuTotalNetWeight.value =  this.Intercept(this.$calc.multiply(outerCartonNetWeight, inboundOutCartonTotalQty), 2)
                 }
+            },
+            Intercept (value, num) {
+                let n = '', b;
+                value = _.isString(value) ? Number(value) : value;
+                if (!_.isNumber(value) || _.isNaN(value)) {
+                    return '';
+                }
+                _.map(_.range(num), () => n += 0);
+                n = Number('1' + n);
+                return Math.floor(value * n) / n;
             },
             handleClick(e) {
                 console.log(e,'e')

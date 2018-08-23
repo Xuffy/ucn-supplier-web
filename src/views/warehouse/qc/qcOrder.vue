@@ -110,6 +110,7 @@
                     <el-table-column
                             align="center"
                             type="selection"
+                            fixed="left"
                             :selectable='checkboxInit'
                             width="55">
                     </el-table-column>

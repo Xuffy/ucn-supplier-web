@@ -43,11 +43,11 @@ export default {
   serviceFee: {
     type: 'number'
   },
-  serviceName: {
-    type: 'select',
-    isServiceName: true,
-    disabled: true
-  },
+  // serviceName: {
+  //   type: 'select',
+  //   isServiceName: true,
+  //   disabled: true
+  // },
   exchangeCurrencyDictCode: {
     type: 'select',
     isCurrency: true,
