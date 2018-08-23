@@ -58,7 +58,7 @@
       @change-checked='checked'
       style='marginTop:10px'>
       <template slot="header">
-        <div style="margin-top: 20px;">
+        <div style="margin-top: 20px;" v-authorize="'CUSTOMER:ARCHIVE:READ_ONLY'">
           <el-button @click="postBatchRecover" type="primary" :disabled='!selectNumber.length>0'
           v-authorize="'CUSTOMER:ARCHIVE:RECOVER'">
             {{$i.button.recover}}

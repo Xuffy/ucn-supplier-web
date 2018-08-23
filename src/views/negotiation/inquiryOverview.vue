@@ -21,7 +21,7 @@
       />
     </div>
     <div class="fn">
-      <div class="btn-wrap">
+      <div class="btn-wrap" v-authorize="'INQUIRY:OVERVIEW:READ_ONLY'">
         <el-button @click="ajaxInqueryAction('accept')" v-authorize="'INQUIRY:DETAIL:ACCEPT'" :disabled="!acceptAble">
           {{ $i.common.accept }}<span>({{ checkedIds.length }})</span></el-button>
         <el-button @click="cancelInquiry" :disabled="!cancelAble"
