@@ -182,7 +182,7 @@ export default {
     key: 'actOuterCartonSkuQty',
     type: 'Number',
     showType: 'number',
-    accuracy: 2,
+    accuracy: 1,
     _rules: {
       type: 'Number',
       required: true

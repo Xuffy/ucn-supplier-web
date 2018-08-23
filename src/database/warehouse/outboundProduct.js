@@ -22,7 +22,7 @@ export default {
             required:true,
             type:'Number'
         },
-        accuracy: 2
+        accuracy: 1
     },
     inventoryDays:{
         key:'inventoryDays',
