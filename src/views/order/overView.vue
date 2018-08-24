@@ -143,6 +143,7 @@
                 /**
                  * 字典
                  * */
+                countryOption: [],
                 orderStatusOption: [],
                 incotermOption: [],
                 paymentOption: [],
@@ -262,6 +263,12 @@
                             if (e.skuStatus) {
                                 e.skuStatus._value = (_.findWhere(this.skuStatusOption, { code: e.skuStatus.value }) || {}).name;
                             }
+                            if (e.departureCountry) {
+                                e.departureCountry._value = (_.findWhere(this.countryOption, { code: e.departureCountry.value }) || {}).name;
+                            }
+                            if (e.destCountry) {
+                                e.destCountry._value = (_.findWhere(this.countryOption, { code: e.destCountry.value }) || {}).name;
+                            }
                             if (e.skuIncoterm) {
                                 e.skuIncoterm.value = this.$change(this.incotermOption, "skuIncoterm", e).name;
                             }
@@ -295,8 +302,11 @@
 
             //获取字典
             getUnit() {
-                this.$ajax.post(this.$apis.get_partUnit, ["ORDER_STATUS", "AE_IS", "ITM", "PMT", "SKU_STATUS"], { cache: true }).then(res => {
-                    res.forEach(v => {
+                let countryGet = this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache: true});
+                let codesPost = this.$ajax.post(this.$apis.get_partUnit, ["ORDER_STATUS", "AE_IS", "ITM", "PMT", "SKU_STATUS"], { cache: true })
+                Promise.all([countryGet, codesPost]).then(res => {
+                    this.countryOption = res[0];
+                    res[1].forEach(v => {
                         if (v.code === "ORDER_STATUS") {
                             this.orderStatusOption = v.codes;
                         } else if (v.code === "ITM") {
