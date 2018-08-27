@@ -128,5 +128,7 @@
   "shipAgent": "货代公司",
   "amount": "订单总数量",
   "expressAddress": "收货地址",
-  "consignee": "收货人"
+  "consignee": "收货人",
+  "exportLicenseYes": "是",
+  "exportLicenseNo": "否"
 }

@@ -317,6 +317,7 @@ export default {
     },
     outerCartonSkuQty:{
         showType:'number',
+        accuracy: 1
     },
     outerCartonVolume:{
         showType:'number',

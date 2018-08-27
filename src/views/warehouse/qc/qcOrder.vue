@@ -110,6 +110,7 @@
                     <el-table-column
                             align="center"
                             type="selection"
+                            fixed="left"
                             :selectable='checkboxInit'
                             width="55">
                     </el-table-column>
@@ -741,26 +742,40 @@
                 const sums = [];
                 columns.forEach((column, index) => {
                     if (index === 0) {
-                        sums[index] = this.$i.warehouse.totalMoney;
+                        sums[index] = this.$i.warehouse.summary;
                         return;
-                    }else if(index===17 || index===18 || index===43 || index===44 || index===45 || index===46 || index===47 || index===48 || index===49 || index===50 || index===51 || index===52 || index===53 || index===66){
-                        const values = data.map(item => Number(item[column.property]));
-                        if (!values.every(value => isNaN(value))) {
+                    } else if (
+                        column.property === 'qualifiedSkuCartonTotalQty'
+                        || column.property === 'unqualifiedSkuCartonTotalQty'
+                        || column.property === 'qualifiedSkuQty'
+                        || column.property === 'unqualifiedSkuQty'
+                        || column.property === 'qualifiedSkuVolume'
+                        || column.property === 'unqualifiedSkuVolume'
+                        || column.property === 'qualifiedSkuNetWeight'
+                        || column.property === 'unqualifiedSkuNetWeight'
+                        || column.property === 'qualifiedSkuGrossWeight'
+                        || column.property === 'unqualifiedSkuGrossWeight'
+                        || column.property === 'actSkuCartonTotalQty'
+                        || column.property === 'actSkuQty'
+                        ) {
+                            const values = data.map(item => {
+                                if (item[column.property] !== null) {
+                                    return Number(item[column.property].value)
+                                }
+                            })
+                            if (!values.every(value => isNaN(value))) {
                             sums[index] = values.reduce((prev, curr) => {
                                 const value = Number(curr);
                                 if (!isNaN(value)) {
-                                    return prev + curr;
+                                    let num = this.$calc.add(prev, curr)
+                                    return num;
                                 } else {
                                     return prev;
                                 }
                             }, 0);
-                        } else {
-
                         }
                     }
-
                 });
-
                 return sums;
             },
 

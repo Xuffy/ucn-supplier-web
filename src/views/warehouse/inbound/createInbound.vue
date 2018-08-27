@@ -445,14 +445,37 @@
             },
             getSummaries(param) {
                 const { columns, data } = param;
-                let obj = {};
-                let keys = ["inboundSkuTotalQty", "inboundOutCartonTotalQty", "inboundSkuTotalVolume", "inboundSkuTotalNetWeight", "inboundSkuTotalGrossWeight"];
-                _.map(keys, val => {
-                    let a = _.pluck(_.pluck(data, val), "value");
-                    obj[val] = _.reduce(_.compact(a), (memo, num) => Number(memo) + Number(num), 0);
+                let sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = this.$i.warehouse.totalMoney;
+                        return;
+                    } else if (
+                        column.property === 'inboundSkuTotalQty'
+                        || column.property === 'inboundOutCartonTotalQty'
+                        || column.property === 'inboundSkuTotalVolume'
+                        || column.property === 'inboundSkuTotalNetWeight'
+                        || column.property === 'inboundSkuTotalGrossWeight') {
+                        const values = data.map(item => {
+                            if (item[column.property] !== null) {
+                                return Number(item[column.property].value)
+                            }
+                        })
+                        if (!values.every(value => isNaN(value))) {
+                            sums[index] = values.reduce((prev, curr) => {
+                                const value = Number(curr);
+                                if (!isNaN(value)) {
+                                    return this.$calc.add(prev, curr);
+                                } else {
+                                    return prev;
+                                }
+                            }, 0);
+                        } else {
+                            sums[index] = 0;
+                        }
+                    }
                 });
-                let sums=_.map(_.pluck(columns, "property"), val => !_.isUndefined(obj[val]) ? obj[val] : '');
-                sums[0]= this.$i.warehouse.total;
+
                 return sums;
             },
 
@@ -555,7 +578,6 @@
                         _.each(arr, e => {
                             let flag = true
                             _.each(oldData, v => {
-                                console.log(e)
                                 if (e.id.value === v.id.value) {
                                     flag = false
                                 }
@@ -600,58 +622,48 @@
              * 页面表格事件
              * */
             handleBlur(e, index) {
-                if (e === "inboundOutCartonTotalQty" || e === 'outerCartonSkuQty') {
-                    //处理入库产品总箱数输入框
-                    if (!this.productData[index][e].value || !this.productData[index]["outerCartonSkuQty"].value) {
-                        this.productData[index].inboundSkuTotalQty.value = "";
-                    }
-                    else {
-                        this.productData[index].inboundSkuTotalQty.value = this.productData[index][e].value * this.productData[index]["outerCartonSkuQty"].value;
-                    }
-                    //处理入库产品总净重
-                    if (!this.productData[index][e].value || !this.productData[index]["outerCartonNetWeight"].value) {
-                        this.productData[index].inboundSkuTotalNetWeight.value = "";
-                    } else {
-                        this.productData[index].inboundSkuTotalNetWeight.value = this.productData[index][e].value * this.productData[index]["outerCartonNetWeight"].value;
-                    }
-                    //处理入库产品总毛重
-                    if (!this.productData[index][e].value || !this.productData[index]["outerCartonGrossWeight"].value) {
-                        this.productData[index].inboundSkuTotalGrossWeight.value = "";
-                    } else {
-                        this.productData[index].inboundSkuTotalGrossWeight.value = this.productData[index][e].value * this.productData[index]["outerCartonGrossWeight"].value;
-                    }
-
-                    //处理入库产品总体积
-                    if (!this.productData[index][e].value || !this.productData[index]["outerCartonVolume"].value) {
-                        this.productData[index].inboundSkuTotalVolume.value = "";
-                    } else {
-                        this.productData[index].inboundSkuTotalVolume.value = this.productData[index][e].value * this.productData[index]["outerCartonVolume"].value;
-                    }
+                // 外箱产品数
+                let outerCartonSkuQty = this.productData[index]['outerCartonSkuQty'].value ? this.productData[index]['outerCartonSkuQty'].value : 0
+                // 入库箱数
+                let inboundOutCartonTotalQty = this.productData[index]['inboundOutCartonTotalQty'].value ? this.productData[index]['inboundOutCartonTotalQty'].value : 0
+                // 外箱净重
+                let outerCartonNetWeight = this.productData[index]["outerCartonNetWeight"].value ? this.productData[index]["outerCartonNetWeight"].value : 0
+                // 外箱毛重
+                let outerCartonGrossWeight = this.productData[index]["outerCartonGrossWeight"].value ? this.productData[index]["outerCartonGrossWeight"].value : 0
+                // 外箱体积
+                let outerCartonVolume = this.productData[index]["outerCartonVolume"].value ? this.productData[index]["outerCartonVolume"].value : 0
+                if (e === 'outerCartonSkuQty') {
+                    // 计算入库数量
+                    this.productData[index].inboundSkuTotalQty.value = this.Intercept(this.$calc.multiply(outerCartonSkuQty, inboundOutCartonTotalQty), 1)
+                } else if (e === "inboundOutCartonTotalQty") {
+                    // 计算入库数量
+                    this.productData[index].inboundSkuTotalQty.value = this.Intercept(this.$calc.multiply(outerCartonSkuQty, inboundOutCartonTotalQty), 1)
+                    // 计算入库外箱总净重
+                    this.productData[index].inboundSkuTotalNetWeight.value =  this.Intercept(this.$calc.multiply(outerCartonNetWeight, inboundOutCartonTotalQty), 2)
+                    // 计算入库外箱总毛重
+                    this.productData[index].inboundSkuTotalGrossWeight.value =  this.Intercept(this.$calc.multiply(outerCartonGrossWeight, inboundOutCartonTotalQty), 2)
+                    // 计算入库外箱总体积
+                    this.productData[index].inboundSkuTotalVolume.value =  this.Intercept(this.$calc.multiply(outerCartonVolume, inboundOutCartonTotalQty), 3)
+                } else if (e === "outerCartonVolume") {
+                    // 计算入库外箱总体积
+                    this.productData[index].inboundSkuTotalVolume.value =  this.Intercept(this.$calc.multiply(outerCartonVolume, inboundOutCartonTotalQty), 3)
+                } else if (e === "outerCartonGrossWeight") {
+                    // 计算入库外箱总毛重
+                    this.productData[index].inboundSkuTotalGrossWeight.value =  this.Intercept(this.$calc.multiply(outerCartonGrossWeight, inboundOutCartonTotalQty), 2)
+                } else if (e === "outerCartonNetWeight") {
+                    // 计算入库外箱总净重
+                    this.productData[index].inboundSkuTotalNetWeight.value =  this.Intercept(this.$calc.multiply(outerCartonNetWeight, inboundOutCartonTotalQty), 2)
                 }
-                else if (e === "outerCartonVolume") {
-                    //处理外箱体积
-                    if (!this.productData[index]["inboundOutCartonTotalQty"].value || !this.productData[index]["outerCartonVolume"].value) {
-                        this.productData[index].inboundSkuTotalVolume.value = "";
-                    } else {
-                        this.productData[index].inboundSkuTotalVolume.value = this.productData[index]["inboundOutCartonTotalQty"].value * this.productData[index]["outerCartonVolume"].value;
-                    }
+            },
+            Intercept (value, num) {
+                let n = '', b;
+                value = _.isString(value) ? Number(value) : value;
+                if (!_.isNumber(value) || _.isNaN(value)) {
+                    return '';
                 }
-                else if (e === "outerCartonGrossWeight") {
-                    //处理外箱毛重
-                    if (!this.productData[index]["inboundOutCartonTotalQty"].value || !this.productData[index]["outerCartonGrossWeight"].value) {
-                        this.productData[index].inboundSkuTotalGrossWeight.value = "";
-                    } else {
-                        this.productData[index].inboundSkuTotalGrossWeight.value = this.productData[index]["inboundOutCartonTotalQty"].value * this.productData[index]["outerCartonGrossWeight"].value;
-                    }
-                }
-                else if (e === "outerCartonNetWeight") {
-                    //处理外箱净重
-                    if (!this.productData[index]["inboundOutCartonTotalQty"].value || !this.productData[index]["outerCartonNetWeight"].value) {
-                        this.productData[index].inboundSkuTotalNetWeight.value = "";
-                    } else {
-                        this.productData[index].inboundSkuTotalNetWeight.value = this.productData[index]["inboundOutCartonTotalQty"].value * this.productData[index]["outerCartonNetWeight"].value;
-                    }
-                }
+                _.map(_.range(num), () => n += 0);
+                n = Number('1' + n);
+                return Math.floor(value * n) / n;
             },
             handleClick(e) {
                 console.log(e,'e')

@@ -58,14 +58,14 @@
                                                 :value="item.code">
                                         </el-option>
                                     </div>
-                                    <div v-else-if="v.isServiceName">
+                                    <!-- <div v-else-if="v.isServiceName">
                                         <el-option
                                                 v-for="item in serviceList"
                                                 :key="item.id"
                                                 :label="item.name"
                                                 :value="item.name">
                                         </el-option>
-                                    </div>
+                                    </div> -->
                                     <div v-else-if="v.isCurrency">
                                         <el-option
                                                 v-for="item in currencyOptions"
@@ -604,7 +604,6 @@
                         sums[index] = this.$i.warehouse.totalMoney;
                         return;
                     } else if (
-                        // index === 17 || index === 18 || index === 43 || index === 44 || index === 45 || index === 46 || index === 47 || index === 48 || index === 49 || index === 50 || index === 51 || index === 52 || index === 53 || index === 54 || index === 67
                         column.property === 'qualifiedSkuCartonTotalQty'
                         || column.property === 'unqualifiedSkuCartonTotalQty'
                         || column.property === 'qualifiedSkuQty'
@@ -627,7 +626,7 @@
                             sums[index] = values.reduce((prev, curr) => {
                                 const value = Number(curr);
                                 if (!isNaN(value)) {
-                                    let num = ((prev * 100) + (curr * 100)) / 100;
+                                    let num = this.$calc.add(prev, curr)
                                     if (column.property === 'qualifiedSkuCartonTotalQty') {
                                          this.qcDetail.qualifiedSkuCartonTotalQty = num;
                                     }
@@ -654,61 +653,74 @@
                                     } else if (column.property === 'unqualifiedSkuGrossWeight') {
                                         this.qcDetail.unqualifiedSkuGrossWeight = num;
                                     }
-                                    return ((prev * 100) + (curr * 100)) / 100;
+                                    return num;
                                 } else {
                                     return prev;
                                 }
                             }, 0);
-                        // const values = data.map(item => Number(item[column.property]));
-                        // if (!values.every(value => isNaN(value))) {
-                        //     sums[index] = values.reduce((prev, curr) => {
-                        //         const value = Number(curr);
-                        //         if (!isNaN(value)) {
-                        //             return prev + curr;
-                        //         } else {
-                        //             return prev;
-                        //         }
-                        //     }, 0);
-                        // } else {
-
                         }
                     }
                 });
                 return sums;
             },
             inputBlur (row, k) {
+                let qualifiedSkuCartonTotalQty = this.filterNum(row.qualifiedSkuCartonTotalQty.value)
+                let unqualifiedSkuCartonTotalQty = this.filterNum(row.unqualifiedSkuCartonTotalQty.value)
+                let actOuterCartonSkuQty = this.filterNum(row.actOuterCartonSkuQty.value)
+                let outerCartonNetWeight = this.filterNum(row.outerCartonNetWeight.value)
+                let outerCartonLength = this.filterNum(row.outerCartonLength.value) // 外箱长
+                let outerCartonWidth = this.filterNum(row.outerCartonWidth.value) // 外箱宽
+                let outerCartonHeight = this.filterNum(row.outerCartonHeight.value) // 外箱高
+                let outerCartonGrossWeight = this.filterNum(row.outerCartonGrossWeight.value)
                 // 计算实际产品总箱数
-                row.actSkuCartonTotalQty.value = row.qualifiedSkuCartonTotalQty.value + row.unqualifiedSkuCartonTotalQty.value
+                row.actSkuCartonTotalQty.value = this.$calc.add(qualifiedSkuCartonTotalQty, unqualifiedSkuCartonTotalQty)
                 
-                // 实际产品数量
-                row.actSkuQty.value = row.qualifiedSkuQty.value + row.unqualifiedSkuQty.value
-
                 // 合格产品数量
-                row.qualifiedSkuQty.value = row.actOuterCartonSkuQty.value * row.qualifiedSkuCartonTotalQty.value
+                row.qualifiedSkuQty.value = this.Intercept(this.$calc.multiply(actOuterCartonSkuQty, qualifiedSkuCartonTotalQty), 1)
+                let qualifiedSkuQty = this.filterNum(row.qualifiedSkuQty.value)
 
                 // 不合格产品数量
-                row.unqualifiedSkuQty.value = row.actOuterCartonSkuQty.value * row.unqualifiedSkuCartonTotalQty.value
+                row.unqualifiedSkuQty.value = this.Intercept(this.$calc.multiply(actOuterCartonSkuQty, unqualifiedSkuCartonTotalQty), 1)
+                let unqualifiedSkuQty = this.filterNum(row.unqualifiedSkuQty.value)
+
+                // 实际产品数量
+                row.actSkuQty.value = this.$calc.add(qualifiedSkuQty, unqualifiedSkuQty)
 
                 // 合格产品总净重
-                row.qualifiedSkuNetWeight.value = row.qualifiedSkuCartonTotalQty.value * row.outerCartonNetWeight.value
+                row.qualifiedSkuNetWeight.value = this.Intercept(this.$calc.multiply(qualifiedSkuCartonTotalQty, outerCartonNetWeight), 2)
 
                 // 不合格产品总净重
-                row.unqualifiedSkuNetWeight.value = row.unqualifiedSkuCartonTotalQty.value * row.outerCartonNetWeight.value
-
-                // 合格产品总体积
-                row.qualifiedSkuVolume.value = row.qualifiedSkuCartonTotalQty.value * row.outerCartonVolume.value
-
-                // 不合格产品总体积
-                row.unqualifiedSkuVolume.value = row.unqualifiedSkuCartonTotalQty.value * row.outerCartonVolume.value
-
-                // 合格产品总毛重
-                row.qualifiedSkuGrossWeight.value = row.qualifiedSkuCartonTotalQty.value * row.outerCartonGrossWeight.value
-
-                // 不合格产品总毛重
-                row.unqualifiedSkuGrossWeight.value = row.unqualifiedSkuCartonTotalQty.value * row.outerCartonGrossWeight.value
+                row.unqualifiedSkuNetWeight.value = this.Intercept(this.$calc.multiply(unqualifiedSkuCartonTotalQty, outerCartonNetWeight), 2)
 
                 // 外箱体积
-                row.outerCartonVolume.value = (row.outerCartonLength.value * row.outerCartonWidth.value * row.outerCartonHeight.value) / 1000000
+                row.outerCartonVolume.value = this.Intercept(this.$calc.divide(this.$calc.multiply(this.$calc.multiply(outerCartonLength, outerCartonWidth), outerCartonHeight), 1000000), 3)
+                let outerCartonVolume = this.filterNum(row.outerCartonVolume.value)
+
+                // 合格产品总体积
+                row.qualifiedSkuVolume.value = this.Intercept(this.$calc.multiply(qualifiedSkuCartonTotalQty, outerCartonVolume), 3)
+
+                // 不合格产品总体积
+                row.unqualifiedSkuVolume.value = this.Intercept(this.$calc.multiply(unqualifiedSkuCartonTotalQty, outerCartonVolume), 3)
+
+                // 合格产品总毛重
+                row.qualifiedSkuGrossWeight.value = this.Intercept(this.$calc.multiply(qualifiedSkuCartonTotalQty, outerCartonGrossWeight), 2)
+
+                // 不合格产品总毛重
+                row.unqualifiedSkuGrossWeight.value = this.Intercept(this.$calc.multiply(unqualifiedSkuCartonTotalQty, outerCartonGrossWeight), 2)
+                
+            },
+            filterNum (val) {
+                return val ? val : 0
+            },
+            Intercept (value, num) {
+                let n = '', b;
+                value = _.isString(value) ? Number(value) : value;
+                if (!_.isNumber(value) || _.isNaN(value)) {
+                    return '';
+                }
+                _.map(_.range(num), () => n += 0);
+                n = Number('1' + n);
+                return Math.floor(value * n) / n;
             },
             submit() {
                 if (this.$validateForm(this.qcDetail, this.$db.warehouse.qcOrderDetailBasicInfo)) {

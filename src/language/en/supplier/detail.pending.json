@@ -34,7 +34,7 @@
   "emailAddress": "Email Address",
   "skype": "Skype",
   "qq": "QQ",
-  "orderNo": "Order No",
+  "orderNo": "QC order NO.",
   "orderStatus": "Order Status",
   "orderDate": "Order Date",
   "purchasingPerson": "Purchasing Person",
@@ -117,7 +117,7 @@
   "beneficiaryBankAddress": "Beneficiary bank address",
   "intermediaryBankName": "Intermediary Bank Name",
   "intermBankAddress": "Interm. Bank Address",
-  "intermBankSWIFTCode":"Interm. Bank SWIFT-code",
+  "intermBankSWIFTCode": "Interm. Bank SWIFT-code",
   "status": "Status",
   "totalAmount": "Total amount",
   "skuQty": "SKU QTY",
@@ -129,6 +129,7 @@
   "amount": "Total QTY",
   "expressAddress": "Express address",
   "consignee": "Consignee",
-  "destinationPort": "Destination port"
+  "exportLicenseYes": "YES",
+  "exportLicenseNo": "NO"
 
 }

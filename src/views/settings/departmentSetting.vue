@@ -428,8 +428,7 @@
     },
     created() {
       this.getPart();
-      this.getDepartmentData();
-      this.getUnit();
+      // this.getUnit();
     },
     mounted() {
       this.setMenuLink({
@@ -437,6 +436,7 @@
         query: {code: 'DEPARTMENT_SETTING', bizCode: 'BIZ_USER'},
         label: this.$i.common.log
       });
+      this.getDepartmentData();
     },
     watch: {
       searchDepartment(val) {
@@ -785,10 +785,10 @@
           .then(res => this.$message.success(this.$i.setting.invitationSuccess))
           .finally(() => this.inviteUserLoading = false);
       },
-      getUnit() {
-        this.$ajax.post(this.$apis.get_partUnit, ['LANGUAGE'], {cache: true})
+      /*getUnit() {
+        return this.$ajax.post(this.$apis.get_partUnit, ['LANGUAGE'], {cache: true})
           .then(res => this.languageOption = res[0].codes);
-      },
+      },*/
       savePrivilege() {
         let nodes = [], dataNodes
           , params = {resourceCodes: [], domainCodes: []};
@@ -892,8 +892,9 @@
         this.$ajax.post(this.$apis.ROLE_UPDATESORT, {deptId: this.userData.deptId, sorts});
       },
       getPart() {
-        this.$ajax.post(this.$apis.CODE_PART, ['SEX'], {cache: true}).then(res => {
-          this.genderOption = res[0].codes;
+        this.$ajax.post(this.$apis.CODE_PART, ['SEX', 'LANGUAGE'], {cache: true}).then(res => {
+          this.genderOption = (_.findWhere(res, {code: 'SEX'}) || {}).codes;
+          this.languageOption = (_.findWhere(res, {code: 'LANGUAGE'}) || {}).codes;
         });
       }
     },

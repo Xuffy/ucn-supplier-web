@@ -1,5 +1,7 @@
 <template>
   <div class="workbench">
+    <!--<h1 @click="$refs.exportTemplate.start({ids:['82161595060334592','82161907640840192']})">
+      export</h1>-->
     <ul class="welcome-box ucn-container-right" :class="{show:settingStateShow}">
       <li class="title" v-text="$i.workbench.settingState"></li>
       <li v-if="!settingState.departmentInfo && userInfo.userType === 0">
@@ -60,6 +62,7 @@
         <v-table-data :type="4"></v-table-data>
       </el-col>
     </el-row>
+    <v-export-template ref="exportTemplate" code="SKU_PURCHASE_EXPORT_IDS"></v-export-template>
     <!--<button @click="test">sadas</button>-->
     <!--<v-upload ref="upload"></v-upload>-->
     <!--<v-import-template ref="importFile" code="PRODUCT_SUPPLIER" biz-code="PRODUCT_SUPPLIER"></v-import-template>-->
@@ -73,12 +76,21 @@
   import VBasicInfo from './basicInfo'
   import config from 'service/config'
   import {mapActions, mapState} from 'vuex';
-  import {VHistoryModify, VMessageBoard, VTimeZone, VUpload, VImportTemplate, VImage} from '@/components/index';
+  import {
+    VHistoryModify,
+    VMessageBoard,
+    VTimeZone,
+    VUpload,
+    VImportTemplate,
+    VExportTemplate,
+    VImage
+  } from '@/components/index';
 
   export default {
     name: 'workbench',
     components: {
       VImportTemplate,
+      VExportTemplate,
       VUpload,
       VDataDashboard,
       VTableData,
@@ -94,10 +106,11 @@
         settingState: {},
         settingStateShow: false,
         settingStateLoading: false,
-        userInfo: this.$localStore.get('user') || {}
+        userInfo: this.$localStore.get('user') || {},
       }
     },
     created() {
+      //
     },
     mounted() {
       this.userInfo.userType === 0 && this.getBasicInfo();

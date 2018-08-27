@@ -139,7 +139,7 @@
         ShipmentStatusCode: '',
         pageParams: {
           pn: 1,
-          ps: 10
+          ps: 50
         },
         DeliveredEdit: false,
         beShipper: null,
@@ -1048,7 +1048,7 @@
       download() {
         let code;
         if (this.pageTypeCurr == "loadingListDetail") {
-          code = 'LOGISTICS_ORDER';
+          code = 'LOADING_LIST_CI_PL';
         } else {
           code = 'LOGISTICS_PLAN';
         }

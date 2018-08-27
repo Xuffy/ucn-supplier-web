@@ -501,7 +501,7 @@
                 this.$ajax.post(this.$apis.get_inboundSku, this.orderProduct).then(res => {
                     this.tableDataList = this.$getDB(this.$db.warehouse.outboundOrderTable, res.datas, e => {
                         this.productData.forEach(v => {
-                            if (e.id.value === v.id) {
+                            if (e.id.value === v.id.value) {
                                 this.$set(e, "_disabled", true);
                                 this.$set(e, "_checked", true);
                             }
@@ -533,6 +533,7 @@
                         ids: id
                     }).then(res => {
                         let arr = []
+                        let oldData = _.clone(this.productData)
                         res.datas.forEach(v => {
                             v.outboundOutCartonTotalQty = "";
                             v.outboundSkuTotalGrossWeight = 0;
@@ -559,8 +560,19 @@
                         });
                         this.loadingProductTable = false;
                         arr = this.$getDB(this.$db.warehouse.outboundProduct, arr);
-                        this.$refs.filterColumn.update(false, arr).then(data => {
-                            this.productData = this.$refs.filterColumn.getFilterData(arr, data);
+                         _.each(arr, e => {
+                            let flag = true
+                            _.each(oldData, v => {
+                                if (e.id.value === v.id.value) {
+                                    flag = false
+                                }
+                            })
+                            if (flag) {
+                                oldData.push(e)
+                            }
+                        })
+                        this.$refs.filterColumn.update(false, oldData).then(data => {
+                            this.productData = this.$refs.filterColumn.getFilterData(oldData, data);
                             this.columnConfig = this.productData[0];
                         });
                     }).catch(err => {
@@ -672,10 +684,10 @@
             },
             handleBlur(v, e, val) {
                 if (v.isNeed && val) {
-                    e.outboundSkuTotalQty.value = this.mul(Number(val),Number(e.outerCartonSkuQty.value));
-                    e.outboundSkuTotalVolume.value = this.mul(Number(val),Number(e.outerCartonVolume.value));
-                    e.outboundSkuTotalNetWeight.value = this.mul(Number(val),Number(e.outerCartonNetWeight.value));
-                    e.outboundSkuTotalGrossWeight.value = this.mul(Number(val),Number(e.outerCartonGrossWeight.value));
+                    e.outboundSkuTotalQty.value = this.Intercept(this.mul(Number(val),Number(e.outerCartonSkuQty.value)), 1);
+                    e.outboundSkuTotalVolume.value = this.Intercept(this.mul(Number(val),Number(e.outerCartonVolume.value)), 3);
+                    e.outboundSkuTotalNetWeight.value = this.Intercept(this.mul(Number(val),Number(e.outerCartonNetWeight.value)), 2);
+                    e.outboundSkuTotalGrossWeight.value = this.Intercept(this.mul(Number(val),Number(e.outerCartonGrossWeight.value)), 2);
                 } else if(!val){
                     e.outboundSkuTotalQty.value = 0;
                     e.outboundSkuTotalVolume.value = 0;
@@ -683,7 +695,16 @@
                     e.outboundSkuTotalGrossWeight.value = 0;
                 }
             },
-
+            Intercept (value, num) {
+                let n = '', b;
+                value = _.isString(value) ? Number(value) : value;
+                if (!_.isNumber(value) || _.isNaN(value)) {
+                    return '';
+                }
+                _.map(_.range(num), () => n += 0);
+                n = Number('1' + n);
+                return Math.floor(value * n) / n;
+            },
             /**
              * 获取字典
              * */

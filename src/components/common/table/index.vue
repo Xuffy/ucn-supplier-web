@@ -108,7 +108,8 @@
                 <v-upload readonly :limit="cItem._upload.limit || 5"
                           :ref="cItem.key + 'Upload'"
                           :list="cItem._value || cItem.value"></v-upload>
-                <el-button slot="reference" type="text">{{$i.upload.viewAttachment}}</el-button>
+                <el-button slot="reference" type="text" :disabled="!cItem.value">{{$i.upload.viewAttachment}}
+                </el-button>
               </el-popover>
 
               <div v-else
@@ -289,6 +290,9 @@
     },
     methods: {
       ...mapActions(['setViewPicture']),
+      setField(key, type) {
+        this.$refs.filterColumn.setField(key, type);
+      },
       changeSort(key, type) {
         let params = {sorts: []};
         if (key !== this.currentSort.orderBy) {
@@ -428,7 +432,7 @@
         let e = this.$refs.tableBox, timeout = null;
 
         // this.tableLoading = true;
-        if (this.dataList.length !== val.length) {
+        if (this.dataList.length !== val.length || _.values(this.dataList[0]).length !== _.values(val[0]).length) {
           e.scrollTop = 0;
           e.scrollLeft = 0;
         }
@@ -454,8 +458,9 @@
       resetFile() {
         _.mapObject(this.dataList, value => {
           _.map(value, val => {
-            if (val._upload && this.$refs[val.key + 'Upload']) {
-              this.$refs[val.key + 'Upload'][0].reset();
+            let e = this.$refs[val.key + 'Upload'];
+            if (val._upload && !_.isEmpty(e)) {
+              e[0].reset();
             }
           });
         });

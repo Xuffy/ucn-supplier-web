@@ -60,7 +60,7 @@
               @change-checked='checked'
               style='marginTop:10px'>
             <template slot="header">
-              <div style="margin-top: 20px;">
+              <div style="margin-top: 20px;" v-authorize="'CUSTOMER:OVERVIEW:READ_ONLY'">
                 <el-button @click="deleteCustomer" type="danger" :disabled='!selectNumber.length>0'
                 v-authorize="'CUSTOMER:OVERVIEW:ARCHIVE'">
                   {{$i.common.archive}}({{selectNumber.length}})</el-button>
