@@ -1211,6 +1211,7 @@
           // this.oldPlanObject.product = this.modifyProductArray;
           this.oldPlanObject.currencyExchangeRate = _.map(this.$depthClone(this.ExchangeRateInfoArr), (item) => {
             item['price'] = item['value'];
+            item['id'] = null;
             delete item['value'];
             delete item['key'];
             delete item['label'];
