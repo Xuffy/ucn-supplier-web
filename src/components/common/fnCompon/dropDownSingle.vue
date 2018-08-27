@@ -33,8 +33,8 @@
                 v-model="val[defaultProps.label]"
                 :size="size"
                 readonly>
-            <i v-if="showIcon" slot="suffix" class="el-icon-arrow-down"></i>
-            <i v-else @click="clearData" slot="suffix" class="el-icon-error"></i>
+            <i v-if="showIcon" slot="suffix" class="el-icon-arrow-down speIcon"></i>
+            <i v-else @click="clearData" slot="suffix" class="el-icon-error speIcon"></i>
         </el-input>
     </div>
 </template>
@@ -273,6 +273,10 @@
                     cursor: pointer;
                 }
             }
+        }
+
+        .speIcon{
+            margin-right: 5px;
         }
     }
 </style>
