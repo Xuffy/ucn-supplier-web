@@ -578,7 +578,6 @@
                         _.each(arr, e => {
                             let flag = true
                             _.each(oldData, v => {
-                                console.log(e)
                                 if (e.id.value === v.id.value) {
                                     flag = false
                                 }

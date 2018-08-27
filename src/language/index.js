@@ -7,6 +7,9 @@ const json = {
   importTemplate:_.extend({},
     require(`./${lang}/importTemplate/page`)
   ),
+  exportTemplate:_.extend({},
+    require(`./${lang}/exportTemplate/page`)
+  ),
   table:_.extend({},
     require(`./${lang}/table/page`),
     require(`./${lang}/table/message`)
@@ -104,7 +107,7 @@ const json = {
     require(`./${lang}/warehouse/warehouse.outboundOverview`),
     require(`./${lang}/warehouse/warehouse.outboundDetail`),
     require(`./${lang}/warehouse/warehouse.qcOverview`),
-    
+
     // 新加
     require(`./${lang}/warehouse/warehouse.createOutbound`),
   ),
